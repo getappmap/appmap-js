@@ -2,7 +2,6 @@ import { basename, join } from 'path';
 import nock from 'nock';
 import sinon from 'sinon';
 import fsextra from 'fs-extra';
-import * as test from '../integration/setup';
 import Command from '../../src/cli/scan/command';
 import { fixtureAppMapFileName } from '../util';
 import { readFileSync, unlinkSync } from 'fs';
@@ -23,7 +22,6 @@ delete process.env.APPLAND_API_KEY;
 delete process.env.APPLAND_URL;
 
 const ReportFile = 'appmap-findings.json';
-const AppId = test.AppId;
 const DefaultScanConfigFilePath = join(__dirname, '..', '..', 'src', 'sampleConfig', 'default.yml');
 const StandardOneShotScanOptions = {
   appmapFile: fixtureAppMapFileName(
@@ -31,7 +29,6 @@ const StandardOneShotScanOptions = {
   ),
   config: DefaultScanConfigFilePath, // need to pass it explicitly
   reportFile: ReportFile,
-  app: AppId,
   all: false,
   interactive: false,
   watch: false,
@@ -57,16 +54,6 @@ function runCommand(options: CommandOptions): Promise<void> {
 }
 
 describe('scan', () => {
-  it('errors with default options and without AppMap server API key', async () => {
-    delete process.env.APPLAND_API_KEY;
-    try {
-      await runCommand(StandardOneShotScanOptions);
-      throw new Error(`Expected this command to fail`);
-    } catch (err) {
-      expect((err as any).toString()).toMatch(/No API key available for AppMap server/);
-    }
-  });
-
   async function checkScan(options: CommandOptions): Promise<void> {
     await runCommand(options);
 
@@ -89,27 +76,6 @@ describe('scan', () => {
 
   it('runs with server access disabled', async () => {
     await checkScan({ ...StandardOneShotScanOptions, all: true });
-  });
-
-  it('errors when the provided appId is not valid', async () => {
-    nock('http://localhost:3000').head(`/api/${AppId}`).reply(404);
-
-    try {
-      await runCommand(StandardOneShotScanOptions);
-      throw new Error(`Expected this command to fail`);
-    } catch (e) {
-      expect((e as any).message).toMatch(
-        /App "myorg\/sample_app_6th_ed" is not valid or does not exist./
-      );
-    }
-  });
-
-  it('integrates server finding status with local findings', async () => {
-    const localhost = nock('http://localhost:3000');
-    localhost.head(`/api/${AppId}`).reply(204).persist();
-    localhost.get(`/api/${AppId}/finding_status`).reply(200, JSON.stringify([]));
-
-    await runCommand(StandardOneShotScanOptions);
   });
 
   it('skips when encountering a bad file in a directory', async () =>

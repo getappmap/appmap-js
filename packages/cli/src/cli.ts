@@ -38,7 +38,6 @@ import * as RpcCommand from './cmds/index/rpc';
 import * as RpcClientCommand from './cmds/rpcClient';
 import * as NavieCommand from './cmds/navie';
 import * as ApplyCommand from './cmds/apply';
-import UploadCommand from './cmds/upload';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 
 setSQLErrorHandler(sqlErrorLog);
@@ -134,7 +133,6 @@ yargs(process.argv.slice(2))
   .command(SequenceDiagramCommand)
   .command(SequenceDiagramDiffCommand)
   .command(PruneCommand)
-  .command(UploadCommand)
   .command(ArchiveCommand)
   .command(RestoreCommand)
   .command(CompareCommand)

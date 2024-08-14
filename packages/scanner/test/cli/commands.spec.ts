@@ -1,5 +1,4 @@
 import { Arguments } from 'yargs';
-import * as resolveAppId from '../../src/cli/resolveAppId';
 import ScanCommand from '../../src/cli/scan/command';
 import CommandOptions from '../../src/cli/scan/options';
 import * as scanner from '../../src/cli/scan/scanner';
@@ -31,16 +30,12 @@ describe('commands', () => {
       // Prevent the watcher from running indefinitely
       jest.spyOn(watchScan, 'default').mockResolvedValue();
 
-      const spy = jest.spyOn(resolveAppId, 'default');
-
       try {
         await ScanCommand.handler({ ...defaultArguments, watch: true });
       } catch {
         // Do nothing.
         // We don't want exceptions, we just want to know if our stub was called.
       }
-
-      expect(spy).not.toBeCalled();
     });
 
     let watcher: watchScan.Watcher | undefined;
