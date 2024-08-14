@@ -172,15 +172,27 @@ request, and will be stored in `tmp/appmap/requests`.
 In the absence of tests or HTTP requests, AppMap can record an entire
 Node.js application's execution from start to finish. 
 
-Run the `appmap-node` command and give it an argument for starting your application, and it will record the entire
-application's behavior by default.
+By default, AppMap will create a process recording of your application. This recording will 
+be abandoned (cancelled and the process recording not created) if there are other recordings during 
+the run (such as Request, Remote, or Test recording).  Set the `APPMAP_RECORDER_PROCESS_ALWAYS` environment variable 
+to `true` and AppMap will continue process recording even if other recordings are encountered.
+
+For example: 
+
+```
+APPMAP_RECORDER_PROCESS_ALWAYS=true npx appmap-node <add your Node.js application launch command here>
+```
+{: .example-code}
+
+Otherwise, you can run the `appmap-node` command with the commands and arguments for starting your application, and it will record the entire application's behavior by default.
 
 ```
 npx appmap-node <add your Node.js application launch command here>
 ```
 {: .example-code}
 
-Then interact with your app using its UI or API, and AppMap Diagrams will be generated automatically. 
+Then interact with your app using its UI or API, and AppMap Diagrams will be generated automatically. And when your 
+process finishes or your application exits a process recording will be created in your code editor. 
 
 ## Viewing AppMap Diagrams
 
