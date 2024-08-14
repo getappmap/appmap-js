@@ -10,19 +10,45 @@ redirect_from: [/docs/analysis/configuring-checks, /docs/analysis/match-pattern-
 
 # AppMap Analysis
 
-When there is AppMap Data available in your project, AppMap Runtime Analysis will immediately scan them to detect flaws in the code. These flaws are surfaced as **findings** and are displayed in your code editor as you work so that they can be addressed **before** they are propagated to test or production environments.
+When there is AppMap Data available in your project, AppMap Runtime Analysis can scan them to detect flaws in the code. These flaws are surfaced as **findings** and are displayed in your code editor as you work so that they can be addressed **before** they are propagated to test or production environments.
 
+- [Enable AppMap Scanner](#enable-appmap-scanner)
+  - [In JetBrains](#in-jetbrains)
+  - [In VS Code](#in-vs-code)
 - [Navigate Findings](#navigate-findings)
 - [Investigate findings](#investigate-findings)
 - [Use labels to visually explore your code](#use-labels-to-visually-explore-your-code)
-- [Configuring Analysis](#configuring-analysis)
-- [Configuring checks](#configuring-checks)
+- [Configuring Analysis Checks](#configuring-analysis-checks)
   - [Example appmap-scanner.yml](#example-appmap-scanneryml)
 - [Match pattern config](#match-pattern-config)
   - [Examples](#examples)
 - [Findings Reference](#findings-reference)
   - [Properties](#properties)
   - [Finding hash](#finding-hash)
+
+## Enable AppMap Scanner
+
+The AppMap dynamic runtime analysis of AppMap data is disabled by default.  Follow the instructions below to enable the AppMap Scanner to analyze your AppMap data for software flaws.  
+
+### In JetBrains
+
+Open the JetBrains settings page and search for `appmap scanner`.  Ensure the box is checked for the AppMap Scanner setting.  
+
+<image class="video-screenshot" src="/assets/img/enable-jetbrains-scanner.webp"/> 
+
+After applying this change, **restart** your JetBrains editor and in the AppMap plugin you will see the `Runtime Analysis` section with any findings within your AppMap data.
+
+<image class="video-screenshot" src="/assets/img/jetbrains-runtime-analysis.webp"/> 
+
+### In VS Code
+
+Open the VS Code settings page and search for `appmap scanner`.  Ensure the box is checked for the AppMap Scanner setting.  
+
+<image class="video-screenshot" src="/assets/img/enable-vscode-scanner.webp"/> 
+
+After applying this change, **reload** your VS Code editor and in the AppMap plugin you will see the `Runtime Analysis` section with any findings within your AppMap data.
+
+<image class="video-screenshot" src="/assets/img/vscode-runtime-analysis.webp"/> 
 
 ## Navigate Findings
 
