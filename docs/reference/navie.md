@@ -199,6 +199,10 @@ If you have the Copilot extension installed, but have not signed in, you'll see 
 
 Click the `Sign in to GitHub` and login with an account that has a valid paid or trial GitHub Copilot subscription.
 
+#### Video Demo
+
+{% include vimeo.html id='992238965' %}
+
 ### OpenAI
 
 **Note:** We recommend configuring your OpenAI key using the code editor extension. Follow the [Bring Your Own Key](/docs/navie/bring-your-own-model.html#configuring-your-openai-key) docs for instructions.  
@@ -233,6 +237,14 @@ setting:
 Consult [AnyScale documentation](https://docs.endpoints.anyscale.com/) for model
 names. Note we recommend using Mixtral models with Navie.
 
+#### Anyscale Demo with VS Code
+
+{% include vimeo.html id='970914908' %}
+
+#### Anyscale Demo with JetBrains
+
+{% include vimeo.html id='970914884' %}
+
 ### Fireworks AI
 
 You can use [Fireworks AI](https://fireworks.ai/) and their serverless or on-demand 
@@ -247,6 +259,10 @@ settings:
 
 Consult the [Fireworks AI documentation](https://fireworks.ai/models) for a full list of 
 the available models they currently support. 
+
+#### Video Demo
+
+{% include vimeo.html id='992941358' %}
 
 ### Ollama
 
