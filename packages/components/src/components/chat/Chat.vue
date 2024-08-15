@@ -25,6 +25,7 @@
       ref="messages"
       @scroll="manageScroll"
     >
+      <slot name="not-chatting" v-if="!isChatting"></slot>
       <v-user-message
         v-for="(message, i) in messages"
         :key="i"

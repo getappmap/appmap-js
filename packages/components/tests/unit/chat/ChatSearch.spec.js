@@ -42,6 +42,7 @@ describe('pages/ChatSearch.vue', () => {
     ],
   };
   const rpcNavieMetadata = () => [[null, null, navieMetadata]];
+  const rpcNavieMetadataEmpty = () => [[null, null, { commands: [] }]];
 
   const emptySearchResponse = {
     results: [],
@@ -520,5 +521,50 @@ describe('pages/ChatSearch.vue', () => {
     await wrapper.vm.$nextTick();
 
     expect(wrapper.find('[data-handle][data-reference]').exists()).toBe(true);
+  });
+
+  describe('metadata', () => {
+    beforeEach(() => {
+      document.getSelection = jest.fn().mockReturnValue({ focusOffset: 1 });
+    });
+
+    it('renders the metadata', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.configuration.get': noConfig(),
+        'v1.navie.metadata': rpcNavieMetadata(),
+      });
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-cy="welcome-message"]').text()).toBe(navieMetadata.welcomeMessage);
+      expect(
+        wrapper
+          .find(`[data-cy="chat-input"][placeholder="${navieMetadata.inputPlaceholder}"]`)
+          .exists()
+      ).toBe(true);
+
+      const input = wrapper.findComponent(`.chat-input`);
+      await input.setData({ input: '@' });
+
+      expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(true);
+      expect(wrapper.findAll('[data-cy="autocomplete-item"]').length).toBe(1);
+    });
+  });
+
+  it('renders default metadata when no metadata is available', async () => {
+    const wrapper = chatSearchWrapper({
+      'v2.configuration.get': noConfig(),
+      'v1.navie.metadata': rpcNavieMetadataEmpty(),
+    });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('[data-cy="welcome-message"]').exists()).toBe(false);
+    expect(wrapper.find('[data-cy="chat-input"]').attributes('placeholder')).toBe(
+      'What are you working on today?'
+    );
+
+    const input = wrapper.findComponent(`.chat-input`);
+    await input.setData({ input: '@' });
+
+    expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(false);
   });
 });
