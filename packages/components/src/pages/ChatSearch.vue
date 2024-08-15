@@ -24,6 +24,11 @@
           :base-url="baseUrl"
           :model="model"
         />
+        <template #not-chatting>
+          <div class="message-box__footer">
+            <v-welcome-message :message="welcomeMessage" />
+          </div>
+        </template>
       </v-chat>
     </div>
     <div
@@ -51,6 +56,7 @@ import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
 import type { PinEvent } from '@/components/chat/PinEvent';
+import VWelcomeMessage from '@/components/chat/WelcomeMessage.vue';
 
 import debounce from '@/lib/debounce';
 
@@ -60,6 +66,7 @@ export default {
     VChat,
     VContext,
     VLlmConfiguration,
+    VWelcomeMessage,
   },
   mixins: [authenticatedClient],
   props: {
@@ -241,6 +248,9 @@ export default {
       return new AppMapRPC(
         this.appmapRpcFn ? { request: this.appmapRpcFn } : this.appmapRpcPort || 30101
       );
+    },
+    welcomeMessage(): string {
+      return this.metadata?.welcomeMessage ?? '';
     },
   },
   methods: {
@@ -533,6 +543,11 @@ $border-color: darken($gray4, 10%);
     display: flex;
     flex-direction: column;
     background-color: #292c39;
+
+    .message-box__footer {
+      padding: 2rem 2rem;
+      padding-top: 0;
+    }
 
     .navie-intro {
       padding: 1rem;
