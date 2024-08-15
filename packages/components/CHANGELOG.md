@@ -1,3 +1,10 @@
+# [@appland/components-v4.32.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.32.0...@appland/components-v4.32.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* Update @appland/rpc to v1.24.0 ([109b4bd](https://github.com/getappmap/appmap-js/commit/109b4bd67a9011f44365241aaf2f1d3e75accb36))
+
 # [@appland/components-v4.32.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.31.1...@appland/components-v4.32.0) (2024-08-15)
 
 
