@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.158.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.158.0...@appland/appmap-v3.158.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* Update @appland/rpc to v1.24.0 ([b3f4b72](https://github.com/getappmap/appmap-js/commit/b3f4b72c8c9166c197c963ba428f4dd88ae0bf92))
+
 # [@appland/appmap-v3.158.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.157.1...@appland/appmap-v3.158.0) (2024-08-15)
 
 
