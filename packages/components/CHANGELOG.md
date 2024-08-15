@@ -1,3 +1,11 @@
+# [@appland/components-v4.32.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.31.1...@appland/components-v4.32.0) (2024-08-15)
+
+
+### Features
+
+* Add welcome message frontend to Navie ([543e54b](https://github.com/getappmap/appmap-js/commit/543e54b12d7a24f2e42822c74d38807d39fb0078))
+* An inline auto-completion for @ commands ([4374f2f](https://github.com/getappmap/appmap-js/commit/4374f2f2a7a2506d2103305d9c9e0df74aebe295))
+
 # [@appland/components-v4.31.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.31.0...@appland/components-v4.31.1) (2024-08-15)
 
 
