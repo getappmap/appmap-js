@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.158.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.157.1...@appland/appmap-v3.158.0) (2024-08-15)
+
+
+### Features
+
+* Add `v1.navie.metadata` implementation ([27d3eb0](https://github.com/getappmap/appmap-js/commit/27d3eb04de9b87f65f92bfd62847381f4d127614))
+
 # [@appland/appmap-v3.157.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.157.0...@appland/appmap-v3.157.1) (2024-08-09)
 
 
