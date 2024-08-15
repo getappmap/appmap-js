@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.12.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.11.0...@appland/rpc-v1.12.0) (2024-08-15)
+
+
+### Features
+
+* Add `v1.navie.metadata` definitions ([fc1f753](https://github.com/getappmap/appmap-js/commit/fc1f753bbca15f8c7e99967fae585ba174ff08fd))
+
 # [@appland/rpc-v1.11.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.10.0...@appland/rpc-v1.11.0) (2024-07-24)
 
 
