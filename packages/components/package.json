@@ -30,7 +30,7 @@
     "@appland/client": "workspace:^1.12.0",
     "@appland/diagrams": "workspace:^1.7.0",
     "@appland/models": "workspace:^2.10.2",
-    "@appland/rpc": "workspace:^1.9.0",
+    "@appland/rpc": "workspace:^1.12.0",
     "@appland/sequence-diagram": "workspace:^1.11.0",
     "buffer": "^6.0.3",
     "d3": "^7.8.4",
