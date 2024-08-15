@@ -1,3 +1,10 @@
+# [@appland/components-v4.31.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.31.0...@appland/components-v4.31.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* Drop AppMap status bars ([eebdf99](https://github.com/getappmap/appmap-js/commit/eebdf99b789884b339ceb0b3314031d329c0eefe))
+
 # [@appland/components-v4.31.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.30.1...@appland/components-v4.31.0) (2024-08-13)
 
 
