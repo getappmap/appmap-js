@@ -8,11 +8,6 @@ export { default as reportJSON } from './reportJson';
 export { default as buildRequest } from './buildRequest';
 export { RetryHandler } from './retryHandler';
 export { default as LicenseKey } from './licenseKey';
-export { default as App } from './app';
-export { default as AppMap, CreateAppMapOptions, UploadAppMapResponse } from './appMap';
-export { default as Mapset, CreateMapsetOptions, CreateMapsetResponse } from './mapset';
-export { default as AppMapListItem } from './appMapListItem';
-export { default as FindingStatusListItem } from './findingStatusListItem';
 export { default as Usage, UsageReport, UsageUpdateDto } from './usage';
 export { AckCallback, UserMessageHandler } from './userMessageHandler';
 export {

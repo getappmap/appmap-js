@@ -1,4 +1,3 @@
-import { AppMap } from '@appland/client';
 import { Event } from '@appland/models';
 import Check from '../../check';
 import { MatchResult } from '../../types';
@@ -7,7 +6,6 @@ export type ExecutionContext = {
   counter: number;
   depth: number;
   eventName: string;
-  appMap?: AppMap;
   appMapFileName?: string;
   check?: Check;
   event?: Event;

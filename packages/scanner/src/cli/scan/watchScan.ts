@@ -195,7 +195,7 @@ export class Watcher {
       }
 
       const startTime = Date.now();
-      const scanner = await buildScanner(true, this.config, [appmapFile]);
+      const scanner = await buildScanner(this.config, [appmapFile]);
 
       const rawScanResults = await scanner.scan();
       const elapsed = Date.now() - startTime;

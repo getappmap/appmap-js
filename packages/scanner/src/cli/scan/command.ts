@@ -7,7 +7,6 @@ import { appmapDirFromConfig } from '../appmapDirFromConfig';
 import validateFile from '../validateFile';
 import CommandOptions from './options';
 import scanArgs from '../scanArgs';
-import resolveAppId from '../resolveAppId';
 import singleScan from './singleScan';
 import watchScan from './watchScan';
 import { parseConfigFile } from '../../configuration/configurationProvider';
@@ -32,11 +31,6 @@ export default {
       describe: 'choose your IDE protocol to open AppMaps directly in your IDE.',
       options: ['vscode', 'x-mine', 'idea', 'pycharm'],
     });
-    args.option('all', {
-      describe: 'report all findings, including duplicates of known findings',
-      default: false,
-      type: 'boolean',
-    });
     args.option('watch', {
       describe: 'scan code changes and report findings on changed files',
       default: false,
@@ -53,9 +47,7 @@ export default {
       interactive,
       config: configFile,
       verbose: isVerbose,
-      all: reportAllFindings,
       watch,
-      app: appIdArg,
       apiKey,
       ide,
       reportFile,
@@ -74,23 +66,15 @@ export default {
     if (appmapFile && watch) {
       throw new ValidationError('Use --appmap-file or --watch, but not both');
     }
-    if (reportAllFindings && watch) {
-      throw new ValidationError(
-        `Don't use --all with --watch, because in watch mode all findings are reported`
-      );
-    }
 
     if (appmapDir) await validateFile('directory', appmapDir);
     if (!appmapFile && !appmapDir) {
       appmapDir = (await appmapDirFromConfig()) || '.';
     }
 
-    let appId = appIdArg;
-    if (!watch && !reportAllFindings) appId = await resolveAppId(appIdArg, appmapDir);
-
     if (watch) {
       const watchAppMapDir = appmapDir!;
-      return watchScan({ appId, appmapDir: watchAppMapDir, configFile });
+      return watchScan({ appmapDir: watchAppMapDir, configFile });
     } else {
       const configuration = await parseConfigFile(configFile);
       if (interactive) {
@@ -104,8 +88,6 @@ export default {
           appmapFile,
           appmapDir,
           configuration,
-          reportAllFindings,
-          appId,
           ide,
           reportFile,
         });
