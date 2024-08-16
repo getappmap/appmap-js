@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.159.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.158.1...@appland/appmap-v3.159.0) (2024-08-16)
+
+
+### Features
+
+* Remove unused @appland/client commands ([a54f352](https://github.com/getappmap/appmap-js/commit/a54f3521dd6eea9336dc4265123bd726869491e8))
+
 # [@appland/appmap-v3.158.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.158.0...@appland/appmap-v3.158.1) (2024-08-15)
 
 
