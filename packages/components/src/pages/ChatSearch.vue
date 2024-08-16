@@ -83,10 +83,6 @@ export default {
     appmapRpcFn: {
       type: Function,
     },
-    savedFilters: {
-      type: Array,
-      default: () => [],
-    },
     appmaps: {
       type: Array,
       default: () => [],
@@ -331,9 +327,6 @@ export default {
     },
     setAppMapState(state) {
       this.$refs.vappmap?.setState(state);
-    },
-    updateFilters(updatedFilters) {
-      this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
     onStop() {
       // This will stop token emission from this.ask immediately
