@@ -21,6 +21,9 @@ import { getLLMConfiguration } from '../llmConfiguration';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
 import reportFetchError from './navie/report-fetch-error';
 import { LRUCache } from 'lru-cache';
+import { initializeHistory } from './navie/historyHelper';
+import { ThreadAccessError } from './navie/history';
+import Thread from './navie/thread';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -315,6 +318,21 @@ export function explainStatus(userMessageId: string): ExplainRpc.ExplainStatusRe
   return searchStatus;
 }
 
+export async function loadThread(threadId: string): Promise<ExplainRpc.LoadThreadResponse> {
+  const history = initializeHistory();
+
+  let thread: Thread;
+  try {
+    thread = await history.load(threadId);
+  } catch (e) {
+    if (e instanceof ThreadAccessError) throw new RpcError(404, `Thread ${threadId} not found`);
+
+    throw e;
+  }
+
+  return thread;
+}
+
 const explainHandler: (
   navieProvider: INavieProvider,
   codeEditor: string | undefined
@@ -349,4 +367,16 @@ const explainStatusHandler: () => RpcHandler<
   };
 };
 
-export { explainHandler, explainStatusHandler };
+const loadThreadHandler: () => RpcHandler<
+  ExplainRpc.LoadThreadOptions,
+  ExplainRpc.LoadThreadResponse
+> = () => {
+  return {
+    name: ExplainRpc.ExplainThreadLoadFunctionName,
+    handler: async (options: ExplainRpc.LoadThreadOptions) => {
+      return loadThread(options.threadId);
+    },
+  };
+};
+
+export { explainHandler, explainStatusHandler, loadThreadHandler };

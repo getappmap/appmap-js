@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/require-await */
 import EventEmitter from 'events';
 import { navie as navieFn, Navie } from '@appland/navie';
 
 import LocalNavie from '../../../../src/rpc/explain/navie/navie-local';
+import History from '../../../../src/rpc/explain/navie/history';
+import Thread from '../../../../src/rpc/explain/navie/thread';
 
 jest.mock('@appland/navie');
+jest.mock('../../../../src/rpc/explain/navie/history');
 
 describe('LocalNavie', () => {
   let navie: LocalNavie;
@@ -37,6 +42,28 @@ describe('LocalNavie', () => {
   });
 
   describe('ask', () => {
+    let thread: Thread;
+    let timestamp: number;
+    let projectDirectories: string[];
+
+    let mockHistoryLoad: jest.SpyInstance;
+    let mockHistoryQuestion: jest.SpyInstance;
+    let mockHistoryToken: jest.SpyInstance;
+
+    beforeEach(() => {
+      timestamp = Date.now();
+      projectDirectories = ['dir-1'];
+      thread = new Thread('the-thread-id', timestamp, projectDirectories);
+
+      mockHistoryLoad = jest
+        .spyOn(History.prototype, 'load')
+        .mockImplementation(async (_threadId: string) => {
+          return thread;
+        });
+      mockHistoryQuestion = jest.spyOn(History.prototype, 'question');
+      mockHistoryToken = jest.spyOn(History.prototype, 'token');
+    });
+
     describe('when invoked with a threadId', () => {
       let navieImpl: Navie.INavie;
       let tokens: string[];
@@ -66,24 +93,37 @@ describe('LocalNavie', () => {
       };
 
       it('uses the threadId and processes the question', async () => {
-        navie.on('ack', (_messageId: string, threadId: string) =>
-          expect(threadId).toBe('the-thread-id')
-        );
+        let allocatedThreadId: string;
+        navie.on('ack', (_messageId: string, threadId: string) => {
+          expect(threadId).toBe('the-thread-id');
+          allocatedThreadId = threadId;
+        });
 
         await new Promise<void>((resolve) => {
-          awaitResponse(resolve);
+          awaitResponse(() => {
+            expect(mockHistoryLoad).toHaveBeenCalledWith(allocatedThreadId);
+
+            resolve();
+          });
           navie.ask('the-thread-id', 'What is the meaning of life?');
         });
       });
 
       describe('when invoked without a threadId', () => {
         it('allocates a new threadId', async () => {
+          let allocatedThreadId: string;
+
           navie.on('ack', (_messageId: string, threadId: string) => {
             expect(threadId).toBeDefined();
+            allocatedThreadId = threadId;
           });
 
           await new Promise<void>((resolve) => {
-            awaitResponse(resolve);
+            awaitResponse(() => {
+              expect(mockHistoryLoad).toHaveBeenCalledWith(allocatedThreadId);
+
+              resolve();
+            });
             navie.ask(undefined, 'What is the meaning of life?');
           });
         });

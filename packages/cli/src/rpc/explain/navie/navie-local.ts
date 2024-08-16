@@ -1,10 +1,7 @@
 import { log, warn } from 'console';
 import EventEmitter from 'events';
-import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
 import { randomUUID } from 'crypto';
-import { join } from 'path';
-import { homedir } from 'os';
-import { ContextV2, Navie, Help, Message, ProjectInfo, navie } from '@appland/navie';
+import { ContextV2, Navie, Help, ProjectInfo, navie } from '@appland/navie';
 
 import INavie from './inavie';
 import Telemetry from '../../../telemetry';
@@ -17,45 +14,7 @@ import {
 } from '@appland/client';
 import reportFetchError from './report-fetch-error';
 import assert from 'assert';
-
-class LocalHistory {
-  constructor(public readonly threadId: string) {}
-
-  async saveMessage(message: Message) {
-    if (!['user', 'assistant'].includes(message.role))
-      throw new Error(`Invalid message role for conversation history : ${message.role}`);
-
-    await this.initHistory();
-    const timestampNumber = Date.now();
-    const historyFile = join(this.historyDir, `${timestampNumber}.json`);
-    await writeFile(historyFile, JSON.stringify(message, null, 2));
-  }
-
-  async restoreMessages(): Promise<Message[]> {
-    await this.initHistory();
-    const historyFiles = (await readdir(this.historyDir)).sort();
-    const history: Message[] = [];
-    for (const historyFile of historyFiles) {
-      const historyPath = join(this.historyDir, historyFile);
-      const historyString = await readFile(historyPath, 'utf-8');
-      const message = JSON.parse(historyString);
-      // Fix messages that were miscategorized.
-      if (message.role === 'system') {
-        message.role = 'assistant';
-      }
-      history.push(message);
-    }
-    return history;
-  }
-
-  protected async initHistory() {
-    await mkdir(this.historyDir, { recursive: true });
-  }
-
-  protected get historyDir() {
-    return join(homedir(), '.appmap', 'navie', 'history', this.threadId);
-  }
-}
+import { initializeHistory, loadThread } from './historyHelper';
 
 const OPTION_SETTERS: Record<
   string,
@@ -140,7 +99,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
         )?.id ?? randomUUID();
     }
 
-    const history = new LocalHistory(threadId);
+    const history = initializeHistory();
+    const thread = await loadThread(history, threadId);
 
     this.#reportConfigTelemetry();
     log(`[local-navie] Processing question ${userMessageId} in thread ${threadId}`);
@@ -153,8 +113,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
         prompt,
       };
 
-      const messages = await history.restoreMessages();
-      await history.saveMessage({ content: question, role: 'user' });
+      await history.question(threadId, userMessageId, question, codeSelection, prompt);
 
       const startTime = Date.now();
 
@@ -164,7 +123,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
         this.projectInfoProvider,
         this.helpProvider,
         this.navieOptions,
-        messages
+        thread.messages
       );
 
       let agentName: string | undefined;
@@ -177,14 +136,13 @@ export default class LocalNavie extends EventEmitter implements INavie {
       const response = new Array<string>();
       for await (const token of navieFn.execute()) {
         response.push(token);
+        await history.token(threadId, userMessageId, agentMessageId, token);
         this.emit('token', token, agentMessageId);
       }
       const endTime = Date.now();
       const duration = endTime - startTime;
 
       warn(`[local-navie] Completed question ${userMessageId} in ${duration}ms`);
-
-      await history.saveMessage({ content: response.join(''), role: 'assistant' });
 
       {
         const userMessage: UpdateUserMessage = {
