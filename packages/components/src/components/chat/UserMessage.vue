@@ -35,8 +35,46 @@
         />
       </div>
       <v-streaming-message-content :content="renderedMarkdown" :active="!complete" />
+      <div
+        v-if="complete"
+        class="next-step-suggestions"
+        data-cy="next-step-suggestions"
+        :data-fetched="nextStepSuggestions !== undefined"
+      >
+        <div class="next-step-suggestions__buttons" v-if="nextStepSuggestions">
+          <v-popper
+            v-for="(i, index) in nextStepSuggestions"
+            :key="index"
+            placement="top"
+            align="left"
+            :time-to-display="500"
+          >
+            <template #content>
+              <div class="key-binds" v-if="nextStepSuggestions">
+                <div class="key-binds__option">
+                  <span class="keyboard">Click</span>
+                  <span class="keyboard-plus">To select this option</span>
+                </div>
+                <div class="key-binds__option">
+                  <span class="keyboard">Shift</span>
+                  <span class="keyboard-plus">+</span>
+                  <span class="keyboard">Click</span>
+                  <span class="keyboard-plus">To add prompt to input</span>
+                </div>
+              </div>
+            </template>
+            <v-next-prompt-button
+              data-cy="next-step-button"
+              :command="i.command"
+              :prompt="i.prompt"
+            >
+              {{ i.label }}
+            </v-next-prompt-button>
+          </v-popper>
+        </div>
+      </div>
     </div>
-    <div class="buttons">
+    <div class="buttons" v-if="complete">
       <span
         v-if="!isUser && id && hasClipboardAPI"
         class="button"
@@ -78,6 +116,7 @@
 
 <script lang="ts">
 //@ts-nocheck
+import { PropType } from 'vue';
 import VNavieCompass from '@/assets/compass-icon.svg';
 import VUserAvatar from '@/assets/user-avatar.svg';
 import VThumbIcon from '@/assets/thumb.svg';
@@ -87,6 +126,8 @@ import VButton from '@/components/Button.vue';
 import VToolStatus from '@/components/chat/ToolStatus.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
 import VStreamingMessageContent from '@/components/chat-search/StreamingMessageContent.ts';
+import VNextPromptButton from '@/components/chat/NextPromptButton.vue';
+import VPopper from '@/components/Popper.vue';
 
 import { Marked, Renderer } from 'marked';
 import DOMPurify from 'dompurify';
@@ -173,6 +214,11 @@ const marked = new Marked({
   ],
 });
 
+interface Injected {
+  rpcClient: AppMapRPC;
+  threadId: string | undefined;
+}
+
 export default {
   name: 'v-user-message',
 
@@ -186,6 +232,8 @@ export default {
     VClipboardIcon,
     VCheckIcon,
     VStreamingMessageContent,
+    VNextPromptButton,
+    VPopper,
   },
 
   props: {
@@ -213,13 +261,36 @@ export default {
     codeSelections: {
       default: () => [],
     },
+    threadId: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
   },
 
   data() {
     return {
       sentimentTimeout: undefined,
       copiedMessageTimeout: undefined,
+      nextStepSuggestions: undefined as NavieRpc.V1.Suggest.NextStep[] | undefined,
     };
+  },
+
+  inject: {
+    rpcClient: { default: () => ({ suggest: () => Promise.resolve([]) }) },
+  },
+
+  watch: {
+    async complete(isComplete) {
+      if (!isComplete || !this.threadId || this.isUser || this.nextStepSuggestions) return;
+
+      const { rpcClient, threadId } = this as Injected;
+      try {
+        this.nextStepSuggestions = await rpcClient.suggest(threadId);
+      } catch (e) {
+        console.error('Failed to fetch next step suggestions:', e);
+        this.nextStepSuggestions = [];
+      }
+    },
   },
 
   computed: {
@@ -233,8 +304,10 @@ export default {
       const markdown = marked.parse(this.message.toString());
       return DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
-        ADD_TAGS: ['v-markdown-code-snippet', 'v-mermaid-diagram'],
-        ADD_ATTR: ['language', 'location'],
+        ADD_TAGS: ['v-markdown-code-snippet', 'v-mermaid-diagram', 'v-next-prompt-button'],
+        ADD_ATTR: ['language', 'location', 'command', 'prompt'],
+        ALLOWED_URI_REGEXP:
+          /^(?:(?:(?:f|ht)tps?|mailto|event):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
       });
     },
     hasClipboardAPI() {
@@ -300,6 +373,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes skeleton {
+  0% {
+    background-position: -100% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
 .message {
   display: grid;
   grid-template-columns: 38px 1fr;
@@ -343,10 +424,83 @@ export default {
     grid-column: 2;
     grid-row: 2;
     max-width: 100%;
-    overflow: hidden;
 
     :last-child {
       margin-bottom: 0;
+    }
+
+    .key-binds {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      &__option {
+        display: flex;
+      }
+
+      .keyboard {
+        background-color: rgba(white, 0.75);
+        border-radius: 3px;
+        border: 1px solid rgba(black, 0.2);
+        box-shadow: 0 -2px 2px rgba(black, 0.3) inset, 0 2px 0 0 rgba(white, 0.5) inset;
+        color: rgba(black, 0.75);
+        display: inline-block;
+        font-size: 0.85em;
+        font-weight: 700;
+        line-height: 1;
+        padding: 3px 4px 2px 4px;
+        white-space: nowrap;
+        font-family: monospace;
+      }
+
+      .keyboard-plus {
+        // font-size: 0.75em;
+        padding: 0 0.25rem;
+        align-self: center;
+      }
+    }
+
+    .next-step-suggestions {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      margin-top: 0.5rem;
+
+      &__buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+
+        &::v-deep {
+          .popper__text {
+            backdrop-filter: blur(12px);
+            background-color: transparent;
+            border-color: rgba(white, 0.2);
+            margin-bottom: 2rem;
+            padding: 0.25rem;
+
+            &:before {
+              display: none;
+            }
+          }
+        }
+      }
+
+      &:not([data-fetched]) {
+        $alpha: 0.075;
+        width: 100%;
+        height: 1.5rem;
+        border-radius: $border-radius;
+        background-color: rgba(black, 0.1);
+        background: linear-gradient(
+          90deg,
+          rgba(black, $alpha) 0%,
+          rgba(white, $alpha) 50%,
+          rgba(black, $alpha) 100%
+        );
+        background-size: 200% 100%;
+        animation: skeleton 3s linear infinite;
+      }
     }
   }
 
@@ -364,6 +518,12 @@ export default {
     margin-bottom: 2rem;
     .buttons .button {
       opacity: 100%;
+    }
+  }
+
+  &:not(:last-of-type) {
+    .next-step-suggestions {
+      display: none;
     }
   }
 

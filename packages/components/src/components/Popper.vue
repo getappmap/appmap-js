@@ -1,5 +1,11 @@
 <template>
-  <div class="popper" @mouseover="hover = true" @mouseleave="hover = false">
+  <div
+    class="popper"
+    @mouseover="onHover"
+    @mouseleave="onLeave"
+    @mousemove="onHover"
+    @click="onClick"
+  >
     <transition name="fade">
       <span :class="classes" v-if="isVisible">
         <div v-if="textValue" v-html="textValue" />
@@ -42,6 +48,10 @@ export default Vue.extend({
     arrow: {
       default: true,
     },
+    timeToDisplay: {
+      type: Number,
+      default: 0,
+    },
   },
 
   data() {
@@ -52,6 +62,8 @@ export default Vue.extend({
       flashTimer: undefined as number | undefined,
       flashStyle: 'default',
       visibleOverride: false,
+      hoverTimer: undefined as number | undefined,
+      ignoreHover: false,
     };
   },
 
@@ -66,7 +78,8 @@ export default Vue.extend({
   computed: {
     isVisible(): boolean {
       const explicitlyVisible = this.visibleOverride;
-      const isHovered = !this.disabled && this.hover && Boolean(this.textValue);
+      const isHovered =
+        !this.disabled && this.hover && (!!this.textValue || !!this.$slots.content?.length);
       const isFlashed = !this.disabled && this.displayFlash && Boolean(this.flashText);
       return explicitlyVisible || isHovered || isFlashed;
     },
@@ -105,6 +118,38 @@ export default Vue.extend({
     },
     hide() {
       this.visibleOverride = false;
+    },
+    onHover() {
+      if (this.ignoreHover) return;
+
+      if (this.timeToDisplay > 0) {
+        if (this.hoverTimer) {
+          window.clearTimeout(this.hoverTimer);
+        }
+
+        this.hoverTimer = window.setTimeout(() => {
+          this.hover = true;
+          this.hoverTimer = undefined;
+        }, this.timeToDisplay);
+      } else {
+        this.hover = true;
+      }
+    },
+    onLeave() {
+      if (this.hoverTimer) {
+        window.clearTimeout(this.hoverTimer);
+        this.hoverTimer = undefined;
+      }
+      this.hover = false;
+      this.ignoreHover = false;
+    },
+    onClick() {
+      if (this.hoverTimer) {
+        window.clearTimeout(this.hoverTimer);
+        this.hoverTimer = undefined;
+      }
+      this.hover = false;
+      this.ignoreHover = true;
     },
   },
 });

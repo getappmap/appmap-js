@@ -161,6 +161,7 @@ describe('components/Chat.vue', () => {
 
       wrapper.vm.onAck('Faking the thread ID', threadId);
       wrapper.vm.addToken('Hello from the system', 'the-thread-id', messageId);
+      wrapper.vm.getMessage({ isUser: false }).complete = true;
 
       await wrapper.vm.$nextTick();
 

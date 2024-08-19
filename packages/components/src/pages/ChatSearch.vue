@@ -507,19 +507,27 @@ export default {
     }
     this.loadNavieConfig();
     this.loadMetadata();
-    this.$root.$on('pin', (pin: PinEvent) => {
-      const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
-      if (pin.pinned && pinIndex === -1) {
-        this.pinnedItems.push(pin);
-      } else if (!pin.pinned && pinIndex !== -1) {
-        this.pinnedItems.splice(pinIndex, 1);
-      }
-    });
-    this.$root.$on('jump-to', (handle: number) => {
-      document
-        .querySelector(`[data-handle="${handle}"]:not([data-reference])`)
-        ?.scrollIntoView({ behavior: 'smooth' });
-    });
+    this.$root
+      .$on('pin', (pin: PinEvent) => {
+        const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
+        if (pin.pinned && pinIndex === -1) {
+          this.pinnedItems.push(pin);
+        } else if (!pin.pinned && pinIndex !== -1) {
+          this.pinnedItems.splice(pinIndex, 1);
+        }
+      })
+      .$on('jump-to', (handle: number) => {
+        document
+          .querySelector(`[data-handle="${handle}"]:not([data-reference])`)
+          ?.scrollIntoView({ behavior: 'smooth' });
+      })
+      .$on('submit-prompt', (prompt: string) => {
+        this.$refs.vchat.onSend(prompt);
+        this.$refs.vchat.scrollToBottom();
+      })
+      .$on('change-input', (prompt: string) => {
+        this.$refs.vchat.setInput(prompt);
+      });
   },
 };
 </script>

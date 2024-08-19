@@ -43,6 +43,7 @@ describe('pages/ChatSearch.vue', () => {
   };
   const rpcNavieMetadata = () => [[null, null, navieMetadata]];
   const rpcNavieMetadataEmpty = () => [[null, null, { commands: [] }]];
+  const rpcNavieNextSteps = () => [[null, null, []]];
 
   const emptySearchResponse = {
     results: [],
@@ -50,6 +51,7 @@ describe('pages/ChatSearch.vue', () => {
 
   const buildComponent = (searchResponse, contextResponse, hasMetadata) => {
     const messagesCalled = {
+      'v1.navie.suggest': rpcNavieNextSteps(),
       'v1.navie.metadata': rpcNavieMetadata(),
       'v2.configuration.get': noConfig(),
       explain: [[null, null, { userMessageId, threadId }]],
@@ -80,6 +82,8 @@ describe('pages/ChatSearch.vue', () => {
     const wrapper = chatSearchWrapper(messagesCalled);
     return { messagesCalled, wrapper };
   };
+
+  afterEach(jest.clearAllMocks);
 
   it('can change context', async () => {
     const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
@@ -170,6 +174,7 @@ describe('pages/ChatSearch.vue', () => {
 
       it('only renders the search status once', async () => {
         const { wrapper } = await performSearch();
+        console.error = jest.fn();
 
         expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
 
