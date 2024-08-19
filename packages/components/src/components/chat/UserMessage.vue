@@ -170,6 +170,31 @@ const marked = new Marked({
         return this.parser.renderer.code(content, language, true, sourcePath);
       },
     },
+    {
+      // Matches markdown links with an `event` protocol
+      name: 'event-link',
+      level: 'inline',
+      start(src: string) {
+        const index = src.search(/\s*?\[[^\]\n]*?\]\(event:[^)]*?\)/);
+        return index > -1 ? index : false;
+      },
+      tokenizer(src: string) {
+        const eventLinkMatch = /\s*?\[([^\]\n]*?)\]\(event:([^)]*?)\)/.exec(src);
+        if (!eventLinkMatch) return false;
+
+        const [, text, event] = eventLinkMatch;
+
+        return {
+          type: 'event-link',
+          raw: eventLinkMatch[0],
+          text,
+          event,
+        };
+      },
+      renderer({ text, event }) {
+        return `<v-event-button event="${event}">${text}</v-event-button>`;
+      },
+    },
   ],
 });
 
@@ -233,8 +258,10 @@ export default {
       const markdown = marked.parse(this.message.toString());
       return DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
-        ADD_TAGS: ['v-markdown-code-snippet', 'v-mermaid-diagram'],
-        ADD_ATTR: ['language', 'location'],
+        ADD_TAGS: ['v-markdown-code-snippet', 'v-mermaid-diagram', 'v-event-button'],
+        ADD_ATTR: ['language', 'location', 'event'],
+        ALLOWED_URI_REGEXP:
+          /^(?:(?:(?:f|ht)tps?|mailto|event):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
       });
     },
     hasClipboardAPI() {
@@ -364,6 +391,12 @@ export default {
     margin-bottom: 2rem;
     .buttons .button {
       opacity: 100%;
+    }
+  }
+
+  &:not(:last-of-type) {
+    &::v-deep .event-button {
+      display: none;
     }
   }
 

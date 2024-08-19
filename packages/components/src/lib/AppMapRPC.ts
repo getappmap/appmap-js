@@ -230,4 +230,18 @@ export default class AppMapRPC {
       );
     });
   }
+
+  emitUiEvent(event: string): Promise<NavieRpc.V1.UIEvent.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V1.UIEvent.Method,
+        { event },
+        (err: any, error: any, result: NavieRpc.V1.UIEvent.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
 }

@@ -507,19 +507,35 @@ export default {
     }
     this.loadNavieConfig();
     this.loadMetadata();
-    this.$root.$on('pin', (pin: PinEvent) => {
-      const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
-      if (pin.pinned && pinIndex === -1) {
-        this.pinnedItems.push(pin);
-      } else if (!pin.pinned && pinIndex !== -1) {
-        this.pinnedItems.splice(pinIndex, 1);
-      }
-    });
-    this.$root.$on('jump-to', (handle: number) => {
-      document
-        .querySelector(`[data-handle="${handle}"]:not([data-reference])`)
-        ?.scrollIntoView({ behavior: 'smooth' });
-    });
+    this.$root
+      .$on('pin', (pin: PinEvent) => {
+        const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
+        if (pin.pinned && pinIndex === -1) {
+          this.pinnedItems.push(pin);
+        } else if (!pin.pinned && pinIndex !== -1) {
+          this.pinnedItems.splice(pinIndex, 1);
+        }
+      })
+      .$on('jump-to', (handle: number) => {
+        document
+          .querySelector(`[data-handle="${handle}"]:not([data-reference])`)
+          ?.scrollIntoView({ behavior: 'smooth' });
+      })
+      .$on('navie-ui-event', async (event: string) => {
+        try {
+          const response = await this.rpcClient.emitUiEvent(event);
+          switch (response.action) {
+            case 'submit_prompt':
+              this.$refs.vchat.onSend(response.prompt);
+              this.$refs.vchat.scrollToBottom();
+              break;
+            default:
+              console.error(`Unknown action: ${response.action}`);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      });
   },
 };
 </script>
