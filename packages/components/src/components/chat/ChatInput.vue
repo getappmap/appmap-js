@@ -158,19 +158,25 @@ export default {
     prefixNewMode(mode: string) {
       const currentInput = (this.$refs.input as HTMLSpanElement).innerText || '';
       this.setInput(`${mode} ${currentInput.replace(/^\s*@[^\s]*\s*/g, '')}`);
+      this.moveCursorToFirstWord();
     },
     setInput(input: string) {
       this.input = input;
       const inputEl: HTMLInputElement = this.$refs.input;
       inputEl.innerText = input;
-
-      const match = input.match(/\s+|$/);
+      this.focus();
+    },
+    moveCursorToFirstWord() {
+      const match = this.$refs.input.innerText.match(/\s+|$/);
       const index = match ? match.index + match[0].length : input.length;
 
       // Move the cursor to the end of the input
       const selection = window.getSelection();
       selection?.setPosition(this.$refs.input.lastChild, index);
-      this.focus();
+    },
+    moveCursorToEnd() {
+      const selection = window.getSelection();
+      selection?.setPosition(this.$refs.input.lastChild, this.$refs.input.innerText.length);
     },
   },
   updated() {

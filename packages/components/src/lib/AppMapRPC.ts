@@ -230,4 +230,18 @@ export default class AppMapRPC {
       );
     });
   }
+
+  suggest(threadId: string): Promise<NavieRpc.V1.Suggest.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V1.Suggest.Method,
+        { threadId },
+        (err: any, error: any, result: NavieRpc.V1.Suggest.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
 }

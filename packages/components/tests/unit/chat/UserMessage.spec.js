@@ -105,9 +105,15 @@ describe('components/UserMessage.vue', () => {
     });
 
     it('should display feedback buttons after an identified system message', () => {
-      const wrapper = mount(VUserMessage, { propsData: { id: 'id' } });
+      const wrapper = mount(VUserMessage, { propsData: { id: 'id', complete: true } });
       expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(true);
       expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(true);
+    });
+
+    it('does not display feedback buttons until the message is complete', () => {
+      const wrapper = mount(VUserMessage, { propsData: { id: 'id', isUser: 'false' } });
+      expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(false);
     });
 
     it('does not display feedback buttons after a user message', () => {
@@ -125,6 +131,7 @@ describe('components/UserMessage.vue', () => {
       const wrapper = mount(VUserMessage, {
         propsData: {
           id: messageId,
+          complete: true,
         },
       });
       wrapper.find('[data-cy="feedback-good"]').trigger('click');
@@ -141,7 +148,7 @@ describe('components/UserMessage.vue', () => {
     });
 
     it('throttles feedback button clicks', () => {
-      const wrapper = mount(VUserMessage, { propsData: { id: '123' } });
+      const wrapper = mount(VUserMessage, { propsData: { id: '123', complete: true } });
       for (let i = 0; i < 3; i++) {
         wrapper.find('[data-cy="feedback-good"]').trigger('click');
       }
@@ -149,14 +156,16 @@ describe('components/UserMessage.vue', () => {
     });
 
     it('sends the correct sentiment value if the button is clicked again', () => {
-      const wrapper = mount(VUserMessage, { propsData: { id: '123', sentiment: 1 } });
+      const wrapper = mount(VUserMessage, {
+        propsData: { id: '123', sentiment: 1, complete: true },
+      });
       wrapper.find('[data-cy="feedback-good"]').trigger('click');
       const [, sentiment] = wrapper.emitted()['change-sentiment'][0];
       expect(sentiment).toEqual(0);
     });
 
     it('should change button state', async () => {
-      const wrapper = mount(VUserMessage, { propsData: { id: '123' } });
+      const wrapper = mount(VUserMessage, { propsData: { id: '123', complete: true } });
       expect(wrapper.find('.sentiment--selected[data-cy="feedback-good"]').exists()).toBe(false);
       expect(wrapper.find('.sentiment--selected[data-cy="feedback-bad"]').exists()).toBe(false);
 
@@ -197,6 +206,7 @@ describe('components/UserMessage.vue', () => {
         propsData: {
           message: snippets.tsCode,
           id: 'id',
+          complete: true,
         },
       });
     });
@@ -304,6 +314,62 @@ describe('components/UserMessage.vue', () => {
       const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
       expect(title.text()).toEqual('js');
       expect(codeSnippet.text()).toEqual(sourceText);
+    });
+  });
+
+  describe('next steps', () => {
+    it('shows a skeleton loader if next steps are pending', () => {
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: 'Hello world!',
+          complete: true,
+        },
+      });
+      expect(wrapper.find('[data-cy="next-step-suggestions"]:not([data-fetched])').exists()).toBe(
+        true
+      );
+      expect(wrapper.find('[data-cy="next-step-button"]').exists()).toBe(false);
+    });
+
+    it('displays next steps once they are fetched', async () => {
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: 'Hello world!',
+          complete: true,
+        },
+        data: () => ({
+          nextStepSuggestions: [
+            { label: 'Do this', prompt: 'I will do this', command: 'do' },
+            { label: 'Do that', prompt: 'I will do that', command: 'that' },
+          ],
+        }),
+      });
+      expect(
+        wrapper.findAll('[data-cy="next-step-button"]').wrappers.map((w) => w.text())
+      ).toStrictEqual(['Do this', 'Do that']);
+    });
+
+    it('automatically fetches next steps once the message is complete', async () => {
+      const suggest = jest.fn();
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: 'Hello world!',
+          threadId: '00000000-0000-0000-0000-000000000000',
+          isUser: false,
+          complete: false,
+        },
+        provide: {
+          rpcClient: { suggest },
+        },
+      });
+
+      expect(wrapper.find('[data-cy="next-step-suggestions"]').exists()).toBe(false);
+      expect(suggest).not.toHaveBeenCalled();
+
+      await wrapper.setProps({ complete: true });
+
+      expect(suggest).toHaveBeenCalled();
+      expect(wrapper.find('[data-cy="next-step-suggestions"]').exists()).toBe(true);
     });
   });
 });

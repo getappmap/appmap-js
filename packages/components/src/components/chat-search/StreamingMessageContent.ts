@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
+import VNextPromptButton from '@/components/chat/NextPromptButton.vue';
 
 function findCursorNode(node: Node): Node | undefined {
   const children = Array.from(node.childNodes);
@@ -81,6 +82,7 @@ export default Vue.extend({
   components: {
     VMarkdownCodeSnippet,
     VMermaidDiagram,
+    VNextPromptButton,
   },
   data() {
     return {

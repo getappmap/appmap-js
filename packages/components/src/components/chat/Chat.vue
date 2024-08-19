@@ -37,6 +37,7 @@
         :tools="message.tools"
         :complete="message.complete"
         :code-selections="message.codeSelections"
+        :thread-id="threadId"
         @change-sentiment="onSentimentChange"
       />
     </div>
@@ -337,6 +338,10 @@ export default {
     },
     resetAppMaps() {
       this.appmaps = [];
+    },
+    setInput(input: string) {
+      this.$refs.input.setInput(input);
+      this.$refs.input.moveCursorToEnd();
     },
   },
   watch: {
