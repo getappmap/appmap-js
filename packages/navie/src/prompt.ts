@@ -56,7 +56,8 @@ focused primarily on answering this question.
     content: `**The code generation task**
 
 This is a description of a code enhancement that the user wants you to help them with. Your response should be
-focused primarily on solving this issue via code generation.
+focused primarily on solving this issue via code generation. If this field is blank, the user expects you to use
+the conversation history to generate code.
 `,
     tagName: 'issue-description',
   },
