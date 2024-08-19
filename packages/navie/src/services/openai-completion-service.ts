@@ -1,10 +1,15 @@
 import { ChatOpenAI } from '@langchain/openai';
+import type { ChatCompletion, ChatCompletionChunk } from 'openai/resources';
+import { z } from 'zod';
+import { zodResponseFormat } from 'openai/helpers/zod';
 import { warn } from 'console';
 import Message, { CHARACTERS_PER_TOKEN } from '../message';
 import CompletionService, {
   Completion,
   convertToMessage,
+  JsonOptions,
   mergeSystemMessages,
+  ModelType,
   Usage,
 } from './completion-service';
 
@@ -121,6 +126,111 @@ export default class OpenAICompletionService implements CompletionService {
     });
   }
   model: ChatOpenAI;
+
+  get miniModelName(): string {
+    const miniModel = process.env.APPMAP_NAVIE_MINI_MODEL;
+    if (miniModel) return miniModel;
+
+    // If the mini model is not specified, fall back to `APPMAP_NAVIE_MODEL` when running locally.
+    return this.isLocalModel ? this.modelName : 'gpt-4o-mini';
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private get isLocalModel(): boolean {
+    const baseUrl = process.env.OPENAI_BASE_URL ?? process.env.AZURE_OPENAI_BASE_PATH;
+    if (!baseUrl) return false;
+
+    try {
+      // Check to see if the base URL points to an official OpenAI API endpoint.
+      const { hostname } = new URL(baseUrl);
+      return hostname.match(/openai.(?:azure.)?com$/i) === null;
+    } catch {
+      return true;
+    }
+  }
+
+  // Resolve `full` or `mini` to the appropriate model name.
+  private resolveModel(modelType?: ModelType): string {
+    if (modelType === ModelType.Mini) return this.miniModelName;
+    return this.modelName;
+  }
+
+  // Request a JSON object with a given JSON schema.
+  async json<Schema extends z.ZodType>(
+    messages: Message[],
+    schema: Schema,
+    options?: JsonOptions
+  ): Promise<z.infer<Schema> | undefined> {
+    // If using a local model, provide the JSON schema to the model in the system prompt.
+    // This method is more likely to generate failure cases, but will be retried.
+    const generateLocal = () =>
+      this.model.completionWithRetry({
+        messages: mergeSystemMessages([
+          ...messages,
+          {
+            role: 'system',
+            content: `Use the following JSON schema for your response:\n\n${JSON.stringify(
+              zodResponseFormat(schema, 'requestedObject').json_schema.schema,
+              null,
+              2
+            )}`,
+          },
+        ]),
+        model: this.resolveModel(options?.model),
+        stream: false,
+        temperature: options?.temperature,
+      });
+
+    // If using the OpenAI API, use the structured output response format.
+    // This method unlikely to generate failure cases.
+    const generateOpenAi = () =>
+      this.model.completionWithRetry({
+        messages: mergeSystemMessages(messages),
+        model: this.resolveModel(options?.model),
+        stream: false,
+        temperature: options?.temperature,
+        response_format: zodResponseFormat(schema, 'requestedObject'),
+      });
+
+    const maxRetries = options?.maxRetries ?? 3;
+    for (let i = 0; i < maxRetries; i += 1) {
+      const generateJson = this.isLocalModel ? generateLocal : generateOpenAi;
+      const response = await generateJson(); // eslint-disable-line no-await-in-loop
+      if (!response?.choices?.length) {
+        warn(`Bad response, retrying (${i + 1}/${maxRetries})`);
+        continue; // eslint-disable-line no-continue
+      }
+
+      // As of 1.92, the Copilot endpoint in Visual Studio Code always returns chunks even when
+      // streaming has been disabled.
+      const [choice] = response.choices as (ChatCompletion.Choice | ChatCompletionChunk.Choice)[];
+      let completion: { content?: string | null };
+      if ('message' in choice) {
+        completion = choice.message;
+      } else if ('delta' in choice) {
+        completion = choice.delta;
+      } else {
+        warn(`Unexpected response choice: ${JSON.stringify(choice)}`);
+        continue; // eslint-disable-line no-continue
+      }
+
+      if (completion.content) {
+        try {
+          // Strip code fences
+          const sanitizedContent = completion.content.replace(/^`{3,}[^\s]*?$/gm, '');
+          const parsed = JSON.parse(sanitizedContent) as unknown;
+          schema.parse(parsed);
+          return parsed;
+        } catch (e) {
+          // fall through
+        }
+      }
+
+      warn(`Failed to parse JSON, retrying (${i + 1}/${maxRetries})`);
+    }
+
+    return undefined;
+  }
 
   async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
     const promptTokensPromise = this.countTokens(messages);

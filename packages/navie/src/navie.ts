@@ -34,6 +34,8 @@ import MermaidFixerService from './services/mermaid-fixer-service';
 import UpdateCommand from './commands/update-command';
 import ComputeUpdateService from './services/compute-update-service';
 import createCompletionService from './services/completion-service-factory';
+import NextStepClassificationService from './services/next-step-classification-service';
+import SuggestCommand from './commands/suggest-command';
 
 export type ChatHistory = Message[];
 
@@ -155,6 +157,11 @@ export default function navie(
   const buildContextCommand = () =>
     new ContextCommand(options, vectorTermsService, lookupContextService);
 
+  const buildSuggestCommand = () => {
+    const nextStepService = new NextStepClassificationService(completionService);
+    return new SuggestCommand(nextStepService);
+  };
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
@@ -163,6 +170,7 @@ export default function navie(
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
     [CommandMode.TechStack]: buildTechStackCommand,
     [CommandMode.Context]: buildContextCommand,
+    [CommandMode.Suggest]: buildSuggestCommand,
   };
 
   let { question } = clientRequest;
@@ -205,7 +213,8 @@ export default function navie(
     async *execute(): AsyncIterable<string> {
       assert(command, 'Command not specified');
 
-      yield* command.execute({ ...clientRequest, userOptions }, chatHistory);
+      for await (const chunk of command.execute({ ...clientRequest, userOptions }, chatHistory))
+        yield chunk;
     }
   }
 
