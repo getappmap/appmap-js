@@ -34,6 +34,11 @@ import ListFilesCommand from './commands/list-files-command';
 import MermaidFixerService from './services/mermaid-fixer-service';
 import UpdateCommand from './commands/update-command';
 import ComputeUpdateService from './services/compute-update-service';
+import PostResponseHook from './lib/post-response-hook';
+import PostPlanHook from './lib/post-response-hooks/post-plan';
+import PostDiagramHook from './lib/post-response-hooks/post-diagram';
+import PostGenerateHook from './lib/post-response-hooks/post-generate';
+import PostTestHook from './lib/post-response-hooks/post-test';
 
 export type ChatHistory = Message[];
 
@@ -182,6 +187,12 @@ export default function navie(
   clientRequest.question = questionText;
 
   class Navie extends EventEmitter implements INavie {
+    private readonly postResponseHooks: PostResponseHook[] = [
+      new PostPlanHook(),
+      new PostDiagramHook(),
+      new PostGenerateHook(),
+      new PostTestHook(),
+    ];
     constructor() {
       super();
 
@@ -198,11 +209,17 @@ export default function navie(
       });
     }
 
-    // eslint-disable-next-line class-methods-use-this
     async *execute(): AsyncIterable<string> {
       assert(command, 'Command not specified');
 
       yield* command.execute({ ...clientRequest, userOptions }, chatHistory);
+
+      for (const hook of this.postResponseHooks) {
+        if (hook.condition(interactionHistory)) {
+          const result = await hook.execute(interactionHistory); // eslint-disable-line no-await-in-loop
+          if (result) yield result;
+        }
+      }
     }
   }
 
