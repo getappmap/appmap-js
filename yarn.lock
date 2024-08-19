@@ -151,7 +151,7 @@ __metadata:
     "@appland/models": "workspace:^2.10.2"
     "@appland/navie": ^1.24.0
     "@appland/openapi": "workspace:^1.8.0"
-    "@appland/rpc": "workspace:^1.9.0"
+    "@appland/rpc": "workspace:^1.11.0"
     "@appland/scanner": "workspace:^1.86.0"
     "@appland/sequence-diagram": "workspace:^1.12.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
@@ -500,7 +500,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/rpc@workspace:^1.12.0, @appland/rpc@workspace:^1.9.0, @appland/rpc@workspace:packages/rpc":
+"@appland/rpc@workspace:^1.11.0, @appland/rpc@workspace:^1.12.0, @appland/rpc@workspace:packages/rpc":
   version: 0.0.0-use.local
   resolution: "@appland/rpc@workspace:packages/rpc"
   dependencies:
