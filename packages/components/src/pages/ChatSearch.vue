@@ -250,6 +250,11 @@ export default {
     },
   },
   methods: {
+    async loadThread(threadId: string) {
+      const thread = await this.rpcClient.loadThread(threadId);
+      const chat = this.$refs.vchat;
+      chat.restoreThread(threadId, thread);
+    },
     // This converts the old search context into the new context format
     createContextResponse() {
       if (!this.searchStatus) return;

@@ -16,9 +16,16 @@ describe('components/Chat.vue', () => {
         },
       });
 
+      let receivedThreadId;
+      wrapper.vm.$root.$on('thread-id', (id) => {
+        receivedThreadId = id;
+      });
+
       await wrapper.vm.onSend('Hello from the user');
+      await wrapper.vm.$nextTick();
 
       expect(wrapper.vm.threadId).toBe(threadId);
+      expect(receivedThreadId).toBe(threadId);
     });
   });
 
