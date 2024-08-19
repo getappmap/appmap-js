@@ -16,5 +16,20 @@ export namespace NavieRpc {
         commands: Command[];
       };
     }
+
+    export namespace UIEvent {
+      export const Method = 'v1.navie.ui_event';
+      export type Params = {
+        event: string;
+      };
+      export type ResponseSubmitPrompt = Response & {
+        action: 'submit_prompt';
+        prompt: string;
+      };
+      export type Response = {
+        action: string;
+        [key: string]: any;
+      };
+    }
   }
 }
