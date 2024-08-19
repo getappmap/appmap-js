@@ -7,6 +7,8 @@ import { exists } from '../../../utils';
 import { OpenMode } from 'fs';
 import configuration from '../../configuration';
 
+export const THREAD_ID_REGEX = /^[0-9a-f]{4,16}(-[0-9a-f]{4,16}){3,6}$/;
+
 export class ThreadAccessError extends Error {
   constructor(public readonly threadId: string, public action: string, public cause?: Error) {
     super(ThreadAccessError.errorMessage(threadId, action, cause));
@@ -303,7 +305,7 @@ export default class History {
       // Match UUIDs like 5278527e-c4ed-4e45-9fb6-372ed6a036f6 in the thread dir
       // Being careful not to touch anything else, like the dates and threads directories that are
       // created in the new history format.
-      (dir) => dir.match(/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/)
+      (dir) => dir.match(THREAD_ID_REGEX)
     );
 
     const threadFileAsTimestamp = (threadFile: string) => parseInt(threadFile.split('.')[0]);

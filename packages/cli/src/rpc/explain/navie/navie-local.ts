@@ -15,6 +15,7 @@ import {
 import reportFetchError from './report-fetch-error';
 import assert from 'assert';
 import { initializeHistory, loadThread } from './historyHelper';
+import { THREAD_ID_REGEX } from './history';
 
 const OPTION_SETTERS: Record<
   string,
@@ -37,12 +38,22 @@ const OPTION_SETTERS: Record<
 export default class LocalNavie extends EventEmitter implements INavie {
   public navieOptions = new Navie.NavieOptions();
 
+  assignedThreadId: string | undefined;
+
   constructor(
     private readonly contextProvider: ContextV2.ContextProvider,
     private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     private readonly helpProvider: Help.HelpProvider
   ) {
     super();
+  }
+
+  // Sets a thread id to use with the request.
+  // The caller is responsible for ensuring that the thread id is a unique, valid uuid.
+  setThreadId(threadId: string) {
+    if (!THREAD_ID_REGEX.test(threadId)) throw new Error(`Invalid thread id: ${threadId}`);
+
+    this.assignedThreadId = threadId;
   }
 
   get providerName() {
@@ -65,9 +76,15 @@ export default class LocalNavie extends EventEmitter implements INavie {
     prompt?: string
   ): Promise<void> {
     if (!threadId) {
-      warn(`[local-navie] No threadId provided for question. Allocating a new threadId.`);
-      // eslint-disable-next-line no-param-reassign
-      threadId = randomUUID();
+      if (this.assignedThreadId) {
+        warn(`[local-navie] No threadId provided for question. Using client-specified threadId.`);
+        // eslint-disable-next-line no-param-reassign
+        threadId = this.assignedThreadId;
+      } else {
+        warn(`[local-navie] No threadId provided for question. Allocating a new threadId.`);
+        // eslint-disable-next-line no-param-reassign
+        threadId = randomUUID();
+      }
     }
 
     let userMessageId: string;

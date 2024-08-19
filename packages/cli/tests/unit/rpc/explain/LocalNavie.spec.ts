@@ -110,6 +110,16 @@ describe('LocalNavie', () => {
       });
 
       describe('when invoked without a threadId', () => {
+        it('should assign a thread id if not provided', async () => {
+          const mockThreadId = 'mock-thread-id';
+          navie.setThreadId(mockThreadId);
+
+          const question = 'What is the meaning of life?';
+          await navie.ask(undefined, question);
+
+          expect(mockHistoryLoad).toHaveBeenCalledWith(mockThreadId);
+        });
+
         it('allocates a new threadId', async () => {
           let allocatedThreadId: string;
 
