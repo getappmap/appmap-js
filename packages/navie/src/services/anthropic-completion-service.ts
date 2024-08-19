@@ -2,12 +2,15 @@ import { warn } from 'node:console';
 import { isNativeError } from 'node:util/types';
 
 import { ChatAnthropic } from '@langchain/anthropic';
+import { z } from 'zod';
 
 import Message from '../message';
 import CompletionService, {
   Completion,
   convertToMessage,
+  JsonOptions,
   mergeSystemMessages,
+  ModelType,
   Usage,
 } from './completion-service';
 
@@ -69,17 +72,52 @@ const COST_PER_M_TOKEN: Record<string, { input: number; output: number }> = {
 
 export default class AnthropicCompletionService implements CompletionService {
   constructor(public readonly modelName: string, public readonly temperature: number) {
-    this.model = new ChatAnthropic({
-      modelName: this.modelName,
-      temperature: this.temperature,
-      streaming: true,
-    });
+    this.model = this.buildModel({ temperature });
   }
   model: ChatAnthropic;
 
-  async *complete(messages: readonly Message[]): Completion {
+  // Construct a model with non-default options. There doesn't seem to be a way to configure
+  // the model parameters at invocation time like with OpenAI.
+  private buildModel(options?: {
+    model?: ModelType;
+    temperature?: number;
+    streaming?: boolean;
+  }): ChatAnthropic {
+    return new ChatAnthropic({
+      modelName: options?.model === ModelType.Mini ? this.miniModelName : this.modelName,
+      temperature: options?.temperature ?? this.temperature,
+      streaming: options?.streaming ?? true,
+    });
+  }
+
+  get miniModelName(): string {
+    const miniModel = process.env.APPMAP_NAVIE_MINI_MODEL;
+    return miniModel ?? this.modelName;
+  }
+
+  // Request a JSON object with a given JSON schema.
+  async json<Schema extends z.ZodType>(
+    messages: Message[],
+    schema: Schema,
+    options?: JsonOptions
+  ): Promise<z.infer<Schema> | undefined> {
+    const maxRetries = options?.maxRetries ?? 3;
+    const model = this.buildModel({ ...options, streaming: false });
     try {
-      const response = await this.model.stream(mergeSystemMessages(messages).map(convertToMessage));
+      return await model
+        .withStructuredOutput<Schema>(schema)
+        .withRetry({ stopAfterAttempt: maxRetries })
+        .invoke(mergeSystemMessages(messages).map(convertToMessage));
+    } catch {
+      warn(`Failed to generate JSON after ${maxRetries} attempts`);
+      return undefined;
+    }
+  }
+
+  async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
+    try {
+      const model = this.buildModel(options);
+      const response = await model.stream(mergeSystemMessages(messages).map(convertToMessage));
 
       const usage = new Usage(COST_PER_M_TOKEN[this.modelName]);
 

@@ -479,6 +479,7 @@ __metadata:
     ts-node: ^10.4.0
     tsc: ^2.0.3
     typescript: ^4.9.5
+    zod: ^3.23.8
   languageName: unknown
   linkType: soft
 
@@ -42848,7 +42849,7 @@ typescript@~4.4.3:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.22.4":
+"zod@npm:^3.22.4, zod@npm:^3.23.8":
   version: 3.23.8
   resolution: "zod@npm:3.23.8"
   checksum: 15949ff82118f59c893dacd9d3c766d02b6fa2e71cf474d5aa888570c469dbf5446ac5ad562bb035bf7ac9650da94f290655c194f4a6de3e766f43febd432c5c

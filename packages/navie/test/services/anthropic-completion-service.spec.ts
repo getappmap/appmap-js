@@ -3,6 +3,8 @@ import InteractionHistory from '../../src/interaction-history';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { IterableReadableStream } from '@langchain/core/utils/stream';
 import { AIMessageChunk } from '@langchain/core/messages';
+import { z } from 'zod';
+import { RunnableBinding } from '@langchain/core/runnables';
 
 describe('AnthropicCompletionService', () => {
   let interactionHistory: InteractionHistory;
@@ -42,6 +44,15 @@ describe('AnthropicCompletionService', () => {
       result.push(token);
     }
     expect(result).toEqual(['Anthropic completion result']);
+  });
+
+  describe('json', () => {
+    it('returns the parsed JSON', async () => {
+      jest.spyOn(RunnableBinding.prototype, 'invoke').mockResolvedValue({ answer: '42' } as any);
+      const schema = z.object({ answer: z.string() });
+      const result = await service.json([], schema);
+      expect(result).toEqual({ answer: '42' });
+    });
   });
 });
 

@@ -118,7 +118,9 @@ describe('ExplainCommand', () => {
     interactionHistory = new InteractionHistory();
     completionService = {
       complete: jest.fn().mockReturnValue(TOKEN_STREAM),
+      json: jest.fn().mockResolvedValue(undefined),
       modelName: 'mock',
+      miniModelName: 'mock-mini',
       temperature: 0.5,
     };
     classificationService = {

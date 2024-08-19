@@ -1,10 +1,28 @@
 import type { BaseLanguageModelInterface, TokenUsage } from '@langchain/core/language_models/base';
 import { AIMessage, BaseMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { z } from 'zod';
 import Message from '../message';
+
+export enum ModelType {
+  Full, // slower, more intelligent
+  Mini, // faster, less intelligent
+}
+
+export type JsonOptions = {
+  model?: ModelType;
+  temperature?: number;
+  maxRetries?: number;
+};
 
 export default interface CompletionService {
   complete: (messages: readonly Message[], options?: { temperature?: number }) => Completion;
+  json<Schema extends z.ZodType>(
+    messages: Message[],
+    schema: Schema,
+    options?: JsonOptions
+  ): Promise<z.infer<Schema> | undefined>;
   readonly modelName: string;
+  readonly miniModelName: string;
   readonly temperature?: number;
   readonly model?: BaseLanguageModelInterface;
 }
