@@ -26,6 +26,7 @@ import detectCodeEditor from '../../lib/detectCodeEditor';
 import { update } from '../../rpc/file/update';
 import { INavieProvider } from '../../rpc/explain/navie/inavie';
 import { navieMetadataV1 } from '../../rpc/navie/metadata';
+import { navieSuggestHandlerV1 } from '../../rpc/navie/suggest';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -64,6 +65,7 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     setConfigurationV2(),
     getConfigurationV2(),
     navieMetadataV1(),
+    navieSuggestHandlerV1(navie),
   ];
 }
 
