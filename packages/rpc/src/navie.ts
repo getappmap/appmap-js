@@ -16,5 +16,19 @@ export namespace NavieRpc {
         commands: Command[];
       };
     }
+
+    export namespace Suggest {
+      export const Method = 'v1.navie.suggest';
+      export type NextStep = {
+        command: 'generate' | 'diagram' | 'plan' | 'test' | 'explain' | 'help';
+        prompt: string;
+        label: string;
+        overallScore: number;
+      };
+      export type Params = {
+        threadId: string;
+      };
+      export type Response = NextStep[];
+    }
   }
 }
