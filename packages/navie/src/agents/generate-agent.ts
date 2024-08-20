@@ -84,7 +84,9 @@ export default class GenerateAgent implements Agent {
       new PromptInteractionEvent(
         PromptType.IssueDescription,
         'user',
-        buildPromptValue(PromptType.IssueDescription, question)
+        question.trim().length > 0
+          ? buildPromptValue(PromptType.IssueDescription, question)
+          : 'Please generate code as discussed above.'
       )
     );
   }
