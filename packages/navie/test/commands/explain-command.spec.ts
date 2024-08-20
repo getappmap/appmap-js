@@ -250,7 +250,19 @@ describe('ExplainCommand', () => {
 
     it('applies the expected prompts', async () => {
       await explain();
-      expect(interactionHistory.events.map((event) => event.metadata)).toEqual([CompletionEvent]);
+      expect(interactionHistory.events.map((event) => event.metadata)).toEqual([
+        {
+          name: 'historicalMessage',
+          role: 'user',
+          type: 'prompt',
+        },
+        {
+          name: 'historicalMessage',
+          role: 'assistant',
+          type: 'prompt',
+        },
+        CompletionEvent,
+      ]);
     });
 
     it('returns a response', async () => {

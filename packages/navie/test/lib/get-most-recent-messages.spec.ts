@@ -13,30 +13,36 @@ describe('getMostRecentMessages', () => {
       { role: 'user', content: 'What can you do?' },
     ];
 
-    for (let i = 0; i < messages.length - 1; i++) {
+    for (let i = 0; i < messages.length; i++) {
       const events = getMostRecentMessages(messages, i);
-      expect(events.length).toBe(i);
-      for (let eventIndex = 0; eventIndex < events.length; eventIndex++) {
-        const event = events[eventIndex];
-        const message = messages[messages.length - 1 - i + eventIndex];
-        expect(event.type).toEqual('prompt');
-        expect(event.name).toEqual('historicalMessage');
-        expect(event.role).toEqual(message.role);
-        expect(event.content).toEqual(message.content);
+      if (i === 0) {
+        expect(events.length).toBe(0);
+        continue;
       }
+      expect(events.map(({ role, content }) => ({ role, content }))).toStrictEqual(
+        messages.slice(-i - (1 - (i % 2)))
+      );
     }
   });
 
-  it('does not return the most recent user message', () => {
+  it('always starts with a user message (adding messages as necessary)', () => {
     const messages: Message[] = [
       { role: 'user', content: "Let's count. I'll start. 1." },
       { role: 'assistant', content: '2' },
       { role: 'user', content: '3' },
     ];
-    const events = getMostRecentMessages(messages, 1);
-    expect(events.length).toBe(1);
-    expect(events[0].role).toBe('assistant');
-    expect(events[0].content).toBe('2');
+    const events = getMostRecentMessages(messages, 2);
+    expect(events.map((m) => m.role)).toStrictEqual(['user', 'assistant', 'user']);
+  });
+
+  it('always starts with a user message (removing messages as necessary)', () => {
+    const messages: Message[] = [
+      { role: 'assistant', content: "Let's count. I'll start. 1." },
+      { role: 'assistant', content: '2' },
+      { role: 'user', content: '3' },
+    ];
+    const events = getMostRecentMessages(messages, 2);
+    expect(events.map((m) => m.role)).toStrictEqual(['user']);
   });
 
   it('fixes up the system role', () => {
@@ -45,12 +51,13 @@ describe('getMostRecentMessages', () => {
       to remove them.
     */
     const messages: Message[] = [
+      { role: 'user', content: 'Hello.' },
       { role: 'system', content: 'My name is bot.' },
       { role: 'user', content: 'Who asked?' },
     ];
-    const events = getMostRecentMessages(messages, 1);
-    expect(events.length).toBe(1);
-    expect(events[0].role).toBe('assistant');
-    expect(events[0].content).toBe('My name is bot.');
+    const events = getMostRecentMessages(messages, 2);
+    expect(events.length).toBe(3);
+    expect(events[1].role).toBe('assistant');
+    expect(events[1].content).toBe('My name is bot.');
   });
 });
