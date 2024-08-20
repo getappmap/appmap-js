@@ -62,5 +62,11 @@ const MESSAGE_CONSTRUCTORS = {
 
 export function convertToMessage(message: Message): BaseMessage {
   const Cons = MESSAGE_CONSTRUCTORS[message.role];
-  return new Cons({ content: message.content ?? '' });
+  let content = '';
+  if (Array.isArray(message.content)) {
+    content = message.content.join('\n');
+  } else if (typeof message.content === 'string') {
+    content = message.content;
+  }
+  return new Cons({ content });
 }
