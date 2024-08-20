@@ -1,4 +1,5 @@
 import InteractionHistory, { ClassificationEvent } from '../interaction-history';
+import getMostRecentMessages from '../lib/get-most-recent-messages';
 import Message from '../message';
 import { ContextV2 } from '../context';
 import { ChatHistory } from '../navie';
@@ -135,20 +136,12 @@ export default class ClassificationService {
     question: string,
     chatHistory?: ChatHistory
   ): Promise<ContextV2.ContextLabel[]> {
-    let previousQuestions: Message[] = [];
-    if (chatHistory) {
-      const numPreviousMessages = 2;
-      const endIndex = chatHistory.length - 1;
-      const startIndex = endIndex - numPreviousMessages;
-      previousQuestions = chatHistory.slice(startIndex, endIndex).filter(Boolean);
-    }
-
     const messages: Message[] = [
       {
         content: SYSTEM_PROMPT,
         role: 'system',
       },
-      ...previousQuestions,
+      ...getMostRecentMessages(chatHistory ?? [], 2),
       {
         content: question,
         role: 'user',
