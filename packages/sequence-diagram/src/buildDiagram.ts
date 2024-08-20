@@ -1,7 +1,7 @@
 import { AppMap, Event } from '@appland/models';
 import { classNameToOpenAPIType } from '@appland/openapi';
 import sha256 from 'crypto-js/sha256.js';
-import LRUCache from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 import { merge } from './mergeWindow';
 import { selectEvents } from './selectEvents';
 import Specification from './specification';

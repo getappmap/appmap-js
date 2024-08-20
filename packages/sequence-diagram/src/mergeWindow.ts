@@ -1,5 +1,5 @@
 import sha256 from 'crypto-js/sha256.js';
-import LRUCache from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 import { Action, Loop, NodeType } from './types';
 
 const sha256Cache = new LRUCache<string, string>({ max: 3000 });
