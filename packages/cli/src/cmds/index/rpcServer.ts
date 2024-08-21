@@ -1,6 +1,7 @@
 import connect from 'connect';
 import { json as jsonParser } from 'body-parser';
 import cors from 'connect-cors';
+import makeDebug from 'debug';
 import jayson, { MethodLike } from 'jayson';
 import { log, warn } from 'console';
 import assert from 'assert';
@@ -10,13 +11,14 @@ import { Server } from 'http';
 import { inspect } from 'util';
 import { verbose } from '../../utils';
 
+const debug = makeDebug('appmap:rpcServer');
+
 function handlerMiddleware(
   name: string,
   handler: (args: any) => unknown | Promise<unknown>
 ): (args: any, callback: RpcCallback<unknown>) => Promise<void> {
   return async (args, callback) => {
-    if (verbose())
-      log(`[RPCServer] Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
+    debug(`[RPCServer] Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
     let err: any, result: any;
     try {
       result = await handler(args);

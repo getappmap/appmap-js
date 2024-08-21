@@ -1,7 +1,10 @@
+import makeDebug from 'debug';
+
 import { verbose } from '../utils';
 import { exec as execCb } from 'node:child_process';
 import { promisify } from 'util';
 
+const debug = makeDebug('appmap:listGitProjectFiles');
 const exec = promisify(execCb);
 
 // Run git ls-files and git status to get a list of all git-managed files. By doing it this way,
@@ -14,7 +17,7 @@ export default async function listGitProjectFiles(directory: string): Promise<st
         maxBuffer: 1024 ** 2 * 20, // 20 MB
       });
 
-      if (verbose()) console.log(stdout);
+      debug(stdout);
 
       return stdout.split('\n').filter(Boolean);
     } catch (e) {
@@ -33,7 +36,7 @@ export default async function listGitProjectFiles(directory: string): Promise<st
         maxBuffer: 1024 ** 2 * 20, // 20 MB
       });
 
-      if (verbose()) console.log(stdout);
+      debug(stdout);
 
       return stdout
         .split('\n')

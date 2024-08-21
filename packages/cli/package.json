@@ -112,6 +112,7 @@
     "connect-cors": "^0.5.6",
     "console-table-printer": "^2.9.0",
     "crypto-js": "^4.0.0",
+    "debug": "^4.3.6",
     "detect-indent": "^6.1.0",
     "diff": "^5.1.0",
     "fs-extra": "^10.1.0",
