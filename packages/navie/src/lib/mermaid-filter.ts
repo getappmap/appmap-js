@@ -44,7 +44,6 @@ export default class MermaidFilter implements Filter {
   }
 
   private async *processLine(line: string): AsyncIterable<Chunk> {
-    this.history.log(`[mermaid-filter] ${line}`);
     if (!this.inDiagram) {
       const startMatch = line.trim() === '```mermaid';
       if (startMatch) {

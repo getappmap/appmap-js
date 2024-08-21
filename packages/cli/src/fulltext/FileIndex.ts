@@ -3,15 +3,17 @@ import path, { join } from 'node:path';
 
 import sqlite3 from 'better-sqlite3';
 import assert from 'assert';
+import makeDebug from 'debug';
 import { existsSync } from 'fs';
 
-import { verbose } from '../utils';
 import listProjectFiles from './listProjectFiles';
 import queryKeywords from './queryKeywords';
 import { Git, GitState } from '../telemetry';
 import listGitProjectFiles from './listGitProjectFIles';
 import querySymbols from './querySymbols';
 import { fileNameMatchesFilterPatterns } from './fileNameMatchesFilterPatterns';
+
+const debug = makeDebug('appmap:file-index');
 
 export type FileIndexMatch = {
   directory: string;
@@ -45,9 +47,10 @@ export class FileIndex {
 
     const searchExpr = queryKeywords(keywords).join(' OR ');
     const rows = this.database.prepare(query).all(searchExpr, limit);
-    rows.forEach((row: any) => {
-      if (verbose()) console.log(`Found row ${row.file_name}`);
-    });
+    if (debug.enabled)
+      for (const row of rows) {
+        debug(`Found row ${(row as { file_name: string }).file_name}`);
+      }
     return rows.map((row: any) => ({
       directory: row.directory,
       fileName: row.file_name,
@@ -82,15 +85,13 @@ export class FileIndex {
           allowSymbols: fileNames.length < 15_000,
         };
 
-        if (verbose()) {
-          if (options.allowSymbols) {
-            console.log('Symbol parsing is enabled.');
-            console.log(
-              `Generic symbol parsing is ${options.allowGenericParsing ? 'enabled.' : 'disabled.'}`
-            );
-          } else {
-            console.log('Symbol parsing is disabled.');
-          }
+        if (options.allowSymbols) {
+          debug('Symbol parsing is enabled.');
+          debug(
+            `Generic symbol parsing is ${options.allowGenericParsing ? 'enabled.' : 'disabled.'}`
+          );
+        } else {
+          debug('Symbol parsing is disabled.');
         }
 
         for (let i = 0; i < filteredFileNames.length; i += batchSize) {
@@ -141,7 +142,7 @@ export class FileIndex {
         terms += ` ${queryKeywords(symbols).sort().join(' ')}`;
       }
 
-      if (verbose()) console.log(`Indexing file path ${filePath} with terms ${terms}`);
+      debug(`Indexing file path ${filePath} with terms ${terms}`);
 
       this.#insert.run(directory, filePath, terms);
     } catch (error) {

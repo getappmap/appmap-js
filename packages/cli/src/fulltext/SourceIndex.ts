@@ -1,3 +1,4 @@
+import makeDebug from 'debug';
 import {
   RecursiveCharacterTextSplitter,
   SupportedTextSplitterLanguage,
@@ -11,6 +12,8 @@ import { verbose } from '../utils';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import queryKeywords from './queryKeywords';
+
+const debug = makeDebug('appmap:source-index');
 
 const TEXT_SPLITTER_LANGUAGE_EXTENSIONS: Record<SupportedTextSplitterLanguage, string[]> = {
   cpp: ['cpp', 'h', 'hpp', 'c', 'cc', 'cxx', 'hxx'],
@@ -65,11 +68,12 @@ export class SourceIndex {
     const query = `SELECT directory, file_name, from_line, to_line, snippet, (rank * -1) score FROM code_snippets WHERE code_snippets MATCH ? ORDER BY rank LIMIT ?`;
 
     const searchExpr = queryKeywords(keywords).join(' OR ');
-    if (verbose()) console.log(`[SourceIndex] Searching for ${searchExpr}`);
+    debug(`[SourceIndex] Searching for ${searchExpr}`);
     const rows = this.database.prepare(query).all(searchExpr, limit);
-    rows.forEach((row: any) => {
-      if (verbose()) console.log(`[SourceIndex] Found row ${row.file_name}`);
-    });
+    if (debug.enabled)
+      rows.forEach((row: any) => {
+        debug(`[SourceIndex] Found row ${row.file_name}`);
+      });
     return rows.map((row: any) => ({
       directory: row.directory,
       fileName: row.file_name,
@@ -99,7 +103,7 @@ export class SourceIndex {
     if (language) {
       splitter = RecursiveCharacterTextSplitter.fromLanguage(language);
     } else {
-      if (verbose()) console.log(`No language found for file: ${fileName}`);
+      debug(`No language found for file: ${fileName}`);
       splitter = new RecursiveCharacterTextSplitter();
     }
     const filePath = join(directory, fileName);
@@ -122,7 +126,7 @@ export class SourceIndex {
         const { from, to } = chunk.metadata.loc.lines;
 
         try {
-          if (verbose()) console.log(`Indexing document ${fileName} from ${from} to ${to}`);
+          debug(`Indexing document ${fileName} from ${from} to ${to}`);
 
           const terms = queryKeywords([chunk.pageContent]).join(' ');
           this.#insert.run(directory, fileName, from, to, chunk.pageContent, terms);
