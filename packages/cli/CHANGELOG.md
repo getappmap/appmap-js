@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.160.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.159.0...@appland/appmap-v3.160.0) (2024-08-23)
+
+
+### Features
+
+* Support for Anthropic AI API ([5ba1694](https://github.com/getappmap/appmap-js/commit/5ba16947674f23cc72785ba0fd8dd51a6e4af815))
+
 # [@appland/appmap-v3.159.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.158.1...@appland/appmap-v3.159.0) (2024-08-16)
 
 
