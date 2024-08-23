@@ -1,3 +1,16 @@
+# [@appland/navie-v1.25.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.24.0...@appland/navie-v1.25.0) (2024-08-23)
+
+
+### Bug Fixes
+
+* Make sure that sliced message history starts with a user message ([8e8b96f](https://github.com/getappmap/appmap-js/commit/8e8b96f87aa4baeef7fca56d032f2385799feafb))
+* Provide a better prompt when using plain [@generate](https://github.com/generate) ([233ee79](https://github.com/getappmap/appmap-js/commit/233ee79241a763526251d6998160310e7748b28e))
+
+
+### Features
+
+* Support for Anthropic AI API ([5ba1694](https://github.com/getappmap/appmap-js/commit/5ba16947674f23cc72785ba0fd8dd51a6e4af815))
+
 # [@appland/navie-v1.24.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.23.0...@appland/navie-v1.24.0) (2024-08-08)
 
 
