@@ -47,7 +47,11 @@ function makeWhitespaceAdjuster(to: string, from: string) {
   return adjuster;
 }
 
-export default async function applyFileUpdate(file: string, original: string, modified: string) {
+export default async function applyFileUpdate(
+  file: string,
+  original: string,
+  modified: string
+): Promise<string[] | undefined> {
   // Read the original file
   const fileContents = await readFile(file, 'utf-8');
   const fileLines = fileContents.split('\n');
