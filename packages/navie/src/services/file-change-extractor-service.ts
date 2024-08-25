@@ -1,13 +1,11 @@
-import XML from 'fast-xml-parser';
-
 import InteractionHistory from '../interaction-history';
+import extractFileChanges from '../lib/extract-file-changes';
 import CompletionService from './completion-service';
 import { ChatHistory, ClientRequest } from '../navie';
 import Message from '../message';
 import Oracle from '../lib/oracle';
 import parseJSON from '../lib/parse-json';
 import { FileUpdate } from '../file-update';
-import { Update } from './compute-update-service';
 
 const LIST_PROMPT = `**File Name List Extractor**
 
@@ -86,7 +84,7 @@ export default class FileChangeExtractorService {
     }
 
     const content = FileChangeExtractorService.collectContent(messages);
-    const changes = FileChangeExtractorService.extractChanges(content).reverse();
+    const changes = extractFileChanges(content).reverse();
 
     // Return all changes that apply to the requested file name.
     const fileChanges = changes.filter((change) => change.file === fileName);
@@ -99,34 +97,6 @@ export default class FileChangeExtractorService {
       `[file-change-extractor] ${fileChanges.length} suggested changes found for ${fileName}`
     );
     return fileChanges.map((u) => ({ original: u.original, modified: u.modified, file: fileName }));
-  }
-
-  static extractChanges(content: string): (Update & { file?: string })[] {
-    // Search for <change> tags
-    const changeRegex = /<change>([\s\S]*?)<\/change>/gi;
-    let match: RegExpExecArray | null;
-    const changes = new Array<FileUpdate>();
-
-    // Trim at most one leading and trailing blank lines
-    const trimChange = (change: string): string =>
-      change.replace(/^\s*\n/, '').replace(/\n\s*$/, '');
-
-    // eslint-disable-next-line no-cond-assign
-    while ((match = changeRegex.exec(content)) !== null) {
-      const change = match[1];
-
-      const parser = new XML.XMLParser();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const jObj = parser.parse(change);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (jObj && jObj.original && jObj.modified) {
-        const update = jObj as FileUpdate;
-        update.original = trimChange(update.original);
-        update.modified = trimChange(update.modified);
-        changes.push(jObj as FileUpdate);
-      }
-    }
-    return changes;
   }
 
   static collectContent(messages: Message[]): string {

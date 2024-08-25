@@ -1,8 +1,8 @@
+import { extractFileChanges } from '..';
 import InteractionHistory from '../interaction-history';
 import trimFences from '../lib/trim-fences';
 import Message from '../message';
 import CompletionService from './completion-service';
-import FileChangeExtractorService from './file-change-extractor-service';
 
 export const COMPUTE_UPDATE_PROMPT = `**Compute Update**
 
@@ -77,7 +77,7 @@ ${existingContent}
     const originalRaw = tokens.join('');
     const original = trimFences(originalRaw);
 
-    const changes = FileChangeExtractorService.extractChanges(original);
+    const changes = extractFileChanges(original);
     if (changes.length === 0) {
       this.history.log('No changes were emitted in the output:');
       this.history.log(originalRaw);
