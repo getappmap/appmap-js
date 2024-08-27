@@ -201,11 +201,11 @@ export default class AppMapRPC {
     return new ExplainRequest(this.client);
   }
 
-  update(filePath: string, modifiedContent: string): Promise<void> {
+  update(filePath: string, modifiedContent: string, originalContent?: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.client.request(
         'file.update',
-        { file: filePath, modified: modifiedContent },
+        { file: filePath, modified: modifiedContent, original: originalContent },
         (err: any, error: any, { succeeded }: UpdateResult) => {
           if (err || error) return reportError(reject, err, error);
 

@@ -319,6 +319,7 @@ __metadata:
     "@types/dompurify": ^3.0.5
     "@types/events": ^3.0.3
     "@types/pako": ^2.0.3
+    "@types/sax": ^1.2.7
     "@types/yargs": ^16.0.0
     "@typescript-eslint/parser": ^5.51.0
     "@vue/babel-preset-app": ^5.0.8
@@ -377,6 +378,7 @@ __metadata:
     sass: ^1.26.5
     sass-loader: ^8.0.2
     sass-resources-loader: ^2.1.1
+    sax: ^1.4.1
     sql-formatter: ^4.0.2
     start-server-and-test: ^1.14.0
     storybook: ^7.6.17
@@ -11463,6 +11465,15 @@ __metadata:
   version: 0.12.1
   resolution: "@types/retry@npm:0.12.1"
   checksum: 5f46b2556053655f78262bb33040dc58417c900457cc63ff37d6c35349814471453ef511af0cec76a540c601296cd2b22f64bab1ab649c0dacc0223765ba876c
+  languageName: node
+  linkType: hard
+
+"@types/sax@npm:^1.2.7":
+  version: 1.2.7
+  resolution: "@types/sax@npm:1.2.7"
+  dependencies:
+    "@types/node": "*"
+  checksum: 7ece5fbb5d9c8fc76ab0de2f99d705edf92f18e701d4f9d9b0647275e32eb65e656c1badf9dfaa12f4e1ff3e250561c8c9cfe79e8b5f33dd1417ac0f1804f6cc
   languageName: node
   linkType: hard
 
@@ -37172,6 +37183,13 @@ resolve@1.1.7:
   version: 1.2.4
   resolution: "sax@npm:1.2.4"
   checksum: d3df7d32b897a2c2f28e941f732c71ba90e27c24f62ee918bd4d9a8cfb3553f2f81e5493c7f0be94a11c1911b643a9108f231dd6f60df3fa9586b5d2e3e9e1fe
+  languageName: node
+  linkType: hard
+
+"sax@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "sax@npm:1.4.1"
+  checksum: 3ad64df16b743f0f2eb7c38ced9692a6d924f1cd07bbe45c39576c2cf50de8290d9d04e7b2228f924c7d05fecc4ec5cf651423278e0c7b63d260c387ef3af84a
   languageName: node
   linkType: hard
 

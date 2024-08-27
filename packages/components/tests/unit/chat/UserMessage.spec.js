@@ -61,7 +61,8 @@ describe('components/UserMessage.vue', () => {
     },
   }),
   { renderer: customRenderer }
-);`);
+);
+`);
     });
   });
 

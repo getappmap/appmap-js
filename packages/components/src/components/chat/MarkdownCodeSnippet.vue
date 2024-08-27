@@ -98,12 +98,25 @@ export default Vue.extend({
       // The location may be URI encoded to avoid issues with special characters.
       return this.location ? decodeURIComponent(this.location) : undefined;
     },
+    change: function (): Vue.VNode | undefined {
+      return this.$slots.default?.find(({ tag }) => tag === 'change');
+    },
+    original: function (): string | undefined {
+      return this.change?.children?.find(({ tag }) => tag === 'original')?.children?.[0]?.text;
+    },
+    modified: function (): string | undefined {
+      return this.change?.children?.find(({ tag }) => tag === 'modified')?.children?.[0]?.text;
+    },
   },
   methods: {
     copyToClipboard(): void {
       if (!this.code) return;
 
-      navigator.clipboard.writeText(this.code);
+      let code = this.modified ?? this.code;
+      // ensure there's a final newline
+      if (!code.endsWith('\n')) code += '\n';
+
+      navigator.clipboard.writeText(code);
     },
     onPin({ pinned, handle }: { pinned: boolean; handle: number }): void {
       const eventData: PinEvent & Partial<PinCodeSnippet> = { pinned, handle };
@@ -123,7 +136,7 @@ export default Vue.extend({
       const { rpcClient } = this as unknown as Injected;
       this.pendingApply = true;
       try {
-        await rpcClient.update(this.decodedLocation, this.code);
+        await rpcClient.update(this.decodedLocation, this.modified ?? this.code, this.original);
         resultCallback('success');
       } catch (e) {
         resultCallback('failure');
