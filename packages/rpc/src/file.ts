@@ -4,6 +4,7 @@ export namespace FileRpc {
   export type UpdateOptions = {
     file: string;
     modified: string;
+    original?: string;
   };
 
   export type UpdateResponse = {

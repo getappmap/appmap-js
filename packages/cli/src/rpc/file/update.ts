@@ -34,23 +34,18 @@ async function createFile(file: string, modified: string): Promise<FileRpc.Updat
   }
 }
 
-async function updateFile(
+interface UpdateTemplate {
+  original: string;
+  modified: string;
+}
+
+async function createTemplate(
   navieProvider: INavieProvider,
   file: string,
   modified: string
-): Promise<FileRpc.UpdateResponse> {
+): Promise<UpdateTemplate> {
   // Read the original file
-  let original: string | undefined;
-  try {
-    original = await readFile(file, 'utf-8');
-  } catch (e) {
-    reportError('read file', e, file);
-
-    return {
-      exists: true,
-      succeeded: false,
-    };
-  }
+  const original = await readFile(file, 'utf-8');
 
   const explainResponse = await explain(
     navieProvider,
@@ -83,51 +78,64 @@ async function updateFile(
 
   await awaitCompletion(2, 30000);
 
-  if (status?.step !== ExplainRpc.Step.COMPLETE) {
-    warn(`[file-update] Failed to update ${file}`);
-    return {
-      exists: true,
-      succeeded: false,
-    };
-  }
+  if (status?.step !== ExplainRpc.Step.COMPLETE) throw new Error(`completion failed`);
 
-  const result = JSON.parse((status.explanation || []).join('')) as {
+  return JSON.parse((status.explanation || []).join('')) as {
     original: string;
     modified: string;
   };
+}
 
+async function updateFile(
+  navieProvider: INavieProvider,
+  file: string,
+  modified: string,
+  original: string
+): Promise<FileRpc.UpdateResponse> {
   try {
-    await applyFileUpdate(file, result.original, result.modified);
+    await applyFileUpdate(file, original, modified);
   } catch (e) {
     reportError('update file', e, file);
 
     return {
       exists: true,
       succeeded: false,
-      original: result.original,
-      modified: result.modified,
+      original,
+      modified,
     };
   }
 
   return {
     exists: true,
     succeeded: true,
-    original: result.original,
-    modified: result.modified,
+    original,
+    modified,
   };
 }
 
 export async function handler(
   navieProvider: INavieProvider,
   file: string,
-  modified: string
+  target: string,
+  original?: string
 ): Promise<FileRpc.UpdateResponse> {
   const fileExists = async () => exists(file);
 
   if (!(await fileExists())) {
-    return createFile(file, modified);
+    return createFile(file, target);
   } else {
-    return updateFile(navieProvider, file, modified);
+    if (original) return updateFile(navieProvider, file, target, original);
+    try {
+      const { modified, original } = await createTemplate(navieProvider, file, target);
+      return updateFile(navieProvider, file, modified, original);
+    } catch (e) {
+      reportError('create template', e, file);
+
+      return {
+        exists: true,
+        succeeded: false,
+      };
+    }
   }
 }
 
@@ -136,6 +144,6 @@ export function update(
 ): RpcHandler<FileRpc.UpdateOptions, FileRpc.UpdateResponse> {
   return {
     name: FileRpc.UpdateFunctionName,
-    handler: (args) => handler(navieProvider, args.file, args.modified),
+    handler: (args) => handler(navieProvider, args.file, args.modified, args.original),
   };
 }
