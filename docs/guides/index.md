@@ -18,4 +18,3 @@ These guide contain in-depth information on how to use AppMap for different use 
 - [Generating OpenAPI Definitions](/docs/guides/openapi)
 - [Using AppMap Analysis](/docs/guides/using-appmap-analysis)
 - [Reverse Engineering with AppMap](/docs/guides/reverse-engineering)
-- [Understanding the Runtime Code Review Report](/docs/guides/runtime-code-review)

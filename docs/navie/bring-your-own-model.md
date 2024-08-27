@@ -15,6 +15,7 @@ By default, when asking a question to Navie, your code editor will interact with
 
 You can also use any OpenAI API compatible LLM model either running locally or via a 3rd party provider.  Finally, for VS Code users with an active GitHub Copilot subscription, you can leverage the Copilot Language Models as a supported Navie backend.  Refer to the [Navie docs for more examples](/docs/reference/navie#bring-your-own-model-examples) of using alternative language models. 
 - [Bring Your Own OpenAI API Key (BYOK)](#bring-your-own-openai-api-key-byok)
+- [Bring Your Own Anthropic (Claude) API Key (BYOK)](#bring-your-own-anthropic-claude-api-key-byok)
 - [Bring Your Own Model (BYOM)](#bring-your-own-model-byom)
 - [Using GitHub Copilot Language Models](#using-github-copilot-language-models)
 - [Examples](#examples)
@@ -61,6 +62,32 @@ At any time, you can unset your OpenAI API Key and revert usage back to using th
 
 ![Navie Recommended Models](/assets/img/product/navie-use-default-backend.webp)
 
+## Bring Your Own Anthropic (Claude) API Key (BYOK)
+
+AppMap supports the Anthropic suite of large language models such as Claude Sonnet or Claude Opus.  
+
+To use AppMap Navie with Anthropic LLMs you need to generate an API key for your account.  
+
+Login to your [Anthropic dashboard](https://console.anthropic.com/dashboard), and choose the option to "Get API Keys"
+
+Click the box to "Create Key"
+
+![Anthropic Create Key](/assets/img/product/create-anthropic-key.webp)
+
+In the next box, give your key an easy to recognize name. 
+
+![Anthropic Key Name](/assets/img/product/give-anthropic-key-name.webp)
+
+In your VS Code or JetBrains editor, configure the following environment variables.  For more details on configuring 
+these environment variables in your VS Code or JetBrains editor, refer to the [AppMap BOYK documentation.](/docs/navie/bring-your-own-model.html#configuration)
+
+```
+ANTHROPIC_API_KEY=sk-ant-api03-12...
+APPMAP_NAVIE_MODEL=claude-3-5-sonnet-20240620
+```
+
+When setting the `APPMAP_NAVIE_MODEL` refer to the [Anthropic documentation](https://docs.anthropic.com/en/docs/intro-to-claude#model-options) for the latest available models to chose from. 
+
 ## Bring Your Own Model (BYOM)
 
 <p class="alert alert-info">
@@ -70,7 +97,7 @@ At any time, you can unset your OpenAI API Key and revert usage back to using th
 
 Navie currently supports any OpenAI-compatible model running locally or remotely. When configured like this, as in the BYOK case, Navie won't contact the AppMap hosted proxy and your conversations will stay private between you and the model provider.
 
-### Configuration <!-- omit in toc -->
+### Configuration
 
 In order to configure Navie for your own LLM, certain environment variables need to be set for AppMap services.
 
