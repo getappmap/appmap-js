@@ -129,6 +129,8 @@ import VStreamingMessageContent from '@/components/chat-search/StreamingMessageC
 import VNextPromptButton from '@/components/chat/NextPromptButton.vue';
 import VPopper from '@/components/Popper.vue';
 
+import markedChangeExtension from '@/components/chat/markedChangeExtension.ts';
+
 import { Marked, Renderer } from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -155,6 +157,7 @@ customRenderer.code = (code: string, language: string, escaped: boolean, sourceP
 const marked = new Marked({
   renderer: customRenderer,
   extensions: [
+    markedChangeExtension,
     {
       // Matches an HTML comment that contains a file path
       // Example: <!-- file: /path/to/file.py -->
@@ -304,7 +307,14 @@ export default {
       const markdown = marked.parse(this.message.toString());
       return DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
-        ADD_TAGS: ['v-markdown-code-snippet', 'v-mermaid-diagram', 'v-next-prompt-button'],
+        ADD_TAGS: [
+          'v-markdown-code-snippet',
+          'v-mermaid-diagram',
+          'v-next-prompt-button',
+          'change',
+          'modified',
+          'original',
+        ],
         ADD_ATTR: ['language', 'location', 'command', 'prompt'],
         ALLOWED_URI_REGEXP:
           /^(?:(?:(?:f|ht)tps?|mailto|event):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,

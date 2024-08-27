@@ -34,7 +34,7 @@ describe('components/MarkdownCodeSnippet.vue', () => {
 
     expect(clipboardText).toBeUndefined();
     await wrapper.find('[data-cy="copy"]').trigger('click');
-    expect(clipboardText).toBe(code);
+    expect(clipboardText).toBe(code + '\n');
   });
 
   it('can apply a code change', async () => {
@@ -54,7 +54,7 @@ describe('components/MarkdownCodeSnippet.vue', () => {
     });
 
     await wrapper.find('[data-cy="apply"]').trigger('click');
-    expect(update).toHaveBeenCalledWith(location, code);
+    expect(update).toHaveBeenCalledWith(location, code, undefined);
   });
 
   it('can open a file', async () => {

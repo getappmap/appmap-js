@@ -76,6 +76,8 @@ ChatSearch.args = {
   },
 };
 
+export const GenerateChangeResponse = (...args) => ChatSearch(...args);
+
 export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
@@ -190,7 +192,51 @@ const MOCK_EXPLANATION =
 9. The \`edit.html.erb\` view displays a form for editing a user's profile.
 
 Overall, this code provides functionality for user authentication, user creation, and user profile management in a Rails application.
-`.split('\n');
+`.split(/(?=\W)/);
+
+const GENERATE_CHANGE = `
+Here is the proposed change:
+<change>
+<file change-number-for-this-file="1">/home/user/projects/server/app/models/org.rb</file>
+<original line-count="7" no-ellipsis="true">
+<![CDATA[    def find_by_join_code!(join_code)
+      id, code = JSON.parse([join_code].pack("H*"))
+      code = Base64.decode64(code)
+
+      org = DAO::Org[id]
+      raise Exceptions::RecordNotFound.new("Org", id) unless org
+      raise Exceptions::RecordNotFound.new("Org", join_code) unless org.join_code == code
+
+      Org::Show.new(org)]]></original>
+<modified line-count="7" no-ellipsis="true">
+<![CDATA[    def find_by_join_code!(join_code)
+      id, code = JSON.parse([join_code].pack("H*"))
+      code = Base64.decode64(code)
+
+      org = DAO::Org[id]
+      raise Exceptions::RecordNotFound.new("Org", id) unless org
+      raise Exceptions::RecordNotFound.new("Org", join_code) unless org.join_code == code
+
+      Org::Show.new(org)
+    end
+
+    def add_member(member)
+      return false if member_of?(member)
+      OrganizationMember.create(org: self, member: member)
+    end
+
+    def member_of?(member)
+      members.include?(member)
+    end
+
+    def owner?(user)
+      owner == user
+    end
+
+    def members
+      @members ||= User.joins(:organization_memberships).where(organization_memberships: { org_id: id })
+    end]]></modified>
+</change>`;
 
 const DATA_BY_PATH = {
   'tmp/appmap/rspec/order_test': orderData,
@@ -284,9 +330,9 @@ function buildMockRpc(
     explainStatus.contextResponse = navieContext;
     if (supportsStreaming) {
       explainStatus.explanation = [];
-      for (const line of explanation) {
-        await wait(500);
-        explainStatus.explanation.push(`${line}\n`);
+      for (const line of explanation.split(/(?=\W)/)) {
+        await wait(10);
+        explainStatus.explanation.push(`${line}`);
       }
     } else {
       await wait(10000);
@@ -314,6 +360,9 @@ function buildMockRpc(
       if (method === 'appmap.metadata') {
         callback(null, null, data.metadata);
       }
+    } else if (method === 'file.update') {
+      console.log('file.update', params);
+      callback(null, null, {});
     } else if (method === 'v2.configuration.get') {
       callback(null, null, {
         baseUrl,
@@ -392,6 +441,12 @@ const emptyMockRpc = buildMockRpc(
   EmptyAppmapStats,
   noAppMapsContext
 );
+
+GenerateChangeResponse.args = {
+  appmapRpcFn: buildMockRpc(EmptySearchResponse, GENERATE_CHANGE, EmptyAppmapStats, navieContext),
+  question: '@generate example change',
+  appmapYmlPresent: true,
+};
 
 ChatSearchMock.args = {
   appmapRpcFn: nonEmptyMockRpc,
