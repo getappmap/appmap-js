@@ -15,24 +15,27 @@
     >
       <span class="context-container__title" data-cy="context-title">{{ title }}</span>
       <span class="context-container__button-group">
-        <span
-          :class="{
-            'context-container__button': 1,
-            'context-container__button--pending': !!pendingState,
-            'context-container__button--failure': pendingState === 'failure',
-            'context-container__button--success': pendingState === 'success',
-          }"
-          data-cy="apply"
-          @click.stop="onApply"
-          v-if="isFile && isPinnable"
-        >
-          <transition name="fade" mode="out-in">
-            <v-loader v-if="pendingState === 'pending'" />
-            <v-check-icon v-else-if="pendingState === 'success'" />
-            <v-close-icon v-else-if="pendingState === 'failure'" />
-            <v-apply-icon v-else />
-          </transition>
-        </span>
+        <v-popper :time-to-display="250" text="Apply changes" align="right" placement="top">
+          <span
+            :class="{
+              'context-container__button': 1,
+              'context-container__button--pending': !!pendingState,
+              'context-container__button--failure': pendingState === 'failure',
+              'context-container__button--success': pendingState === 'success',
+            }"
+            data-cy="apply"
+            @click.stop="onApply"
+            v-if="isFile && isPinnable"
+          >
+            <transition name="fade" mode="out-in">
+              <v-loader v-if="pendingState === 'pending'" />
+              <v-check-icon v-else-if="pendingState === 'success'" />
+              <v-close-icon v-else-if="pendingState === 'failure'" />
+              <v-apply-icon v-else />
+            </transition>
+          </span>
+        </v-popper>
+        <v-popper :time-to-display="250" text="Open" align="right" placement="top"></v-popper>
         <span
           class="context-container__button"
           data-cy="jump-to"
@@ -41,37 +44,50 @@
         >
           <v-jump-to-icon />
         </span>
-        <span class="context-container__button" data-cy="open" @click.stop="onOpen" v-if="isFile">
-          <v-jump-to-icon />
-        </span>
-        <span
-          class="context-container__button"
-          data-cy="expand"
-          @click.stop="$emit('expand')"
-          v-if="contentType === 'image' && !collapsed"
+        <v-popper :time-to-display="250" text="Open" align="right" placement="top">
+          <span class="context-container__button" data-cy="open" @click.stop="onOpen" v-if="isFile">
+            <v-jump-to-icon />
+          </span>
+        </v-popper>
+        <v-popper :time-to-display="250" text="Expand" align="right" placement="top">
+          <span
+            class="context-container__button"
+            data-cy="expand"
+            @click.stop="$emit('expand')"
+            v-if="contentType === 'image' && !collapsed"
+          >
+            <v-expand-icon />
+          </span>
+        </v-popper>
+        <v-popper :time-to-display="250" text="Copy" align="right" placement="top">
+          <span
+            class="context-container__button"
+            data-cy="copy"
+            @click.stop="$emit('copy')"
+            v-if="contentType === 'text' && !collapsed"
+          >
+            <v-copy-icon />
+          </span>
+        </v-popper>
+        <v-popper
+          :time-to-display="250"
+          :text="pinned ? 'Unpin from context' : 'Pin to context'"
+          align="right"
+          placement="top"
         >
-          <v-expand-icon />
-        </span>
-        <span
-          class="context-container__button"
-          data-cy="copy"
-          @click.stop="$emit('copy')"
-          v-if="contentType === 'text' && !collapsed"
-        >
-          <v-copy-icon />
-        </span>
-        <span
-          :class="{
-            'context-container__button': 1,
-            'context-container__button--toggled': pinned,
-          }"
-          @click.stop="onPin"
-          data-cy="pin"
-          :data-pinned="pinned"
-          v-if="isPinnable"
-        >
-          <v-pin-icon />
-        </span>
+          <span
+            :class="{
+              'context-container__button': 1,
+              'context-container__button--toggled': pinned,
+            }"
+            @click.stop="onPin"
+            data-cy="pin"
+            :data-pinned="pinned"
+            v-if="isPinnable"
+          >
+            <v-pin-icon />
+          </span>
+        </v-popper>
         <v-popper-menu
           position="bottom left"
           :allow-fullscreen="false"
@@ -128,6 +144,7 @@ import VApplyIcon from '@/assets/apply.svg';
 import VCheckIcon from '@/assets/success-checkmark.svg';
 import VCloseIcon from '@/assets/x-icon.svg';
 import VLoader from '@/components/chat/Loader.vue';
+import VPopper from '@/components/Popper.vue';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
 import type { PinEvent } from './PinEvent';
 
@@ -145,6 +162,7 @@ export default Vue.extend({
     VLoader,
     VCheckIcon,
     VCloseIcon,
+    VPopper,
   },
   props: {
     title: String,
@@ -248,7 +266,6 @@ export default Vue.extend({
   border-radius: $border-radius;
   background-color: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(black, 0.1);
-  overflow: hidden;
   line-height: 1 !important;
   position: relative;
   box-shadow: 0 0 1rem 0 rgba(black, 0.33);
@@ -256,6 +273,7 @@ export default Vue.extend({
   &--collapsed {
     .context-container__header {
       border-bottom: none;
+      border-radius: $border-radius;
     }
   }
 
@@ -269,12 +287,17 @@ export default Vue.extend({
     justify-content: space-between;
     background-color: rgba(black, 0.2);
     border-bottom: 1px solid rgba(white, 0.1);
+    border-radius: $border-radius $border-radius 0 0;
 
     &--collapsable {
       cursor: pointer;
 
       &:hover {
         background-color: rgba(white, 0.1);
+      }
+
+      .context-container__button:last-child {
+        border-radius: 0 $border-radius $border-radius 0;
       }
     }
   }
@@ -292,6 +315,29 @@ export default Vue.extend({
     display: flex;
     justify-content: end;
     background-color: rgba(black, 0.1);
+    position: relative;
+
+    & > :last-of-type {
+      .context-container__button {
+        border-radius: 0 $border-radius 0 0;
+      }
+    }
+
+    &::v-deep {
+      .popper__text {
+        backdrop-filter: blur(12px);
+        background-color: transparent;
+        border-color: rgba(white, 0.2);
+        border-bottom: 0;
+        border-radius: $border-radius $border-radius 0 0;
+        padding: 0.25rem;
+        margin-top: 0;
+
+        &:before {
+          display: none;
+        }
+      }
+    }
 
     & > *:nth-child(1) {
       border-left: 1px solid rgba(black, 0.1);
@@ -306,7 +352,6 @@ export default Vue.extend({
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     user-select: none;
-    height: 100%;
 
     &--pending {
       $bg: black;
@@ -353,7 +398,7 @@ export default Vue.extend({
         filter: drop-shadow(2px 2px 2px rgba(black, 0.75));
         path {
           fill: white;
-          stroke: white;
+          // stroke: white;
         }
       }
       &:hover {

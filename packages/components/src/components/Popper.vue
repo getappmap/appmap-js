@@ -229,8 +229,7 @@ $border-color: $gray1;
     }
 
     &--top {
-      transform: translate(-50%, -100%);
-      left: 50%;
+      transform: translateY(-100%);
       margin-top: -$margin;
 
       &::before {
@@ -239,7 +238,7 @@ $border-color: $gray1;
         bottom: -1px;
         width: 1em;
         height: 1em;
-        transform: translate(-50%, 0.5em) rotateZ(45deg);
+        transform: translateY(0.5em) rotateZ(45deg);
         background: $bg;
         z-index: -1;
         border: 1px solid $border-color;
@@ -281,11 +280,18 @@ $border-color: $gray1;
 
     &--align-right {
       right: 0;
+      &::before {
+        right: 2px;
+      }
     }
 
     &--align-center {
       left: 50%;
       transform: translateX(-50%);
+      &::before {
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
   }
 }
