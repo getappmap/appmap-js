@@ -17,7 +17,6 @@ Confluence facilitates robust documentation and knowledge sharing. AppMap automa
 
 1. A project containing AppMap Data.
   - How to make AppMap Diagrams [in your code editor](/docs/get-started-with-appmap/)
-  - How to make AppMap Diagrams [using a GitHub action](/docs/integrations/github-actions) or in [CircleCI](/docs/integrations/circle-ci)
 2. [The AppMap app for Confluence](https://marketplace.atlassian.com/apps/1233075/appmap-for-confluence). 
 
 ## Add AppMap Diagrams to a Document or Blog Post
