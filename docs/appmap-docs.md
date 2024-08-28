@@ -20,8 +20,6 @@ Over 90,000 software developers are using the [AppMap extension for VSCode](http
 
 <a class="btn btn-primary btn-lg" href="/docs/get-started-with-appmap/">Get Started with AppMap</a>
 
-{% include docs/app_framework_logos.html %}
-
-![Getting started screenshot](/assets/img/docs/dependency-map-example.webp)
-_AppMap dependency map in Visual Studio Code_
+![AppMap Navie with Sequence diagram in Visual Studio Code](/assets/img/docs/vscode-with-navie-prompt.webp)
+_AppMap Navie with Sequence diagram in Visual Studio Code_
 

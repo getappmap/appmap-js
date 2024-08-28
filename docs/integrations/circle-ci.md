@@ -7,6 +7,7 @@ name: CircleCI
 step: 3
 render_with_liquid: false
 redirect_from: [/docs/setup-appmap-in-ci/in-circleci]
+published: false
 ---
 
 # CircleCI <!-- omit in toc -->
