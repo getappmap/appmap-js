@@ -25,6 +25,7 @@ step: 1
   - [GitHub Copilot Language Model](#github-copilot-language-model)
     - [Video Demo](#video-demo)
   - [OpenAI](#openai)
+  - [Anthropic (Claude)](#anthropic-claude)
   - [Azure OpenAI](#azure-openai)
   - [AnyScale Endpoints](#anyscale-endpoints)
     - [Anyscale Demo with VS Code](#anyscale-demo-with-vs-code)
@@ -298,7 +299,7 @@ If you have the Copilot extension installed, but have not signed in, you'll see 
 
 Click the `Sign in to GitHub` and login with an account that has a valid paid or trial GitHub Copilot subscription.
 
-#### Video Demo
+#### Video Demo  <!-- omit in toc -->
 
 {% include vimeo.html id='992238965' %}
 
@@ -313,6 +314,35 @@ Only `OPENAI_API_KEY` needs to be set, other settings can stay default:
 When using your own OpenAI API key, you can also modify the OpenAI model for Navie to use.  For example if you wanted to use `gpt-3.5` or use an preview model like `gpt-4-vision-preview`.
 
 | `APPMAP_NAVIE_MODEL`| `gpt-4-vision-preview` |
+
+### Anthropic (Claude)
+
+AppMap supports the Anthropic suite of large language models such as Claude Sonnet or Claude Opus.  
+
+To use AppMap Navie with Anthropic LLMs you need to generate an API key for your account.  
+
+Login to your [Anthropic dashboard](https://console.anthropic.com/dashboard), and choose the option to "Get API Keys"
+
+Click the box to "Create Key"
+
+![Anthropic Create Key](/assets/img/product/create-anthropic-key.webp)
+
+In the next box, give your key an easy to recognize name. 
+
+![Anthropic Key Name](/assets/img/product/give-anthropic-key-name.webp)
+
+In your VS Code or JetBrains editor, configure the following environment variables.  For more details on configuring 
+these environment variables in your VS Code or JetBrains editor, refer to the [AppMap BOYK documentation.](/docs/navie/bring-your-own-model.html#configuration)
+
+| `ANTHROPIC_API_KEY`| `sk-ant-api03-8SgtgQrGB0vTSsB_DeeIZHvDrfmrg` |
+| `APPMAP_NAVIE_MODEL`| `claude-3-5-sonnet-20240620` |
+
+
+When setting the `APPMAP_NAVIE_MODEL` refer to the [Anthropic documentation](https://docs.anthropic.com/en/docs/intro-to-claude#model-options) for the latest available models to chose from. 
+
+#### Video Demo  <!-- omit in toc -->
+
+{% include vimeo.html id='1003330117' %}
 
 ### Azure OpenAI
 
@@ -336,11 +366,11 @@ setting:
 Consult [AnyScale documentation](https://docs.endpoints.anyscale.com/) for model
 names. Note we recommend using Mixtral models with Navie.
 
-#### Anyscale Demo with VS Code
+#### Anyscale Demo with VS Code  <!-- omit in toc -->
 
 {% include vimeo.html id='970914908' %}
 
-#### Anyscale Demo with JetBrains
+#### Anyscale Demo with JetBrains  <!-- omit in toc -->
 
 {% include vimeo.html id='970914884' %}
 
@@ -359,7 +389,7 @@ settings:
 Consult the [Fireworks AI documentation](https://fireworks.ai/models) for a full list of 
 the available models they currently support. 
 
-#### Video Demo
+#### Video Demo  <!-- omit in toc -->
 
 {% include vimeo.html id='992941358' %}
 

@@ -88,6 +88,8 @@ APPMAP_NAVIE_MODEL=claude-3-5-sonnet-20240620
 
 When setting the `APPMAP_NAVIE_MODEL` refer to the [Anthropic documentation](https://docs.anthropic.com/en/docs/intro-to-claude#model-options) for the latest available models to chose from. 
 
+{% include vimeo.html id='1003330117' %}
+
 ## Bring Your Own Model (BYOM)
 
 <p class="alert alert-info">
