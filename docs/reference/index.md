@@ -8,9 +8,9 @@ redirect_from: [/docs/reference/browser-extension]
 ---
 
 # Reference
+- [AppMap Navie AI](/docs/reference/navie)
 - [AppMap for Visual Studio Code](/docs/reference/vscode)
 - [AppMap for JetBrains](/docs/reference/jetbrains)
-- [AppMap Navie AI](/docs/reference/navie)
 - [AppMap Agent for Ruby](/docs/reference/appmap-ruby)
 - [AppMap Agent for Python](/docs/reference/appmap-python)
 - [AppMap Agent for Node.js](/docs/reference/appmap-node)

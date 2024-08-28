@@ -5,10 +5,11 @@ description: "Reference Guide to AppMap Navie, including advanced usage and conf
 toc: true
 reference: true
 name: AppMap Navie AI
-step: 3
+step: 1
 ---
 
 # AppMap Navie AI
+- [Navie Supported Software](#navie-supported-software)
 - [Navie Commands](#navie-commands)
   - [`@plan`](#plan)
   - [`@generate`](#generate)
@@ -16,17 +17,20 @@ step: 3
   - [`@explain`](#explain)
   - [`@diagram`](#diagram)
   - [`@help`](#help)
-  - [Navie Commands Demo](#navie-commands-demo)
-- [Navie Options](#options)
-  - [`/tokenlimit`](#tokenlimit)
-  - [`/temperature`](#temperature)
-  - [`/include` and `/exclude`](#include-and-exclude)
+- [Options](#options)
+    - [`/tokenlimit`](#tokenlimit)
+    - [`/temperature`](#temperature)
+    - [`/include` and `/exclude`](#include-and-exclude)
 - [Bring Your Own Model Examples](#bring-your-own-model-examples)
   - [GitHub Copilot Language Model](#github-copilot-language-model)
+    - [Video Demo](#video-demo)
   - [OpenAI](#openai)
   - [Azure OpenAI](#azure-openai)
   - [AnyScale Endpoints](#anyscale-endpoints)
+    - [Anyscale Demo with VS Code](#anyscale-demo-with-vs-code)
+    - [Anyscale Demo with JetBrains](#anyscale-demo-with-jetbrains)
   - [Fireworks AI](#fireworks-ai)
+    - [Video Demo](#video-demo-1)
   - [Ollama](#ollama)
   - [LM Studio](#lm-studio)
 - [OpenAI Key Management in VS Code](#openai-key-management-in-vs-code)
@@ -40,6 +44,19 @@ step: 3
   - [In VS Code](#in-vs-code)
   - [In JetBrains](#in-jetbrains)
 - [GitHub Repository](#github-repository)
+
+## Navie Supported Software
+
+AppMap Navie AI supports all software languages and frameworks for coding with static analysis and static diagrams based on the software. 
+
+AppMap supports the following languages for advanced runtime analysis and automated deep tracing of APIs, packages, classes, functions, databases, etc. 
+
+- Java
+- Ruby
+- Python
+- Node.js
+
+To learn how to make AppMap data of these languages, refer to the AppMap Navie [getting started documentation](/docs/get-started-with-appmap/making-appmap-data)
 
 ## Navie Commands
 
@@ -103,7 +120,7 @@ The `@explain` command prefix within Navie serves as a default option focused on
 
 ### `@diagram`
 
-The `@diagram` command prefix within Navie focuses the AI response to generate Mermaid compatable diagrams.  [Mermaid](https://mermaid.js.org/) is an open source diagramming and charting utility with wide support across tools such as GitHub, Atlassian, and more.  Use the `@diagram` command, and Navie will create and render a Mermaid compatable diagram within the Navie chat window.  You can open this diagram in the [Mermaid Live Editor](https://mermaid.live), copy the Mermaid Definitions to your clipboard, save to disk, or expand a full window view.  Save the Mermaid diagram into any supported tool such as GitHub Issues, Atlassian Confluence, and more. 
+The `@diagram` command prefix within Navie focuses the AI response to generate Mermaid compatible diagrams.  [Mermaid](https://mermaid.js.org/) is an open source diagramming and charting utility with wide support across tools such as GitHub, Atlassian, and more.  Use the `@diagram` command, and Navie will create and render a Mermaid compatible diagram within the Navie chat window.  You can open this diagram in the [Mermaid Live Editor](https://mermaid.live), copy the Mermaid Definitions to your clipboard, save to disk, or expand a full window view.  Save the Mermaid diagram into any supported tool such as GitHub Issues, Atlassian Confluence, and more. 
 
 #### Example Questions <!-- omit in toc -->
 
@@ -140,7 +157,7 @@ into your code editor with the AppMap extension installed, and ask Navie to gene
 - [Sample Python Project](https://github.com/land-of-apps/python-diagram-example/blob/master/README.md)
 - [Sample Ruby Project](https://github.com/land-of-apps/rails-diagram-example/blob/main/README.md)
 - [Sample Node (MERN) Project](https://github.com/land-of-apps/mern-diagram-example/blob/master/README.md)
-- [Sample Jave Spring Project](https://github.com/land-of-apps/waltz/blob/demo/diagram-examples/demo/diagram-demo.md)
+- [Sample Java Spring Project](https://github.com/land-of-apps/waltz/blob/demo/diagram-examples/demo/diagram-demo.md)
 
 ### `@help`
 
