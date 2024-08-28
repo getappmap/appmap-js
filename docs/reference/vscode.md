@@ -5,7 +5,7 @@ description: "Explore AppMap features in Visual Studio Code: AppMap panel, runti
 toc: true
 reference: true
 name: AppMap for Visual Studio Code
-step: 1
+step: 2
 ---
 
 # AppMap for Visual Studio Code
