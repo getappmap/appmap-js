@@ -5,10 +5,11 @@ description: "Reference Guide to AppMap Navie, including advanced usage and conf
 toc: true
 reference: true
 name: AppMap Navie AI
-step: 3
+step: 1
 ---
 
 # AppMap Navie AI
+- [Navie Supported Software](#navie-supported-software)
 - [Navie Commands](#navie-commands)
   - [`@plan`](#plan)
   - [`@generate`](#generate)
@@ -16,13 +17,21 @@ step: 3
   - [`@explain`](#explain)
   - [`@diagram`](#diagram)
   - [`@help`](#help)
-  - [Navie Commands Demo](#navie-commands-demo)
+- [Options](#options)
+    - [`/tokenlimit`](#tokenlimit)
+    - [`/temperature`](#temperature)
+    - [`/include` and `/exclude`](#include-and-exclude)
 - [Bring Your Own Model Examples](#bring-your-own-model-examples)
   - [GitHub Copilot Language Model](#github-copilot-language-model)
+    - [Video Demo](#video-demo)
   - [OpenAI](#openai)
+  - [Anthropic (Claude)](#anthropic-claude)
   - [Azure OpenAI](#azure-openai)
   - [AnyScale Endpoints](#anyscale-endpoints)
+    - [Anyscale Demo with VS Code](#anyscale-demo-with-vs-code)
+    - [Anyscale Demo with JetBrains](#anyscale-demo-with-jetbrains)
   - [Fireworks AI](#fireworks-ai)
+    - [Video Demo](#video-demo-1)
   - [Ollama](#ollama)
   - [LM Studio](#lm-studio)
 - [OpenAI Key Management in VS Code](#openai-key-management-in-vs-code)
@@ -36,6 +45,19 @@ step: 3
   - [In VS Code](#in-vs-code)
   - [In JetBrains](#in-jetbrains)
 - [GitHub Repository](#github-repository)
+
+## Navie Supported Software
+
+AppMap Navie AI supports all software languages and frameworks for coding with static analysis and static diagrams based on the software. 
+
+AppMap supports the following languages for advanced runtime analysis and automated deep tracing of APIs, packages, classes, functions, databases, etc. 
+
+- Java
+- Ruby
+- Python
+- Node.js
+
+To learn how to make AppMap data of these languages, refer to the AppMap Navie [getting started documentation](/docs/get-started-with-appmap/making-appmap-data)
 
 ## Navie Commands
 
@@ -99,7 +121,7 @@ The `@explain` command prefix within Navie serves as a default option focused on
 
 ### `@diagram`
 
-The `@diagram` command prefix within Navie focuses the AI response to generate Mermaid compatable diagrams.  [Mermaid](https://mermaid.js.org/) is an open source diagramming and charting utility with wide support across tools such as GitHub, Atlassian, and more.  Use the `@diagram` command, and Navie will create and render a Mermaid compatable diagram within the Navie chat window.  You can open this diagram in the [Mermaid Live Editor](https://mermaid.live), copy the Mermaid Definitions to your clipboard, save to disk, or expand a full window view.  Save the Mermaid diagram into any supported tool such as GitHub Issues, Atlassian Confluence, and more. 
+The `@diagram` command prefix within Navie focuses the AI response to generate Mermaid compatible diagrams.  [Mermaid](https://mermaid.js.org/) is an open source diagramming and charting utility with wide support across tools such as GitHub, Atlassian, and more.  Use the `@diagram` command, and Navie will create and render a Mermaid compatible diagram within the Navie chat window.  You can open this diagram in the [Mermaid Live Editor](https://mermaid.live), copy the Mermaid Definitions to your clipboard, save to disk, or expand a full window view.  Save the Mermaid diagram into any supported tool such as GitHub Issues, Atlassian Confluence, and more. 
 
 #### Example Questions <!-- omit in toc -->
 
@@ -136,7 +158,7 @@ into your code editor with the AppMap extension installed, and ask Navie to gene
 - [Sample Python Project](https://github.com/land-of-apps/python-diagram-example/blob/master/README.md)
 - [Sample Ruby Project](https://github.com/land-of-apps/rails-diagram-example/blob/main/README.md)
 - [Sample Node (MERN) Project](https://github.com/land-of-apps/mern-diagram-example/blob/master/README.md)
-- [Sample Jave Spring Project](https://github.com/land-of-apps/waltz/blob/demo/diagram-examples/demo/diagram-demo.md)
+- [Sample Java Spring Project](https://github.com/land-of-apps/waltz/blob/demo/diagram-examples/demo/diagram-demo.md)
 
 ### `@help`
 
@@ -147,6 +169,84 @@ Navie will help you setup AppMap, including generating AppMap recordings and dia
 - @help how do I setup process recording for my node.js project?
 - @help how can I reduce the size of my large AppMap Data recordings?
 - @help how can i export my AppMap data to atlassian confluence? 
+
+## Options
+
+Navie supports forward-slash options that can be included at the beginning of your questions to control various aspects of text generation. 
+
+#### `/tokenlimit`
+
+The `/tokenlimit` option is used to specify a limit on the number of tokens processed by the system. This parameter can help control the length of the generated text or manage resource consumption effectively.
+
+**Syntax**
+```shell
+/tokenlimit=<value>
+```
+- `<value>`: The maximum number of tokens to be processed. This can be either a string or a number. If provided as a string, it will be automatically converted to an integer.
+
+**Description**
+When executing commands, the `/tokenlimit` option sets the upper limit on the number of tokens the system should utilize. The default token limit is 8000. Increasing the token limit allows more space for context.
+
+**Example**
+To set the token limit to 16000, you can use:
+```shell
+@explain /tokenlimit=16000 <question>
+```
+
+**Notes**
+- It's important to ensure that the value provided for `/tokenlimit` is a valid positive integer.
+- The effect of `/tokenlimit` can directly impact the performance and output length of text generation processes.
+- The `/tokenlimit` cannot be increased above the fundamental limit of the LLM backend. Some backends, such as Copilot, may have a lower token limit than others.
+
+
+#### `/temperature`
+
+The `/temperature` option is used to control the randomness of the text generation process. This parameter can help adjust the creativity and diversity of the generated text.
+
+**Syntax**
+```shell
+/temperature=<value>
+```
+
+- `<value>`: The temperature value to be set. This can be either a string or a number. If provided as a string, it will be automatically converted to a float.
+
+**Description**
+When executing commands, the `/temperature` option sets the randomness of the text generation process. The default temperature value is 0.2. Lower values result in more deterministic outputs, while higher values lead to more creative and diverse outputs.
+
+**Example**
+To set the temperature to 0, you can use:
+```shell
+@generate /temperature=0 <question>
+```
+
+**Notes**
+
+- It's important to ensure that the value provided for `/temperature` is a valid float.
+- The effect of `/temperature` can directly impact the creativity and diversity of the generated text.
+
+#### `/include` and `/exclude`
+
+The `/include` and `/exclude` options are used to include or exclude specific file patterns from the retrieved context.
+
+**Syntax**
+```shell
+/include=<word-or-pattern>|<word-or-pattern> /exclude=<word-or-pattern>|<word-or-pattern>
+```
+
+- `<word-or-pattern>`: The word or pattern to be included or excluded. Multiple values or patterns can be separated by a pipe `|`, because the entire string is treated as a
+  regular expression.
+
+**Description**
+
+When executing commands, the `/include` option includes files according to the words or patterns specified, while the `/exclude` option excludes them. This can help control the context used by the system to generate text.
+
+**Example**
+
+To include only Python files and exclude files containing the word "test":
+
+```shell
+@plan /include=\.py /exclude=test
+```
 
 ## Bring Your Own Model Examples
 
@@ -199,7 +299,7 @@ If you have the Copilot extension installed, but have not signed in, you'll see 
 
 Click the `Sign in to GitHub` and login with an account that has a valid paid or trial GitHub Copilot subscription.
 
-#### Video Demo
+#### Video Demo  <!-- omit in toc -->
 
 {% include vimeo.html id='992238965' %}
 
@@ -214,6 +314,35 @@ Only `OPENAI_API_KEY` needs to be set, other settings can stay default:
 When using your own OpenAI API key, you can also modify the OpenAI model for Navie to use.  For example if you wanted to use `gpt-3.5` or use an preview model like `gpt-4-vision-preview`.
 
 | `APPMAP_NAVIE_MODEL`| `gpt-4-vision-preview` |
+
+### Anthropic (Claude)
+
+AppMap supports the Anthropic suite of large language models such as Claude Sonnet or Claude Opus.  
+
+To use AppMap Navie with Anthropic LLMs you need to generate an API key for your account.  
+
+Login to your [Anthropic dashboard](https://console.anthropic.com/dashboard), and choose the option to "Get API Keys"
+
+Click the box to "Create Key"
+
+![Anthropic Create Key](/assets/img/product/create-anthropic-key.webp)
+
+In the next box, give your key an easy to recognize name. 
+
+![Anthropic Key Name](/assets/img/product/give-anthropic-key-name.webp)
+
+In your VS Code or JetBrains editor, configure the following environment variables.  For more details on configuring 
+these environment variables in your VS Code or JetBrains editor, refer to the [AppMap BOYK documentation.](/docs/navie/bring-your-own-model.html#configuration)
+
+| `ANTHROPIC_API_KEY`| `sk-ant-api03-8SgtgQrGB0vTSsB_DeeIZHvDrfmrg` |
+| `APPMAP_NAVIE_MODEL`| `claude-3-5-sonnet-20240620` |
+
+
+When setting the `APPMAP_NAVIE_MODEL` refer to the [Anthropic documentation](https://docs.anthropic.com/en/docs/intro-to-claude#model-options) for the latest available models to chose from. 
+
+#### Video Demo  <!-- omit in toc -->
+
+{% include vimeo.html id='1003330117' %}
 
 ### Azure OpenAI
 
@@ -237,11 +366,11 @@ setting:
 Consult [AnyScale documentation](https://docs.endpoints.anyscale.com/) for model
 names. Note we recommend using Mixtral models with Navie.
 
-#### Anyscale Demo with VS Code
+#### Anyscale Demo with VS Code  <!-- omit in toc -->
 
 {% include vimeo.html id='970914908' %}
 
-#### Anyscale Demo with JetBrains
+#### Anyscale Demo with JetBrains  <!-- omit in toc -->
 
 {% include vimeo.html id='970914884' %}
 
@@ -260,7 +389,7 @@ settings:
 Consult the [Fireworks AI documentation](https://fireworks.ai/models) for a full list of 
 the available models they currently support. 
 
-#### Video Demo
+#### Video Demo  <!-- omit in toc -->
 
 {% include vimeo.html id='992941358' %}
 

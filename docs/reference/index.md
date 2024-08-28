@@ -8,9 +8,9 @@ redirect_from: [/docs/reference/browser-extension]
 ---
 
 # Reference
+- [AppMap Navie AI](/docs/reference/navie)
 - [AppMap for Visual Studio Code](/docs/reference/vscode)
 - [AppMap for JetBrains](/docs/reference/jetbrains)
-- [AppMap Navie AI](/docs/reference/navie)
 - [AppMap Agent for Ruby](/docs/reference/appmap-ruby)
 - [AppMap Agent for Python](/docs/reference/appmap-python)
 - [AppMap Agent for Node.js](/docs/reference/appmap-node)
@@ -21,5 +21,4 @@ redirect_from: [/docs/reference/browser-extension]
 - [Remote recording API](/docs/reference/remote-recording-api)
 - [Analysis Rules](/docs/reference/analysis-rules)
 - [Analysis Labels](/docs/reference/analysis-labels)
-- [GitHub Action](/docs/reference/github-action)
 - [Uninstalling AppMap](/docs/reference/uninstalling-appmap)

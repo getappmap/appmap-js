@@ -33,7 +33,6 @@ name: Reverse Engineering
     - [Saving AppMap Data in CI](#saving-appmap-data-in-ci)
     - [In GitHub Actions](#in-github-actions)
     - [In other CI tools](#in-other-ci-tools)
-    - [Matrix builds](#matrix-builds)
     - [Checklist](#checklist-2)
 - [Step 6: Use AppMap Diagrams to investigate a code issue](#step-6-use-appmap-diagrams-to-investigate-a-code-issue)
       - [Obtain the archive](#obtain-the-archive)
@@ -93,7 +92,7 @@ In a large project, it’s best to start making AppMap Diagrams in one functiona
 #### Run applicable test cases
 Start by recording any test cases that are applicable to this functional area. Test cases that traverse through the HTTP and SQL stack are the most useful. Unit tests and tests that mock or stub SQL are of less utility, since they don’t show the actual behavior of the application API and interactions with the data store. If you don’t have relevant tests - or just can’t easily determine if you do or not - proceed to the next step: requests recording.
 
-If you have a really large test suite, it’s useful to start generating AppMap Data of a subset of it, to make the turnaround times quicker for getting through this process. This approach also enables you to roll out AppMap incrementally to your team via the [GitHub Action](/docs/integrations/github-actions) or [CircleCI](/docs/integrations/circle-ci), without worrying about introducing too much overhead to the CI job.
+If you have a really large test suite, it’s useful to start generating AppMap Data of a subset of it, to make the turnaround times quicker for getting through this process.
 
 <table class="table table-striped table-bordered">
     <tr>
@@ -308,13 +307,6 @@ You can then store this archive anywhere you keep large files. The `appmap resto
 
 So, once the AppMap Data is created by the CI job, run `appmap archive` to create an AppMap archive file. You can save this archive file to the artifact store of your CI provider.
 
-#### Matrix builds
-Large projects often use matrix builds to distribute the testing load across multiple machines. AppMap in CI supports matrix builds. 
-
-For GitHub Actions, you can find further information about matrix builds [here](/docs/integrations/github-actions.html#matrix-builds). 
-
-For other CI tools, you need to create an appmap archive on each worker node. Then add a single “gather” step to collect the worker archives together, unpack them, and merge them into a single final archive using the archive --no-index flag.
-
 #### Checklist
 - ☐ Enable AppMap in CI
 - ☐ Run a build job to create AppMap Data
@@ -374,4 +366,4 @@ When the web stack or SQL queries are not exercised by the test suite, the appli
 
 ## Next Steps - AppMap analysis
 
-Thus far, we’ve shown how to build, maintain and use AppMap archives to investigate, learn and fix code.  The next step with AppMap is to use the [GitHub Action](/docs/integrations/github-actions) or [CircleCI](/docs/integrations/circle-ci) to analyze each Pull Request.
+Thus far, we’ve shown how to build, maintain and use AppMap archives to investigate, learn and fix code.  The next step with AppMap is to use AppMap in CI to analyze each Pull Request. [Request access](/contact/sales) to our AppMap in CI solution. 
