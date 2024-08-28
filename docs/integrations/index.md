@@ -12,6 +12,7 @@ AppMap supports integrations with many popular services. Learn more about how to
 - [Atlassian Compass](/docs/integrations/atlassian-compass)
 - [Atlassian Confluence](/docs/integrations/atlassian-confluence)
 - [PlantUML](/docs/integrations/plantuml)
+- [Mermaid](/docs/integrations/mermaid)
 - [Postman](/docs/integrations/postman)
 - [SmartBear SwaggerHub](/docs/integrations/smartbear-swaggerhub)
 - [Readme.com](/docs/integrations/readme)

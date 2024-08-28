@@ -5,10 +5,11 @@ description: "Reference Guide to AppMap Navie, including advanced usage and conf
 toc: true
 reference: true
 name: AppMap Navie AI
-step: 3
+step: 1
 ---
 
 # AppMap Navie AI
+- [Navie Supported Software](#navie-supported-software)
 - [Navie Commands](#navie-commands)
   - [`@plan`](#plan)
   - [`@generate`](#generate)
@@ -16,17 +17,21 @@ step: 3
   - [`@explain`](#explain)
   - [`@diagram`](#diagram)
   - [`@help`](#help)
-  - [Navie Commands Demo](#navie-commands-demo)
-- [Navie Options](#options)
-  - [`/tokenlimit`](#tokenlimit)
-  - [`/temperature`](#temperature)
-  - [`/include` and `/exclude`](#include-and-exclude)
+- [Options](#options)
+    - [`/tokenlimit`](#tokenlimit)
+    - [`/temperature`](#temperature)
+    - [`/include` and `/exclude`](#include-and-exclude)
 - [Bring Your Own Model Examples](#bring-your-own-model-examples)
   - [GitHub Copilot Language Model](#github-copilot-language-model)
+    - [Video Demo](#video-demo)
   - [OpenAI](#openai)
+  - [Anthropic (Claude)](#anthropic-claude)
   - [Azure OpenAI](#azure-openai)
   - [AnyScale Endpoints](#anyscale-endpoints)
+    - [Anyscale Demo with VS Code](#anyscale-demo-with-vs-code)
+    - [Anyscale Demo with JetBrains](#anyscale-demo-with-jetbrains)
   - [Fireworks AI](#fireworks-ai)
+    - [Video Demo](#video-demo-1)
   - [Ollama](#ollama)
   - [LM Studio](#lm-studio)
 - [OpenAI Key Management in VS Code](#openai-key-management-in-vs-code)
@@ -40,6 +45,19 @@ step: 3
   - [In VS Code](#in-vs-code)
   - [In JetBrains](#in-jetbrains)
 - [GitHub Repository](#github-repository)
+
+## Navie Supported Software
+
+AppMap Navie AI supports all software languages and frameworks for coding with static analysis and static diagrams based on the software. 
+
+AppMap supports the following languages for advanced runtime analysis and automated deep tracing of APIs, packages, classes, functions, databases, etc. 
+
+- Java
+- Ruby
+- Python
+- Node.js
+
+To learn how to make AppMap data of these languages, refer to the AppMap Navie [getting started documentation](/docs/get-started-with-appmap/making-appmap-data)
 
 ## Navie Commands
 
@@ -103,7 +121,7 @@ The `@explain` command prefix within Navie serves as a default option focused on
 
 ### `@diagram`
 
-The `@diagram` command prefix within Navie focuses the AI response to generate Mermaid compatable diagrams.  [Mermaid](https://mermaid.js.org/) is an open source diagramming and charting utility with wide support across tools such as GitHub, Atlassian, and more.  Use the `@diagram` command, and Navie will create and render a Mermaid compatable diagram within the Navie chat window.  You can open this diagram in the [Mermaid Live Editor](https://mermaid.live), copy the Mermaid Definitions to your clipboard, save to disk, or expand a full window view.  Save the Mermaid diagram into any supported tool such as GitHub Issues, Atlassian Confluence, and more. 
+The `@diagram` command prefix within Navie focuses the AI response to generate Mermaid compatible diagrams.  [Mermaid](https://mermaid.js.org/) is an open source diagramming and charting utility with wide support across tools such as GitHub, Atlassian, and more.  Use the `@diagram` command, and Navie will create and render a Mermaid compatible diagram within the Navie chat window.  You can open this diagram in the [Mermaid Live Editor](https://mermaid.live), copy the Mermaid Definitions to your clipboard, save to disk, or expand a full window view.  Save the Mermaid diagram into any supported tool such as GitHub Issues, Atlassian Confluence, and more. 
 
 #### Example Questions <!-- omit in toc -->
 
@@ -140,7 +158,7 @@ into your code editor with the AppMap extension installed, and ask Navie to gene
 - [Sample Python Project](https://github.com/land-of-apps/python-diagram-example/blob/master/README.md)
 - [Sample Ruby Project](https://github.com/land-of-apps/rails-diagram-example/blob/main/README.md)
 - [Sample Node (MERN) Project](https://github.com/land-of-apps/mern-diagram-example/blob/master/README.md)
-- [Sample Jave Spring Project](https://github.com/land-of-apps/waltz/blob/demo/diagram-examples/demo/diagram-demo.md)
+- [Sample Java Spring Project](https://github.com/land-of-apps/waltz/blob/demo/diagram-examples/demo/diagram-demo.md)
 
 ### `@help`
 
@@ -281,7 +299,7 @@ If you have the Copilot extension installed, but have not signed in, you'll see 
 
 Click the `Sign in to GitHub` and login with an account that has a valid paid or trial GitHub Copilot subscription.
 
-#### Video Demo
+#### Video Demo  <!-- omit in toc -->
 
 {% include vimeo.html id='992238965' %}
 
@@ -296,6 +314,35 @@ Only `OPENAI_API_KEY` needs to be set, other settings can stay default:
 When using your own OpenAI API key, you can also modify the OpenAI model for Navie to use.  For example if you wanted to use `gpt-3.5` or use an preview model like `gpt-4-vision-preview`.
 
 | `APPMAP_NAVIE_MODEL`| `gpt-4-vision-preview` |
+
+### Anthropic (Claude)
+
+AppMap supports the Anthropic suite of large language models such as Claude Sonnet or Claude Opus.  
+
+To use AppMap Navie with Anthropic LLMs you need to generate an API key for your account.  
+
+Login to your [Anthropic dashboard](https://console.anthropic.com/dashboard), and choose the option to "Get API Keys"
+
+Click the box to "Create Key"
+
+![Anthropic Create Key](/assets/img/product/create-anthropic-key.webp)
+
+In the next box, give your key an easy to recognize name. 
+
+![Anthropic Key Name](/assets/img/product/give-anthropic-key-name.webp)
+
+In your VS Code or JetBrains editor, configure the following environment variables.  For more details on configuring 
+these environment variables in your VS Code or JetBrains editor, refer to the [AppMap BOYK documentation.](/docs/navie/bring-your-own-model.html#configuration)
+
+| `ANTHROPIC_API_KEY`| `sk-ant-api03-8SgtgQrGB0vTSsB_DeeIZHvDrfmrg` |
+| `APPMAP_NAVIE_MODEL`| `claude-3-5-sonnet-20240620` |
+
+
+When setting the `APPMAP_NAVIE_MODEL` refer to the [Anthropic documentation](https://docs.anthropic.com/en/docs/intro-to-claude#model-options) for the latest available models to chose from. 
+
+#### Video Demo  <!-- omit in toc -->
+
+{% include vimeo.html id='1003330117' %}
 
 ### Azure OpenAI
 
@@ -319,11 +366,11 @@ setting:
 Consult [AnyScale documentation](https://docs.endpoints.anyscale.com/) for model
 names. Note we recommend using Mixtral models with Navie.
 
-#### Anyscale Demo with VS Code
+#### Anyscale Demo with VS Code  <!-- omit in toc -->
 
 {% include vimeo.html id='970914908' %}
 
-#### Anyscale Demo with JetBrains
+#### Anyscale Demo with JetBrains  <!-- omit in toc -->
 
 {% include vimeo.html id='970914884' %}
 
@@ -342,7 +389,7 @@ settings:
 Consult the [Fireworks AI documentation](https://fireworks.ai/models) for a full list of 
 the available models they currently support. 
 
-#### Video Demo
+#### Video Demo  <!-- omit in toc -->
 
 {% include vimeo.html id='992941358' %}
 

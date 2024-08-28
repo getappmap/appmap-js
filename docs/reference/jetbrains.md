@@ -5,7 +5,7 @@ description: "AppMap for JetBrains reference guide. Learn to use AppMap in your 
 toc: true
 reference: true
 name: AppMap for JetBrains
-step: 2
+step: 3
 ---
 
 # AppMap for JetBrains
