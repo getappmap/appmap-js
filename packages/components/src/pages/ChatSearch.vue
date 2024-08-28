@@ -4,6 +4,9 @@
     @mousemove="makeResizing"
     @mouseup="stopResizing"
     @mouseleave="stopResizing"
+    @drop="onDrop"
+    @dragover.prevent
+    data-cy="chat-search"
   >
     <div class="chat-container" data-cy="resize-left" ref="chatContainer">
       <v-chat
@@ -55,9 +58,11 @@ import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import AppMapRPC from '@/lib/AppMapRPC';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
-import type { PinEvent } from '@/components/chat/PinEvent';
+import { getNextHandle } from '@/components/chat/Handle';
+import type { PinEvent, PinFile } from '@/components/chat/PinEvent';
 import VWelcomeMessage from '@/components/chat/WelcomeMessage.vue';
 
+import { PinFileRequest } from '@/lib/PinFileRequest';
 import debounce from '@/lib/debounce';
 
 export default {
@@ -497,6 +502,50 @@ export default {
       const metadata = await this.rpcClient.metadata();
       this.metadata = metadata;
     },
+    async onDrop(evt: any) {
+      const items = evt.dataTransfer.items;
+      const len = items.length;
+      type DropPinFileRequest = PinFileRequest & { file: File };
+      let promises: Promise<DropPinFileRequest[]>[] = [];
+      for (let i = 0; i < len; i++) {
+        const item = items[i];
+        if (item.kind === 'string' && item.type?.match('^application/vnd.code.uri-list')) {
+          promises.push(
+            new Promise((resolve) => {
+              item.getAsString((s: string) => {
+                resolve(
+                  s.split(/[\r\n]+/).map((uri) => {
+                    const name = new URL(uri).pathname.split('/').slice(-1)[0];
+                    return {
+                      name,
+                      uri,
+                    };
+                  })
+                );
+              });
+            })
+          );
+        } else if (item.kind === 'file') {
+          const file = item.getAsFile();
+          const name = file.name;
+          const uri = file.path ? 'file://' + file.path : undefined;
+          promises.push(Promise.resolve([{ name, uri, file }]));
+        }
+      }
+      await Promise.all(promises).then((requests) => {
+        const reqs = requests.flat(Infinity);
+        reqs.forEach((r) => {
+          if (r.file && !r.uri) {
+            r.file.text().then((text) => {
+              r.content = text;
+              this.$root.$emit('fetch-pinned-files', [new PinFileRequest(r)]);
+            });
+          } else {
+            this.$root.$emit('fetch-pinned-files', [new PinFileRequest(r)]);
+          }
+        });
+      });
+    },
   },
   async mounted() {
     if (this.$refs.vappmap && this.targetAppmap && this.targetAppmapFsPath) {
@@ -525,6 +574,20 @@ export default {
       })
       .$on('change-input', (prompt: string) => {
         this.$refs.vchat.setInput(prompt);
+      })
+      .$on('pin-files', (requests: PinFileRequests[]) => {
+        requests.forEach((r) => {
+          const uri = new URL(r.uri);
+          const pathname = decodeURIComponent(uri.pathname);
+          const eventData: PinEvent & Partial<PinFile> = {
+            handle: getNextHandle(),
+            pinned: true,
+            type: 'file',
+            location: pathname,
+            content: r.content,
+          };
+          this.$root.$emit('pin', eventData);
+        });
       });
   },
 };

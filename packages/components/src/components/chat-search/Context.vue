@@ -1,6 +1,6 @@
 <template>
   <div class="context" data-cy="context">
-    <template v-if="!contextResponse">
+    <template v-if="!contextResponse && !hasPinnedItems">
       <div class="context__notice-container">
         <div class="context__notice" data-cy="context-notice">
           <h2>Navie's context</h2>
@@ -15,7 +15,7 @@
     <template v-else>
       <div class="context__body">
         <h2>Context</h2>
-        <template v-if="pinnedItems && pinnedItems.length">
+        <template v-if="hasPinnedItems">
           <h3>Pinned Items</h3>
           <div class="context__body__table">
             <component
@@ -54,6 +54,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VContextItem from '@/components/chat-search/ContextItem.vue';
+import VFile from '@/components/chat/File.vue';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
 import VButton from '@/components/Button.vue';
@@ -61,14 +62,16 @@ import VButton from '@/components/Button.vue';
 const PinnedContextComponents = {
   'code-snippet': VMarkdownCodeSnippet,
   mermaid: VMermaidDiagram,
+  file: VFile,
 };
 
 export default {
   name: 'v-context',
 
   components: {
-    VContextItem,
     VButton,
+    VContextItem,
+    VFile,
     VMarkdownCodeSnippet,
     VMermaidDiagram,
   },
@@ -102,11 +105,14 @@ export default {
     contextTypeKeys() {
       return Object.keys(this.contextTypes);
     },
+    hasPinnedItems() {
+      return this.pinnedItems?.length > 0;
+    },
   },
 
   methods: {
     hasContext(type: string) {
-      return this.contextResponse.some((context) => context.type === type);
+      return this.contextResponse?.some((context) => context.type === type);
     },
     contextItems(type: string) {
       return this.contextResponse.filter((context) => context.type === type);

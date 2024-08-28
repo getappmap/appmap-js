@@ -1,14 +1,18 @@
 <template>
   <div
-    :class="{ 'context-container': 1, 'context-container--collapsed': collapsed }"
+    :class="{
+      'context-container': 1,
+      'context-container--collapsed': collapsed || !isAppliable,
+    }"
     data-cy="context-container"
     :data-handle="valueHandle"
     :data-reference="isReference"
+    :title="location"
   >
     <div
       :class="{
         'context-container__header': 1,
-        'context-container__header--collapsable': isCollapsable,
+        'context-container__header--collapsable': isCollapsable || !isAppliable,
       }"
       data-cy="context-header"
       @click="onClickHeader"
@@ -25,7 +29,7 @@
             }"
             data-cy="apply"
             @click.stop="onApply"
-            v-if="isFile && isPinnable"
+            v-if="isFile && isPinnable && isAppliable"
           >
             <transition name="fade" mode="out-in">
               <v-loader v-if="pendingState === 'pending'" />
@@ -64,7 +68,7 @@
             class="context-container__button"
             data-cy="copy"
             @click.stop="$emit('copy')"
-            v-if="contentType === 'text' && !collapsed"
+            v-if="contentType === 'text' && !collapsed && isAppliable"
           >
             <v-copy-icon />
           </span>
@@ -133,22 +137,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import VCopyIcon from '@/assets/copy-icon.svg';
-import VPinIcon from '@/assets/pin.svg';
-import VHamburgerMenuIcon from '@/assets/hamburger.svg';
-import VExpandIcon from '@/assets/fullscreen.svg';
-import VPopperMenu from '@/components/PopperMenu.vue';
-import VJumpToIcon from '@/assets/open.svg';
 import VApplyIcon from '@/assets/apply.svg';
+import VCopyIcon from '@/assets/copy-icon.svg';
+import VExpandIcon from '@/assets/fullscreen.svg';
+import VHamburgerMenuIcon from '@/assets/hamburger.svg';
+import VJumpToIcon from '@/assets/open.svg';
+import VPinIcon from '@/assets/pin.svg';
 import VCheckIcon from '@/assets/success-checkmark.svg';
 import VCloseIcon from '@/assets/x-icon.svg';
+import { getNextHandle } from '@/components/chat/Handle';
 import VLoader from '@/components/chat/Loader.vue';
 import VPopper from '@/components/Popper.vue';
+import VPopperMenu from '@/components/PopperMenu.vue';
+import Vue from 'vue';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
 import type { PinEvent } from './PinEvent';
-
-let GlobalId = 0;
 
 export default Vue.extend({
   components: {
@@ -191,6 +194,10 @@ export default Vue.extend({
       type: Boolean,
       default: true,
     },
+    isAppliable: {
+      type: Boolean,
+      default: true,
+    },
   },
   inject: {
     pinnedItems: {
@@ -198,11 +205,11 @@ export default Vue.extend({
     },
   },
   data() {
-    const isReference = typeof this.handle === 'number';
+    const isReference = typeof this.handle === 'number' && this.isAppliable;
     return {
       isReference,
       collapsed: isReference || !this.isPinnable,
-      valueHandle: this.handle ?? GlobalId++,
+      valueHandle: this.handle ?? getNextHandle(),
       pendingState: undefined as undefined | 'pending' | 'success' | 'failure',
     };
   },
@@ -235,7 +242,12 @@ export default Vue.extend({
       this.closeMenu();
     },
     onClickHeader() {
-      if (!this.isCollapsable) return;
+      if (!this.isCollapsable) {
+        if (this.isFile) {
+          this.$root.$emit('open-location', this.location, this.directory);
+        }
+        return;
+      }
       this.collapsed = !this.collapsed;
     },
     onJumpTo() {
