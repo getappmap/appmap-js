@@ -10,7 +10,7 @@ import { existsSync } from 'fs';
 import { FileIndexMatch } from './FileIndex';
 import { verbose } from '../utils';
 import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { basename, join } from 'path';
 import queryKeywords from './queryKeywords';
 
 const debug = makeDebug('appmap:source-index');
@@ -128,7 +128,7 @@ export class SourceIndex {
         try {
           debug(`Indexing document ${fileName} from ${from} to ${to}`);
 
-          const terms = queryKeywords([chunk.pageContent]).join(' ');
+          const terms = queryKeywords([fileName, chunk.pageContent]).join(' ');
           this.#insert.run(directory, fileName, from, to, chunk.pageContent, terms);
         } catch (error) {
           console.warn(`Error indexing document ${fileName} from ${from} to ${to}`);

@@ -31,11 +31,22 @@ describe('SourceIndex', () => {
 
       const results = sourceIndex.search(['SourceIndex'], 10);
       expect(results.length).toBeTruthy();
-      expect(
-        results.every((r) =>
-          queryKeywords(r.content).some((keyword) => indexWords.includes(keyword))
-        )
-      ).toBeTruthy();
+
+      for (const result of results) {
+        if (
+          !queryKeywords([result.directory, result.fileName, result.content]).some((keyword) =>
+            indexWords.includes(keyword)
+          )
+        ) {
+          throw new Error(
+            `Expected result content (${queryKeywords([
+              result.directory,
+              result.fileName,
+              result.content,
+            ]).join(', ')}) to contain one of ${indexWords.join(', ')}`
+          );
+        }
+      }
     });
   });
 });
