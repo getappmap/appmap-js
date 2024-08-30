@@ -324,19 +324,25 @@ export default class History {
         const messageId = timestamp.toString();
         const messageFile = join(oldThreadDir, threadFile);
         const messageStr = await readFile(messageFile, 'utf-8');
-        const message = JSON.parse(messageStr) as Message;
-        if (message.role === 'user') {
-          lastUserMessageId = messageId;
-          // codeSelection and prompt are not available in the old format.
-          await history.question(threadId, messageId, message.content, undefined, undefined);
-        } else if (message.role === 'assistant' || message.role === 'system') {
-          if (lastUserMessageId)
-            await history.token(threadId, lastUserMessageId, messageId, message.content);
+        try {
+          const message = JSON.parse(messageStr) as Message;
+          if (message.role === 'user') {
+            lastUserMessageId = messageId;
+            // codeSelection and prompt are not available in the old format.
+            await history.question(threadId, messageId, message.content, undefined, undefined);
+          } else if (message.role === 'assistant' || message.role === 'system') {
+            if (lastUserMessageId)
+              await history.token(threadId, lastUserMessageId, messageId, message.content);
+          }
+        } catch (e) {
+          warn(`[history] Failed to parse message from ${messageFile}. Skipping.`);
+          warn(e);
         }
 
         // Project directories are unknown, so overwrite the file contents with empty text.
         const newThreadDir = join(history.directory, 'threads', threadId);
-        if (await exists(newThreadDir)) await writeFile(join(newThreadDir, 'projectDirectories.txt'), '');
+        if (await exists(newThreadDir))
+          await writeFile(join(newThreadDir, 'projectDirectories.txt'), '');
       }
 
       if (options.cleanup) await rm(oldThreadDir, { recursive: true });
