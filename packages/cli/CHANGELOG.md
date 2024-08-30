@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.161.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.160.0...@appland/appmap-v3.161.0) (2024-08-30)
+
+
+### Features
+
+* Add an implementation of `v1.navie.suggest` ([919f57b](https://github.com/getappmap/appmap-js/commit/919f57b3b87ce0923915b0de89e66054fdfdc7ec))
+
 # [@appland/appmap-v3.160.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.159.0...@appland/appmap-v3.160.0) (2024-08-23)
 
 
