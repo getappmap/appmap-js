@@ -36,6 +36,7 @@ import ComputeUpdateService from './services/compute-update-service';
 import createCompletionService from './services/completion-service-factory';
 import NextStepClassificationService from './services/next-step-classification-service';
 import SuggestCommand from './commands/suggest-command';
+import ObserveCommand from './commands/observe-command';
 
 export type ChatHistory = Message[];
 
@@ -162,6 +163,18 @@ export default function navie(
     return new SuggestCommand(nextStepService);
   };
 
+  const buildObserveCommand = () => {
+    const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
+    return new ObserveCommand(
+      options,
+      completionService,
+      lookupContextService,
+      vectorTermsService,
+      interactionHistory,
+      projectInfoService
+    );
+  };
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
@@ -171,6 +184,7 @@ export default function navie(
     [CommandMode.TechStack]: buildTechStackCommand,
     [CommandMode.Context]: buildContextCommand,
     [CommandMode.Suggest]: buildSuggestCommand,
+    [CommandMode.Observe]: buildObserveCommand,
   };
 
   let { question } = clientRequest;

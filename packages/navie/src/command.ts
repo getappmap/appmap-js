@@ -10,6 +10,7 @@ export enum CommandMode {
   TechStack = 'tech-stack',
   ListFiles = 'list-files',
   Suggest = 'suggest',
+  Observe = 'observe',
 }
 
 export interface CommandRequest extends ClientRequest {
