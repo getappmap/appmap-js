@@ -1,3 +1,10 @@
+# [@appland/components-v4.33.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.32.1...@appland/components-v4.33.0) (2024-08-30)
+
+
+### Features
+
+* Navie will render next step buttons following chat messages ([b913faf](https://github.com/getappmap/appmap-js/commit/b913faf620165e6c65ad6e16d1060aa741eeec84))
+
 # [@appland/components-v4.32.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.32.0...@appland/components-v4.32.1) (2024-08-15)
 
 
