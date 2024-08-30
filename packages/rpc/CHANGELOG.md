@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.13.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.12.0...@appland/rpc-v1.13.0) (2024-08-30)
+
+
+### Features
+
+* Add definitions for `v1.navie.suggest` ([b37cc34](https://github.com/getappmap/appmap-js/commit/b37cc34d8f60ea8ce6bdb41ce6284a26aa4beaaf))
+
 # [@appland/rpc-v1.12.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.11.0...@appland/rpc-v1.12.0) (2024-08-15)
 
 
