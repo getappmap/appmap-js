@@ -1,3 +1,10 @@
+# [@appland/navie-v1.26.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.25.0...@appland/navie-v1.26.0) (2024-08-30)
+
+
+### Features
+
+* Implement `[@suggest](https://github.com/suggest)` command ([fd3f6b2](https://github.com/getappmap/appmap-js/commit/fd3f6b216192f65c86c18eee6dcd5e4bf3068856))
+
 # [@appland/navie-v1.25.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.24.0...@appland/navie-v1.25.0) (2024-08-23)
 
 
