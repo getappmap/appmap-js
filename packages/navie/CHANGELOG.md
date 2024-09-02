@@ -1,3 +1,10 @@
+# [@appland/navie-v1.26.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.26.0...@appland/navie-v1.26.1) (2024-09-02)
+
+
+### Bug Fixes
+
+* Simplify the [@test](https://github.com/test) prompt ([f308c1e](https://github.com/getappmap/appmap-js/commit/f308c1e5bd16a6cad9fa4303df24615bf759aa9f))
+
 # [@appland/navie-v1.26.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.25.0...@appland/navie-v1.26.0) (2024-08-30)
 
 
