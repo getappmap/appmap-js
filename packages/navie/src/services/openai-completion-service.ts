@@ -1,3 +1,5 @@
+import { isNativeError } from 'node:util/types';
+
 import { ChatOpenAI } from '@langchain/openai';
 import type { ChatCompletion, ChatCompletionChunk } from 'openai/resources';
 import { z } from 'zod';
@@ -117,12 +119,50 @@ function estimateTokens(messages: readonly Message[]): number {
   return 0;
 }
 
+const STATUS_NO_RETRY = [
+  400, // Bad Request
+  401, // Unauthorized
+  402, // Payment Required
+  403, // Forbidden
+  404, // Not Found
+  405, // Method Not Allowed
+  406, // Not Acceptable
+  407, // Proxy Authentication Required
+  409, // Conflict
+  422, // Unprocessable Entity
+];
+
+// based on https://github.com/langchain-ai/langchainjs/blob/5d63f397c02f232d2a3729ed34461e209cfb0350/langchain-core/src/utils/async_caller.ts#L17
+function onFailedAttempt(error: unknown) {
+  console.warn(error);
+  if (isNativeError(error)) {
+    if (error.message.startsWith('Cancel') || error.message.startsWith('AbortError')) throw error;
+    if (error.name === 'AbortError') throw error;
+    if ('code' in error && error.code === 'ECONNABORTED') throw error;
+    const response =
+      ('response' in error && typeof error.response === 'object' && error.response) || error;
+    if ('status' in response && STATUS_NO_RETRY.includes(Number(response.status))) throw error;
+    if (
+      'error' in error &&
+      typeof error.error === 'object' &&
+      error.error &&
+      'code' in error.error &&
+      error.error.code === 'insufficient_quota'
+    ) {
+      const err = new Error(error.message);
+      err.name = 'InsufficientQuotaError';
+      throw err;
+    }
+  }
+}
+
 export default class OpenAICompletionService implements CompletionService {
   constructor(public readonly modelName: string, public readonly temperature: number) {
     this.model = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
       streaming: true,
+      onFailedAttempt,
     });
   }
   model: ChatOpenAI;

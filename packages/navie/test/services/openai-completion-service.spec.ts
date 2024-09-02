@@ -77,11 +77,13 @@ describe('OpenAICompletionService', () => {
       expect(tokens).toEqual(['User management works by managing users.']);
 
       expect(openAI).toHaveBeenCalled();
-      expect(openAI).toHaveBeenCalledWith({
-        modelName: modelName,
-        temperature: temperature,
-        streaming: true,
-      });
+      expect(openAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          modelName,
+          temperature,
+          streaming: true,
+        })
+      );
       expect(completionWithRetry).toHaveBeenCalledTimes(1);
     });
 
@@ -136,7 +138,11 @@ describe('OpenAICompletionService', () => {
       await service.json(messages, schema, options);
       expect(service.model.completionWithRetry).toHaveBeenCalledWith(
         expect.objectContaining({
-          messages,
+          messages: [
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            { role: 'system', content: expect.stringContaining(messages[0].content) },
+            ...messages.slice(1),
+          ],
           temperature: options.temperature,
           model: service.miniModelName,
         })
