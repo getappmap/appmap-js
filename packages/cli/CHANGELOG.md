@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.162.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.161.1...@appland/appmap-v3.162.0) (2024-09-02)
+
+
+### Bug Fixes
+
+* Include filename in SourceIndex ([f0dbc6d](https://github.com/getappmap/appmap-js/commit/f0dbc6d8e2e61d62cd873b43ae9c3407455487b6))
+
+
+### Features
+
+* Define new History format and message organization ([7dee821](https://github.com/getappmap/appmap-js/commit/7dee821c349918817a834c747e47475a8a75080b))
+* navie --thread-id option ([bf35daa](https://github.com/getappmap/appmap-js/commit/bf35daaa24f3e0a9d8156c75b8cea4f04bd1df24))
+
 # [@appland/appmap-v3.161.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.161.0...@appland/appmap-v3.161.1) (2024-08-30)
 
 
