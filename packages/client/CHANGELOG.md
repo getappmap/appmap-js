@@ -1,3 +1,10 @@
+# [@appland/client-v1.20.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.19.0...@appland/client-v1.20.0) (2024-09-02)
+
+
+### Features
+
+* Define new History format and message organization ([7dee821](https://github.com/getappmap/appmap-js/commit/7dee821c349918817a834c747e47475a8a75080b))
+
 # [@appland/client-v1.19.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.18.1...@appland/client-v1.19.0) (2024-08-16)
 
 
