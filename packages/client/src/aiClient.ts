@@ -13,13 +13,13 @@ export class CodedError extends Error {
 }
 
 export type Callbacks = {
-  onToken: (token: string, messageId: string) => void;
-  onComplete(): void;
+  onToken: (token: string, messageId: string) => void | Promise<void>;
+  onComplete(): void | Promise<void>;
   onRequestContext?: (
     data: Record<string, unknown>
   ) => Record<string, unknown> | unknown[] | Promise<Record<string, unknown> | unknown[]>;
-  onAck?: (userMessageId: string, threadId: string) => void;
-  onError?: (error: Error) => void;
+  onAck?: (userMessageId: string, threadId: string) => void | Promise<void>;
+  onError?: (error: Error) => void | Promise<void>;
 };
 
 export type UserInput = {
@@ -67,13 +67,13 @@ export default class AIClient {
         if (!('userMessageId' in message))
           this.panic(new Error('Unexpected ack message: no userMessageId'));
         if (!('threadId' in message)) this.panic(new Error('Unexpected ack message: no threadId'));
-        this.callbacks.onAck?.(message.userMessageId as string, message.threadId as string);
+        await this.callbacks.onAck?.(message.userMessageId as string, message.threadId as string);
         break;
       case 'token':
         if (!('token' in message)) this.panic(new Error('Unexpected token message: no token'));
         if (!('messageId' in message))
           this.panic(new Error('Unexpected token message: no messageId'));
-        this.callbacks.onToken(message.token as string, message.messageId as string);
+        await this.callbacks.onToken(message.token as string, message.messageId as string);
         break;
       case 'request-context': {
         if (!this.callbacks.onRequestContext) {
@@ -86,7 +86,7 @@ export default class AIClient {
         break;
       }
       case 'end':
-        this.callbacks.onComplete();
+        await this.callbacks.onComplete();
         this.disconnect();
         break;
       default:

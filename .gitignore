@@ -45,4 +45,5 @@ notebooks
 tmp/appmap
 packages/*/tmp/
 *.appmap.json
+.navie
 

@@ -572,4 +572,44 @@ describe('pages/ChatSearch.vue', () => {
 
     expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(false);
   });
+
+  describe('loadThred', () => {
+    it('loads the thread', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.configuration.get': noConfig(),
+        'v1.navie.metadata': rpcNavieMetadata(),
+        'explain.thread.load': [
+          [
+            null,
+            null,
+            {
+              timestamp: Date.now(),
+              exchanges: [
+                {
+                  question: {
+                    role: 'user',
+                    messageId: 'user-message-id-1',
+                    content: 'How does password reset work?',
+                  },
+                  answer: {
+                    role: 'assistant',
+                    messageId: 'assistant-message-id-1',
+                    content:
+                      'Password reset works by sending an email to the user with a link to reset their password.',
+                  },
+                },
+              ],
+              projectDirectories: [],
+            },
+          ],
+        ],
+      });
+
+      await wrapper.vm.loadThread('the-thread-id');
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.vm.$refs.vchat.threadId).toBe('the-thread-id');
+      expect(wrapper.vm.$refs.vchat.messages).toBeArrayOfSize(2);
+    });
+  });
 });

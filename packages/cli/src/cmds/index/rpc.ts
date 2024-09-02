@@ -10,7 +10,7 @@ import appmapFilter from '../../rpc/appmap/filter';
 import { RpcHandler } from '../../rpc/rpc';
 import metadata from '../../rpc/appmap/metadata';
 import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
-import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain';
+import { explainHandler, explainStatusHandler, loadThreadHandler } from '../../rpc/explain/explain';
 import { buildNavieProvider, commonNavieArgsBuilder as navieBuilder } from '../navie';
 import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
@@ -27,6 +27,10 @@ import { update } from '../../rpc/file/update';
 import { INavieProvider } from '../../rpc/explain/navie/inavie';
 import { navieMetadataV1 } from '../../rpc/navie/metadata';
 import { navieSuggestHandlerV1 } from '../../rpc/navie/suggest';
+import { initializeHistory } from '../../rpc/explain/navie/historyHelper';
+import History from '../../rpc/explain/navie/history';
+import { join } from 'path';
+import { homedir } from 'os';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -59,6 +63,7 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     sequenceDiagram(),
     explainHandler(navie, codeEditor),
     explainStatusHandler(),
+    loadThreadHandler(),
     update(navie),
     setConfigurationV1(),
     getConfigurationV1(),
@@ -81,6 +86,12 @@ export const handler = async (argv: HandlerArguments) => {
 
   loadConfiguration(false);
   await configureRpcDirectories(argv.directory);
+
+  {
+    const history = initializeHistory();
+    const oldHistoryDir = join(homedir(), '.appmap', 'navie', 'history');
+    await History.migrate(oldHistoryDir, history);
+  }
 
   const rpcServer = new RPCServer(argv.port, rpcMethods(navie, codeEditor));
   rpcServer.start();

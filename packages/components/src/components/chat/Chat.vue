@@ -77,7 +77,7 @@ import VChatInput from '@/components/chat/ChatInput.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
-import { NavieRpc } from '@appland/rpc';
+import { ExplainRpc, NavieRpc } from '@appland/rpc';
 
 export type CodeSelection = {
   path: string;
@@ -203,6 +203,29 @@ export default {
     },
   },
   methods: {
+    restoreThread(threadId: string, thread: ExplainRpc.Thread) {
+      // In hindsight, the thread should have an id property.
+      this.threadId = threadId;
+      let populatedCodeSelection = false;
+      for (const exchange of thread.exchanges) {
+        if (exchange.question) {
+          // TODO: User message provides prompt, but the UI does not have a place for it.
+          const { content, codeSelection } = exchange.question;
+          const userMessage = this.addUserMessage(content);
+          if (codeSelection && !populatedCodeSelection) {
+            populatedCodeSelection = true;
+            // TODO: There's some mismatch here between what the UI shows & what's in the thread data.
+            userMessage.codeSelections = [codeSelection];
+          }
+        }
+        if (exchange.answer) {
+          const { content } = exchange.answer;
+          const systemMessage = this.addSystemMessage();
+          systemMessage.content = content;
+          systemMessage.complete = true;
+        }
+      }
+    },
     getMessage(query: Partial<IMessage>): IMessage | undefined {
       return this.messages.find((m) => {
         return Object.keys(query).every((key) => m[key] === query[key]);
@@ -278,6 +301,7 @@ export default {
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);
       this.threadId = threadId;
+      this.$root.$emit('thread-id', threadId);
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied

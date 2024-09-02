@@ -1,4 +1,4 @@
-import { AppMapRpc, ConfigurationRpc, NavieRpc } from '@appland/rpc';
+import { AppMapRpc, ConfigurationRpc, ExplainRpc, NavieRpc } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
 
 import { EventEmitter } from 'events';
@@ -237,6 +237,20 @@ export default class AppMapRPC {
         NavieRpc.V1.Suggest.Method,
         { threadId },
         (err: any, error: any, result: NavieRpc.V1.Suggest.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
+
+  loadThread(threadId: string): Promise<ExplainRpc.LoadThreadResponse> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        ExplainRpc.ExplainThreadLoadFunctionName,
+        { threadId },
+        (err: any, error: any, result: ExplainRpc.LoadThreadResponse) => {
           if (err || error) return reportError(reject, err, error);
 
           resolve(result);

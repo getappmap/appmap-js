@@ -117,6 +117,15 @@ export const ChatSearchMock = (args, { argTypes }) => ({
   },
 });
 
+export const ChatSearchMockWithThreadId = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VChatSearch },
+  template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
+  mounted() {
+    this.$refs.chatSearch.loadThread('the-thread-id');
+  },
+});
+
 export const ChatSearchMockWithCodeSelection = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VChatSearch },
@@ -310,6 +319,26 @@ function buildMockRpc(
         baseUrl,
         model: 'gpt-4-turbo',
       });
+    } else if (method == 'explain.thread.load') {
+      callback(null, null, {
+        timestamp: Date.now(),
+        exchanges: [
+          {
+            question: {
+              role: 'user',
+              messageId: 'user-message-id-1',
+              content: 'How does password reset work?',
+            },
+            answer: {
+              role: 'assistant',
+              messageId: 'assistant-message-id-1',
+              content:
+                'Password reset works by sending an email to the user with a link to reset their password.',
+            },
+          },
+        ],
+        projectDirectories: [],
+      });
     } else if (method === 'v1.navie.metadata') {
       callback(null, null, {
         welcomeMessage:
@@ -365,6 +394,12 @@ const emptyMockRpc = buildMockRpc(
 );
 
 ChatSearchMock.args = {
+  appmapRpcFn: nonEmptyMockRpc,
+  appmapYmlPresent: true,
+  mostRecentAppMaps,
+};
+
+ChatSearchMockWithThreadId.args = {
   appmapRpcFn: nonEmptyMockRpc,
   appmapYmlPresent: true,
   mostRecentAppMaps,

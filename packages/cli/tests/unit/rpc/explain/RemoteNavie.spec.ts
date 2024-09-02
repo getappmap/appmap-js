@@ -1,8 +1,11 @@
 import { ContextV1, ContextV2 } from '@appland/navie';
 import RemoteNavie from '../../../../src/rpc/explain/navie/navie-remote';
 import { AI, AIClient, AICallbacks } from '@appland/client';
+import { verbose } from '../../../../src/utils';
 
 jest.mock('@appland/client');
+
+if (process.env.VERBOSE === 'true') verbose(true);
 
 describe('RemoteNavie', () => {
   let navie: RemoteNavie;
@@ -71,7 +74,7 @@ describe('RemoteNavie', () => {
     it('provides ContextV2', async () => {
       await navie.ask(threadId, question, codeSelection);
 
-      callbacks.onAck!('userMessageId', 'threadId');
+      await callbacks.onAck!('userMessageId', 'threadId');
       expect(ackFn).toHaveBeenCalledWith('userMessageId', 'threadId');
 
       const contextRequestV2: ContextV2.ContextRequest = {
@@ -109,7 +112,7 @@ describe('RemoteNavie', () => {
     it('adapts ContextV1 to ContextV2', async () => {
       await navie.ask(threadId, question, codeSelection);
 
-      callbacks.onAck!('userMessageId', 'threadId');
+      await callbacks.onAck!('userMessageId', 'threadId');
       expect(ackFn).toHaveBeenCalledWith('userMessageId', 'threadId');
 
       const contextRequestV1: ContextV1.ContextRequest = {
@@ -130,7 +133,7 @@ describe('RemoteNavie', () => {
         codeObjects: ['SELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1'],
       });
 
-      callbacks.onComplete();
+      await callbacks.onComplete();
       expect(completeFn).toHaveBeenCalled();
     });
   });

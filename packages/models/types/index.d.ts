@@ -1,5 +1,5 @@
 import type { SqliteParser } from './sqlite-parser';
-import type LRUCache from 'lru-cache';
+import type { LRUCache } from 'lru-cache';
 
 declare module '@appland/models' {
   export type CodeObjectType =

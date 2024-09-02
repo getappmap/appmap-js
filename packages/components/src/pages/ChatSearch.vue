@@ -83,10 +83,6 @@ export default {
     appmapRpcFn: {
       type: Function,
     },
-    savedFilters: {
-      type: Array,
-      default: () => [],
-    },
     appmaps: {
       type: Array,
       default: () => [],
@@ -254,6 +250,11 @@ export default {
     },
   },
   methods: {
+    async loadThread(threadId: string) {
+      const thread = await this.rpcClient.loadThread(threadId);
+      const chat = this.$refs.vchat;
+      chat.restoreThread(threadId, thread);
+    },
     // This converts the old search context into the new context format
     createContextResponse() {
       if (!this.searchStatus) return;
@@ -331,9 +332,6 @@ export default {
     },
     setAppMapState(state) {
       this.$refs.vappmap?.setState(state);
-    },
-    updateFilters(updatedFilters) {
-      this.$store.commit(SET_SAVED_FILTERS, updatedFilters);
     },
     onStop() {
       // This will stop token emission from this.ask immediately

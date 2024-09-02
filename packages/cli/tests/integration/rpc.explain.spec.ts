@@ -10,8 +10,11 @@ import LocalNavie from '../../src/rpc/explain/navie/navie-local';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
 
 import Telemetry, { Git } from '../../src/telemetry';
+import { verbose } from '../../src/utils';
 
 jest.mock('@appland/navie');
+
+if (process.env.VERBOSE === 'true') verbose(true);
 
 describe('RPC', () => {
   describe('explain', () => {
@@ -298,17 +301,20 @@ describe('RPC', () => {
           class MockAIClient {
             constructor(public callbacks: AICallbacks, public error: string) {}
 
-            async inputPrompt(): Promise<void> {
+            inputPrompt(): void {
               this.callbacks.onAck!(userMessageId, threadId);
+            }
 
-              setTimeout(() => {
-                this.callbacks.onError!(new Error(this.error));
-              }, 0);
+            sendError(): void {
+              this.callbacks.onError!(new Error(this.error));
             }
           }
 
+          let mockAIClient: MockAIClient | undefined;
+
           const aiClient = (callbacks: AICallbacks): AIClient => {
-            return new MockAIClient(callbacks, 'GPT service unavailable') as unknown as AIClient;
+            mockAIClient = new MockAIClient(callbacks, 'GPT service unavailable');
+            return mockAIClient as unknown as AIClient;
           };
 
           jest
@@ -322,7 +328,6 @@ describe('RPC', () => {
             ExplainRpc.ExplainFunctionName,
             explainOptions
           );
-          expect(response.error).toBeFalsy();
           const explainResponse: ExplainRpc.ExplainResponse = response.result;
 
           const queryStatus = queryStatusWithArgs.bind(
@@ -330,6 +335,9 @@ describe('RPC', () => {
             explainResponse.userMessageId,
             explainResponse.threadId
           );
+
+          assert(mockAIClient);
+          mockAIClient.sendError();
 
           await waitFor(async () => (await queryStatus()).step === ExplainRpc.Step.ERROR);
           const err: any = (await queryStatus()).err;

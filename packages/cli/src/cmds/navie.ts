@@ -27,6 +27,7 @@ interface ExplainArgs {
   navieProvider?: string;
   logNavie?: boolean;
   prompt?: string;
+  threadId?: string;
 }
 
 interface NavieCommonCmdArgs extends ExplainArgs {
@@ -79,6 +80,11 @@ export function commonNavieArgsBuilder<T>(args: yargs.Argv<T>): yargs.Argv<T & N
       type: 'string',
       // Allow this to be any string. The code editor brand name may be a clue to the language
       // in use, or the user's intent.
+    })
+    .option('thread-id', {
+      describe:
+        'The thread ID to use for the question. If not provided, a new thread ID will be allocated. Valid only for local Navie provider.',
+      type: 'string',
     });
 }
 
@@ -138,6 +144,8 @@ export function buildNavieProvider(argv: ExplainArgs) {
   ) => {
     loadConfiguration(false);
     const navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
+    if (argv.threadId) navie.setThreadId(argv.threadId);
+
     applyAIOptions(navie);
 
     let START: number | undefined;
@@ -164,6 +172,11 @@ export function buildNavieProvider(argv: ExplainArgs) {
     loadConfiguration(true);
     const navie = new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
     applyAIOptions(navie);
+
+    if (argv.threadId) {
+      warn(`Ignoring --thread-id option for remote Navie provider`);
+    }
+
     return navie;
   };
 
