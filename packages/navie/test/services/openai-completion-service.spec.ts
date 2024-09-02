@@ -1,21 +1,25 @@
 import * as OpenAI from '@langchain/openai';
 
-import InteractionHistory from '../../src/interaction-history';
+import InteractionHistory, { PromptInteractionEvent } from '../../src/interaction-history';
+import Trajectory, { TrajectoryEvent } from '../../src/lib/trajectory';
 import OpenAICompletionService from '../../src/services/openai-completion-service';
 import { z } from 'zod';
 import Message from '../../src/message';
+import { PromptType } from '../../src/prompt';
 
 jest.mock('@langchain/openai');
 
 describe('OpenAICompletionService', () => {
   let interactionHistory: InteractionHistory;
   let service: OpenAICompletionService;
+  let trajectory: Trajectory;
   const modelName = 'the-model-name';
   const temperature = 0.2;
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
-    service = new OpenAICompletionService(modelName, temperature);
+    trajectory = new Trajectory();
+    service = new OpenAICompletionService(modelName, temperature, trajectory);
   });
 
   describe('when the completion service is created', () => {
@@ -37,6 +41,10 @@ describe('OpenAICompletionService', () => {
     >(OpenAI.ChatOpenAI.prototype.completionWithRetry);
 
     beforeEach(() => {
+      interactionHistory.addEvent(
+        new PromptInteractionEvent(PromptType.Question, 'user', 'What is user management?')
+      );
+
       const generator =
         async function* (): AsyncIterable<OpenAI.OpenAIClient.Chat.Completions.ChatCompletionChunk> {
           yield {
@@ -84,6 +92,16 @@ describe('OpenAICompletionService', () => {
         })
       );
       expect(completionWithRetry).toHaveBeenCalledTimes(1);
+    });
+
+    it('emits trajectory events', async () => {
+      const events = new Array<TrajectoryEvent>();
+      trajectory.on('event', (event) => events.push(event));
+
+      await complete({ temperature: undefined });
+
+      expect(events.map((e) => e.message.role)).toEqual(['system', 'user', 'assistant']);
+      expect(events.map((e) => e.type)).toEqual(['sent', 'sent', 'received']);
     });
 
     describe('with a custom temperature', () => {
@@ -148,6 +166,23 @@ describe('OpenAICompletionService', () => {
       );
     });
 
+    it('logs sent messages to the trajectory', async () => {
+      const trajectoryEvents = new Array<TrajectoryEvent>();
+      trajectory.on('event', (event) => trajectoryEvents.push(event));
+
+      service.model.completionWithRetry = jest.fn().mockResolvedValue({
+        choices: [{ message: { content: '{"answer": "42"}' } }],
+      });
+
+      const messages: Message[] = [
+        { role: 'system', content: 'system prompt' },
+        { role: 'user', content: 'the question' },
+      ];
+      await service.json(messages, z.object({ answer: z.string() }));
+      expect(trajectoryEvents.map((e) => e.message.role)).toEqual(['system', 'user', 'assistant']);
+      expect(trajectoryEvents.map((e) => e.type)).toEqual(['sent', 'sent', 'received']);
+    });
+
     it('retries the expected number of times on failure', async () => {
       service.model.completionWithRetry = jest.fn().mockResolvedValue({ choices: [] });
       const schema = z.object({ answer: z.string() });
@@ -204,6 +239,32 @@ describe('OpenAICompletionService', () => {
             ],
           })
         );
+      });
+
+      it('emits trajectory events', async () => {
+        const trajectoryEvents = new Array<TrajectoryEvent>();
+        trajectory.on('event', (event) => trajectoryEvents.push(event));
+
+        service.model.completionWithRetry = jest.fn().mockResolvedValue({
+          choices: [{ message: { content: '{"answer": "42"}' } }],
+        });
+
+        const schema = z.object({ answer: z.string() });
+        await service.json(
+          [
+            {
+              role: 'user',
+              content: 'the question',
+            },
+          ],
+          schema
+        );
+        expect(trajectoryEvents.map((e) => e.message.role)).toEqual([
+          'system',
+          'user',
+          'assistant',
+        ]);
+        expect(trajectoryEvents.map((e) => e.type)).toEqual(['sent', 'sent', 'received']);
       });
 
       it('handles Visual Studio Code Copilot responses', async () => {

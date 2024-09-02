@@ -13,6 +13,7 @@ import CompletionService, {
   mergeSystemMessages,
   Usage,
 } from './completion-service';
+import Trajectory from '../lib/trajectory';
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -156,7 +157,11 @@ function onFailedAttempt(error: unknown) {
 }
 
 export default class OpenAICompletionService implements CompletionService {
-  constructor(public readonly modelName: string, public readonly temperature: number) {
+  constructor(
+    public readonly modelName: string,
+    public readonly temperature: number,
+    private trajectory: Trajectory
+  ) {
     this.model = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
@@ -196,34 +201,41 @@ export default class OpenAICompletionService implements CompletionService {
   ): Promise<z.infer<Schema> | undefined> {
     // If using a local model, provide the JSON schema to the model in the system prompt.
     // This method is more likely to generate failure cases, but will be retried.
-    const generateLocal = () =>
-      this.model.completionWithRetry({
-        messages: mergeSystemMessages([
-          ...messages,
-          {
-            role: 'system',
-            content: `Use the following JSON schema for your response:\n\n${JSON.stringify(
-              zodResponseFormat(schema, 'requestedObject').json_schema.schema,
-              null,
-              2
-            )}`,
-          },
-        ]),
+    const generateLocal = () => {
+      const sentMessages = mergeSystemMessages([
+        ...messages,
+        {
+          role: 'system',
+          content: `Use the following JSON schema for your response:\n\n${JSON.stringify(
+            zodResponseFormat(schema, 'requestedObject').json_schema.schema,
+            null,
+            2
+          )}`,
+        },
+      ]);
+      for (const message of sentMessages) this.trajectory.logSentMessage(message);
+
+      return this.model.completionWithRetry({
+        messages: sentMessages,
         model: options?.model ?? this.modelName,
         stream: false,
         temperature: options?.temperature,
       });
-
+    };
     // If using the OpenAI API, use the structured output response format.
     // This method unlikely to generate failure cases.
-    const generateOpenAi = () =>
-      this.model.completionWithRetry({
-        messages: mergeSystemMessages(messages),
+    const generateOpenAi = () => {
+      const sentMessages = mergeSystemMessages(messages);
+      for (const message of sentMessages) this.trajectory.logSentMessage(message);
+
+      return this.model.completionWithRetry({
+        messages: sentMessages,
         model: options?.model ?? this.miniModelName,
         stream: false,
         temperature: options?.temperature,
         response_format: zodResponseFormat(schema, 'requestedObject'),
       });
+    };
 
     const maxRetries = options?.maxRetries ?? 3;
     for (let i = 0; i < maxRetries; i += 1) {
@@ -247,7 +259,9 @@ export default class OpenAICompletionService implements CompletionService {
         continue; // eslint-disable-line no-continue
       }
 
-      if (completion.content) {
+      if (completion && completion.content !== null && completion.content !== undefined) {
+        this.trajectory.logReceivedMessage({ role: 'assistant', content: completion.content });
+
         try {
           // Strip code fences
           const sanitizedContent = completion.content.replace(/^`{3,}[^\s]*?$/gm, '');
@@ -267,19 +281,30 @@ export default class OpenAICompletionService implements CompletionService {
 
   async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
     const promptTokensPromise = this.countTokens(messages);
+
+    const sentMessages = mergeSystemMessages(messages);
+    for (const message of sentMessages) this.trajectory.logSentMessage(message);
+
     const response = await this.model.completionWithRetry({
-      messages: mergeSystemMessages(messages),
+      messages: sentMessages,
       model: this.model.modelName,
       stream: true,
       temperature: options?.temperature,
     });
 
     let tokenCount = 0;
+    const tokens = new Array<string>();
     for await (const token of response) {
       const { content } = token.choices[0].delta;
-      if (content) yield content;
+      if (content) {
+        tokens.push(content);
+        yield content;
+      }
       tokenCount += 1;
     }
+
+    this.trajectory.logReceivedMessage({ role: 'assistant', content: tokens.join('') });
+
     const usage = tokenUsage(await promptTokensPromise, tokenCount, this.modelName);
     warn(usage.toString());
     return usage;
