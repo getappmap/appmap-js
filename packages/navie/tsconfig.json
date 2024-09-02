@@ -1,11 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",
+    "noEmit": true,
     "types": ["node", "jest"],
     "declaration": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "test"
+  ]
 }
