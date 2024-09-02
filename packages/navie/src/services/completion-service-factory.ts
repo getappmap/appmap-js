@@ -3,10 +3,12 @@ import { warn } from 'node:console';
 import OpenAICompletionService from './openai-completion-service';
 import AnthropicCompletionService from './anthropic-completion-service';
 import CompletionService from './completion-service';
+import Trajectory from '../lib/trajectory';
 
 interface Options {
   modelName: string;
   temperature: number;
+  trajectory: Trajectory;
 }
 
 type Backend = 'anthropic' | 'openai';
@@ -30,12 +32,13 @@ export const SELECTED_BACKEND: Backend = environmentBackend() ?? defaultBackend(
 export default function createCompletionService({
   modelName,
   temperature,
+  trajectory,
 }: Options): CompletionService {
   const backend = environmentBackend() ?? defaultBackend();
   if (backend === 'anthropic') {
     warn('Using Anthropic AI backend');
-    return new AnthropicCompletionService(modelName, temperature);
+    return new AnthropicCompletionService(modelName, temperature, trajectory);
   }
   warn('Using OpenAI backend');
-  return new OpenAICompletionService(modelName, temperature);
+  return new OpenAICompletionService(modelName, temperature, trajectory);
 }

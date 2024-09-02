@@ -36,6 +36,7 @@ import ComputeUpdateService from './services/compute-update-service';
 import createCompletionService from './services/completion-service-factory';
 import NextStepClassificationService from './services/next-step-classification-service';
 import SuggestCommand from './commands/suggest-command';
+import Trajectory, { TrajectoryEvent } from './lib/trajectory';
 
 export type ChatHistory = Message[];
 
@@ -51,6 +52,8 @@ export interface INavie extends InteractionHistoryEvents {
   on(event: 'agent', listener: (agent: string) => void): void;
 
   on(event: 'classification', listener: (labels: ContextV2.ContextLabel[]) => void): void;
+
+  on(event: 'trajectory', listener: (event: TrajectoryEvent) => void): void;
 
   execute(): AsyncIterable<string>;
 }
@@ -81,9 +84,11 @@ export default function navie(
   if (options.responseTokens !== DEFAULT_RESPONSE_TOKENS)
     warn(`Using response tokens ${options.responseTokens}`);
 
+  const trajectory = new Trajectory();
+
   const interactionHistory = new InteractionHistory();
 
-  const completionService = createCompletionService(options);
+  const completionService = createCompletionService({ ...options, trajectory });
 
   const classificationService = new ClassificationService(interactionHistory, completionService);
 
@@ -206,6 +211,10 @@ export default function navie(
         if (event instanceof ClassificationEvent) {
           this.emit('classification', event.classification);
         }
+      });
+
+      trajectory.on('event', (event: TrajectoryEvent) => {
+        this.emit('trajectory', event);
       });
     }
 

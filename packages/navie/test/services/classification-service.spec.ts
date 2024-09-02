@@ -4,20 +4,24 @@ import InteractionHistory from '../../src/interaction-history';
 import ClassificationService from '../../src/services/classification-service';
 import { mockAIResponse } from '../fixture';
 import OpenAICompletionService from '../../src/services/openai-completion-service';
+import Trajectory from '../../src/lib/trajectory';
+import { TrajectoryEvent } from '../../dist/lib/trajectory';
 
 jest.mock('@langchain/openai');
 const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
 
 describe('ClassificationService', () => {
   let interactionHistory: InteractionHistory;
+  let trajectory: Trajectory;
   let service: ClassificationService;
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
     interactionHistory.on('event', (event) => console.log(event.message));
+    trajectory = new Trajectory();
     service = new ClassificationService(
       interactionHistory,
-      new OpenAICompletionService('gpt-4', 0.5)
+      new OpenAICompletionService('gpt-4', 0.5, trajectory)
     );
   });
   afterEach(() => jest.resetAllMocks());
@@ -54,6 +58,17 @@ describe('ClassificationService', () => {
         type: 'classification',
         classification: ['architecture=high', 'troubleshoot=medium'],
       });
+    });
+
+    it('emits trajectory events', async () => {
+      const trajectoryEvents = new Array<TrajectoryEvent>();
+
+      trajectory.on('event', (event) => trajectoryEvents.push(event));
+
+      await service.classifyQuestion('user management');
+
+      expect(trajectoryEvents.map((e) => e.message.role)).toEqual(['system', 'user', 'assistant']);
+      expect(trajectoryEvents.map((e) => e.type)).toEqual(['sent', 'sent', 'received']);
     });
   });
 });

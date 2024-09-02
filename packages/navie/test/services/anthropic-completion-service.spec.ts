@@ -5,9 +5,11 @@ import { IterableReadableStream } from '@langchain/core/utils/stream';
 import { AIMessageChunk } from '@langchain/core/messages';
 import { z } from 'zod';
 import { RunnableBinding } from '@langchain/core/runnables';
+import Trajectory, { TrajectoryEvent } from '../../src/lib/trajectory';
 
 describe('AnthropicCompletionService', () => {
   let interactionHistory: InteractionHistory;
+  let trajectory: Trajectory;
   let service: AnthropicCompletionService;
   const modelName = 'anthropic-model';
   const temperature = 0.3;
@@ -17,7 +19,8 @@ describe('AnthropicCompletionService', () => {
   beforeEach(() => {
     process.env['ANTHROPIC_API_KEY'] = 'test-api-key';
     interactionHistory = new InteractionHistory();
-    service = new AnthropicCompletionService(modelName, temperature);
+    trajectory = new Trajectory();
+    service = new AnthropicCompletionService(modelName, temperature, trajectory);
   });
 
   afterEach(() => {
@@ -32,26 +35,73 @@ describe('AnthropicCompletionService', () => {
     expect(service.temperature).toEqual(temperature);
   });
 
-  it('completes the question', async () => {
-    mockAnthropicStream('Anthropic completion result');
+  describe('completing a question', () => {
     const messages = [
       { role: 'user', content: 'What is your name?' },
       { role: 'assistant', content: 'I am a bot.' },
     ] as const;
-    const completion = service.complete(messages);
-    const result: string[] = [];
-    for await (const token of completion) {
-      result.push(token);
-    }
-    expect(result).toEqual(['Anthropic completion result']);
+
+    beforeEach(() => mockAnthropicStream('Anthropic completion result'));
+
+    const complete = async () => {
+      const completion = service.complete(messages);
+      const result: string[] = [];
+      for await (const token of completion) {
+        result.push(token);
+      }
+      return result;
+    };
+
+    it('completes the question', async () => {
+      const result = await complete();
+      expect(result).toEqual(['Anthropic completion result']);
+    });
+
+    it('emits trajectory events', async () => {
+      const events = new Array<TrajectoryEvent>();
+      trajectory.on('event', (event) => events.push(event));
+
+      await complete();
+
+      // I am not sure why we are sending it an "assistant" message, but here it is.
+      expect(events.map((e) => e.message.role)).toEqual([
+        'system',
+        'user',
+        'assistant',
+        'assistant',
+      ]);
+      expect(events.map((e) => e.type)).toEqual(['sent', 'sent', 'sent', 'received']);
+    });
   });
 
   describe('json', () => {
+    const schema = z.object({ answer: z.string() });
+
+    beforeEach(() =>
+      jest.spyOn(RunnableBinding.prototype, 'invoke').mockResolvedValue({ answer: '42' } as any)
+    );
+
     it('returns the parsed JSON', async () => {
-      jest.spyOn(RunnableBinding.prototype, 'invoke').mockResolvedValue({ answer: '42' } as any);
-      const schema = z.object({ answer: z.string() });
       const result = await service.json([], schema);
       expect(result).toEqual({ answer: '42' });
+    });
+
+    it('emits trajectory events', async () => {
+      const events = new Array<TrajectoryEvent>();
+      trajectory.on('event', (event) => events.push(event));
+
+      await service.json(
+        [
+          {
+            role: 'user',
+            content: 'the question',
+          },
+        ],
+        schema
+      );
+
+      expect(events.map((e) => e.message.role)).toEqual(['system', 'user', 'assistant']);
+      expect(events.map((e) => e.type)).toEqual(['sent', 'sent', 'received']);
     });
   });
 });

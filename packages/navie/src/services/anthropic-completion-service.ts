@@ -13,6 +13,7 @@ import CompletionService, {
   ModelType,
   Usage,
 } from './completion-service';
+import Trajectory from '../lib/trajectory';
 
 /* 
   Generated on https://docs.anthropic.com/en/docs/about-claude/models with
@@ -71,7 +72,11 @@ const COST_PER_M_TOKEN: Record<string, { input: number; output: number }> = {
 };
 
 export default class AnthropicCompletionService implements CompletionService {
-  constructor(public readonly modelName: string, public readonly temperature: number) {
+  constructor(
+    public readonly modelName: string,
+    public readonly temperature: number,
+    private trajectory: Trajectory
+  ) {
     this.model = this.buildModel({ temperature });
   }
   model: ChatAnthropic;
@@ -103,32 +108,56 @@ export default class AnthropicCompletionService implements CompletionService {
   ): Promise<z.infer<Schema> | undefined> {
     const maxRetries = options?.maxRetries ?? 3;
     const model = this.buildModel({ ...options, streaming: false });
+    const sentMessages = mergeSystemMessages(messages);
+
+    for (const message of sentMessages) this.trajectory.logSentMessage(message);
+
+    let response: z.infer<Schema>;
     try {
-      return await model
+      response = await model
         .withStructuredOutput<Schema>(schema)
         .withRetry({ stopAfterAttempt: maxRetries })
-        .invoke(mergeSystemMessages(messages).map(convertToMessage));
+        .invoke(sentMessages.map(convertToMessage));
     } catch {
       warn(`Failed to generate JSON after ${maxRetries} attempts`);
       return undefined;
     }
+
+    this.trajectory.logReceivedMessage({
+      role: 'assistant',
+      content: JSON.stringify(response),
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return response;
   }
 
   async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
     try {
       const model = this.buildModel(options);
-      const response = await model.stream(mergeSystemMessages(messages).map(convertToMessage));
+
+      const sentMessages = mergeSystemMessages(messages);
+      for (const message of sentMessages) this.trajectory.logSentMessage(message);
+
+      const response = await model.stream(sentMessages.map(convertToMessage));
 
       const usage = new Usage(COST_PER_M_TOKEN[this.modelName]);
 
+      const tokens = new Array<string>();
       // eslint-disable-next-line @typescript-eslint/naming-convention
       for await (const { content, usage_metadata } of response) {
         yield content.toString();
+        tokens.push(content.toString());
         if (usage_metadata) {
           usage.promptTokens += usage_metadata.input_tokens;
           usage.completionTokens += usage_metadata.output_tokens;
         }
       }
+
+      this.trajectory.logReceivedMessage({
+        role: 'assistant',
+        content: tokens.join(''),
+      });
 
       warn(usage.toString());
       return usage;
