@@ -8,8 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "build": "tsc --project tsconfig.build.json",
+    "watch": "tsc --project tsconfig.build.json --watch",
     "test": "npx appmap-node jest",
     "lint": "eslint"
   },
