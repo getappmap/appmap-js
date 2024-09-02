@@ -1,3 +1,15 @@
+# [@appland/components-v4.34.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.33.1...@appland/components-v4.34.0) (2024-09-02)
+
+
+### Bug Fixes
+
+* Remove unused savedFilters parameter ([4cb5417](https://github.com/getappmap/appmap-js/commit/4cb5417baa13fc9aa4b736a90005e71802d1efc0))
+
+
+### Features
+
+* Emit and load the thread-id from the UI ([fc0f898](https://github.com/getappmap/appmap-js/commit/fc0f898ed150816527b2f26b1e489097944009e8))
+
 # [@appland/components-v4.33.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.33.0...@appland/components-v4.33.1) (2024-08-30)
 
 
