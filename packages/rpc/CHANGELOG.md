@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.15.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.14.0...@appland/rpc-v1.15.0) (2024-09-03)
+
+
+### Features
+
+* Support providing change directly to the RPC update method ([31fe29b](https://github.com/getappmap/appmap-js/commit/31fe29b027f45e5eab04c20792be71047e75b9ad))
+
 # [@appland/rpc-v1.14.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.13.0...@appland/rpc-v1.14.0) (2024-09-02)
 
 
