@@ -31,7 +31,7 @@
     "@appland/diagrams": "workspace:^1.7.0",
     "@appland/models": "workspace:^2.10.2",
     "@appland/rpc": "workspace:^1.13.0",
-    "@appland/sequence-diagram": "workspace:^1.11.0",
+    "@appland/sequence-diagram": "^1.11.0",
     "@types/sax": "^1.2.7",
     "buffer": "^6.0.3",
     "d3": "^7.8.4",
