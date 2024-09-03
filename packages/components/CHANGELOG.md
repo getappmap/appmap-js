@@ -1,3 +1,10 @@
+# [@appland/components-v4.35.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.34.0...@appland/components-v4.35.0) (2024-09-03)
+
+
+### Features
+
+* Show diff when generating and applying code changes ([d90a0c8](https://github.com/getappmap/appmap-js/commit/d90a0c8c12ade97de0f79d10967719d947d65267))
+
 # [@appland/components-v4.34.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.33.1...@appland/components-v4.34.0) (2024-09-02)
 
 
