@@ -1,3 +1,11 @@
+# [@appland/navie-v1.27.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.26.1...@appland/navie-v1.27.0) (2024-09-03)
+
+
+### Features
+
+* Allow passing a <change>-set to apply CLI command ([9055d9a](https://github.com/getappmap/appmap-js/commit/9055d9a5a868032a93d7c948260ad091de5caf13))
+* Show diff when generating and applying code changes ([d90a0c8](https://github.com/getappmap/appmap-js/commit/d90a0c8c12ade97de0f79d10967719d947d65267))
+
 # [@appland/navie-v1.26.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.26.0...@appland/navie-v1.26.1) (2024-09-02)
 
 
