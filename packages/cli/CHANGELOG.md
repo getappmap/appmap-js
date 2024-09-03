@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.163.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.162.0...@appland/appmap-v3.163.0) (2024-09-03)
+
+
+### Features
+
+* Allow passing a <change>-set to apply CLI command ([9055d9a](https://github.com/getappmap/appmap-js/commit/9055d9a5a868032a93d7c948260ad091de5caf13))
+* Support providing change directly to the RPC update method ([31fe29b](https://github.com/getappmap/appmap-js/commit/31fe29b027f45e5eab04c20792be71047e75b9ad))
+
 # [@appland/appmap-v3.162.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.161.1...@appland/appmap-v3.162.0) (2024-09-02)
 
 
