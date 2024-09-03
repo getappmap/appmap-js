@@ -19,6 +19,7 @@ import RemoteNavie from '../rpc/explain/navie/navie-remote';
 import detectAIEnvVar, { AI_KEY_ENV_VARS } from './index/aiEnvVar';
 import detectCodeEditor from '../lib/detectCodeEditor';
 import { verbose } from '../utils';
+import Trajectory from '../rpc/explain/navie/trajectory';
 
 interface ExplainArgs {
   verbose: boolean;
@@ -28,6 +29,7 @@ interface ExplainArgs {
   logNavie?: boolean;
   prompt?: string;
   threadId?: string;
+  trajectoryFile?: string;
 }
 
 interface NavieCommonCmdArgs extends ExplainArgs {
@@ -84,6 +86,10 @@ export function commonNavieArgsBuilder<T>(args: yargs.Argv<T>): yargs.Argv<T & N
     .option('thread-id', {
       describe:
         'The thread ID to use for the question. If not provided, a new thread ID will be allocated. Valid only for local Navie provider.',
+      type: 'string',
+    })
+    .option('trajectory-file', {
+      describe: 'File to write the LLM interaction history, in JSONL format',
       type: 'string',
     });
 }
@@ -144,8 +150,15 @@ export function buildNavieProvider(argv: ExplainArgs) {
   ) => {
     loadConfiguration(false);
     const navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
-    if (argv.threadId) navie.setThreadId(argv.threadId);
 
+    if (argv.threadId) navie.setThreadId(argv.threadId);
+    if (argv.trajectoryFile) {
+      const trajectory = new Trajectory(argv.trajectoryFile);
+      navie.setTrajectoryHandler(trajectory);
+
+      process.on('SIGINT', () => trajectory.close());
+      process.on('exit', () => trajectory.close());
+    }
     applyAIOptions(navie);
 
     let START: number | undefined;
