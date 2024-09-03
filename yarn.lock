@@ -148,7 +148,7 @@ __metadata:
     "@appland/components": "workspace:^4.12.0"
     "@appland/diagrams": "workspace:^1.8.0"
     "@appland/models": "workspace:^2.10.2"
-    "@appland/navie": ^1.26.0
+    "@appland/navie": ^1.27.0
     "@appland/openapi": "workspace:^1.8.0"
     "@appland/rpc": "workspace:^1.13.0"
     "@appland/scanner": "workspace:^1.86.0"
@@ -450,7 +450,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/navie@^1.26.0, @appland/navie@workspace:packages/navie":
+"@appland/navie@^1.27.0, @appland/navie@workspace:packages/navie":
   version: 0.0.0-use.local
   resolution: "@appland/navie@workspace:packages/navie"
   dependencies:
