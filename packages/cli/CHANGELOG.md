@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.163.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.1...@appland/appmap-v3.163.2) (2024-09-04)
+
+
+### Bug Fixes
+
+* Create history dir if it does not exist ([75fc426](https://github.com/getappmap/appmap-js/commit/75fc426dd1d22202d799bb74267c4c8e366d62d1)), closes [#1973](https://github.com/getappmap/appmap-js/issues/1973)
+
 # [@appland/appmap-v3.163.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.0...@appland/appmap-v3.163.1) (2024-09-03)
 
 
