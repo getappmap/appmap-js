@@ -1,4 +1,5 @@
 import { homedir } from 'os';
+import { mkdirSync, existsSync } from 'fs';
 import History, { ThreadAccessError } from './history';
 import Thread from './thread';
 import { join } from 'path';
@@ -6,9 +7,12 @@ import { warn } from 'console';
 import configuration from '../../configuration';
 
 export function initializeHistory(): History {
-  return new History(join(homedir(), '.appmap', 'navie', 'history'));
+  const historyDir = join(homedir(), '.appmap', 'navie', 'history');
+  if (!existsSync(historyDir)) {
+    mkdirSync(historyDir, { recursive: true });
+  }
+  return new History(historyDir);
 }
-
 export async function loadThread(history: History, threadId: string): Promise<Thread> {
   let thread: Thread;
 
