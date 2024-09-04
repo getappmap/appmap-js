@@ -1,3 +1,10 @@
+# [@appland/navie-v1.27.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.27.0...@appland/navie-v1.27.1) (2024-09-04)
+
+
+### Bug Fixes
+
+* Don't retry on 422 with OpenAI completion ([91d9711](https://github.com/getappmap/appmap-js/commit/91d9711a46bbae3d587d3f8909d21f67a4d4dd07))
+
 # [@appland/navie-v1.27.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.26.1...@appland/navie-v1.27.0) (2024-09-03)
 
 
