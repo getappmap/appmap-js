@@ -6,31 +6,9 @@ import { Message } from '@appland/navie';
 import { exists } from '../../../utils';
 import { OpenMode } from 'fs';
 import configuration from '../../configuration';
+import IHistory, { QuestionField, ResponseField, ThreadAccessError } from './ihistory';
 
 export const THREAD_ID_REGEX = /^[0-9a-f]{4,16}(-[0-9a-f]{4,16}){3,6}$/;
-
-export class ThreadAccessError extends Error {
-  constructor(public readonly threadId: string, public action: string, public cause?: Error) {
-    super(ThreadAccessError.errorMessage(threadId, action, cause));
-  }
-
-  static errorMessage(threadId: string, action: string, cause?: Error): string {
-    const messages = [`Failed to ${action} thread ${threadId}`];
-    if (cause) messages.push(cause.message);
-    return messages.join(': ');
-  }
-}
-
-export enum QuestionField {
-  Question = 'question',
-  CodeSelection = 'codeSelection',
-  Prompt = 'prompt',
-}
-
-export enum ResponseField {
-  AssistantMessageId = 'assistantMessageId',
-  Answer = 'answer',
-}
 
 type SequenceFile = { timestamp: number; messageId: string };
 
@@ -39,7 +17,7 @@ const parseSequenceFile = (dir: string): SequenceFile => ({
   messageId: dir.split('.')[1],
 });
 
-export default class History {
+export default class History implements IHistory {
   private firstResponse = new Map<string, number>();
 
   public constructor(public readonly directory: string) {}
@@ -296,7 +274,7 @@ export default class History {
   // their thread id, and the thread file is symlinked to a file named for the date of the thread.
   static async migrate(
     oldDirectory: string,
-    history: History,
+    history: IHistory,
     options: { cleanup: boolean } = { cleanup: true }
   ): Promise<void> {
     // List the contents of the old directory. Each one is a threadId directory, containing

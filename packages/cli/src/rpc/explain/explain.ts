@@ -22,7 +22,7 @@ import detectAIEnvVar from '../../cmds/index/aiEnvVar';
 import reportFetchError from './navie/report-fetch-error';
 import { LRUCache } from 'lru-cache';
 import { initializeHistory } from './navie/historyHelper';
-import { ThreadAccessError } from './navie/history';
+import { ThreadAccessError } from './navie/ihistory';
 import Thread from './navie/thread';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
