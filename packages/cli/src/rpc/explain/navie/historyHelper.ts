@@ -1,19 +1,22 @@
 import { homedir } from 'os';
 import { mkdirSync, existsSync } from 'fs';
-import History, { ThreadAccessError } from './history';
+import History from './history';
 import Thread from './thread';
 import { join } from 'path';
 import { warn } from 'console';
 import configuration from '../../configuration';
+import IHistory, { ThreadAccessError } from './ihistory';
+import HistoryWindows from './historyWindows';
 
-export function initializeHistory(): History {
+export function initializeHistory(): IHistory {
   const historyDir = join(homedir(), '.appmap', 'navie', 'history');
   if (!existsSync(historyDir)) {
     mkdirSync(historyDir, { recursive: true });
   }
-  return new History(historyDir);
+  return process.platform === 'win32' ? new HistoryWindows(historyDir) : new History(historyDir);
 }
-export async function loadThread(history: History, threadId: string): Promise<Thread> {
+
+export async function loadThread(history: IHistory, threadId: string): Promise<Thread> {
   let thread: Thread;
 
   try {

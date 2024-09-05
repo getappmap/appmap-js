@@ -8,7 +8,7 @@ import { default as INavie } from './inavie';
 import assert from 'assert';
 import { initializeHistory, loadThread } from './historyHelper';
 import Thread from './thread';
-import History from './history';
+import IHistory from './ihistory';
 
 export class RemtoteCallbackHandler {
   thread: Thread | undefined;
@@ -17,7 +17,7 @@ export class RemtoteCallbackHandler {
   tokens: string[] = [];
 
   constructor(
-    private readonly history: History,
+    private readonly history: IHistory,
     private readonly contextProvider: ContextV2.ContextProvider,
     private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     private readonly helpProvider: Help.HelpProvider
