@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.163.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.2...@appland/appmap-v3.163.3) (2024-09-05)
+
+
+### Bug Fixes
+
+* Disable History on Windows ([3095090](https://github.com/getappmap/appmap-js/commit/30950907f5560071a7fce2fd0a0873043d284964))
+
 # [@appland/appmap-v3.163.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.1...@appland/appmap-v3.163.2) (2024-09-04)
 
 
