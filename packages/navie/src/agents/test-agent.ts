@@ -6,7 +6,7 @@ import ContextService from '../services/context-service';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import FileContentFetcher from '../services/file-content-fetcher';
 
-export const TEST_AGENT_PROMPT = `**Task: Generation a Test Case**
+export const TEST_AGENT_PROMPT = `**Task: Generate a Test Case**
 
 **About you**
 
