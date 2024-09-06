@@ -588,6 +588,21 @@ export default {
           };
           this.$root.$emit('pin', eventData);
         });
+      })
+      .$on('review', async (baseRef: string) => {
+        const systemMessage = this.$refs.vchat.addSystemMessage();
+        const tool = {
+          title: `Reviewing changes since ${baseRef}`,
+          status: 'This will take a few moments...',
+        };
+        systemMessage.tools.push(tool);
+        const result = await this.rpcClient.review(baseRef);
+        // const numChanges = result.reduce((acc, v) => (acc += v.issues.length), 0);
+        tool.title = `Review complete`;
+        // tool.status = `${numChanges} potential issues identified`;
+        tool.complete = true;
+        systemMessage.content = result;
+        systemMessage.complete = true;
       });
     this.$nextTick(() => {
       this.$root.$emit('chat-search-loaded');

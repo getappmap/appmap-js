@@ -287,6 +287,16 @@ export default {
       const userMessage = this.addUserMessage(message);
       userMessage.codeSelections = this.codeSelections;
 
+      const commandMatch = message.match(/^[@\/](\w+)\s+(.*)/);
+      console.log('commandMatch', commandMatch);
+      if (commandMatch) {
+        const [, command, args] = commandMatch;
+        if (command === 'review') {
+          this.$root.$emit('review', args);
+          return;
+        }
+      }
+
       this.sendMessage(
         message,
         this.codeSelections.map((s) => s.code),

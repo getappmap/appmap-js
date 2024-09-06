@@ -38,6 +38,8 @@ import createCompletionService from './services/completion-service-factory';
 import NextStepClassificationService from './services/next-step-classification-service';
 import SuggestCommand from './commands/suggest-command';
 import ObserveCommand from './commands/observe-command';
+import ReviewService from './services/review-service';
+import ReviewCommand from './commands/review-command';
 
 export type ChatHistory = Message[];
 
@@ -180,6 +182,11 @@ export default function navie(
     );
   };
 
+  const buildReviewCommand = () => {
+    const reviewService = new ReviewService(completionService, lookupContextService);
+    return new ReviewCommand(reviewService);
+  };
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
@@ -190,6 +197,7 @@ export default function navie(
     [CommandMode.Context]: buildContextCommand,
     [CommandMode.Suggest]: buildSuggestCommand,
     [CommandMode.Observe]: buildObserveCommand,
+    [CommandMode.Review]: buildReviewCommand,
   };
 
   let { question } = clientRequest;

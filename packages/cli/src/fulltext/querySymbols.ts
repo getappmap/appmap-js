@@ -8,7 +8,7 @@ export const SymbolRegexes: Record<string, RegExp> = {
   rb: /(((class|module)\s+(?<symbol1>\w+))|(def\s+?(?<symbol2>\w+)))/g,
   py: /(class|def)\s+(?<symbol1>\w+)/g,
   java: /(((class|@?interface|enum)\s+(?<symbol1>[\w$]+))|((\s|^)(?!try|catch|if|while|do|for|switch)(?<symbol2>[\w$]+)\s*?\([^;)]*?\)[\w\s\d<>[\].:\n]*?{))/g,
-  ts: /(((class|interface|enum|type|function)\s+(?<symbol1>[#$\w\p{L}]+))|((\s|^)(?!using|try|catch|if|while|do|for|switch)(?<symbol2>[#$\w\p{L}]+)\s*?\([^;)]*?\)[\w\s<>[\].:\n]*?\{)|((?<symbol3>[#$\w\p{L}]+)\s*?(=|:)\s*?\(.*?\)\s*?=>))/gu,
+  ts: /(((class|interface|enum|type|function)\s+(?<symbol1>[#$\w\p{L}]+))|((\s|^)(?!using|try|catch|if|while|do|for|switch|await)(?<symbol2>[#$\w\p{L}]+)\s*?\([^;)]*?\)[\w\s<>[\].:\n]*?\{)|((?<symbol3>[#$\w\p{L}]+)\s*?(=|:)\s*?\(.*?\)\s*?=>))/gu,
   kt: /(((class|typealias)\s+(?<symbol1>[\w_]+))|(fun\s+?(<.+?>\s+)?(.*?\.)?(?<symbol2>\w+)))/g,
   php: /(class|trait|function)\s+(?<symbol1>[\w_$]+)/g,
 };
@@ -37,6 +37,48 @@ function getMatches(source: string, regex: RegExp): string[] {
   }
 
   return results;
+}
+
+function getIndexedMatches(source: string, regex: RegExp): Record<string, number> {
+  const results: Record<string, number> = {};
+  const matches = source.matchAll(regex);
+
+  for (const match of matches) {
+    const { groups, index } = match;
+    const symbol = groups?.symbol1 ?? groups?.symbol2 ?? groups?.symbol3;
+
+    if (symbol) {
+      const i = index ?? 0;
+      if (i < 0) continue;
+
+      const lineNumber = source.slice(0, i).split('\n').length;
+      results[symbol] = lineNumber;
+    }
+  }
+
+  return results;
+}
+
+export function querySymbolLocations(path: string, allowGeneric = true): Record<string, number> {
+  const fileExtension = path.split('.').pop()?.toLowerCase();
+
+  let regex = allowGeneric ? genericSymbolRegex : undefined;
+  if (fileExtension && fileExtension in SymbolRegexes) {
+    regex = SymbolRegexes[fileExtension];
+  }
+
+  if (regex) {
+    try {
+      // readFileSync performs 2x faster than its async counterpart in this case.
+      const content = readFileSync(path, 'utf-8');
+      return getIndexedMatches(content, regex);
+    } catch (error) {
+      console.warn(`Error reading file ${path}`);
+      console.warn(error);
+    }
+  }
+
+  return {};
 }
 
 export default function querySymbols(path: string, allowGeneric = true): string[] {

@@ -258,4 +258,18 @@ export default class AppMapRPC {
       );
     });
   }
+
+  review(baseRef: string): Promise<AppMapRpc.Review.V1.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        AppMapRpc.Review.V1.Method,
+        { baseRef },
+        (err: any, error: any, result: AppMapRpc.Review.V1.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
 }

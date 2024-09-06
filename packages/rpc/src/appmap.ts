@@ -50,4 +50,14 @@ export namespace AppMapRpc {
   };
 
   export type SequenceDiagramResponse = Record<string, unknown> | string;
+
+  export namespace Review {
+    export namespace V1 {
+      export const Method = 'v1.appmap.review';
+      export type Params = {
+        baseRef: string;
+      };
+      export type Response = {};
+    }
+  }
 }

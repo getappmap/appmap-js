@@ -31,6 +31,7 @@ import { initializeHistory } from '../../rpc/explain/navie/historyHelper';
 import History from '../../rpc/explain/navie/history';
 import { join } from 'path';
 import { homedir } from 'os';
+import { appmapReviewV1 } from '../../rpc/appmap/review';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -71,6 +72,7 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     getConfigurationV2(),
     navieMetadataV1(),
     navieSuggestHandlerV1(navie),
+    appmapReviewV1(navie),
   ];
 }
 

@@ -11,6 +11,7 @@ export enum CommandMode {
   ListFiles = 'list-files',
   Suggest = 'suggest',
   Observe = 'observe',
+  Review = 'review',
 }
 
 export interface CommandRequest extends ClientRequest {
