@@ -57,7 +57,7 @@ export default class ContextService {
 
     this.history.log(`[context-service] Retrieving full context of files: ${fileNames.join(', ')}`);
 
-    // By requesting no vectors terms and no characters, we should get named files only.
+    // By requesting no terms and no characters, we should get named files only.
     let context = await this.lookupContextService.lookupContext([], 0, {
       locations: fileNames,
     });
