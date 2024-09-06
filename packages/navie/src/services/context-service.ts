@@ -50,6 +50,11 @@ export default class ContextService {
   }
 
   async locationContext(fileNames: string[]): Promise<void> {
+    if (!fileNames || fileNames.length === 0) {
+      this.history.log('[context-service] No file names provided for location context');
+      return;
+    }
+
     this.history.log(`[context-service] Retrieving full context of files: ${fileNames.join(', ')}`);
 
     // By requesting no vectors terms and no characters, we should get named files only.
