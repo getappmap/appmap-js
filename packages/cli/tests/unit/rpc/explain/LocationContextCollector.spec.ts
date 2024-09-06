@@ -5,20 +5,25 @@ import Location from '../../../../src/rpc/explain/location';
 import LocationContextCollector from '../../../../src/rpc/explain/LocationContextCollector';
 
 jest.mock('fs/promises');
-jest.mock('../../../../src/utils');
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+jest.mock('../../../../src/utils', () => ({
+  ...jest.requireActual('../../../../src/utils'),
+  exists: jest.fn(),
+  isFile: jest.fn(),
+}));
 
 describe('LocationContextCollector', () => {
   const sourceDirectories = ['/src', '/lib'];
   const locations: Location[] = [
     { path: 'file1.js', snippet: (contents: string) => contents.slice(0, 10) },
     { path: '/src/file2.js', snippet: (contents: string) => contents.slice(0, 10) },
+    { path: '/other/file3.js', snippet: (contents: string) => contents.slice(0, 10) },
   ];
 
   let collector: LocationContextCollector;
 
-  beforeEach(() => {
-    collector = new LocationContextCollector(sourceDirectories, locations);
-  });
+  beforeEach(() => (collector = new LocationContextCollector(sourceDirectories, locations)));
+  beforeEach(() => jest.resetAllMocks());
 
   it('initializes correctly', () => {
     expect(collector).toBeDefined();
@@ -37,10 +42,17 @@ describe('LocationContextCollector', () => {
     jest.spyOn(fs, 'readFile').mockResolvedValue('file contents');
 
     const result = await collector.collectContext();
-    expect(result.context.length).toBe(3);
+    expect(result.context.length).toBe(4);
     expect(result.context[0].content).toBe('file conte');
     expect(result.context[1].content).toBe('file conte');
     expect(result.context[2].content).toBe('file conte');
+    expect(result.context[3].content).toBe('file conte');
+
+    expect(utils.exists).toHaveBeenCalledTimes(4);
+    expect(utils.exists).toHaveBeenCalledWith('/src/file1.js');
+    expect(utils.exists).toHaveBeenCalledWith('/lib/file1.js');
+    expect(utils.exists).toHaveBeenCalledWith('/src/file2.js');
+    expect(utils.exists).toHaveBeenCalledWith('/other/file3.js');
   });
 
   it('handles non-file locations', async () => {
