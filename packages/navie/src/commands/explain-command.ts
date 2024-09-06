@@ -16,6 +16,8 @@ import Command, { CommandRequest } from '../command';
 import { ChatHistory } from '../navie';
 import getMostRecentMessages from '../lib/get-most-recent-messages';
 import Filter from '../lib/filter';
+import { ContextV2 } from '../context';
+import assert from 'assert';
 
 const COLOR_GREEN = '\x1b[32m';
 const COLOR_RESET = '\x1b[0m';
@@ -40,7 +42,12 @@ export default class ExplainCommand implements Command {
   async *execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
     const { question: baseQuestion, codeSelection } = request;
 
-    const contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion, chatHistory);
+    const classifyEnabled = request.userOptions.isEnabled('classify', true);
+
+    let contextLabelsFn: Promise<ContextV2.ContextLabel[]> | undefined;
+
+    if (classifyEnabled)
+      contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion, chatHistory);
 
     let projectInfo: ProjectInfo[] = [];
     if (request.userOptions.isEnabled('projectinfo', true)) {
@@ -50,13 +57,19 @@ export default class ExplainCommand implements Command {
         : [projectInfoResponse];
     }
 
-    const contextLabels = await contextLabelsFn;
-    warn(`${COLOR_GREEN}Question: ${baseQuestion}${COLOR_RESET}`);
-    warn(
-      `${COLOR_GREEN}Classification: ${contextLabels
-        .map((label) => [label.name, label.weight].join('='))
-        .join(', ')}${COLOR_RESET}`
-    );
+    let contextLabels: ContextV2.ContextLabel[] | undefined;
+    if (classifyEnabled) {
+      assert(contextLabelsFn);
+      contextLabels = await contextLabelsFn;
+      warn(`${COLOR_GREEN}Question: ${baseQuestion}${COLOR_RESET}`);
+      warn(
+        `${COLOR_GREEN}Classification: ${contextLabels
+          .map((label) => [label.name, label.weight].join('='))
+          .join(', ')}${COLOR_RESET}`
+      );
+    } else {
+      contextLabels = [];
+    }
 
     const agentSelectionResult = this.agentSelectionService.selectAgent(
       baseQuestion,
