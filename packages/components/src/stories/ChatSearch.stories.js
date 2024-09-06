@@ -417,6 +417,11 @@ function buildMockRpc(
             description: 'Write tests for your code.',
           },
           {
+            name: '@observe',
+            description:
+              'Request recommendations for recording trace data of specific behaviors within your application. Beta feature.',
+          },
+          {
             name: '@help',
             description: 'Get help with AppMap and Navie AI.',
           },
