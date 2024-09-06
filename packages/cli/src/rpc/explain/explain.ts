@@ -110,7 +110,7 @@ export class Explain extends EventEmitter {
 
   async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
     const { vectorTerms } = data;
-    let { tokenCount } = data;
+    const { tokenCount } = data;
 
     this.status.vectorTerms = vectorTerms;
 
