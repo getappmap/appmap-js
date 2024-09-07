@@ -157,9 +157,8 @@ export default class RemoteNavie extends EventEmitter implements INavie {
     };
 
     const onToken = async (token: string, messageId: string): Promise<void> => {
-      await callbackHandler.onToken(token, messageId);
-
       this.emit('token', token, messageId);
+      await callbackHandler.onToken(token, messageId);
     };
 
     const onRequestContext = async (
