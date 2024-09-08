@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.163.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.3...@appland/appmap-v3.163.4) (2024-09-08)
+
+
+### Bug Fixes
+
+* Prevent a case where tokens would appear out of order ([d22b027](https://github.com/getappmap/appmap-js/commit/d22b0275e3967381c9a063448f3d4fbfa8fcc267))
+
 # [@appland/appmap-v3.163.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.2...@appland/appmap-v3.163.3) (2024-09-05)
 
 
