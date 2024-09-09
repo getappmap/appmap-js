@@ -1,3 +1,10 @@
+# [@appland/components-v4.36.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.35.0...@appland/components-v4.36.0) (2024-09-09)
+
+
+### Features
+
+* Add tooltips to code snippet buttons ([eb4e0a7](https://github.com/getappmap/appmap-js/commit/eb4e0a735c8fd336d904b05578d84b4ea1034441))
+
 # [@appland/components-v4.35.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.34.0...@appland/components-v4.35.0) (2024-09-03)
 
 
