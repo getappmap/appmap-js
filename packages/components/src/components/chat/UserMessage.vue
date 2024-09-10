@@ -393,7 +393,7 @@ export default {
 }
 .message {
   display: grid;
-  grid-template-columns: 38px 1fr;
+  grid-template-columns: 38px calc(100% - 38px - 1rem);
   grid-template-rows: 16px 1fr;
   gap: 0.5rem 1rem;
   padding: 0 1rem;
