@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import Message from '../message';
 import { ChatHistory } from '../navie';
-import CompletionService, { ModelType } from './completion-service';
+import CompletionService from './completion-service';
 
 const scoreSchema = z.object({
   evaluation: z.string(),
@@ -61,7 +61,7 @@ export default class NextStepClassificationService {
 
   private async getCompletion(messages: Message[]): Promise<NextStepResponse> {
     const response = await this.completionService.json(messages, NextStepResponseFormat, {
-      model: ModelType.Mini,
+      model: this.completionService.miniModelName,
       temperature: 0.2,
     });
     return response?.nextSteps ?? [];

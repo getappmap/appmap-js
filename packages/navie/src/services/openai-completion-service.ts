@@ -11,7 +11,6 @@ import CompletionService, {
   convertToMessage,
   JsonOptions,
   mergeSystemMessages,
-  ModelType,
   Usage,
 } from './completion-service';
 
@@ -189,12 +188,6 @@ export default class OpenAICompletionService implements CompletionService {
     }
   }
 
-  // Resolve `full` or `mini` to the appropriate model name.
-  private resolveModel(modelType?: ModelType): string {
-    if (modelType === ModelType.Mini) return this.miniModelName;
-    return this.modelName;
-  }
-
   // Request a JSON object with a given JSON schema.
   async json<Schema extends z.ZodType>(
     messages: Message[],
@@ -216,7 +209,7 @@ export default class OpenAICompletionService implements CompletionService {
             )}`,
           },
         ]),
-        model: this.resolveModel(options?.model),
+        model: options?.model ?? this.modelName,
         stream: false,
         temperature: options?.temperature,
       });
@@ -226,7 +219,7 @@ export default class OpenAICompletionService implements CompletionService {
     const generateOpenAi = () =>
       this.model.completionWithRetry({
         messages: mergeSystemMessages(messages),
-        model: this.resolveModel(options?.model),
+        model: options?.model ?? this.miniModelName,
         stream: false,
         temperature: options?.temperature,
         response_format: zodResponseFormat(schema, 'requestedObject'),

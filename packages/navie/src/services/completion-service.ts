@@ -3,13 +3,8 @@ import { AIMessage, BaseMessage, HumanMessage, SystemMessage } from '@langchain/
 import { z } from 'zod';
 import Message from '../message';
 
-export enum ModelType {
-  Full, // slower, more intelligent
-  Mini, // faster, less intelligent
-}
-
 export type JsonOptions = {
-  model?: ModelType;
+  model?: string;
   temperature?: number;
   maxRetries?: number;
 };
