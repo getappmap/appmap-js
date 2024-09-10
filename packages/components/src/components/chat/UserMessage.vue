@@ -656,6 +656,10 @@ export default {
     }
   }
 
+  li > div {
+    margin: 0.5rem 0 1rem 0;
+  }
+
   div {
     hr {
       border: none;
