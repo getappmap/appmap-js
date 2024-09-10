@@ -10,7 +10,6 @@ import CompletionService, {
   convertToMessage,
   JsonOptions,
   mergeSystemMessages,
-  ModelType,
   Usage,
 } from './completion-service';
 
@@ -79,12 +78,12 @@ export default class AnthropicCompletionService implements CompletionService {
   // Construct a model with non-default options. There doesn't seem to be a way to configure
   // the model parameters at invocation time like with OpenAI.
   private buildModel(options?: {
-    model?: ModelType;
+    model?: string;
     temperature?: number;
     streaming?: boolean;
   }): ChatAnthropic {
     return new ChatAnthropic({
-      modelName: options?.model === ModelType.Mini ? this.miniModelName : this.modelName,
+      modelName: options?.model ?? this.modelName,
       temperature: options?.temperature ?? this.temperature,
       streaming: options?.streaming ?? true,
     });
