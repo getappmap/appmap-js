@@ -156,7 +156,6 @@ export function buildNavieProvider(argv: ExplainArgs) {
       const trajectory = new Trajectory(argv.trajectoryFile);
       navie.setTrajectoryHandler(trajectory);
 
-      process.on('SIGINT', () => trajectory.close());
       process.on('exit', () => trajectory.close());
     }
     applyAIOptions(navie);
