@@ -19,4 +19,9 @@ export type PinCodeSnippet = PinItem & {
   content: string;
 };
 
-export type PinEvents = PinEvent & (PinMermaid | PinCodeSnippet);
+export type PinFile = PinItem & {
+  type: 'file';
+  content: string;
+};
+
+export type PinEvents = PinEvent & (PinMermaid | PinCodeSnippet | PinFile);

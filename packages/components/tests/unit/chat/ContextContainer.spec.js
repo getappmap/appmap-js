@@ -1,5 +1,5 @@
 import VContextContainer from '@/components/chat/ContextContainer.vue';
-import { mount } from '@vue/test-utils';
+import { createWrapper, mount } from '@vue/test-utils';
 
 describe('components/chat/ContextContainer.vue', () => {
   it('renders pinned state', async () => {
@@ -16,5 +16,24 @@ describe('components/chat/ContextContainer.vue', () => {
 
     const events = wrapper.emitted().pin;
     expect(events).toStrictEqual([[{ pinned: true, handle: wrapper.vm.valueHandle }]]);
+  });
+
+  it('opens a non-collapsible file item', async () => {
+    const location = '/home/user/my-project/app/models/user.rb';
+    const wrapper = mount(VContextContainer, {
+      propsData: {
+        language: 'javascript',
+        location,
+        isFile: true,
+        isCollapsible: false,
+      },
+    });
+
+    const rootWrapper = createWrapper(wrapper.vm.$root);
+    await wrapper.find('[data-cy="open"]').trigger('click');
+
+    const actual = rootWrapper.emitted()['open-location'];
+    expect(actual).toHaveLength(1);
+    expect(actual[0][0]).toStrictEqual(location);
   });
 });
