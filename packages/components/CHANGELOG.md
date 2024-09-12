@@ -1,3 +1,10 @@
+# [@appland/components-v4.37.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.36.0...@appland/components-v4.37.0) (2024-09-12)
+
+
+### Features
+
+* handle drag and drop of files ([911bc7c](https://github.com/getappmap/appmap-js/commit/911bc7c9b0333ad4ccb35a40697972596eb52c1b))
+
 # [@appland/components-v4.36.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.35.0...@appland/components-v4.36.0) (2024-09-09)
 
 
