@@ -60,4 +60,25 @@ describe('getMostRecentMessages', () => {
     expect(events[1].role).toBe('assistant');
     expect(events[1].content).toBe('My name is bot.');
   });
+
+  it('discards non-conversational messages', () => {
+    const messages: Message[] = [
+      { role: 'user', content: 'Hello.' },
+      { role: 'assistant', content: 'Hi.' },
+      { role: 'user', content: '@suggest /nohelp /nocontext' },
+      {
+        role: 'assistant',
+        content:
+          '[{"label":"Ask about the codebase","prompt":"What do you want to know about this codebase?"}]',
+      },
+      { role: 'user', content: 'What is the meaning of life?' },
+      { role: 'assistant', content: '42' },
+    ];
+
+    const events = getMostRecentMessages(messages, messages.length);
+    expect(events.map(({ role, content }) => ({ role, content }))).toStrictEqual([
+      ...messages.slice(0, 2),
+      ...messages.slice(4),
+    ]);
+  });
 });
