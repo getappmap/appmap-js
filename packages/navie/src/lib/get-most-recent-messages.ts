@@ -14,6 +14,22 @@ const DEFAULT_HISTORICAL_MESSAGES = (() => {
   return 2;
 })();
 
+function filterNonConversationalMessages(messages: Message[]): Message[] {
+  const filteredMessages = [];
+  for (let i = 0; i < messages.length; i += 1) {
+    const message = messages[i];
+    if (message.role === 'user' && message.content.match(/^\s*@suggest/)) {
+      // Skip the next message as well - it's the assistant's response
+      i += 1;
+      continue;
+    }
+
+    filteredMessages.push(message);
+  }
+
+  return filteredMessages;
+}
+
 // Selects the last numMessages in a way suitable to provide
 // to the LLM as chat history. Since some models require the first
 // message to be a user message, make sure it's true by adding
@@ -24,17 +40,18 @@ export default function getMostRecentMessages(
   numMessages = DEFAULT_HISTORICAL_MESSAGES
 ): PromptInteractionEvent[] {
   if (numMessages === 0) return [];
-  let start = -numMessages;
+  const filteredMessages = filterNonConversationalMessages(messages);
+  let start = -Math.min(numMessages, filteredMessages.length);
 
   // go back to make sure user message is first
-  while ((messages.at(start)?.role ?? 'user') !== 'user') start -= 1;
-  if (start < -messages.length) {
+  while ((filteredMessages.at(start)?.role ?? 'user') !== 'user') start -= 1;
+  if (start < -filteredMessages.length) {
     // we must have overrun, try going forward instead
-    start = 1 - messages.length;
-    while ((messages.at(start)?.role ?? 'user') !== 'user') start += 1;
+    start = 1 - filteredMessages.length;
+    while ((filteredMessages.at(start)?.role ?? 'user') !== 'user') start += 1;
   }
 
-  return messages
+  return filteredMessages
     .slice(start)
     .map(
       ({ role, content }) =>
