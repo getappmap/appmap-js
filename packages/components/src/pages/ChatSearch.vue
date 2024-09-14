@@ -589,6 +589,9 @@ export default {
           this.$root.$emit('pin', eventData);
         });
       });
+    this.$nextTick(() => {
+      this.$root.$emit('chat-search-loaded');
+    });
   },
 };
 </script>
