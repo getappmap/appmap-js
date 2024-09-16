@@ -7,7 +7,7 @@
     @click="onClick"
   >
     <transition name="fade">
-      <span :class="classes" v-if="isVisible">
+      <span :class="classes" v-if="isVisible" data-cy="popper-content">
         <div v-if="textValue" v-html="textValue" />
         <slot else name="content" />
       </span>
@@ -51,6 +51,10 @@ export default Vue.extend({
     timeToDisplay: {
       type: Number,
       default: 0,
+    },
+    hoverable: {
+      type: Boolean,
+      default: true,
     },
   },
 
@@ -120,6 +124,7 @@ export default Vue.extend({
       this.visibleOverride = false;
     },
     onHover() {
+      if (!this.hoverable) return;
       if (this.ignoreHover) return;
 
       if (this.timeToDisplay > 0) {

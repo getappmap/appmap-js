@@ -121,5 +121,12 @@ describe('AutoComplete', () => {
       await wrapper.vm.$nextTick();
       expect(wrapper.emitted('submit')).toStrictEqual([['@one']]);
     });
+
+    it('disappears after mouse hover', async () => {
+      const popper = wrapper.findComponent({ name: 'VPopper' });
+      await popper.element.dispatchEvent(new MouseEvent('mousemove'));
+      await wrapper.setProps({ input: '' });
+      expect(wrapper.find('[data-cy="popper-content"]').exists()).toBe(false);
+    });
   });
 });
