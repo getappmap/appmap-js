@@ -14,7 +14,8 @@ suggested code changes.
 
 You should list the names of all the files that have suggested changes in the file.
 
-Your response should be a JSON list of file names.
+Your response should be a JSON list of file names. If you include any text along with your
+JSON output, the JSON must be marked by triple backticks (\`\`\`) to indicate that it is code.
 
 **Example
 
@@ -39,12 +40,14 @@ def subtract_one(x):
 </input>
 
 <output>
+\`\`\`json
 [
   "add_one.py",
   "app/controllers/user_controller.rb",
   "subtract_one.py",
   "db/parser.py"
 ]
+\`\`\`
 </output>
 `;
 
