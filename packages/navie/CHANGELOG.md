@@ -1,3 +1,10 @@
+# [@appland/navie-v1.27.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.27.1...@appland/navie-v1.27.2) (2024-09-16)
+
+
+### Bug Fixes
+
+* Ignore [@suggest](https://github.com/suggest) commands in chat history when building context ([ade8882](https://github.com/getappmap/appmap-js/commit/ade8882a1064259df9b1246f9243deb5176e3a78))
+
 # [@appland/navie-v1.27.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.27.0...@appland/navie-v1.27.1) (2024-09-04)
 
 
