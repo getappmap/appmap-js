@@ -1,5 +1,12 @@
 <template>
-  <v-popper :arrow="false" align="left" placement="top" ref="autocomplete" class="autocomplete">
+  <v-popper
+    :arrow="false"
+    :hoverable="false"
+    align="left"
+    placement="top"
+    ref="autocomplete"
+    class="autocomplete"
+  >
     <template #content>
       <ul data-cy="autocomplete">
         <li
