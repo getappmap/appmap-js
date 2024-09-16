@@ -1,7 +1,7 @@
 import { isNativeError } from 'node:util/types';
 
 import { ChatOpenAI } from '@langchain/openai';
-import type { ChatCompletion, ChatCompletionChunk } from 'openai/resources';
+import type { ChatCompletion, ChatCompletionChunk } from 'openai/resources/index';
 import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { warn } from 'console';
