@@ -132,9 +132,15 @@ export default class AnthropicCompletionService implements CompletionService {
 
       warn(usage.toString());
       return usage;
-    } catch (e) {
-      // throw a new error so we have stack from here instead of deep within the callback jungle
-      throw new Error(`Failed to complete: ${isNativeError(e) ? e.message : String(e)}`);
+    } catch (cause) {
+      throw new Error(`Failed to complete: ${errorMessage(cause)}`, {
+        cause,
+      });
     }
   }
+}
+
+function errorMessage(err: unknown): string {
+  if (isNativeError(err)) return err.cause ? errorMessage(err.cause) : err.message;
+  return String(err);
 }
