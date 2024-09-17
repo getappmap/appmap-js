@@ -1,3 +1,10 @@
+# [@appland/components-v4.37.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.1...@appland/components-v4.37.2) (2024-09-17)
+
+
+### Bug Fixes
+
+* emit an event when ChatSearch is loaded ([f85542e](https://github.com/getappmap/appmap-js/commit/f85542eb432fe1f17a211cedf8998cb7b63b4b20))
+
 # [@appland/components-v4.37.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.0...@appland/components-v4.37.1) (2024-09-17)
 
 
