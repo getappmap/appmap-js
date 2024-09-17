@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.163.5](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.4...@appland/appmap-v3.163.5) (2024-09-17)
+
+
+### Bug Fixes
+
+* Update @appland/navie to v1.27.2 ([8e2b816](https://github.com/getappmap/appmap-js/commit/8e2b816ed1b111552721c09f1e058d1b4ec9cd8f))
+
 # [@appland/appmap-v3.163.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.3...@appland/appmap-v3.163.4) (2024-09-08)
 
 
