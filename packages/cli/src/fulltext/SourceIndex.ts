@@ -8,9 +8,8 @@ import assert from 'assert';
 import sqlite3 from 'better-sqlite3';
 import { existsSync } from 'fs';
 import { FileIndexMatch } from './FileIndex';
-import { verbose } from '../utils';
 import { readFile } from 'fs/promises';
-import { basename, join } from 'path';
+import { join } from 'path';
 import queryKeywords from './queryKeywords';
 
 const debug = makeDebug('appmap:source-index');
