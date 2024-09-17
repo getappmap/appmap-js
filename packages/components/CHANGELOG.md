@@ -1,3 +1,10 @@
+# [@appland/components-v4.37.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.0...@appland/components-v4.37.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* Prevent an issue where autocompletion becomes stuck ([7dea33e](https://github.com/getappmap/appmap-js/commit/7dea33e9a195ff803b8a7f626ecb278c356639e4))
+
 # [@appland/components-v4.37.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.36.0...@appland/components-v4.37.0) (2024-09-12)
 
 
