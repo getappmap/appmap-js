@@ -1,3 +1,11 @@
+# [@appland/components-v4.37.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.2...@appland/components-v4.37.3) (2024-09-17)
+
+
+### Bug Fixes
+
+* Adjust code snippet margins in assistant response ([84a55c5](https://github.com/getappmap/appmap-js/commit/84a55c5aa6bbdf10075bc7b0fd9f1b6a5ddf311f))
+* Adjust the horizontal space available for chat messages ([3360d89](https://github.com/getappmap/appmap-js/commit/3360d89003d254efeebf4cced82bb09b3dd63c9a))
+
 # [@appland/components-v4.37.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.1...@appland/components-v4.37.2) (2024-09-17)
 
 
