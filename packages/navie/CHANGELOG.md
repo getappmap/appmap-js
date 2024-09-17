@@ -1,3 +1,10 @@
+# [@appland/navie-v1.28.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.27.2...@appland/navie-v1.28.0) (2024-09-17)
+
+
+### Features
+
+* Add a [@observe](https://github.com/observe) command for recording suggestions ([f4bd42c](https://github.com/getappmap/appmap-js/commit/f4bd42cf5776c0c19da6fc674912adea601664b8))
+
 # [@appland/navie-v1.27.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.27.1...@appland/navie-v1.27.2) (2024-09-16)
 
 
