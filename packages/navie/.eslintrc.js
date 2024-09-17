@@ -5,8 +5,6 @@ const path = require('path');
 module.exports = {
   plugins: ['@typescript-eslint', 'eslint-comments', 'jest', 'promise', 'unicorn'],
   extends: [
-    'airbnb-base',
-    'airbnb-typescript/base',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:eslint-comments/recommended',
@@ -36,7 +34,7 @@ module.exports = {
   overrides: [
     {
       files: ['*.js'],
-      extends: ['eslint:recommended', 'airbnb-base', 'prettier'],
+      extends: ['eslint:recommended', 'prettier'],
       parserOptions: {
         project: path.join(__dirname, 'jsconfig.json'),
       },
