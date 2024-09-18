@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
-import { STOP_WORDS } from './queryKeywords';
+import { sanitizeKeyword, STOP_WORDS } from './queryKeywords';
+import { splitCamelized } from '../lib/splitCamelized';
 
 export const SymbolRegexes: Record<string, RegExp> = {
   cs: /(((interface|class|enum|struct)\s+(?<symbol1>\w+))|((\s|^)(?!using|try|catch|if|while|do|for|switch)(?<!#define\s+?)(?<symbol2>[\w~$]+)\s*?\([^;)]*?\)[\w\s\d<>[\].:\n]*?{))/g,
@@ -26,6 +27,18 @@ const genericSymbolRegex =
   SymbolRegexes[ext] = SymbolRegexes.cpp;
 });
 
+function expandSymbol(symbol: string): string[] {
+  const results = sanitizeKeyword(symbol)
+    .flatMap((t) =>
+      splitCamelized(t)
+        .split(/[\s-_]/)
+        .map((s) => s.toLowerCase())
+    )
+    .filter((t) => t.trim().length > 1);
+  const unique = new Set([...results, symbol.toLowerCase()]);
+  return Array.from(unique).filter((t) => !STOP_WORDS.has(t));
+}
+
 function getMatches(source: string, regex: RegExp): string[] {
   const results: string[] = [];
   const matches = source.matchAll(regex);
@@ -34,7 +47,7 @@ function getMatches(source: string, regex: RegExp): string[] {
     const { groups } = match;
     const symbol = groups?.symbol1 ?? groups?.symbol2 ?? groups?.symbol3;
 
-    if (symbol && !STOP_WORDS.has(symbol.toLowerCase())) results.push(symbol);
+    if (symbol) results.push(...expandSymbol(symbol));
   }
 
   return results;

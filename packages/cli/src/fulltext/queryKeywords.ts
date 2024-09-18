@@ -36,7 +36,7 @@ export const STOP_WORDS = new Set([
  * So in effect, words with non-alphanumeric characters become multiple words.
  * Allow dash and underscore as delimeters.
  */
-const sanitizeKeyword = (keyword: string): string[] =>
+export const sanitizeKeyword = (keyword: string): string[] =>
   keyword.replace(/[^\p{L}\p{N}\-_]/gu, ' ').split(' ');
 
 /**

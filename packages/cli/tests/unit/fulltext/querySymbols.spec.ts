@@ -8,27 +8,60 @@ describe('querySymbols', () => {
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
-          'ClassOne',
-          'ClassTwo',
-          'ClassThree',
-          'ClassFour',
-          'StructOne',
-          'StructTwo',
-          'StructThree',
-          'IOne',
-          'ITwo',
-          'IThree',
-          'IFour',
-          'Example',
-          'Season',
-          'ErrorCode',
-          'ClassWithMethods',
-          'ClassWithMethods',
-          '~ClassWithMethods',
-          'MethodOne',
-          'MethodTwo',
-          'MethodThree',
-          'MethodFour',
+          'class',
+          'class',
+          'class',
+          'class',
+          'class',
+          'class',
+          'class',
+          'classfour',
+          'classone',
+          'classthree',
+          'classtwo',
+          'classwithmethods',
+          'classwithmethods',
+          'error',
+          'errorcode',
+          'example',
+          'four',
+          'four',
+          'four',
+          'ifour',
+          'ione',
+          'ithree',
+          'itwo',
+          'method',
+          'method',
+          'method',
+          'method',
+          'methodfour',
+          'methodone',
+          'methods',
+          'methods',
+          'methods',
+          'methodthree',
+          'methodtwo',
+          'one',
+          'one',
+          'one',
+          'one',
+          'season',
+          'struct',
+          'struct',
+          'struct',
+          'structone',
+          'structthree',
+          'structtwo',
+          'three',
+          'three',
+          'three',
+          'three',
+          'two',
+          'two',
+          'two',
+          'two',
+          '~classwithmethods',
         ].sort()
       );
     });
@@ -39,7 +72,18 @@ describe('querySymbols', () => {
       const srcPath = join(__dirname, '../fixtures/source/sample.c');
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
-        ['foo', 'main', 'MyStruct', 'MyOtherStruct', 'Point'].sort()
+        [
+          'foo',
+          'main',
+          'my',
+          'my',
+          'myotherstruct',
+          'mystruct',
+          'other',
+          'point',
+          'struct',
+          'struct',
+        ].sort()
       );
     });
   });
@@ -49,7 +93,22 @@ describe('querySymbols', () => {
       const srcPath = join(__dirname, '../fixtures/source/sample.rs');
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
-        ['Foo', 'new', 'MyUnion', 'MyTrait', 'my_function', 'Point', 'main', 'Москва'].sort()
+        [
+          'foo',
+          'function',
+          'main',
+          'my',
+          'my',
+          'my',
+          'my_function',
+          'mytrait',
+          'myunion',
+          'new',
+          'point',
+          'trait',
+          'union',
+          'москва',
+        ].sort()
       );
     });
   });
@@ -60,15 +119,21 @@ describe('querySymbols', () => {
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
-          'Locker',
-          'MyInterface',
-          'LockerImpl',
-          'Lock',
-          'Unlock',
-          'Reader',
-          'ReadWriter',
+          'impl',
+          'interface',
+          'lock',
+          'locker',
+          'locker',
+          'lockerimpl',
           'main',
+          'my',
+          'myinterface',
+          'read',
+          'reader',
+          'readwriter',
           'unicodeβ',
+          'unlock',
+          'writer',
         ].sort()
       );
     });
@@ -79,7 +144,24 @@ describe('querySymbols', () => {
       const srcPath = join(__dirname, '../fixtures/source/sample.rb');
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
-        ['MyClass', 'MyModule', 'my_method', 'my_module_method', 'some_function'].sort()
+        [
+          'class',
+          'function',
+          'method',
+          'method',
+          'module',
+          'module',
+          'my',
+          'my',
+          'my',
+          'my',
+          'my_method',
+          'my_module_method',
+          'myclass',
+          'mymodule',
+          'some',
+          'some_function',
+        ].sort()
       );
     });
   });
@@ -91,36 +173,60 @@ describe('querySymbols', () => {
       console.log(symbols);
       expect(symbols.sort()).toStrictEqual(
         [
-          'Hello',
-          'Hello',
-          'MyBaseClass',
-          'MyBaseClass',
-          'MyClass',
-          'Python',
-          'This',
           '__init__',
           '__init__',
           '__main__',
           '__name__',
+          'array',
+          'array',
+          'base',
+          'base',
+          'class',
+          'class',
+          'class',
+          'function',
+          'hello',
+          'hello',
+          'hello',
+          'init',
+          'init',
+          'main',
+          'module',
+          'my',
+          'my',
+          'my',
+          'my',
+          'my',
+          'my',
           'my_array',
           'my_array',
           'my_module',
+          'mybaseclass',
+          'mybaseclass',
+          'myclass',
           'name',
           'name',
           'name',
           'name',
           'name',
+          'name',
+          'operation',
+          'perform',
           'perform',
           'perform',
           'perform_operation',
           'print',
           'print',
+          'python',
           'result',
           'result',
           'sample',
+          'say',
           'say_hello',
           'script',
+          'some',
           'some_function',
+          'this',
           'world',
         ].sort()
       );
@@ -133,12 +239,20 @@ describe('querySymbols', () => {
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
-          'SampleEnum',
-          'SampleAnnotation',
-          'ISample',
-          'Sample',
+          'annotation',
+          'enum',
+          'isample',
           'main',
-          'performUserOperation',
+          'operation',
+          'perform',
+          'performuseroperation',
+          'sample',
+          'sample',
+          'sample',
+          'sample',
+          'sampleannotation',
+          'sampleenum',
+          'user',
         ].sort()
       );
     });
@@ -150,17 +264,41 @@ describe('querySymbols', () => {
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
-          'MyClass',
+          '#myclassmethod',
+          '$linebreak',
+          'braces',
+          'break',
+          'class',
+          'class',
           'constructor',
-          '#myClassMethod',
-          'myFunction',
-          'myOtherFunction',
-          'MyType',
-          'MyInterface',
-          'MyEnum',
-          'myObjectMethod',
-          'newLineBraces',
-          '$lineBreak',
+          'enum',
+          'function',
+          'function',
+          'interface',
+          'line',
+          'line',
+          'method',
+          'method',
+          'my',
+          'my',
+          'my',
+          'my',
+          'my',
+          'my',
+          'my',
+          'my',
+          'myclass',
+          'myenum',
+          'myfunction',
+          'myinterface',
+          'myobjectmethod',
+          'myotherfunction',
+          'mytype',
+          'new',
+          'newlinebraces',
+          'object',
+          'other',
+          'type',
         ].sort()
       );
     });
@@ -171,7 +309,7 @@ describe('querySymbols', () => {
       const srcPath = join(__dirname, '../fixtures/source/sample.kt');
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
-        ['main', 'Rectangle', 'Predicate', 'Color', 'filter', 'sort'].sort()
+        ['color', 'filter', 'main', 'predicate', 'rectangle', 'sort'].sort()
       );
     });
   });
@@ -181,7 +319,19 @@ describe('querySymbols', () => {
       const srcPath = join(__dirname, '../fixtures/source/sample.php');
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
-        ['MyClass', 'myMethod', 'Talk', 'talk', 'myFunction'].sort()
+        [
+          'class',
+          'function',
+          'method',
+          'my',
+          'my',
+          'my',
+          'myclass',
+          'myfunction',
+          'mymethod',
+          'talk',
+          'talk',
+        ].sort()
       );
     });
   });
@@ -193,22 +343,31 @@ describe('querySymbols', () => {
       const symbols = querySymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
-          'fibonacci',
-          'Spacecraft',
-          'Spacecraft',
-          'describe',
-          'PlanetType',
-          'Resolution',
-          'VideoMode',
-          'Counter',
-          'increment',
-          'increment',
-          'reset',
-          'Something',
           '_init',
+          'action',
+          'counter',
+          'describe',
+          'fibonacci',
+          'increment',
+          'increment',
+          'init',
+          'mode',
+          'other',
           'other_something',
-          'something',
+          'perform',
           'perform_action',
+          'planet',
+          'planettype',
+          'reset',
+          'resolution',
+          'something',
+          'something',
+          'something',
+          'spacecraft',
+          'spacecraft',
+          'type',
+          'video',
+          'videomode',
         ].sort()
       );
     });
