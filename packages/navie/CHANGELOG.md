@@ -1,3 +1,10 @@
+# [@appland/navie-v1.28.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.28.0...@appland/navie-v1.28.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* More verbose errors from Anthropic completion service ([d66fdc9](https://github.com/getappmap/appmap-js/commit/d66fdc93654cb2d2c7ce36e91c9f78e52519fd25))
+
 # [@appland/navie-v1.28.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.27.2...@appland/navie-v1.28.0) (2024-09-17)
 
 
