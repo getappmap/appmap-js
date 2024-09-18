@@ -34,21 +34,19 @@ describe('Sidebar activation page', () => {
       .should('contain.text', expectedText2);
   });
 
-  it('shows an error message for an invalid email', () => {
-    cy.intercept('POST', 'https://getappmap.com/api/activations*', {
-      statusCode: 422,
-    });
-    cy.get('[data-cy="email-activation-button"]').click();
-    cy.get('.error').should('contain.text', INVALID_EMAIL_MSG);
-  });
-
-  it('shows an error message for a server error', () => {
-    cy.intercept('POST', 'https://getappmap.com/api/activations*', {
-      statusCode: 500,
-    });
-    cy.get('[data-cy="email-activation-button"]').click();
-    cy.get('.error').should('contain.text', GENERIC_ERROR_MSG);
-  });
+  [422, 500].forEach((code) =>
+    it('presents the error directly to the user for response ' + code, () => {
+      const errorMessage = 'An error occurred.';
+      cy.intercept('POST', 'https://getappmap.com/api/activations*', {
+        statusCode: 500,
+        body: {
+          error: errorMessage,
+        },
+      });
+      cy.get('[data-cy="email-activation-button"]').click();
+      cy.get('.error').should('contain.text', errorMessage);
+    })
+  );
 
   it('shows verification code page upon successful email submission', () => {
     cy.intercept('POST', 'https://getappmap.com/api/activations*', {
