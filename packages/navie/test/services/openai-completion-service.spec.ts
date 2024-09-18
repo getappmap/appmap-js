@@ -6,6 +6,7 @@ import OpenAICompletionService from '../../src/services/openai-completion-servic
 import { z } from 'zod';
 import Message from '../../src/message';
 import { PromptType } from '../../src/prompt';
+import { APIError } from 'openai';
 
 jest.mock('@langchain/openai');
 
@@ -102,6 +103,44 @@ describe('OpenAICompletionService', () => {
 
       expect(events.map((e) => e.message.role)).toEqual(['system', 'user', 'assistant']);
       expect(events.map((e) => e.type)).toEqual(['sent', 'sent', 'received']);
+    });
+
+    it('retries on server error with exponential backoff during response iteration', async () => {
+      let callCount = 0;
+      // eslint-disable-next-line @typescript-eslint/require-await
+      const mockCompletionWithRetry = jest.fn().mockImplementation(async function* () {
+        if (callCount === 0) {
+          callCount += 1;
+          throw new APIError(
+            undefined,
+            {
+              message:
+                'The server had an error processing your request. Sorry about that! You can retry your request, or contact us through our help center at help.openai.com if you keep seeing this error.',
+              type: 'server_error',
+              param: null,
+              code: null,
+            },
+            undefined,
+            undefined
+          );
+        }
+
+        // This is the success case after retry
+        yield {
+          choices: [{ delta: { content: 'Hello' } }],
+        };
+      });
+
+      service.model.completionWithRetry = mockCompletionWithRetry;
+
+      const messages = [{ role: 'user', content: 'Hello' }] as const;
+      const result = [];
+      for await (const token of service.complete(messages)) {
+        result.push(token);
+      }
+
+      expect(result).toEqual(['Hello']);
+      expect(mockCompletionWithRetry).toHaveBeenCalledTimes(2);
     });
 
     describe('with a custom temperature', () => {

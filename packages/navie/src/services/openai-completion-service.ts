@@ -14,6 +14,7 @@ import CompletionService, {
   Usage,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
+import { APIError } from 'openai';
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -281,26 +282,37 @@ export default class OpenAICompletionService implements CompletionService {
 
   async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
     const promptTokensPromise = this.countTokens(messages);
-
+    let tokenCount = 0;
+    const tokens = new Array<string>();
     const sentMessages = mergeSystemMessages(messages);
     for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
-    const response = await this.model.completionWithRetry({
-      messages: sentMessages,
-      model: this.model.modelName,
-      stream: true,
-      temperature: options?.temperature,
-    });
+    const fetchResponse = async () => {
+      return this.model.completionWithRetry({
+        messages: mergeSystemMessages(messages),
+        model: this.model.modelName,
+        stream: true,
+        temperature: options?.temperature,
+      });
+    };
 
-    let tokenCount = 0;
-    const tokens = new Array<string>();
-    for await (const token of response) {
-      const { content } = token.choices[0].delta;
-      if (content) {
-        tokens.push(content);
-        yield content;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const response = await fetchResponse();
+      try {
+        for await (const token of response) {
+          const { content } = token.choices[0].delta;
+          if (content) {
+            yield content;
+            tokens.push(content);
+          }
+          tokenCount += 1;
+        }
+        break; // Exit loop if successful
+      } catch (error) {
+        if (!(error instanceof APIError) || error.type !== 'server_error') throw error; // only retry on server errors
+        if (tokens.length || attempt === 4) throw error; // Rethrow if tokens were yielded or max attempts reached
+        await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, attempt))); // Exponential backoff
       }
-      tokenCount += 1;
     }
 
     this.trajectory.logReceivedMessage({ role: 'assistant', content: tokens.join('') });
