@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import { STOP_WORDS } from './queryKeywords';
 
 export const SymbolRegexes: Record<string, RegExp> = {
   cs: /(((interface|class|enum|struct)\s+(?<symbol1>\w+))|((\s|^)(?!using|try|catch|if|while|do|for|switch)(?<!#define\s+?)(?<symbol2>[\w~$]+)\s*?\([^;)]*?\)[\w\s\d<>[\].:\n]*?{))/g,
@@ -6,7 +7,7 @@ export const SymbolRegexes: Record<string, RegExp> = {
   rs: /(struct|enum|union|trait|type|fn)\s+(?<symbol1>[\w\p{L}]+)/gu,
   go: /((type\s+(?<symbol1>[\w\p{L}]+))|(func\s+?(\(.*?\)\s*?)?(?<symbol2>[\w\p{L}]+)\s*?\())/gu,
   rb: /(((class|module)\s+(?<symbol1>\w+))|(def\s+?(?<symbol2>\w+)))/g,
-  py: /(class|def)\s+(?<symbol1>\w+)/g,
+  py: /(?:([\d]+?|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|f|False|finally|for|from|global|if|import|in|is|lambda|None|nonlocal|not|or|pass|raise|return|self|super|True|try|while|with|yield)[\s."'=,())\]:])|(?<symbol1>[^\s=():,*+-.`[\]>{}"'#/!]{3,})/g,
   java: /(((class|@?interface|enum)\s+(?<symbol1>[\w$]+))|((\s|^)(?!try|catch|if|while|do|for|switch)(?<symbol2>[\w$]+)\s*?\([^;)]*?\)[\w\s\d<>[\].:\n]*?{))/g,
   ts: /(((class|interface|enum|type|function)\s+(?<symbol1>[#$\w\p{L}]+))|((\s|^)(?!using|try|catch|if|while|do|for|switch)(?<symbol2>[#$\w\p{L}]+)\s*?\([^;)]*?\)[\w\s<>[\].:\n]*?\{)|((?<symbol3>[#$\w\p{L}]+)\s*?(=|:)\s*?\(.*?\)\s*?=>))/gu,
   kt: /(((class|typealias)\s+(?<symbol1>[\w_]+))|(fun\s+?(<.+?>\s+)?(.*?\.)?(?<symbol2>\w+)))/g,
@@ -33,7 +34,7 @@ function getMatches(source: string, regex: RegExp): string[] {
     const { groups } = match;
     const symbol = groups?.symbol1 ?? groups?.symbol2 ?? groups?.symbol3;
 
-    if (symbol) results.push(symbol);
+    if (symbol && !STOP_WORDS.has(symbol.toLowerCase())) results.push(symbol);
   }
 
   return results;

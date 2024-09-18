@@ -88,8 +88,41 @@ describe('querySymbols', () => {
     it('identifies symbols', () => {
       const srcPath = join(__dirname, '../fixtures/source/sample.py');
       const symbols = querySymbols(srcPath);
+      console.log(symbols);
       expect(symbols.sort()).toStrictEqual(
-        ['MyClass', '__init__', 'say_hello', 'some_function'].sort()
+        [
+          'Hello',
+          'Hello',
+          'MyBaseClass',
+          'MyBaseClass',
+          'MyClass',
+          'Python',
+          'This',
+          '__init__',
+          '__init__',
+          '__main__',
+          '__name__',
+          'my_array',
+          'my_array',
+          'my_module',
+          'name',
+          'name',
+          'name',
+          'name',
+          'name',
+          'perform',
+          'perform',
+          'perform_operation',
+          'print',
+          'print',
+          'result',
+          'result',
+          'sample',
+          'say_hello',
+          'script',
+          'some_function',
+          'world',
+        ].sort()
       );
     });
   });

@@ -1,6 +1,6 @@
 import { splitCamelized } from '../lib/splitCamelized';
 
-const STOP_WORDS = new Set([
+export const STOP_WORDS = new Set([
   'a',
   'an',
   'and',
