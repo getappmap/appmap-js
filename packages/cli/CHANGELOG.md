@@ -1,3 +1,18 @@
+# [@appland/appmap-v3.164.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.6...@appland/appmap-v3.164.0) (2024-09-19)
+
+
+### Bug Fixes
+
+* Drop SIGINT handler in trajectory ([ef0cb3b](https://github.com/getappmap/appmap-js/commit/ef0cb3b39e4de703f9901d200596975581ce9ab2))
+* Fix context collection of absolute paths ([9cd56dd](https://github.com/getappmap/appmap-js/commit/9cd56dd3cf762f0fe6fdcb999aa7d91e55dd3b1f))
+* Remove file size limitation on indexing ([5c28821](https://github.com/getappmap/appmap-js/commit/5c2882170cb3f3d735cf8f6909d28cd3c80b3ca9))
+
+
+### Features
+
+* Accept more path variations ([4b752c0](https://github.com/getappmap/appmap-js/commit/4b752c0f89a11b32941ad92b93c701bf1cfc78a8))
+* Add --trajectory-file option ([6e0ae7c](https://github.com/getappmap/appmap-js/commit/6e0ae7c632fde8c812937a124a8131e62f3639cd))
+
 # [@appland/appmap-v3.163.6](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.5...@appland/appmap-v3.163.6) (2024-09-17)
 
 
