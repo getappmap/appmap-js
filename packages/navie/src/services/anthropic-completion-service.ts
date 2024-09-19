@@ -10,13 +10,13 @@ import CompletionService, {
   CompletionRetries,
   CompletionRetryDelay,
   convertToMessage,
-  JsonOptions,
+  CompleteOptions,
   mergeSystemMessages,
   Usage,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
 
-/* 
+/*
   Generated on https://docs.anthropic.com/en/docs/about-claude/models with
   Object.fromEntries(
     $$('table tbody')
@@ -128,7 +128,7 @@ export default class AnthropicCompletionService implements CompletionService {
   async json<Schema extends z.ZodType>(
     messages: Message[],
     schema: Schema,
-    options?: JsonOptions
+    options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined> {
     const maxRetries = options?.maxRetries ?? 3;
     const model = this.buildModel({ ...options, streaming: false });

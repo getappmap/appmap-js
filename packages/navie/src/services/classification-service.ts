@@ -148,7 +148,7 @@ export default class ClassificationService {
       },
     ];
 
-    const response = this.completion.complete(messages);
+    const response = this.completion.complete(messages, { model: this.completion.miniModelName });
     const tokens = Array<string>();
     for await (const token of response) {
       tokens.push(token);
