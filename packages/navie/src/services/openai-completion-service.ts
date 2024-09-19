@@ -5,12 +5,11 @@ import type { ChatCompletion, ChatCompletionChunk } from 'openai/resources/index
 import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { warn } from 'console';
-import Message, { CHARACTERS_PER_TOKEN } from '../message';
+import Message from '../message';
 import CompletionService, {
   Completion,
   CompletionRetries,
   CompletionRetryDelay,
-  convertToMessage,
   CompleteOptions,
   mergeSystemMessages,
   Usage,
@@ -37,15 +36,39 @@ import { APIError } from 'openai';
 const COST_PER_M_TOKEN: Record<string, { input: number; output: number }> = {
   'gpt-4o': {
     input: 5,
-    output: 5,
+    output: 15,
+  },
+  'gpt-4o-2024-08-06': {
+    input: 2.5,
+    output: 10,
   },
   'gpt-4o-2024-05-13': {
     input: 5,
-    output: 5,
+    output: 15,
   },
   'gpt-4o-mini': {
     input: 0.15,
     output: 0.6,
+  },
+  'gpt-4o-mini-2024-07-18': {
+    input: 0.15,
+    output: 0.6,
+  },
+  'o1-preview': {
+    input: 15,
+    output: 60,
+  },
+  'o1-preview-2024-09-12': {
+    input: 15,
+    output: 60,
+  },
+  'o1-mini': {
+    input: 3,
+    output: 12,
+  },
+  'o1-mini-2024-09-12': {
+    input: 3,
+    output: 12,
   },
   'gpt-3.5-turbo-0125': {
     input: 0.5,
@@ -108,19 +131,6 @@ const COST_PER_M_TOKEN: Record<string, { input: number; output: number }> = {
     output: 0.4,
   },
 };
-
-function tokenUsage(promptTokens: number, completionTokens: number, modelName: string): Usage {
-  const result = new Usage(COST_PER_M_TOKEN[modelName]);
-  result.promptTokens = promptTokens;
-  result.completionTokens = completionTokens;
-  return result;
-}
-
-function estimateTokens(messages: readonly Message[]): number {
-  const nonEmpty = messages.map((x) => x.content?.toString().length ?? 0);
-  if (nonEmpty.length) return nonEmpty.reduce((x, y) => x + y) / CHARACTERS_PER_TOKEN;
-  return 0;
-}
 
 const STATUS_NO_RETRY = [
   400, // Bad Request
@@ -283,31 +293,67 @@ export default class OpenAICompletionService implements CompletionService {
   }
 
   async *complete(messages: readonly Message[], options?: CompleteOptions): Completion {
-    const promptTokensPromise = this.countTokens(messages);
-    let tokenCount = 0;
     const tokens = new Array<string>();
+    const model = options?.model ?? this.model.modelName;
+    const isO1 = this.modelName.startsWith('o1-');
+    const usage = new Usage(COST_PER_M_TOKEN[model]);
     const sentMessages = mergeSystemMessages(messages);
+
+    if (isO1) {
+      // O1 does not support system messages, so prepend the system message to the newest user message.
+      const { content } = sentMessages.shift()!;
+      const userIdx = sentMessages.findLastIndex(({ role }) => role === 'user');
+      if (userIdx === -1) sentMessages.push({ content, role: 'user' });
+      else sentMessages[userIdx].content = content + '\n\n' + sentMessages[userIdx].content;
+    }
+
     for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
     const fetchResponse = async () => {
-      return this.model.completionWithRetry({
-        messages: sentMessages,
-        model: options?.model ?? this.model.modelName,
-        stream: true,
-        temperature: options?.temperature,
-      });
+      return isO1
+        ? // o1 currently doesn't support streaming or temperatures != 1
+          this.model.completionWithRetry({
+            messages: sentMessages,
+            model,
+            stream: false,
+            temperature: 1,
+          })
+        : this.model.completionWithRetry({
+            messages: sentMessages,
+            model,
+            stream: true,
+            temperature: options?.temperature,
+            stream_options: { include_usage: true },
+          });
     };
 
     for (let attempt = 0; attempt < CompletionRetries; attempt++) {
       const response = await fetchResponse();
       try {
-        for await (const token of response) {
-          const { content } = token.choices[0].delta;
+        if ('choices' in response) {
+          const { content } = response.choices[0].message;
           if (content) {
             yield content;
             tokens.push(content);
           }
-          tokenCount += 1;
+          if (response.usage) {
+            usage.promptTokens = response.usage.prompt_tokens;
+            usage.completionTokens = response.usage.completion_tokens;
+          }
+        } else {
+          for await (const token of response) {
+            if (token.choices.length > 0) {
+              const { content } = token.choices[0].delta;
+              if (content) {
+                tokens.push(content);
+                yield content;
+              }
+            }
+            if (token.usage) {
+              usage.promptTokens += token.usage.prompt_tokens;
+              usage.completionTokens += token.usage.completion_tokens;
+            }
+          }
         }
         break; // Exit loop if successful
       } catch (error) {
@@ -321,17 +367,7 @@ export default class OpenAICompletionService implements CompletionService {
 
     this.trajectory.logReceivedMessage({ role: 'assistant', content: tokens.join('') });
 
-    const usage = tokenUsage(await promptTokensPromise, tokenCount, this.modelName);
     warn(usage.toString());
     return usage;
-  }
-
-  async countTokens(messages: readonly Message[]): Promise<number> {
-    try {
-      const count = await this.model.getNumTokensFromMessages(messages.map(convertToMessage));
-      return count?.totalCount ?? estimateTokens(messages);
-    } catch (e) {
-      return estimateTokens(messages);
-    }
   }
 }
