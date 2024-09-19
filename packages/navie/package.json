@@ -41,7 +41,7 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
-    "@langchain/anthropic": "^0.2.14",
+    "@langchain/anthropic": "^0.3.1",
     "@langchain/core": "^0.2.27",
     "@langchain/openai": "^0.2.7",
     "fast-xml-parser": "^4.4.0",

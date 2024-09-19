@@ -31,9 +31,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@anthropic-ai/sdk@npm:^0.25.2":
-  version: 0.25.2
-  resolution: "@anthropic-ai/sdk@npm:0.25.2"
+"@anthropic-ai/sdk@npm:^0.27.3":
+  version: 0.27.3
+  resolution: "@anthropic-ai/sdk@npm:0.27.3"
   dependencies:
     "@types/node": ^18.11.18
     "@types/node-fetch": ^2.6.4
@@ -42,7 +42,7 @@ __metadata:
     form-data-encoder: 1.7.2
     formdata-node: ^4.3.2
     node-fetch: ^2.6.7
-  checksum: b38f6a43f6f678e49f1b53226cc55654c23cf0fd1902cf3fcf98c0ae78f4c229518964f4cb31bc39da41925c806e7f4cc7ec14c511d387f07db3136b111bc744
+  checksum: 8000fc5a4e545057d8711f978a0de59c9a174398a81f700c9d279213790aaa4b2c100f96f2ef79447b8f1f3a04b8f094d60db66a06df8df96b31a3240d69cb5a
   languageName: node
   linkType: hard
 
@@ -454,7 +454,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/navie@workspace:packages/navie"
   dependencies:
-    "@langchain/anthropic": ^0.2.14
+    "@langchain/anthropic": ^0.3.1
     "@langchain/core": ^0.2.27
     "@langchain/openai": ^0.2.7
     "@tsconfig/node-lts": ^20.1.3
@@ -6988,16 +6988,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@langchain/anthropic@npm:^0.2.14":
-  version: 0.2.15
-  resolution: "@langchain/anthropic@npm:0.2.15"
+"@langchain/anthropic@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@langchain/anthropic@npm:0.3.1"
   dependencies:
-    "@anthropic-ai/sdk": ^0.25.2
-    "@langchain/core": ">=0.2.21 <0.3.0"
+    "@anthropic-ai/sdk": ^0.27.3
     fast-xml-parser: ^4.4.1
     zod: ^3.22.4
     zod-to-json-schema: ^3.22.4
-  checksum: 06e36bee0451884be2e53c06942666f32701568fa83b329634169f4a1dd409f1659761c6255ac3b042f20f2ff5e63e7d4f04110fc1e908b00c3136c900474ba0
+  peerDependencies:
+    "@langchain/core": ">=0.2.21 <0.4.0"
+  checksum: 397dc1b114e48c312f8627e6a3a2dd1b28e91b11d3e1c08e6679a4087b3535665da8ea330fcd73ff95e8b87393347d5e112d6ca073b54bef2980625f0ec34217
   languageName: node
   linkType: hard
 
