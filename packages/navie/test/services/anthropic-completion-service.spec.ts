@@ -41,7 +41,10 @@ describe('AnthropicCompletionService', () => {
       { role: 'assistant', content: 'I am a bot.' },
     ] as const;
 
-    beforeEach(() => mockAnthropicStream('Anthropic completion result'));
+    beforeEach(() => {
+      jest.clearAllMocks();
+      mockAnthropicStream('Anthropic completion result');
+    });
 
     const complete = async () => {
       const completion = service.complete(messages);
@@ -71,6 +74,58 @@ describe('AnthropicCompletionService', () => {
         'assistant',
       ]);
       expect(events.map((e) => e.type)).toEqual(['sent', 'sent', 'sent', 'received']);
+    });
+
+    it('retries on overloaded error', async () => {
+      jest.useFakeTimers();
+      const stream = jest.spyOn(ChatAnthropic.prototype, 'stream').mockImplementation(() => {
+        function gen(): AsyncGenerator<AIMessageChunk> {
+          const sseError = {
+            type: 'error',
+            error: {
+              type: 'overloaded_error',
+              message: 'Overloaded',
+            },
+          };
+          const error = Object.defineProperties(new Error(JSON.stringify(sseError)), {
+            status: {
+              value: undefined,
+            },
+          });
+          throw error;
+        }
+        return Promise.resolve(IterableReadableStream.fromAsyncGenerator(gen()));
+      });
+
+      const completion = service.complete([]);
+      const consumePromise = (async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        try {
+          for await (const chunk of completion) {
+            // We don't expect to get any chunks
+          }
+        } catch (e) {
+          /* eslint-disable jest/no-conditional-expect */
+          // This is not conditional, it's guaranteed to throw
+          expect(stream).toHaveBeenCalledTimes(5);
+          const err = e as Error;
+          expect(err).toBeInstanceOf(Error);
+          expect(err.message).toContain('Failed to complete');
+          /* eslint-enable jest/no-conditional-expect */
+        }
+      })();
+
+      const delays = [1000, 2000, 4000, 8000];
+
+      for (const delay of delays) {
+        jest.advanceTimersByTime(delay);
+
+        // Yield to the event loop to allow another attempt to be made
+        // eslint-disable-next-line no-await-in-loop
+        await Promise.resolve();
+      }
+
+      await consumePromise;
     });
   });
 
