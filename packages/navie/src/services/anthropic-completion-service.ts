@@ -8,6 +8,7 @@ import Message from '../message';
 import CompletionService, {
   Completion,
   CompletionRetries,
+  CompletionRetryDelay,
   convertToMessage,
   JsonOptions,
   mergeSystemMessages,
@@ -188,7 +189,7 @@ export default class AnthropicCompletionService implements CompletionService {
         if (attempt < maxAttempts - 1 && tokens.length === 0) {
           const sseError = getSseError(cause);
           if (sseError) {
-            const nextAttempt = 1000 * 2 ** attempt;
+            const nextAttempt = CompletionRetryDelay * 2 ** attempt;
             warn(`Received ${JSON.stringify(sseError.error)}, retrying in ${nextAttempt}ms`);
 
             // eslint-disable-next-line no-await-in-loop

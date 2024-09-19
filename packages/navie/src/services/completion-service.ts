@@ -97,3 +97,15 @@ export const CompletionRetries = (() => {
   return 5;
 })();
 
+// Base delay between retries in milliseconds, before exponential backoff
+export const CompletionRetryDelay = (() => {
+  const env = process.env.APPMAP_NAVIE_COMPLETION_RETRY_DELAY;
+  if (env) {
+    const value = parseInt(env, 10);
+    if (Number.isInteger(value) && value > 0) {
+      return value;
+    }
+  }
+
+  return 1000;
+})();
