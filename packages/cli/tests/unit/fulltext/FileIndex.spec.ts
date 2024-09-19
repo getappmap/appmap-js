@@ -155,7 +155,7 @@ describe(filterFiles, () => {
     jest.resetAllMocks();
   });
 
-  it('filters out files with binary extensions, files over 50 kB and non-files', async () => {
+  it('filters out files with binary extensions and non-files', async () => {
     const dir = tmp.dirSync({ unsafeCleanup: true }).name;
     writeFileSync(join(dir, 'file.txt'), 'hello');
     writeFileSync(join(dir, 'file.zip'), 'hello');
@@ -165,6 +165,6 @@ describe(filterFiles, () => {
 
     const fileList = readdirSync(dir);
     const filtered = await filterFiles(dir, fileList);
-    expect(filtered).toEqual(['file.json', 'file.txt']);
+    expect(filtered).toEqual(['file.json', 'file.txt', 'large.txt']);
   });
 });

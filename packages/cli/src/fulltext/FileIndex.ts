@@ -256,7 +256,11 @@ export async function filterFiles(
 
     try {
       const stats = await stat(join(directory, fileName));
-      if (stats.isFile() && stats.size < 50_000) result.push(fileName);
+      if (stats.isFile()) {
+        if (stats.size > 50_000) debug(`WARNING Large file ${fileName} with size ${stats.size}`);
+
+        result.push(fileName);
+      }
     } catch (error) {
       console.warn(`Error checking file ${fileName}`);
       console.warn(error);

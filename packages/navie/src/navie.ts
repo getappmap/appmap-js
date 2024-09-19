@@ -29,6 +29,7 @@ import TechStackCommand from './commands/tech-stack-command';
 import ContextCommand from './commands/context-command';
 import FileChangeExtractorService from './services/file-change-extractor-service';
 import parseOptions from './lib/parse-options';
+import Trajectory, { TrajectoryEvent } from './lib/trajectory';
 import ListFilesCommand from './commands/list-files-command';
 import MermaidFixerService from './services/mermaid-fixer-service';
 import UpdateCommand from './commands/update-command';
@@ -52,6 +53,8 @@ export interface INavie extends InteractionHistoryEvents {
   on(event: 'agent', listener: (agent: string) => void): void;
 
   on(event: 'classification', listener: (labels: ContextV2.ContextLabel[]) => void): void;
+
+  on(event: 'trajectory', listener: (event: TrajectoryEvent) => void): void;
 
   execute(): AsyncIterable<string>;
 }
@@ -82,9 +85,11 @@ export default function navie(
   if (options.responseTokens !== DEFAULT_RESPONSE_TOKENS)
     warn(`Using response tokens ${options.responseTokens}`);
 
+  const trajectory = new Trajectory();
+
   const interactionHistory = new InteractionHistory();
 
-  const completionService = createCompletionService(options);
+  const completionService = createCompletionService({ ...options, trajectory });
 
   const classificationService = new ClassificationService(interactionHistory, completionService);
 
@@ -220,6 +225,10 @@ export default function navie(
         if (event instanceof ClassificationEvent) {
           this.emit('classification', event.classification);
         }
+      });
+
+      trajectory.on('event', (event: TrajectoryEvent) => {
+        this.emit('trajectory', event);
       });
     }
 

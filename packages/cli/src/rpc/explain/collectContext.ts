@@ -101,7 +101,37 @@ export default async function collectContext(
   context: ContextV2.ContextResponse;
 }> {
   const keywords = searchTerms.map((term) => queryKeywords(term)).flat();
-  warn(`[collectContext] keywords: ${keywords.join(' ')}`);
+
+  //   recent?: boolean;
+  // locations?: string[];
+  // itemTypes?: ContextItemType[];
+  // labels?: ContextLabel[];
+  // exclude?: string[];
+  // include?: string[];
+
+  const contextParameters: Record<string, string | number | boolean> = {
+    sourceDirectories: sourceDirectories.join(', '),
+    charLimit,
+  };
+  if (appmapDirectories.length > 0)
+    contextParameters.appmapDirectories = appmapDirectories.join(', ');
+  if (keywords.length > 0) contextParameters.keywords = keywords.join(', ');
+  if (appmaps && appmaps.length > 0) contextParameters.appmaps = appmaps.join(', ');
+  if (filters.recent) contextParameters.recent = filters.recent;
+  if (filters.locations) contextParameters.locations = filters.locations.join(', ');
+  if (filters.itemTypes) contextParameters.itemTypes = filters.itemTypes.join(', ');
+  if (filters.labels && filters.labels.length > 0)
+    contextParameters.labels = filters.labels
+      .map((label) => `${label.name}(${label.weight})`)
+      .join(', ');
+  if (filters.exclude) contextParameters.exclude = filters.exclude.join(', ');
+  if (filters.include) contextParameters.include = filters.include.join(', ');
+
+  const contextDebugString = Object.entries(contextParameters)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(', ');
+  warn(`Collecting context with parameters: ${contextDebugString}`);
+
   const contextCollector = new ContextCollector(
     appmapDirectories,
     sourceDirectories,
@@ -115,10 +145,12 @@ export default async function collectContext(
   if (filters?.include)
     contextCollector.includePatterns = filters.include.map((pattern) => new RegExp(pattern));
   if (filters?.itemTypes) contextCollector.includeTypes = filters.itemTypes.map((type) => type);
-  if (filters?.locations)
+  if (filters?.locations) {
     contextCollector.locations = filters.locations
       .map((location) => Location.parse(location))
       .filter(Boolean) as Location[];
+    warn(`Parsed locations: ${contextCollector.locations.map((loc) => loc.toString()).join(', ')}`);
+  }
 
   return await contextCollector.collectContext();
 }

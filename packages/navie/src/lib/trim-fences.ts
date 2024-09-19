@@ -7,24 +7,15 @@ export default function trimFences(text: string): string {
     .split(lineSeparator)
     .map((line) => line.trimEnd())
     .filter(Boolean);
-  if (openingFencePattern.test(lines[0]) && closingFencePattern.test(lines[lines.length - 1])) {
-    lines[0] = lines[0].replace(openingFencePattern, '');
-    const startIndex = lines[0] === '' ? 1 : 0;
-    return lines.slice(startIndex, -1).join(lineSeparator);
+
+  const firstLineContainingFence = lines.findIndex((line) => openingFencePattern.test(line));
+  const rlines = lines.slice().reverse();
+  const lastLineContainingFence = rlines.findIndex((line) => closingFencePattern.test(line));
+  if (firstLineContainingFence === -1 || lastLineContainingFence === -1) {
+    return text;
   }
 
-  return text;
+  const startIndex = firstLineContainingFence + 1;
+  const endIndex = lines.length - lastLineContainingFence - 1;
+  return lines.slice(startIndex, endIndex).join(lineSeparator);
 }
-
-// TODO: Alternatively:
-// const sanitizeContent = (fileUpdate: FileUpdate) => {
-//   const { content } = fileUpdate;
-
-//   const fenceRegex = /```(?:\w+)?\n([\s\S]*?)```/g;
-//   let match: RegExpExecArray | null;
-//   const codeBlocks = new Array<string>();
-//   while ((match = fenceRegex.exec(content)) !== null) {
-//     codeBlocks.push(match[1]);
-//   }
-//   if (codeBlocks.length) fileUpdate.content = codeBlocks.join('\n');
-// };

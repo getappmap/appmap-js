@@ -16,6 +16,7 @@ import reportFetchError from './report-fetch-error';
 import assert from 'assert';
 import { initializeHistory, loadThread } from './historyHelper';
 import { THREAD_ID_REGEX } from './history';
+import Trajectory from './trajectory';
 
 const OPTION_SETTERS: Record<
   string,
@@ -37,6 +38,7 @@ const OPTION_SETTERS: Record<
 
 export default class LocalNavie extends EventEmitter implements INavie {
   public navieOptions = new Navie.NavieOptions();
+  public trajectory: Trajectory | undefined;
 
   assignedThreadId: string | undefined;
 
@@ -54,6 +56,10 @@ export default class LocalNavie extends EventEmitter implements INavie {
     if (!THREAD_ID_REGEX.test(threadId)) throw new Error(`Invalid thread id: ${threadId}`);
 
     this.assignedThreadId = threadId;
+  }
+
+  setTrajectoryHandler(trajectory: Trajectory) {
+    this.trajectory = trajectory;
   }
 
   get providerName() {
@@ -149,6 +155,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
       navieFn.on('event', (event) => this.emit('event', event));
       navieFn.on('agent', (agent) => (agentName = agent));
       navieFn.on('classification', (labels) => (classification = labels));
+      if (this.trajectory)
+        navieFn.on('trajectory', this.trajectory.logMessage.bind(this.trajectory));
 
       const response = new Array<string>();
       for await (const token of navieFn.execute()) {
