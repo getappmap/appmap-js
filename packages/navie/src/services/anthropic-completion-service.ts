@@ -70,6 +70,29 @@ const COST_PER_M_TOKEN: Record<string, { input: number; output: number }> = {
   },
 };
 
+type SSEError = {
+  type: 'error';
+  error: {
+    type: string;
+    message: string;
+  };
+};
+
+// Parses Claude's SSE error format from an error message
+function getSseError(e: unknown): SSEError | undefined {
+  if (e instanceof Error) {
+    if ('status' in e && e.status === undefined) {
+      try {
+        const error = JSON.parse(e.message) as SSEError;
+        return error;
+      } catch {
+        // ignore
+      }
+    }
+  }
+  return undefined;
+}
+
 export default class AnthropicCompletionService implements CompletionService {
   constructor(
     public readonly modelName: string,
@@ -132,39 +155,61 @@ export default class AnthropicCompletionService implements CompletionService {
   }
 
   async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
-    try {
-      const model = this.buildModel(options);
+    const usage = new Usage(COST_PER_M_TOKEN[this.modelName]);
+    const model = this.buildModel(options);
+    const sentMessages = mergeSystemMessages(messages);
+    const tokens = new Array<string>();
+    for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
-      const sentMessages = mergeSystemMessages(messages);
-      for (const message of sentMessages) this.trajectory.logSentMessage(message);
+    const maxAttempts = 5;
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const response = await model.stream(sentMessages.map(convertToMessage));
 
-      const response = await model.stream(sentMessages.map(convertToMessage));
-
-      const usage = new Usage(COST_PER_M_TOKEN[this.modelName]);
-
-      const tokens = new Array<string>();
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      for await (const { content, usage_metadata } of response) {
-        yield content.toString();
-        tokens.push(content.toString());
-        if (usage_metadata) {
-          usage.promptTokens += usage_metadata.input_tokens;
-          usage.completionTokens += usage_metadata.output_tokens;
+        // eslint-disable-next-line @typescript-eslint/naming-convention, no-await-in-loop
+        for await (const { content, usage_metadata } of response) {
+          yield content.toString();
+          tokens.push(content.toString());
+          if (usage_metadata) {
+            usage.promptTokens += usage_metadata.input_tokens;
+            usage.completionTokens += usage_metadata.output_tokens;
+          }
         }
+
+        this.trajectory.logReceivedMessage({
+          role: 'assistant',
+          content: tokens.join(''),
+        });
+
+        break;
+      } catch (cause) {
+        if (attempt < maxAttempts - 1 && tokens.length === 0) {
+          const sseError = getSseError(cause);
+          if (sseError) {
+            const nextAttempt = 1000 * 2 ** attempt;
+            warn(`Received ${JSON.stringify(sseError.error)}, retrying in ${nextAttempt}ms`);
+
+            // eslint-disable-next-line no-await-in-loop
+            await new Promise<void>((resolve) => {
+              setTimeout(resolve, nextAttempt);
+            });
+
+            // eslint-disable-next-line no-continue
+            continue;
+          }
+        }
+        throw new Error(
+          `Failed to complete after ${attempt + 1} attempt(s): ${errorMessage(cause)}`,
+          {
+            cause,
+          }
+        );
       }
-
-      this.trajectory.logReceivedMessage({
-        role: 'assistant',
-        content: tokens.join(''),
-      });
-
-      warn(usage.toString());
-      return usage;
-    } catch (cause) {
-      throw new Error(`Failed to complete: ${errorMessage(cause)}`, {
-        cause,
-      });
     }
+
+    warn(usage.toString());
+    return usage;
   }
 }
 
