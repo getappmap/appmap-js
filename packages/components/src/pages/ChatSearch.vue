@@ -39,38 +39,88 @@
       data-cy="resize-handle"
       @mousedown="startResizing"
     ></div>
-    <div class="search-container">
-      <v-context
-        class="no-match-instructions"
-        :appmap-stats="appmapStats"
-        :context-response="contextResponse"
-        :pinned-items="pinnedItems"
-      />
+    <div class="search-wrapper">
+      <div class="search-header">
+        <h1>Navie's Context Sources</h1>
+        <v-popper class="infoHelp" ref="infoPopper" placement="none">
+          <div class="info" @click.prevent="onMouseEnter">
+            <InfoIcon />
+          </div>
+          <template #content>
+            <p>The Context Window displays data sources that Navie is using to inform responses.</p>
+            <p>
+              <strong>Pinned Items</strong> - specific content that you select to refine AI
+              responses.
+            </p>
+            <p>
+              <strong>Selected by Navie</strong> - code, files, and data relevant to the issue you
+              are working on that Navie has discovered in your environment. You can give Navie more
+              to work with by creating AppMap data specific to code you are working on.
+            </p>
+          </template>
+        </v-popper>
+      </div>
+      <div class="pinned-items-wrapper">
+        <div class="search-subheader">
+          <h2>
+            Pinned Items
+            <span class="pinned-item__count">{{ pinnedItemCount }}</span>
+          </h2>
+          <v-add-file-button
+            v-if="hasPinnedItems || showAddFilesWhenEmpty"
+            @click.native="addFiles"
+          />
+        </div>
+        <div class="search-container">
+          <v-pinned-items
+            class="no-match-instructions"
+            :pinned-items="pinnedItems"
+            :editor-type="editorType"
+          />
+        </div>
+      </div>
+      <div class="context-wrapper">
+        <h2>Selected by Navie</h2>
+        <div class="search-container">
+          <v-context
+            class="no-match-instructions"
+            :appmap-stats="appmapStats"
+            :context-response="contextResponse"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 //@ts-nocheck
-import VChat from '@/components/chat/Chat.vue';
+import VAddFileButton from '@/components/AddFileButton.vue';
+import VPopper from '@/components/Popper.vue';
 import VContext from '@/components/chat-search/Context.vue';
 import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
-import AppMapRPC from '@/lib/AppMapRPC';
-import authenticatedClient from '@/components/mixins/authenticatedClient';
-import type { ITool, CodeSelection } from '@/components/chat/Chat.vue';
+import VPinnedItems from '@/components/chat-search/PinnedItems.vue';
+import type { CodeSelection, ITool } from '@/components/chat/Chat.vue';
+import VChat from '@/components/chat/Chat.vue';
 import { getNextHandle } from '@/components/chat/Handle';
 import type { PinEvent, PinFile } from '@/components/chat/PinEvent';
 import VWelcomeMessage from '@/components/chat/WelcomeMessage.vue';
-
+import authenticatedClient from '@/components/mixins/authenticatedClient';
+import AppMapRPC from '@/lib/AppMapRPC';
 import { PinFileRequest } from '@/lib/PinFileRequest';
 import debounce from '@/lib/debounce';
+import InfoIcon from '../assets/info.svg';
 
 export default {
   name: 'v-chat-search',
   components: {
+    InfoIcon,
+    VAddFileButton,
     VChat,
     VContext,
     VLlmConfiguration,
+    VPinnedItems,
+    VPopper,
     VWelcomeMessage,
   },
   mixins: [authenticatedClient],
@@ -102,6 +152,11 @@ export default {
     disableLlmConfig: {
       type: Boolean,
       default: false,
+    },
+    editorType: {
+      type: String,
+      default: 'vscode',
+      validator: (value) => ['vscode', 'intellij'].indexOf(value) !== -1,
     },
   },
   data() {
@@ -252,6 +307,15 @@ export default {
     },
     welcomeMessage(): string {
       return this.metadata?.welcomeMessage ?? '';
+    },
+    hasPinnedItems() {
+      return this.pinnedItemCount > 0;
+    },
+    pinnedItemCount() {
+      return this.pinnedItems.length;
+    },
+    showAddFilesWhenEmpty() {
+      return this.editorType !== 'intellij';
     },
   },
   methods: {
@@ -548,6 +612,15 @@ export default {
         });
       });
     },
+    onMouseEnter() {
+      this.$refs.infoPopper.show();
+    },
+    onMouseLeave() {
+      this.$refs.infoPopper.hide();
+    },
+    addFiles() {
+      this.$root.$emit('choose-files-to-pin');
+    },
   },
   async mounted() {
     if (this.$refs.vappmap && this.targetAppmap && this.targetAppmapFsPath) {
@@ -609,6 +682,61 @@ $border-color: darken($gray4, 10%);
   height: 100vh;
   background-color: $gray2;
 
+  .search-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .search-subheader {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    &::v-deep .btn {
+      margin-top: 0.83rem;
+      margin-right: 0.83rem;
+    }
+  }
+
+  h1 {
+    margin: 0.5rem;
+    color: $white;
+  }
+
+  .info {
+    position: relative;
+    margin: 0 0.83rem;
+    svg {
+      width: 18px;
+      height: 18px;
+      fill: $white;
+    }
+  }
+
+  .infoHelp {
+    &::v-deep {
+      .popper__text {
+        position: absolute;
+        color: $white;
+        background: $black;
+        left: unset;
+        right: 100%;
+        transform: translateX(0.65rem) translateY(+1.65rem);
+        border: 1px solid;
+      }
+    }
+  }
+
+  h2 {
+    margin-left: 0.75rem;
+    margin-bottom: 0.5rem;
+    color: $white;
+  }
+
   .chat-container {
     overflow: hidden;
     min-width: 375px;
@@ -657,6 +785,27 @@ $border-color: darken($gray4, 10%);
     }
   }
 
+  .search-wrapper {
+    display: grid;
+    grid-template-rows: min-content min-content 1fr;
+
+    max-height: 100vh;
+    background-color: darken(#292c39, 10%);
+
+    .pinned-items-wrapper,
+    .context-wrapper {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      margin-bottom: 0;
+    }
+
+    .pinned-items-wrapper .search-container {
+      max-height: 33vh;
+      border-bottom: 1px dashed rgba($white, 0.33);
+    }
+  }
+
   .search-container,
   .context-container {
     font-size: 1rem;
@@ -674,6 +823,7 @@ $border-color: darken($gray4, 10%);
     max-height: 100vh;
     display: flex;
     flex-direction: column;
+
     h2 {
       font-size: 1.2rem;
       margin-right: 1rem;
@@ -689,6 +839,20 @@ $border-color: darken($gray4, 10%);
       background-color: $black;
       margin-top: 0rem;
     }
+  }
+
+  .pinned-item__count {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: lighten($gray4, 20%);
+    margin-left: 0.5rem;
+    background-color: rgb(168, 168, 255, 0.15);
+    border-radius: 4rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>
