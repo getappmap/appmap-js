@@ -1,3 +1,19 @@
+# [@appland/navie-v1.29.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.28.1...@appland/navie-v1.29.0) (2024-09-19)
+
+
+### Bug Fixes
+
+* Be even more directive about what FileChangeExtractor is supposed to do ([2551bab](https://github.com/getappmap/appmap-js/commit/2551babd084ec35192fe8897a3bea0cfa1fa4573))
+* Fix typo in prompt ([1832d59](https://github.com/getappmap/appmap-js/commit/1832d595ac67aca463bc48c571254e81e061647d))
+* Handle the case when fileNames is empty or undefined ([ae45fde](https://github.com/getappmap/appmap-js/commit/ae45fdedc95be306b9bf692080a6416522b8ed2a))
+* Prompt for fences in mixed content ([a9298ea](https://github.com/getappmap/appmap-js/commit/a9298ea69a327ec3c96c0e50e44031941b7a908b))
+
+
+### Features
+
+* Add /classify switch ([ab73088](https://github.com/getappmap/appmap-js/commit/ab73088b5de199f45f23ae0af8163ce0974b185d))
+* Navie emits sent / received events for all LLM interactions ([efc6f74](https://github.com/getappmap/appmap-js/commit/efc6f744d6537ac06c42b7715cbf84c5109610ce))
+
 # [@appland/navie-v1.28.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.28.0...@appland/navie-v1.28.1) (2024-09-18)
 
 
