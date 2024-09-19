@@ -83,3 +83,17 @@ export function convertToMessage(message: Message): BaseMessage {
   }
   return new Cons({ content });
 }
+
+// Number of retries to attempt a completion before giving up
+export const CompletionRetries = (() => {
+  const env = process.env.APPMAP_NAVIE_COMPLETION_RETRIES;
+  if (env) {
+    const value = parseInt(env, 10);
+    if (Number.isInteger(value) && value > 0) {
+      return value;
+    }
+  }
+
+  return 5;
+})();
+
