@@ -55,7 +55,9 @@ export type Completion = AsyncGenerator<string, Usage, void>;
 // Some LLMs only accept a single system message.
 // This functions merges all system messages into a single message
 // at the start of the list.
-export function mergeSystemMessages(messages: readonly Message[]): Message[] {
+export function mergeSystemMessages(
+  messages: readonly Message[]
+): [Message & { role: 'system' }, ...Message[]] {
   const systemMessages = messages.filter((message) => message.role === 'system');
   const nonSystemMessages = messages.filter((message) => message.role !== 'system');
   const mergedSystemMessage = {
