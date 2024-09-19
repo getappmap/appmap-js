@@ -119,7 +119,9 @@ export default class VectorTermsService {
       },
     ];
 
-    const response = this.completionsService.complete(messages);
+    const response = this.completionsService.complete(messages, {
+      model: this.completionsService.miniModelName,
+    });
     const tokens = Array<string>();
     for await (const token of response) {
       tokens.push(token);

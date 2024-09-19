@@ -11,7 +11,7 @@ import CompletionService, {
   CompletionRetries,
   CompletionRetryDelay,
   convertToMessage,
-  JsonOptions,
+  CompleteOptions,
   mergeSystemMessages,
   Usage,
 } from './completion-service';
@@ -200,7 +200,7 @@ export default class OpenAICompletionService implements CompletionService {
   async json<Schema extends z.ZodType>(
     messages: Message[],
     schema: Schema,
-    options?: JsonOptions
+    options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined> {
     // If using a local model, provide the JSON schema to the model in the system prompt.
     // This method is more likely to generate failure cases, but will be retried.
@@ -282,7 +282,7 @@ export default class OpenAICompletionService implements CompletionService {
     return undefined;
   }
 
-  async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
+  async *complete(messages: readonly Message[], options?: CompleteOptions): Completion {
     const promptTokensPromise = this.countTokens(messages);
     let tokenCount = 0;
     const tokens = new Array<string>();
@@ -291,8 +291,8 @@ export default class OpenAICompletionService implements CompletionService {
 
     const fetchResponse = async () => {
       return this.model.completionWithRetry({
-        messages: mergeSystemMessages(messages),
-        model: this.model.modelName,
+        messages: sentMessages,
+        model: options?.model ?? this.model.modelName,
         stream: true,
         temperature: options?.temperature,
       });

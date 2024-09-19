@@ -3,18 +3,18 @@ import { AIMessage, BaseMessage, HumanMessage, SystemMessage } from '@langchain/
 import { z } from 'zod';
 import Message from '../message';
 
-export type JsonOptions = {
+export type CompleteOptions = {
   model?: string;
   temperature?: number;
   maxRetries?: number;
 };
 
 export default interface CompletionService {
-  complete: (messages: readonly Message[], options?: { temperature?: number }) => Completion;
+  complete: (messages: readonly Message[], options?: CompleteOptions) => Completion;
   json<Schema extends z.ZodType>(
     messages: Message[],
     schema: Schema,
-    options?: JsonOptions
+    options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined>;
   readonly modelName: string;
   readonly miniModelName: string;
