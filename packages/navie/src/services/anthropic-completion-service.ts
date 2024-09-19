@@ -7,6 +7,7 @@ import { z } from 'zod';
 import Message from '../message';
 import CompletionService, {
   Completion,
+  CompletionRetries,
   convertToMessage,
   JsonOptions,
   mergeSystemMessages,
@@ -161,7 +162,7 @@ export default class AnthropicCompletionService implements CompletionService {
     const tokens = new Array<string>();
     for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
-    const maxAttempts = 5;
+    const maxAttempts = CompletionRetries;
     for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
       try {
         // eslint-disable-next-line no-await-in-loop
