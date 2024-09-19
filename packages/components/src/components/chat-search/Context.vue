@@ -1,9 +1,8 @@
 <template>
   <div class="context" data-cy="context">
-    <template v-if="!contextResponse && !hasPinnedItems">
+    <template v-if="!contextResponse">
       <div class="context__notice-container">
         <div class="context__notice" data-cy="context-notice">
-          <h2>Navie's context</h2>
           <p>
             When you ask Navie a question, this area will reflect the information that Navie is
             aware of when answering. You can use this information to better understand how Navie is
@@ -14,22 +13,6 @@
     </template>
     <template v-else>
       <div class="context__body">
-        <h2>Context</h2>
-        <template v-if="hasPinnedItems">
-          <h3>Pinned Items</h3>
-          <div class="context__body__table">
-            <component
-              v-for="pin in pinnedItems"
-              :is="getPinnedComponent(pin)"
-              :is-reference="true"
-              :key="pin.handle"
-              v-bind="pin"
-              class="context__pinned-item"
-              @pin="unpin(pin.handle)"
-              >{{ pin.content }}</component
-            >
-          </div>
-        </template>
         <div v-for="t in Object.keys(contextTypes)" :key="t">
           <div v-if="hasContext(t)">
             <h3>
@@ -54,26 +37,12 @@
 <script lang="ts">
 //@ts-nocheck
 import VContextItem from '@/components/chat-search/ContextItem.vue';
-import VFile from '@/components/chat/File.vue';
-import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
-import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
-import VButton from '@/components/Button.vue';
-
-const PinnedContextComponents = {
-  'code-snippet': VMarkdownCodeSnippet,
-  mermaid: VMermaidDiagram,
-  file: VFile,
-};
 
 export default {
   name: 'v-context',
 
   components: {
-    VButton,
     VContextItem,
-    VFile,
-    VMarkdownCodeSnippet,
-    VMermaidDiagram,
   },
 
   props: {
@@ -82,10 +51,6 @@ export default {
       required: false,
     },
     contextResponse: {
-      type: Array,
-      required: false,
-    },
-    pinnedItems: {
       type: Array,
       required: false,
     },
@@ -105,9 +70,6 @@ export default {
     contextTypeKeys() {
       return Object.keys(this.contextTypes);
     },
-    hasPinnedItems() {
-      return this.pinnedItems?.length > 0;
-    },
   },
 
   methods: {
@@ -122,12 +84,6 @@ export default {
     },
     openInstallInstructions() {
       this.$root.$emit('open-install-instructions');
-    },
-    getPinnedComponent({ type }: any): Vue.Component | undefined {
-      return PinnedContextComponents[type];
-    },
-    unpin(handle: number) {
-      this.$emit('pin', { handle, pinned: false });
     },
   },
 };
@@ -164,23 +120,14 @@ export default {
     align-items: center;
   }
 
-  h2 {
-    margin-top: 0;
-    margin-bottom: 2rem;
-    color: $white;
-  }
-
   h3 {
+    margin: 0.65rem;
     color: $gray5;
   }
 
   &__body {
     padding: 1rem;
-
-    &__no-appmaps {
-      padding: 0 1rem;
-      margin-bottom: 2.5rem;
-    }
+    overflow-y: auto;
 
     &__table {
       display: flex;
@@ -195,7 +142,8 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: fit-content;
+    margin-top: 1.5rem;
   }
 
   &__notice {

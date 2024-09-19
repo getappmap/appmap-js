@@ -1,10 +1,10 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
-import './scss/vscode.scss';
-import orderData from './data/scenario.json';
-import petclinicData from './data/java_scenario.json';
-import longPackageData from './data/long-package.appmap.json';
-import savedFilters from './data/saved_filters.js';
-import navieContext from './data/navie_context.json';
+import petclinicData from '../data/java_scenario.json';
+import longPackageData from '../data/long-package.appmap.json';
+import navieContext from '../data/navie_context.json';
+import savedFilters from '../data/saved_filters.js';
+import orderData from '../data/scenario.json';
+import '../scss/vscode.scss';
 
 function wait(msec) {
   return new Promise((resolve) => setTimeout(resolve, msec));
