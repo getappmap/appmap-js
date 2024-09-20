@@ -1,6 +1,6 @@
 <template>
   <div class="chat-container">
-    <v-chat ref="vchat" class="chat" />
+    <v-chat ref="vchat" class="chat" :use-animation="useAnimation" />
   </div>
 </template>
 
@@ -18,6 +18,10 @@ export default {
   props: {
     aiClientFn: {
       type: Function,
+    },
+    useAnimation: {
+      type: Boolean,
+      default: true,
     },
   },
   mixins: [authenticatedClient],

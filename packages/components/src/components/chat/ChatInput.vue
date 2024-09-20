@@ -97,6 +97,10 @@ export default {
       type: Object as PropType<NavieRpc.V1.Metadata.Response | undefined>,
       default: undefined,
     },
+    useAnimation: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -115,6 +119,11 @@ export default {
     },
     isSelectingCommand() {
       return this.$refs.autocomplete.isVisible;
+    },
+    inputClass() {
+      return {
+        glow: this.useAnimation,
+      };
     },
   },
   methods: {
@@ -237,7 +246,6 @@ $border-color: #7289c5;
       background-color: #171b25;
       font-size: 1rem;
       color: white;
-      animation: glow 4s infinite ease-in-out;
       font-family: inherit;
       resize: none;
       max-height: 200px;
@@ -251,6 +259,9 @@ $border-color: #7289c5;
 
       &:focus-visible {
         outline: none !important;
+      }
+      &.glow {
+        animation: glow 4s infinite ease-in-out;
       }
     }
 

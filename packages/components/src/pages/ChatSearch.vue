@@ -18,6 +18,7 @@
         :question="question"
         :input-placeholder="inputPlaceholder"
         :metadata="metadata"
+        :use-animation="useAnimation"
         @isChatting="setIsChatting"
         @stop="onStop"
       >
@@ -152,6 +153,10 @@ export default {
     disableLlmConfig: {
       type: Boolean,
       default: false,
+    },
+    useAnimation: {
+      type: Boolean,
+      default: true,
     },
     editorType: {
       type: String,

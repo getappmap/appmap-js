@@ -64,6 +64,7 @@
       :code-selections="codeSelections"
       :is-stop-active="isResponseStreaming"
       :metadata="metadata"
+      :use-animation="useAnimation"
       ref="input"
     />
   </div>
@@ -172,6 +173,10 @@ export default {
     },
     metadata: {
       type: Object as PropType<NavieRpc.V1.Metadata.Response | undefined>,
+    },
+    useAnimation: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
