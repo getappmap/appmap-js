@@ -16,6 +16,7 @@ import CompletionService, {
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
 import { APIError } from 'openai';
+import trimLargestUserMessage from '../lib/trim-largest-user-message';
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -297,7 +298,7 @@ export default class OpenAICompletionService implements CompletionService {
     const model = options?.model ?? this.model.modelName;
     const isO1 = this.modelName.startsWith('o1-');
     const usage = new Usage(COST_PER_M_TOKEN[model]);
-    const sentMessages = mergeSystemMessages(messages);
+    let sentMessages: Message[] = mergeSystemMessages(messages);
 
     if (isO1) {
       // O1 does not support system messages, so prepend the system message to the newest user message.
@@ -328,8 +329,8 @@ export default class OpenAICompletionService implements CompletionService {
     };
 
     for (let attempt = 0; attempt < CompletionRetries; attempt++) {
-      const response = await fetchResponse();
       try {
+        const response = await fetchResponse();
         if ('choices' in response) {
           const { content } = response.choices[0].message;
           if (content) {
@@ -357,8 +358,12 @@ export default class OpenAICompletionService implements CompletionService {
         }
         break; // Exit loop if successful
       } catch (error) {
-        if (!(error instanceof APIError) || error.type !== 'server_error') throw error; // only retry on server errors
+        if (!(error instanceof APIError)) throw error; // only retry on server errors
         if (tokens.length || attempt === CompletionRetries - 1) throw error; // Rethrow if tokens were yielded or max attempts reached
+        if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
+          warn('Context length exceeded, truncating messages by 15% and retrying');
+          sentMessages = trimLargestUserMessage(sentMessages, 0.15);
+        } else if (error.type !== 'server_error') throw error; // only retry on server errors
         await new Promise(
           (resolve) => setTimeout(resolve, CompletionRetryDelay * Math.pow(2, attempt)) // Exponential backoff
         );
