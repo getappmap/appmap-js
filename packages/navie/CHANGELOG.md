@@ -1,3 +1,15 @@
+# [@appland/navie-v1.30.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.29.2...@appland/navie-v1.30.0) (2024-09-20)
+
+
+### Bug Fixes
+
+* Use mini model for vector terms and classification ([afe2a59](https://github.com/getappmap/appmap-js/commit/afe2a59bc5a657b3374b123333670b837d8c208e))
+
+
+### Features
+
+* Support O1 models ([e813a01](https://github.com/getappmap/appmap-js/commit/e813a01e9e0a37b62594818a2988a236c24be01a))
+
 # [@appland/navie-v1.29.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.29.1...@appland/navie-v1.29.2) (2024-09-20)
 
 
