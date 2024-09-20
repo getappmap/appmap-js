@@ -8,6 +8,8 @@ import { warn } from 'console';
 import Message, { CHARACTERS_PER_TOKEN } from '../message';
 import CompletionService, {
   Completion,
+  CompletionRetries,
+  CompletionRetryDelay,
   convertToMessage,
   JsonOptions,
   mergeSystemMessages,
@@ -296,7 +298,7 @@ export default class OpenAICompletionService implements CompletionService {
       });
     };
 
-    for (let attempt = 0; attempt < 5; attempt++) {
+    for (let attempt = 0; attempt < CompletionRetries; attempt++) {
       const response = await fetchResponse();
       try {
         for await (const token of response) {
@@ -310,8 +312,10 @@ export default class OpenAICompletionService implements CompletionService {
         break; // Exit loop if successful
       } catch (error) {
         if (!(error instanceof APIError) || error.type !== 'server_error') throw error; // only retry on server errors
-        if (tokens.length || attempt === 4) throw error; // Rethrow if tokens were yielded or max attempts reached
-        await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, attempt))); // Exponential backoff
+        if (tokens.length || attempt === CompletionRetries - 1) throw error; // Rethrow if tokens were yielded or max attempts reached
+        await new Promise(
+          (resolve) => setTimeout(resolve, CompletionRetryDelay * Math.pow(2, attempt)) // Exponential backoff
+        );
       }
     }
 
