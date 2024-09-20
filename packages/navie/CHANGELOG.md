@@ -1,3 +1,11 @@
+# [@appland/navie-v1.29.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.29.0...@appland/navie-v1.29.1) (2024-09-20)
+
+
+### Bug Fixes
+
+* Retry on Claude overload error ([b5395f1](https://github.com/getappmap/appmap-js/commit/b5395f1dc7ee201b0f710631c4e9328abafaf730))
+* Update @langchain/anthropic to v0.3.1 ([9760d25](https://github.com/getappmap/appmap-js/commit/9760d25b599bf0c6c0657bd2f87163e7bce67ad8))
+
 # [@appland/navie-v1.29.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.28.1...@appland/navie-v1.29.0) (2024-09-19)
 
 
