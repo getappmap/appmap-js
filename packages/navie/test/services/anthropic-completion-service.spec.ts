@@ -6,6 +6,7 @@ import { AIMessageChunk } from '@langchain/core/messages';
 import { z } from 'zod';
 import { RunnableBinding } from '@langchain/core/runnables';
 import Trajectory, { TrajectoryEvent } from '../../src/lib/trajectory';
+import * as trimLargestUserMessageModule from '../../src/lib/trim-largest-user-message';
 
 describe('AnthropicCompletionService', () => {
   let interactionHistory: InteractionHistory;
@@ -111,6 +112,60 @@ describe('AnthropicCompletionService', () => {
           const err = e as Error;
           expect(err).toBeInstanceOf(Error);
           expect(err.message).toContain('Failed to complete');
+          /* eslint-enable jest/no-conditional-expect */
+        }
+      })();
+
+      const delays = [1000, 2000, 4000, 8000];
+
+      for (const delay of delays) {
+        jest.advanceTimersByTime(delay);
+
+        // Yield to the event loop to allow another attempt to be made
+        // eslint-disable-next-line no-await-in-loop
+        await Promise.resolve();
+      }
+
+      await consumePromise;
+    });
+
+    it('truncates messages if context length exceeded', async () => {
+      const stream = jest.spyOn(ChatAnthropic.prototype, 'stream').mockImplementation(() => {
+        const message = 'prompt is too long: 200000 tokens > 199999 maximum';
+        const error = Object.defineProperties(new Error(message), {
+          status: {
+            value: 400,
+          },
+          error: {
+            value: {
+              type: 'error',
+              error: {
+                type: 'invalid_request_error',
+                message,
+              },
+            },
+          },
+        });
+        throw error;
+      });
+      const trimLargestMessage = jest
+        .spyOn(trimLargestUserMessageModule, 'default')
+        .mockReturnValue([]);
+      const completion = service.complete([]);
+      const consumePromise = (async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        try {
+          for await (const chunk of completion) {
+            // We don't expect to get any chunks
+          }
+        } catch (e) {
+          /* eslint-disable jest/no-conditional-expect */
+          // This is not conditional, it's guaranteed to throw
+          const err = e as Error;
+          expect(err).toBeInstanceOf(Error);
+          expect(err.message).toContain('prompt is too long');
+          expect(trimLargestMessage).toHaveBeenCalledTimes(4);
+          expect(stream).toHaveBeenCalledTimes(5);
           /* eslint-enable jest/no-conditional-expect */
         }
       })();

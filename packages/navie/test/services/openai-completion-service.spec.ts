@@ -7,6 +7,7 @@ import { z } from 'zod';
 import Message from '../../src/message';
 import { PromptType } from '../../src/prompt';
 import { APIError } from 'openai';
+import * as trimLargestUserMessageModule from '../../src/lib/trim-largest-user-message';
 
 jest.mock('@langchain/openai');
 
@@ -141,6 +142,48 @@ describe('OpenAICompletionService', () => {
 
       expect(result).toEqual(['Hello']);
       expect(mockCompletionWithRetry).toHaveBeenCalledTimes(2);
+    });
+
+    it('retries if token count exceeds limit', async () => {
+      let callCount = 0;
+      // eslint-disable-next-line @typescript-eslint/require-await
+      const mockCompletionWithRetry = jest.fn().mockImplementation(async function* () {
+        if (callCount === 0) {
+          callCount += 1;
+          throw new APIError(
+            undefined,
+            {
+              message:
+                "This model's maximum context length is 128000 tokens. However, your messages resulted in 128001 tokens. Please reduce the length of the messages.",
+              type: 'invalid_request_error',
+              param: 'messages',
+              code: 'context_length_exceeded',
+            },
+            undefined,
+            undefined
+          );
+        }
+
+        // This is the success case after retry
+        yield {
+          choices: [{ delta: { content: 'Hello' } }],
+        };
+      });
+      const trimLargestMessage = jest
+        .spyOn(trimLargestUserMessageModule, 'default')
+        .mockReturnValue([]);
+
+      service.model.completionWithRetry = mockCompletionWithRetry;
+
+      const messages = [{ role: 'user', content: 'Hello' }] as const;
+      const result = [];
+      for await (const token of service.complete(messages)) {
+        result.push(token);
+      }
+
+      expect(result).toEqual(['Hello']);
+      expect(mockCompletionWithRetry).toHaveBeenCalledTimes(2);
+      expect(trimLargestMessage).toHaveBeenCalledTimes(1);
     });
 
     describe('with a custom temperature', () => {

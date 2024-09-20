@@ -15,6 +15,7 @@ import CompletionService, {
   Usage,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
+import trimLargestUserMessage from '../lib/trim-largest-user-message';
 
 /*
   Generated on https://docs.anthropic.com/en/docs/about-claude/models with
@@ -72,24 +73,33 @@ const COST_PER_M_TOKEN: Record<string, { input: number; output: number }> = {
   },
 };
 
-type SSEError = {
+type ClaudeError = {
   type: 'error';
+  status?: number;
   error: {
     type: string;
     message: string;
   };
 };
 
-// Parses Claude's SSE error format from an error message
-function getSseError(e: unknown): SSEError | undefined {
-  if (e instanceof Error) {
-    if ('status' in e && e.status === undefined) {
-      try {
-        const error = JSON.parse(e.message) as SSEError;
-        return error;
-      } catch {
-        // ignore
-      }
+// Parses Claude's error format from an error message
+function getClaudeError(e: unknown): ClaudeError | undefined {
+  if (e instanceof Error && 'status' in e) {
+    // API errors contain an error object
+    if ('error' in e) {
+      return {
+        ...(e.error as ClaudeError),
+        status: e.status as number | undefined,
+      };
+    }
+
+    // SSE errors contain the stringified error object in the message
+    try {
+      const error = JSON.parse(e.message) as ClaudeError;
+      error.status = e.status as number | undefined;
+      return error;
+    } catch {
+      // ignore
     }
   }
   return undefined;
@@ -113,6 +123,7 @@ export default class AnthropicCompletionService implements CompletionService {
     streaming?: boolean;
   }): ChatAnthropic {
     return new ChatAnthropic({
+      anthropicApiUrl: 'http://localhost:3000',
       modelName: options?.model ?? this.modelName,
       temperature: options?.temperature ?? this.temperature,
       streaming: options?.streaming ?? true,
@@ -159,7 +170,7 @@ export default class AnthropicCompletionService implements CompletionService {
   async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
     const usage = new Usage(COST_PER_M_TOKEN[this.modelName]);
     const model = this.buildModel(options);
-    const sentMessages = mergeSystemMessages(messages);
+    let sentMessages: Message[] = mergeSystemMessages(messages);
     const tokens = new Array<string>();
     for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
@@ -187,18 +198,32 @@ export default class AnthropicCompletionService implements CompletionService {
         break;
       } catch (cause) {
         if (attempt < maxAttempts - 1 && tokens.length === 0) {
-          const sseError = getSseError(cause);
-          if (sseError) {
+          const apiError = getClaudeError(cause);
+          if (apiError) {
             const nextAttempt = CompletionRetryDelay * 2 ** attempt;
-            warn(`Received ${JSON.stringify(sseError.error)}, retrying in ${nextAttempt}ms`);
+            let shouldRetry = apiError.status === undefined;
 
-            // eslint-disable-next-line no-await-in-loop
-            await new Promise<void>((resolve) => {
-              setTimeout(resolve, nextAttempt);
-            });
+            if (
+              apiError.status === 400 &&
+              apiError.error.type === 'invalid_request_error' &&
+              apiError.error.message.includes('prompt is too long')
+            ) {
+              warn('Context length exceeded, truncating messages by 15% and retrying');
+              sentMessages = trimLargestUserMessage(sentMessages, 0.15);
+              shouldRetry = true;
+            }
 
-            // eslint-disable-next-line no-continue
-            continue;
+            if (shouldRetry) {
+              warn(`Received ${JSON.stringify(apiError.error)}, retrying in ${nextAttempt}ms`);
+
+              // eslint-disable-next-line no-await-in-loop
+              await new Promise<void>((resolve) => {
+                setTimeout(resolve, nextAttempt);
+              });
+
+              // eslint-disable-next-line no-continue
+              continue;
+            }
           }
         }
         throw new Error(
