@@ -1,3 +1,10 @@
+# [@appland/navie-v1.29.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.29.1...@appland/navie-v1.29.2) (2024-09-20)
+
+
+### Bug Fixes
+
+* Retry completion if OpenAI throws a server error while streaming ([c220ab5](https://github.com/getappmap/appmap-js/commit/c220ab54f1834c832b5a9d03d69cae0443129da2))
+
 # [@appland/navie-v1.29.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.29.0...@appland/navie-v1.29.1) (2024-09-20)
 
 
