@@ -1,3 +1,10 @@
+# [@appland/navie-v1.30.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.30.0...@appland/navie-v1.30.1) (2024-09-23)
+
+
+### Bug Fixes
+
+* Truncate largest message if max tokens are exceeded ([e5ced70](https://github.com/getappmap/appmap-js/commit/e5ced703f8abe8987fb5a54fa11accbe386a82ed))
+
 # [@appland/navie-v1.30.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.29.2...@appland/navie-v1.30.0) (2024-09-20)
 
 
