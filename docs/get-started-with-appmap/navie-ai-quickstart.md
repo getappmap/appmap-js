@@ -18,9 +18,9 @@ redirect_from: [/docs/setup-appmap-in-your-code-editor/navie-ai-quickstart]
 
 ## Choose your AI Provider (Optional)
 
-By default, Navie uses an AppMap proxy of the latest OpenAI supported AI models. If you would like to customize your own model, you can leverage a variety of other AI model providers such as [Azure OpenAI](https://appmap.io/docs/reference/navie#azure-openai), [Fireworks.ai](https://appmap.io/docs/reference/navie#fireworks-ai), [LM Studio](https://appmap.io/docs/reference/navie#lm-studio), and more.  
+By default, Navie uses an AppMap proxy of the latest OpenAI supported AI models. If you would like to customize your own model, you can leverage a variety of other AI model providers such as [Azure OpenAI](https://appmap.io/docs/navie-reference#azure-openai), [Fireworks.ai](https://appmap.io/docs/navie-reference#fireworks-ai), [LM Studio](https://appmap.io/docs/navie-reference#lm-studio), and more.  
 
-If you have an active GitHub Copilot subscription, you can use Navie with the [Copilot Lanauage Model](/docs/reference/navie#github-copilot-language-model) as a supported backend. Refer to the Navie Copilot documentation for instructions on how to enable.
+If you have an active GitHub Copilot subscription, you can use Navie with the [Copilot Lanauage Model](/docs/navie-reference#github-copilot-language-model) as a supported backend. Refer to the Navie Copilot documentation for instructions on how to enable.
 
 ## Open AppMap Navie AI
 
@@ -34,11 +34,11 @@ To open the Navie Chat, open the AppMap plugin in the sidebar menu for your code
 
 You can ask questions about your application with Navie immediately after installing the plugin.  AppMap Data is not required but Navie only has partial information about your project and the answers will not include any runtime specific information. 
 
-By default, Navie will utilize an OpenAI service hosted by AppMap. If, for data privacy or other reasons, you are do not wish to use the AppMap OpenAI proxy, you can [bring your own OpenAI API key](/docs/navie/bring-your-own-model.html#bring-your-own-openai-api-key-byok), or use an [entirely different AI Model](/docs/navie/bring-your-own-model.html#ollama), hosted in your environment or hosted locally.
+By default, Navie will utilize an OpenAI service hosted by AppMap. If, for data privacy or other reasons, you are do not wish to use the AppMap OpenAI proxy, you can [bring your own OpenAI API key](/docs/using-navie-ai/bring-your-own-model.html#bring-your-own-openai-api-key-byok), or use an [entirely different AI Model](/docs/using-navie-ai/bring-your-own-model.html#ollama), hosted in your environment or hosted locally.
 
 When you ask a question to Navie, it will search through all your AppMap Diagrams (if they exist) for your project to pull in relevant traces, sequence diagrams, and code snippets for analysis. It will then send these code snippets and runtime code sequence diagrams to the Generative AI service along with your question. 
 
-Refer to the [Using Navie docs](/docs/navie/using-navie) to learn more about the advanced Navie chat commands you can use with your question. 
+Refer to the [Using Navie docs](/docs/using-navie-ai/using-navie) to learn more about the advanced Navie chat commands you can use with your question. 
 
 After asking Navie a question, Navie will search through your application source code, finding any relevant code snippets. It will include relevant AppMap Data like sequence diagrams and data flows if they exist for your project. You will see on the right hand side of the Navie window the relevant context from your code included with the question. 
 

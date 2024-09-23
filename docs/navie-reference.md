@@ -1,14 +1,11 @@
 ---
 layout: docs
 title: Docs - Reference
-description: "Reference Guide to AppMap Navie, including advanced usage and configuration"
 toc: true
-reference: true
-name: AppMap Navie AI
-step: 1
+description: "Reference Guide to AppMap Navie, including advanced usage and configuration"
 ---
 
-# AppMap Navie AI
+# Navie Reference
 - [Navie Supported Software](#navie-supported-software)
 - [Navie Commands](#navie-commands)
   - [`@plan`](#plan)
@@ -305,7 +302,7 @@ Click the `Sign in to GitHub` and login with an account that has a valid paid or
 
 ### OpenAI
 
-**Note:** We recommend configuring your OpenAI key using the code editor extension. Follow the [Bring Your Own Key](/docs/navie/bring-your-own-model.html#configuring-your-openai-key) docs for instructions.  
+**Note:** We recommend configuring your OpenAI key using the code editor extension. Follow the [Bring Your Own Key](/docs/using-navie-ai/bring-your-own-model.html#configuring-your-openai-key) docs for instructions.  
 
 Only `OPENAI_API_KEY` needs to be set, other settings can stay default:
 
@@ -332,7 +329,7 @@ In the next box, give your key an easy to recognize name.
 ![Anthropic Key Name](/assets/img/product/give-anthropic-key-name.webp)
 
 In your VS Code or JetBrains editor, configure the following environment variables.  For more details on configuring 
-these environment variables in your VS Code or JetBrains editor, refer to the [AppMap BOYK documentation.](/docs/navie/bring-your-own-model.html#configuration)
+these environment variables in your VS Code or JetBrains editor, refer to the [AppMap BOYK documentation.](/docs/using-navie-ai/bring-your-own-model.html#configuration)
 
 | `ANTHROPIC_API_KEY`| `sk-ant-api03-8SgtgQrGB0vTSsB_DeeIZHvDrfmrg` |
 | `APPMAP_NAVIE_MODEL`| `claude-3-5-sonnet-20240620` |
