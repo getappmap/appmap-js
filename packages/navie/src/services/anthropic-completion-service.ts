@@ -123,7 +123,6 @@ export default class AnthropicCompletionService implements CompletionService {
     streaming?: boolean;
   }): ChatAnthropic {
     return new ChatAnthropic({
-      anthropicApiUrl: 'http://localhost:3000',
       modelName: options?.model ?? this.modelName,
       temperature: options?.temperature ?? this.temperature,
       streaming: options?.streaming ?? true,
