@@ -1,3 +1,10 @@
+# [@appland/navie-v1.30.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.30.1...@appland/navie-v1.30.2) (2024-09-24)
+
+
+### Bug Fixes
+
+* Anthropic API URL is no longer hard coded ([da75da0](https://github.com/getappmap/appmap-js/commit/da75da0065a298f5da0ba89e2811d792479939d1))
+
 # [@appland/navie-v1.30.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.30.0...@appland/navie-v1.30.1) (2024-09-23)
 
 
