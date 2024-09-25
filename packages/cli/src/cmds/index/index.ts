@@ -24,8 +24,7 @@ import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { update } from '../../rpc/file/update';
-
-const AI_KEY_ENV_VARS = ['OPENAI_API_KEY', 'AZURE_OPENAI_API_KEY'];
+import { AI_KEY_ENV_VARS } from './aiEnvVar';
 
 export const command = 'index';
 export const describe =
