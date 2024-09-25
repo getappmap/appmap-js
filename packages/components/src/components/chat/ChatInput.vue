@@ -23,7 +23,10 @@
         @submit="onAutoComplete"
         ref="autocomplete"
       />
+      <!-- See the comment in getappmap/vscode-appland/web/src/app.js for why `focus` is set on the
+        input -->
       <div
+        :class="{ glow: useAnimation }"
         contenteditable="plaintext-only"
         :placeholder="placeholderOverride"
         role="textbox"
@@ -32,6 +35,7 @@
         tabindex="0"
         ref="input"
         data-cy="chat-input"
+        focus
       />
       <v-popper
         v-if="!isStopActive"
@@ -61,13 +65,13 @@
 <script lang="ts">
 //@ts-nocheck
 
-import type { PropType } from 'vue';
 import VSendIcon from '@/assets/compass-icon.svg';
 import VStopIcon from '@/assets/stop-icon.svg';
 import VPopper from '@/components/Popper.vue';
-import VCodeSelection from '@/components/chat/CodeSelection.vue';
 import VAutoComplete from '@/components/chat/AutoComplete.vue';
+import VCodeSelection from '@/components/chat/CodeSelection.vue';
 import { NavieRpc } from '@appland/rpc';
+import type { PropType } from 'vue';
 
 export default {
   name: 'v-chat-input',
@@ -119,11 +123,6 @@ export default {
     },
     isSelectingCommand() {
       return this.$refs.autocomplete.isVisible;
-    },
-    inputClass() {
-      return {
-        glow: this.useAnimation,
-      };
     },
   },
   methods: {
