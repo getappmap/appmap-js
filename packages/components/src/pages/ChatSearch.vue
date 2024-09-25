@@ -423,7 +423,9 @@ export default {
         this.ask.on('stop', onStop);
 
         const explainRequest = {
-          question: message.replace(/^@generate/, '@generate /format=xml'),
+          question: message
+            .replace(/^@generate/, '@generate /format=xml')
+            .replace(/^@test/, '@test /format=xml'),
         };
         if (appmaps.length > 0) explainRequest.appmaps = appmaps;
 
