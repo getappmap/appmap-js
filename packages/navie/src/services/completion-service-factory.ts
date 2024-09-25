@@ -1,5 +1,6 @@
 import { warn } from 'node:console';
 
+import GoogleVertexAICompletionService from './google-vertexai-completion-service';
 import OpenAICompletionService from './openai-completion-service';
 import AnthropicCompletionService from './anthropic-completion-service';
 import CompletionService from './completion-service';
@@ -10,47 +11,41 @@ interface Options {
   modelName: string;
   temperature: number;
   trajectory: Trajectory;
+  backend?: Backend;
 }
 
-type Backend = 'anthropic' | 'openai';
+const BACKENDS = {
+  anthropic: AnthropicCompletionService,
+  openai: OpenAICompletionService,
+  'vertex-ai': GoogleVertexAICompletionService,
+} as const;
 
-function defaultBackend(): Backend {
-  return 'ANTHROPIC_API_KEY' in process.env ? 'anthropic' : 'openai';
-}
+type Backend = keyof typeof BACKENDS;
 
-function environmentBackend(): Backend | undefined {
+function determineCompletionBackend(): Backend {
   switch (process.env.APPMAP_NAVIE_COMPLETION_BACKEND) {
     case 'anthropic':
     case 'openai':
+    case 'vertex-ai':
       return process.env.APPMAP_NAVIE_COMPLETION_BACKEND;
     default:
-      return undefined;
+    // pass
   }
+  if ('ANTHROPIC_API_KEY' in process.env) return 'anthropic';
+  if ('GOOGLE_WEB_CREDENTIALS' in process.env) return 'vertex-ai';
+  if ('OPENAI_API_KEY' in process.env) return 'openai';
+  return 'openai'; // fallback
 }
 
-export const SELECTED_BACKEND: Backend = environmentBackend() ?? defaultBackend();
+export const SELECTED_BACKEND: Backend = determineCompletionBackend();
 
 export default function createCompletionService({
   modelName,
   temperature,
   trajectory,
+  backend = determineCompletionBackend(),
 }: Options): CompletionService {
-  const backend = environmentBackend() ?? defaultBackend();
   const messageTokenReducerService = new MessageTokenReducerService();
-  if (backend === 'anthropic') {
-    warn('Using Anthropic AI backend');
-    return new AnthropicCompletionService(
-      modelName,
-      temperature,
-      trajectory,
-      messageTokenReducerService
-    );
-  }
-  warn('Using OpenAI backend');
-  return new OpenAICompletionService(
-    modelName,
-    temperature,
-    trajectory,
-    messageTokenReducerService
-  );
+  warn(`Using completion service ${backend}`);
+  return new BACKENDS[backend](modelName, temperature, trajectory, messageTokenReducerService);
 }
