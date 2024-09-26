@@ -7,7 +7,6 @@
     data-cy="context-container"
     :data-handle="valueHandle"
     :data-reference="isReference"
-    :title="location"
   >
     <div
       :class="{
@@ -16,6 +15,7 @@
       }"
       data-cy="context-header"
       @click="onClickHeader"
+      :title="location"
     >
       <span class="context-container__title" data-cy="context-title">{{ title }}</span>
       <span class="context-container__button-group">
