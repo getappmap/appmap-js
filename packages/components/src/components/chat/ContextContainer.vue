@@ -380,7 +380,7 @@ export default Vue.extend({
     &--pending {
       $bg: black;
       width: 16px;
-      height: auto;
+      height: 50%;
       cursor: initial;
 
       &:hover {
