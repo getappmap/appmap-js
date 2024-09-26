@@ -410,6 +410,7 @@ export default Vue.extend({
       height: 16px;
       width: 16px;
       vertical-align: text-bottom;
+      overflow: visible;
 
       path {
         fill: #e2e4e5;
