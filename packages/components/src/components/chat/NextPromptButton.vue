@@ -1,8 +1,8 @@
 <template>
   <v-button
     class="event-button"
-    @click.exact.native="onSubmit"
-    @click.shift.native="onChangeInput"
+    @click.shift.native="onSubmit"
+    @click.exact.native="onChangeInput"
     size="small"
     kind="ghost"
   >

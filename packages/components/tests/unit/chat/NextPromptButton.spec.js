@@ -18,14 +18,14 @@ describe('components/VNextPromptButton.vue', () => {
     const wrapper = mount(VNextPromptButton, { propsData });
     const rootWrapper = createWrapper(wrapper.vm.$root);
     await wrapper.trigger('click');
-    expect(rootWrapper.emitted('submit-prompt')).toBeTruthy();
+    expect(rootWrapper.emitted('change-input')).toBeTruthy();
   });
 
   it('emits an event when shift clicked', async () => {
     const wrapper = mount(VNextPromptButton, { propsData });
     const rootWrapper = createWrapper(wrapper.vm.$root);
     await wrapper.trigger('click', { shiftKey: true });
-    expect(rootWrapper.emitted('change-input')).toBeTruthy();
+    expect(rootWrapper.emitted('submit-prompt')).toBeTruthy();
   });
 
   it('formats the prompt if it starts with a command verb', () => {
