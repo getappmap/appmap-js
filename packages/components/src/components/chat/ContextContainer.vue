@@ -12,6 +12,7 @@
       :class="{
         'context-container__header': 1,
         'context-container__header--collapsable': isCollapsable || !isAppliable,
+        'context-container__header--file': !isCollapsable && isFile,
       }"
       data-cy="context-header"
       @click="onClickHeader"
@@ -310,6 +311,17 @@ export default Vue.extend({
 
       .context-container__button:last-child {
         border-radius: 0 $border-radius $border-radius 0;
+      }
+    }
+
+    &--file {
+      .context-container__title {
+        color: $brightblue;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
