@@ -31,7 +31,7 @@ const SYSTEM_PROMPT = `Your job is to predict the next step(s) for the user give
 ## Commands
 These are the actions that the user may request next:
 - \`plan\`: This is useful to create step by step plans to implement a code change in the user's application.
-- \`generate\`: This will generate code for the user.
+- \`generate\`: This will generate code for the user. Always include this command if the transcript contains \`@plan\`.
 - \`test\`: This action will generate test cases for the user.
 - \`diagram\`: This will generate a (sequence, flow, class, entity relation) diagram for the user. This is useful for visualizing complex concepts, relationships, or processes.
 - \`explain\`: This action will explain parts of the codebase or application behavior.
