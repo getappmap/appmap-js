@@ -333,6 +333,7 @@ export default Vue.extend({
     text-wrap: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    direction: rtl;
   }
 
   &__button-group {
