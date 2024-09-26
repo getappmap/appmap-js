@@ -53,13 +53,13 @@
               <div class="key-binds" v-if="nextStepSuggestions">
                 <div class="key-binds__option">
                   <span class="keyboard">Click</span>
-                  <span class="keyboard-plus">To select this option</span>
+                  <span class="keyboard-plus">To add prompt to input</span>
                 </div>
                 <div class="key-binds__option">
                   <span class="keyboard">Shift</span>
                   <span class="keyboard-plus">+</span>
                   <span class="keyboard">Click</span>
-                  <span class="keyboard-plus">To add prompt to input</span>
+                  <span class="keyboard-plus">To submit this suggestion</span>
                 </div>
               </div>
             </template>
