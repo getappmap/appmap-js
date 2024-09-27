@@ -1,3 +1,10 @@
+# [@appland/navie-v1.30.3](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.30.2...@appland/navie-v1.30.3) (2024-09-27)
+
+
+### Bug Fixes
+
+* Always suggest `[@generate](https://github.com/generate)` following `[@plan](https://github.com/plan)` ([e6d2dcc](https://github.com/getappmap/appmap-js/commit/e6d2dcc5f5ddfd86397d98b39a6f554573797ed0))
+
 # [@appland/navie-v1.30.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.30.1...@appland/navie-v1.30.2) (2024-09-24)
 
 
