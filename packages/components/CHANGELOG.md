@@ -1,3 +1,15 @@
+# [@appland/components-v4.37.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.3...@appland/components-v4.37.4) (2024-09-27)
+
+
+### Bug Fixes
+
+* Clickable code snippet headers now have a visual indicator ([9d190b3](https://github.com/getappmap/appmap-js/commit/9d190b3c7f12b681b5c31c1cf4ec074f591df8a0))
+* Clicking a suggested prompt now populates the input ([220f18d](https://github.com/getappmap/appmap-js/commit/220f18d13cbe6b9901804e648a31624fd43d9788))
+* Context item names are truncated on the left ([c4308de](https://github.com/getappmap/appmap-js/commit/c4308deb1e6fb6a88c8d151ea172b8ca025054b8))
+* Placement of pending apply indicator ([edbb776](https://github.com/getappmap/appmap-js/commit/edbb776cfcbc75ea27aac5c0167dbb25d1a2a3dc))
+* Prevent some icons from being clipped on the right side ([73c5a18](https://github.com/getappmap/appmap-js/commit/73c5a186ed4d5b21fe65041d7df3acf6432acd1a))
+* Tooltips are now limited to code snippet header ([5261aff](https://github.com/getappmap/appmap-js/commit/5261aff9d14406414ef4514d54af2aad625b8b06))
+
 # [@appland/components-v4.37.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.2...@appland/components-v4.37.3) (2024-09-17)
 
 
