@@ -6,10 +6,11 @@ import { AIMessageChunk } from '@langchain/core/messages';
 import { z } from 'zod';
 import { RunnableBinding } from '@langchain/core/runnables';
 import Trajectory, { TrajectoryEvent } from '../../src/lib/trajectory';
-import * as trimLargestUserMessageModule from '../../src/lib/trim-largest-user-message';
+import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
 
 describe('AnthropicCompletionService', () => {
   let interactionHistory: InteractionHistory;
+  let messageTokenReducerService: MessageTokenReducerService;
   let trajectory: Trajectory;
   let service: AnthropicCompletionService;
   const modelName = 'anthropic-model';
@@ -20,8 +21,14 @@ describe('AnthropicCompletionService', () => {
   beforeEach(() => {
     process.env['ANTHROPIC_API_KEY'] = 'test-api-key';
     interactionHistory = new InteractionHistory();
+    messageTokenReducerService = new MessageTokenReducerService();
     trajectory = new Trajectory();
-    service = new AnthropicCompletionService(modelName, temperature, trajectory);
+    service = new AnthropicCompletionService(
+      modelName,
+      temperature,
+      trajectory,
+      messageTokenReducerService
+    );
   });
 
   afterEach(() => {
@@ -148,9 +155,9 @@ describe('AnthropicCompletionService', () => {
         });
         throw error;
       });
-      const trimLargestMessage = jest
-        .spyOn(trimLargestUserMessageModule, 'default')
-        .mockReturnValue([]);
+      const reduceMessageTokens = jest
+        .spyOn(messageTokenReducerService, 'reduceMessageTokens')
+        .mockResolvedValue([]);
       const completion = service.complete([]);
       const consumePromise = (async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -164,7 +171,7 @@ describe('AnthropicCompletionService', () => {
           const err = e as Error;
           expect(err).toBeInstanceOf(Error);
           expect(err.message).toContain('prompt is too long');
-          expect(trimLargestMessage).toHaveBeenCalledTimes(4);
+          expect(reduceMessageTokens).toHaveBeenCalledTimes(4);
           expect(stream).toHaveBeenCalledTimes(5);
           /* eslint-enable jest/no-conditional-expect */
         }
@@ -173,11 +180,14 @@ describe('AnthropicCompletionService', () => {
       const delays = [1000, 2000, 4000, 8000];
 
       for (const delay of delays) {
-        jest.advanceTimersByTime(delay);
-
         // Yield to the event loop to allow another attempt to be made
         // eslint-disable-next-line no-await-in-loop
         await Promise.resolve();
+
+        // Another yield because the call to `reduceMessageTokens` is async
+        await Promise.resolve();
+
+        jest.advanceTimersByTime(delay);
       }
 
       await consumePromise;

@@ -7,12 +7,13 @@ import { z } from 'zod';
 import Message from '../../src/message';
 import { PromptType } from '../../src/prompt';
 import { APIError } from 'openai';
-import * as trimLargestUserMessageModule from '../../src/lib/trim-largest-user-message';
+import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
 
 jest.mock('@langchain/openai');
 
 describe('OpenAICompletionService', () => {
   let interactionHistory: InteractionHistory;
+  let messageTokenReducerService: MessageTokenReducerService;
   let service: OpenAICompletionService;
   let trajectory: Trajectory;
   const modelName = 'the-model-name';
@@ -20,8 +21,14 @@ describe('OpenAICompletionService', () => {
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
+    messageTokenReducerService = new MessageTokenReducerService();
     trajectory = new Trajectory();
-    service = new OpenAICompletionService(modelName, temperature, trajectory);
+    service = new OpenAICompletionService(
+      modelName,
+      temperature,
+      trajectory,
+      messageTokenReducerService
+    );
   });
 
   describe('when the completion service is created', () => {
@@ -169,9 +176,9 @@ describe('OpenAICompletionService', () => {
           choices: [{ delta: { content: 'Hello' } }],
         };
       });
-      const trimLargestMessage = jest
-        .spyOn(trimLargestUserMessageModule, 'default')
-        .mockReturnValue([]);
+      const reduceMessageTokens = jest
+        .spyOn(messageTokenReducerService, 'reduceMessageTokens')
+        .mockResolvedValue([]);
 
       service.model.completionWithRetry = mockCompletionWithRetry;
 
@@ -183,7 +190,7 @@ describe('OpenAICompletionService', () => {
 
       expect(result).toEqual(['Hello']);
       expect(mockCompletionWithRetry).toHaveBeenCalledTimes(2);
-      expect(trimLargestMessage).toHaveBeenCalledTimes(1);
+      expect(reduceMessageTokens).toHaveBeenCalledTimes(1);
     });
 
     describe('with a custom temperature', () => {

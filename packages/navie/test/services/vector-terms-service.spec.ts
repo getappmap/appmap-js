@@ -8,6 +8,7 @@ import InteractionHistory from '../../src/interaction-history';
 import { mockAIResponse } from '../fixture';
 import OpenAICompletionService from '../../src/services/openai-completion-service';
 import Trajectory from '../../src/lib/trajectory';
+import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
 
 jest.mock('@langchain/openai');
 const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
@@ -23,7 +24,7 @@ describe('VectorTermsService', () => {
     trajectory = new Trajectory();
     service = new VectorTermsService(
       interactionHistory,
-      new OpenAICompletionService('gpt-4', 0.5, trajectory)
+      new OpenAICompletionService('gpt-4', 0.5, trajectory, new MessageTokenReducerService())
     );
   });
   afterEach(() => jest.resetAllMocks());
