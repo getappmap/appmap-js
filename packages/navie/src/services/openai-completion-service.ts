@@ -16,7 +16,7 @@ import CompletionService, {
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
 import { APIError } from 'openai';
-import trimLargestUserMessage from '../lib/trim-largest-user-message';
+import MessageTokenReducerService from './message-token-reducer-service';
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -174,7 +174,8 @@ export default class OpenAICompletionService implements CompletionService {
   constructor(
     public readonly modelName: string,
     public readonly temperature: number,
-    private trajectory: Trajectory
+    private trajectory: Trajectory,
+    private readonly messageTokenReducerService: MessageTokenReducerService
   ) {
     this.model = new ChatOpenAI({
       modelName: this.modelName,
@@ -361,8 +362,12 @@ export default class OpenAICompletionService implements CompletionService {
         if (!(error instanceof APIError)) throw error; // only retry on server errors
         if (tokens.length || attempt === CompletionRetries - 1) throw error; // Rethrow if tokens were yielded or max attempts reached
         if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
-          warn('Context length exceeded, truncating messages by 15% and retrying');
-          sentMessages = trimLargestUserMessage(sentMessages, 0.15);
+          warn('Context length exceeded. Reducing token count and retrying.');
+          sentMessages = await this.messageTokenReducerService.reduceMessageTokens(
+            sentMessages,
+            model,
+            { message: error.message }
+          );
         } else if (error.type !== 'server_error') throw error; // only retry on server errors
         await new Promise(
           (resolve) => setTimeout(resolve, CompletionRetryDelay * Math.pow(2, attempt)) // Exponential backoff

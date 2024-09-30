@@ -6,6 +6,7 @@ import { mockAIResponse } from '../fixture';
 import OpenAICompletionService from '../../src/services/openai-completion-service';
 import ComputeUpdateService from '../../src/services/compute-update-service';
 import Trajectory from '../../src/lib/trajectory';
+import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
 
 jest.mock('@langchain/openai');
 const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
@@ -21,7 +22,7 @@ describe('ComputeUpdateService', () => {
     trajectory = new Trajectory();
     service = new ComputeUpdateService(
       interactionHistory,
-      new OpenAICompletionService('gpt-4', 0.5, trajectory)
+      new OpenAICompletionService('gpt-4', 0.5, trajectory, new MessageTokenReducerService())
     );
   });
   afterEach(() => jest.resetAllMocks());
