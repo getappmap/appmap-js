@@ -79,6 +79,10 @@ Ensure that all lines of the original and modified code are indented correctly.
 
 If you want to create a new file, skip the <original> part.
 
+DO NOT put the generated XML in Markdown code fences (\`\`\`).
+
+If the output is too long, present only some changes and offer the user an option to continue with others.
+
 ## Example output
 
 <change>
