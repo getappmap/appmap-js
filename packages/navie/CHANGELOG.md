@@ -1,3 +1,15 @@
+# [@appland/navie-v1.31.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.30.3...@appland/navie-v1.31.0) (2024-10-01)
+
+
+### Bug Fixes
+
+* Adjust generate prompt ([46228ab](https://github.com/getappmap/appmap-js/commit/46228ab44c95c10d631d79e4a47d7f99d189e90b))
+
+
+### Features
+
+* Generate diff output with [@test](https://github.com/test) command ([82578b8](https://github.com/getappmap/appmap-js/commit/82578b8f62ecbcd0a9910a4f32a6566744d8e85e)), closes [#1983](https://github.com/getappmap/appmap-js/issues/1983)
+
 # [@appland/navie-v1.30.3](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.30.2...@appland/navie-v1.30.3) (2024-09-27)
 
 
