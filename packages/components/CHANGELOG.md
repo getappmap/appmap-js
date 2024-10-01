@@ -1,3 +1,15 @@
+# [@appland/components-v4.38.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.4...@appland/components-v4.38.0) (2024-10-01)
+
+
+### Bug Fixes
+
+* Display errors coming from LLM ([9d85dc9](https://github.com/getappmap/appmap-js/commit/9d85dc9c7347ea4335e7f31270b927db0f567592))
+
+
+### Features
+
+* Generate diff output with [@test](https://github.com/test) command ([82578b8](https://github.com/getappmap/appmap-js/commit/82578b8f62ecbcd0a9910a4f32a6566744d8e85e)), closes [#1983](https://github.com/getappmap/appmap-js/issues/1983)
+
 # [@appland/components-v4.37.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.3...@appland/components-v4.37.4) (2024-09-27)
 
 
