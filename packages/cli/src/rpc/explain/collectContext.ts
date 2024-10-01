@@ -8,6 +8,10 @@ import LocationContextCollector from './LocationContextCollector';
 import queryKeywords from '../../fulltext/queryKeywords';
 import { warn } from 'console';
 
+export const EXCLUDE_DOT_APPMAP_DIR = /(^|[/\\])\.appmap([/\\]|$)/;
+
+export const EXCLUDE_DOT_NAVIE_DIR = /(^|[/\\])\.navie([/\\]|$)/;
+
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
 ): SearchRpc.EventMatch {
@@ -140,8 +144,9 @@ export default async function collectContext(
   );
   if (appmaps) contextCollector.appmaps = appmaps;
 
+  const excludePatterns: RegExp[] = [];
   if (filters?.exclude)
-    contextCollector.excludePatterns = filters.exclude.map((pattern) => new RegExp(pattern));
+    excludePatterns.push(...filters.exclude.map((pattern) => new RegExp(pattern)));
   if (filters?.include)
     contextCollector.includePatterns = filters.include.map((pattern) => new RegExp(pattern));
   if (filters?.itemTypes) contextCollector.includeTypes = filters.itemTypes.map((type) => type);
@@ -151,6 +156,16 @@ export default async function collectContext(
       .filter(Boolean) as Location[];
     warn(`Parsed locations: ${contextCollector.locations.map((loc) => loc.toString()).join(', ')}`);
   }
+
+  const appendIfNotExists = (patterns: RegExp[], pattern: RegExp): RegExp[] => {
+    if (!patterns.find((p) => p.source === pattern.source)) patterns.push(pattern);
+    return patterns;
+  };
+
+  appendIfNotExists(excludePatterns, EXCLUDE_DOT_APPMAP_DIR);
+  appendIfNotExists(excludePatterns, EXCLUDE_DOT_NAVIE_DIR);
+
+  contextCollector.excludePatterns = excludePatterns;
 
   return await contextCollector.collectContext();
 }
