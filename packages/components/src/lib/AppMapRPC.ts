@@ -84,7 +84,7 @@ export class ExplainRequest extends EventEmitter {
       this.client.request(
         'explain.status',
         { userMessageId },
-        (err: any, error: any, statusResponse: any) => {
+        (err: any, error: any, statusResponse: ExplainRpc.ExplainStatusResponse) => {
           // Stop polling if the user message is no longer available from the server,
           // for example if the RPC service has been restarted.
           if (error && error.code === 404) this.stopPolling();
@@ -100,6 +100,8 @@ export class ExplainRequest extends EventEmitter {
             for (const token of newTokens) this.onToken(token, userMessageId);
           }
           numTokens = explanation.length;
+
+          if (statusResponse.step === 'error') this.onError(statusResponse.err);
 
           if (['complete', 'error'].includes(statusResponse.step)) {
             this.stopPolling();
