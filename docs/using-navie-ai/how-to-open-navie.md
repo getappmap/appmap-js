@@ -19,7 +19,7 @@ redirect_from: [/docs/using-navie-ai/using-navie.html#how-to-open-navie, /docs/n
 
 ### In the VS Code Sidebar <!-- omit in toc -->
 
-You can open Navie in the VC Code sidebar by expanding (if necessary) the Navie section and select the `New Navie Chat` button. 
+You can open Navie in the VSCode sidebar by expanding (if necessary) the Navie section and select the `New Navie Chat` button. 
 
 <img class="video-screenshot" src="/assets/img/product/navie-sidebar.webp"/> 
 

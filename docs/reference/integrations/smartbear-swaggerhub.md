@@ -115,6 +115,6 @@ env:
 
 Refer to [this project on GitHub](https://github.com/land-of-apps/rails_tutorial_sample_app_7th_ed/blob/smartbear-api-comparison/.github/workflows/openapi-compare.yml) for a fully working example of this GitHub Action.
 
-With this configuratino enabled, when a user makes a commit which changes the routes that are NOT currently in the published API spec on SwaggerHub this build will fail and the user will be unable to deploy unless they update the API spec on SwaggerHub or remove the offending changes. 
+With this configuration enabled, when a user makes a commit which changes the routes that are NOT currently in the published API spec on SwaggerHub this build will fail and the user will be unable to deploy unless they update the API spec on SwaggerHub or remove the offending changes. 
 
 <img class="video-screenshot" src="/assets/img/swaggerhub-github-build-failure.webp"/>
