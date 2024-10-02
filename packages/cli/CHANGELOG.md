@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.165.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.164.0...@appland/appmap-v3.165.0) (2024-10-02)
+
+
+### Features
+
+* Ignore .appmap and .navie directories when selecting context ([c81ea51](https://github.com/getappmap/appmap-js/commit/c81ea51308069cdf40a35fc435c2cad8a039e9d2))
+
 # [@appland/appmap-v3.164.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.163.6...@appland/appmap-v3.164.0) (2024-09-19)
 
 
