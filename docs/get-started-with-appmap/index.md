@@ -6,7 +6,7 @@ toc: true
 redirect_from: [/docs/your-first-15-minutes-with-appmap/, /docs/code-editor-extensions/,/docs/code-editor-extensions/appmap-for-vs-code, /docs/code-editor-extensions/appmap-for-jetbrains,/docs/setup-appmap-in-your-code-editor/index.html]
 ---
 
-# Get Started with AppMap
+# Get Started
 
 <p class="alert alert-info">
 If at any point you would like some help, <a href="/slack">join us in Slack</a>!

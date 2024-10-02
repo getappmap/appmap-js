@@ -5,7 +5,7 @@ description: "Explore AppMap's Code Objects view to navigate code functions, HTT
 guides: true
 name: Navigating Code Objects
 step: 3
-redirect_from: [/docs/your-first-15-minutes-with-appmap/navigating-code-objects, /docs/setup-appmap-in-your-code-editor/navigating-code-objects]
+redirect_from: [/docs/your-first-15-minutes-with-appmap/navigating-code-objects, /docs/setup-appmap-in-your-code-editor/navigating-code-objects, /docs/guides/navigating-code-objects]
 ---
 
 # Navigating Code Objects

@@ -5,7 +5,7 @@ description: "Learn how to manage large AppMap Diagrams effectively. Discover ti
 guides: true
 name: Handling Large AppMap Diagrams
 step: 4
-redirect_from: [/docs/reference/handling-large-appmaps, /docs/reference/guides/handling-large-appmaps]
+redirect_from: [/docs/reference/handling-large-appmaps, /docs/reference/guides/handling-large-appmaps, /docs/guides/handling-large-appmap-diagrams]
 ---
 
 # Handling Large AppMap Diagrams <!-- omit in toc -->

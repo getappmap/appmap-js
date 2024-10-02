@@ -5,6 +5,7 @@ description: "Generate Mermaid diagrams with AppMap Navie. Download, edit, and s
 integrations: true
 name: Mermaid
 step: 4
+redirect_from: [/docs/integrations/mermaid]
 ---
 
 # Mermaid

@@ -5,7 +5,7 @@ description: "Optimize AppMap Diagrams by refining recordings to exclude noise. 
 guides: true
 name: Refining AppMap Data
 step: 6
-redirect_from: [/docs/reference/refine-appmaps, /docs/reference/guides/refine-appmaps]
+redirect_from: [/docs/reference/refine-appmaps, /docs/reference/guides/refine-appmaps /docs/guides/refine-appmap-data]
 ---
 
 # Refining AppMap Data <!-- omit in toc -->

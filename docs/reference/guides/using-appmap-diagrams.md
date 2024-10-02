@@ -6,7 +6,7 @@ guides: true
 toc: true
 name: Using AppMap Diagrams
 step: 2
-redirect_from: [/docs/how-to-use-appmap-diagrams.html, /docs/how-to-use-appmap-diagrams, /docs/diagrams/how-to-use-appmaps, /docs/diagrams/sequence-diagrams, /docs/diagrams, /docs/diagrams/how-it-works, /docs/diagrams/dependency-map, /docs/diagrams/trace-view, /docs/diagrams/sequence-diagram, /docs/diagrams/flamegraph, /docs/setup-appmap-in-your-code-editor/navigating-appmap-diagrams]
+redirect_from: [/docs/how-to-use-appmap-diagrams.html, /docs/how-to-use-appmap-diagrams, /docs/diagrams/how-to-use-appmaps, /docs/diagrams/sequence-diagrams, /docs/diagrams, /docs/diagrams/how-it-works, /docs/diagrams/dependency-map, /docs/diagrams/trace-view, /docs/diagrams/sequence-diagram, /docs/diagrams/flamegraph, /docs/setup-appmap-in-your-code-editor/navigating-appmap-diagrams, /docs/guides/using-appmap-diagrams]
 ---
 
 # Using AppMap Diagrams <!-- omit in toc -->

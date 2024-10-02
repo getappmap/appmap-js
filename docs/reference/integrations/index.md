@@ -3,6 +3,7 @@ layout: docs
 title: Docs - Integrations
 description: "Explore how to integrate AppMap with popular services like Atlassian Compass, Confluence, GitHub Actions, CircleCI, PlantUML, Postman, SwaggerHub, Readme.com, and Docker"
 toc: false
+redirect_from: [/docs/integrations]
 ---
 
 # Integrations

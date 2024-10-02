@@ -6,6 +6,7 @@ integrations: true
 name: SmartBear SwaggerHub
 render_with_liquid: false
 step: 5
+redirect_from: [/docs/integrations/smartbear-swaggerhub]
 ---
 
 # SmartBear SwaggerHub and Portal

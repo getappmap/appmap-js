@@ -5,6 +5,7 @@ description: "Optimize your AppMap API interaction with Readme's developer hub. 
 integrations: true
 name: Readme
 step: 6
+redirect_from: [/docs/integrations/readme]
 ---
 
 # Readme

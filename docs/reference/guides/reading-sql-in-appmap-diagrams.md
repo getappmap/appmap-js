@@ -5,7 +5,7 @@ description: "Discover SQL commands in AppMap Diagrams to analyze application lo
 guides: true
 name: Reading SQL in AppMap Diagrams
 step: 5
-redirect_from: [/docs/reference/guides/reading-sql-in-appmaps]
+redirect_from: [/docs/reference/guides/reading-sql-in-appmaps, /docs/guides/reading-sql-in-appmap-diagrams]
 ---
 
 ## Reading SQL in AppMap Diagrams

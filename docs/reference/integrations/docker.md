@@ -5,6 +5,7 @@ description: "Learn how to record AppMap Data inside a Docker container for cons
 integrations: true
 name: Docker
 step: 7
+redirect_from: [/docs/integrations/docker]
 ---
 
 # Docker

@@ -18,7 +18,7 @@ By using AppMap data, Navie is the first AI code architect with the context to u
 
 Over 90,000 software developers are using the [AppMap extension for VSCode](https://marketplace.visualstudio.com/items?itemName=appland.appmap) and the [AppMap plugin for JetBrains](https://plugins.jetbrains.com/plugin/16701-appmap).
 
-<a class="btn btn-primary btn-lg" href="/docs/get-started-with-appmap/">Get Started with AppMap</a>
+<a class="btn btn-primary btn-lg" href="/docs/get-started-with-appmap/">Get Started</a>
 
 ![AppMap Navie with Sequence diagram in Visual Studio Code](/assets/img/docs/vscode-with-navie-prompt.webp)
 _AppMap Navie with Sequence diagram in Visual Studio Code_

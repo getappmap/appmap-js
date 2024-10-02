@@ -5,7 +5,7 @@ description: "Learn how to uninstall AppMap components like IDE plugins, librari
 toc: true
 reference: true
 name: Uninstalling AppMap
-step: 19
+step: 20
 ---
 
 # Uninstalling AppMap

@@ -5,7 +5,7 @@ description: "Use AppMap to auto generate OpenAPI definitions and document HTTP 
 guides: true
 name: Generating OpenAPI Definitions
 step: 7
-redirect_from: [/docs/openapi,/docs/openapi/features,/docs/openapi/code-editor-extensions,/docs/openapi/integrations,/docs/openapi/customization,/docs/reference/openapi]
+redirect_from: [/docs/guides/openapi, /docs/openapi,/docs/openapi/features,/docs/openapi/code-editor-extensions,/docs/openapi/integrations,/docs/openapi/customization,/docs/reference/openapi]
 ---
 
 
