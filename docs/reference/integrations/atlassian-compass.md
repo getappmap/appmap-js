@@ -5,6 +5,7 @@ description: "Atlassian Compass is a unified platform for managing distributed s
 integrations: true
 name: Atlassian Compass
 step: 1
+redirect_from: [/docs/integrations/atlassian-compass]
 ---
 
 # Atlassian Compass

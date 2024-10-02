@@ -5,6 +5,7 @@ description: "Learn how to import your AppMap generated OpenAPI definitions into
 integrations: true
 name: Postman
 step: 4
+redirect_from: [/docs/integrations/postman]
 ---
 
 # Postman

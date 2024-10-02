@@ -21,6 +21,8 @@ redirect_from: [/docs/reference/browser-extension]
 - [Remote recording API](/docs/reference/remote-recording-api)
 - [Analysis Rules](/docs/reference/analysis-rules)
 - [Analysis Labels](/docs/reference/analysis-labels)
+- [License Key Installation](/docs/reference/license-key-install)
+- [AppMap Offline Install for Secure Environments](/docs/reference/appmap-airgapped-install)
 - [Uninstalling AppMap](/docs/reference/uninstalling-appmap)
 
 ## Advanced AppMap Data Management
@@ -34,7 +36,7 @@ redirect_from: [/docs/reference/browser-extension]
 - [Using AppMap Analysis](/docs/reference/guides/using-appmap-analysis.html)
 - [Reverse Engineering](/docs/reference/guides/reverse-engineering.html)
 
-## integrations
+## Integrations
 
 - [Atlassian Compass](/docs/reference/integrations/atlassian-compass.html)
 - [Atlassian Confluence](/docs/reference/integrations/atlassian-confluence.html)

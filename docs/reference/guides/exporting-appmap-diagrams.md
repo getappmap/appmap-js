@@ -5,6 +5,7 @@ description: "Learn how to export your AppMap Diagrams into raw JSON format, SVG
 guides: true
 name: Exporting AppMap Diagrams
 step: 4
+redirect_from: [/docs/guides/exporting-appmap-diagrams]
 ---
 
 # Exporting AppMap Diagrams <!-- omit in toc -->

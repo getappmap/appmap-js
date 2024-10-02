@@ -5,7 +5,7 @@ description: "Configure AppMap Analysis by customizing checks for flexible rule 
 guides: true
 name: Using AppMap Analysis
 step: 8
-redirect_from: [/docs/analysis/configuring-checks, /docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis,/docs/reference/guides/configuring-analysis, /docs/analysis]
+redirect_from: [/docs/analysis/configuring-checks, /docs/analysis/match-pattern-config, /docs/analysis/findings,/docs/reference/configuring-analysis,/docs/reference/guides/configuring-analysis, /docs/analysis, /docs/guides/using-appmap-analysis]
 ---
 
 # AppMap Analysis

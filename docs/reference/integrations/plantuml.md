@@ -5,6 +5,7 @@ description: "Generate, modify, and compare PlantUML sequence diagrams with AppM
 integrations: true
 name: PlantUML
 step: 3
+redirect_from: [/docs/integrations/plantuml]
 ---
 
 # PlantUML
