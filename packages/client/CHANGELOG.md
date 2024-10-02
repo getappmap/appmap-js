@@ -1,3 +1,10 @@
+# [@appland/client-v1.22.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.21.0...@appland/client-v1.22.0) (2024-10-02)
+
+
+### Features
+
+* Export Subscription types ([f2bc44b](https://github.com/getappmap/appmap-js/commit/f2bc44bec3b5f32e8075ec1d94e64d5b9ae39f83))
+
 # [@appland/client-v1.21.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.20.0...@appland/client-v1.21.0) (2024-10-02)
 
 
