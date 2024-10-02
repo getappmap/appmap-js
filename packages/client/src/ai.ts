@@ -32,6 +32,15 @@ export type ProjectParameters = {
   directories: ProjectDirectory[];
 };
 
+export type SubscriptionItem = {
+  productName: string;
+};
+
+export type Subscription = {
+  enrollmentDate: Date;
+  subscriptions: SubscriptionItem[];
+};
+
 export type CreateConversationThread = {
   modelParameters: ModelParameters;
   projectParameters: ProjectParameters;
@@ -41,6 +50,7 @@ export type ConversationThread = {
   id: string;
   permissions: Permissions;
   usage: Usage;
+  subscription: Subscription;
 };
 
 export type UserMessage = {

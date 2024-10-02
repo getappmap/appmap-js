@@ -17,6 +17,8 @@ jest.mock('@appland/navie');
 if (process.env.VERBOSE === 'true') verbose(true);
 
 describe('RPC', () => {
+  const enrollmentDate = new Date();
+
   describe('explain', () => {
     let navieProvider: INavieProvider;
     let rpcTest: RPCTest;
@@ -167,6 +169,10 @@ describe('RPC', () => {
               id: threadId,
               permissions: { useNavieAIProxy: true },
               usage: { conversationCounts: [] },
+              subscription: {
+                enrollmentDate: enrollmentDate,
+                subscriptions: [],
+              },
             })
           );
 

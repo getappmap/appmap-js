@@ -60,6 +60,7 @@ describe('Explain', () => {
           id: 'the-conversation-thread-id',
           permissions: { useNavieAIProxy: true },
           usage: { conversationCounts: [] },
+          subscription: { enrollmentDate: new Date(), subscriptions: [] },
         });
 
         jest.spyOn(AIEnvVar, 'default').mockReturnValue(undefined);
@@ -101,6 +102,7 @@ describe('Explain', () => {
           id: 'the-conversation-thread-id',
           permissions: { useNavieAIProxy: true },
           usage: { conversationCounts: [] },
+          subscription: { enrollmentDate: new Date(), subscriptions: [] },
         });
 
         jest.spyOn(AIEnvVar, 'default').mockReturnValue('THE_AI_KEY');
@@ -137,6 +139,7 @@ describe('Explain', () => {
           id: 'the-conversation-thread-id',
           permissions: { useNavieAIProxy: true },
           usage: { conversationCounts: [] },
+          subscription: { enrollmentDate: new Date(), subscriptions: [] },
         };
         jest.spyOn(explain, 'enrollConversationThread').mockResolvedValue(conversationThread);
       });
