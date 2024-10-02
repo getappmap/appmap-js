@@ -1,3 +1,10 @@
+# [@appland/navie-v1.31.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.31.0...@appland/navie-v1.31.1) (2024-10-02)
+
+
+### Bug Fixes
+
+* Handle empty prompts gracefully ([f195e35](https://github.com/getappmap/appmap-js/commit/f195e35ca4a49bc6678195e462c78dddfdae9fae))
+
 # [@appland/navie-v1.31.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.30.3...@appland/navie-v1.31.0) (2024-10-01)
 
 
