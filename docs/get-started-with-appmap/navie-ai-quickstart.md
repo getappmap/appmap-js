@@ -20,7 +20,7 @@ redirect_from: [/docs/setup-appmap-in-your-code-editor/navie-ai-quickstart]
 
 By default, Navie uses an AppMap proxy of the latest OpenAI supported AI models. If you would like to customize your own model, you can leverage a variety of other AI model providers such as [Azure OpenAI](https://appmap.io/docs/navie-reference#azure-openai), [Fireworks.ai](https://appmap.io/docs/navie-reference#fireworks-ai), [LM Studio](https://appmap.io/docs/navie-reference#lm-studio), and more.  
 
-If you have an active GitHub Copilot subscription, you can use Navie with the [Copilot Lanauage Model](/docs/navie-reference/navie-bring-your-own-model-examples.html#github-copilot-language-model) as a supported backend. Refer to the [Navie Copilot documentation](/docs/navie-reference/navie-bring-your-own-model-examples.html#github-copilot-language-model) for instructions on how to enable.
+If you have an active GitHub Copilot subscription, you can use Navie with the [Copilot Language Model](/docs/navie-reference/navie-bring-your-own-model-examples.html#github-copilot-language-model) as a supported backend. Refer to the [Navie Copilot documentation](/docs/navie-reference/navie-bring-your-own-model-examples.html#github-copilot-language-model) for instructions on how to enable.
 
 ## Open AppMap Navie AI
 
