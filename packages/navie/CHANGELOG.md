@@ -1,3 +1,10 @@
+# [@appland/navie-v1.32.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.31.1...@appland/navie-v1.32.0) (2024-10-02)
+
+
+### Features
+
+* Export Subscription types ([f2bc44b](https://github.com/getappmap/appmap-js/commit/f2bc44bec3b5f32e8075ec1d94e64d5b9ae39f83))
+
 # [@appland/navie-v1.31.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.31.0...@appland/navie-v1.31.1) (2024-10-02)
 
 
