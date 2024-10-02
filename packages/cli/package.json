@@ -124,7 +124,7 @@
     "jayson": "^4.1.0",
     "js-yaml": "^4.0.3",
     "jsdom": "^16.6.0",
-    "langchain": "^0.2.12",
+    "langchain": "^0.2.20",
     "lru-cache": "^10.2.2",
     "lunr": "^2.3.9",
     "minimatch": "^5.1.2",
