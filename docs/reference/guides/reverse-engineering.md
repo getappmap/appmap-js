@@ -6,6 +6,7 @@ description: "Learn to reverse engineer efficiently using AppMap. Capture code e
 step: 9
 render_with_liquid: false
 name: Reverse Engineering
+redirect_from: [/docs/guides/reverse-engineering]
 ---
 
 # Reverse Engineering with AppMap <!-- omit in toc -->

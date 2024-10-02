@@ -20,7 +20,7 @@ redirect_from: [/docs/setup-appmap-in-your-code-editor/navie-ai-quickstart]
 
 By default, Navie uses an AppMap proxy of the latest OpenAI supported AI models. If you would like to customize your own model, you can leverage a variety of other AI model providers such as [Azure OpenAI](https://appmap.io/docs/navie-reference#azure-openai), [Fireworks.ai](https://appmap.io/docs/navie-reference#fireworks-ai), [LM Studio](https://appmap.io/docs/navie-reference#lm-studio), and more.  
 
-If you have an active GitHub Copilot subscription, you can use Navie with the [Copilot Lanauage Model](/docs/navie-reference#github-copilot-language-model) as a supported backend. Refer to the Navie Copilot documentation for instructions on how to enable.
+If you have an active GitHub Copilot subscription, you can use Navie with the [Copilot Lanauage Model](/docs/navie-reference/navie-bring-your-own-model-examples.html#github-copilot-language-model) as a supported backend. Refer to the [Navie Copilot documentation](/docs/navie-reference/navie-bring-your-own-model-examples.html#github-copilot-language-model) for instructions on how to enable.
 
 ## Open AppMap Navie AI
 
@@ -32,20 +32,21 @@ To open the Navie Chat, open the AppMap plugin in the sidebar menu for your code
 
 ## Ask Navie about your App
 
-You can ask questions about your application with Navie immediately after installing the plugin.  AppMap Data is not required but Navie only has partial information about your project and the answers will not include any runtime specific information. 
+You can ask questions about your application with Navie immediately after installing the plugin. Navie will answer questions based on analysis of your project code. For increased accuracy of more complex projects, you can record AppMap data and Navie will utilize this information as well.
 
 By default, Navie will utilize an OpenAI service hosted by AppMap. If, for data privacy or other reasons, you are do not wish to use the AppMap OpenAI proxy, you can [bring your own OpenAI API key](/docs/using-navie-ai/bring-your-own-model.html#bring-your-own-openai-api-key-byok), or use an [entirely different AI Model](/docs/using-navie-ai/bring-your-own-model.html#ollama), hosted in your environment or hosted locally.
 
-When you ask a question to Navie, it will search through all your AppMap Diagrams (if they exist) for your project to pull in relevant traces, sequence diagrams, and code snippets for analysis. It will then send these code snippets and runtime code sequence diagrams to the Generative AI service along with your question. 
+When you ask a question to Navie, it will search through all the available AppMap data for your project to pull in relevant traces, sequence diagrams, and code snippets for analysis. it will send the selected context to your preferred LLM provider.
 
-Refer to the [Using Navie docs](/docs/using-navie-ai/using-navie) to learn more about the advanced Navie chat commands you can use with your question. 
+To achieve the highest quality results, we suggest using the available command modes when prompting Navie. Simply type `@` into the chat input to access the list of available command modes.
 
-After asking Navie a question, Navie will search through your application source code, finding any relevant code snippets. It will include relevant AppMap Data like sequence diagrams and data flows if they exist for your project. You will see on the right hand side of the Navie window the relevant context from your code included with the question. 
+By default, Navie chat is in a default mode called `@explain`. Other specialized modes are available for generating diagrams, planning work, generating code and tests, and more. Consult [Using Navie docs](/docs/navie-reference/navie-commands.html) for more details on Navie commands.
 
 The Navie UI includes a standard chat window, and a context panel which will include all the context that is included in the query to the AI provider.  This context can include things such as:
 
 **Always available:**  
 - Code Snippets
+- Pinned Content
 
 **If AppMap Data exists:**  
 - Sequence Diagrams

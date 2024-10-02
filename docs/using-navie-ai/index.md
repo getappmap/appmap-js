@@ -4,18 +4,19 @@ title: Docs - AppMap Navie
 description: "Optimize AI code completion with AppMap Navie, leveraging runtime code execution insights for hyper-personalized AI-assisted coding."
 name: index
 step: 1
+redirect_from: [/docs/navie]
 ---
 
-# Using Navie AI
+# Using Navie
 
-AppMap Navie is the missing link that improves the power of AI code completers and code assistants. Leveraging the unique ability that AppMap has to understand your code's execution at runtime, Navie transforms this data into a powerhouse of hyper-personalized context-aware insights for AI-assisted coding. 
+AppMap Navie is designed to help developers solve issues and add features in their codebase by leveraging runtime data and AI-driven commands. By following a structured workflow, you can maximize Navie’s capabilities to plan, generate, and verify your code changes with precision. This guide outlines the recommended workflow and provides an overview of the key command modes used throughout the process.
 
-That means you're not just working with static analysis anymore, and you're not looking at just individual files or functions. With Navie, you can understand the entire codebase at an architectural level, how it behaves and executes, and provide much more detailed answers to your software questions.
+If you are not able to use the AppMap OpenAI proxy, you can bring your own OpenAI API key, or use an entirely different AI Model, [hosted in your environment](/docs/using-navie-ai/bring-your-own-model.html#azure-openai) or [hosted locally](/docs/using-navie-ai/bring-your-own-model.html#ollama).
 
-- [How Navie Works](/docs/using-navie-ai/how-navie-works)
-- [How to Open Navie](/docs/using-navie-ai/how-to-open-navie)
-- [Using Navie](/docs/using-navie-ai/using-navie)
-- [Bring Your Own LLM Model](/docs/using-navie-ai/bring-your-own-model.html)
+- [Open Navie](/docs/using-navie-ai/how-to-open-navie)
+- [Choose Your LLM](/docs/using-navie-ai/bring-your-own-model.html)
+- [Using Navie For Solving Issues](/docs/using-navie-ai/using-navie)
+- [How Navie Works](/docs/navie-reference/navie-how-it-works.html)
 
 **Install AppMap for your preferred code editor to get started.**
 

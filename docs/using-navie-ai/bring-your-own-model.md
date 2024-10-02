@@ -1,24 +1,54 @@
 ---
 layout: docs
 title: Docs - Navie
-name: Bring Your Own LLM Model
-step: 4
+name: Choose Your LLM
+step: 2
 navie: true
 toc: true
 description: Use AppMap Navie with your own OpenAI account or OpenAI-compatible LLM running either locally or remotely.
-redirect_from: [/docs/navie/bring-your-own-llm, /docs/navie/bring-your-own-key]
+redirect_from: [/docs/navie/bring-your-own-llm, /docs/navie/bring-your-own-key, /docs/navie/bring-your-own-model.html]
 ---
 
-# Bring Your Own LLM Model
+# Choose Your LLM
 
 By default, when asking a question to Navie, your code editor will interact with the AppMap hosted proxy for OpenAI.  If you have a requirement to bring your own key or otherwise use your own OpenAI account you can specify your own OpenAI key; this will cause Navie to connect to OpenAI directly, without AppMap proxy acting as an intermediate.
 
-You can also use any OpenAI API compatible LLM model either running locally or via a 3rd party provider.  Finally, for VS Code users with an active GitHub Copilot subscription, you can leverage the Copilot Language Models as a supported Navie backend.  Refer to the [Navie docs for more examples](/docs/navie-reference#bring-your-own-model-examples) of using alternative language models. 
+You can also use any OpenAI API compatible LLM model either running locally or via a 3rd party provider.  Finally, for VS Code users with an active GitHub Copilot subscription, you can leverage the Copilot Language Models as a supported Navie backend.  Refer to the [Navie docs for more examples](/docs/navie-reference#bring-your-own-model-examples) of using alternative language models.
+- [Using GitHub Copilot Language Models](#using-github-copilot-language-models)
 - [Bring Your Own OpenAI API Key (BYOK)](#bring-your-own-openai-api-key-byok)
 - [Bring Your Own Anthropic (Claude) API Key (BYOK)](#bring-your-own-anthropic-claude-api-key-byok)
 - [Bring Your Own Model (BYOM)](#bring-your-own-model-byom)
-- [Using GitHub Copilot Language Models](#using-github-copilot-language-models)
 - [Examples](#examples)
+
+## Using GitHub Copilot Language Models
+
+Starting with VS Code `1.91` and greater, and with an active GitHub Copilot subscription, you can use Navie with the Copilot Language Model as a supported LLM backend.  This allows you to leverage the powerful runtime powered Navie AI Architect with your existing Copilot subscription.  This is the recommended option for users in corporate environments where Copilot is the only approved and supported language model. 
+
+### Requirements <!-- omit in toc -->
+
+The following items are required to use the GitHub Copilot Language Model with Navie:
+
+- VS Code Version `1.91` or greater
+- AppMap Extension version `v0.123.0` or greater
+- GitHub Copilot VS Code extension must be installed
+- Signed into an active paid or trial GitHub Copilot subscription
+
+#### Setup <!-- omit in toc -->
+
+Open the VS Code Settings, and search for `navie vscode`
+
+<img class="video-screenshot" src="/assets/img/product/navie-copilot-1.webp"/> 
+
+Click the box to use the `VS Code language model...`
+
+After clicking the box to enable the VS Code LM, you'll be instructed to reload your VS Code to enable these changes.
+
+For more details about using the GitHub Copilot Language Model as a supported Navie backend, refer to the [Navie reference guide](/docs/navie-reference/navie-bring-your-own-model-examples.html)
+
+#### Video Demo
+
+{% include vimeo.html id='992238965' %}
+
 
 ## Bring Your Own OpenAI API Key (BYOK)
 
@@ -166,35 +196,6 @@ After reloading you can confirm the model is configured correctly in the Navie C
 
 <img class="video-screenshot" src="/assets/img/product/navie-confirm-ui-vscode.webp"/>
 
-## Using GitHub Copilot Language Models
-
-Starting with VS Code `1.91` and greater, and with an active GitHub Copilot subscription, you can use Navie with the Copilot Language Model as a supported LLM backend.  This allows you to leverage the powerful runtime powered Navie AI Architect with your existing Copilot subscription.  This is the recommended option for users in corporate environments where Copilot is the only approved and supported language model. 
-
-### Requirements <!-- omit in toc -->
-
-The following items are required to use the GitHub Copilot Language Model with Navie:
-
-- VS Code Version `1.91` or greater
-- AppMap Extension version `v0.123.0` or greater
-- GitHub Copilot VS Code extension must be installed
-- Signed into an active paid or trial GitHub Copilot subscription
-
-#### Setup <!-- omit in toc -->
-
-Open the VS Code Settings, and search for `navie vscode`
-
-<img class="video-screenshot" src="/assets/img/product/navie-copilot-1.webp"/> 
-
-Click the box to use the `VS Code language model...`
-
-After clicking the box to enable the VS Code LM, you'll be instructed to reload your VS Code to enable these changes.
-
-For more details about using the GitHub Copilot Language Model as a supported Navie backend, refer to the [Navie reference guide](/docs/navie-reference#github-copilot-language-model)
-
-#### Video Demo
-
-{% include vimeo.html id='992238965' %}
-
 ## Examples
 
-Refer to the [Navie Reference Guide](/docs/navie-reference) for detailed examples of using Navie with your own LLM backend.
+Refer to the [Navie Reference Guide](/docs/navie-reference/navie-bring-your-own-model-examples.html) for detailed examples of using Navie with your own LLM backend.

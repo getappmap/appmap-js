@@ -5,6 +5,7 @@ description: "AppMap integrates with Atlassian Confluence to generate interactiv
 integrations: true
 name: Atlassian Confluence
 step: 1
+redirect_from: [/docs/integrations/atlassian-confluence]
 ---
 
 # Atlassian Confluence

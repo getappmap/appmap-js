@@ -1,10 +1,11 @@
 ---
 layout: docs
 title: Docs - AppMap Navie
-description: "Enhance Generative AI models with AppMap Navie. Navie leverages RAG to provide accurate answers by searching locally stored AppMap Data for relevant code snippets and application insights."
+description: "Reference Guide to AppMap Navie AI, architectural overview of AppMap Navie AI."
 name: How Navie Works
-step: 1
-navie: true
+navie-reference: true
+step: 10
+toc: true
 ---
 
 # How Navie Works
@@ -18,7 +19,7 @@ This powerful technique provides the AI with many valuable pieces of information
 4) Detailed insights into data flows, SQL queries, and other database interactions.  
 
 
-## Navie Technical Architecture
+### Navie Technical Architecture
 
 Navie integrates seamlessly into your existing AppMap enabled project.  Once you have the AppMap software libraries installed into your project, interact with your application or run tests to automatically generate AppMap Data. All of your code and AppMap Data will stay locally in your environment until you ask Navie a question.  After asking a question to Navie, the relevant AppMap Diagrams and code snippets are located locally by the AppMap search and explain API, then this data is sent to OpenAI (available option to bring your own LLM), and the response is returned to the user. 
 
