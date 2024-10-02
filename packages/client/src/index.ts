@@ -20,6 +20,8 @@ export {
   ConversationCount,
   Permissions as ConversationPermissions,
   Usage as ConversationUsage,
+  SubscriptionItem,
+  Subscription,
   Classification,
   CreateUserMessage,
   UpdateUserMessage,
