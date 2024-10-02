@@ -36,7 +36,7 @@ There are three sections to the Code Objects view. The first section is the Code
 
 In the HTTP Service request list, you can see basically a mini spec file showing you what routes are available across all of your AppMap Diagrams. 
 
-If this route only exists in a single AppMap, you’ll be taken directly to the AppMap for this request, but if the route exists in multiple diagrams you’ll get a VScode picker to choose which one to open. 
+If this route only exists in a single AppMap, you’ll be taken directly to the AppMap for this request, but if the route exists in multiple diagrams you’ll get a VSCode picker to choose which one to open. 
 
 Here is this route, and here it is shown in a trace view, and you’ll see the status code for that is 302 which is a redirect.
 

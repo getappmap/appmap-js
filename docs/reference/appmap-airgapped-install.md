@@ -274,11 +274,11 @@ After completing the install steps, you can confirm the installation was done co
 ### Open a Navie Chat 
 
 Follow the [getting started instructions](/docs/using-navie-ai/how-to-open-navie) to open a new Navie chat window.  
-If the AppMap binaries are installed and executable, you should see a new Navie chat window open sucessfully. 
+If the AppMap binaries are installed and executable, you should see a new Navie chat window open successfully. 
 
 <img class="video-screenshot" src="/assets/img/docs/offline-install-14.webp"/>
 
-If the binaries are not installed in the correct location, or are not exectuable, you will show a new Navie window prompt attempting to open but will hang until timeout. 
+If the binaries are not installed in the correct location, or are not executable, you will show a new Navie window prompt attempting to open but will hang until timeout. 
 
 <img class="video-screenshot" src="/assets/img/docs/offline-install-15.webp"/>
 

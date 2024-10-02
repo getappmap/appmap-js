@@ -264,7 +264,7 @@ Flame Graphs make it easy to see how much time is spent in each function, and wh
 
 ### How to read a Flame Graph
 
-The lowest layer in a Flame Graph represents the AppMap Data recording, and it contains the recordings’s name. For an AppMap Flame Graph created from tests, this will usually be the same name as the test from which it was generated. In the example below, the AppMap was recorded from a test related to an application’s account activation capability.
+The lowest layer in a Flame Graph represents the AppMap Data recording, and it contains the recording's name. For an AppMap Flame Graph created from tests, this will usually be the same name as the test from which it was generated. In the example below, the AppMap was recorded from a test related to an application’s account activation capability.
 
 ![flame graph image](/assets/img/docs/flamegraph-8.webp)
 

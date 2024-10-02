@@ -82,7 +82,7 @@ After your code editor reloads, you can confirm your requests are being routed t
 
 AppMap generally uses the latest OpenAI models as the default, but if you want to use an alternative model like `gpt-3.5` or a preview model like `gpt-4-vision-preview` you can modify the `APPMAP_NAVIE_MODEL` environment variable after configuring your own OpenAI API key to use other OpenAI models.  
 
-After setting your `APPMAP_NAVIE_MODEL` with your chosen model reload/restart your code editor and then confirm it's configuration by opening a new Navie chat window. In this example i've configured my model to be `gpt-4o` with my personal OpenAI API Key. 
+After setting your `APPMAP_NAVIE_MODEL` with your chosen model reload/restart your code editor and then confirm it's configuration by opening a new Navie chat window. In this example I've configured my model to be `gpt-4o` with my personal OpenAI API Key. 
 
 ![JetBrains OpenAI key modal](/assets/img/product/custom-model.webp)
 

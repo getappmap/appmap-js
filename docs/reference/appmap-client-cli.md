@@ -455,7 +455,7 @@ using the `--filter` option. Here are the steps for using this technique:
 
 1. Open an AppMap in the code editor.
 2. Use the filtering available in the AppMap to hide certain events. ![AppMap Filtering](/assets/img/docs/using_appmap_filter.jpg)
-3. Open the command pallette using `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS, type `AppMap: Copy Current AppMap State to Clipboard`, then hit `Enter`.
+3. Open the command palette using `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS, type `AppMap: Copy Current AppMap State to Clipboard`, then hit `Enter`.
 4. Use the copied state as the `--filter` argument to the `prune` command. The `prune` command will remove whatever was filtered in the AppMap in your code editor.
 
 ```shell

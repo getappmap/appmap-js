@@ -121,7 +121,7 @@ Learn more about AppMap in GitHub Codespaces:
 
 ## Generate OpenAPI Definitions
 
-After [recording AppMap Data](/docs/recording-methods.html) for your project, open the command pallette using `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS, type `AppMap: Generate OpenAPI`, then hit `Enter`. This will open a new file with your OpenAPI definition document. Save this file locally, share with your team, or ingest as a [new collection into API tools like Postman.](https://blog.postman.com/new-postman-integration-with-appmap-create-and-manage-always-accurate-collections/)
+After [recording AppMap Data](/docs/recording-methods.html) for your project, open the command palette using `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS, type `AppMap: Generate OpenAPI`, then hit `Enter`. This will open a new file with your OpenAPI definition document. Save this file locally, share with your team, or ingest as a [new collection into API tools like Postman.](https://blog.postman.com/new-postman-integration-with-appmap-create-and-manage-always-accurate-collections/)
 
 ![alt_text](/assets/img/openapi/openapi-1.webp "OpenAPI export to file")
 
