@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.166.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.165.0...@appland/appmap-v3.166.0) (2024-10-02)
+
+
+### Features
+
+* Report subscription status on thread creation ([4343ed1](https://github.com/getappmap/appmap-js/commit/4343ed143d4bb0ef09ec4556f1d4ab103664e567))
+
 # [@appland/appmap-v3.165.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.164.0...@appland/appmap-v3.165.0) (2024-10-02)
 
 
