@@ -41,10 +41,10 @@
   "dependencies": {
     "@langchain/anthropic": "^0.3.1",
     "@langchain/core": "^0.2.27",
-    "@langchain/openai": "^0.2.11",
+    "@langchain/openai": "^0.2.7",
     "fast-xml-parser": "^4.4.0",
     "js-yaml": "^4.1.0",
-    "langchain": "^0.2.20",
+    "langchain": "^0.2.16",
     "mermaid": "^9",
     "openai": "^4.56.0",
     "zod": "^3.23.8"
