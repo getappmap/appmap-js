@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.167.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.166.0...@appland/appmap-v3.167.0) (2024-10-02)
+
+
+### Features
+
+* Export Subscription types ([f2bc44b](https://github.com/getappmap/appmap-js/commit/f2bc44bec3b5f32e8075ec1d94e64d5b9ae39f83))
+
 # [@appland/appmap-v3.166.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.165.0...@appland/appmap-v3.166.0) (2024-10-02)
 
 
