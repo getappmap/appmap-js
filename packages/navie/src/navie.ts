@@ -29,6 +29,7 @@ import TechStackCommand from './commands/tech-stack-command';
 import ContextCommand from './commands/context-command';
 import FileChangeExtractorService from './services/file-change-extractor-service';
 import parseOptions from './lib/parse-options';
+import stringOrDefault from './lib/string-or-default';
 import Trajectory, { TrajectoryEvent } from './lib/trajectory';
 import ListFilesCommand from './commands/list-files-command';
 import MermaidFixerService from './services/mermaid-fixer-service';
@@ -195,21 +196,22 @@ export default function navie(
   let { question } = clientRequest;
   question = question.trim();
 
-  let command: Command | undefined;
+  let commandName = CommandMode.Explain;
   for (const commandMode of Object.values(CommandMode)) {
     const prefix = `@${commandMode} `;
     if (question.startsWith(prefix) || question.split('\n')[0].trim() === `@${commandMode}`) {
-      command = commandBuilders[commandMode]();
+      commandName = commandMode;
       question = question.slice(prefix.length);
       break;
     }
   }
 
-  if (!command) command = buildExplainCommand();
+  const command = commandBuilders[commandName]();
 
   const { options: userOptions, question: questionText } = parseOptions(question);
 
-  clientRequest.question = questionText;
+  // some models balk at empty questions, so use the command name if the question is empty
+  clientRequest.question = stringOrDefault(questionText, commandName);
 
   class Navie extends EventEmitter implements INavie {
     constructor() {
