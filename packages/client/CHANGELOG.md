@@ -1,3 +1,10 @@
+# [@appland/client-v1.21.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.20.0...@appland/client-v1.21.0) (2024-10-02)
+
+
+### Features
+
+* Report subscription status on thread creation ([4343ed1](https://github.com/getappmap/appmap-js/commit/4343ed143d4bb0ef09ec4556f1d4ab103664e567))
+
 # [@appland/client-v1.20.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.19.0...@appland/client-v1.20.0) (2024-09-02)
 
 
