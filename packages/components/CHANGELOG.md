@@ -1,3 +1,12 @@
+# [@appland/components-v4.38.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.38.0...@appland/components-v4.38.1) (2024-10-03)
+
+
+### Bug Fixes
+
+* add setting to disable animation ([d802c0f](https://github.com/getappmap/appmap-js/commit/d802c0fbc40306cc05b79a41850f062772be186f))
+* mark Chat input for focus ([017af4a](https://github.com/getappmap/appmap-js/commit/017af4a5dd0557d3009bd03b2262032ec87dc29b))
+* show pinning help ([e5cc7a7](https://github.com/getappmap/appmap-js/commit/e5cc7a7ff7467eccd1fcc2e7b014f5a8ce4eaadf))
+
 # [@appland/components-v4.38.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.37.4...@appland/components-v4.38.0) (2024-10-01)
 
 
