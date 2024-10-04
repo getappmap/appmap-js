@@ -44,7 +44,7 @@
       <div class="search-header">
         <h1>Navie's Context Sources</h1>
         <v-popper class="infoHelp" ref="infoPopper" placement="none">
-          <div class="info" @click.prevent="onMouseEnter">
+          <div class="info">
             <InfoIcon />
           </div>
           <template #content>
