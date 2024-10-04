@@ -240,6 +240,18 @@ const BINARY_FILE_EXTENSIONS: string[] = [
   'min.css',
 ].map((ext) => '.' + ext);
 
+const DATA_FILE_EXTENSIONS: string[] = ['csv', 'tsv', 'json', 'yaml', 'yml', 'xml', 'txt', 'log'];
+
+const isBinaryFile = (fileName: string) => {
+  const fileExtension = path.extname(fileName).toLowerCase();
+  return BINARY_FILE_EXTENSIONS.some((ext) => ext === fileExtension);
+};
+
+const isDataFile = (fileName: string) => {
+  const fileExtension = path.extname(fileName).toLowerCase();
+  return DATA_FILE_EXTENSIONS.some((ext) => ext === fileExtension);
+};
+
 export async function filterFiles(
   directory: string,
   fileNames: string[],
@@ -248,23 +260,31 @@ export async function filterFiles(
 ): Promise<string[]> {
   const result: string[] = [];
   for (const fileName of fileNames) {
-    const fileExtension = path.extname(fileName).toLowerCase();
-    if (BINARY_FILE_EXTENSIONS.some((ext) => ext === fileExtension)) continue;
+    if (isBinaryFile(fileName)) continue;
 
     const includeFile = fileNameMatchesFilterPatterns(fileName, includePatterns, excludePatterns);
     if (!includeFile) continue;
 
+    let appendFile = false;
     try {
       const stats = await stat(join(directory, fileName));
       if (stats.isFile()) {
-        if (stats.size > 50_000) debug(`WARNING Large file ${fileName} with size ${stats.size}`);
-
-        result.push(fileName);
+        appendFile = true;
+        if (stats.size > 50_000) {
+          if (isDataFile(fileName)) {
+            debug(`Skipping large data file ${fileName} with size ${stats.size}`);
+            appendFile = false;
+          } else {
+            debug(`WARNING Large file ${fileName} with size ${stats.size}`);
+          }
+        }
       }
     } catch (error) {
       console.warn(`Error checking file ${fileName}`);
       console.warn(error);
     }
+
+    if (appendFile) result.push(fileName);
   }
   return result;
 }
