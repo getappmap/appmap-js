@@ -17,6 +17,7 @@ describe('Regex patterns', () => {
     { path: '_.navie', pattern: EXCLUDE_DOT_NAVIE_DIR, shouldMatch: false },
     { path: '._navie', pattern: EXCLUDE_DOT_NAVIE_DIR, shouldMatch: false },
     { path: '/navie/.navie/', pattern: EXCLUDE_DOT_NAVIE_DIR, shouldMatch: true },
+    { path: '/non-matching/test/file', pattern: /some_other_regex/, shouldMatch: false },
   ];
 
   testCases.forEach(({ path, pattern, shouldMatch }) => {

@@ -155,16 +155,31 @@ describe(filterFiles, () => {
     jest.resetAllMocks();
   });
 
-  it('filters out files with binary extensions and non-files', async () => {
+  it('filters out binary files, non-files, and large data files', async () => {
     const dir = tmp.dirSync({ unsafeCleanup: true }).name;
     writeFileSync(join(dir, 'file.txt'), 'hello');
     writeFileSync(join(dir, 'file.zip'), 'hello');
     writeFileSync(join(dir, 'file.json'), 'hello');
     writeFileSync(join(dir, 'large.txt'), Buffer.alloc(100_000));
+    writeFileSync(join(dir, 'large.js'), Buffer.alloc(100_000));
+    writeFileSync(join(dir, 'large.ts'), Buffer.alloc(100_000));
+    writeFileSync(join(dir, 'large.haml'), Buffer.alloc(100_000));
+    writeFileSync(join(dir, 'large.java'), Buffer.alloc(100_000));
+    writeFileSync(join(dir, 'large.mjs'), Buffer.alloc(100_000));
+    writeFileSync(join(dir, 'large.pyc'), Buffer.alloc(100_000));
+    writeFileSync(join(dir, 'large.json'), Buffer.alloc(100_000));
     mkdirSync(join(dir, 'dir'));
 
     const fileList = readdirSync(dir);
     const filtered = await filterFiles(dir, fileList);
-    expect(filtered).toEqual(['file.json', 'file.txt', 'large.txt']);
+    expect(filtered).toEqual([
+      'file.json',
+      'file.txt',
+      'large.haml',
+      'large.java',
+      'large.js',
+      'large.ts',
+      'large.txt',
+    ]);
   });
 });
