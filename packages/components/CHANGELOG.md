@@ -1,3 +1,10 @@
+# [@appland/components-v4.38.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.38.2...@appland/components-v4.38.3) (2024-10-04)
+
+
+### Bug Fixes
+
+* remove click handler from ChatSearch info ([fb2b271](https://github.com/getappmap/appmap-js/commit/fb2b2712a7aac7f3479fbd4426200b6415aca54f))
+
 # [@appland/components-v4.38.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.38.1...@appland/components-v4.38.2) (2024-10-04)
 
 
