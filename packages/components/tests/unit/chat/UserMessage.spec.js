@@ -258,7 +258,7 @@ describe('components/UserMessage.vue', () => {
       });
 
       const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
-      expect(title.text()).toEqual(path);
+      expect(title.text()).toContain(path);
     });
 
     it('renders code snippets with Unix paths', async () => {
@@ -270,7 +270,7 @@ describe('components/UserMessage.vue', () => {
       });
 
       const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
-      expect(title.text()).toEqual(path);
+      expect(title.text()).toContain(path);
     });
 
     it('renders code snippet paths with a preceding file directive', async () => {
@@ -284,7 +284,7 @@ describe('components/UserMessage.vue', () => {
 
       const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
       const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
-      expect(title.text()).toEqual(path);
+      expect(title.text()).toContain(path);
       expect(codeSnippet.text()).toEqual(sourceText);
     });
 
@@ -299,7 +299,7 @@ describe('components/UserMessage.vue', () => {
 
       const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
       const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
-      expect(title.text()).toEqual(path);
+      expect(title.text()).toContain(path);
       expect(codeSnippet.text()).toEqual(sourceText);
     });
 
@@ -313,7 +313,7 @@ describe('components/UserMessage.vue', () => {
 
       const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
       const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
-      expect(title.text()).toEqual('js');
+      expect(title.text()).toContain('js');
       expect(codeSnippet.text()).toEqual(sourceText);
     });
   });

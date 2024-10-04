@@ -30,6 +30,16 @@ def hello_world
 end
 \`\`\`
 
+<!-- file: /absolute/path.txt -->
+\`\`\`txt
+This is a text file, it should render as an absolute path.
+\`\`\`
+
+<!-- file: /really-really-really-really-really-really-really-really-really-really-really-really-really-really-really-really/long/absolute/path.txt -->
+\`\`\`txt
+This is a text file, it should render as an absolute path.
+\`\`\`
+
 \`\`\`html
 <!--
 here's
