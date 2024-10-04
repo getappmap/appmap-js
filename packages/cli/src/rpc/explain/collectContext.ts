@@ -8,9 +8,12 @@ import LocationContextCollector from './LocationContextCollector';
 import queryKeywords from '../../fulltext/queryKeywords';
 import { warn } from 'console';
 
-export const EXCLUDE_DOT_APPMAP_DIR = /(^|[/\\])\.appmap([/\\]|$)/;
+export const buildExclusionPattern = (dirName: string): RegExp => {
+  const dirNamePattern = dirName.replace('.', '\\.');
+  return new RegExp(`(^|[/\\\\])${dirNamePattern}([/\\\\]|$)`);
+};
 
-export const EXCLUDE_DOT_NAVIE_DIR = /(^|[/\\])\.navie([/\\]|$)/;
+const EXCLUDE_DIRS = ['.appmap', '.navie', '.yarn', 'venv', '.venv', 'node_modules', 'vendor'];
 
 export function textSearchResultToRpcSearchResult(
   eventResult: EventSearchResult
@@ -162,8 +165,7 @@ export default async function collectContext(
     return patterns;
   };
 
-  appendIfNotExists(excludePatterns, EXCLUDE_DOT_APPMAP_DIR);
-  appendIfNotExists(excludePatterns, EXCLUDE_DOT_NAVIE_DIR);
+  for (const dir of EXCLUDE_DIRS) appendIfNotExists(excludePatterns, buildExclusionPattern(dir));
 
   contextCollector.excludePatterns = excludePatterns;
 
