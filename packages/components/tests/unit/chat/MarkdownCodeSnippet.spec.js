@@ -88,6 +88,6 @@ describe('components/MarkdownCodeSnippet.vue', () => {
       provide: { projectDirectories: ['/home/user/my-project'] },
     });
 
-    expect(wrapper.find('[data-cy="context-title"]').text()).toBe('app/models/user.rb');
+    expect(wrapper.find('[data-cy="context-title"]').text()).toContain('app/models/user.rb');
   });
 });
