@@ -19,7 +19,7 @@
       :title="location"
     >
       <span class="context-container__title" data-cy="context-title">&#8206;{{ title }}</span>
-      <span class="context-container__button-group">
+      <span class="context-container__button-group" title="">
         <v-popper :time-to-display="250" text="Apply changes" align="right" placement="top">
           <span
             :class="{
