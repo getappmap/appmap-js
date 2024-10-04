@@ -1,3 +1,11 @@
+# [@appland/components-v4.38.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.38.1...@appland/components-v4.38.2) (2024-10-04)
+
+
+### Bug Fixes
+
+* Hide file path tooltips from buttons ([903b144](https://github.com/getappmap/appmap-js/commit/903b144a666585f258a74d76481a02b0dbea4800))
+* Prevent punctuation from rendering on the right side of titles ([c085a59](https://github.com/getappmap/appmap-js/commit/c085a59124408f566e84963570a7008bbdd334aa))
+
 # [@appland/components-v4.38.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.38.0...@appland/components-v4.38.1) (2024-10-03)
 
 
