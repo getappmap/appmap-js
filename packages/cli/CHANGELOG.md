@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.168.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.167.0...@appland/appmap-v3.168.0) (2024-10-06)
+
+
+### Features
+
+* Ignore large data files ([4b10599](https://github.com/getappmap/appmap-js/commit/4b105995985e1c00a470141135acf457f02d4ee5))
+
 # [@appland/appmap-v3.167.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.166.0...@appland/appmap-v3.167.0) (2024-10-02)
 
 
