@@ -173,72 +173,84 @@ export async function buildFileIndex(
 }
 
 const BINARY_FILE_EXTENSIONS: string[] = [
-  'png',
-  'jpg',
-  'jpeg',
-  'gif',
-  'bmp',
-  'ico',
-  'tiff',
-  'webp',
-  'svg',
-  'mp3',
-  'wav',
-  'ogg',
-  'flac',
-  'aac',
-  'mp4',
-  'webm',
-  'mkv',
-  'avi',
-  'mov',
-  'wmv',
-  'mpg',
-  'flv',
-  'zip',
-  'tar',
-  'gz',
-  'bz2',
-  'xz',
   '7z',
-  'rar',
-  'pdf',
+  'aac',
+  'avi',
+  'bmp',
+  'bz2',
+  'class',
+  'dll',
   'doc',
   'docx',
-  'xls',
-  'xlsx',
-  'ppt',
-  'pptx',
-  'odt',
-  'ods',
-  'odp',
-  'rtf',
-  'woff',
-  'woff2',
-  'eot',
-  'ttf',
-  'otf',
-  'mo',
-  'po',
-  'pyc',
-  'ico',
-  'flv',
-  'avi',
-  'mov',
-  'wmv',
-  'mpg',
-  'jar',
-  'war',
-  'ear',
-  'class',
-  'so',
-  'dll',
   'dylib',
-  'o',
+  'ear',
   'exe',
+  'eot',
+  'flac',
+  'flv',
+  'gif',
+  'gz',
+  'ico',
+  'jar',
+  'jpeg',
+  'jpg',
   'min.js',
   'min.css',
+  'mjs',
+  'mkv',
+  'mo',
+  'mov',
+  'mp3',
+  'mp4',
+  'mpg',
+  'odt',
+  'odp',
+  'ods',
+  'ogg',
+  'otf',
+  'pdf',
+  'po',
+  'png',
+  'ppt',
+  'pptx',
+  'pyc',
+  'rar',
+  'rtf',
+  'so',
+  'svg',
+  'tar',
+  'tiff',
+  'ttf',
+  'wav',
+  'webm',
+  'webp',
+  'woff',
+  'woff2',
+  'wmv',
+  'xls',
+  'xlsx',
+  'xz',
+  'zip',
 ].map((ext) => '.' + ext);
+
+const DATA_FILE_EXTENSIONS: string[] = [
+  'csv',
+  'dat',
+  'log',
+  'json',
+  'tsv',
+  'yaml',
+  'yml',
+  'xml',
+].map((ext) => '.' + ext);
+
+const isBinaryFile = (fileName: string) => {
+  return BINARY_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext));
+};
+
+const isDataFile = (fileName: string) => {
+  return DATA_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext));
+};
 
 export async function filterFiles(
   directory: string,
@@ -248,23 +260,31 @@ export async function filterFiles(
 ): Promise<string[]> {
   const result: string[] = [];
   for (const fileName of fileNames) {
-    const fileExtension = path.extname(fileName).toLowerCase();
-    if (BINARY_FILE_EXTENSIONS.some((ext) => ext === fileExtension)) continue;
+    if (isBinaryFile(fileName)) continue;
 
     const includeFile = fileNameMatchesFilterPatterns(fileName, includePatterns, excludePatterns);
     if (!includeFile) continue;
 
+    let appendFile = false;
     try {
       const stats = await stat(join(directory, fileName));
       if (stats.isFile()) {
-        if (stats.size > 50_000) debug(`WARNING Large file ${fileName} with size ${stats.size}`);
-
-        result.push(fileName);
+        appendFile = true;
+        if (stats.size > 50_000) {
+          if (isDataFile(fileName)) {
+            debug(`Skipping large data file ${fileName} with size ${stats.size}`);
+            appendFile = false;
+          } else {
+            debug(`WARNING Large file ${fileName} with size ${stats.size}`);
+          }
+        }
       }
     } catch (error) {
       console.warn(`Error checking file ${fileName}`);
       console.warn(error);
     }
+
+    if (appendFile) result.push(fileName);
   }
   return result;
 }
