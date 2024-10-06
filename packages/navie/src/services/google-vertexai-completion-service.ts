@@ -17,7 +17,7 @@ import CompletionService, {
   Usage,
 } from './completion-service';
 
-const VertexAI = import('@langchain/google-vertexai-web');
+const VertexAI = importVertexAI();
 
 export default class GoogleVertexAICompletionService implements CompletionService {
   constructor(
@@ -135,4 +135,17 @@ export default class GoogleVertexAICompletionService implements CompletionServic
 function errorMessage(err: unknown): string {
   if (isNativeError(err)) return err.cause ? errorMessage(err.cause) : err.message;
   return String(err);
+}
+
+function importVertexAI(): Promise<typeof import('@langchain/google-vertexai-web')> {
+  try {
+    return import('@langchain/google-vertexai-web');
+  } catch (e) {
+    // Node throws TypeError if it doesn't support modules. In this case, reject the promise
+    // and tell the user that VertexAI support needs ESM support in node.
+    throw new Error(
+      'VertexAI support requires ESM support in Node. Use newer Node or --experimental-vm-modules.',
+      { cause: e }
+    );
+  }
 }
