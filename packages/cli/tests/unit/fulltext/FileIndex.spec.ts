@@ -178,6 +178,7 @@ describe(filterFiles, () => {
       'large.haml',
       'large.java',
       'large.js',
+      'large.mjs',
       'large.ts',
       'large.txt',
     ]);

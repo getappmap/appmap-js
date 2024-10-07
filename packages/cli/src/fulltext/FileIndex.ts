@@ -196,7 +196,6 @@ const BINARY_FILE_EXTENSIONS: string[] = [
   'jpg',
   'min.js',
   'min.css',
-  'mjs',
   'mkv',
   'mo',
   'mov',
