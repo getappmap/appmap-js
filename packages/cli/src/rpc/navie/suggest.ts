@@ -16,7 +16,7 @@ function getSuggestions(
         resolve(JSON.parse(response) as NavieRpc.V1.Suggest.Response)
       )
       .on('error', reject)
-      .ask(threadId, '@suggest /nocontext /nohelp', undefined, undefined)
+      .ask(threadId, '@suggest /nocontext /nohelp', undefined, undefined, undefined)
       .catch(reject);
   });
 }

@@ -9,7 +9,8 @@ export default interface INavie {
     threadId: string | undefined,
     question: string,
     codeSelection: string | undefined,
-    prompt: string | undefined
+    prompt: string | undefined,
+    locations: string[] | undefined
   ): Promise<void>;
 
   on(event: 'ack', listener: (userMessageId: string, threadId: string) => void): this;

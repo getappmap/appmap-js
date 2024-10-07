@@ -105,7 +105,8 @@ export default class ExplainCommand implements Command {
       chatHistory || [],
       projectInfo,
       codeSelection,
-      contextLabels
+      contextLabels,
+      request.locations
     );
 
     const isArchitecture = contextLabels
