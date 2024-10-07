@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.168.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.168.0...@appland/appmap-v3.168.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* mjs file is not binary data ([5c26aed](https://github.com/getappmap/appmap-js/commit/5c26aedea2e587571fee4732cea00f72abad052e))
+
 # [@appland/appmap-v3.168.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.167.0...@appland/appmap-v3.168.0) (2024-10-06)
 
 
