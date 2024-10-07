@@ -3,6 +3,7 @@
     :title="title"
     :menu-items="menuItems"
     :handle="handle"
+    :is-reference="isReference"
     content-type="image"
     @expand="showModal"
     @pin="onPin"
@@ -38,6 +39,7 @@ import { fromUint8Array } from 'js-base64';
 
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
 import type { PinEvent, PinMermaid } from './PinEvent';
+import { pinnedItemRegistry } from '@/lib/pinnedItems';
 
 mermaid.initialize({
   startOnLoad: false,
@@ -76,10 +78,11 @@ export default Vue.extend({
     },
   },
   data() {
+    const definition = this.$slots.default?.[0].text ?? '';
     return {
+      definition,
       id: `mermaid-${diagramId++}`,
       svg: undefined as string | undefined,
-      definition: this.$slots.default?.[0].text ?? '',
       modalVisible: false,
     };
   },
@@ -179,12 +182,6 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .mermaid-diagram {
-  margin: 1rem 0;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
   &:v-deep {
     svg {
       width: 100%;

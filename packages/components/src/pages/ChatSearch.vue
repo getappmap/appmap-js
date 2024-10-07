@@ -18,11 +18,12 @@
         :question="question"
         :input-placeholder="inputPlaceholder"
         :commands="commands"
-        :is-input-disabled="isNavieLoading"
+        :is-input-disabled="isNavieLoading || !activeThreadId"
         :use-animation="useAnimation"
         :usage="usage"
         :subscription="subscription"
         :email="email"
+        :thread-id="activeThreadId"
         @isChatting="setIsChatting"
         @stop="onStop"
       >
@@ -129,6 +130,7 @@ import AppMapRPC from '@/lib/AppMapRPC';
 import { PinFileRequest } from '@/lib/PinFileRequest';
 import debounce from '@/lib/debounce';
 import InfoIcon from '../assets/info.svg';
+import { pinnedItemRegistry } from '@/lib/pinnedItems';
 
 export default {
   name: 'v-chat-search',
@@ -182,6 +184,16 @@ export default {
       default: 'vscode',
       validator: (value) => ['vscode', 'intellij'].indexOf(value) !== -1,
     },
+    threadId: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+      required: false,
+    },
+    replay: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+      required: false,
+    },
   },
   data() {
     return {
@@ -233,6 +245,8 @@ export default {
       suggestedQuestions: undefined,
       isWelcomeV2Available: false,
       registrationData: undefined,
+      activeThreadId: undefined,
+      threadListener: undefined,
     };
   },
   provide() {
@@ -355,6 +369,13 @@ export default {
     },
   },
   methods: {
+    // Clear all stateful chat information to return to the base screen
+    clear() {
+      const chatApi = this.$refs.vchat;
+      chatApi.clear();
+      this.pinnedItems = [];
+      this.contextItems = [];
+    },
     async initConversationThread() {
       try {
         this.registrationData = await this.rpcClient.register();
@@ -371,7 +392,27 @@ export default {
 
       const { registrationData } = this;
 
-      this.threadId = registrationData.thread.id;
+      this.subscribeToThread(registrationData.thread.id);
+    },
+    async subscribeToThread(threadId: string) {
+      if (this.threadListener) {
+        throw new Error(`Tried to subscribe to thread ${threadId} but already subscribed`);
+      }
+
+      this.threadListener = await this.rpcClient.thread.subscribe(threadId, this.replay);
+      this.threadListener
+        .on('event', (e) => this.onReceiveEvent(e))
+        .on('connected', () => {
+          console.log('Listening to thread', threadId);
+          this.activeThreadId = threadId;
+          this.$emit('on-thread-subscription', threadId);
+        });
+    },
+    unsubscribeFromThread() {
+      if (!this.threadListener) return;
+      this.threadListener.close();
+      this.threadListener = undefined;
+      this.clear();
     },
     onNavieRestarting() {
       this.configLoaded = false;
@@ -465,130 +506,15 @@ export default {
       this.ask?.stop();
     },
     async sendMessage(message: string, codeSelections: string[] = [], appmaps: string[] = []) {
-      this.ask = this.rpcClient.explain();
-      this.searching = true;
-      this.lastStatusLabel = undefined;
-      this.$set(this, 'contextItems', {});
-
-      let myThreadId: string | undefined;
-      return new Promise((resolve, reject) => {
-        // If we can't find a system message, this is a new chat.
-        // We could potentially use the status to determine whether or not
-        // to add a new tool, but this will be more reactive.
-        const isNewChat = !Boolean(this.$refs.vchat.getMessage({ isUser: false }));
-        const systemMessage = this.$refs.vchat.addSystemMessage();
-        let tool: ITool | undefined;
-
-        const contextToolTitle = 'Analyzing your project';
-        if (isNewChat) {
-          tool = {
-            title: contextToolTitle,
-          };
-          systemMessage.tools.push(tool);
-        }
-
-        const onProjectContextComplete = () => {
-          if (tool && tool.title === contextToolTitle) {
-            tool.title = 'Project analysis complete';
-            tool.complete = true;
-          }
-        };
-
-        const onComplete = () => {
-          this.searching = false;
-          onProjectContextComplete();
-          systemMessage.complete = true;
-          resolve();
-        };
-
-        const onStop = () => {
-          onComplete();
-        };
-
-        const onError = (error) => {
-          onComplete();
-          this.$refs.vchat.onError(error, systemMessage);
-          reject();
-        };
-
-        this.ask.on('ack', (_messageId: string, threadId: string) => {
-          myThreadId = threadId;
-          this.$refs.vchat.onAck(_messageId, threadId);
-        });
-        this.ask.on('token', (token, messageId) => {
-          if (!systemMessage.messageId) systemMessage.messageId = messageId;
-
-          onProjectContextComplete();
-          this.$refs.vchat.addToken(token, myThreadId, messageId);
-        });
-        this.ask.on('error', onError);
-        this.ask.on('status', (status) => {
-          this.searchStatus = status;
-
-          // Only update the context response if one is present.
-          if (status.contextResponse) {
-            const context = status.contextResponse || this.createContextResponse();
-            context.forEach((item) => {
-              this.$set(this.contextItems, `${item.type}:${item.location}`, item);
-            });
-          }
-
-          if (!this.searchResponse && status.searchResponse) {
-            this.searchResponse = status.searchResponse;
-
-            // Update the tool status to reflect the fact that we've found some AppMaps
-            if (tool) {
-              tool.title = 'Project analysis complete';
-              tool.complete = true;
-            }
-          }
-
-          if (tool && !tool.status) tool.status = this.getToolStatusMessage();
-        });
-        this.ask.on('complete', onComplete);
-        this.ask.on('stop', onStop);
-
-        const explainRequest = {
-          question: message
-            .replace(/^@generate/, '@generate /format=xml')
-            .replace(/^@test/, '@test /format=xml'),
-        };
-        if (appmaps.length > 0) explainRequest.appmaps = appmaps;
-
-        const userProvidedContext: ExplainRpc.UserContextItem[] = [];
-        if (this.pinnedItems.length > 0) {
-          userProvidedContext.push(
-            ...this.pinnedItems.map((p) => {
-              if (p.type === 'file') {
-                return {
-                  type: 'file',
-                  location: p.location,
-                };
-              } else {
-                return {
-                  type: 'code-snippet',
-                  location: p.location,
-                  content: p.content,
-                };
-              }
-            })
-          );
-        }
-
-        if (codeSelections.length > 0) {
-          userProvidedContext.push(
-            ...codeSelections.map((c) => ({
-              type: 'code-selection',
-              content: c,
-            }))
-          );
-        }
-        if (userProvidedContext.length > 0) {
-          explainRequest.codeSelection = userProvidedContext;
-        }
-        const threadId = this.$refs.vchat.threadId || this.threadId;
-        this.ask.explain(explainRequest, threadId).catch(onError);
-      });
+      try {
+        await this.rpcClient.thread.sendMessage(
+          this.activeThreadId,
+          message,
+          codeSelections.join('\n')
+        );
+      } catch (e) {
+        console.error('Failed to send message', e);
+      }
     },
     setAppMapStats(stats) {
       this.appmapStats = stats;
@@ -752,8 +678,11 @@ export default {
         await this.listRpcMethods();
 
         // v1.navie.register
-        this.initConversationThread();
-
+        if (this.threadId) {
+          this.subscribeToThread(this.threadId);
+        } else {
+          this.initConversationThread();
+        }
         // If v2.navie.welcome is available: v2.navie.metadata
         // otherwise: v1.navie.metadata
         this.loadStaticMessages();
@@ -762,6 +691,153 @@ export default {
         this.loadDynamicWelcomeMessages();
       } catch (e) {
         console.error(e);
+      }
+    },
+    onReceiveEvent(event) {
+      const chatApi = this.$refs.vchat;
+      console.log(event);
+      switch (event.type) {
+        case 'message': {
+          if (event.role === 'assistant') {
+            chatApi.addSystemMessage(event.content);
+          } else if (event.role === 'user') {
+            chatApi.addUserMessage(event.content);
+          }
+          break;
+        }
+
+        case 'begin-context-search': {
+          let message = chatApi.getMessage({ isUser: false, complete: false });
+          if (!message) {
+            message = chatApi.addSystemMessage();
+          }
+          message.tools.push({
+            id: event.id,
+            title: `Searching for ${event.contextType}`,
+            status: 'Working...',
+          });
+          break;
+        }
+
+        case 'complete-context-search': {
+          if (!Array.isArray(this.contextItems)) {
+            this.$set(this, 'contextItems', []);
+          }
+
+          if (event.result.length) {
+            this.contextItems.push(...event.result);
+          }
+
+          const message = chatApi.getMessage({ isUser: false, complete: false });
+          if (!message) {
+            throw new Error(
+              `Tried to complete context search for ${event.id}, but no message was found`
+            );
+          }
+
+          const tool = message.tools.find((tool) => tool.id === event.id);
+          if (!tool) {
+            throw new Error(
+              `Tried to complete context search for ${event.id}, but no tool was found`
+            );
+          }
+          tool.status = 'Complete';
+          tool.complete = true;
+          break;
+        }
+
+        case 'token-metadata': {
+          const metadata = event.metadata;
+          if (!metadata) return;
+
+          Object.entries(metadata).forEach(([key, value]) => {
+            pinnedItemRegistry.setMetadata(event.codeBlockId, key, value);
+          });
+
+          break;
+        }
+
+        case 'token': {
+          const codeBlockId = event.codeBlockId;
+          let newToken = event.token;
+          if (codeBlockId) {
+            pinnedItemRegistry.appendContent(codeBlockId, event.token);
+            chatApi.addToken({ type: 'code-block', id: codeBlockId }, event.messageId);
+            newToken = { type: 'hidden', content: event.token };
+          }
+
+          const orphanedMessage = chatApi.getMessage({
+            messageId: undefined,
+            complete: false,
+            isUser: false,
+          });
+          if (orphanedMessage) {
+            orphanedMessage.messageId = event.messageId;
+          }
+
+          chatApi.addToken(newToken, event.messageId);
+          break;
+        }
+
+        case 'message-complete': {
+          const message = chatApi.getMessage({ messageId: event.messageId });
+          if (!message) {
+            throw new Error(
+              `Tried to mark message ${event.messageId} as complete, but it was not found`
+            );
+          }
+          message.complete = true;
+          break;
+        }
+
+        case 'pin-item': {
+          let pinnedItem;
+          if (event.uri) {
+            const uri = new URL(event.uri);
+            const pathname = decodeURIComponent(uri.pathname);
+            pinnedItem = {
+              handle: getNextHandle(),
+              pinned: true,
+              type: 'file',
+              location: pathname,
+            };
+          } else {
+            pinnedItem = { handle: event.handle };
+          }
+
+          const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pinnedItem.handle);
+          if (event.operation === 'pin' && pinIndex === -1) {
+            this.pinnedItems.push(pinnedItem);
+          } else if (event.operation === 'unpin' && pinIndex !== -1) {
+            this.pinnedItems.splice(pinIndex, 1);
+          }
+          break;
+        }
+
+        case 'prompt-suggestions': {
+          const message = chatApi.getMessage({ messageId: event.messageId });
+          if (!message) {
+            console.error(`Received prompt suggestions for unknown message ${event.messageId}`);
+            return;
+          }
+
+          let suggestions = event.suggestions ?? [];
+          message.setPromptSuggestions(suggestions);
+          break;
+        }
+
+        case 'error': {
+          if (event.code === 'missing-thread') {
+            console.error('The requested thread does not exist:', this.activeThreadId);
+            console.error('Registering a new thread');
+            this.unsubscribeFromThread();
+            this.initConversationThread();
+            return;
+          }
+
+          chatApi.onError(error, systemMessage);
+          break;
+        }
       }
     },
   },
@@ -773,12 +849,9 @@ export default {
 
     this.$root
       .$on('pin', (pin: PinEvent) => {
-        const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
-        if (pin.pinned && pinIndex === -1) {
-          this.pinnedItems.push(pin);
-        } else if (!pin.pinned && pinIndex !== -1) {
-          this.pinnedItems.splice(pinIndex, 1);
-        }
+        this.rpcClient.thread.pinItem(this.activeThreadId, pin.pinned ? 'pin' : 'unpin', {
+          handle: pin.handle,
+        });
       })
       .$on('jump-to', (handle: number) => {
         document
@@ -794,16 +867,7 @@ export default {
       })
       .$on('pin-files', (requests: PinFileRequests[]) => {
         requests.forEach((r) => {
-          const uri = new URL(r.uri);
-          const pathname = decodeURIComponent(uri.pathname);
-          const eventData: PinEvent & Partial<PinFile> = {
-            handle: getNextHandle(),
-            pinned: true,
-            type: 'file',
-            location: pathname,
-            content: r.content,
-          };
-          this.$root.$emit('pin', eventData);
+          this.rpcClient.thread.pinItem(this.activeThreadId, 'pin', r.uri);
         });
       });
 

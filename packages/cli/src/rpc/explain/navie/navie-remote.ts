@@ -151,8 +151,6 @@ export default class RemoteNavie extends EventEmitter implements INavie {
     );
 
     const onAck = async (userMessageId: string, threadId: string) => {
-      await callbackHandler.onAck(userMessageId, threadId, question, codeSelection, prompt);
-
       this.emit('ack', userMessageId, threadId);
     };
 

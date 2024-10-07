@@ -4,7 +4,6 @@
     :handle="handle"
     :location="decodedLocation"
     :is-pinnable="isPinnable"
-    :content-type="text"
     :is-appliable="false"
     @pin="onPin"
   >

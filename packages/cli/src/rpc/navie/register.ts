@@ -12,6 +12,8 @@ import { RpcHandler } from '../rpc';
 import { getLLMConfiguration } from '../llmConfiguration';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
 import configuration from '../configuration';
+import { INavieProvider } from '../explain/navie/inavie';
+import { registerThread } from './thread';
 
 export async function register(
   codeEditor: string | undefined
@@ -40,6 +42,7 @@ export async function register(
   if (codeEditor) projectParameters.codeEditor = codeEditor;
 
   const thread = await AI.createConversationThread({ modelParameters, projectParameters });
+  registerThread(thread);
 
   return { thread };
 }

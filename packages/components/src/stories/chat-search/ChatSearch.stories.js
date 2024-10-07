@@ -56,7 +56,11 @@ const appmapStats = [
 export default {
   title: 'Pages/ChatSearch',
   component: VChatSearch,
-  argTypes: {},
+  argTypes: {
+    threadId: {
+      control: { type: 'text' },
+    },
+  },
 };
 
 export const ChatSearch = (args, { argTypes }) => ({
@@ -71,6 +75,8 @@ ChatSearch.args = {
   mostRecentAppMaps,
   appmapYmlPresent: true,
   appmapRpcPort: 3002,
+  threadId: 'ad74f14c-fdc5-4ebc-b8fd-549d17ca9ddb',
+  replay: true,
   openNewChat() {
     alert('open new chat');
   },

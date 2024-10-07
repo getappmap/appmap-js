@@ -40,6 +40,65 @@ export namespace NavieRpc {
         thread: ConversationThread;
       };
     }
+    export namespace Thread {
+      export namespace Subscribe {
+        export const Method = 'v1.navie.thread.subscribe';
+        export type Params = {
+          threadId: string;
+          nonce?: number;
+          replay?: boolean;
+        };
+        export type Response = {
+          /*
+            This is a non-standard JSON RPC method.
+            Invoking this method will open an event stream.
+          */
+        };
+      }
+      export type ResponseOk = { ok: true };
+      export type ResponseError = { ok: false; error: unknown };
+      export namespace SendMessage {
+        export const Method = 'v1.navie.thread.sendMessage';
+        export type Params = {
+          threadId: string;
+          content: string;
+          codeSelection?: string;
+        };
+        export type Response = ResponseOk | ResponseError;
+      }
+      export namespace PinItem {
+        export const Method = 'v1.navie.thread.pinItem';
+        export type PinnedUri = {
+          uri: string;
+        };
+        export type PinnedConversationItem = {
+          handle: number;
+        };
+        export type Params = {
+          threadId: string;
+          operation: 'pin' | 'unpin';
+          pinnedItem: PinnedUri | PinnedConversationItem;
+        };
+        export type Response = void;
+      }
+      export namespace Query {
+        export const Method = 'v1.navie.thread.query';
+        export type Params = {
+          threadId?: string;
+          maxCreatedAt?: Date;
+          orderBy?: 'created_at' | 'updated_at';
+          limit?: number;
+          offset?: number;
+        };
+        export type Response = {
+          id: string;
+          path: string;
+          title: string;
+          createdAt: Date;
+          updatedAt: Date;
+        }[];
+      }
+    }
   }
 
   export namespace V2 {

@@ -5,6 +5,7 @@
     :location="decodedLocation"
     :directory="directory"
     :is-pinnable="isPinnable"
+    :is-reference="isReference"
     content-type="text"
     data-cy="code-snippet"
     class="code-snippet"
@@ -121,7 +122,10 @@ export default Vue.extend({
       navigator.clipboard.writeText(code);
     },
     onPin({ pinned, handle }: { pinned: boolean; handle: number }): void {
-      const eventData: PinEvent & Partial<PinCodeSnippet> = { pinned, handle };
+      const eventData: PinEvent & Partial<PinCodeSnippet> = {
+        pinned,
+        handle,
+      };
       if (pinned) {
         eventData.type = 'code-snippet';
         eventData.language = this.language;
