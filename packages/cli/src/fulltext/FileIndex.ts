@@ -193,6 +193,7 @@ const BINARY_FILE_EXTENSIONS: string[] = [
   'jar',
   'jpeg',
   'jpg',
+  'js.map',
   'min.js',
   'min.css',
   'mkv',
@@ -228,6 +229,7 @@ const BINARY_FILE_EXTENSIONS: string[] = [
   'xls',
   'xlsx',
   'xz',
+  'yarn.lock',
   'zip',
 ].map((ext) => '.' + ext);
 
