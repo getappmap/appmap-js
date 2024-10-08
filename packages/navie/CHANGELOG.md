@@ -1,3 +1,10 @@
+# [@appland/navie-v1.33.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.32.1...@appland/navie-v1.33.0) (2024-10-08)
+
+
+### Features
+
+* Add a single pass message compression strategy ([26768dd](https://github.com/getappmap/appmap-js/commit/26768dd08682daeeed0133085430665fe4e84c5a))
+
 # [@appland/navie-v1.32.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.32.0...@appland/navie-v1.32.1) (2024-10-08)
 
 
