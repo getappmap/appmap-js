@@ -11,7 +11,7 @@ const DEFAULT_HISTORICAL_MESSAGES = (() => {
   }
 
   // Default one user message, one assistant message
-  return 2;
+  return 4;
 })();
 
 function filterNonConversationalMessages(messages: Message[]): Message[] {
