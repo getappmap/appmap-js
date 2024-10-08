@@ -46,7 +46,7 @@ export default async function performSetup() {
           '-o',
           'release/appmap',
           '-t',
-          `node18-${platform()}-x64`,
+          `node22-${platform()}-x64`,
           'built/cli.js',
         ],
         packageRoot,

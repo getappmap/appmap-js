@@ -47,9 +47,14 @@ function openAIBaseURL(): string | undefined {
   return baseUrl;
 }
 
+const DEFAULT_BASE_URLS = {
+  anthropic: 'https://api.anthropic.com/v1/',
+  'vertex-ai': 'https://googleapis.com',
+  openai: undefined,
+} as const;
+
 export function getLLMConfiguration(): LLMConfiguration {
-  const baseUrl =
-    SELECTED_BACKEND === 'anthropic' ? 'https://api.anthropic.com/v1/' : openAIBaseURL();
+  const baseUrl = (SELECTED_BACKEND && DEFAULT_BASE_URLS[SELECTED_BACKEND]) ?? openAIBaseURL();
 
   return {
     baseUrl,
