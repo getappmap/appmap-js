@@ -1,3 +1,10 @@
+# [@appland/navie-v1.32.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.32.0...@appland/navie-v1.32.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* The number of historical messages is now 4 by default, up from 2 ([bef49d8](https://github.com/getappmap/appmap-js/commit/bef49d802d4aaf690ab2369e535a9e00f3746c62))
+
 # [@appland/navie-v1.32.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.31.1...@appland/navie-v1.32.0) (2024-10-02)
 
 
