@@ -7,9 +7,9 @@ import makeDebug from 'debug';
 import { existsSync } from 'fs';
 
 import listProjectFiles from './listProjectFiles';
-import queryKeywords from './queryKeywords';
 import { Git, GitState } from '../telemetry';
 import listGitProjectFiles from './listGitProjectFIles';
+import { default as queryKeywords, queryUniqKeywords } from './queryKeywords';
 import querySymbols from './querySymbols';
 import { fileNameMatchesFilterPatterns } from './fileNameMatchesFilterPatterns';
 
@@ -135,11 +135,10 @@ export class FileIndex {
     const fileNameTokens = filePath.split(path.sep);
 
     try {
-      let terms = queryKeywords(fileNameTokens).join(' ');
-
+      let terms = queryUniqKeywords(fileNameTokens).join(' ');
       if (allowSymbols) {
         const symbols = querySymbols(path.join(directory, filePath), allowGenericParsing);
-        terms += ` ${queryKeywords(symbols).sort().join(' ')}`;
+        terms += ` ${queryUniqKeywords(symbols).join(' ')}`;
       }
 
       debug(`Indexing file path ${filePath} with terms ${terms}`);

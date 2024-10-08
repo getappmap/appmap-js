@@ -1,4 +1,4 @@
-import queryKeywords from '../../../src/fulltext/queryKeywords';
+import { default as queryKeywords, queryUniqKeywords } from '../../../src/fulltext/queryKeywords';
 
 describe('queryKeywords', () => {
   it('should sanitize and split keywords correctly', () => {
@@ -79,5 +79,10 @@ describe('queryKeywords', () => {
       'httpresponse',
       'responsecode',
     ]);
+  });
+
+  it('can remove duplicate terms', () => {
+    const input = 'the the the quick quick brown fox jumped jumped jumped';
+    expect(queryUniqKeywords(input)).toEqual(['brown', 'fox', 'jumped', 'quick']);
   });
 });

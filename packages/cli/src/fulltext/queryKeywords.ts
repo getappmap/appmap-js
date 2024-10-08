@@ -40,6 +40,26 @@ const sanitizeKeyword = (keyword: string): string[] =>
   keyword.replace(/[^\p{L}\p{N}\-_]/gu, ' ').split(' ');
 
 /**
+ * Remove duplicate entries from a sorted array.
+ */
+const uniq = (ary: string[]) => {
+  if (ary.length === 0) {
+    return [];
+  }
+  console.warn(`before, ary: ${JSON.stringify(ary)}`);
+  let i = 0;
+  for (let j = 1; j < ary.length; j++) {
+    if (ary[j] !== ary[i]) {
+      i++;
+      ary[i] = ary[j];
+    }
+  }
+  console.warn(`after, ary: ${JSON.stringify(ary)}`);
+
+  return ary.slice(0, i + 1);
+};
+
+/**
  * Extract keywords from a string or an array of strings. The extraction process includes the following steps:
  *
  * - Remove non-alphanumeric characters and split the keyword on spaces.
@@ -73,4 +93,9 @@ export default function queryKeywords(words: undefined | string | string[]): str
     .filter(Boolean)
     .filter((str) => str.length >= 2)
     .filter((str) => !STOP_WORDS.has(str));
+}
+
+export function queryUniqKeywords(words: undefined | string | string[]): string[] {
+  const ret = queryKeywords(words).sort();
+  return uniq(ret);
 }
