@@ -16,10 +16,32 @@
               <v-button
                 size="medium"
                 @click.native="selectOption('default')"
-                :disabled="!isLocal"
+                :disabled="selectedOption === 'default'"
                 data-cy="llm-select"
               >
-                {{ isLocal ? 'Select' : 'Selected' }}
+                {{ selectedOption === 'default' ? 'Selected' : 'Select' }}
+              </v-button>
+            </div>
+          </div>
+          <div class="option" data-cy="llm-modal-option" data-option="copilot">
+            <div class="description">
+              <h1>Use the GitHub Copilot language model</h1>
+              <p>
+                If you have an active GitHub Copilot subscription, you can use it with AppMap Navie.
+                Your AI completions will be served by Copilot.
+              </p>
+              <a href="https://appmap.io/docs" target="_blank">
+                Visit the documentation to learn more.
+              </a>
+            </div>
+            <div class="action">
+              <v-button
+                size="medium"
+                @click.native="selectOption('copilot')"
+                :disabled="selectedOption === 'copilot'"
+                data-cy="llm-select"
+              >
+                {{ selectedOption === 'copilot' ? 'Selected' : 'Select' }}
               </v-button>
             </div>
           </div>
@@ -63,20 +85,27 @@
         </div>
       </div>
     </v-modal>
-    <v-button
-      v-if="!vsCodeLMVendor"
-      kind="ghost"
-      class="button"
-      @click.native="showModal"
-      data-cy="llm-config-button"
-    >
-      <v-cog-solid class="icon" />
-    </v-button>
-    <span>
-      <b>Model:</b>
-      <span class="llm-model-name" data-cy="llm-model">{{ modelName }}</span>
-      <i data-cy="llm-provider">({{ modelSubtext }})</i>
-    </span>
+    <template v-if="vsCodeLMVendor">
+      <v-copilot-notice @on-configure="showModal" />
+    </template>
+    <template v-else>
+      <div class="llm-configuration__indicator">
+        <v-button
+          v-if="!vsCodeLMVendor"
+          kind="ghost"
+          class="button"
+          @click.native="showModal"
+          data-cy="llm-config-button"
+        >
+          <v-cog-solid class="icon" />
+        </v-button>
+        <span>
+          <b>Model:</b>
+          <span class="llm-model-name" data-cy="llm-model">{{ modelName }}</span>
+          <i data-cy="llm-provider">({{ modelSubtext }})</i>
+        </span>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -86,8 +115,9 @@ import VButton from '@/components/Button.vue';
 import VCogSolid from '@/assets/cog-solid.svg';
 import VModal from '@/components/Modal.vue';
 import VCloseIcon from '@/assets/x-icon.svg';
+import VCopilotNotice from '@/components/chat-search/CopilotNotice.vue';
 
-type LLMConfigOption = 'default' | 'own-key' | 'own-model';
+type LLMConfigOption = 'default' | 'own-key' | 'own-model' | 'copilot';
 
 export default Vue.extend({
   components: {
@@ -95,6 +125,7 @@ export default Vue.extend({
     VCogSolid,
     VModal,
     VCloseIcon,
+    VCopilotNotice,
   },
 
   props: {
@@ -152,6 +183,10 @@ export default Vue.extend({
         return 'default';
       }
     },
+    selectedOption(): 'default' | 'copilot' | 'other' {
+      if (this.vsCodeLMVendor) return 'copilot';
+      return this.isLocal ? 'other' : 'default';
+    },
   },
 
   methods: {
@@ -171,14 +206,17 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .llm-configuration {
-  border-radius: $border-radius;
-  background-color: #32354d;
   display: flex;
   padding: 1rem;
   width: fit-content;
   font-size: 12px;
-  align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  &__indicator {
+    align-items: center;
+    border-radius: $border-radius;
+    background-color: #32354d;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 
   &__content {
     display: flex;
@@ -269,6 +307,17 @@ export default Vue.extend({
       p {
         opacity: 0.8;
         margin: 0 0 0.5rem 0;
+      }
+
+      a {
+        text-decoration: none;
+        color: desaturate($brightblue, 30%);
+
+        &:hover,
+        &:active {
+          color: $brightblue;
+          text-decoration: underline;
+        }
       }
     }
   }
