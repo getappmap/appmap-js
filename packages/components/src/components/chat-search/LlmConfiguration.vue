@@ -34,7 +34,7 @@
           </div>
           <div class="option" data-cy="llm-modal-option" data-option="default">
             <div class="description">
-              <h1>Use the Navie backend</h1>
+              <h1>Use the AppMap hosted provider</h1>
               <p>Instantly get access to Navie without any additional configuration.</p>
             </div>
             <div class="action">
