@@ -63,20 +63,27 @@
         </div>
       </div>
     </v-modal>
-    <v-button
-      v-if="!vsCodeLMVendor"
-      kind="ghost"
-      class="button"
-      @click.native="showModal"
-      data-cy="llm-config-button"
-    >
-      <v-cog-solid class="icon" />
-    </v-button>
-    <span>
-      <b>Model:</b>
-      <span class="llm-model-name" data-cy="llm-model">{{ modelName }}</span>
-      <i data-cy="llm-provider">({{ modelSubtext }})</i>
-    </span>
+    <template v-if="vsCodeLMVendor">
+      <v-copilot-notice @on-configure="showModal" />
+    </template>
+    <template v-else>
+      <div class="llm-configuration__indicator">
+        <v-button
+          v-if="!vsCodeLMVendor"
+          kind="ghost"
+          class="button"
+          @click.native="showModal"
+          data-cy="llm-config-button"
+        >
+          <v-cog-solid class="icon" />
+        </v-button>
+        <span>
+          <b>Model:</b>
+          <span class="llm-model-name" data-cy="llm-model">{{ modelName }}</span>
+          <i data-cy="llm-provider">({{ modelSubtext }})</i>
+        </span>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -86,6 +93,7 @@ import VButton from '@/components/Button.vue';
 import VCogSolid from '@/assets/cog-solid.svg';
 import VModal from '@/components/Modal.vue';
 import VCloseIcon from '@/assets/x-icon.svg';
+import VCopilotNotice from '@/components/chat-search/CopilotNotice.vue';
 
 type LLMConfigOption = 'default' | 'own-key' | 'own-model';
 
@@ -95,6 +103,7 @@ export default Vue.extend({
     VCogSolid,
     VModal,
     VCloseIcon,
+    VCopilotNotice,
   },
 
   props: {
@@ -171,14 +180,18 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .llm-configuration {
-  border-radius: $border-radius;
-  background-color: #32354d;
   display: flex;
   padding: 1rem;
   width: fit-content;
   font-size: 12px;
-  align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  &__indicator {
+    padding: 1rem;
+    align-items: center;
+    border-radius: $border-radius;
+    background-color: #32354d;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 
   &__content {
     display: flex;
@@ -269,6 +282,17 @@ export default Vue.extend({
       p {
         opacity: 0.8;
         margin: 0 0 0.5rem 0;
+      }
+
+      a {
+        text-decoration: none;
+        color: desaturate($brightblue, 30%);
+
+        &:hover,
+        &:active {
+          color: $brightblue;
+          text-decoration: underline;
+        }
       }
     }
   }
