@@ -7,22 +7,6 @@
           <v-close-icon class="close-icon" @click="hideModal" />
         </div>
         <div class="config-options">
-          <div class="option" data-cy="llm-modal-option" data-option="default">
-            <div class="description">
-              <h1>Use the Navie backend</h1>
-              <p>Instantly get access to Navie without any additional configuration.</p>
-            </div>
-            <div class="action">
-              <v-button
-                size="medium"
-                @click.native="selectOption('default')"
-                :disabled="selectedOption === 'default'"
-                data-cy="llm-select"
-              >
-                {{ selectedOption === 'default' ? 'Selected' : 'Select' }}
-              </v-button>
-            </div>
-          </div>
           <div class="option" data-cy="llm-modal-option" data-option="copilot">
             <div class="description">
               <h1>Use the GitHub Copilot language model</h1>
@@ -45,6 +29,33 @@
                 data-cy="llm-select"
               >
                 {{ selectedOption === 'copilot' ? 'Selected' : 'Select' }}
+              </v-button>
+            </div>
+          </div>
+          <div class="option" data-cy="llm-modal-option" data-option="default">
+            <div class="description">
+              <h1>Use the Navie backend</h1>
+              <p>Instantly get access to Navie without any additional configuration.</p>
+            </div>
+            <div class="action">
+              <v-button
+                size="medium"
+                @click.native="selectOption('default')"
+                :disabled="selectedOption === 'default'"
+                data-cy="llm-select"
+              >
+                {{ selectedOption === 'default' ? 'Selected' : 'Select' }}
+              </v-button>
+            </div>
+          </div>
+          <div class="option" data-cy="llm-modal-option" data-option="byok">
+            <div class="description">
+              <h1>Use your own OpenAI API key</h1>
+              <p>Input your own OpenAI API key to use it with Navie.</p>
+            </div>
+            <div class="action">
+              <v-button size="medium" @click.native="selectOption('own-key')" data-cy="llm-select">
+                Select
               </v-button>
             </div>
           </div>
@@ -72,17 +83,6 @@
                   Select
                 </v-button>
               </a>
-            </div>
-          </div>
-          <div class="option" data-cy="llm-modal-option" data-option="byok">
-            <div class="description">
-              <h1>Use your own OpenAI API key</h1>
-              <p>Input your own OpenAI API key to use it with Navie.</p>
-            </div>
-            <div class="action">
-              <v-button size="medium" @click.native="selectOption('own-key')" data-cy="llm-select">
-                Select
-              </v-button>
             </div>
           </div>
         </div>
