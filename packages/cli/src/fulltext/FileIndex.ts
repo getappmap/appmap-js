@@ -13,7 +13,14 @@ import listGitProjectFiles from './listGitProjectFIles';
 import querySymbols from './querySymbols';
 import { fileNameMatchesFilterPatterns } from './fileNameMatchesFilterPatterns';
 
+makeDebug.formatters.a = (v) => {
+  return v.join(' ');
+};
+
 const debug = makeDebug('appmap:file-index');
+
+// enable to see all indexing terms for each file
+const debugTerms = makeDebug('appmap:file-index:terms');
 
 export type FileIndexMatch = {
   directory: string;
@@ -49,7 +56,7 @@ export class FileIndex {
     const rows = this.database.prepare(query).all(searchExpr, limit);
     if (debug.enabled)
       for (const row of rows) {
-        debug(`Found row ${(row as { file_name: string }).file_name}`);
+        debug('Found row %s', (row as { file_name: string }).file_name);
       }
     return rows.map((row: any) => ({
       directory: row.directory,
@@ -88,7 +95,8 @@ export class FileIndex {
         if (options.allowSymbols) {
           debug('Symbol parsing is enabled.');
           debug(
-            `Generic symbol parsing is ${options.allowGenericParsing ? 'enabled.' : 'disabled.'}`
+            'Generic symbol parsing is %s',
+            options.allowGenericParsing ? 'enabled.' : 'disabled.'
           );
         } else {
           debug('Symbol parsing is disabled.');
@@ -135,16 +143,17 @@ export class FileIndex {
     const fileNameTokens = filePath.split(path.sep);
 
     try {
-      let terms = queryKeywords(fileNameTokens).join(' ');
+      let terms = queryKeywords(fileNameTokens);
 
       if (allowSymbols) {
         const symbols = querySymbols(path.join(directory, filePath), allowGenericParsing);
-        terms += ` ${queryKeywords(symbols).sort().join(' ')}`;
+        terms = terms.concat(queryKeywords(symbols).sort());
       }
 
-      debug(`Indexing file path ${filePath} with terms ${terms}`);
+      debug('Indexing file path %s with %d terms', filePath, terms.length);
+      debugTerms('Terms for path %s: %a', filePath, terms);
 
-      this.#insert.run(directory, filePath, terms);
+      this.#insert.run(directory, filePath, terms.join(' '));
     } catch (error) {
       console.warn(`Error indexing document ${filePath}`);
       console.warn(error);
@@ -194,6 +203,7 @@ const BINARY_FILE_EXTENSIONS: string[] = [
   'jar',
   'jpeg',
   'jpg',
+  'js.map',
   'min.js',
   'min.css',
   'mkv',
@@ -229,6 +239,7 @@ const BINARY_FILE_EXTENSIONS: string[] = [
   'xls',
   'xlsx',
   'xz',
+  'yarn.lock',
   'zip',
 ].map((ext) => '.' + ext);
 
@@ -271,10 +282,10 @@ export async function filterFiles(
         appendFile = true;
         if (stats.size > 50_000) {
           if (isDataFile(fileName)) {
-            debug(`Skipping large data file ${fileName} with size ${stats.size}`);
+            debug('Skipping large data file %s with size %d', fileName, stats.size);
             appendFile = false;
           } else {
-            debug(`WARNING Large file ${fileName} with size ${stats.size}`);
+            debug('WARNING Large file %s with size %d', fileName, stats.size);
           }
         }
       }
