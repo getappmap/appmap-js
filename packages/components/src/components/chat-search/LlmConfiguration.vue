@@ -212,6 +212,7 @@ export default Vue.extend({
   font-size: 12px;
 
   &__indicator {
+    padding: 1rem;
     align-items: center;
     border-radius: $border-radius;
     background-color: #32354d;
