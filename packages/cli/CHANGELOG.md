@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.169.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.169.0...@appland/appmap-v3.169.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* don't index js source maps or yarn.lock ([c70587d](https://github.com/getappmap/appmap-js/commit/c70587d34af75fb6e7fbb6bc7ef208e2f7b480ba))
+* remove string interpolation ([087d63c](https://github.com/getappmap/appmap-js/commit/087d63cd97aedbd9d6ff9413ee104348d35f5894))
+
 # [@appland/appmap-v3.169.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.168.1...@appland/appmap-v3.169.0) (2024-10-08)
 
 
