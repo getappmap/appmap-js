@@ -10,7 +10,7 @@ import { initializeHistory, loadThread } from './historyHelper';
 import Thread from './thread';
 import IHistory from './ihistory';
 
-export class RemtoteCallbackHandler {
+export class RemoteCallbackHandler {
   thread: Thread | undefined;
   userMessageId: string | undefined;
   assistantMessageId: string | undefined;
@@ -143,7 +143,7 @@ export default class RemoteNavie extends EventEmitter implements INavie {
   }
 
   async ask(threadId: string, question: string, codeSelection?: string, prompt?: string) {
-    const callbackHandler = new RemtoteCallbackHandler(
+    const callbackHandler = new RemoteCallbackHandler(
       this.history,
       this.contextProvider,
       this.projectInfoProvider,

@@ -46,6 +46,7 @@ export interface ClientRequest {
   question: string;
   codeSelection?: string;
   prompt?: string;
+  locations?: string[];
 }
 
 export interface INavie extends InteractionHistoryEvents {

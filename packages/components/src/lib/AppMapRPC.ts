@@ -12,12 +12,14 @@ type ExplainOptions = {
   codeSelection?: string;
   appmaps?: string[];
   threadId?: string;
+  locations?: string[];
 };
 
 type UserInput = {
   question: string;
   codeSelection?: string;
   appmaps?: string[];
+  locations?: string[];
 };
 
 type UpdateResult = {
@@ -38,18 +40,21 @@ export class ExplainRequest extends EventEmitter {
     let question: string;
     let codeSelection: string | undefined;
     let appmaps: string[] | undefined;
+    let locations: string[] | undefined;
     if (typeof input === 'string') {
       question = input;
     } else {
       question = input.question;
       codeSelection = input.codeSelection;
       appmaps = input.appmaps;
+      locations = input.locations;
     }
     const explainOptions: ExplainOptions = {
       question,
       appmaps,
       threadId,
       codeSelection,
+      locations,
     };
 
     return new Promise<string>((resolve, reject) => {

@@ -79,7 +79,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
     threadId: string | undefined,
     question: string,
     codeSelection?: string,
-    prompt?: string
+    prompt?: string,
+    locations?: string[]
   ): Promise<void> {
     if (!threadId) {
       if (this.assignedThreadId) {
@@ -134,6 +135,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
         question,
         codeSelection,
         prompt,
+        locations,
       };
 
       await history.question(threadId, userMessageId, question, codeSelection, prompt);

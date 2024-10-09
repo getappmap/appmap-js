@@ -299,7 +299,8 @@ export default class ExplainAgent implements Agent {
       )
     );
 
-    await this.contextService.searchContext(options, tokensAvailable);
+    const locations = options.userOptions.stringValue('locations');
+    await this.contextService.searchContext(options, tokensAvailable, [], options.locations);
   }
 
   applyQuestionPrompt(question: string): void {

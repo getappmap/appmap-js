@@ -22,6 +22,7 @@ export namespace ExplainRpc {
     appmaps?: string[];
     threadId?: string;
     prompt?: string;
+    locations?: string[];
   };
 
   export type ExplainResponse = {

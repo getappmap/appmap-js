@@ -55,7 +55,8 @@ export class Explain extends EventEmitter {
     public appmaps: string[] | undefined,
     public status: ExplainRpc.ExplainStatusResponse,
     public codeEditor?: string,
-    public prompt?: string
+    public prompt?: string,
+    public locations?: string[]
   ) {
     super();
   }
@@ -105,7 +106,13 @@ export class Explain extends EventEmitter {
       }
     }
 
-    await navie.ask(this.status.threadId, this.question, this.codeSelection, this.prompt);
+    await navie.ask(
+      this.status.threadId,
+      this.question,
+      this.codeSelection,
+      this.prompt,
+      this.locations
+    );
   }
 
   async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
@@ -220,7 +227,8 @@ export async function explain(
   appmaps: string[] | undefined,
   threadId: string | undefined,
   codeEditor: string | undefined,
-  prompt: string | undefined
+  prompt: string | undefined,
+  locations: string[] | undefined
 ): Promise<ExplainRpc.ExplainResponse> {
   const status: ExplainRpc.ExplainStatusResponse = {
     step: ExplainRpc.Step.NEW,
@@ -243,7 +251,8 @@ export async function explain(
     appmaps,
     status,
     codeEditor,
-    prompt
+    prompt,
+    locations
   );
 
   const invokeContextFunction = async (data: any) => {
@@ -350,7 +359,8 @@ const explainHandler: (
         options.appmaps,
         options.threadId,
         codeEditor,
-        options.prompt
+        options.prompt,
+        options.locations
       ),
   };
 };

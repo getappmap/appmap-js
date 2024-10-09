@@ -499,14 +499,19 @@ export default {
         if (appmaps.length > 0) explainRequest.appmaps = appmaps;
 
         const userProvidedContext: string[] = [];
+        const locations: string[] = [];
         if (this.pinnedItems.length > 0) {
           userProvidedContext.push(
             `<!-- Pinned items are snippets that I have saved from earlier in the conversation -->`,
-            ...this.pinnedItems.map(
-              (p) => `<pinned-context handle="${p.handle}">\n${p.content}\n</pinned-context>`
-            )
+            ...this.pinnedItems
+              .filter((p) => p.type !== 'file')
+              .map((p) => `<pinned-context handle="${p.handle}">\n${p.content}\n</pinned-context>`)
+          );
+          locations.push(
+            ...this.pinnedItems.filter((p) => p.type === 'file').map((p) => p.location)
           );
         }
+
         if (codeSelections.length > 0) {
           userProvidedContext.push(
             `<!-- Code selections are snippets that I have selected from the code editor -->`,
@@ -519,7 +524,9 @@ export default {
             userProvidedContext.join('\n'),
             '</user-provided-context>',
           ].join('\n');
-
+        if (locations.length > 0) {
+          explainRequest.locations = locations;
+        }
         this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
       });
     },
