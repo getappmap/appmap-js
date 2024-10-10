@@ -105,7 +105,7 @@
         <span>
           <b>Model:</b>
           <span class="llm-model-name" data-cy="llm-model">{{ modelName }}</span>
-          <i data-cy="llm-provider">({{ modelSubtext }})</i>
+          <span class="llm-provider" data-cy="llm-provider">({{ modelSubtext }})</span>
         </span>
       </div>
     </template>
@@ -212,7 +212,6 @@ export default Vue.extend({
   display: flex;
   padding: 1rem;
   width: fit-content;
-  font-size: 12px;
 
   &__indicator {
     padding: 1rem;
@@ -258,9 +257,11 @@ export default Vue.extend({
     fill: #e3e5e8;
   }
 
-  i {
+  .llm-provider {
     opacity: 0.5;
+    padding-left: 0;
   }
+
   span {
     padding-left: 0.5rem;
   }

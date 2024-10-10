@@ -283,6 +283,12 @@ export default Vue.extend({
   position: relative;
   box-shadow: 0 0 1rem 0 rgba(black, 0.33);
 
+  &[is-reference] {
+    .context-container__button:last-of-type {
+      border-radius: 0 $border-radius $border-radius 0;
+    }
+  }
+
   &--collapsed {
     .context-container__header {
       border-bottom: none;

@@ -34,7 +34,8 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.35rem;
+  color: $white;
+  gap: 0.5rem;
 
   &__notification {
     display: flex;
@@ -43,11 +44,11 @@ export default Vue.extend({
     justify-content: center;
     align-items: flex-end;
     align-items: center;
-    max-width: 15rem;
+    max-width: 20rem;
     gap: 1rem;
     border-radius: $border-radius;
-    border: 1px solid rgba(146, 146, 146, 0.33);
-    background: rgba(116, 109, 217, 0.11);
+    background-color: #32354d;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 
     &-icon {
       svg {

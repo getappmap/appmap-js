@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <h3><v-up-arrow />SHIFT + DRAG to put files here</h3>
+  <div class="vscode-notice">
+    <p>Drag and hold <v-up-arrow class="arrow" />SHIFT to add files here.</p>
     <p>
-      or click the <span class="pin"><v-pin-icon /></span> pin icon in a Navie response
+      Content within a conversation can be added by clicking the <v-pin-icon class="pin" /> pin icon
+      in a Navie response.
     </p>
   </div>
 </template>
@@ -22,38 +23,34 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-h3 {
-  margin-bottom: 0.5rem;
-}
+.vscode-notice {
+  margin-bottom: 2em;
 
-p {
-  margin-top: 0;
-  margin-bottom: 2rem;
-}
+  p {
+    &:first-child {
+      margin-top: 0;
+    }
 
-h3 {
-  display: inline-block;
-  // background-color: rgba(black, 0.1);
-  color: $gray4;
-  transition: background-color 0.2s ease-in-out;
-  user-select: none;
-  svg {
-    margin-right: 0.33rem;
-  }
-}
+    user-select: none;
+    line-height: 1.5;
+    font-size: 1em;
+    color: rgba(white, 0.66);
 
-.pin svg {
-  vertical-align: text-bottom;
-}
+    svg {
+      height: 16px;
+      width: 16px;
 
-h3,
-p {
-  svg {
-    height: 16px;
-    width: 16px;
+      path {
+        fill: $gray4;
+      }
+    }
 
-    path {
-      fill: $gray4;
+    .pin {
+      vertical-align: text-bottom;
+    }
+
+    .arrow {
+      margin-right: 0.33rem;
     }
   }
 }
