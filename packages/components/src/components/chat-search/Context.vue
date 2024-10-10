@@ -91,7 +91,6 @@ export default {
 
 <style lang="scss" scoped>
 .context {
-  font-size: 0.9rem;
   color: $gray4;
   width: 100%;
   min-height: 100%;
@@ -149,8 +148,7 @@ export default {
   &__notice {
     $fg: rgb(255, 255, 255, 0.75);
 
-    margin: 0 auto;
-    width: 40%;
+    margin: 0 2rem;
     min-width: 180px;
     background-color: rgb(0, 0, 0, 0.25);
     border: 1px solid rgb(255, 255, 255, 0.1);
