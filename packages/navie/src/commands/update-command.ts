@@ -21,6 +21,10 @@ export default class UpdateCommand implements Command {
     }
 
     const existingContent = codeSelection;
+    if (typeof existingContent !== 'string') {
+      throw new Error('unimplemented');
+    }
+
     const newContent = question;
     const update = await this.computeUpdateService.computeUpdate(existingContent, newContent);
 

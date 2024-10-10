@@ -41,6 +41,11 @@ export namespace ContextV2 {
     DataRequest = 'data-request',
     // A help document that is relevant to the user's situation.
     HelpDoc = 'help-doc',
+    // A reference to a source file
+    File = 'file',
+    // A selection from a source file, including the location (specified as a path
+    // and range of lines), as well as the content extracted from the location
+    CodeSelection = 'code-selection',
   }
 
   // A specific context item that is returned in the response.

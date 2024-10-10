@@ -8,7 +8,7 @@ import {
   ProjectDirectory,
   ProjectParameters,
 } from '@appland/client';
-import { ContextV2, Help, ProjectInfo } from '@appland/navie';
+import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
 
 import { RpcError, RpcHandler } from '../rpc';
@@ -51,7 +51,7 @@ export class Explain extends EventEmitter {
     public appmapDirectories: AppMapDirectory[],
     public projectDirectories: string[],
     public question: string,
-    public codeSelection: string | undefined,
+    public codeSelection: UserContext.Context | undefined,
     public appmaps: string[] | undefined,
     public status: ExplainRpc.ExplainStatusResponse,
     public codeEditor?: string,
@@ -104,7 +104,12 @@ export class Explain extends EventEmitter {
       }
     }
 
-    await navie.ask(this.status.threadId, this.question, this.codeSelection, this.prompt);
+    await navie.ask(
+      this.status.threadId,
+      this.question,
+      this.codeSelection,
+      this.prompt
+    );
   }
 
   async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
@@ -207,15 +212,31 @@ export class Explain extends EventEmitter {
   }
 }
 
-const codeSelections = new LRUCache<string, string>({
+const codeSelections = new LRUCache<string, UserContext.Context>({
   maxSize: 1024 ** 2 * 10 /* 10 MB */,
-  sizeCalculation: (value) => value.length,
+  sizeCalculation: (value) => {
+    if (typeof value === 'string') {
+      return value.length;
+    }
+    const size = value.reduce((a, v) => {
+      let ret = v.type.length;
+      if (UserContext.isCodeSelectionItem(v)) {
+        ret += v.location.length + v.content.length;
+      } else if (UserContext.isCodeSnippetItem(v)) {
+        ret += v.content.length;
+      } else if (UserContext.isFileItem(v)) {
+        ret += v.location!.length;
+      }
+      return ret;
+    }, 0);
+    return size;
+  },
 });
 
 export async function explain(
   navieProvider: INavieProvider,
   question: string,
-  codeSelection: string | undefined,
+  codeSelection: UserContext.Context | undefined,
   appmaps: string[] | undefined,
   threadId: string | undefined,
   codeEditor: string | undefined,
@@ -337,16 +358,33 @@ const explainHandler: (
 ) => {
   return {
     name: ExplainRpc.ExplainFunctionName,
-    handler: async (options: ExplainRpc.ExplainOptions) =>
-      await explain(
+    handler: async (options: ExplainRpc.ExplainOptions) => {
+      let userContext: UserContext.Context | undefined;
+      if (options.codeSelection === undefined) {
+        userContext = undefined;
+      } else {
+        if (typeof options.codeSelection === 'string') {
+          userContext = options.codeSelection;
+        } else {
+          userContext = options.codeSelection.map((cs) => {
+            return {
+              type: cs.type,
+              location: cs.location,
+              content: cs.content,
+            } as UserContext.ContextItem;
+          });
+        }
+      }
+      return await explain(
         navieProvider,
         options.question,
-        options.codeSelection,
+        userContext,
         options.appmaps,
         options.threadId,
         codeEditor,
         options.prompt
-      ),
+      );
+    },
   };
 };
 
