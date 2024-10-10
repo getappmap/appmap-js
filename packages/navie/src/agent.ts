@@ -21,7 +21,7 @@ export class AgentOptions {
     public userOptions: UserOptions,
     public chatHistory: Message[],
     public projectInfo: ProjectInfo[],
-    public codeSelection?: string,
+    public codeSelection?: string | ContextV2.UserContextItem[],
     public contextLabels?: ContextV2.ContextLabel[]
   ) {}
 

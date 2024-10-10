@@ -1,3 +1,4 @@
+import { ContextV2 } from '../context';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 
@@ -14,12 +15,16 @@ export default class CodeSelectionService {
     );
   }
 
-  applyCodeSelection(codeSelection: string) {
+  applyCodeSelection(userContext: string | ContextV2.UserContextItem[]) {
+    if (typeof userContext !== 'string') {
+      throw new Error('unimplemented');
+    }
+
     this.interactionHistory.addEvent(
       new PromptInteractionEvent(
         PromptType.CodeSelection,
         'user',
-        buildPromptValue(PromptType.CodeSelection, codeSelection)
+        buildPromptValue(PromptType.CodeSelection, userContext)
       )
     );
   }

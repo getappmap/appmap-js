@@ -8,7 +8,7 @@ export default interface INavie {
   ask(
     threadId: string | undefined,
     question: string,
-    codeSelection: string | undefined,
+    codeSelection: string | ContextV2.UserContextItem[] | undefined,
     prompt: string | undefined
   ): Promise<void>;
 

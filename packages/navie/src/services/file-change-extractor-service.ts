@@ -134,6 +134,10 @@ ${content}
       });
     }
     if (clientRequest.codeSelection) {
+      if (typeof clientRequest.codeSelection !== 'string') {
+        throw new Error('unimplemented');
+      }
+
       history.push({
         content: clientRequest.codeSelection,
         role: 'user',
