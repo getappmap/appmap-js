@@ -209,7 +209,6 @@ export default Vue.extend({
   display: flex;
   padding: 1rem;
   width: fit-content;
-  font-size: 12px;
 
   &__indicator {
     padding: 1rem;

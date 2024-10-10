@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <h3><v-up-arrow />SHIFT + DRAG to put files here</h3>
-    <p>
-      or click the <span class="pin"><v-pin-icon /></span> pin icon in a Navie response
-    </p>
-  </div>
+  <p>
+    Drag and hold <v-up-arrow class="arrow" />SHIFT to add files here<br />
+    or click the <v-pin-icon class="pin" /> pin icon in a Navie response
+  </p>
 </template>
 
 <script lang="ts">
@@ -22,32 +20,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-h3 {
-  margin-bottom: 0.5rem;
-}
-
 p {
   margin-top: 0;
   margin-bottom: 2rem;
-}
-
-h3 {
-  display: inline-block;
-  // background-color: rgba(black, 0.1);
-  color: $gray4;
-  transition: background-color 0.2s ease-in-out;
   user-select: none;
-  svg {
-    margin-right: 0.33rem;
-  }
-}
+  line-height: 1.5;
+  font-size: 1rem;
+  color: rgba(white, 0.66);
 
-.pin svg {
-  vertical-align: text-bottom;
-}
-
-h3,
-p {
   svg {
     height: 16px;
     width: 16px;
@@ -55,6 +35,14 @@ p {
     path {
       fill: $gray4;
     }
+  }
+
+  .pin {
+    vertical-align: text-bottom;
+  }
+
+  .arrow {
+    margin-right: 0.33rem;
   }
 }
 </style>
