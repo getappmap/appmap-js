@@ -89,7 +89,6 @@ export default {
 
 <style lang="scss" scoped>
 .pinned-items {
-  font-size: 0.9rem;
   color: $gray4;
   width: 100%;
   min-height: 100%;
@@ -152,10 +151,9 @@ export default {
   &__notice-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     height: fit-content;
-    margin-top: 1.5rem;
+    margin: 1rem 2rem;
+    margin-bottom: 0;
   }
 
   &__notice {

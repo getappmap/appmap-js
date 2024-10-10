@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="intellij-notice">
     <v-add-file-button class="button" @click.native="addFiles" />
     <p>
       or click the <span class="pin"><v-pin-icon /></span> pin icon in a Navie response
@@ -27,30 +27,26 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.button {
-  margin-bottom: 0.5rem;
-}
+.intellij-notice {
+  margin-bottom: 2em;
 
-p {
-  margin-top: 0;
-  margin-bottom: 2rem;
-}
+  p {
+    user-select: none;
+    line-height: 1.5;
+    font-size: 1em;
+    color: rgba(white, 0.66);
 
-.pin {
-  display: inline-block;
-  // background-color: rgba(black, 0.1);
-  color: $gray4;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  user-select: none;
+    svg {
+      height: 16px;
+      width: 16px;
 
-  svg {
-    height: 16px;
-    width: 16px;
-    vertical-align: text-bottom;
+      path {
+        fill: $gray4;
+      }
+    }
 
-    path {
-      fill: $gray4;
+    .pin {
+      vertical-align: text-bottom;
     }
   }
 }

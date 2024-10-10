@@ -105,15 +105,17 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .context__body__table-row {
   &__header {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 0.5em;
     padding: 0.65rem;
     cursor: pointer;
     color: lighten($gray4, 20%);
-    display: flex;
     height: 100%;
 
     .row-icon {
-      margin-right: 0.75rem;
       width: 18px;
+      align-self: end;
     }
 
     .row-text {

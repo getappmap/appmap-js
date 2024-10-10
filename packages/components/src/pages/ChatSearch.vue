@@ -43,7 +43,7 @@
     <div class="search-wrapper">
       <div class="search-header">
         <h1>Navie's Context Sources</h1>
-        <v-popper class="infoHelp" ref="infoPopper" placement="none">
+        <v-popper class="info-help" ref="infoPopper" placement="none">
           <div class="info">
             <InfoIcon />
           </div>
@@ -693,6 +693,9 @@ $border-color: darken($gray4, 10%);
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
+    background-color: rgba(black, 0.25);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(white, 0.1);
   }
 
   .search-subheader {
@@ -701,20 +704,19 @@ $border-color: darken($gray4, 10%);
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    &::v-deep .btn {
-      margin-top: 0.83rem;
-      margin-right: 0.83rem;
-    }
+    padding-right: 1em;
   }
 
   h1 {
     margin: 0.5rem;
     color: $white;
+    font-size: 1.17em;
   }
 
   .info {
     position: relative;
     margin: 0 0.83rem;
+    display: flex;
     svg {
       width: 18px;
       height: 18px;
@@ -722,7 +724,7 @@ $border-color: darken($gray4, 10%);
     }
   }
 
-  .infoHelp {
+  .info-help {
     &::v-deep {
       .popper__text {
         position: absolute;
@@ -740,6 +742,7 @@ $border-color: darken($gray4, 10%);
     margin-left: 0.75rem;
     margin-bottom: 0.5rem;
     color: $white;
+    font-size: 1.17em;
   }
 
   .chat-container {
@@ -807,13 +810,13 @@ $border-color: darken($gray4, 10%);
 
     .pinned-items-wrapper .search-container {
       max-height: 33vh;
-      border-bottom: 1px dashed rgba($white, 0.33);
+      border-bottom: 1px solid rgba(white, 0.1);
     }
   }
 
   .search-container,
   .context-container {
-    font-size: 1rem;
+    font-size: 1em;
     color: $white;
     flex-direction: column;
     overflow-y: auto;

@@ -91,7 +91,6 @@ export default {
 
 <style lang="scss" scoped>
 .context {
-  font-size: 0.9rem;
   color: $gray4;
   width: 100%;
   min-height: 100%;
@@ -141,29 +140,15 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: fit-content;
-    margin-top: 1.5rem;
   }
 
   &__notice {
-    $fg: rgb(255, 255, 255, 0.75);
-
-    margin: 0 auto;
-    width: 40%;
+    margin: 0 2rem;
     min-width: 180px;
-    background-color: rgb(0, 0, 0, 0.25);
-    border: 1px solid rgb(255, 255, 255, 0.1);
     border-radius: 0.5rem;
-    padding: 1rem;
-    color: $fg;
+    color: rgba(white, 0.66);
     line-height: 1.5;
-
-    h2 {
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-      color: $fg;
-    }
   }
 }
 </style>

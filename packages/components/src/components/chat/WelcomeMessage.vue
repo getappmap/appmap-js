@@ -29,12 +29,8 @@ export default Vue.extend({
 .welcome-message {
   line-height: 1.5;
   color: $white;
-  background-color: rgba(black, 0.1);
-  border-radius: $border-radius;
-  border: 1px solid rgba(black, 0.1);
   max-height: 100%;
   overflow-y: auto;
-  padding: 0 1rem;
 
   &::v-deep {
     code {
