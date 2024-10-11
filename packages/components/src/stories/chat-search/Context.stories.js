@@ -5,6 +5,11 @@ export default {
   title: 'Pages/ChatSearch/Context',
   component: VContext,
   argTypes: {},
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
+  },
 };
 
 export const Context = (args, { argTypes }) => ({
@@ -14,6 +19,26 @@ export const Context = (args, { argTypes }) => ({
 });
 
 Context.args = {
-  apiKey: '',
-  apiUrl: 'https://api.getappmap.com',
+  contextResponse: [
+    {
+      directory: '/home/user/my-app',
+      location: '/home/user/my-app/tmp/appmap/minitest/example.appmap.json',
+      type: 'sequence-diagram',
+    },
+    {
+      directory: '/home/user/my-app',
+      location: 'z:\\workspace\\example.appmap.json',
+      type: 'sequence-diagram',
+    },
+    {
+      directory: '/home/user/my-app',
+      location: '/home/user/my-app/tmp/appmap/minitest/True_equals_true.appmap.json:23',
+      type: 'data-request',
+    },
+    {
+      directory: '/home/user/my-app',
+      type: 'code-snippet',
+      location: 'app/models/user.rb:45',
+    },
+  ],
 };

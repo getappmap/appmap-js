@@ -52,4 +52,17 @@ describe('ContextItem', () => {
     expect(events).toHaveLength(1);
     expect(events[0]).toStrictEqual([location, directory]);
   });
+  it('renders Windows paths correctly', () => {
+    const wrapper = mount(VContextItem, {
+      propsData: {
+        contextItem: {
+          type: 'data-request',
+          location: 'C:\\Users\\Me\\Projects\\AppMap\\app\\controllers\\users_controller.rb:43',
+          content: '# frozen_string_literal: true\n',
+          directory: 'C:\\Users\\Me\\Projects\\AppMap',
+        },
+      },
+    });
+    expect(wrapper.find('[data-cy="context-item-header"]').text()).toBe('users controller');
+  });
 });

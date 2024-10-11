@@ -72,8 +72,7 @@ export default Vue.extend({
         if (this.contextItem.type === 'code-snippet') {
           return this.contextItem.location;
         } else {
-          const [path] = this.contextItem.location.split(':');
-          const appmapName = path.split(/[\\/]/).pop();
+          const appmapName = this.contextItem.location.split(/[\\/]/).pop();
           return appmapName.split('.').shift().replace(/_/g, ' ');
         }
       } else {
