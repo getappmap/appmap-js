@@ -12,7 +12,7 @@ describe('components/LlmConfiguration.vue', () => {
     await wrapper.vm.$nextTick();
 
     expect(wrapper.find('[data-cy="llm-config-modal"]').exists()).toBe(true);
-    expect(wrapper.findAll('[data-cy="llm-modal-option"]').length).toBe(3);
+    expect(wrapper.findAll('[data-cy="llm-modal-option"]').length).toBe(4);
   });
 
   it('shows the default option when using a custom model', async () => {
@@ -27,7 +27,7 @@ describe('components/LlmConfiguration.vue', () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findAll('[data-cy="llm-modal-option"]').length).toBe(3);
+    expect(wrapper.findAll('[data-cy="llm-modal-option"]').length).toBe(4);
     expect(wrapper.find('[data-cy="llm-modal-option"][data-option="default"]').exists()).toBe(true);
   });
 
@@ -78,6 +78,25 @@ describe('components/LlmConfiguration.vue', () => {
     ).toBe(undefined);
   });
 
+  it('shows the copilot option when selected', async () => {
+    const wrapper = mount(LlmConfiguration, {
+      propsData: {
+        model: 'gpt-4o',
+        baseUrl: 'http://localhost:11434/vscode/copilot',
+      },
+    });
+
+    wrapper.find('[data-cy="copilot-notice"] [data-cy="llm-config-button"]').trigger('click');
+    await wrapper.vm.$nextTick();
+
+    const button = wrapper.find(
+      '[data-cy="llm-modal-option"][data-option="copilot"] [data-cy="llm-select"]'
+    );
+    expect(button.exists()).toBe(true);
+    expect(button.attributes('disabled')).toBe('disabled');
+    expect(button.text()).toBe('Selected');
+  });
+
   it('emits the expected events', async () => {
     const wrapper = mount(LlmConfiguration, {
       propsData: {
@@ -102,5 +121,6 @@ describe('components/LlmConfiguration.vue', () => {
     expect(await selectOption('byom')).toEqual('own-model');
     expect(await selectOption('byok')).toEqual('own-key');
     expect(await selectOption('default')).toEqual('default');
+    expect(await selectOption('copilot')).toEqual('copilot');
   });
 });

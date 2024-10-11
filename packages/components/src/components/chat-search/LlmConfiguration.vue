@@ -16,10 +16,35 @@
               <v-button
                 size="medium"
                 @click.native="selectOption('default')"
-                :disabled="!isLocal"
+                :disabled="selectedOption === 'default'"
                 data-cy="llm-select"
               >
-                {{ isLocal ? 'Select' : 'Selected' }}
+                {{ selectedOption === 'default' ? 'Selected' : 'Select' }}
+              </v-button>
+            </div>
+          </div>
+          <div class="option" data-cy="llm-modal-option" data-option="copilot">
+            <div class="description">
+              <h1>Use the GitHub Copilot language model</h1>
+              <p>
+                If you have an active GitHub Copilot subscription, you can use it with AppMap Navie.
+                Your AI completions will be served by Copilot.
+              </p>
+              <a
+                href="https://appmap.io/docs/navie-reference/navie-copilot-backend.html"
+                target="_blank"
+              >
+                Visit the documentation to learn more.
+              </a>
+            </div>
+            <div class="action">
+              <v-button
+                size="medium"
+                @click.native="selectOption('copilot')"
+                :disabled="selectedOption === 'copilot'"
+                data-cy="llm-select"
+              >
+                {{ selectedOption === 'copilot' ? 'Selected' : 'Select' }}
               </v-button>
             </div>
           </div>
@@ -95,7 +120,7 @@ import VModal from '@/components/Modal.vue';
 import VCloseIcon from '@/assets/x-icon.svg';
 import VCopilotNotice from '@/components/chat-search/CopilotNotice.vue';
 
-type LLMConfigOption = 'default' | 'own-key' | 'own-model';
+type LLMConfigOption = 'default' | 'own-key' | 'own-model' | 'copilot';
 
 export default Vue.extend({
   components: {
@@ -160,6 +185,10 @@ export default Vue.extend({
       } catch {
         return 'default';
       }
+    },
+    selectedOption(): 'default' | 'copilot' | 'other' {
+      if (this.vsCodeLMVendor) return 'copilot';
+      return this.isLocal ? 'other' : 'default';
     },
   },
 
