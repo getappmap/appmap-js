@@ -2,9 +2,7 @@
   <div class="signin-sidebar">
     <AppMapLogo width="120" />
     <div v-if="!submitted" class="content-wrap">
-      <div class="sidebar-title">
-        <h1 data-cy="title">Activate AppMap</h1>
-      </div>
+      <div class="sidebar-title" data-cy="title">Activate AppMap</div>
 
       <div class="signin-buttons">
         <p v-if="error" class="error">{{ error }}</p>
@@ -233,15 +231,10 @@ export default {
   background-color: $black;
   font-family: $appland-text-font-family;
   color: $white;
-  font-size: 1rem;
   width: auto;
   height: 100%;
   padding: 1.5rem;
   line-height: 1.4rem;
-
-  h1 {
-    line-height: 2rem;
-  }
 
   a.link {
     color: $brightblue;
@@ -292,7 +285,6 @@ export default {
     &.btn-primary {
       background-color: desaturate($powderblue, 20);
       font-weight: 600;
-      margin: 0 1.25rem;
 
       &:hover {
         background-color: darken($powderblue, 15);
@@ -309,17 +301,17 @@ export default {
   }
 
   .content-wrap {
-    margin: 2rem 0;
+    margin: 1em 0;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-content: center;
-    gap: 1.2rem;
+    gap: 1em;
 
     .sidebar-title {
-      h1 {
-        margin: 0 0 0.5rem 0;
-      }
+      line-height: 2rem;
+      font-size: 1.17em;
+      font-weight: bold;
     }
 
     p {
@@ -332,14 +324,13 @@ export default {
     flex-direction: column;
     gap: 1rem;
     align-items: center;
-    margin-bottom: 1rem;
 
     .or-divider-container {
       display: flex;
       width: 90%;
 
       .or-divider {
-        margin: 0.5rem;
+        margin: 0 0.5rem;
         color: $gray4;
       }
 
@@ -353,12 +344,10 @@ export default {
 
     .error {
       color: $hotpink;
-      font-size: 0.9rem;
       margin: 0;
     }
 
     .accept-tos {
-      font-size: 0.9rem;
       width: 90%;
     }
   }
@@ -367,7 +356,7 @@ export default {
   input[type='text'] {
     width: 90%;
     color: $white;
-    font-size: 1rem;
+    font-size: 1em;
     background-color: inherit;
     border: 1px solid $gray5;
     padding: 0.75rem;
@@ -386,17 +375,12 @@ export default {
     padding: 1rem;
     border: 1px solid $gray3;
     border-radius: 0.5rem;
-    font-size: 0.9rem;
     line-height: 1.2rem;
 
     svg {
       width: 100%;
       max-width: 33px;
       height: 42px;
-    }
-
-    .your-data-text p {
-      margin: 0.5rem 0.2rem;
     }
   }
 
@@ -414,7 +398,6 @@ export default {
     }
 
     .no-email {
-      font-size: 0.9rem;
       line-height: 1rem;
     }
   }
