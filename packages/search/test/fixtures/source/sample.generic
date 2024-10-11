@@ -1,0 +1,103 @@
+// dart
+// via https://dart.dev/language
+
+int fibonacci(int n) {
+  if (n == 0 || n == 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+class Spacecraft {
+  String name;
+  DateTime? launchDate;
+
+  // Read-only non-final property
+  int? get launchYear => launchDate?.year;
+
+  // Constructor, with syntactic sugar for assignment to members.
+  Spacecraft(this.name, this.launchDate) {
+    // Initialization code goes here.
+  }
+
+  // Named constructor that forwards to the default one.
+  Spacecraft.unlaunched(String name) : this(name, null);
+
+  // Method.
+  void describe() {
+    print('Spacecraft: $name');
+    // Type promotion doesn't work on getters.
+    var launchDate = this.launchDate;
+    if (launchDate != null) {
+      int years = DateTime.now().difference(launchDate).inDays ~/ 365;
+      print('Launched: $launchYear ($years years ago)');
+    } else {
+      print('Unlaunched');
+    }
+  }
+}
+
+enum PlanetType { terrestrial, gas, ice }
+
+// swift
+// via https://docs.swift.org/swift-book/documentation/the-swift-programming-language
+
+struct Resolution {
+    var width = 0
+    var height = 0
+}
+
+class VideoMode {
+    var resolution = Resolution()
+    var interlaced = false
+    var frameRate = 0.0
+    var name: String?
+}
+
+class Counter {
+    var count = 0
+    func increment() {
+        count += 1
+    }
+    func increment(by amount: Int) {
+        count += amount
+    }
+    func reset() {
+        count = 0
+    }
+}
+
+// gdscript
+// via https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html
+
+func something(p1, p2):
+	super(p1, p2)
+
+
+# It's also possible to call another function in the super class:
+func other_something(p1, p2):
+	super.something(p1, p2)
+
+
+# Inner class
+class Something:
+	var a = 10
+
+
+# Constructor
+func _init():
+	print("Constructed!")
+	var lv = Something.new()
+	print(lv.a)
+
+
+// misc
+
+# fn dont_include_me
+# class CommentedOut {}
+
+// fn dont_include_me_either
+// class CommentedOutToo {}
+
+// qc
+void() perform_action = {
+
+}
