@@ -40,6 +40,11 @@ This is a text file, it should render as an absolute path.
 This is a text file, it should render as an absolute path.
 \`\`\`
 
+<!-- file: C:\\Users\\Me\\Projects\\AppMap\\app\\controllers\\users_controller.rb -->
+\`\`\`txt
+Windows path
+\`\`\`
+
 \`\`\`html
 <!--
 here's
