@@ -231,7 +231,7 @@ describe('RPC', () => {
             explainOptions
           );
           expect(response.error).toBeTruthy();
-          expect(response.error).toEqual({ code: 500, message: 'Connection failed' });
+          expect(response.error).toMatchObject({ code: 500, message: 'Connection failed' });
         });
       });
 
@@ -260,7 +260,7 @@ describe('RPC', () => {
             ExplainRpc.ExplainFunctionName,
             explainOptions
           );
-          expect(response.error).toStrictEqual({
+          expect(response.error).toMatchObject({
             code: 500,
             message: 'The response completed unexpectedly',
           });
@@ -295,7 +295,7 @@ describe('RPC', () => {
             explainOptions
           );
           expect(response.error).toBeTruthy();
-          expect(response.error).toEqual({
+          expect(response.error).toMatchObject({
             message: 'Missing authentication',
             code: 500,
           });

@@ -1,36 +1,31 @@
 import connect from 'connect';
 import { json as jsonParser } from 'body-parser';
-import cors from 'connect-cors';
 import makeDebug from 'debug';
 import jayson, { MethodLike } from 'jayson';
 import { log, warn } from 'console';
 import assert from 'assert';
 
-import { RpcCallback, RpcError, RpcHandler } from '../../rpc/rpc';
+import cors from 'cors';
+
 import { Server } from 'http';
-import { inspect } from 'util';
+
+import { RpcCallback, RpcHandler, toJaysonRpcError } from '../../rpc/rpc';
 
 const debug = makeDebug('appmap:rpcServer');
 
-function handlerMiddleware(
+function handlerMiddleware<Args, Result>(
   name: string,
-  handler: (args: any) => unknown | Promise<unknown>
-): (args: any, callback: RpcCallback<unknown>) => Promise<void> {
+  handler: (args: Args) => Result | Promise<Result>
+): (args: Args, callback: RpcCallback<Result>) => Promise<void> {
   return async (args, callback) => {
     debug(`[RPCServer] Handling JSON-RPC request for ${name} (${JSON.stringify(args)})`);
-    let err: any, result: any;
     try {
-      result = await handler(args);
-    } catch (error) {
-      err = error;
-    }
-
-    if (err) {
-      warn(`[RPCServer] An error occurred handling ${name}: ${inspect(err)}`);
-      const error = RpcError.fromException(err);
-      callback(error);
-    } else {
+      const result = await handler(args);
+      debug(`[RPCServer] JSON-RPC response for ${name}: ${JSON.stringify(result)}`);
       callback(null, result);
+    } catch (error) {
+      debug(`[RPCServer] JSON-RPC error for ${name}: ${JSON.stringify(error)}`);
+      callback(toJaysonRpcError(error));
     }
   };
 }
