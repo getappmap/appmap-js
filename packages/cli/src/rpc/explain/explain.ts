@@ -79,15 +79,14 @@ export class Explain extends EventEmitter {
     });
     navie.on('error', (err: Error) => {
       this.status.step = ExplainRpc.Step.ERROR;
-      const rpcError = RpcError.fromException(err);
       if (!this.status.err)
         this.status.err = {
-          code: rpcError.code,
-          message: rpcError.message,
+          code: 'code' in err ? Number(err.code) : 500,
+          message: err.message,
           stack: err.stack,
           cause: err.cause,
         };
-      this.emit('error', rpcError);
+      this.emit('error', err);
     });
 
     if (!this.status.threadId) {
@@ -285,7 +284,7 @@ export async function explain(
     };
 
     // TODO: These could be collected into status errors
-    explain.on('error', (err: Error) => first() && reject(RpcError.fromException(err)));
+    explain.on('error', (err: Error) => first() && reject(err));
     explain.on('ack', (userMessageId: string, threadId: string) => {
       status.threadId = threadId;
       const cleanupFn = () => searchStatusByUserMessageId.delete(userMessageId);
@@ -301,14 +300,10 @@ export async function explain(
       'complete',
       () =>
         first() &&
-        reject(
-          RpcError.fromException(
-            new Error(status.explanation?.join('') || 'The response completed unexpectedly')
-          )
-        )
+        reject(new Error(status.explanation?.join('') ?? 'The response completed unexpectedly'))
     );
 
-    explain.explain(navie).catch((err: Error) => first() && reject(RpcError.fromException(err)));
+    explain.explain(navie).catch((err: Error) => first() && reject(err));
   });
 }
 

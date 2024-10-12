@@ -1,62 +1,50 @@
-import { warn } from 'console';
-import jayson from 'jayson';
-import { inspect } from 'util';
+import type jayson from 'jayson';
 
 export type RpcHandler<CallT, ResponseT> = {
   name: string | string[];
   handler: (args: CallT) => ResponseT | Promise<ResponseT>;
 };
 
-export class RpcError extends Error implements jayson.JSONRPCError {
-  static fromException(err: Error): jayson.JSONRPCError {
-    let rpcError: jayson.JSONRPCError;
-    warn(`Handling exception: ${inspect(err)}`);
-    if (err.stack) warn(`Stack trace: ${err.stack}`);
-    if (err.cause) warn(`Cause: ${String(err.cause)}`);
-    if (isRpcError(err)) {
-      rpcError = { code: err.code, message: err.message };
-      const data: Record<string, any> = {};
-      if (err.data) {
-        warn(`Data: ${err.data}`);
-        try {
-          data.data = JSON.parse(JSON.stringify(err.data));
-        } catch {
-          // fallthrough
-        }
-      }
-      if (err.cause) {
-        try {
-          data.cause = JSON.parse(JSON.stringify(err.cause));
-        } catch {
-          // fallthrough
-        }
-      }
-      if (err.stack) data.stack = err.stack;
-
-      if (Object.keys(data).length !== 0) rpcError.data = data;
-    } else {
-      rpcError = { code: 500, message: errorMessage(err) };
-    }
-    return rpcError;
-  }
-
-  constructor(public code: number, message: string, public data?: any) {
+export class RpcError extends Error {
+  constructor(public code: number, message: string) {
     super(message);
   }
 }
 
-export function isRpcError(err: Error): err is RpcError {
-  return (err as any).code !== undefined;
+export function toJaysonRpcError(error: unknown): jayson.JSONRPCError {
+  const rpcError: jayson.JSONRPCError = { code: 500, message: errorMessage(error) };
+  if (error && typeof error === 'object') {
+    if ('code' in error && typeof error.code === 'number') rpcError.code = error.code;
+    const data: Record<string, unknown> = {};
+    if ('data' in error)
+      try {
+        data.data = JSON.parse(JSON.stringify(error.data));
+      } catch {
+        // fallthrough
+      }
+    if ('cause' in error)
+      try {
+        data.cause = JSON.parse(JSON.stringify(error.cause));
+      } catch {
+        // fallthrough
+      }
+    if ('stack' in error) data.stack = error.stack;
+
+    if (Object.keys(data).length !== 0) rpcError.data = data;
+  }
+  return rpcError;
 }
 
-export function errorMessage(err: any): string {
-  if (err instanceof Error) {
-    return err.message;
-  } else if (typeof err === 'string') {
-    return err;
-  } else {
-    return `Unknown error: ${err}`;
-  }
+function errorMessage(error: unknown): string {
+  if (typeof error === 'string') return error;
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof error.message === 'string'
+  )
+    return error.message;
+  return String(error);
 }
 
 export type RpcCallback<T> = (error: jayson.JSONRPCError | null, result?: T) => void;
