@@ -9,7 +9,6 @@ import assert from 'assert';
 import { RpcCallback, RpcError, RpcHandler } from '../../rpc/rpc';
 import { Server } from 'http';
 import { inspect } from 'util';
-import { verbose } from '../../utils';
 
 const debug = makeDebug('appmap:rpcServer');
 
@@ -65,7 +64,7 @@ export default class RPCServer {
     app.use(cors({ methods: ['POST'] }));
     app.use(jsonParser());
     app.use(server.middleware());
-    const listener = app.listen(this.bindPort);
+    const listener = app.listen(this.bindPort, 'localhost');
     listener.on('listening', () => {
       const address = listener.address();
       if (address === null) {
