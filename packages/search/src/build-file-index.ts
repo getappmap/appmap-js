@@ -2,7 +2,7 @@ import makeDebug from 'debug';
 import { join } from 'path';
 
 import FileIndex from './file-index';
-import { readFileSync } from 'fs';
+import { ContentReader, readFileSafe } from './ioutil';
 
 export type ListFn = (path: string) => Promise<string[]>;
 
@@ -20,20 +20,12 @@ type Context = {
   baseDirectory: string;
   listDirectory: ListFn;
   fileFilter: FilterFn;
+  contentReader: ContentReader;
   tokenizer: Tokenizer;
 };
 
-const readFileSafe = (filePath: string) => {
-  try {
-    return readFileSync(filePath, 'utf8');
-  } catch (error) {
-    debug(`Error reading file: %s`, filePath);
-    return undefined;
-  }
-};
-
-function indexFile(context: Context, filePath: string) {
-  const fileContents = readFileSafe(filePath);
+async function indexFile(context: Context, filePath: string) {
+  const fileContents = await context.contentReader(filePath);
   if (!fileContents) return;
 
   const tokens = context.tokenizer(fileContents, filePath);
@@ -57,11 +49,12 @@ async function indexDirectory(context: Context, directory: string) {
   }
 }
 
-export default async function buildIndex(
+export default async function buildFileIndex(
   fileIndex: FileIndex,
   directories: string[],
   listDirectory: ListFn,
   fileFilter: FilterFn,
+  contentReader: ContentReader,
   tokenizer: Tokenizer
 ): Promise<void> {
   for (const directory of directories) {
@@ -70,6 +63,7 @@ export default async function buildIndex(
       baseDirectory: directory,
       listDirectory,
       fileFilter,
+      contentReader,
       tokenizer,
     };
     await indexDirectory(context, directory);
