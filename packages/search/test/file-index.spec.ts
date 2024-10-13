@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import sqlite3 from 'better-sqlite3';
-import FileIndex, { SearchResult } from '../src/file-index';
+import FileIndex, { FileSearchResult } from '../src/file-index';
 
 describe('FileIndex', () => {
   let db: sqlite3.Database;
@@ -27,8 +27,8 @@ describe('FileIndex', () => {
     index.indexFile(directory, 'test2.txt', 'symbol2', 'word2');
     index.boostFile('test2.txt', 2.0);
     const results = index.search('symbol2');
-    expect(results.map((r: SearchResult) => r.directory)).toEqual([directory]);
-    expect(results.map((r: SearchResult) => r.filePath)).toEqual(['test2.txt']);
+    expect(results.map((r: FileSearchResult) => r.directory)).toEqual([directory]);
+    expect(results.map((r: FileSearchResult) => r.filePath)).toEqual(['test2.txt']);
     expect(results[0].score).toBeGreaterThan(0);
   });
 
@@ -38,12 +38,12 @@ describe('FileIndex', () => {
     index.boostFile('test4.txt', 2.0);
 
     let results = index.search('word1');
-    expect(results.map((r: SearchResult) => r.filePath)).toEqual(['test4.txt', 'test3.txt']);
+    expect(results.map((r: FileSearchResult) => r.filePath)).toEqual(['test4.txt', 'test3.txt']);
 
     results = index.search('symbol3');
-    expect(results.map((r: SearchResult) => r.filePath)).toEqual(['test4.txt', 'test3.txt']);
+    expect(results.map((r: FileSearchResult) => r.filePath)).toEqual(['test4.txt', 'test3.txt']);
 
     results = index.search('symbol2');
-    expect(results.map((r: SearchResult) => r.filePath)).toEqual(['test4.txt']);
+    expect(results.map((r: FileSearchResult) => r.filePath)).toEqual(['test4.txt']);
   });
 });

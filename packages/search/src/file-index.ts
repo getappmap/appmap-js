@@ -45,7 +45,7 @@ type FileIndexRow = {
   score: number;
 };
 
-export type SearchResult = {
+export type FileSearchResult = {
   directory: string;
   filePath: string;
   score: number;
@@ -88,7 +88,7 @@ export default class FileIndex {
     this.#updateBoost.run(filePath, boostFactor);
   }
 
-  search(query: string, limit = 10): SearchResult[] {
+  search(query: string, limit = 10): FileSearchResult[] {
     const rows = this.#search.all(query, limit) as FileIndexRow[];
     return rows.map((row) => ({
       directory: row.directory,
