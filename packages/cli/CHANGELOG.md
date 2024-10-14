@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.170.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.169.2...@appland/appmap-v3.170.0) (2024-10-14)
+
+
+### Features
+
+* Ignore more directories of vendored code ([24a791e](https://github.com/getappmap/appmap-js/commit/24a791e32f4a589d93327595bd4af2c459c03fa3))
+
 # [@appland/appmap-v3.169.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.169.1...@appland/appmap-v3.169.2) (2024-10-14)
 
 
