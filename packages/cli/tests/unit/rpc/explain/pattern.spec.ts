@@ -1,9 +1,9 @@
-import {
-  EXCLUDE_DOT_APPMAP_DIR,
-  EXCLUDE_DOT_NAVIE_DIR,
-} from '../../../../src/rpc/explain/collectContext';
+import { buildExclusionPattern } from '../../../../src/rpc/explain/collectContext';
 
 describe('Regex patterns', () => {
+  const EXCLUDE_DOT_APPMAP_DIR = buildExclusionPattern('.appmap');
+  const EXCLUDE_DOT_NAVIE_DIR = buildExclusionPattern('.navie');
+
   const testCases = [
     { path: '/path/to/.appmap/file', pattern: EXCLUDE_DOT_APPMAP_DIR, shouldMatch: true },
     { path: '/path/.hidden/.appmap/file', pattern: EXCLUDE_DOT_APPMAP_DIR, shouldMatch: true },
