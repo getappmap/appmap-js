@@ -6,7 +6,7 @@ import { IndexResult } from '../index/IndexResult';
 import { basename, dirname, join } from 'path';
 import { readFile } from 'fs/promises';
 import { Metadata } from '@appland/models';
-import emitUsage from '../../lib/emitUsage';
+import writeUsage, { collectUsageData } from '../../lib/emitUsage';
 
 export async function index(
   workerPool: WorkerPool,
@@ -39,7 +39,14 @@ export async function index(
   );
 
   if (sampleMetadata) {
-    await emitUsage(appMapDir, totalEvents, result.numProcessed, sampleMetadata);
+    const outputDir = join('.appmap', 'run-stats');
+    const usageData = await collectUsageData(
+      appMapDir,
+      totalEvents,
+      result.numProcessed,
+      sampleMetadata
+    );
+    await writeUsage(usageData, outputDir);
   }
 
   const elapsed = new Date().getTime() - startTime;

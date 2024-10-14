@@ -1,7 +1,7 @@
 import type { Metadata } from '@appland/models';
 import { findFiles, verbose } from '../utils';
 import FingerprintQueue from './fingerprintQueue';
-import emitUsage from '../lib/emitUsage';
+import writeUsage, { collectUsageData } from '../lib/emitUsage';
 
 class FingerprintDirectoryCommand {
   private appmaps = 0;
@@ -29,7 +29,13 @@ class FingerprintDirectoryCommand {
     });
     if (count > 0) await fpQueue.process();
 
-    emitUsage(this.directory, this.events, this.appmaps, this.metadata);
+    const usageData = await collectUsageData(
+      this.directory,
+      this.events,
+      this.appmaps,
+      this.metadata
+    );
+    await writeUsage(usageData, this.directory);
 
     return count;
   }

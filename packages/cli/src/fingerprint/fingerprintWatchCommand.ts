@@ -6,7 +6,7 @@ import { verbose } from '../utils';
 import FingerprintQueue from './fingerprintQueue';
 import Globber, { GlobberOptions } from './globber';
 import Telemetry from '../telemetry';
-import emitUsage from '../lib/emitUsage';
+import writeUsage, { collectUsageData, sendUsageData } from '../lib/emitUsage';
 import { FingerprintEvent } from './fingerprinter';
 import { Metadata } from '@appland/models';
 import { rm } from 'fs/promises';
@@ -35,7 +35,7 @@ export default class FingerprintWatchCommand {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
     this.eventAggregator = new EventAggregator(async (events) => {
-      if (this.doReportUsage) await this.reportUsage(events);
+      await this.reportUsage(events);
       this.numProcessed += events.length;
     });
     this.eventAggregator.attach(this.fpQueue.handler, 'index');
@@ -258,6 +258,12 @@ export default class FingerprintWatchCommand {
       }),
       { metadata: [] as Metadata[], numEvents: 0 }
     );
-    await emitUsage(this.directory, numEvents, metadata.length, metadata[0]);
+    const usageData = await collectUsageData(
+      this.directory,
+      numEvents,
+      indexEvents.length,
+      metadata[0]
+    );
+    await sendUsageData(usageData, this.directory);
   }
 }
