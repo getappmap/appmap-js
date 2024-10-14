@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.169.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.169.1...@appland/appmap-v3.169.2) (2024-10-14)
+
+
+### Bug Fixes
+
+* Bind the RPC server to localhost ([06b3791](https://github.com/getappmap/appmap-js/commit/06b3791d6f3a896c917e1d2827da53c2af22d5a0))
+
 # [@appland/appmap-v3.169.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.169.0...@appland/appmap-v3.169.1) (2024-10-09)
 
 
