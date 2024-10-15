@@ -60,9 +60,10 @@ describe('Usage', () => {
       const appmaps = 256;
       const contributors = 512;
       const metadata = { foo: 'bar' };
-      const dto = { events, appmaps, contributors, metadata: JSON.stringify(metadata) };
+      const dto = { events, appmaps, contributors, metadata };
+      const dtoWithStringMetadata = { ...dto, metadata: JSON.stringify(metadata) };
       nock('http://localhost:3000')
-        .post('/v1/usage', dto)
+        .post('/v1/usage', dtoWithStringMetadata)
         .matchHeader('authorization', `Bearer ${ApiKey}`)
         .reply(201);
       return expect(Usage.update(dto as any)).resolves.toBeUndefined();
