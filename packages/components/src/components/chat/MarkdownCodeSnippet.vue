@@ -123,6 +123,7 @@ export default Vue.extend({
       if (pinned) {
         eventData.type = 'code-snippet';
         eventData.language = this.language;
+        eventData.location = this.location;
         eventData.content = this.code;
       }
       this.$root.$emit('pin', eventData);

@@ -18,6 +18,7 @@ import getMostRecentMessages from '../lib/get-most-recent-messages';
 import Filter from '../lib/filter';
 import { ContextV2 } from '../context';
 import assert from 'assert';
+import { UserContext } from '../user-context';
 
 const COLOR_GREEN = '\x1b[32m';
 const COLOR_RESET = '\x1b[0m';
@@ -93,14 +94,16 @@ export default class ExplainCommand implements Command {
         .filter((message) => message.role === 'user')
         .map((message) => message.content),
       question,
-      codeSelection,
-    ]
-      .filter(Boolean)
-      .join('\n\n');
+    ];
+    if (codeSelection) {
+      const rendered =
+        typeof codeSelection !== 'string' ? UserContext.renderItems(codeSelection) : codeSelection;
+      aggregateQuestion.push(rendered);
+    }
 
     const agentOptions = new AgentOptions(
       question,
-      aggregateQuestion,
+      aggregateQuestion.filter(Boolean).join('\n\n'),
       request.userOptions,
       chatHistory || [],
       projectInfo,
