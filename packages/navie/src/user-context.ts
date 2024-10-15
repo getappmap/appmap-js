@@ -34,4 +34,41 @@ export namespace UserContext {
   export function hasLocation(i: ContextItem): i is LocationItem {
     return 'location' in i;
   }
+
+  export function renderItems(items: ContextItem[]) {
+    const renderItem = (i: UserContext.ContextItem) => {
+      // Ignore UserContext.FileItems, they've already be incorporated into the context filters.
+      if (UserContext.isCodeSelectionItem(i)) {
+        // TODO: decide what to do with i.location
+        return i.content;
+      } else if (UserContext.isCodeSnippetItem(i)) {
+        return i.content;
+      } else if (UserContext.isFileItem(i)) {
+        return i.location;
+      }
+    };
+
+    const renderedItems = [];
+    const pinnedItems = items.filter(
+      (i) => UserContext.isCodeSelectionItem(i) || UserContext.isFileItem(i)
+    );
+    const snippets = items.filter((i) => UserContext.isCodeSnippetItem(i));
+    if (pinnedItems.length > 0 || snippets.length > 0) {
+      renderedItems.push('<user-provided-context>');
+      if (pinnedItems.length > 0) {
+        renderedItems.push(
+          `<!-- Pinned items are snippets that I have saved from earlier in the conversation -->`,
+          ...pinnedItems.map((i) => `<pinned-context>\n${renderItem(i)}\n</pinned-context>`)
+        );
+        if (snippets.length > 0) {
+          renderedItems.push(
+            `<!-- Code selections are snippets that I have selected from the code editor -->`,
+            ...snippets.map((i) => `<code-selection>\n${renderItem(i)}\n</code-selection>`)
+          );
+        }
+      }
+      renderedItems.push('</user-provided-context>');
+    }
+    return renderedItems.join('\n');
+  }
 }

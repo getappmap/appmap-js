@@ -15,16 +15,15 @@ export default class CodeSelectionService {
     );
   }
 
-  applyCodeSelection(userContext: UserContext.Context) {
-    if (typeof userContext !== 'string') {
-      throw new Error('unimplemented');
-    }
+  applyCodeSelection(userContext: string | UserContext.ContextItem[]) {
+    const renderedContext: string =
+      typeof userContext !== 'string' ? UserContext.renderItems(userContext) : userContext;
 
     this.interactionHistory.addEvent(
       new PromptInteractionEvent(
         PromptType.CodeSelection,
         'user',
-        buildPromptValue(PromptType.CodeSelection, userContext)
+        buildPromptValue(PromptType.CodeSelection, renderedContext)
       )
     );
   }
