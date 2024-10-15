@@ -3,7 +3,7 @@ layout: docs
 title: Docs - Reference
 toc: true
 description: "Reference Guide to AppMap Navie, including advanced usage and configuration"
-redirect_for: [/docs/reference/navie]
+redirect_from: [/docs/reference/navie]
 ---
 
 # Navie Reference
