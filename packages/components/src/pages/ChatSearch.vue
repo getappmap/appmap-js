@@ -17,6 +17,7 @@
         :status-label="searchStatusLabel"
         :question="question"
         :input-placeholder="inputPlaceholder"
+        :is-input-disabled="isNavieLoading"
         :metadata="metadata"
         :use-animation="useAnimation"
         @isChatting="setIsChatting"
@@ -24,7 +25,8 @@
       >
         <v-llm-configuration
           data-cy="llm-config"
-          v-if="!disableLlmConfig && configLoaded && !isChatting"
+          v-if="!disableLlmConfig && !isChatting"
+          :is-loading="isNavieLoading"
           :base-url="baseUrl"
           :model="model"
         />
@@ -272,6 +274,9 @@ export default {
     },
   },
   computed: {
+    isNavieLoading() {
+      return !this.configLoaded;
+    },
     showStatus() {
       return !this.targetAppmap && this.appmapStats && !this.isChatting;
     },
@@ -324,6 +329,9 @@ export default {
     },
   },
   methods: {
+    onNavieRestarting() {
+      this.configLoaded = false;
+    },
     async loadThread(threadId: string) {
       const thread = await this.rpcClient.loadThread(threadId);
       const chat = this.$refs.vchat;

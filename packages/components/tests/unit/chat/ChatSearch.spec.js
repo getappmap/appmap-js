@@ -288,11 +288,14 @@ describe('pages/ChatSearch.vue', () => {
         'v1.navie.metadata': rpcNavieMetadata(),
       });
 
-      expect(wrapper.find('[data-cy="llm-config"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="llm-config"] [data-cy="loading"]').exists()).toBe(true);
+      expect(wrapper.vm.configLoaded).toBe(false);
 
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find('[data-cy="llm-config"]').exists()).toBe(true);
+      expect(wrapper.vm.configLoaded).toBe(true);
+      expect(wrapper.find('[data-cy="llm-config"] [data-cy="loading"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="llm-config"] [data-cy="llm-model"]').exists()).toBe(true);
     });
 
     it('renders a local configuration', async () => {
@@ -493,7 +496,12 @@ describe('pages/ChatSearch.vue', () => {
     });
 
     it('should not allow another input while the stop button is active', async () => {
-      const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+      const wrapper = mount(VChatSearch, {
+        propsData: { appmapRpcFn: jest.fn() },
+      });
+
+      await wrapper.setData({ configLoaded: true });
+
       const chatInput = wrapper.findComponent(VChatInput);
       chatInput.setData({ input: 'Hello world' });
       chatInput.vm.send();

@@ -49,4 +49,16 @@ describe('ChatInput', () => {
 
     expect(wrapper.emitted('send')).toBeUndefined();
   });
+
+  it('is not editable when disabled', async () => {
+    await wrapper.setProps({ isDisabled: true });
+    expect(wrapper.find('[data-cy="chat-input"]').attributes('contenteditable')).toBe('false');
+  });
+
+  it('is editable when not disabled', async () => {
+    await wrapper.setProps({ isDisabled: false });
+    expect(wrapper.find('[data-cy="chat-input"]').attributes('contenteditable')).toBe(
+      'plaintext-only'
+    );
+  });
 });

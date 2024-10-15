@@ -123,4 +123,16 @@ describe('components/LlmConfiguration.vue', () => {
     expect(await selectOption('default')).toEqual('default');
     expect(await selectOption('copilot')).toEqual('copilot');
   });
+
+  it('renders a loading state', async () => {
+    const wrapper = mount(LlmConfiguration, {
+      propsData: { isLoading: true },
+    });
+
+    expect(wrapper.find('[data-cy="loading"]').exists()).toBe(true);
+
+    await wrapper.setProps({ isLoading: false });
+
+    expect(wrapper.find('[data-cy="llm-config"]').exists()).toBe(false);
+  });
 });

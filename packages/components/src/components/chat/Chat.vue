@@ -65,6 +65,7 @@
       :is-stop-active="isResponseStreaming"
       :metadata="metadata"
       :use-animation="useAnimation"
+      :is-disabled="isInputDisabled"
       ref="input"
     />
   </div>
@@ -170,6 +171,10 @@ export default {
     inputPlaceholder: {
       type: String,
       default: 'What are you working on today?',
+    },
+    isInputDisabled: {
+      type: Boolean,
+      default: false,
     },
     metadata: {
       type: Object as PropType<NavieRpc.V1.Metadata.Response | undefined>,
