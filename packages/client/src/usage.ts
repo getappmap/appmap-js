@@ -50,12 +50,20 @@ export default class Usage {
     // Consider this to be a no-op if there's nothing to report.
     if (!dto.events && !dto.appmaps) return;
 
-    await makeRequest({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const serializeDto: any = { ...dto };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (serializeDto.metadata) serializeDto.metadata = JSON.stringify(serializeDto.metadata);
+
+    const response = await makeRequest({
       service: ServiceEndpoint.ServiceApi,
       path: this.usagePath,
       method: 'POST',
-      body: JSON.stringify(dto),
+      body: JSON.stringify(serializeDto),
       retry: false,
     });
+    if (!response.ok) {
+      throw new Error(`Failed to update usage: ${response.body.toString('utf-8')}`);
+    }
   }
 }

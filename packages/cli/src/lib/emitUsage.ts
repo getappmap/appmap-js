@@ -1,11 +1,12 @@
 import { Metadata } from '@appland/models';
-import { Git } from '../telemetry';
-import type { UsageUpdateDto } from '@appland/client';
-import sanitizeURL from './repositoryInfo';
-import { mkdir, stat, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import loadAppMapConfig from './loadAppMapConfig';
+import { Usage, type UsageUpdateDto } from '@appland/client';
 import { warn } from 'node:console';
+import { existsSync, mkdirSync } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+import { Git } from '../telemetry';
+import sanitizeURL from './repositoryInfo';
 
 async function buildMetadata(appmapDir: string, metadata: Metadata): Promise<Metadata> {
   const repository = await Git.repository(appmapDir);
@@ -34,39 +35,73 @@ async function buildMetadata(appmapDir: string, metadata: Metadata): Promise<Met
   return result;
 }
 
-export default async function emitUsage(
+/**
+ * Collects usage data for AppMap events and files.
+ */
+export async function collectUsageData(
   appmapDir: string,
   numEvents: number,
   numAppMaps: number,
   sampleMetadata?: Metadata
-): Promise<string | undefined> {
-  let metadata: Metadata | undefined;
-  if (sampleMetadata) metadata = await buildMetadata(appmapDir, sampleMetadata);
+): Promise<UsageUpdateDto> {
+  const metadata = sampleMetadata ? await buildMetadata(appmapDir, sampleMetadata) : undefined;
 
-  const appmapConfig = await loadAppMapConfig();
-  if (!appmapConfig) warn(`Unable to load appmap.yml config file`);
-
-  const dto: UsageUpdateDto = {
+  return {
     events: numEvents,
     appmaps: numAppMaps,
     metadata,
     ci: process.env.CI !== undefined,
-    appmapConfig,
-  } as UsageUpdateDto;
+  };
+}
 
+/**
+ * Generates and writes usage statistics for AppMap events and files.
+ * The function builds metadata, reads the AppMap configuration, and saves the statistics
+ * to a JSON file in a specified directory.
+ *
+ * The output directory can be fully specified, or it will default to `${appmapDir}/.run-stats`.
+ */
+
+export default async function writeUsageData(
+  usageData: UsageUpdateDto,
+  appmapDir: string,
+  outputDir?: string
+): Promise<string | undefined> {
+  const runStatsDirectory = outputDir ?? join(appmapDir, '.run-stats');
+  if (!existsSync(runStatsDirectory)) {
+    try {
+      mkdirSync(runStatsDirectory, { recursive: true });
+    } catch (e) {
+      warn(`Unable to create run stats directory: ${String(e)}`);
+      return;
+    }
+  }
+
+  const statsFilePath = join(runStatsDirectory, `${Date.now().toString()}.json`);
   try {
-    const stats = await stat('.appmap');
-    if (stats.isDirectory()) {
-      const runStatsDirectory = join('.appmap', 'run-stats');
-      await mkdir(runStatsDirectory, { recursive: true });
-
-      const statsFilePath = join(runStatsDirectory, `${Date.now().toString()}.json`);
-      await writeFile(statsFilePath, JSON.stringify(dto));
-      return statsFilePath;
-    }
+    await writeFile(statsFilePath, JSON.stringify(usageData));
   } catch (e) {
-    if (e instanceof Error && 'code' in e && e.code !== 'ENOENT') {
-      console.warn(`Unable to write run stats: ${e}`);
-    }
+    warn(`Unable to write run stats file ${statsFilePath}: ${String(e)}`);
+  }
+
+  return statsFilePath;
+}
+
+export type UsageDataResponse = {
+  sent: boolean;
+  filePath?: string;
+};
+
+export async function sendUsageData(
+  usageData: UsageUpdateDto,
+  appmapDir: string
+): Promise<UsageDataResponse> {
+  try {
+    await Usage.update(usageData);
+    return { sent: true };
+  } catch (err) {
+    warn(`Failed to send usage data: ${String(err)}`);
+    const filePath = await writeUsageData(usageData, appmapDir);
+    return { sent: false, filePath };
   }
 }
