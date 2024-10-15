@@ -32,7 +32,8 @@ async function indexFile(context: Context, file: File) {
       startLine,
       endLine,
       context.tokenizer(content, file.filePath).symbols.join(' '),
-      context.tokenizer(content, file.filePath).words.join(' ')
+      context.tokenizer(content, file.filePath).words.join(' '),
+      content
     );
   });
 }
