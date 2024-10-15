@@ -1,11 +1,13 @@
 {
-  "name": "@appland/index",
+  "name": "@appland/search",
   "version": "1.0.0",
   "description": "",
   "bin": "built/cli.js",
   "publishConfig": {
     "access": "public"
   },
+  "main": "built/index.js",
+  "types": "built/index.d.ts",
   "files": [
     "built"
   ],

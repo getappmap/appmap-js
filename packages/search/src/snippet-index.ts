@@ -9,6 +9,7 @@ const CREATE_SNIPPET_CONTENT_TABLE_SQL = `CREATE VIRTUAL TABLE snippet_content U
   end_line UNINDEXED, 
   file_symbols,
   file_words,
+  content UNINDEXED,
   tokenize = 'porter unicode61'
 )`;
 
@@ -18,8 +19,8 @@ const CREATE_SNIPPET_BOOST_TABLE_SQL = `CREATE TABLE snippet_boost (
 )`;
 
 const INSERT_SNIPPET_SQL = `INSERT INTO snippet_content 
-(snippet_id, directory, file_path, start_line, end_line, file_symbols, file_words)
-VALUES (?, ?, ?, ?, ?, ?, ?)`;
+(snippet_id, directory, file_path, start_line, end_line, file_symbols, file_words, content)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
 const UPDATE_SNIPPET_BOOST_SQL = `INSERT OR REPLACE INTO snippet_boost 
 (snippet_id, boost_factor)
@@ -31,6 +32,7 @@ const SEARCH_SNIPPET_SQL = `SELECT
   snippet_content.start_line,
   snippet_content.end_line,
   snippet_content.snippet_id,
+  snippet_content.content,
   (bm25(snippet_content, 1)*3.0 + bm25(snippet_content, 2)*2.0 + bm25(snippet_content, 3)*1.0)
       * COALESCE(snippet_boost.boost_factor, 1.0) * -1
     AS score
@@ -46,12 +48,14 @@ ORDER BY
   score DESC
 LIMIT ?`;
 
-type SnippetSearchResult = {
+export type SnippetSearchResult = {
   snippetId: string;
+  directory: string;
   filePath: string;
   startLine: number | undefined;
   endLine: number | undefined;
   score: number;
+  content: string;
 };
 
 export default class SnippetIndex {
@@ -76,9 +80,19 @@ export default class SnippetIndex {
     startLine: number | undefined,
     endLine: number | undefined,
     symbols: string,
-    words: string
+    words: string,
+    content: string
   ): void {
-    this.#insertSnippet.run(snippetId, directory, filePath, startLine, endLine, symbols, words);
+    this.#insertSnippet.run(
+      snippetId,
+      directory,
+      filePath,
+      startLine,
+      endLine,
+      symbols,
+      words,
+      content
+    );
   }
 
   boostSnippet(snippetId: string, boostFactor: number): void {
@@ -88,11 +102,13 @@ export default class SnippetIndex {
   searchSnippets(query: string, limit = 10): SnippetSearchResult[] {
     const rows = this.#searchSnippet.all(query, limit) as any[];
     return rows.map((row) => ({
+      directory: row.directory,
       snippetId: row.snippet_id,
       filePath: row.file_path,
       startLine: row.start_line,
       endLine: row.end_line,
       score: row.score,
+      content: row.content,
     }));
   }
 
