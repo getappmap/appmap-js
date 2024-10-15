@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.171.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.170.0...@appland/appmap-v3.171.0) (2024-10-15)
+
+
+### Features
+
+* Report AppMap usage stats ([3a59ecd](https://github.com/getappmap/appmap-js/commit/3a59ecd1c80f48626bf5eec4103bb4b4edf55d9d))
+
 # [@appland/appmap-v3.170.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.169.2...@appland/appmap-v3.170.0) (2024-10-14)
 
 
