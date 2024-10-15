@@ -6,9 +6,19 @@ name: Bring Your Own Model Examples
 navie-reference: true
 toc: true
 step: 5
+redirect_from: [/docs/navie-reference/navie-copilot-backend]
 ---
 
 # Bring Your Own Model Examples
+
+- [GitHub Copilot Language Model](#github-copilot-language-model)
+- [OpenAI](#openai)
+- [Anthropic (Claude)](#anthropic-claude)
+- [Azure OpenAI](#azure-openai)
+- [AnyScale Endpoints](#anyscale-endpoints)
+- [Fireworks AI](#fireworks-ai)
+- [Ollama](#ollama)
+- [LM Studio](#lm-studio)
 
 ## GitHub Copilot Language Model
 
@@ -75,7 +85,7 @@ When using your own OpenAI API key, you can also modify the OpenAI model for Nav
 
 | `APPMAP_NAVIE_MODEL`| `gpt-4-vision-preview` |
 
-### Anthropic (Claude)
+## Anthropic (Claude)
 
 AppMap supports the Anthropic suite of large language models such as Claude Sonnet or Claude Opus.  
 
@@ -153,7 +163,7 @@ the available models they currently support.
 
 {% include vimeo.html id='992941358' %}
 
-### Ollama
+## Ollama
 
 You can use [Ollama](https://ollama.com/) to run Navie with local models; after
 you've successfully ran a model with `ollama run` command, you can configure
