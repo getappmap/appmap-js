@@ -1,6 +1,3 @@
-import EventEmitter from 'events';
-import { warn } from 'console';
-import { basename } from 'path';
 import {
   AI,
   ConversationThread,
@@ -10,19 +7,22 @@ import {
 } from '@appland/client';
 import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
+import { warn } from 'console';
+import EventEmitter from 'events';
+import { basename } from 'path';
 
+import { LRUCache } from 'lru-cache';
+import detectAIEnvVar from '../../cmds/index/aiEnvVar';
+import collectHelp from '../../cmds/navie/help';
+import collectProjectInfos from '../../cmds/navie/projectInfo';
+import configuration, { AppMapDirectory } from '../configuration';
+import { getLLMConfiguration } from '../llmConfiguration';
 import { RpcError, RpcHandler } from '../rpc';
 import collectContext from './collectContext';
-import INavie, { INavieProvider } from './navie/inavie';
-import configuration, { AppMapDirectory } from '../configuration';
-import collectProjectInfos from '../../cmds/navie/projectInfo';
-import collectHelp from '../../cmds/navie/help';
-import { getLLMConfiguration } from '../llmConfiguration';
-import detectAIEnvVar from '../../cmds/index/aiEnvVar';
-import reportFetchError from './navie/report-fetch-error';
-import { LRUCache } from 'lru-cache';
 import { initializeHistory } from './navie/historyHelper';
 import { ThreadAccessError } from './navie/ihistory';
+import INavie, { INavieProvider } from './navie/inavie';
+import reportFetchError from './navie/report-fetch-error';
 import Thread from './navie/thread';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
@@ -221,11 +221,12 @@ const codeSelections = new LRUCache<string, UserContext.Context>({
     const size = value.reduce((a, v) => {
       let ret = v.type.length;
       if (UserContext.isCodeSelectionItem(v)) {
-        ret += v.location.length + v.content.length;
+        ret += v.content.length;
       } else if (UserContext.isCodeSnippetItem(v)) {
         ret += v.content.length;
-      } else if (UserContext.isFileItem(v)) {
-        ret += v.location!.length;
+      }
+      if (UserContext.hasLocation(v)) {
+        ret += v.location.length;
       }
       return ret;
     }, 0);

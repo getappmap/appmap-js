@@ -33,6 +33,11 @@ export class AgentOptions {
   buildContextFilters(): ContextV2.ContextFilters {
     const filters: ContextV2.ContextFilters = {};
     if (this.contextLabels) filters.labels = this.contextLabels;
+    if (this.codeSelection && typeof this.codeSelection !== 'string') {
+      filters.locations = this.codeSelection
+        .filter(UserContext.hasLocation)
+        .map((cs) => cs.location);
+    }
     this.userOptions.populateContextFilters(filters);
     return filters;
   }

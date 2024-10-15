@@ -19,8 +19,7 @@ export default class ContextService {
   async searchContext(
     options: AgentOptions,
     tokensAvailable: () => number,
-    additionalTerms: string[] = [],
-    locations?: string[]
+    additionalTerms: string[] = []
   ): Promise<void> {
     const contextEnabled = options.userOptions.isEnabled('context', true);
     const termsEnabled = options.userOptions.isEnabled('terms', true);
@@ -37,7 +36,6 @@ export default class ContextService {
       }
 
       const filters = { ...options.buildContextFilters() };
-      if (locations) filters.locations = locations;
 
       const tokenCount = tokensAvailable();
       let context = await this.lookupContextService.lookupContext(searchTerms, tokenCount, filters);

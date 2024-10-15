@@ -2,7 +2,7 @@ import { join } from 'path';
 import Thread from './thread';
 import { mkdir, readdir, readFile, readlink, rm, symlink, writeFile } from 'fs/promises';
 import { warn } from 'console';
-import { Message } from '@appland/navie';
+import { Message, UserContext } from '@appland/navie';
 import { exists } from '../../../utils';
 import { OpenMode } from 'fs';
 import configuration from '../../configuration';
@@ -26,7 +26,7 @@ export default class History implements IHistory {
     threadId: string,
     userMessageId: string,
     question: string,
-    codeSelection: string | undefined,
+    codeSelection: UserContext.Context | undefined,
     prompt: string | undefined,
     extensions: Record<QuestionField, string> = {
       question: 'txt',
@@ -54,7 +54,8 @@ export default class History implements IHistory {
     };
 
     await writeMessageFile(QuestionField.Question, question);
-    if (codeSelection) await writeMessageFile(QuestionField.CodeSelection, codeSelection);
+    if (codeSelection)
+      await writeMessageFile(QuestionField.CodeSelection, JSON.stringify(codeSelection));
     if (prompt) await writeMessageFile(QuestionField.Prompt, prompt);
 
     const date = new Date().toISOString().split('T')[0];
@@ -187,7 +188,8 @@ export default class History implements IHistory {
       };
 
       const question = await readRecordFile('question');
-      const codeSelection = await readRecordFile('codeSelection');
+      const rawCodeSelection = await readRecordFile('codeSelection');
+      const codeSelection = rawCodeSelection ? JSON.parse(rawCodeSelection) : undefined;
       const prompt = await readRecordFile('prompt');
       const assistantMessageId = await readRecordFile('assistantMessageId');
       const answer = await readRecordFile('answer');
