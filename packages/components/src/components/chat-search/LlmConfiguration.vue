@@ -88,7 +88,10 @@
         </div>
       </div>
     </v-modal>
-    <template v-if="vsCodeLMVendor">
+    <template v-if="isLoading">
+      <div class="skeleton-loader" data-cy="loading" />
+    </template>
+    <template v-else-if="vsCodeLMVendor">
       <v-copilot-notice @on-configure="showModal" />
     </template>
     <template v-else>
@@ -139,6 +142,11 @@ export default Vue.extend({
     baseUrl: {
       type: String as PropType<string | undefined>,
       required: false,
+    },
+    isLoading: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
 
@@ -212,6 +220,32 @@ export default Vue.extend({
   display: flex;
   padding: 1rem;
   width: fit-content;
+
+  .skeleton-loader {
+    @keyframes skeleton {
+      0% {
+        background-position: -100% 0%;
+      }
+      100% {
+        background-position: 100% 0%;
+      }
+    }
+
+    $alpha: 0.075;
+    width: 15em;
+    height: 4em;
+    border-radius: $border-radius;
+    background-color: rgba(black, 0.1);
+    background: linear-gradient(
+      90deg,
+      rgba(black, $alpha) 0%,
+      rgba(white, $alpha) 50%,
+      rgba(black, $alpha) 100%
+    );
+    border: 1px solid rgba(white, 0.025);
+    background-size: 200% 100%;
+    animation: skeleton 3s linear infinite;
+  }
 
   &__indicator {
     padding: 1rem;

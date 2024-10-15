@@ -27,8 +27,9 @@
         input -->
       <div
         :class="{ glow: useAnimation }"
-        contenteditable="plaintext-only"
+        :contenteditable="isDisabled ? 'false' : 'plaintext-only'"
         :placeholder="placeholderOverride"
+        :disabled="isDisabled"
         role="textbox"
         @input="onInput"
         @keydown="onKeyDown"
@@ -41,8 +42,8 @@
         v-if="!isStopActive"
         text="Send message"
         placement="top"
-        text-align="left"
-        :disabled="!hasInput"
+        align="right"
+        :disabled="!hasInput || isDisabled"
       >
         <button class="control-button" data-cy="send-message" :disabled="!hasInput" @click="send">
           <v-send-icon />
@@ -94,6 +95,10 @@ export default {
       default: () => [],
     },
     isStopActive: {
+      type: Boolean,
+      default: false,
+    },
+    isDisabled: {
       type: Boolean,
       default: false,
     },
@@ -151,7 +156,7 @@ export default {
       this.prefixNewMode(command);
     },
     send() {
-      if (!this.hasInput || this.isSelectingCommand || this.isStopActive) return;
+      if (!this.hasInput || this.isSelectingCommand || this.isStopActive || this.isDisabled) return;
 
       this.$emit('send', this.input);
       this.input = '';
@@ -250,10 +255,29 @@ $border-color: #7289c5;
       max-height: 200px;
       overflow-y: auto;
       overflow-x: hidden;
+      cursor: text;
+
+      &[disabled] {
+        animation: none !important;
+        border-color: rgba(white, 0.16);
+        background-color: rgba(#6c81ba, 0.13);
+        cursor: not-allowed;
+
+        &:empty:before {
+          content: attr(placeholder);
+          color: rgba(white, 0.25) !important;
+          cursor: not-allowed;
+        }
+
+        & + .popper.control-button {
+          cursor: not-allowed;
+        }
+      }
 
       &:empty:before {
         content: attr(placeholder);
         color: lighten($gray4, 10%);
+        cursor: text;
       }
 
       &:focus-visible {
@@ -289,13 +313,17 @@ $border-color: #7289c5;
         }
 
         &:disabled {
-          pointer-events: none;
           background-color: rgba($color: #7289c5, $alpha: 0.25);
+          cursor: not-allowed !important;
 
           svg {
             path {
               fill: #9aa9d3;
             }
+          }
+
+          &:hover {
+            background-color: rgba($color: #7289c5, $alpha: 0.25);
           }
         }
 
