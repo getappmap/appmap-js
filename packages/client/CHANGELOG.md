@@ -1,3 +1,15 @@
+# [@appland/client-v1.23.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.22.0...@appland/client-v1.23.0) (2024-10-15)
+
+
+### Bug Fixes
+
+* Fix Usage reporting test ([9c2c115](https://github.com/getappmap/appmap-js/commit/9c2c115b65b18ba57c4aef50b33908e365ba0856))
+
+
+### Features
+
+* Report AppMap usage stats ([3a59ecd](https://github.com/getappmap/appmap-js/commit/3a59ecd1c80f48626bf5eec4103bb4b4edf55d9d))
+
 # [@appland/client-v1.22.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.21.0...@appland/client-v1.22.0) (2024-10-02)
 
 
