@@ -9,6 +9,7 @@ import cors from 'cors';
 
 import { Server } from 'http';
 
+import shadowLocalhost from '../../lib/shadowLocalhost';
 import { RpcCallback, RpcHandler, toJaysonRpcError } from '../../rpc/rpc';
 
 const debug = makeDebug('appmap:rpcServer');
@@ -60,6 +61,16 @@ export default class RPCServer {
     app.use(jsonParser());
     app.use(server.middleware());
     const listener = app.listen(this.bindPort, 'localhost');
+
+    // In some environments the client and server can resolve localhost to
+    // different address families leading them to be unable to communicate.
+    // Try to start a shadow server on the other family to prevent that.
+    void shadowLocalhost(listener).catch(
+      // ignore errors, it's just a shadow server
+      // (errors will most likely occur when the other address family is unavailable)
+      debug
+    );
+
     listener.on('listening', () => {
       const address = listener.address();
       if (address === null) {
