@@ -35,16 +35,17 @@ export namespace UserContext {
     return 'location' in i;
   }
 
-  export function renderItems(items: ContextItem[]) {
+  export function renderItems(items: ContextItem[], includeContent: boolean = true) {
     const renderItem = (i: UserContext.ContextItem) => {
-      // Ignore UserContext.FileItems, they've already be incorporated into the context filters.
-      if (UserContext.isCodeSelectionItem(i)) {
-        // TODO: decide what to do with i.location
-        return i.content;
+      if (UserContext.isCodeSelectionItem(i) && includeContent) {
+        return `<code-selection>\n${i.content}\n</code-selection>`;
       } else if (UserContext.isCodeSnippetItem(i)) {
-        return i.content;
+        const content = includeContent ? `\n<content>${i.content}</content>\n'` : '';
+        return `<pinned-snippet>
+  <location>${i.location}</location>${content}
+</pinned-snippet>`;
       } else if (UserContext.isFileItem(i)) {
-        return i.location;
+        return `<pinned-file><location>${i.location}</location></pinned-file>`;
       }
     };
 
@@ -57,13 +58,13 @@ export namespace UserContext {
       renderedItems.push('<user-provided-context>');
       if (pinnedItems.length > 0) {
         renderedItems.push(
-          `<!-- Pinned items are snippets that I have saved from earlier in the conversation -->`,
-          ...pinnedItems.map((i) => `<pinned-context>\n${renderItem(i)}\n</pinned-context>`)
+          `<!-- Pinned items are snippets and files that I want included in the conversation -->`,
+          ...pinnedItems.map((i) => renderItem(i))
         );
         if (snippets.length > 0) {
           renderedItems.push(
             `<!-- Code selections are snippets that I have selected from the code editor -->`,
-            ...snippets.map((i) => `<code-selection>\n${renderItem(i)}\n</code-selection>`)
+            ...snippets.map((i) => renderItem(i))
           );
         }
       }
