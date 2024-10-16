@@ -51,11 +51,11 @@ export class Explain extends EventEmitter {
     public appmapDirectories: AppMapDirectory[],
     public projectDirectories: string[],
     public question: string,
-    public codeSelection: string | ExplainRpc.UserContextItem[] | undefined,
+    public codeSelection: UserContext.Context | undefined,
     public appmaps: string[] | undefined,
     public status: ExplainRpc.ExplainStatusResponse,
     public codeEditor?: string,
-    public prompt?: string,
+    public prompt?: string
   ) {
     super();
   }
@@ -212,7 +212,7 @@ export class Explain extends EventEmitter {
   }
 }
 
-const codeSelections = new LRUCache<string, string | UserContext.ContextItem[]>({
+const codeSelections = new LRUCache<string, UserContext.Context>({
   maxSize: 1024 ** 2 * 10 /* 10 MB */,
   sizeCalculation: (value) => {
     if (typeof value === 'string') {
@@ -236,7 +236,7 @@ const codeSelections = new LRUCache<string, string | UserContext.ContextItem[]>(
 export async function explain(
   navieProvider: INavieProvider,
   question: string,
-  codeSelection: string | UserContext.ContextItem[] | undefined,
+  codeSelection: UserContext.Context | undefined,
   appmaps: string[] | undefined,
   threadId: string | undefined,
   codeEditor: string | undefined,
@@ -359,7 +359,7 @@ const explainHandler: (
   return {
     name: ExplainRpc.ExplainFunctionName,
     handler: async (options: ExplainRpc.ExplainOptions) => {
-      let userContext: string | UserContext.ContextItem[] | undefined;
+      let userContext: UserContext.Context | undefined;
       if (options.codeSelection === undefined) {
         userContext = undefined;
       } else {

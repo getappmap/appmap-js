@@ -45,7 +45,7 @@ export type ChatHistory = Message[];
 
 export interface ClientRequest {
   question: string;
-  codeSelection?: string | UserContext.ContextItem[];
+  codeSelection?: UserContext.Context;
   prompt?: string;
 }
 
