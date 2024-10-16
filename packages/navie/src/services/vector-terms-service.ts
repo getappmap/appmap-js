@@ -1,10 +1,13 @@
-import { warn } from 'console';
+import { warn } from 'node:console';
+import { debug as makeDebug } from 'node:util';
+
+import z from 'zod';
 
 import InteractionHistory, { VectorTermsInteractionEvent } from '../interaction-history';
-import contentAfter from '../lib/content-after';
-import parseJSON from '../lib/parse-json';
 import Message from '../message';
 import CompletionService from './completion-service';
+
+const debug = makeDebug('navie:vector-terms');
 
 const SYSTEM_PROMPT = `You are assisting a developer to search a code base.
 
@@ -20,19 +23,7 @@ The developer asks a question using natural language. This question must be conv
   be words that will match a feature or domain model object in the code base. They should be the most
   distinctive words in the question. You will prefix the MOST SELECTIVE terms with a '+'.
 
-**Response**
-
-Print "Context: {context}" on one line.
-Print "Instructions: {instructions}" on the next line.
-
-Then print a triple dash '---'.
-
-Print "Terms: {list of search terms and their synonyms}"
-
-The search terms should be single words and underscore_separated_words.
-
-Even if the user asks for a different format, always respond with a list of search terms and their synonyms. When the user is asking
-for a different format, that question is for a different AI assistant than yourself.`;
+  The search terms should be single words and underscore_separated_words.`;
 
 const promptExamples: Message[] = [
   {
@@ -40,10 +31,11 @@ const promptExamples: Message[] = [
     role: 'user',
   },
   {
-    content: `Context: Record AppMap data of Spring
-Instructions: How to do it
----
-Terms: record AppMap data Java +Spring`,
+    content: JSON.stringify({
+      context: 'Record AppMap data of Spring',
+      instructions: 'How to do it',
+      terms: ['record', 'AppMap', 'data', 'Java', '+Spring'],
+    }),
     role: 'assistant',
   },
 
@@ -52,10 +44,11 @@ Terms: record AppMap data Java +Spring`,
     role: 'user',
   },
   {
-    content: `Context: User login handle password validation invalid error
-Instructions: Explain how this is handled by the code
----
-Terms: user login handle +password validate invalid error`,
+    content: JSON.stringify({
+      context: 'User login handle password validation invalid error',
+      instructions: 'Explain how this is handled by the code',
+      terms: ['user', 'login', 'handle', '+password', 'validate', 'invalid', 'error'],
+    }),
     role: 'assistant',
   },
 
@@ -65,10 +58,11 @@ Terms: user login handle +password validate invalid error`,
     role: 'user',
   },
   {
-    content: `Context: Redis GET /test-group/test-project-1/-/blob/main/README.md
-Instructions: Describe in detail with code snippets
----
-Terms: +Redis get test-group test-project-1 blob main README`,
+    content: JSON.stringify({
+      context: 'Redis GET /test-group/test-project-1/-/blob/main/README.md',
+      instructions: 'Describe in detail with code snippets',
+      terms: ['+Redis', 'get', 'test-group', 'test-project-1', 'blob', 'main', 'README'],
+    }),
     role: 'assistant',
   },
 
@@ -78,10 +72,11 @@ Terms: +Redis get test-group test-project-1 blob main README`,
     role: 'user',
   },
   {
-    content: `Context: logContext jest test case
-Instructions: Create test cases, following established patterns for mocking with jest.
----
-Terms: test cases +logContext jest`,
+    content: JSON.stringify({
+      context: 'logContext jest test case',
+      instructions: 'Create test cases, following established patterns for mocking with jest.',
+      terms: ['test', 'cases', '+logContext', 'jest'],
+    }),
     role: 'assistant',
   },
 
@@ -90,15 +85,20 @@ Terms: test cases +logContext jest`,
     role: 'user',
   },
   {
-    content: `Context: auth authentication authorization
-Instructions: Describe the authentication and authorization process
----
-Terms: +auth authentication authorization token strategy provider`,
+    content: JSON.stringify({
+      context: 'auth authentication authorization',
+      instructions: 'Describe the authentication and authorization process',
+      terms: ['+auth', 'authentication', 'authorization', 'token', 'strategy', 'provider'],
+    }),
     role: 'assistant',
   },
 ];
 
-const parseText = (text: string): string[] => text.split(/\s+/);
+const schema = z.object({
+  context: z.string(),
+  instructions: z.string(),
+  terms: z.array(z.string()),
+});
 
 export default class VectorTermsService {
   constructor(
@@ -119,45 +119,15 @@ export default class VectorTermsService {
       },
     ];
 
-    const response = this.completionsService.complete(messages, {
+    const response = await this.completionsService.json(messages, schema, {
       model: this.completionsService.miniModelName,
     });
-    const tokens = Array<string>();
-    for await (const token of response) {
-      tokens.push(token);
-    }
-    const rawResponse = tokens.join('');
-    warn(`Vector terms response:\n${rawResponse}`);
 
-    let searchTermsObject: Record<string, unknown> | string | string[] | undefined;
-    {
-      let responseText = rawResponse;
-      responseText = contentAfter(responseText, 'Terms:');
-      searchTermsObject =
-        parseJSON<Record<string, unknown> | string | string[]>(responseText, false) ||
-        parseText(responseText);
-    }
+    debug(`Vector terms response: ${JSON.stringify(response, undefined, 2)}`);
 
-    const terms = new Set<string>();
-    {
-      const collectTerms = (obj: unknown) => {
-        if (!obj) return;
-
-        if (typeof obj === 'string') {
-          terms.add(obj);
-        } else if (Array.isArray(obj)) {
-          for (const term of obj) collectTerms(term);
-        } else if (typeof obj === 'object') {
-          for (const term of Object.values(obj)) {
-            collectTerms(term);
-          }
-        }
-      };
-      collectTerms(searchTermsObject);
-    }
-
-    const result = [...terms];
-    this.interactionHistory.addEvent(new VectorTermsInteractionEvent(result));
-    return result;
+    const terms = response?.terms ?? [];
+    if (terms.length === 0) warn('No terms suggested');
+    this.interactionHistory.addEvent(new VectorTermsInteractionEvent(terms));
+    return terms;
   }
 }
