@@ -1,3 +1,21 @@
+# [@appland/components-v4.39.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.38.3...@appland/components-v4.39.0) (2024-10-16)
+
+
+### Bug Fixes
+
+* Fix an issue causing AppMap names to render incorrectly on Windows ([b7d4794](https://github.com/getappmap/appmap-js/commit/b7d4794f22df4c0c69d60ba7f7d44f53a8e0e979))
+* Normalize sign in styling ([4753b5c](https://github.com/getappmap/appmap-js/commit/4753b5cfb2f248b87a7b125d09a62c38d18f6598))
+* Normalize some Navie styling ([f2b6425](https://github.com/getappmap/appmap-js/commit/f2b64253e8fdf3a7b6889ec095979c1f552264f7))
+* Re-order LLM backends ([4f4a89e](https://github.com/getappmap/appmap-js/commit/4f4a89e7ac2e268c88535bcc518f312cab8824fc))
+* Rename the 'AppMap hosted provider' in LLM configuration ([0bd7fd2](https://github.com/getappmap/appmap-js/commit/0bd7fd2636e69291fdcd5693744c4e81268b9410))
+
+
+### Features
+
+* Add an indicator when Navie is using Copilot ([273d0a0](https://github.com/getappmap/appmap-js/commit/273d0a0ee2ab72b612eac02d7d87bbe3055da288))
+* Add Copilot as an optional backend to LLM configuration ([f36b3a8](https://github.com/getappmap/appmap-js/commit/f36b3a8f6bab1a86d87febe721a53ea24be5b203))
+* Navie LLM configuration now has a loading state ([c24fa9e](https://github.com/getappmap/appmap-js/commit/c24fa9e6c5690a667bb93ca153a26d72f7f467ea))
+
 # [@appland/components-v4.38.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.38.2...@appland/components-v4.38.3) (2024-10-04)
 
 
