@@ -7,7 +7,6 @@ import { exists } from '../../../utils';
 import { OpenMode } from 'fs';
 import configuration from '../../configuration';
 import IHistory, { QuestionField, ResponseField, ThreadAccessError } from './ihistory';
-import { ExplainRpc } from '@appland/rpc';
 
 export const THREAD_ID_REGEX = /^[0-9a-f]{4,16}(-[0-9a-f]{4,16}){3,6}$/;
 
@@ -27,7 +26,7 @@ export default class History implements IHistory {
     threadId: string,
     userMessageId: string,
     question: string,
-    codeSelection: string | ExplainRpc.UserContextItem[] | undefined,
+    codeSelection: UserContext.Context | undefined,
     prompt: string | undefined,
     extensions: Record<QuestionField, string> = {
       question: 'txt',

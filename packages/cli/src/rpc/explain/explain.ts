@@ -223,8 +223,9 @@ const codeSelections = new LRUCache<string, UserContext.Context>({
       if (UserContext.isCodeSelectionItem(v)) {
         ret += v.content.length;
       } else if (UserContext.isCodeSnippetItem(v)) {
-        ret += v.location.length + v.content.length;
-      } else if (UserContext.isFileItem(v)) {
+        ret += v.content.length;
+      }
+      if (UserContext.hasLocation(v)) {
         ret += v.location.length;
       }
       return ret;

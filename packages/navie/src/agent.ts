@@ -35,7 +35,7 @@ export class AgentOptions {
     if (this.contextLabels) filters.labels = this.contextLabels;
     if (this.codeSelection && typeof this.codeSelection !== 'string') {
       filters.locations = this.codeSelection
-        .filter(UserContext.isFileItem)
+        .filter(UserContext.hasLocation)
         .map((cs) => cs.location);
     }
     this.userOptions.populateContextFilters(filters);
