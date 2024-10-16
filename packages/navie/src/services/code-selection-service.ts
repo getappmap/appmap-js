@@ -1,6 +1,6 @@
-import { ContextV2 } from '../context';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
+import { UserContext } from '../user-context';
 
 export default class CodeSelectionService {
   constructor(public interactionHistory: InteractionHistory) {}
@@ -15,7 +15,7 @@ export default class CodeSelectionService {
     );
   }
 
-  applyCodeSelection(userContext: string | ContextV2.UserContextItem[]) {
+  applyCodeSelection(userContext: UserContext.Context) {
     if (typeof userContext !== 'string') {
       throw new Error('unimplemented');
     }
