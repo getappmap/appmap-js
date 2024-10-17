@@ -1,5 +1,11 @@
 {
   "editor.rulers": [100],
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "jest.virtualFolders": [
+    {
+      "name": "cli",
+      "rootPath": "packages/cli"
+    }
+  ],
 }
