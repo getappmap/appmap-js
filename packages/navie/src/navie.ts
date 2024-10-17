@@ -8,7 +8,6 @@ import InteractionHistory, {
   AgentSelectionEvent,
   ClassificationEvent,
   InteractionEvent,
-  InteractionHistoryEvents,
 } from './interaction-history';
 import { ContextV2 } from './context';
 import ProjectInfoService from './services/project-info-service';
@@ -48,7 +47,7 @@ export interface ClientRequest {
   prompt?: string;
 }
 
-export interface INavie extends InteractionHistoryEvents {
+export interface INavie {
   on(event: 'event', listener: (event: InteractionEvent) => void): void;
 
   on(event: 'agent', listener: (agent: string) => void): void;
