@@ -7,16 +7,9 @@ import { EventEmitter } from 'events';
 // This is defined here to avoid pulling in node dependencies
 const METHOD_NOT_FOUND = -32601;
 
-type ExplainOptions = {
+export type UserInput = {
   question: string;
-  codeSelection?: string;
-  appmaps?: string[];
-  threadId?: string;
-};
-
-type UserInput = {
-  question: string;
-  codeSelection?: string;
+  codeSelection?: string | ExplainRpc.UserContextItem[];
   appmaps?: string[];
 };
 
@@ -36,7 +29,7 @@ export class ExplainRequest extends EventEmitter {
 
   explain(input: string | UserInput, threadId?: string): Promise<string> {
     let question: string;
-    let codeSelection: string | undefined;
+    let codeSelection: string | ExplainRpc.UserContextItem[] | undefined;
     let appmaps: string[] | undefined;
     if (typeof input === 'string') {
       question = input;
@@ -45,7 +38,7 @@ export class ExplainRequest extends EventEmitter {
       codeSelection = input.codeSelection;
       appmaps = input.appmaps;
     }
-    const explainOptions: ExplainOptions = {
+    const explainOptions: ExplainRpc.ExplainOptions = {
       question,
       appmaps,
       threadId,
@@ -54,7 +47,7 @@ export class ExplainRequest extends EventEmitter {
 
     return new Promise<string>((resolve, reject) => {
       this.client.request(
-        'explain',
+        ExplainRpc.ExplainFunctionName,
         explainOptions,
         (err: any, error: any, response: { userMessageId: string; threadId: string }) => {
           if (err || error) return reportError(reject, err, error);
