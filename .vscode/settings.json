@@ -1,11 +1,17 @@
 {
-  "editor.rulers": [100],
+  "editor.rulers": [
+    100
+  ],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "jest.virtualFolders": [
     {
       "name": "cli",
       "rootPath": "packages/cli"
+    },
+    {
+      "name": "navie",
+      "rootPath": "packages/navie"
     }
-  ],
+  ]
 }
