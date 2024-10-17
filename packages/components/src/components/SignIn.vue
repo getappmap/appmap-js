@@ -151,6 +151,7 @@ export default {
       submitted: false,
       verificationCode: '',
       error: '',
+      pendingRequest: undefined,
     };
   },
 
@@ -177,43 +178,56 @@ export default {
       return String(stringToTrim).trim();
     },
     async activateWithEmail() {
+      if (this.pendingRequest) return;
+
       const url = new URL('/api/activations', this.appmapServerUrl);
       this.addParamsToUrl(url, { email: this.trimWhitespace(this.email) });
-      const response = await fetch(url, { method: 'POST' });
-
-      if (response.status === 201) {
-        this.error = '';
-        this.submitted = true;
-      } else if (response.status < 500 && response.status >= 400) {
-        this.email = '';
-        this.error = this.generateInvalidFieldMsg('email address');
-      } else {
-        this.email = '';
+      this.pendingRequest = fetch(url, { method: 'POST' });
+      try {
+        const response = await this.pendingRequest;
+        if (response.status === 201) {
+          this.error = '';
+          this.submitted = true;
+        } else if (response.status < 500 && response.status >= 400) {
+          this.email = '';
+          this.error = this.generateInvalidFieldMsg('email address');
+        } else {
+          this.email = '';
+          this.error = GENERIC_ERROR_MSG;
+        }
+      } catch (error) {
         this.error = GENERIC_ERROR_MSG;
+        this.email = '';
+      } finally {
+        this.pendingRequest = undefined;
       }
     },
     async completeActivation() {
+      if (this.pendingRequest) return;
+
       const url = new URL('/api/activations/verify', this.appmapServerUrl);
       this.addParamsToUrl(url, {
         email: this.trimWhitespace(this.email),
         code: this.trimWhitespace(this.verificationCode),
       });
-      const response = await fetch(url, { method: 'POST' });
-
-      if (response.status === 200) {
-        try {
+      this.pendingRequest = fetch(url, { method: 'POST' });
+      try {
+        const response = await this.pendingRequest;
+        if (response.status === 200) {
           const data = await response.json();
           this.$root.$emit('activate', data.api_key);
-        } catch (error) {
-          this.submitted = false;
-          this.error = GENERIC_ERROR_MSG;
+        } else {
+          this.verificationCode = '';
+          this.error =
+            response.status < 500 && response.status >= 400
+              ? this.generateInvalidFieldMsg('verification code')
+              : (this.error = GENERIC_ERROR_MSG);
         }
-      } else {
-        this.verificationCode = '';
-        this.error =
-          response.status < 500 && response.status >= 400
-            ? this.generateInvalidFieldMsg('verification code')
-            : (this.error = GENERIC_ERROR_MSG);
+      } catch (error) {
+        this.error = GENERIC_ERROR_MSG;
+        this.submitted = false;
+      } finally {
+        this.pendingRequest = undefined;
       }
     },
     addParamsToUrl(url, params) {
