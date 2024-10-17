@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import EventEmitter from 'events';
-import * as path from 'path';
 import InteractionState from './interaction-state';
 import { ContextV2 } from './context';
 import { PROMPTS, PromptType } from './prompt';
@@ -283,11 +283,7 @@ export class TechStackEvent extends InteractionEvent {
   }
 }
 
-export interface InteractionHistoryEvents {
-  on(event: 'event', listener: (event: InteractionEvent) => void): void;
-}
-
-export default class InteractionHistory extends EventEmitter implements InteractionHistoryEvents {
+class InteractionHistory extends EventEmitter {
   public readonly events: InteractionEvent[] = [];
 
   // eslint-disable-next-line class-methods-use-this
@@ -333,3 +329,10 @@ export default class InteractionHistory extends EventEmitter implements Interact
     return state;
   }
 }
+
+interface InteractionHistory {
+  on(event: 'event', listener: (event: InteractionEvent) => void): this;
+  on(event: string, listener: (...args: unknown[]) => void): this;
+}
+
+export default InteractionHistory;
