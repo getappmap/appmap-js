@@ -506,28 +506,37 @@ export default {
         };
         if (appmaps.length > 0) explainRequest.appmaps = appmaps;
 
-        const userProvidedContext: string[] = [];
+        const userProvidedContext: ExplainRpc.UserContextItem[] = [];
         if (this.pinnedItems.length > 0) {
           userProvidedContext.push(
-            `<!-- Pinned items are snippets that I have saved from earlier in the conversation -->`,
-            ...this.pinnedItems.map(
-              (p) => `<pinned-context handle="${p.handle}">\n${p.content}\n</pinned-context>`
-            )
+            ...this.pinnedItems.map((p) => {
+              if (p.type === 'file') {
+                return {
+                  type: 'file',
+                  location: p.location,
+                };
+              } else {
+                return {
+                  type: 'code-snippet',
+                  location: p.location,
+                  content: p.content,
+                };
+              }
+            })
           );
         }
+
         if (codeSelections.length > 0) {
           userProvidedContext.push(
-            `<!-- Code selections are snippets that I have selected from the code editor -->`,
-            ...codeSelections.map((c) => `<code-selection>\n${c}\n</code-selection>`)
+            ...codeSelections.map((c) => ({
+              type: 'code-selection',
+              content: c,
+            }))
           );
         }
-        if (userProvidedContext.length > 0)
-          explainRequest.codeSelection = [
-            '<user-provided-context>',
-            userProvidedContext.join('\n'),
-            '</user-provided-context>',
-          ].join('\n');
-
+        if (userProvidedContext.length > 0) {
+          explainRequest.codeSelection = userProvidedContext;
+        }
         this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
       });
     },

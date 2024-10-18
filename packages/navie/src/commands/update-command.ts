@@ -1,6 +1,7 @@
 import Command, { CommandRequest } from '../command';
 import InteractionHistory from '../interaction-history';
 import ComputeUpdateService from '../services/compute-update-service';
+import { UserContext } from '../user-context';
 
 export default class UpdateCommand implements Command {
   constructor(
@@ -20,7 +21,9 @@ export default class UpdateCommand implements Command {
       return;
     }
 
-    const existingContent = codeSelection;
+    const existingContent =
+      typeof codeSelection !== 'string' ? UserContext.renderItems(codeSelection) : codeSelection;
+
     const newContent = question;
     const update = await this.computeUpdateService.computeUpdate(existingContent, newContent);
 

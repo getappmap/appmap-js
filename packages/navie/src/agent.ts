@@ -3,6 +3,7 @@ import Filter from './lib/filter';
 import { UserOptions } from './lib/parse-options';
 import Message from './message';
 import { ProjectInfo } from './project-info';
+import { UserContext } from './user-context';
 
 export enum AgentMode {
   Explain = 'explain',
@@ -21,7 +22,7 @@ export class AgentOptions {
     public userOptions: UserOptions,
     public chatHistory: Message[],
     public projectInfo: ProjectInfo[],
-    public codeSelection?: string,
+    public codeSelection?: UserContext.Context,
     public contextLabels?: ContextV2.ContextLabel[]
   ) {}
 
@@ -32,6 +33,11 @@ export class AgentOptions {
   buildContextFilters(): ContextV2.ContextFilters {
     const filters: ContextV2.ContextFilters = {};
     if (this.contextLabels) filters.labels = this.contextLabels;
+    if (this.codeSelection && typeof this.codeSelection !== 'string') {
+      filters.locations = this.codeSelection
+        .filter(UserContext.hasLocation)
+        .map((cs) => cs.location);
+    }
     this.userOptions.populateContextFilters(filters);
     return filters;
   }

@@ -11,6 +11,7 @@ import InteractionHistory, {
   InteractionHistoryEvents,
 } from './interaction-history';
 import { ContextV2 } from './context';
+import { UserContext } from './user-context';
 import ProjectInfoService from './services/project-info-service';
 import { ProjectInfoProvider } from './project-info';
 import CodeSelectionService from './services/code-selection-service';
@@ -44,7 +45,7 @@ export type ChatHistory = Message[];
 
 export interface ClientRequest {
   question: string;
-  codeSelection?: string;
+  codeSelection?: UserContext.Context;
   prompt?: string;
 }
 

@@ -17,17 +17,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import VContextContainer from '@/components/chat/ContextContainer.vue';
 import ContextItemMixin from '@/components/mixins/contextItem';
 import AppMapRPC from '@/lib/AppMapRPC';
+import Vue from 'vue';
 
 import hljs from 'highlight.js';
 
 hljs.registerAliases(['rake', 'Gemfile'], { languageName: 'ruby' });
 hljs.registerAliases(['vue'], { languageName: 'xml' });
 
-import type { PinEvent, PinCodeSnippet } from './PinEvent';
+import type { PinCodeSnippet, PinEvent } from './PinEvent';
 
 interface Injected {
   rpcClient: AppMapRPC;
@@ -123,6 +123,7 @@ export default Vue.extend({
       if (pinned) {
         eventData.type = 'code-snippet';
         eventData.language = this.language;
+        eventData.location = this.decodedLocation;
         eventData.content = this.code;
       }
       this.$root.$emit('pin', eventData);

@@ -1,4 +1,4 @@
-import { ContextV2, Help, ProjectInfo } from '@appland/navie';
+import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
 
 export default interface INavie {
   get providerName(): string;
@@ -8,7 +8,7 @@ export default interface INavie {
   ask(
     threadId: string | undefined,
     question: string,
-    codeSelection: string | undefined,
+    codeSelection: UserContext.Context | undefined,
     prompt: string | undefined
   ): Promise<void>;
 
