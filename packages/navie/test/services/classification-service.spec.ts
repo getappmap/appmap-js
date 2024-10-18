@@ -1,31 +1,20 @@
-import { ChatOpenAI } from '@langchain/openai';
-
 import InteractionHistory from '../../src/interaction-history';
 import ClassificationService from '../../src/services/classification-service';
-import { mockAIResponse } from '../fixture';
-import OpenAICompletionService from '../../src/services/openai-completion-service';
-import Trajectory from '../../src/lib/trajectory';
-import { TrajectoryEvent } from '../../dist/lib/trajectory';
-import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
 
-jest.mock('@langchain/openai');
-const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
+import MockCompletionService from './mock-completion-service';
 
 describe('ClassificationService', () => {
   let interactionHistory: InteractionHistory;
-  let trajectory: Trajectory;
   let service: ClassificationService;
+  const completion = new MockCompletionService();
+  const completeSpy = jest.spyOn(completion, 'complete');
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
     interactionHistory.on('event', (event) => console.log(event.message));
-    trajectory = new Trajectory();
-    service = new ClassificationService(
-      interactionHistory,
-      new OpenAICompletionService('gpt-4', 0.5, trajectory, new MessageTokenReducerService())
-    );
+    service = new ClassificationService(interactionHistory, completion);
   });
-  afterEach(() => jest.resetAllMocks());
+  afterEach(() => jest.restoreAllMocks());
 
   describe('when LLM responds', () => {
     const classification = `
@@ -33,7 +22,7 @@ describe('ClassificationService', () => {
 - troubleshoot: medium
 `;
 
-    beforeEach(() => mockAIResponse(completionWithRetry, [classification]));
+    beforeEach(() => completion.mock(classification));
 
     it('returns the response', async () => {
       const response = await service.classifyQuestion('user management');
@@ -47,7 +36,7 @@ describe('ClassificationService', () => {
           weight: 'medium',
         },
       ]);
-      expect(completionWithRetry).toHaveBeenCalledTimes(1);
+      expect(completeSpy).toHaveBeenCalledTimes(1);
     });
 
     it('emits classification event', async () => {
@@ -59,17 +48,6 @@ describe('ClassificationService', () => {
         type: 'classification',
         classification: ['architecture=high', 'troubleshoot=medium'],
       });
-    });
-
-    it('emits trajectory events', async () => {
-      const trajectoryEvents = new Array<TrajectoryEvent>();
-
-      trajectory.on('event', (event) => trajectoryEvents.push(event));
-
-      await service.classifyQuestion('user management');
-
-      expect(trajectoryEvents.map((e) => e.message.role)).toEqual(['system', 'user', 'assistant']);
-      expect(trajectoryEvents.map((e) => e.type)).toEqual(['sent', 'sent', 'received']);
     });
   });
 });
