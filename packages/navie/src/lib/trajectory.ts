@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import EventEmitter from 'events';
 import Message from '../message';
 
@@ -7,7 +8,7 @@ export interface TrajectoryEvent {
   timestamp: Date;
 }
 
-export default class Trajectory extends EventEmitter {
+class Trajectory extends EventEmitter {
   logSentMessage(message: Message) {
     const event: TrajectoryEvent = {
       type: 'sent',
@@ -26,3 +27,10 @@ export default class Trajectory extends EventEmitter {
     this.emit('event', event);
   }
 }
+
+interface Trajectory {
+  on(event: 'event', listener: (event: TrajectoryEvent) => void): this;
+  on(event: string, listener: (...args: unknown[]) => void): this;
+}
+
+export default Trajectory;

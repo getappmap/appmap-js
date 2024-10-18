@@ -457,6 +457,7 @@ __metadata:
   dependencies:
     "@langchain/anthropic": ^0.3.1
     "@langchain/core": ^0.2.27
+    "@langchain/google-vertexai-web": ^0.1.0
     "@langchain/openai": ^0.2.7
     "@tsconfig/node-lts": ^20.1.3
     "@types/jest": ^29.4.1
@@ -7036,6 +7037,41 @@ __metadata:
     zod: ^3.22.4
     zod-to-json-schema: ^3.22.3
   checksum: 0c1c877d9d94d38e32067e1259ca658ca552161ee36b98f9ef6453aa8b1fe37b1b49c321d7789e110c9f515cbb491a6f543f51ba34baff483f073182bcb187e7
+  languageName: node
+  linkType: hard
+
+"@langchain/google-common@npm:~0.1.0":
+  version: 0.1.1
+  resolution: "@langchain/google-common@npm:0.1.1"
+  dependencies:
+    uuid: ^10.0.0
+    zod-to-json-schema: ^3.22.4
+  peerDependencies:
+    "@langchain/core": ">=0.2.21 <0.4.0"
+  checksum: e460a08eaf5e6902c3cb7e8deb9edddcdb46c6bc38657ee1050d05ab5f17bf864bf298a9f00cc41e2824f8c072d79c1dca9b84a7ce64ebcf5a5357af14f5b9d9
+  languageName: node
+  linkType: hard
+
+"@langchain/google-vertexai-web@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@langchain/google-vertexai-web@npm:0.1.0"
+  dependencies:
+    "@langchain/google-webauth": ~0.1.0
+  peerDependencies:
+    "@langchain/core": ">=0.2.21 <0.4.0"
+  checksum: 8c32499e4070ddf28de26e3e4354c60303921e0be84aa68bbcbbeecd5e79e78354fb940708dcfc94efbc67f51893e51039288d78418ec00ec3f64a6cb1e5b20e
+  languageName: node
+  linkType: hard
+
+"@langchain/google-webauth@npm:~0.1.0":
+  version: 0.1.0
+  resolution: "@langchain/google-webauth@npm:0.1.0"
+  dependencies:
+    "@langchain/google-common": ~0.1.0
+    web-auth-library: ^1.0.3
+  peerDependencies:
+    "@langchain/core": ">=0.2.21 <0.4.0"
+  checksum: 90d7c04f95e9950ec5fb39a779352f145efa319d2003564b82a183809ef92d64f8f878999e5cb9c75b1bfda83e38c9b650946c928b1d137dd8bf0bebbaddca74
   languageName: node
   linkType: hard
 
@@ -28417,6 +28453,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jose@npm:>= 4.12.0 < 5.0.0":
+  version: 4.15.9
+  resolution: "jose@npm:4.15.9"
+  checksum: 41abe1c99baa3cf8a78ebbf93da8f8e50e417b7a26754c4afa21865d87527b8ac2baf66de2c5f6accc3f7d7158658dae7364043677236ea1d07895b040097f15
+  languageName: node
+  linkType: hard
+
 "joycon@npm:^3.0.1":
   version: 3.1.1
   resolution: "joycon@npm:3.1.1"
@@ -36936,6 +36979,13 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
+"rfc4648@npm:^1.5.2":
+  version: 1.5.3
+  resolution: "rfc4648@npm:1.5.3"
+  checksum: 19c81d502582e377125b00fbd7a5cdb0e351f9a1e40182fa9f608b48e1ab852d211b75facb2f4f3fa17f7c6ebc2ef4acca61ae7eb7fbcfa4768f11d2db678116
+  languageName: node
+  linkType: hard
+
 "rfdc@npm:^1.3.0":
   version: 1.3.0
   resolution: "rfdc@npm:1.3.0"
@@ -41846,6 +41896,16 @@ typescript@~4.4.3:
   dependencies:
     defaults: ^1.0.3
   checksum: 814e9d1ddcc9798f7377ffa448a5a3892232b9275ebb30a41b529607691c0491de47cba426e917a4d08ded3ee7e9ba2f3fe32e62ee3cd9c7d3bafb7754bd553c
+  languageName: node
+  linkType: hard
+
+"web-auth-library@getappmap/web-auth-library#v1.0.3-cjs":
+  version: 1.0.3
+  resolution: "web-auth-library@https://github.com/getappmap/web-auth-library.git#commit=f60401541b00795465224c5da786fd273dbc9459"
+  dependencies:
+    jose: ">= 4.12.0 < 5.0.0"
+    rfc4648: ^1.5.2
+  checksum: 8031779036fdba6f7eba1638e73368a11b7745a26cab2401998878e767e83fcd88c5b0270ddce140fd1f1822e177b09619a856368295a644af256a2d2d721b88
   languageName: node
   linkType: hard
 
