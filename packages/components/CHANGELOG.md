@@ -1,3 +1,10 @@
+# [@appland/components-v4.39.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.39.0...@appland/components-v4.39.1) (2024-10-18)
+
+
+### Bug Fixes
+
+* Prevent cases where sign in could be requested multiple times ([2037590](https://github.com/getappmap/appmap-js/commit/20375904d1c043812d0de34baae374b7e25163b1))
+
 # [@appland/components-v4.39.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.38.3...@appland/components-v4.39.0) (2024-10-16)
 
 
