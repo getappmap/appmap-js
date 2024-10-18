@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.171.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.171.0...@appland/appmap-v3.171.1) (2024-10-18)
+
+
+### Bug Fixes
+
+* Listen on localhost for IPv4 and IPv6 ([53f0420](https://github.com/getappmap/appmap-js/commit/53f0420ad6fa2884ab3c18f706c1516cff15c318))
+
 # [@appland/appmap-v3.171.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.170.0...@appland/appmap-v3.171.0) (2024-10-15)
 
 
