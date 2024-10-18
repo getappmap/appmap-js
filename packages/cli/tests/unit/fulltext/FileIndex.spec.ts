@@ -144,6 +144,22 @@ describe('FileIndex', () => {
 
     /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
   });
+
+  describe('ranking', () => {
+    const fixtureDir = join(__dirname, '..', 'fixtures', 'fulltext');
+
+    beforeEach(() => {
+      fileIndex = new FileIndex(database);
+      fileIndex.indexFile(fixtureDir, 'HTTPServer.ts');
+    });
+    afterEach(() => fileIndex.close());
+
+    it('case insensitive matches are ranked equally', () => {
+      const [caseMatch] = fileIndex.search(['HTTPServer'], 1);
+      const [nonCaseMatch] = fileIndex.search(['httpserver'], 1);
+      expect(caseMatch).toEqual(nonCaseMatch);
+    });
+  });
 });
 
 describe(filterFiles, () => {
