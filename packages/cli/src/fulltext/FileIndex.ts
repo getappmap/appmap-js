@@ -52,7 +52,7 @@ export class FileIndex {
   search(keywords: string[], limit = 10): FileIndexMatch[] {
     const query = `SELECT directory, file_name, (rank * -1) score FROM files WHERE files MATCH ? ORDER BY rank LIMIT ?`;
 
-    const searchExpr = queryKeywords(keywords).join(' OR ');
+    const searchExpr = queryKeywords(keywords.map((keyword) => keyword.toLowerCase())).join(' OR ');
     const rows = this.database.prepare(query).all(searchExpr, limit);
     if (debug.enabled)
       for (const row of rows) {
