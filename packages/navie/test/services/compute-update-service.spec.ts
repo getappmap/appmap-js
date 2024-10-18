@@ -1,31 +1,20 @@
-import { ChatOpenAI } from '@langchain/openai';
-
 import InteractionHistory from '../../src/interaction-history';
-import ClassificationService from '../../src/services/classification-service';
-import { mockAIResponse } from '../fixture';
-import OpenAICompletionService from '../../src/services/openai-completion-service';
 import ComputeUpdateService from '../../src/services/compute-update-service';
-import Trajectory from '../../src/lib/trajectory';
-import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
 
-jest.mock('@langchain/openai');
-const completionWithRetry = jest.mocked(ChatOpenAI.prototype.completionWithRetry);
+import MockCompletionService from './mock-completion-service';
 
 describe('ComputeUpdateService', () => {
   let interactionHistory: InteractionHistory;
-  let trajectory: Trajectory;
   let service: ComputeUpdateService;
+  const completion = new MockCompletionService();
+  const complete = jest.spyOn(completion, 'complete');
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
     interactionHistory.on('event', (event) => console.log(event.message));
-    trajectory = new Trajectory();
-    service = new ComputeUpdateService(
-      interactionHistory,
-      new OpenAICompletionService('gpt-4', 0.5, trajectory, new MessageTokenReducerService())
-    );
+    service = new ComputeUpdateService(interactionHistory, completion);
   });
-  afterEach(() => jest.resetAllMocks());
+  afterEach(() => jest.restoreAllMocks());
 
   describe('when LLM responds', () => {
     const existingContent = `class User < ApplicationRecord
@@ -50,12 +39,12 @@ end
 </change>
     `;
 
-    beforeEach(() => mockAIResponse(completionWithRetry, [changeStr]));
+    beforeEach(() => completion.mock(changeStr));
 
     it('computes the update', async () => {
       const response = await service.computeUpdate(existingContent, newContent);
       expect(response).toStrictEqual(change);
-      expect(completionWithRetry).toHaveBeenCalledTimes(1);
+      expect(complete).toHaveBeenCalledTimes(1);
     });
   });
 });
