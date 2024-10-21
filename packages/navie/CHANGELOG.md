@@ -1,3 +1,10 @@
+# [@appland/navie-v1.33.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.33.0...@appland/navie-v1.33.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* ensure pinned file content is fresh ([dcdf7c1](https://github.com/getappmap/appmap-js/commit/dcdf7c109a139401441e7b705729299de9ee196e))
+
 # [@appland/navie-v1.33.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.32.1...@appland/navie-v1.33.0) (2024-10-08)
 
 
