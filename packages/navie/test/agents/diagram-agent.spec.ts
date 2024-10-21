@@ -1,7 +1,6 @@
 import InteractionHistory, { PromptInteractionEvent } from '../../src/interaction-history';
 import { AgentOptions } from '../../src/agent';
 import ContextService from '../../src/services/context-service';
-import CompletionService from '../../src/services/completion-service';
 import DiagramAgent, { DIAGRAM_AGENT_PROMPT } from '../../src/agents/diagram-agent';
 import { UserOptions } from '../../src/lib/parse-options';
 import MermaidFixerService from '../../src/services/mermaid-fixer-service';
@@ -21,13 +20,18 @@ describe('@diagram agent', () => {
     [
       {
         directory: 'twitter',
-        appmapConfig: { language: 'ruby' } as unknown as any,
-        appmapStats: { numAppMaps: 1 } as unknown as any,
+        appmapConfig: {
+          language: 'ruby',
+          name: 'test',
+          appmap_dir: 'tmp/appmap',
+          packages: undefined,
+        },
+        appmapStats: { numAppMaps: 1, packages: [], routes: [], tables: [] },
       },
     ]
   );
 
-  beforeEach(async () => {
+  beforeEach(() => {
     tokensAvailable = 1000;
     interactionHistory = new InteractionHistory();
     contextService = {
@@ -41,10 +45,6 @@ describe('@diagram agent', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('should perform the diagram agent task', async () => {
-    const completionService = {
-      perform: jest.fn(),
-    } as unknown as CompletionService;
-
     const diagramAgent = new DiagramAgent(interactionHistory, contextService, mermaidFixerService);
     const result = await diagramAgent.perform(initialQuestionOptions, () => tokensAvailable);
 
@@ -65,6 +65,7 @@ describe('@diagram agent', () => {
     );
 
     // Verify that the context service's perform method is called with the expected options
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(contextService.searchContext).toHaveBeenCalledWith(
       initialQuestionOptions,
       expect.any(Function)
