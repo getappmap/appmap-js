@@ -1,3 +1,10 @@
+# [@appland/components-v4.39.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.39.1...@appland/components-v4.39.2) (2024-10-21)
+
+
+### Bug Fixes
+
+* ensure pinned file content is fresh ([dcdf7c1](https://github.com/getappmap/appmap-js/commit/dcdf7c109a139401441e7b705729299de9ee196e))
+
 # [@appland/components-v4.39.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.39.0...@appland/components-v4.39.1) (2024-10-18)
 
 
