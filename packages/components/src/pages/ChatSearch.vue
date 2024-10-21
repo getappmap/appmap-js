@@ -205,7 +205,7 @@ export default {
       configLoaded: false,
       baseUrl: undefined,
       model: undefined,
-      contextResponse: undefined,
+      contextItems: {},
       pinnedItems: [] as PinItem[],
       projectDirectories: [] as string[],
       metadata: undefined as NavieRpc.V1.Metadata.Response | undefined,
@@ -327,6 +327,10 @@ export default {
     showAddFilesWhenEmpty() {
       return this.editorType !== 'intellij';
     },
+    contextResponse() {
+      const values = Object.values(this.contextItems);
+      return values.length ? Array.from(values) : undefined;
+    },
   },
   methods: {
     onNavieRestarting() {
@@ -424,6 +428,7 @@ export default {
       this.ask = this.rpcClient.explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
+      this.$set(this, 'contextItems', {});
 
       let myThreadId: string | undefined;
       return new Promise((resolve, reject) => {
@@ -481,8 +486,12 @@ export default {
           this.searchStatus = status;
 
           // Only update the context response if one is present.
-          if (status.contextResponse)
-            this.contextResponse = status.contextResponse || this.createContextResponse();
+          if (status.contextResponse) {
+            const context = status.contextResponse || this.createContextResponse();
+            context.forEach((item) => {
+              this.$set(this.contextItems, `${item.type}:${item.location}`, item);
+            });
+          }
 
           if (!this.searchResponse && status.searchResponse) {
             this.searchResponse = status.searchResponse;
