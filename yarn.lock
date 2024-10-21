@@ -386,11 +386,11 @@ __metadata:
     stream-http: ^3.2.0
     svg-to-vue: ^0.7.0
     typescript: ^4.9.5
-    vue: ^2.7.14
+    vue: ^2.7.16
     vue-jest: ^3.0.7
     vue-loader: ^15.7.0
     vue-svg-loader: ^0.16.0
-    vue-template-compiler: ^2.7.14
+    vue-template-compiler: ^2.7.16
     vuex: ^3.6.0
     webpack: ^5.75.0
   languageName: unknown
@@ -2034,7 +2034,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.15.8, @babel/parser@npm:^7.16.4, @babel/parser@npm:^7.16.7, @babel/parser@npm:^7.17.0, @babel/parser@npm:^7.18.10, @babel/parser@npm:^7.18.4, @babel/parser@npm:^7.20.5, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.21.0, @babel/parser@npm:^7.21.2, @babel/parser@npm:^7.4.3, @babel/parser@npm:^7.6.0, @babel/parser@npm:^7.7.0, @babel/parser@npm:^7.9.6":
+"@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.15.8, @babel/parser@npm:^7.16.4, @babel/parser@npm:^7.16.7, @babel/parser@npm:^7.17.0, @babel/parser@npm:^7.18.10, @babel/parser@npm:^7.20.5, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.21.0, @babel/parser@npm:^7.21.2, @babel/parser@npm:^7.4.3, @babel/parser@npm:^7.6.0, @babel/parser@npm:^7.7.0, @babel/parser@npm:^7.9.6":
   version: 7.21.2
   resolution: "@babel/parser@npm:7.21.2"
   bin:
@@ -13183,14 +13183,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/compiler-sfc@npm:2.7.14":
-  version: 2.7.14
-  resolution: "@vue/compiler-sfc@npm:2.7.14"
+"@vue/compiler-sfc@npm:2.7.16":
+  version: 2.7.16
+  resolution: "@vue/compiler-sfc@npm:2.7.16"
   dependencies:
-    "@babel/parser": ^7.18.4
+    "@babel/parser": ^7.23.5
     postcss: ^8.4.14
+    prettier: ^1.18.2 || ^2.0.0
     source-map: ^0.6.1
-  checksum: 25e00abaecb311f1effbf539bc3e4fdeedb39d35f9c2947b2640187a047e6a7400e693fd7da1d3a98977b9078c5bf629ca47f8b9a59dc14a080c0a1e1dd06a49
+  dependenciesMeta:
+    prettier:
+      optional: true
+  checksum: cf3e498ff01f0876769fa0ec2fc679f18238c42b96ee19744cca94b0b0d0c25c274e7fcad536dab3efb4aad48558219dba861c3937d06d9d91d55be368747097
   languageName: node
   linkType: hard
 
@@ -41689,13 +41693,13 @@ typescript@~4.4.3:
   languageName: node
   linkType: hard
 
-"vue-template-compiler@npm:^2.7.14":
-  version: 2.7.14
-  resolution: "vue-template-compiler@npm:2.7.14"
+"vue-template-compiler@npm:^2.7.16":
+  version: 2.7.16
+  resolution: "vue-template-compiler@npm:2.7.16"
   dependencies:
     de-indent: ^1.0.2
     he: ^1.2.0
-  checksum: eba9d2eed6b7110c963bc356b47bdd11d4023d25148abb7e5f7826db2fefe7ad8a575787ee0d8fa47701d44a6f54bde475279b1319f44e1049271eb2419f93a7
+  checksum: a0d52ecbb99bad37f370341b5c594c5caa1f72b15b3f225148ef378fc06aa25c93185ef061f7e6e5e443c9067e70d8f158742716112acf84088932ebcc49ad10
   languageName: node
   linkType: hard
 
@@ -41706,13 +41710,13 @@ typescript@~4.4.3:
   languageName: node
   linkType: hard
 
-"vue@npm:^2.7.14":
-  version: 2.7.14
-  resolution: "vue@npm:2.7.14"
+"vue@npm:^2.7.16":
+  version: 2.7.16
+  resolution: "vue@npm:2.7.16"
   dependencies:
-    "@vue/compiler-sfc": 2.7.14
+    "@vue/compiler-sfc": 2.7.16
     csstype: ^3.1.0
-  checksum: 8b06da67cc40870c66a30b7a6bc2874950cd4383792c371eb30497dd14fc7b41cf308b1c4517368d8f0e7ac16198c08de19236f6a79fe43f4bdbc4a1d9d4ad07
+  checksum: 42eb129edbd2b647b7a5e0655d69fb2dfcba55009bd4cc6a80da5006ba19054bcbf56554599d9b4379f4aa3bfabc0b4e68c0d7fb47d92b5e41d56b38791553eb
   languageName: node
   linkType: hard
 
