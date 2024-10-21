@@ -33,7 +33,7 @@ export default class DiagramAgent implements Agent {
     return new MermaidFilter(this.history, this.mermaidFixerService);
   }
 
-  async perform(options: AgentOptions, tokensAvailable: () => number): Promise<AgentResponse> {
+  async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     const agentPrompt = [DIAGRAM_AGENT_PROMPT];
     // With the /noformat option, the user will explain the desired output format in their message.
     if (options.userOptions.isEnabled('format', true)) {
@@ -50,8 +50,6 @@ export default class DiagramAgent implements Agent {
     );
 
     await this.contextService.searchContext(options, tokensAvailable);
-
-    return { response: 'Rendering diagram...\n', abort: false };
   }
 
   applyQuestionPrompt(question: string): void {

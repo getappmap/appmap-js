@@ -72,6 +72,6 @@ describe('@diagram agent', () => {
     );
 
     // Verify that the result returned by the perform method is as expected
-    expect(result).toEqual({ response: 'Rendering diagram...\n', abort: false });
+    expect(result).toBeUndefined();
   });
 });
