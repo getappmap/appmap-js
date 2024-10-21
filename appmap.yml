@@ -11,6 +11,10 @@ packages:
     exclude:
       - node_modules
       - .yarn
+  - path: packages/search
+    exclude:
+      - node_modules
+      - .yarn
   - path: packages/client
     exclude:
       - node_modules
