@@ -191,19 +191,23 @@ sequenceDiagram
 
 DO use Mermaid class diagram syntax.
 
+DO NOT use characters other than alphanumeric characters, underscores, or
+dashes (-) in the class names. If you need to use other special characters, you
+MUST use labels in square brackets or put the class name in backticks.
+
 <example format="class-diagram">
 \`\`\`mermaid
 classDiagram
   direction LR
 
-  class PartnerStrategy {
-      +fetch_for_product(product: Product) : PurchaseInfo
-      +fetch_for_line(line: Line, stockrecord: StockRecord) : PurchaseInfo
-      +select_stockrecord(product: Product) : StockRecord
+  class PartnerStrategy["Partner Strategy"] {
+      +fetch_for_product(product: Product): PurchaseInfo
+      +fetch_for_line(line: Line, stockrecord: StockRecord): PurchaseInfo
+      +select_stockrecord(product: Product): StockRecord
   }
 
-  class PurchaseInfo {
-      +price: PricingPolicy
+  class PurchaseInfo["Purchase::Info"] {
+      +price: \`Pricing::Policy\`
       +availability: AvailabilityPolicy
       +stockrecord: StockRecord
   }
@@ -234,7 +238,7 @@ classDiagram
       +upc: str
   }
 
-  class PricingPolicy {
+  class \`Pricing::Policy\` {
   }
 
   class AvailabilityPolicy {
@@ -253,7 +257,7 @@ classDiagram
   PartnerStrategy --> Basket
   PartnerStrategy --> Order
   PurchaseInfo --> StockRecord
-  PurchaseInfo --> PricingPolicy
+  PurchaseInfo --> \`Pricing::Policy\`
   PurchaseInfo --> AvailabilityPolicy
   PartnerStrategy --> PurchaseInfo
   PartnerStrategy --> Product
