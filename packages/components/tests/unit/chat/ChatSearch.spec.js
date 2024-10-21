@@ -85,7 +85,7 @@ describe('pages/ChatSearch.vue', () => {
 
   afterEach(jest.clearAllMocks);
 
-  it('can change context', async () => {
+  it('can append context items', async () => {
     const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
     expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
 
@@ -94,7 +94,7 @@ describe('pages/ChatSearch.vue', () => {
 
     ask.emit('status', { contextResponse: [] });
     await wrapper.vm.$nextTick();
-    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(false);
+    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
 
     ask.emit('status', {
       contextResponse: [
@@ -102,14 +102,74 @@ describe('pages/ChatSearch.vue', () => {
           directory: '/home/user/land-of-apps/sample_app_6th_ed',
           type: 'code-snippet',
           location: 'app/helpers/sessions_helper.rb:54',
-          content:
-            '# Logs out the current user.\n  def log_out\n    forget(current_user)\n    reset_session\n    @current_user = nil\n  end\n\n  # Stores the URL trying to be accessed.\n  def store_location\n    session[:forwarding_url] = request.original_url if request.get? || request.head?\n  end\nend',
-          score: 5.563924544180424,
+          content: '',
         },
       ],
     });
     await wrapper.vm.$nextTick();
-    expect(wrapper.find('[data-cy="context-item"]').exists()).toBe(true);
+    expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(1);
+
+    ask.emit('status', {
+      contextResponse: [
+        {
+          directory: '/home/user/land-of-apps/sample_app_6th_ed',
+          type: 'code-snippet',
+          location: 'app/controllers/sessions_controller.rb',
+          content: '',
+        },
+      ],
+    });
+    await wrapper.vm.$nextTick();
+    const contextItems = wrapper.findAll('[data-cy="context-item"]');
+    expect(contextItems.length).toBe(2);
+    expect(contextItems.at(0).text()).toContain('app/helpers/sessions_helper.rb:54');
+    expect(contextItems.at(1).text()).toContain('app/controllers/sessions_controller.rb');
+  });
+
+  it('clears context items when a new message is sent', async () => {
+    const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
+
+    wrapper.vm.sendMessage('Hello world');
+    const ask = wrapper.vm.ask;
+
+    ask.emit('status', {
+      contextResponse: [
+        {
+          directory: '/home/user/land-of-apps/sample_app_6th_ed',
+          type: 'code-snippet',
+          location: 'app/helpers/sessions_helper.rb:54',
+          content: '',
+        },
+      ],
+    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(1);
+    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(false);
+
+    wrapper.vm.sendMessage('Hello world');
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(0);
+    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
+  });
+
+  it('de-duplicates context items by location and type', async () => {
+    const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+    wrapper.vm.sendMessage('Hello world');
+    const ask = wrapper.vm.ask;
+    const contextItem = {
+      directory: '/home/user/land-of-apps/sample_app_6th_ed',
+      type: 'code-snippet',
+      location: 'app/helpers/sessions_helper.rb:54',
+      content: '',
+    };
+    ask.emit('status', {
+      contextResponse: [contextItem, contextItem, { ...contextItem, type: 'data-request' }],
+    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(2);
+    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(false);
   });
 
   it('can be resized', async () => {
