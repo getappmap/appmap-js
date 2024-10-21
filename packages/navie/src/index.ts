@@ -6,6 +6,7 @@ export { default as InteractionState } from './interaction-state';
 export { default as navie } from './navie';
 export { AgentMode as Agents } from './agent';
 export { ContextV1, ContextV2 } from './context';
+export { UserContext } from './user-context';
 export { FileUpdate } from './file-update';
 export { TrajectoryEvent } from './lib/trajectory';
 export * as ProjectInfo from './project-info';

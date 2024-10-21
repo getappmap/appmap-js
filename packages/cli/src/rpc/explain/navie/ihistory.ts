@@ -1,3 +1,4 @@
+import { UserContext } from '@appland/navie';
 import Thread from './thread';
 
 export class ThreadAccessError extends Error {
@@ -38,7 +39,7 @@ export default interface IHistory {
     threadId: string,
     userMessageId: string,
     question: string,
-    codeSelection: string | undefined,
+    codeSelection: UserContext.Context | undefined,
     prompt: string | undefined,
     extensions?: Record<QuestionField, string>
   ): void | Promise<void>;

@@ -16,6 +16,7 @@ export type PinMermaid = PinItem & {
 export type PinCodeSnippet = PinItem & {
   type: 'code-snippet';
   language: string;
+  location: string;
   content: string;
 };
 

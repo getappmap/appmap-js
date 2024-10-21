@@ -16,9 +16,16 @@ export namespace ExplainRpc {
     ERROR = 'error',
   }
 
+  export type UserContextItem = {
+    // These types needs to match those specified in ContextV2.ContextItemType
+    type: 'code-selection' | 'code-snippet' | 'file';
+    location?: string;
+    content?: string;
+  };
+
   export type ExplainOptions = {
     question: string;
-    codeSelection?: string;
+    codeSelection?: string | UserContextItem[];
     appmaps?: string[];
     threadId?: string;
     prompt?: string;

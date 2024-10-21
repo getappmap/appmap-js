@@ -6,6 +6,7 @@ import Message from '../message';
 import Oracle from '../lib/oracle';
 import parseJSON from '../lib/parse-json';
 import { FileUpdate } from '../file-update';
+import { UserContext } from '../user-context';
 
 const LIST_PROMPT = `**File Name List Extractor**
 
@@ -134,8 +135,13 @@ ${content}
       });
     }
     if (clientRequest.codeSelection) {
+      const codeSelection =
+        typeof clientRequest.codeSelection !== 'string'
+          ? UserContext.renderItems(clientRequest.codeSelection, false)
+          : clientRequest.codeSelection;
+
       history.push({
-        content: clientRequest.codeSelection,
+        content: codeSelection,
         role: 'user',
       });
     }
