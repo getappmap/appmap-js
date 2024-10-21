@@ -22,6 +22,8 @@ The developer asks a question using natural language. This question must be conv
 4) Optionally choose a small number of search terms which are MOST SELECTIVE. The MOST SELECTIVE match terms should
   be words that will match a feature or domain model object in the code base. They should be the most
   distinctive words in the question. You will prefix the MOST SELECTIVE terms with a '+'.
+5) In order for keywords to match optimally, compound words MUST additionally be segmented into individual search terms. This is additionally very important for compound words containing acronyms.
+  E.g., "httpserver" would become "http", "server", "httpserver". "xmlserializer" -> "xml", "serializer", "xmlserializer". "jsonserializer" -> "json", "serializer", "jsonserializer". etc. 
 
   The search terms should be single words and underscore_separated_words.`;
 
@@ -75,7 +77,7 @@ const promptExamples: Message[] = [
     content: JSON.stringify({
       context: 'logContext jest test case',
       instructions: 'Create test cases, following established patterns for mocking with jest.',
-      terms: ['test', 'cases', '+logContext', 'jest'],
+      terms: ['test', 'cases', '+logContext', 'log', 'context', 'jest'],
     }),
     role: 'assistant',
   },
