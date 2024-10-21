@@ -1,22 +1,22 @@
 import { log } from 'console';
+import sqlite3 from 'better-sqlite3';
+
 import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
 import AppMapIndex, {
   SearchResponse as AppMapSearchResponse,
   SearchOptions as AppMapSearchOptions,
 } from '../../fulltext/AppMapIndex';
-import { DEFAULT_MAX_DIAGRAMS, DEFAULT_MAX_FILES } from '../search/search';
-import { buildFileIndex } from '../../fulltext/FileIndex';
-import withIndex from '../../fulltext/withIndex';
+import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
 import EventCollector from './EventCollector';
-import SourceCollector from './SourceCollector';
+import indexFiles from './index-files';
+import indexSnippets from './index-snippets';
+import collectSnippets from './collect-snippets';
 
 export default class SearchContextCollector {
   public excludePatterns: RegExp[] | undefined;
   public includePatterns: RegExp[] | undefined;
   public includeTypes: ContextV2.ContextItemType[] | undefined;
-
-  query: string;
 
   constructor(
     private appmapDirectories: string[],
@@ -24,9 +24,7 @@ export default class SearchContextCollector {
     private appmaps: string[] | undefined,
     private vectorTerms: string[],
     private charLimit: number
-  ) {
-    this.query = this.vectorTerms.join(' ');
-  }
+  ) {}
 
   async collectContext(): Promise<{
     searchResponse: SearchRpc.SearchResponse;
@@ -64,67 +62,66 @@ export default class SearchContextCollector {
       };
       appmapSearchResponse = await AppMapIndex.search(
         this.appmapDirectories,
-        this.query,
+        this.vectorTerms.join(' '),
         searchOptions
       );
     }
 
-    const fileSearchResponse = await withIndex(
-      'files',
-      (indexFileName: string) =>
-        buildFileIndex(
-          this.sourceDirectories,
-          indexFileName,
-          this.excludePatterns,
-          this.includePatterns
-        ),
-      (index) => index.search(this.vectorTerms, DEFAULT_MAX_FILES)
-    );
-
-    const eventsCollector = new EventCollector(this.query, appmapSearchResponse);
-    const sourceCollector = new SourceCollector(this.vectorTerms, fileSearchResponse);
-
+    const db = new sqlite3(':memory:');
+    const fileIndex = await indexFiles(db, this.sourceDirectories);
+    const fileSearchResults = fileIndex.search(this.vectorTerms.join(' OR '));
     let contextCandidate: {
       results: SearchRpc.SearchResult[];
       context: ContextV2.ContextResponse;
       contextSize: number;
     };
-    let charCount = 0;
-    let maxEventsPerDiagram = 5;
-    log(`[search-context] Requested char limit: ${this.charLimit}`);
-    for (;;) {
-      log(`[search-context] Collecting context with ${maxEventsPerDiagram} events per diagram.`);
+    try {
+      const eventsCollector = new EventCollector(this.vectorTerms.join(' '), appmapSearchResponse);
+      const snippetIndex = await indexSnippets(db, fileSearchResults);
 
-      contextCandidate = await eventsCollector.collectEvents(
-        maxEventsPerDiagram,
-        this.excludePatterns,
-        this.includePatterns,
-        this.includeTypes
-      );
+      let charCount = 0;
+      let maxEventsPerDiagram = 5;
+      log(`[search-context] Requested char limit: ${this.charLimit}`);
+      for (;;) {
+        log(`[search-context] Collecting context with ${maxEventsPerDiagram} events per diagram.`);
 
-      const codeSnippetCount = contextCandidate.context.filter(
-        (item) => item.type === ContextV2.ContextItemType.CodeSnippet
-      ).length;
-      let sourceContext: ContextV2.ContextResponse = [];
-      if (codeSnippetCount === 0) {
-        sourceContext = await sourceCollector.collectContext(this.charLimit);
-      } else {
-        sourceContext = await sourceCollector.collectContext(this.charLimit / 4);
+        contextCandidate = await eventsCollector.collectEvents(
+          maxEventsPerDiagram,
+          this.excludePatterns,
+          this.includePatterns,
+          this.includeTypes
+        );
+
+        const codeSnippetCount = contextCandidate.context.filter(
+          (item) => item.type === ContextV2.ContextItemType.CodeSnippet
+        ).length;
+
+        const charLimit = codeSnippetCount === 0 ? this.charLimit : this.charLimit / 4;
+        const sourceContext = collectSnippets(
+          snippetIndex,
+          this.vectorTerms.join(' OR '),
+          charLimit
+        );
+        contextCandidate.context = contextCandidate.context.concat(sourceContext);
+
+        const appliedContext = applyContext(contextCandidate.context, this.charLimit);
+        const appliedContextSize = appliedContext.reduce(
+          (acc, item) => acc + item.content.length,
+          0
+        );
+        contextCandidate.context = appliedContext;
+        contextCandidate.contextSize = appliedContextSize;
+        log(`[search-context] Collected an estimated ${appliedContextSize} characters.`);
+
+        if (appliedContextSize === charCount || appliedContextSize > this.charLimit) {
+          break;
+        }
+        charCount = appliedContextSize;
+        maxEventsPerDiagram = Math.ceil(maxEventsPerDiagram * 1.5);
+        log(`[search-context] Increasing max events per diagram to ${maxEventsPerDiagram}.`);
       }
-      contextCandidate.context = contextCandidate.context.concat(sourceContext);
-
-      const appliedContext = applyContext(contextCandidate.context, this.charLimit);
-      const appliedContextSize = appliedContext.reduce((acc, item) => acc + item.content.length, 0);
-      contextCandidate.context = appliedContext;
-      contextCandidate.contextSize = appliedContextSize;
-      log(`[search-context] Collected an estimated ${appliedContextSize} characters.`);
-
-      if (appliedContextSize === charCount || appliedContextSize > this.charLimit) {
-        break;
-      }
-      charCount = appliedContextSize;
-      maxEventsPerDiagram = Math.ceil(maxEventsPerDiagram * 1.5);
-      log(`[search-context] Increasing max events per diagram to ${maxEventsPerDiagram}.`);
+    } finally {
+      db.close();
     }
 
     return {
