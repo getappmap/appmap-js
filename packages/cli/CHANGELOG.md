@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.171.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.171.1...@appland/appmap-v3.171.2) (2024-10-21)
+
+
+### Bug Fixes
+
+* ensure pinned file content is fresh ([dcdf7c1](https://github.com/getappmap/appmap-js/commit/dcdf7c109a139401441e7b705729299de9ee196e))
+
 # [@appland/appmap-v3.171.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.171.0...@appland/appmap-v3.171.1) (2024-10-18)
 
 
