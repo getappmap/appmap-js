@@ -1,3 +1,10 @@
+# [@appland/components-v4.39.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.39.2...@appland/components-v4.39.3) (2024-10-22)
+
+
+### Bug Fixes
+
+* Context items are now aggregated within a single response ([0a05cef](https://github.com/getappmap/appmap-js/commit/0a05cef29524bf11c0a486e6bfef7f4d3f234df5))
+
 # [@appland/components-v4.39.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.39.1...@appland/components-v4.39.2) (2024-10-21)
 
 
