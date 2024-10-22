@@ -1,3 +1,16 @@
+# [@appland/navie-v1.34.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.33.1...@appland/navie-v1.34.0) (2024-10-22)
+
+
+### Bug Fixes
+
+* Prevent LLM from generating special characters in class names ([8347b53](https://github.com/getappmap/appmap-js/commit/8347b538137bf320f5dd20b2678f961788cfe8ec))
+* Remove "Rendering diagram..." when rendering the diagram ([fc95b0e](https://github.com/getappmap/appmap-js/commit/fc95b0e7ee1d711e29331fd9ba1f3045f9f5c679))
+
+
+### Features
+
+* Support Gemini via Vertex AI ([fc4dabf](https://github.com/getappmap/appmap-js/commit/fc4dabf1f5de1a9ff3695f3397729a19fb299c95))
+
 # [@appland/navie-v1.33.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.33.0...@appland/navie-v1.33.1) (2024-10-21)
 
 
