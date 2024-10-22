@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.172.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.171.2...@appland/appmap-v3.172.0) (2024-10-22)
+
+
+### Features
+
+* Support Gemini via Vertex AI ([fc4dabf](https://github.com/getappmap/appmap-js/commit/fc4dabf1f5de1a9ff3695f3397729a19fb299c95))
+
 # [@appland/appmap-v3.171.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.171.1...@appland/appmap-v3.171.2) (2024-10-21)
 
 
