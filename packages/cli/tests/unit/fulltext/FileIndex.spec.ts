@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import sqlite3 from 'better-sqlite3';
 import tmp from 'tmp';
 
-import { FileIndex, filterFiles } from '../../../src/fulltext/FileIndex';
+import { FileIndex, filterFiles, getGitAttributes } from '../../../src/fulltext/FileIndex';
 import * as querySymbols from '../../../src/fulltext/querySymbols';
 import { Git, GitState } from '../../../src/telemetry';
 import * as listGitProjectFiles from '../../../src/fulltext/listGitProjectFIles';
@@ -181,6 +181,52 @@ describe(filterFiles, () => {
       'large.mjs',
       'large.ts',
       'large.txt',
+    ]);
+  });
+
+  it('filters out files based on git attributes', async () => {
+    const dir = tmp.dirSync({ unsafeCleanup: true }).name;
+    writeFileSync(join(dir, '.gitattributes'), '*.my-extension binary\n*.bin binary\n*.txt text\n');
+    writeFileSync(join(dir, 'file.txt'), 'hello');
+    writeFileSync(join(dir, 'file.my-extension'), 'hello');
+    writeFileSync(join(dir, 'file.bin'), 'hello');
+
+    const fileList = readdirSync(dir);
+    const gitAttributes = getGitAttributes(dir);
+    const filtered = await filterFiles(dir, fileList, undefined, undefined, gitAttributes);
+    expect(filtered).toEqual(['.gitattributes', 'file.txt']);
+  });
+});
+
+describe('getGitAttributes', () => {
+  it('returns an empty array if the .gitattributes file does not exist', () => {
+    const dir = tmp.dirSync({ unsafeCleanup: true }).name;
+    expect(getGitAttributes(dir)).toEqual([]);
+  });
+
+  it('returns an empty array if the .gitattributes file is empty', () => {
+    const dir = tmp.dirSync({ unsafeCleanup: true }).name;
+    writeFileSync(join(dir, '.gitattributes'), '');
+    expect(getGitAttributes(dir)).toEqual([]);
+  });
+
+  it('returns an expected result if an item is invalid', () => {
+    const dir = tmp.dirSync({ unsafeCleanup: true }).name;
+    writeFileSync(join(dir, '.gitattributes'), 'invalid');
+    expect(getGitAttributes(dir)).toEqual([
+      {
+        pattern: 'invalid',
+        binary: false,
+      },
+    ]);
+  });
+
+  it('returns an array of attributes if the .gitattributes file is valid', () => {
+    const dir = tmp.dirSync({ unsafeCleanup: true }).name;
+    writeFileSync(join(dir, '.gitattributes'), '*.txt text\n*.bin binary\n');
+    expect(getGitAttributes(dir)).toEqual([
+      { pattern: '*.txt', binary: false },
+      { pattern: '*.bin', binary: true },
     ]);
   });
 });

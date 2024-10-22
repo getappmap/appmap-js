@@ -1,10 +1,12 @@
 import { stat } from 'node:fs/promises';
 import path, { join } from 'node:path';
+import { readFileSync } from 'node:fs';
 
 import sqlite3 from 'better-sqlite3';
 import assert from 'assert';
 import makeDebug from 'debug';
 import { existsSync } from 'fs';
+import minimatch from 'minimatch';
 
 import listProjectFiles from './listProjectFiles';
 import queryKeywords from './queryKeywords';
@@ -80,11 +82,14 @@ export class FileIndex {
             ? await listGitProjectFiles(directory)
             : await listProjectFiles(directory);
 
+        const gitAttributes = getGitAttributes(directory);
+
         const filteredFileNames = await filterFiles(
           directory,
           fileNames,
           excludePatterns,
-          includePatterns
+          includePatterns,
+          gitAttributes
         );
 
         const options = {
@@ -254,8 +259,10 @@ const DATA_FILE_EXTENSIONS: string[] = [
   'xml',
 ].map((ext) => '.' + ext);
 
-const isBinaryFile = (fileName: string) => {
-  return BINARY_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext));
+const isBinaryFile = (fileName: string, gitAttributes?: ReturnType<typeof getGitAttributes>) => {
+  if (BINARY_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext))) return true;
+  if (gitAttributes?.some((attr) => attr.binary && minimatch(fileName, attr.pattern))) return true;
+  return false;
 };
 
 const isDataFile = (fileName: string) => {
@@ -266,11 +273,12 @@ export async function filterFiles(
   directory: string,
   fileNames: string[],
   excludePatterns?: RegExp[],
-  includePatterns?: RegExp[]
+  includePatterns?: RegExp[],
+  gitAttributes?: ReturnType<typeof getGitAttributes>
 ): Promise<string[]> {
   const result: string[] = [];
   for (const fileName of fileNames) {
-    if (isBinaryFile(fileName)) continue;
+    if (isBinaryFile(fileName, gitAttributes)) continue;
 
     const includeFile = fileNameMatchesFilterPatterns(fileName, includePatterns, excludePatterns);
     if (!includeFile) continue;
@@ -297,4 +305,21 @@ export async function filterFiles(
     if (appendFile) result.push(fileName);
   }
   return result;
+}
+
+// Reads git attribute patterns from a .gitattributes file.
+export function getGitAttributes(directory: string) {
+  const gitAttributesPath = join(directory, '.gitattributes');
+  if (!existsSync(gitAttributesPath)) return [];
+
+  const gitAttributesContent = readFileSync(gitAttributesPath, 'utf-8');
+  const lines = gitAttributesContent.split('\n').filter(Boolean);
+
+  return lines.map((line) => {
+    const [pattern, ...attributes] = line.split(/\s+/);
+    return {
+      pattern,
+      binary: attributes.includes('binary'),
+    };
+  });
 }
