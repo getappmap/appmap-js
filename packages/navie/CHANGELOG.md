@@ -1,3 +1,10 @@
+# [@appland/navie-v1.34.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.0...@appland/navie-v1.34.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* Vector term service now tries to split compound words ([a831259](https://github.com/getappmap/appmap-js/commit/a831259dfa402e3bc32e2b9ca9ba9646d4b2d0bf))
+
 # [@appland/navie-v1.34.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.33.1...@appland/navie-v1.34.0) (2024-10-22)
 
 
