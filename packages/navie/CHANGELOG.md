@@ -1,3 +1,10 @@
+# [@appland/navie-v1.34.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.1...@appland/navie-v1.34.2) (2024-10-23)
+
+
+### Bug Fixes
+
+* Make mermaid diagram fixing more robust ([dfc2eab](https://github.com/getappmap/appmap-js/commit/dfc2eabe2e5effb3486883f60205e85a15b4db55))
+
 # [@appland/navie-v1.34.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.0...@appland/navie-v1.34.1) (2024-10-22)
 
 
