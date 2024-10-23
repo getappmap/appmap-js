@@ -1,5 +1,6 @@
+import assert from 'node:assert';
+
 import InteractionHistory from '../../src/interaction-history';
-import { Chunk } from '../../src/lib/filter';
 import MermaidFilter from '../../src/lib/mermaid-filter';
 import trimFences from '../../src/lib/trim-fences';
 import MermaidFixerService from '../../src/services/mermaid-fixer-service';
@@ -19,48 +20,37 @@ describe('MermaidFilter', () => {
     filter = new MermaidFilter(history, mermaidFixerService);
   });
 
-  const collectChunks = async (
-    result: AsyncIterable<Chunk>,
-    list: string[] = new Array<string>()
-  ) => {
-    for await (const chunk of result) {
-      list.push(chunk.content);
-    }
-    return list;
-  };
+  async function transformContent(content: string) {
+    const chunks = content.match(/.{1,5}/gs);
+    assert(chunks);
+    const result: string[] = [];
+    for (const chunk of chunks)
+      for await (const { content } of filter.transform(chunk)) result.push(content);
+    for await (const { content } of filter.end()) result.push(content);
 
-  const transformContent = async (content: string, output: string[] = new Array<string>()) => {
-    while (content.length > 0) {
-      const chunk = content.slice(0, 5);
-      content = content.slice(5);
-      await collectChunks(filter.transform(chunk), output);
-    }
-    await collectChunks(filter.end(), output);
-
-    return output;
-  };
+    return result;
+  }
 
   it('should process a single line', async () => {
-    const output = await collectChunks(filter.transform('graph TD'));
-    await collectChunks(filter.end(), output);
+    const output = await transformContent('graph TD');
 
     expect(output).toEqual(['graph TD']);
   });
 
   it('should process mixed content including a valid diagram', async () => {
-    let content = 'a diagram\n```mermaid\ngraph TD\n  A1 --> B1\n````';
+    const content = 'a diagram\n```mermaid\ngraph TD\n  A1 --> B1\n````';
     const output = await transformContent(content);
     expect(output).toEqual(['a diagram\n', '\n```mermaid\ngraph TD\n  A1 --> B1\n```\n']);
   });
 
   it('yields an unclosed diagram', async () => {
-    let content = '```mermaid\ngraph TD\n  A2 --> B2\n';
+    const content = '```mermaid\ngraph TD\n  A2 --> B2\n';
     const output = await transformContent(content);
     expect(output).toEqual(['\n```mermaid\ngraph TD\n  A2 --> B2\n```\n']);
   });
 
   it('handles prefix and postfix markdown', async () => {
-    let content =
+    const content =
       'prefix content\na diagram\n```mermaid\ngraph TD\n  A3 --> B3\n```\npostfix content\n';
     const output = await transformContent(content);
     expect(output).toEqual([
@@ -73,7 +63,7 @@ describe('MermaidFilter', () => {
   });
 
   it('retains whitespace in markdown', async () => {
-    let content = 'prefix content\n\npostfix content';
+    const content = 'prefix content\n\npostfix content';
     const output = await transformContent(content);
     expect(output).toEqual(['prefix content\n', '\n', 'postfix content']);
   });
