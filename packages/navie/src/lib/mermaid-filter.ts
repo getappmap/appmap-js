@@ -2,7 +2,7 @@
 import assert from 'assert';
 import { isNativeError } from 'node:util/types';
 
-import mermaid from 'mermaid';
+import mermaid from './mermaid';
 
 import Filter, { Chunk } from './filter';
 
@@ -82,6 +82,12 @@ export default class MermaidFilter implements Filter {
   }
 
   async *repairDiagram(diagram: string, error: string): AsyncIterable<Chunk> {
+    // yield a message to the user that the diagram is not valid
+    yield {
+      type: 'markdown',
+      content:
+        '*Note: The model generated an invalid diagram. Trying to repair, please be patient...*\n\n',
+    };
     const repairedDiagram = await this.mermaidFixer.repairDiagram(diagram, error);
 
     // Check if the repaired diagram is valid.

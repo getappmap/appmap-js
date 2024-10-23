@@ -101,7 +101,7 @@ graph TD;
       it('should pass the diagram through', async () => {
         repairDiagram.mockResolvedValue(trimFences(invalidDiagram));
         const output = await transformContent(invalidDiagram);
-        expect(output.join('')).toEqual(`
+        expect(output.join('')).toContain(`
 \`\`\`text
 ${trimFences(invalidDiagram)}
 \`\`\`
@@ -113,7 +113,7 @@ ${trimFences(invalidDiagram)}
       it('should repair the diagram', async () => {
         repairDiagram.mockResolvedValue(trimFences(validDiagram));
         const output = await transformContent(invalidDiagram);
-        expect(output.join('')).toEqual(`
+        expect(output.join('')).toContain(`
 \`\`\`mermaid
 ${trimFences(validDiagram)}
 \`\`\`
