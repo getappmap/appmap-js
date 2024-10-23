@@ -21,13 +21,13 @@ function getAttributeRecord(attrs: NamedNodeMap): Record<string, string> {
   }, {} as Record<string, string>);
 }
 
-function buildNode(h: Vue.CreateElement, src: Element): Vue.VNode | undefined {
+function buildNode(h: Vue.CreateElement, src: Element, $root: Vue): Vue.VNode | undefined {
   const children = [];
   for (let i = 0; i < src.childNodes.length; i++) {
     const srcChild = src.childNodes[i];
     let vnode;
     if (srcChild instanceof Element) {
-      vnode = buildNode(h, srcChild as Element);
+      vnode = buildNode(h, srcChild as Element, $root);
     } else if (srcChild instanceof Text) {
       vnode = srcChild.textContent;
     }
@@ -68,6 +68,18 @@ function buildNode(h: Vue.CreateElement, src: Element): Vue.VNode | undefined {
     {
       class: src.className.length ? src.className : undefined,
       attrs: getAttributeRecord(src.attributes),
+      on: {
+        click:
+          tag === 'a' && src.attributes.getNamedItem('emit-event')
+            ? (e: MouseEvent) => {
+                const href = src.attributes.getNamedItem('href')?.value;
+                if (!href) return;
+
+                e.preventDefault();
+                $root.$emit('click-link', href);
+              }
+            : () => {},
+      },
     },
     children
   );
@@ -103,7 +115,7 @@ export default Vue.extend({
 
     const children = [];
     for (let i = 0; i < dom.body.childNodes.length; i++) {
-      const vnode = buildNode(h, dom.body.childNodes[i] as Element);
+      const vnode = buildNode(h, dom.body.childNodes[i] as Element, this.$root);
       if (vnode) {
         children.push(vnode);
       }
