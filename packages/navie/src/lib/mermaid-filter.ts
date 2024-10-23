@@ -1,8 +1,10 @@
 /* eslint-disable no-cond-assign */
 import assert from 'assert';
+import { isNativeError } from 'node:util/types';
+
+import mermaid from 'mermaid';
 
 import Filter, { Chunk } from './filter';
-import MermaidValidator from './mermaid-validator';
 
 import InteractionHistory from '../interaction-history';
 import MermaidFixerService from '../services/mermaid-fixer-service';
@@ -67,33 +69,15 @@ export default class MermaidFilter implements Filter {
     this.diagram = undefined;
 
     // Ensure that the diagram content parses correctly.
-    const validator = new MermaidValidator(diagramContent);
-    const validation = await validator.validate();
-
-    // TODO: This is a temporary fix to ignore errors that are not related to the diagram
-    // vN.sanitize error is appearing in Mermaid v9
-    const ignoreError = (error?: string) => error?.includes('vN.sanitize');
-
-    if (validation.valid || ignoreError(validation.error)) {
-      if (ignoreError(validation.error))
-        this.history.log(`[mermaid-filter] Ignoring error: ${validation.error || '(none)'}`);
-
+    try {
+      mermaid.parse(diagramContent);
       this.history.log(`[mermaid-filter] Yielding diagram:\n${diagramContent}`);
       const content = ['', '```mermaid', diagramContent.trim(), '```', ''].join('\n');
       yield { type: 'diagram', content };
-    } else {
-      this.history.log(`[mermaid-filter] Generated diagram is not valid`);
-
-      // eslint-disable-next-line no-lonely-if
-      if (validation.error && !ignoreError(validation.error)) {
-        this.history.log(`[mermaid-filter] Error: ${validation.error}`);
-        yield* this.repairDiagram(diagramContent, validation.error);
-      } else {
-        yield {
-          type: 'diagram',
-          content: ['', '```text', diagramContent.trim(), '```', ''].join('\n'),
-        };
-      }
+    } catch (e) {
+      const error = isNativeError(e) ? e.message : String(e);
+      this.history.log(`[mermaid-filter] Diagram is not valid: ${error}`);
+      yield* this.repairDiagram(diagramContent, error);
     }
   }
 
@@ -101,18 +85,16 @@ export default class MermaidFilter implements Filter {
     const repairedDiagram = await this.mermaidFixer.repairDiagram(diagram, error);
 
     // Check if the repaired diagram is valid.
-    const validator = new MermaidValidator(repairedDiagram);
-    const validation = await validator.validate();
-    if (validation.valid) {
+    try {
+      mermaid.parse(repairedDiagram);
       this.history.log(`[mermaid-filter] Diagram successfully repaired.`);
 
       const content = ['', '```mermaid', repairedDiagram, '```', ''].join('\n');
       yield { type: 'diagram', content };
-    } else {
-      this.history.log(
-        `[mermaid-filter] Diagram repair unsuccessful. Returning repaired content as text.`
-      );
-
+    } catch (e) {
+      const error = isNativeError(e) ? e.message : String(e);
+      this.history.log(`[mermaid-filter] Diagram is still not valid: ${error}`);
+      this.history.log(`[mermaid-filter] Returning repaired diagram as plain text block.`);
       // If the repaired diagram is still invalid, return the repaired diagram, but as a plain text
       // block so that the frontend won't try and render it.
       const content = ['', '```text', repairedDiagram, '```', ''].join('\n');
