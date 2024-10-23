@@ -154,6 +154,18 @@ customRenderer.code = (code: string, language: string, escaped: boolean, sourceP
   ].join('');
 };
 
+const linkRenderer = customRenderer.link;
+customRenderer.link = (href: string, title: string, text: string) => {
+  const linkHtml = linkRenderer(href, title, text);
+  const isWebsite = href.match(/^https?:\/\//);
+  if (isWebsite) {
+    // Links to external websites should always open in a new tab.
+    return linkHtml.replace('<a', '<a target="_blank" rel="noopener noreferrer"');
+  }
+
+  return linkHtml.replace(/<a/, '<a emit-event');
+};
+
 const marked = new Marked({
   renderer: customRenderer,
   extensions: [
@@ -315,9 +327,9 @@ export default {
           'modified',
           'original',
         ],
-        ADD_ATTR: ['language', 'location', 'command', 'prompt'],
+        ADD_ATTR: ['language', 'location', 'command', 'prompt', 'target', 'emit-event'],
         ALLOWED_URI_REGEXP:
-          /^(?:(?:(?:f|ht)tps?|mailto|event):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+          /^(?:(?:(?:f|ht)tps?|mailto|event|file):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
       });
     },
     hasClipboardAPI() {

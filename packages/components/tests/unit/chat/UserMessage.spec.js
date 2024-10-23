@@ -1,5 +1,5 @@
 import VUserMessage from '@/components/chat/UserMessage.vue';
-import { mount } from '@vue/test-utils';
+import { createWrapper, mount } from '@vue/test-utils';
 
 const snippets = {
   tsCode: `Here's some code:
@@ -371,6 +371,51 @@ describe('components/UserMessage.vue', () => {
 
       expect(suggest).toHaveBeenCalled();
       expect(wrapper.find('[data-cy="next-step-suggestions"]').exists()).toBe(true);
+    });
+  });
+
+  describe('links', () => {
+    it('should open links to websites in a new tab', () => {
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: '[AppMap](https://appmap.io)',
+          complete: true,
+          isUser: false,
+        },
+      });
+
+      expect(wrapper.find('a[target="_blank"]').exists()).toBe(true);
+    });
+
+    it('emits a click-link event when a non-http(s) link is clicked', async () => {
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: '[my-file.md](my-file.md)',
+          complete: true,
+          isUser: false,
+        },
+      });
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+
+      await wrapper.find('a[emit-event]').trigger('click');
+
+      const events = rootWrapper.emitted()['click-link'];
+      expect(events).toBeArrayOfSize(1);
+      expect(events[0]).toEqual(['my-file.md']);
+    });
+
+    it('allows the file protocol', () => {
+      const uri = 'file:///home/user/my-file.md';
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          message: `- [\`my-file.md\`](${uri})
+                    - [my-file.md](${uri})`,
+          complete: true,
+          isUser: false,
+        },
+      });
+
+      expect(wrapper.findAll(`a[href="${uri}"]`).length).toBe(2);
     });
   });
 });

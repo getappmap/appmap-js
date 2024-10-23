@@ -179,3 +179,24 @@ Buttons.args = {
 `,
   complete: true,
 };
+
+export const Links = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VUserMessage },
+  template: `<v-user-message v-bind="$props"></v-user-message>`,
+  mounted() {
+    this.$nextTick(() => {
+      this.$root.$on('click-link', (href) => {
+        console.log('click-link', href);
+      });
+    });
+  },
+});
+Links.args = {
+  id: 'system-message-id',
+  message: `Here is some relevant information:
+- [AppMap Documentation](https://appmap.io/docs)
+- [packages/client/src/components/LoginPage.jsx](packages/client/src/components/LoginPage.jsx)
+`,
+  complete: true,
+};
