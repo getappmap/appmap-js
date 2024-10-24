@@ -259,11 +259,9 @@ const DATA_FILE_EXTENSIONS: string[] = [
   'xml',
 ].map((ext) => '.' + ext);
 
-const isBinaryFile = (fileName: string, gitAttributes?: ReturnType<typeof getGitAttributes>) => {
-  if (BINARY_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext))) return true;
-  if (gitAttributes?.some((attr) => attr.binary && minimatch(fileName, attr.pattern))) return true;
-  return false;
-};
+const isBinaryFile = (fileName: string, gitAttributes?: ReturnType<typeof getGitAttributes>) =>
+  BINARY_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext)) ||
+  gitAttributes?.some((attr) => attr.binary && minimatch(fileName, attr.pattern, { dot: true }));
 
 const isDataFile = (fileName: string) => {
   return DATA_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext));

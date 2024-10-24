@@ -190,6 +190,7 @@ describe(filterFiles, () => {
     writeFileSync(join(dir, 'file.txt'), 'hello');
     writeFileSync(join(dir, 'file.my-extension'), 'hello');
     writeFileSync(join(dir, 'file.bin'), 'hello');
+    writeFileSync(join(dir, '.file.bin'), 'hello');
 
     const fileList = readdirSync(dir);
     const gitAttributes = getGitAttributes(dir);
