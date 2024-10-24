@@ -33,7 +33,7 @@
           class="btn btn-primary"
           data-cy="github-activation-button"
           href="/"
-          @click.prevent="signIn"
+          @click.prevent="signIn('github')"
         >
           Activate with <span><GitHubLogo class="small-logo" /> GitHub</span>
         </a>
@@ -41,7 +41,7 @@
           class="btn btn-primary"
           data-cy="gitlab-activation-button"
           href="/"
-          @click.prevent="signIn"
+          @click.prevent="signIn('gitlab')"
         >
           Activate with <span><GitLabLogo class="small-logo" /> GitLab</span>
         </a>
@@ -165,8 +165,8 @@ export default {
         }
       }
     },
-    signIn() {
-      this.$root.$emit('sign-in');
+    signIn(target) {
+      this.$root.$emit('sign-in', target);
     },
     reset() {
       this.email = '';
