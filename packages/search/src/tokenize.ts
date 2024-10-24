@@ -1,4 +1,7 @@
-import { readFileSync } from 'fs';
+import queryKeywords from './query-keywords';
+import makeDebug from 'debug';
+
+const debug = makeDebug('appmap:search:tokenize');
 
 export const SymbolRegexes: Record<string, RegExp> = {
   cs: /(((interface|class|enum|struct)\s+(?<symbol1>\w+))|((\s|^)(?!using|try|catch|if|while|do|for|switch)(?<!#define\s+?)(?<symbol2>[\w~$]+)\s*?\([^;)]*?\)[\w\s\d<>[\].:\n]*?{))/g,
@@ -39,24 +42,63 @@ function getMatches(source: string, regex: RegExp): string[] {
   return results;
 }
 
-export default function querySymbols(path: string, allowGeneric = true): string[] {
-  const fileExtension = path.split('.').pop()?.toLowerCase();
-
+export function symbols(content: string, fileExtension: string, allowGeneric = true): string[] {
   let regex = allowGeneric ? genericSymbolRegex : undefined;
   if (fileExtension && fileExtension in SymbolRegexes) {
     regex = SymbolRegexes[fileExtension];
   }
 
   if (regex) {
-    try {
-      // readFileSync performs 2x faster than its async counterpart in this case.
-      const content = readFileSync(path, 'utf-8');
-      return getMatches(content, regex);
-    } catch (error) {
-      console.warn(`Error reading file ${path}`);
-      console.warn(error);
-    }
+    return getMatches(content, regex);
   }
 
   return [];
+}
+
+export function words(content: string): string[] {
+  return content.match(/\b\w+\b/g) ?? [];
+}
+
+type FileTokens = {
+  symbols: string[];
+  words: string[];
+};
+
+export function fileTokens(
+  content: string,
+  fileExtension: string,
+  enableGenericSymbolParsing = true
+): FileTokens {
+  if (enableGenericSymbolParsing)
+    debug('Using generic symbol parsing for file extension: %s', fileExtension);
+
+  const symbolList = queryKeywords(
+    symbols(content, fileExtension, enableGenericSymbolParsing)
+  ).sort();
+  const wordList = queryKeywords(words(content)).sort();
+
+  // Iterate through words, with a corresponding pointer to symbols.
+  // If the word at the word index does not match the symbol at the symbol index,
+  // add the word to the output. Otherwise, advance both pointers. Repeat
+  // until all words have been traversed.
+  const filteredWordList = new Array<string>();
+  let symbolIndex = 0;
+  let wordIndex = 0;
+  const collectWord = () => {
+    const word = wordList[wordIndex];
+    const symbol = symbolList[symbolIndex];
+    if (word === symbol) {
+      symbolIndex += 1;
+    } else {
+      filteredWordList.push(word);
+    }
+    wordIndex += 1;
+  };
+
+  while (wordIndex < wordList.length) collectWord();
+
+  return {
+    symbols: symbolList,
+    words: filteredWordList,
+  };
 }

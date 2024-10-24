@@ -1,11 +1,18 @@
 import { join } from 'path';
-import querySymbols from '../../../src/fulltext/querySymbols';
+import { symbols } from '../src/tokenize';
+import { readFileSync } from 'fs';
 
 describe('querySymbols', () => {
+  const fileSymbols = (srcPath: string, allowGeneric = true) => {
+    const fileExtension = srcPath.split('.').pop() || '';
+    const content = readFileSync(srcPath, 'utf-8');
+    return symbols(content, fileExtension, allowGeneric);
+  };
+
   describe('csharp', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.cs');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.cs');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
           'ClassOne',
@@ -36,8 +43,8 @@ describe('querySymbols', () => {
 
   describe('c/cpp', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.c');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.c');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         ['foo', 'main', 'MyStruct', 'MyOtherStruct', 'Point'].sort()
       );
@@ -46,8 +53,8 @@ describe('querySymbols', () => {
 
   describe('rust', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.rs');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.rs');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         ['Foo', 'new', 'MyUnion', 'MyTrait', 'my_function', 'Point', 'main', 'Москва'].sort()
       );
@@ -56,8 +63,8 @@ describe('querySymbols', () => {
 
   describe('go', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.go');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.go');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
           'Locker',
@@ -76,8 +83,8 @@ describe('querySymbols', () => {
 
   describe('ruby', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.rb');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.rb');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         ['MyClass', 'MyModule', 'my_method', 'my_module_method', 'some_function'].sort()
       );
@@ -86,8 +93,8 @@ describe('querySymbols', () => {
 
   describe('python', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.py');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.py');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         ['MyClass', '__init__', 'say_hello', 'some_function'].sort()
       );
@@ -96,8 +103,8 @@ describe('querySymbols', () => {
 
   describe('java', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.java');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.java');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
           'SampleEnum',
@@ -113,8 +120,8 @@ describe('querySymbols', () => {
 
   describe('javascript/typescript', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.ts');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.ts');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
           'MyClass',
@@ -135,8 +142,8 @@ describe('querySymbols', () => {
 
   describe('kotlin', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.kt');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.kt');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         ['main', 'Rectangle', 'Predicate', 'Color', 'filter', 'sort'].sort()
       );
@@ -145,8 +152,8 @@ describe('querySymbols', () => {
 
   describe('php', () => {
     it('identifies symbols', () => {
-      const srcPath = join(__dirname, '../fixtures/source/sample.php');
-      const symbols = querySymbols(srcPath);
+      const srcPath = join(__dirname, 'fixtures/source/sample.php');
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         ['MyClass', 'myMethod', 'Talk', 'talk', 'myFunction'].sort()
       );
@@ -154,10 +161,10 @@ describe('querySymbols', () => {
   });
 
   describe('generic', () => {
-    const srcPath = join(__dirname, '../fixtures/source/sample.generic');
+    const srcPath = join(__dirname, 'fixtures/source/sample.generic');
 
     it('identifies symbols', () => {
-      const symbols = querySymbols(srcPath);
+      const symbols = fileSymbols(srcPath);
       expect(symbols.sort()).toStrictEqual(
         [
           'fibonacci',
@@ -181,7 +188,7 @@ describe('querySymbols', () => {
     });
 
     it('does not run if allowGeneric is false', () => {
-      const symbols = querySymbols(srcPath, false);
+      const symbols = fileSymbols(srcPath, false);
       expect(symbols).toStrictEqual([]);
     });
   });

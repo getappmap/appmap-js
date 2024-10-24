@@ -1,11 +1,15 @@
-import listProjectFiles from '../../../src/fulltext/listProjectFiles';
 import * as fs from 'fs';
 import * as fsp from 'fs/promises';
 import { join } from 'path';
+import * as childProcess from 'node:child_process';
+import type { ChildProcess } from 'node:child_process';
+
+import listProjectFiles, { listGitProjectFiles } from '../src/project-files';
 
 jest.mock('fs/promises', () => ({
   readdir: jest.fn(),
 }));
+jest.mock('node:child_process');
 
 describe('listProjectFiles', () => {
   beforeEach(() => {
@@ -56,5 +60,43 @@ describe('listProjectFiles', () => {
     const files = await listProjectFiles(baseDir);
     expect(files).toEqual([]);
     expect(directoriesRead).toEqual([baseDir, join(baseDir, 'src')]);
+  });
+});
+
+describe('listGitProjectFiles', () => {
+  const mockDirectory = '/mock/directory';
+
+  beforeEach(() => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+    // Setup default return values for mocked functions
+    jest.mocked(childProcess.exec).mockImplementation((cmd: string, _options, callback) => {
+      const cb = callback as (_: unknown, __: unknown) => void;
+      if (cmd.includes('ls-files')) {
+        cb(null, { stdout: 'file1.js' });
+      } else if (cmd.includes('status --porcelain')) {
+        cb(null, {
+          stdout: `
+?? newFile.ts
+M  stagedFile.js
+ M unstagedFile.js
+`,
+        });
+      } else {
+        cb(null, { stdout: '' });
+      }
+
+      return {} as ChildProcess;
+    });
+  });
+
+  it('includes git-managed files, including modified files, as well as untracked', async () => {
+    const files = await listGitProjectFiles(mockDirectory);
+
+    expect(files.length).toBe(4);
+    expect(files).toContain('file1.js');
+    expect(files).toContain('newFile.ts');
+    expect(files).toContain('stagedFile.js');
+    expect(files).toContain('unstagedFile.js');
   });
 });

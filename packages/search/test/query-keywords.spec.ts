@@ -1,4 +1,4 @@
-import queryKeywords from '../../../src/fulltext/queryKeywords';
+import queryKeywords from '../src/query-keywords';
 
 describe('queryKeywords', () => {
   it('should sanitize and split keywords correctly', () => {
