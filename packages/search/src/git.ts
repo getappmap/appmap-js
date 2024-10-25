@@ -160,7 +160,7 @@ export const Git = new Proxy(GitProperties, {
           if (gitCache.has(cacheKey)) {
             return gitCache.get(cacheKey);
           }
-          /* @typescript-eslint/no-unsafe-function-type */
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
           const result: unknown = Reflect.apply(target as Function, thisArg, argArray);
           gitCache.set(cacheKey, result);
           return result;
