@@ -1,3 +1,10 @@
+# [@appland/navie-v1.34.3](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.2...@appland/navie-v1.34.3) (2024-10-25)
+
+
+### Bug Fixes
+
+* Don't retry when hitting copilot content filter while generating JSON ([ef29439](https://github.com/getappmap/appmap-js/commit/ef294392c8f4622bd75e9b7a889a148d95b1586d)), closes [#2089](https://github.com/getappmap/appmap-js/issues/2089)
+
 # [@appland/navie-v1.34.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.1...@appland/navie-v1.34.2) (2024-10-23)
 
 
