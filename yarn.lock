@@ -182,7 +182,7 @@ __metadata:
     applicationinsights: ^2.1.4
     async: ^3.2.4
     axios: ^0.27.2
-    better-sqlite3: ^9.5.0
+    better-sqlite3: ^11.5.0
     body-parser: ^1.20.2
     boxen: ^5.0.1
     chalk: ^4.1.2
@@ -16175,17 +16175,6 @@ __metadata:
     node-gyp: latest
     prebuild-install: ^7.1.1
   checksum: 37acef8d4272ad57fe211aa5a2e177f95443eafb794c7db6c2d0dae0a4fe4c2ef508b8b970d82f1d9744d009677d82067279f45e27d4155a5e68a578f5c5c051
-  languageName: node
-  linkType: hard
-
-"better-sqlite3@npm:^9.5.0":
-  version: 9.5.0
-  resolution: "better-sqlite3@npm:9.5.0"
-  dependencies:
-    bindings: ^1.5.0
-    node-gyp: latest
-    prebuild-install: ^7.1.1
-  checksum: cfa56519755d6dd29ef8361c872c6f29392fcfcc44a435099eb61729aae23c4f18057972592a0b9ff0fcedc98e43db4ee7a1a2de21ab2868f8dcec4f8272ad9d
   languageName: node
   linkType: hard
 
