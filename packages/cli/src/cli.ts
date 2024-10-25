@@ -39,6 +39,7 @@ import * as RpcClientCommand from './cmds/rpcClient';
 import * as NavieCommand from './cmds/navie';
 import * as ApplyCommand from './cmds/apply';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
+import NavieFileCommand from './cmds/navie-file';
 
 setSQLErrorHandler(sqlErrorLog);
 
@@ -144,6 +145,7 @@ yargs(process.argv.slice(2))
   .command(RpcClientCommand)
   .command(NavieCommand)
   .command(ApplyCommand)
+  .command(NavieFileCommand)
   .option('verbose', {
     alias: 'v',
     type: 'boolean',
