@@ -10,6 +10,7 @@ export function readFileSafe(filePath: string): PromiseLike<string | undefined> 
     return Promise.resolve(readFileSync(filePath, 'utf8'));
   } catch (error) {
     debug(`Error reading file: %s`, filePath);
+    debug(error);
     return Promise.resolve(undefined);
   }
 }

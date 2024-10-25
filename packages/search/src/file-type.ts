@@ -91,6 +91,7 @@ const statFileSafe = async (filePath: string): Promise<number | undefined> => {
     return stats.size;
   } catch (error) {
     debug(`Error reading file: %s`, filePath);
+    debug(error);
     return undefined;
   }
 };
