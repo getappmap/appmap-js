@@ -210,7 +210,7 @@ export default class OpenAICompletionService implements CompletionService {
 
   // Request a JSON object with a given JSON schema.
   async json<Schema extends z.ZodType>(
-    messages: Message[],
+    messages: readonly Message[],
     schema: Schema,
     options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined> {
@@ -272,6 +272,12 @@ export default class OpenAICompletionService implements CompletionService {
       } else {
         warn(`Unexpected response choice: ${JSON.stringify(choice)}`);
         continue; // eslint-disable-line no-continue
+      }
+
+      // Copilot tends to respond with this when hitting content filters.
+      if (completion.content === "Sorry, I can't assist with that.") {
+        warn('LLM refused to respond, probably hit a content filter.');
+        return;
       }
 
       if (completion && completion.content !== null && completion.content !== undefined) {
