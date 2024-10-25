@@ -1,5 +1,4 @@
 import sqlite3 from 'better-sqlite3';
-import { warn } from 'console';
 
 const CREATE_SNIPPET_CONTENT_TABLE_SQL = `CREATE VIRTUAL TABLE snippet_content USING fts5(
   snippet_id UNINDEXED,
@@ -58,6 +57,16 @@ export type SnippetSearchResult = {
   content: string;
 };
 
+type SnippetSearchRow = {
+  snippet_id: string;
+  directory: string;
+  file_path: string;
+  start_line: number | undefined;
+  end_line: number | undefined;
+  score: number;
+  content: string;
+};
+
 export default class SnippetIndex {
   #insertSnippet: sqlite3.Statement;
   #updateSnippetBoost: sqlite3.Statement;
@@ -100,7 +109,7 @@ export default class SnippetIndex {
   }
 
   searchSnippets(query: string, limit = 10): SnippetSearchResult[] {
-    const rows = this.#searchSnippet.all(query, limit) as any[];
+    const rows = this.#searchSnippet.all(query, limit) as SnippetSearchRow[];
     return rows.map((row) => ({
       directory: row.directory,
       snippetId: row.snippet_id,

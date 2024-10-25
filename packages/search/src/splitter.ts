@@ -3,7 +3,6 @@ import {
   SupportedTextSplitterLanguage,
 } from 'langchain/text_splitter';
 import makeDebug from 'debug';
-import { warn } from 'console';
 
 export type Chunk = {
   content: string;
@@ -34,16 +33,6 @@ const TEXT_SPLITTER_LANGUAGE_EXTENSIONS: Record<SupportedTextSplitterLanguage, s
   sol: ['sol'],
 };
 
-export function wohleDocumentSplitter(content: string, fileExtension: string): Promise<Chunk[]> {
-  return Promise.resolve([
-    {
-      content,
-      startLine: 1,
-      endLine: content.split('\n').length,
-    },
-  ]);
-}
-
 export async function langchainSplitter(content: string, fileExtension: string): Promise<Chunk[]> {
   const language = Object.keys(TEXT_SPLITTER_LANGUAGE_EXTENSIONS).find((language) =>
     TEXT_SPLITTER_LANGUAGE_EXTENSIONS[language as SupportedTextSplitterLanguage].includes(
@@ -63,7 +52,8 @@ export async function langchainSplitter(content: string, fileExtension: string):
   // { loc: { lines: { from: 1, to: 14 } } }
 
   return documents.map((doc) => {
-    const lines = doc.metadata?.loc?.lines;
+    const loc = doc.metadata?.loc as { lines: { from: number; to: number } } | undefined;
+    const lines = loc?.lines;
     const result: Chunk = {
       content: doc.pageContent,
     };
