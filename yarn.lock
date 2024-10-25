@@ -590,8 +590,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/search@workspace:packages/search"
   dependencies:
-    "@eslint/eslintrc": ^3.1.0
-    "@eslint/js": ^9.13.0
     "@types/better-sqlite3": ^7.6.11
     "@types/jest": ^29.5.4
     "@types/node": ^16
@@ -603,7 +601,6 @@ __metadata:
     eslint-plugin-jest: ^28.8.3
     eslint-plugin-prettier: ^5.2.1
     eslint-plugin-promise: ^7.1.0
-    globals: ^15.11.0
     jest: ^29.7.0
     prettier: ^3.3.3
     ts-jest: ^29.2.5
@@ -5840,7 +5837,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.13.0, @eslint/js@npm:^9.13.0":
+"@eslint/js@npm:9.13.0":
   version: 9.13.0
   resolution: "@eslint/js@npm:9.13.0"
   checksum: ad5dd72aa75bd8d5bd3c1ffe68cf748aed7edef5fcf97193eb52af35dbb89a1999f526a0e2c169ef5572afbbbbb5f37d6fd0af2991d9ccdc29f753da5cc0f532
@@ -24768,13 +24765,6 @@ __metadata:
   version: 14.0.0
   resolution: "globals@npm:14.0.0"
   checksum: 534b8216736a5425737f59f6e6a5c7f386254560c9f41d24a9227d60ee3ad4a9e82c5b85def0e212e9d92162f83a92544be4c7fd4c902cb913736c10e08237ac
-  languageName: node
-  linkType: hard
-
-"globals@npm:^15.11.0":
-  version: 15.11.0
-  resolution: "globals@npm:15.11.0"
-  checksum: ef32d5ef987f3d4b47fc2e389a0b235f6a46f605160c4e405722fd7b576106ca407cb867e66fd1e0fc43b631800e2e2e71847f37691026d813f96f40339da702
   languageName: node
   linkType: hard
 
