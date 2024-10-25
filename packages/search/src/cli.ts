@@ -15,8 +15,7 @@ import { langchainSplitter } from './splitter';
 import assert from 'assert';
 
 const debug = makeDebug('appmap:search:cli');
-
-yargs(hideBin(process.argv))
+const cli = yargs(hideBin(process.argv))
   .command(
     '* <query>',
     'Index directories and perform a search',
@@ -101,7 +100,7 @@ yargs(hideBin(process.argv))
       console.log('Snippet search results');
       console.log('----------------------');
 
-      const isNullOrUndefined = (value: any) => value === null || value === undefined;
+      const isNullOrUndefined = (value: unknown) => value === null || value === undefined;
 
       const snippetSearchResults = snippetIndex.searchSnippets(query as string);
       for (const result of snippetSearchResults) {
@@ -124,3 +123,10 @@ yargs(hideBin(process.argv))
     }
   )
   .help().argv;
+
+if (cli instanceof Promise) {
+  cli.catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

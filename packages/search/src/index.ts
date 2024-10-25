@@ -1,5 +1,5 @@
 export { ContentReader, readFileSafe } from './ioutil';
-export { Splitter, langchainSplitter, wohleDocumentSplitter } from './splitter';
+export { Splitter, langchainSplitter } from './splitter';
 export { ListFn, FilterFn, Tokenizer, default as buildFileIndex } from './build-file-index';
 export { File, default as buildSnippetIndex } from './build-snippet-index';
 export { default as SnippetIndex, SnippetSearchResult } from './snippet-index';

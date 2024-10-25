@@ -2,7 +2,8 @@ import makeDebug from 'debug';
 import { join } from 'path';
 
 import FileIndex from './file-index';
-import { ContentReader, readFileSafe } from './ioutil';
+import { ContentReader } from './ioutil';
+import { warn } from 'console';
 
 export type ListFn = (path: string) => Promise<string[]>;
 
@@ -44,7 +45,10 @@ async function indexDirectory(context: Context, directory: string) {
     debug('Indexing: %s', filePath);
 
     if (await context.fileFilter(filePath)) {
-      indexFile(context, filePath);
+      indexFile(context, filePath).catch((e) => {
+        warn(`Error indexing file: ${filePath}`);
+        warn(e);
+      });
     }
   }
 }
