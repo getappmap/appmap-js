@@ -221,6 +221,17 @@ describe('OpenAICompletionService', () => {
       expect(completionWithRetry).toHaveBeenCalledTimes(maxRetries);
     });
 
+    it('should handle content filter response', async () => {
+      const messages = [{ role: 'user', content: 'Hello' }] as const;
+      const schema = z.object({ key: z.string() });
+
+      mockCompletion("Sorry, I can't assist with that.");
+
+      const result = await service.json(messages, schema);
+      expect(result).toBeUndefined();
+      expect(completionWithRetry).toHaveBeenCalledTimes(1);
+    });
+
     describe('when running locally', () => {
       const originalBaseURL = process.env.OPENAI_BASE_URL;
 
