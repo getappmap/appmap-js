@@ -101,4 +101,10 @@ describe('parseOptions', () => {
     expect(options.isEnabled('quiet', false)).toBe(true);
     expect(question).toBe('hello');
   });
+
+  it('leaves @commands intact', () => {
+    const { options, question } = parseOptions('@help /verbose hello');
+    expect(options.isEnabled('verbose', false)).toBe(true);
+    expect(question).toBe('@help hello');
+  });
 });

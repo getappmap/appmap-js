@@ -238,10 +238,26 @@ export default function navie(
     async *execute(): AsyncIterable<string> {
       assert(command, 'Command not specified');
 
-      for await (const chunk of command.execute({ ...clientRequest, userOptions }, chatHistory))
+      for await (const chunk of command.execute(
+        { ...clientRequest, userOptions },
+        cleanHistory(chatHistory)
+      ))
         yield chunk;
     }
   }
 
   return new Navie();
+}
+
+/**
+ * Remove options from the messages; the chat history is given to the LLM
+ * and it shouldn't see them lest they confuse it. Commands are ok.
+ */
+function cleanHistory(chatHistory?: ChatHistory): ChatHistory | undefined {
+  if (!chatHistory) return undefined;
+
+  return chatHistory.map((message) => ({
+    ...message,
+    content: parseOptions(message.content).question,
+  }));
 }
