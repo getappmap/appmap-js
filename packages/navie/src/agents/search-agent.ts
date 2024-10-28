@@ -1,6 +1,5 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
-import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 
@@ -39,11 +38,6 @@ export default class SearchAgent implements Agent {
   public temperature = 0;
 
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
-
-  // eslint-disable-next-line class-methods-use-this
-  newFilter(): Filter {
-    return new NopFilter();
-  }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     const agentPrompt = [SEARCH_AGENT_PROMPT];

@@ -24,9 +24,7 @@ describe('MermaidFilter', () => {
     const chunks = content.match(/.{1,5}/gs);
     assert(chunks);
     const result: string[] = [];
-    for (const chunk of chunks)
-      for await (const { content } of filter.transform(chunk)) result.push(content);
-    for await (const { content } of filter.end()) result.push(content);
+    for await (const chunk of filter.transform(streamToAsync(chunks))) result.push(chunk);
 
     return result;
   }
@@ -112,3 +110,8 @@ ${trimFences(validDiagram)}
     });
   });
 });
+
+// eslint-disable-next-line @typescript-eslint/require-await
+async function* streamToAsync<T>(stream: Iterable<T>): AsyncIterable<T> {
+  for (const chunk of stream) yield chunk;
+}

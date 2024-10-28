@@ -15,7 +15,6 @@ import { ProjectInfo } from '../project-info';
 import Command, { CommandRequest } from '../command';
 import { ChatHistory } from '../navie';
 import getMostRecentMessages from '../lib/get-most-recent-messages';
-import Filter from '../lib/filter';
 import { ContextV2 } from '../context';
 import assert from 'assert';
 import { UserContext } from '../user-context';
@@ -112,8 +111,12 @@ export default class ExplainCommand implements Command {
     );
 
     const isArchitecture = contextLabels
-      ?.filter((label) => label.weight === 'high')
-      .some((label) => label.name === 'architecture' || label.name === 'overview');
+      ?.filter((label) => label.weight === ContextV2.ContextLabelWeight.High)
+      .some(
+        (label) =>
+          label.name === ContextV2.ContextLabelName.Architecture ||
+          label.name === ContextV2.ContextLabelName.Overview
+      );
 
     if (request.userOptions.isEnabled('projectinfo', true)) {
       this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
@@ -158,12 +161,8 @@ export default class ExplainCommand implements Command {
       )
     );
 
-    const filter: Filter = mode.newFilter();
-
     const response = this.completionService.complete(messages, { temperature: mode.temperature });
-    for await (const token of response) {
-      for await (const chunk of filter.transform(token)) yield chunk.content;
-    }
-    for await (const chunk of filter.end()) yield chunk.content;
+    if (mode.filter) yield* mode.filter(response);
+    else yield* response;
   }
 }

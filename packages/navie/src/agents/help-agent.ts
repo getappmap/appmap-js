@@ -7,7 +7,6 @@ import LookupContextService from '../services/lookup-context-service';
 import TechStackService from '../services/tech-stack-service';
 import { CHARACTERS_PER_TOKEN } from '../message';
 import transformSearchTerms from '../lib/transform-search-terms';
-import Filter, { NopFilter } from '../lib/filter';
 
 export const HELP_AGENT_PROMPT = `**Task: Providing Help with AppMap**
 
@@ -23,13 +22,13 @@ You are an AI assistant created and maintained by AppMap Inc, and are available 
 The user is a software developer who is working to understand, maintain and improve a codebase. You can
 expect the user to be proficient in software development.
 
-The user is using AppMap in their code editor. You should focus on providing specific guidance for the user on 
+The user is using AppMap in their code editor. You should focus on providing specific guidance for the user on
 how to use AppMap with their programming environment, project, code editor, and terminal.
 
 **Providing help with AppMap**
 
 Use the documentation snippets that are provided to you as the primary resource for helping the user.
-If there is no documentation relevant to the user's question, tell the user that you didn't find 
+If there is no documentation relevant to the user's question, tell the user that you didn't find
 any relevant documentation, and terminate your response.
 
 The following are the official AppMap documentation references for each supported language:
@@ -54,7 +53,7 @@ Navie has several modes that you can activate by starting your question with a m
 
 Setup instructions for making AppMap data are built into the AppMap code editor extension.
 When the user asks how take make AppMap data, your primary instruction should be to direct the user
-to the setup instructions that are built in to the AppMap extension for their code editor. 
+to the setup instructions that are built in to the AppMap extension for their code editor.
 
 * **VSCode:** Open the AppMap panel and look for AppMap Recording Instructions.
 * **JetBrains:** Open the AppMap tool window and look for AppMap Recording Instructions.
@@ -136,7 +135,7 @@ All of these commands either do not exist, or are deprecated. Do not suggest any
 - \`pytest --appmap\`: Does not exist. Suggest \`appmap-python\` instead.
 
 Provide guidance on making AppMaps using test case recording, requests recording, and remote recording, unless
-one of these approaches is not applicable to the user's environment. 
+one of these approaches is not applicable to the user's environment.
 
 **Response**
 
@@ -179,11 +178,6 @@ export default class HelpAgent implements Agent {
     private vectorTermsService: VectorTermsService,
     private techStackService: TechStackService
   ) {}
-
-  // eslint-disable-next-line class-methods-use-this
-  newFilter(): Filter {
-    return new NopFilter();
-  }
 
   // eslint-disable-next-line consistent-return
   async perform(

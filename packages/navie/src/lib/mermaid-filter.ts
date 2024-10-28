@@ -4,12 +4,10 @@ import { isNativeError } from 'node:util/types';
 
 import mermaid from './mermaid';
 
-import Filter, { Chunk } from './filter';
-
 import InteractionHistory from '../interaction-history';
 import MermaidFixerService from '../services/mermaid-fixer-service';
 
-export default class MermaidFilter implements Filter {
+export default class MermaidFilter {
   private diagram: string[] | undefined;
   private buffer = '';
 
@@ -22,7 +20,12 @@ export default class MermaidFilter implements Filter {
     return this.diagram !== undefined;
   }
 
-  async *transform(chunk: string): AsyncIterable<Chunk> {
+  async *transform(stream: AsyncIterable<string>): AsyncIterable<string> {
+    for await (const chunk of stream) yield* this.processChunk(chunk);
+    yield* this.end();
+  }
+
+  async *processChunk(chunk: string): AsyncIterable<string> {
     // Lines are delineated by '\n'.
     // When a new chunk is received, append the chunk to the buffer.
     // Extract any complete lines from the buffer and process them.
@@ -39,19 +42,19 @@ export default class MermaidFilter implements Filter {
     }
   }
 
-  async *end(): AsyncIterable<Chunk> {
+  async *end(): AsyncIterable<string> {
     if (this.inDiagram) yield* this.onDiagram();
-    else yield { type: 'markdown', content: this.buffer };
+    else yield this.buffer;
     this.buffer = '';
   }
 
-  private async *processLine(line: string): AsyncIterable<Chunk> {
+  private async *processLine(line: string): AsyncIterable<string> {
     if (!this.inDiagram) {
       const startMatch = line.trim() === '```mermaid';
       if (startMatch) {
         this.diagram = [];
       } else {
-        yield { type: 'markdown', content: line };
+        yield line;
       }
     } else {
       const endMatch = line.trim() === '```';
@@ -64,7 +67,7 @@ export default class MermaidFilter implements Filter {
     }
   }
 
-  async *onDiagram(): AsyncIterable<Chunk> {
+  async *onDiagram(): AsyncIterable<string> {
     const diagramContent = (this.diagram || []).join('');
     this.diagram = undefined;
 
@@ -73,7 +76,7 @@ export default class MermaidFilter implements Filter {
       mermaid.parse(diagramContent);
       this.history.log(`[mermaid-filter] Yielding diagram:\n${diagramContent}`);
       const content = ['', '```mermaid', diagramContent.trim(), '```', ''].join('\n');
-      yield { type: 'diagram', content };
+      yield content;
     } catch (e) {
       const error = isNativeError(e) ? e.message : String(e);
       this.history.log(`[mermaid-filter] Diagram is not valid: ${error}`);
@@ -81,13 +84,9 @@ export default class MermaidFilter implements Filter {
     }
   }
 
-  async *repairDiagram(diagram: string, error: string): AsyncIterable<Chunk> {
+  async *repairDiagram(diagram: string, error: string): AsyncIterable<string> {
     // yield a message to the user that the diagram is not valid
-    yield {
-      type: 'markdown',
-      content:
-        '*Note: The model generated an invalid diagram. Trying to repair, please be patient...*\n\n',
-    };
+    yield '*Note: The model generated an invalid diagram. Trying to repair, please be patient...*\n\n';
     const repairedDiagram = await this.mermaidFixer.repairDiagram(diagram, error);
 
     // Check if the repaired diagram is valid.
@@ -96,7 +95,7 @@ export default class MermaidFilter implements Filter {
       this.history.log(`[mermaid-filter] Diagram successfully repaired.`);
 
       const content = ['', '```mermaid', repairedDiagram, '```', ''].join('\n');
-      yield { type: 'diagram', content };
+      yield content;
     } catch (e) {
       const error = isNativeError(e) ? e.message : String(e);
       this.history.log(`[mermaid-filter] Diagram is still not valid: ${error}`);
@@ -104,7 +103,7 @@ export default class MermaidFilter implements Filter {
       // If the repaired diagram is still invalid, return the repaired diagram, but as a plain text
       // block so that the frontend won't try and render it.
       const content = ['', '```text', repairedDiagram, '```', ''].join('\n');
-      yield { type: 'diagram', content };
+      yield content;
     }
   }
 }
