@@ -1,7 +1,8 @@
-import { verbose } from '../../utils';
 import { readFile, writeFile } from 'fs/promises';
-import { warn } from 'console';
 import assert from 'assert';
+import makeDebug from 'debug';
+
+const debug = makeDebug('appmap:cli:file-update');
 
 function findLineMatch(
   haystack: readonly string[],
@@ -47,35 +48,102 @@ function makeWhitespaceAdjuster(to: string, from: string) {
   return adjuster;
 }
 
-export default async function applyFileUpdate(
-  file: string,
-  original: string,
-  modified: string
-): Promise<string[] | undefined> {
-  // Read the original file
-  const fileContents = await readFile(file, 'utf-8');
-  const fileLines = fileContents.split('\n');
+type MatchResult = {
+  index: number;
+  length: number;
+  whitespaceAdjuster: (s: string) => string;
+  whitespaceAdjusterDescription: string;
+};
 
-  const originalLines = original.split('\n');
-
+function matchFileUpdate(fileLines: string[], originalLines: string[]): MatchResult | undefined {
   const match = findLineMatch(fileLines, originalLines);
-  if (!match) return [`[file-update] Failed to find match for ${file}.\n`];
+  if (!match) return undefined;
 
   const [index, length] = match;
-
   const nonEmptyIndex = originalLines.findIndex((s) => s.trim());
   const adjustWhitespace = makeWhitespaceAdjuster(
     fileLines[index + nonEmptyIndex],
     originalLines[nonEmptyIndex]
   );
 
-  if (verbose())
-    warn(
-      `[file-update] Found match at line ${index + 1}, whitespace adjustment: ${
-        adjustWhitespace.desc
-      }\n`
+  return {
+    index,
+    length,
+    whitespaceAdjuster: adjustWhitespace,
+    whitespaceAdjusterDescription: adjustWhitespace.desc,
+  };
+}
+
+function searchForFileUpdate(
+  whitespaceAdjustments: string[],
+  fileLines: string[],
+  originalLines: string[]
+): [MatchResult, string] | undefined {
+  for (const whitespaceAdjustment of whitespaceAdjustments) {
+    const adjustedOriginalLines = [...originalLines];
+    adjustedOriginalLines[0] = whitespaceAdjustment + adjustedOriginalLines[0];
+    const match = matchFileUpdate(fileLines, adjustedOriginalLines);
+    if (match) return [match, whitespaceAdjustment];
+  }
+
+  return undefined;
+}
+
+export default async function applyFileUpdate(
+  file: string,
+  original: string,
+  modified: string
+): Promise<string[] | undefined> {
+  const fileContents = await readFile(file, 'utf-8');
+  const fileLines = fileContents.split('\n');
+  const originalLines = original.split('\n');
+
+  if (fileLines.length === 0) {
+    debug(`File is empty. Skipping.`);
+    return undefined;
+  }
+  if (originalLines.length === 0) {
+    debug(`Original text is empty. Skipping.`);
+    return undefined;
+  }
+
+  const firstLineLeadingWhitespace = originalLines[0].match(/^\s*/)?.[0];
+  let whitespaceAdjustments: Set<string>;
+
+  if (!firstLineLeadingWhitespace) {
+    debug(
+      `No leading whitespace found in the first line of the original text. Will attempt a fuzzy match.`
     );
-  fileLines.splice(index, length, ...modified.split('\n').map(adjustWhitespace));
+    const fileLinesMatchingFirstOriginalLine = new Set(
+      fileLines.filter((line) => line.includes(originalLines[0]))
+    );
+    whitespaceAdjustments = new Set(
+      Array.from(fileLinesMatchingFirstOriginalLine).map((line) => line.match(/^\s*/)?.[0] ?? '')
+    );
+  } else {
+    whitespaceAdjustments = new Set(['']);
+  }
+
+  const searchResult = searchForFileUpdate(
+    Array.from(whitespaceAdjustments),
+    fileLines,
+    originalLines
+  );
+  if (!searchResult) {
+    debug(`No match found for the original text.`);
+    return undefined;
+  }
+
+  const [match, leadingWhitespace] = searchResult;
+  const adjustedModified = [...modified.split('\n')];
+  adjustedModified[0] = leadingWhitespace + adjustedModified[0];
+
+  debug(
+    `[file-update] Found match at line ${match.index + 1}, whitespace adjustment: ${
+      match.whitespaceAdjusterDescription
+    }\n`
+  );
+  fileLines.splice(match.index, match.length, ...adjustedModified.map(match.whitespaceAdjuster));
 
   await writeFile(file, fileLines.join('\n'), 'utf8');
 }
