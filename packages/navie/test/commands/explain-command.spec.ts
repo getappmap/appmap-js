@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import assert from 'assert';
 import { Agent, AgentMode } from '../../src/agent';
-import { ChatHistory, ClientRequest, NavieOptions } from '../../src/navie';
 import ExplainCommand, { ExplainOptions } from '../../src/commands/explain-command';
 import InteractionHistory from '../../src/interaction-history';
 import Message from '../../src/message';
+import { ChatHistory } from '../../src/navie';
 import AgentSelectionService from '../../src/services/agent-selection-service';
 import CodeSelectionService from '../../src/services/code-selection-service';
 import CompletionService from '../../src/services/completion-service';
@@ -21,7 +22,6 @@ import {
 } from '../fixture';
 import { CommandRequest } from '../../src/command';
 import { UserOptions } from '../../src/lib/parse-options';
-import { NopFilter } from '../../src/lib/filter';
 
 const CompletionEvent = { type: 'completion', model: 'mock', temperature: 0.5 };
 describe('ExplainCommand', () => {
@@ -85,7 +85,6 @@ describe('ExplainCommand', () => {
 
   function mockAgent(): Agent {
     return {
-      newFilter: () => new NopFilter(),
       perform: jest.fn().mockResolvedValue(undefined),
       applyQuestionPrompt: jest.fn(),
     } as unknown as Agent;

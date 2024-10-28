@@ -2,7 +2,6 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import { Agent, AgentOptions } from '../agent';
 import { PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
-import Filter from '../lib/filter';
 import { ContextV2 } from '../context';
 import MermaidFilter from '../lib/mermaid-filter';
 import MermaidFixerService from '../services/mermaid-fixer-service';
@@ -19,7 +18,7 @@ AppMap users as a service.
 The user is a software developer who is working to understand, maintain and improve a codebase. You can
 expect the user to be proficient in software development.
 
-You do not need to explain the importance of programming concepts like planning and testing, as the user is 
+You do not need to explain the importance of programming concepts like planning and testing, as the user is
 already aware of these.
 
 ## Your response
@@ -80,16 +79,16 @@ flowchart TD
     B -->|Yes| D["oauth_client"]
     D --> E["oauth_client.authorization_uri"]
     E --> F["Redirect to authorization_uri"]
-    
+
     G["GET /oauth/:provider/confirm"] --> H{oauth_state}
     H -->|State mismatch| I["login_failure('State mismatch')"]
     I --> J["Redirect to login_path"]
-    
+
     H -->|State match| K["oauth_client.fetch_access_token!"]
     K --> L["oauth_access_token"]
     L -->|Invalid code| M["login_failure('Bad code')"]
     M --> J
-    
+
     L -->|Valid code| N["User.create_or_update_oauth"]
     N --> O{"User exists?"}
     O -->|Yes| P["Login existing user"]
@@ -175,7 +174,7 @@ sequenceDiagram
     participant TestDeferredTax as TestDeferredTax
     participant Strategy as Strategy
     participant PricingPolicy as "Pricing Policy"
-    
+
     TestDeferredTax->>Strategy: fetch_for_product
     activate Strategy
     Strategy->>PricingPolicy: pricing_policy
@@ -274,9 +273,9 @@ export default class ExplainAgent implements Agent {
     private mermaidFixerService: MermaidFixerService
   ) {}
 
-  // eslint-disable-next-line class-methods-use-this
-  newFilter(): Filter {
-    return new MermaidFilter(this.history, this.mermaidFixerService);
+  get filter() {
+    const f = new MermaidFilter(this.history, this.mermaidFixerService);
+    return f.transform.bind(f);
   }
 
   async perform(options: AgentOptions, tokensAvailable: () => number) {

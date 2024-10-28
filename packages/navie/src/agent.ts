@@ -1,5 +1,4 @@
 import { ContextV2 } from './context';
-import Filter from './lib/filter';
 import { UserOptions } from './lib/parse-options';
 import Message from './message';
 import { ProjectInfo } from './project-info';
@@ -49,7 +48,7 @@ export type AgentResponse = {
 };
 
 export interface Agent {
-  newFilter(): Filter;
+  filter?: (stream: AsyncIterable<string>) => AsyncIterable<string>;
 
   perform(options: AgentOptions, tokensAvailable: () => number): Promise<AgentResponse | void>;
 

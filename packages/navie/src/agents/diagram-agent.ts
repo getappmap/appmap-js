@@ -1,6 +1,5 @@
-import { Agent, AgentOptions, AgentResponse } from '../agent';
+import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
-import Filter from '../lib/filter';
 import MermaidFilter from '../lib/mermaid-filter';
 import { PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
@@ -28,9 +27,9 @@ export default class DiagramAgent implements Agent {
     private mermaidFixerService: MermaidFixerService
   ) {}
 
-  // eslint-disable-next-line class-methods-use-this
-  newFilter(): Filter {
-    return new MermaidFilter(this.history, this.mermaidFixerService);
+  get filter() {
+    const f = new MermaidFilter(this.history, this.mermaidFixerService);
+    return f.transform.bind(f);
   }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {

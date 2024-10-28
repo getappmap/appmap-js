@@ -1,6 +1,5 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
-import Filter, { NopFilter } from '../lib/filter';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
@@ -171,11 +170,6 @@ export default class GenerateAgent implements Agent {
     private contextService: ContextService,
     private fileChangeExtractorService: FileChangeExtractorService
   ) {}
-
-  // eslint-disable-next-line class-methods-use-this
-  newFilter(): Filter {
-    return new NopFilter();
-  }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     const agentPrompt = [GENERATE_AGENT_PROMPT];
