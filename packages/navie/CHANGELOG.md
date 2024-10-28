@@ -1,3 +1,10 @@
+# [@appland/navie-v1.34.4](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.3...@appland/navie-v1.34.4) (2024-10-28)
+
+
+### Bug Fixes
+
+* Strip options from chat history given to the LLM ([7007a03](https://github.com/getappmap/appmap-js/commit/7007a03bbfa6c1ccd2646c024bbc0623d6552091))
+
 # [@appland/navie-v1.34.3](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.2...@appland/navie-v1.34.3) (2024-10-25)
 
 
