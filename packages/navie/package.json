@@ -49,6 +49,7 @@
     "langchain": "^0.2.16",
     "mermaid": "^9",
     "openai": "^4.56.0",
+    "p-retry": "4",
     "zod": "^3.23.8"
   }
 }

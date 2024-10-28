@@ -1,8 +1,10 @@
+import assert from 'node:assert';
 import { warn } from 'node:console';
 import { isNativeError } from 'node:util/types';
 
 import { ChatVertexAI, type ChatVertexAIInput } from '@langchain/google-vertexai-web';
 import { zodResponseFormat } from 'openai/helpers/zod';
+import pRetry from 'p-retry';
 import { z } from 'zod';
 
 import Trajectory from '../lib/trajectory';
@@ -64,19 +66,37 @@ export default class GoogleVertexAICompletionService implements CompletionServic
       },
     ]);
 
-    for (const message of sentMessages) this.trajectory.logSentMessage(message);
+    const processResponse = async () => {
+      for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
-    const response = await model.invoke(sentMessages.map(convertToMessage));
+      const response = await model.invoke(sentMessages.map(convertToMessage));
 
-    this.trajectory.logReceivedMessage({
-      role: 'assistant',
-      content: JSON.stringify(response),
+      this.trajectory.logReceivedMessage({
+        role: 'assistant',
+        content: JSON.stringify(response),
+      });
+
+      const sanitizedContent = response.content.toString().replace(/^`{3,}[^\s]*?$/gm, '');
+      try {
+        const parsed = JSON.parse(sanitizedContent) as unknown;
+        schema.parse(parsed);
+        return parsed;
+      } catch (e) {
+        assert(isNativeError(e));
+        (e as Error & { response: unknown })['response'] = response;
+        throw e;
+      }
+    };
+
+    return await pRetry(processResponse, {
+      retries: CompletionRetries,
+      minTimeout: CompletionRetryDelay,
+      randomize: true,
+      onFailedAttempt: (err) => {
+        warn(`Failed to complete after ${err.attemptNumber} attempt(s): ${String(err)}`);
+        if ('response' in err) warn(`Response: ${JSON.stringify(err.response)}`);
+      },
     });
-
-    const sanitizedContent = response.content.toString().replace(/^`{3,}[^\s]*?$/gm, '');
-    const parsed = JSON.parse(sanitizedContent) as unknown;
-    schema.parse(parsed);
-    return parsed;
   }
 
   async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
