@@ -1,3 +1,10 @@
+# [@appland/components-v4.40.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.39.3...@appland/components-v4.40.0) (2024-10-28)
+
+
+### Features
+
+* Add support for links to files ([a9eec16](https://github.com/getappmap/appmap-js/commit/a9eec16960b0d6172fce093fd125b4443cef068d))
+
 # [@appland/components-v4.39.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.39.2...@appland/components-v4.39.3) (2024-10-22)
 
 
