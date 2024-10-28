@@ -50,18 +50,17 @@ describe('GoogleVertexAICompletionService', () => {
     });
 
     it('retries on errors', async () => {
-      jest.useFakeTimers();
       mockCompletion('hello world');
       responseMock.mockImplementationOnce(() => {
         throw new Error('error');
       });
       const messages: Message[] = [];
 
-      // eslint-disable-next-line jest/valid-expect
-      const result = expect(collect(service.complete(messages))).resolves.toEqual(['hello world']);
-      await jest.advanceTimersByTimeAsync(1000);
+      jest.useFakeTimers();
+      const result = collect(service.complete(messages));
+      await jest.runAllTimersAsync();
       jest.useRealTimers();
-      return result;
+      expect(await result).toEqual(['hello world']);
     });
   });
 
@@ -72,6 +71,32 @@ describe('GoogleVertexAICompletionService', () => {
       const messages: Message[] = [];
       const result = await service.json(messages, schema);
       expect(result).toEqual({ foo: 'bar' });
+    });
+
+    it('retries on errors', async () => {
+      jest.useFakeTimers();
+      mockCompletion('{"foo": "bar"}');
+      responseMock.mockImplementationOnce(() => {
+        throw new Error('error');
+      });
+      const schema = z.object({ foo: z.string() });
+      const messages: Message[] = [];
+      const result = service.json(messages, schema);
+      await jest.runAllTimersAsync();
+      expect(await result).toEqual({ foo: 'bar' });
+      jest.useRealTimers();
+    });
+
+    it('retries on bad JSON', async () => {
+      jest.useFakeTimers();
+      mockCompletion('{"foo": "bar"}');
+      responseMock.mockReturnValueOnce('{"foo": "bar"');
+      const schema = z.object({ foo: z.string() });
+      const messages: Message[] = [];
+      const result = service.json(messages, schema);
+      await jest.runAllTimersAsync();
+      expect(await result).toEqual({ foo: 'bar' });
+      jest.useRealTimers();
     });
   });
 
