@@ -24,34 +24,22 @@ describe(applyFileUpdate, () => {
     process.chdir(startCwd);
   });
 
-  const example =
-    (name: string, expectedAssertions = 1) =>
-    async (): Promise<string> => {
-      expect.assertions(expectedAssertions);
+  const example = (name: string) => async () => {
+    expect.assertions(1);
 
-      const fixtureDir = join(__dirname, 'applyFileUpdate', name);
-      await cp(fixtureDir, process.cwd(), { recursive: true });
-      const applyStr = await readFile('apply.yml', 'utf8');
-      const change = load(applyStr) as Change;
-      const { file, original, modified } = change;
+    const fixtureDir = join(__dirname, 'applyFileUpdate', name);
+    await cp(fixtureDir, process.cwd(), { recursive: true });
+    const applyStr = await readFile('apply.yml', 'utf8');
+    const change = load(applyStr) as Change;
+    const { file, original, modified } = change;
 
-      await applyFileUpdate(file, original, modified);
+    await applyFileUpdate(file, original, modified);
 
-      const updatedStr = await readFile('original.txt', 'utf8');
-      const updated = updatedStr
-        .split('\n')
-        .map((line) => line.trim())
-        .join('\n');
-      const expectedStr = await readFile('expected.txt', 'utf8');
-      const expected = expectedStr
-        .split('\n')
-        .map((line) => line.trim())
-        .join('\n');
+    const updatedStr = await readFile('original.txt', 'utf8');
+    const expectedStr = await readFile('expected.txt', 'utf8');
 
-      expect(updated).toEqual(expected);
-
-      return updatedStr;
-    };
+    expect(updatedStr).toEqual(expectedStr);
+  };
 
   it('correctly applies an update even with broken whitespace', example('whitespace-mismatch'));
   it('correctly applies an update even with trailing newlines', example('trailing-newlines'));
@@ -61,11 +49,8 @@ describe(applyFileUpdate, () => {
     example('mismatched-similar')
   );
   it('compensates for missing indentation in the first line', example('missing-firstline-indent'));
-  it('compensates for missing indentation in the first line', async () => {
-    const updated = await example('missing-firstline-indent-must-match', 4)();
-    const updatedLines = updated.split('\n');
-    expect(updatedLines[0]).toEqual('    # hello');
-    expect(updatedLines[1]).toEqual('    def _bind_to_schema(self, field_name, schema):');
-    expect(updatedLines[2]).toEqual('    super()._bind_to_schema(field_name, schema)');
-  });
+  it(
+    'compensates for missing indentation in the first line (even when there is a mismatch)',
+    example('missing-firstline-indent-must-match')
+  );
 });
