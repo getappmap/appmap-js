@@ -1,3 +1,10 @@
+# [@appland/navie-v1.34.5](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.4...@appland/navie-v1.34.5) (2024-10-29)
+
+
+### Bug Fixes
+
+* Filter xml markdown fences around changes ([f41b7a1](https://github.com/getappmap/appmap-js/commit/f41b7a1c882b089d58752a2c973b04f1207633c2))
+
 # [@appland/navie-v1.34.4](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.3...@appland/navie-v1.34.4) (2024-10-28)
 
 
