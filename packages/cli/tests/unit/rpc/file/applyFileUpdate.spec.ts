@@ -5,7 +5,6 @@ import tmp from 'tmp';
 
 import applyFileUpdate from '../../../../src/rpc/file/applyFileUpdate';
 import { load } from 'js-yaml';
-import assert from 'node:assert';
 
 type Change = {
   file: string;
@@ -37,17 +36,9 @@ describe(applyFileUpdate, () => {
     await applyFileUpdate(file, original, modified);
 
     const updatedStr = await readFile('original.txt', 'utf8');
-    const updated = updatedStr
-      .split('\n')
-      .map((line) => line.trim())
-      .join('\n');
     const expectedStr = await readFile('expected.txt', 'utf8');
-    const expected = expectedStr
-      .split('\n')
-      .map((line) => line.trim())
-      .join('\n');
 
-    expect(updated).toEqual(expected);
+    expect(updatedStr).toEqual(expectedStr);
   };
 
   it('correctly applies an update even with broken whitespace', example('whitespace-mismatch'));
