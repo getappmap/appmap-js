@@ -5,7 +5,7 @@ import ContextService from '../services/context-service';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import FileContentFetcher from '../services/file-content-fetcher';
 
-import { GENERATE_AGENT_FORMAT } from './generate-agent';
+import { filterXmlFencesAroundChangesets, GENERATE_AGENT_FORMAT } from './generate-agent';
 
 export const TEST_AGENT_PROMPT = `**Task: Generate a Test Case**
 
@@ -91,4 +91,6 @@ export default class TestAgent implements Agent {
       )
     );
   }
+
+  filter = filterXmlFencesAroundChangesets;
 }
