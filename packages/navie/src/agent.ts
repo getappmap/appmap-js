@@ -48,7 +48,7 @@ export type AgentResponse = {
 };
 
 export interface Agent {
-  filter?: (stream: AsyncIterable<string>) => AsyncIterable<string>;
+  readonly filter?: (stream: AsyncIterable<string>) => AsyncIterable<string>;
 
   perform(options: AgentOptions, tokensAvailable: () => number): Promise<AgentResponse | void>;
 
