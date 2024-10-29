@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace UserContext {
   export type CodeSelectionItem = {
     type: 'code-selection';

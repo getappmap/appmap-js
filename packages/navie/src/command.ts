@@ -1,5 +1,6 @@
 import { UserOptions } from './lib/parse-options';
 import { ChatHistory, ClientRequest } from './navie';
+import { UserContext } from './user-context';
 
 export enum CommandMode {
   Explain = 'explain',
@@ -11,6 +12,7 @@ export enum CommandMode {
   ListFiles = 'list-files',
   Suggest = 'suggest',
   Observe = 'observe',
+  Review = 'review',
 }
 
 export interface CommandRequest extends ClientRequest {
@@ -19,4 +21,10 @@ export interface CommandRequest extends ClientRequest {
 
 export default interface Command {
   execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string>;
+}
+
+export function hasCodeSelectionArray(request: CommandRequest): request is CommandRequest & {
+  codeSelection: UserContext.ContextItem[];
+} {
+  return Array.isArray(request.codeSelection);
 }

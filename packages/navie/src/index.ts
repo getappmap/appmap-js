@@ -14,3 +14,5 @@ export * as Help from './help';
 export * as Navie from './navie';
 export * as InteractionHistory from './interaction-history';
 export { SELECTED_BACKEND } from './services/completion-service-factory';
+export { UserOptions, default as parseOptions } from './lib/parse-options';
+export { REVIEW_DIFF_LOCATION } from './commands/review-command';
