@@ -39,6 +39,16 @@ function makeWhitespaceAdjuster(to: string, from: string) {
     const adjuster = (s: string) => s;
     adjuster.desc = 'none';
     return adjuster;
+  } else if (fromWhitespace.endsWith(toWhitespace)) {
+    const extra = fromWhitespace.length - toWhitespace.length;
+    const adjuster = (s: string) => s.slice(extra);
+    adjuster.desc = `-${extra}`;
+    return adjuster;
+  } else if (toWhitespace.endsWith(fromWhitespace)) {
+    const extra = fromWhitespace ? toWhitespace.slice(0, -fromWhitespace.length) : toWhitespace;
+    const adjuster = (s: string) => extra + s;
+    adjuster.desc = `+${extra.length}`;
+    return adjuster;
   }
 
   const fromRe = new RegExp(`^${fromWhitespace}`);
@@ -57,13 +67,13 @@ export default async function applyFileUpdate(
   const fileLines = fileContents.split('\n');
 
   const originalLines = original.split('\n');
-
   const match = findLineMatch(fileLines, originalLines);
   if (!match) return [`[file-update] Failed to find match for ${file}.\n`];
 
   const [index, length] = match;
 
-  const nonEmptyIndex = originalLines.findIndex((s) => s.trim());
+  const firstAdjuster = makeWhitespaceAdjuster(fileLines[index], originalLines[0]);
+  const nonEmptyIndex = findNonEmpty(originalLines, 1);
   const adjustWhitespace = makeWhitespaceAdjuster(
     fileLines[index + nonEmptyIndex],
     originalLines[nonEmptyIndex]
@@ -73,9 +83,15 @@ export default async function applyFileUpdate(
     warn(
       `[file-update] Found match at line ${index + 1}, whitespace adjustment: ${
         adjustWhitespace.desc
-      }\n`
+      }, first: ${firstAdjuster.desc}\n`
     );
-  fileLines.splice(index, length, ...modified.split('\n').map(adjustWhitespace));
+  const [first, ...rest] = modified.split('\n');
+  fileLines.splice(index, length, firstAdjuster(first), ...rest.map(adjustWhitespace));
 
   await writeFile(file, fileLines.join('\n'), 'utf8');
+}
+
+function findNonEmpty(lines: string[], start: number): number {
+  for (let i = start; i < lines.length; ++i) if (lines[i].trim()) return i;
+  return 0;
 }
