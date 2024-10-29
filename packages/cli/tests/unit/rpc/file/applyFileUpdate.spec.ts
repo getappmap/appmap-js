@@ -48,4 +48,5 @@ describe(applyFileUpdate, () => {
     'correctly applies an update even when there are repeated similar but mismatching lines',
     example('mismatched-similar')
   );
+  it('compensates for missing indentation in the first line', example('missing-firstline-indent'));
 });
