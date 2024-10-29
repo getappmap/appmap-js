@@ -3,6 +3,8 @@ import sqlite3 from 'better-sqlite3';
 
 import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
+import { FileSearchResult } from '@appland/search';
+
 import AppMapIndex, {
   SearchResponse as AppMapSearchResponse,
   SearchOptions as AppMapSearchOptions,
@@ -12,6 +14,7 @@ import EventCollector from './EventCollector';
 import indexFiles from './index-files';
 import indexSnippets from './index-snippets';
 import collectSnippets from './collect-snippets';
+import buildIndex from './buildIndex';
 
 export default class SearchContextCollector {
   public excludePatterns: RegExp[] | undefined;
@@ -67,9 +70,27 @@ export default class SearchContextCollector {
       );
     }
 
-    const db = new sqlite3(':memory:');
-    const fileIndex = await indexFiles(db, this.sourceDirectories);
-    const fileSearchResults = fileIndex.search(this.vectorTerms.join(' OR '));
+    const fileIndex = await buildIndex('files', async (indexFile) => {
+      const db = new sqlite3(indexFile);
+      return await indexFiles(
+        db,
+        this.sourceDirectories,
+        this.includePatterns,
+        this.excludePatterns
+      );
+    });
+    let fileSearchResults: FileSearchResult[];
+    try {
+      fileSearchResults = fileIndex.index.search(this.vectorTerms.join(' OR '));
+    } finally {
+      fileIndex.close();
+    }
+
+    const snippetIndex = await buildIndex('snippets', async (indexFile) => {
+      const db = new sqlite3(indexFile);
+      return await indexSnippets(db, fileSearchResults);
+    });
+
     let contextCandidate: {
       results: SearchRpc.SearchResult[];
       context: ContextV2.ContextResponse;
@@ -77,7 +98,6 @@ export default class SearchContextCollector {
     };
     try {
       const eventsCollector = new EventCollector(this.vectorTerms.join(' '), appmapSearchResponse);
-      const snippetIndex = await indexSnippets(db, fileSearchResults);
 
       let charCount = 0;
       let maxEventsPerDiagram = 5;
@@ -98,7 +118,7 @@ export default class SearchContextCollector {
 
         const charLimit = codeSnippetCount === 0 ? this.charLimit : this.charLimit / 4;
         const sourceContext = collectSnippets(
-          snippetIndex,
+          snippetIndex.index,
           this.vectorTerms.join(' OR '),
           charLimit
         );
@@ -121,7 +141,7 @@ export default class SearchContextCollector {
         log(`[search-context] Increasing max events per diagram to ${maxEventsPerDiagram}.`);
       }
     } finally {
-      db.close();
+      snippetIndex.close();
     }
 
     return {
