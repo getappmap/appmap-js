@@ -24,6 +24,7 @@ import { ThreadAccessError } from './navie/ihistory';
 import INavie, { INavieProvider } from './navie/inavie';
 import reportFetchError from './navie/report-fetch-error';
 import Thread from './navie/thread';
+import handleReview from './review';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -376,6 +377,15 @@ const explainHandler: (
           });
         }
       }
+
+      const { applied, userContext: newUserContext } = await handleReview(
+        options.question,
+        userContext
+      );
+      if (applied) {
+        userContext = newUserContext;
+      }
+
       return await explain(
         navieProvider,
         options.question,
