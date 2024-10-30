@@ -1,3 +1,10 @@
+# [@appland/navie-v1.35.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.5...@appland/navie-v1.35.0) (2024-10-30)
+
+
+### Features
+
+* [@search](https://github.com/search) command emits file: URLs ([1d3d85c](https://github.com/getappmap/appmap-js/commit/1d3d85c253bbf206c99f0983cff21867c28b3c51))
+
 # [@appland/navie-v1.34.5](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.4...@appland/navie-v1.34.5) (2024-10-29)
 
 
