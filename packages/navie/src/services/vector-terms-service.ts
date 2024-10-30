@@ -17,13 +17,14 @@ The developer asks a question using natural language. This question must be conv
 
 1) Separate the user's question into "context" and "instructions". The "context" defines the background information that will match
   code in the code base. The "instructions" are the statement about what the user wants you to do or what they want to find out.
+  Be brief in the "instructions" part.
 2) From here on, only consider the "context" part of the question.
 3) Expand the list of "context" words to include synonyms and related terms.
 4) Optionally choose a small number of search terms which are MOST SELECTIVE. The MOST SELECTIVE match terms should
   be words that will match a feature or domain model object in the code base. They should be the most
   distinctive words in the question. You will prefix the MOST SELECTIVE terms with a '+'.
 5) In order for keywords to match optimally, compound words MUST additionally be segmented into individual search terms. This is additionally very important for compound words containing acronyms.
-  E.g., "httpserver" would become "http", "server", "httpserver". "xmlserializer" -> "xml", "serializer", "xmlserializer". "jsonserializer" -> "json", "serializer", "jsonserializer". etc. 
+  E.g., "httpserver" would become "http", "server", "httpserver". "xmlserializer" -> "xml", "serializer", "xmlserializer". "jsonserializer" -> "json", "serializer", "jsonserializer". etc.
 
   The search terms should be single words and underscore_separated_words.`;
 
