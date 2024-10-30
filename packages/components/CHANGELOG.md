@@ -1,3 +1,10 @@
+# [@appland/components-v4.40.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.40.0...@appland/components-v4.40.1) (2024-10-30)
+
+
+### Bug Fixes
+
+* pass desired SSO target ([f48f3ba](https://github.com/getappmap/appmap-js/commit/f48f3bae350ea272e794ed704fe90a944cf38423))
+
 # [@appland/components-v4.40.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.39.3...@appland/components-v4.40.0) (2024-10-28)
 
 
