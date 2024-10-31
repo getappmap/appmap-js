@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.172.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.172.0...@appland/appmap-v3.172.1) (2024-10-31)
+
+
+### Bug Fixes
+
+* Adjust whitespace of the first line of patch separately ([038093b](https://github.com/getappmap/appmap-js/commit/038093b4b67d9fbcbb77f02986d318054f23a081)), closes [#2095](https://github.com/getappmap/appmap-js/issues/2095)
+
 # [@appland/appmap-v3.172.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.171.2...@appland/appmap-v3.172.0) (2024-10-22)
 
 
