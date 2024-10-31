@@ -1,3 +1,11 @@
+# [@appland/navie-v1.35.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.35.0...@appland/navie-v1.35.1) (2024-10-31)
+
+
+### Bug Fixes
+
+* Instruct the LLM to be briefer in the vector terms ([b2c310b](https://github.com/getappmap/appmap-js/commit/b2c310b567ca914fd9f894eeac33b15afcb69f3a))
+* Retry JSON queries on Vertex AI ([cddad7c](https://github.com/getappmap/appmap-js/commit/cddad7c59a3d4cdf0b9f36721407a6817e237847))
+
 # [@appland/navie-v1.35.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.34.5...@appland/navie-v1.35.0) (2024-10-30)
 
 
