@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.173.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.173.0...@appland/appmap-v3.173.1) (2024-11-06)
+
+
+### Bug Fixes
+
+* Bump @appland/search version ([5a7da7b](https://github.com/getappmap/appmap-js/commit/5a7da7b6b0a15598182b3a509186a7fb35695aa6))
+
 # [@appland/appmap-v3.173.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.172.1...@appland/appmap-v3.173.0) (2024-11-06)
 
 
