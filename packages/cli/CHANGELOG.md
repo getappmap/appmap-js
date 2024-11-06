@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.173.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.172.1...@appland/appmap-v3.173.0) (2024-11-06)
+
+
+### Features
+
+* Refactor fulltext search to use @appland/search ([fa52118](https://github.com/getappmap/appmap-js/commit/fa5211812c173657b5c70ce3f4e60e4c996d7495))
+
 # [@appland/appmap-v3.172.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.172.0...@appland/appmap-v3.172.1) (2024-10-31)
 
 
