@@ -5,7 +5,7 @@ import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
 import { FileIndex, FileSearchResult } from '@appland/search';
 
-import { SearchResponse as AppMapSearchResponse } from '../../fulltext/AppMapIndex';
+import { SearchResponse as AppMapSearchResponse } from '../../fulltext/appmap-match';
 import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
 import EventCollector from './EventCollector';
 import indexFiles from './index-files';
