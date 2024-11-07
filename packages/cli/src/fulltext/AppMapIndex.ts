@@ -1,6 +1,7 @@
 import { dirname, join } from 'path';
-import { Metadata } from '@appland/models';
 import { readFile } from 'fs/promises';
+import { Metadata } from '@appland/models';
+import { queryKeywords } from '@appland/search';
 
 import { exists, processNamedFiles, verbose } from '../utils';
 import { splitCamelized } from '../lib/splitCamelized';
@@ -9,7 +10,6 @@ import lunr from 'lunr';
 import UpToDate from '../lib/UpToDate';
 import loadAppMapConfig from '../lib/loadAppMapConfig';
 import { packRef, refToAppMapDir, unpackRef } from './ref';
-import queryKeywords from './queryKeywords';
 
 type SerializedCodeObject = {
   name: string;

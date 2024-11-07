@@ -1,11 +1,12 @@
 import { AppMap, AppMapFilter, Event, buildAppMap } from '@appland/models';
 import { log, warn } from 'console';
 import { readFile } from 'fs/promises';
-import { verbose } from '../utils';
+import { queryKeywords } from '@appland/search';
 import lunr from 'lunr';
-import { collectParameters } from './collectParameters';
 import assert from 'assert';
-import queryKeywords from './queryKeywords';
+
+import { verbose } from '../utils';
+import { collectParameters } from './collectParameters';
 import { fileNameMatchesFilterPatterns } from './fileNameMatchesFilterPatterns';
 
 type IndexItem = {

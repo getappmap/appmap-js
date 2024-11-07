@@ -7,3 +7,4 @@ export { default as FileIndex, FileSearchResult } from './file-index';
 export { default as listProjectFiles } from './project-files';
 export { isBinaryFile, isDataFile, isLargeFile } from './file-type';
 export { fileTokens } from './tokenize';
+export { default as queryKeywords } from './query-keywords';
