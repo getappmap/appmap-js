@@ -175,6 +175,11 @@ export async function processNamedFiles(
   return matchCount;
 }
 
+export function isNodeError(error: unknown, code?: string): error is NodeJS.ErrnoException {
+  return error instanceof Error && (!code || (error as NodeJS.ErrnoException).code === code);
+}
+
+
 /**
  * Lists all matching files in a directory, and passes them to an optional function.
  */
