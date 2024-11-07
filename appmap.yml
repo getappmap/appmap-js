@@ -7,6 +7,10 @@ packages:
       - .yarn
       - splitCamelized
       - isCamelized
+      - collectClassMapEntry
+      - matchFile
+      - collectParameters
+      - indexEvent
   - path: packages/navie
     exclude:
       - node_modules
@@ -15,6 +19,10 @@ packages:
     exclude:
       - node_modules
       - .yarn
+      - tokenize
+      - query-keywords
+      - split-camelized
+      - file-type
   - path: packages/client
     exclude:
       - node_modules
