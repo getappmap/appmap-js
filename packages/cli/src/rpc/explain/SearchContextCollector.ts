@@ -3,18 +3,16 @@ import sqlite3 from 'better-sqlite3';
 
 import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
-import { FileSearchResult } from '@appland/search';
+import { FileIndex, FileSearchResult } from '@appland/search';
 
-import AppMapIndex, {
-  SearchResponse as AppMapSearchResponse,
-  SearchOptions as AppMapSearchOptions,
-} from '../../fulltext/AppMapIndex';
+import { SearchResponse as AppMapSearchResponse } from '../../fulltext/AppMapIndex';
 import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
 import EventCollector from './EventCollector';
 import indexFiles from './index-files';
 import indexSnippets from './index-snippets';
 import collectSnippets from './collect-snippets';
 import buildIndex from './buildIndex';
+import { buildAppMapIndex, search } from '../../fulltext/appmap-index';
 
 export default class SearchContextCollector {
   public excludePatterns: RegExp[] | undefined;
@@ -59,15 +57,27 @@ export default class SearchContextCollector {
         numResults: this.appmaps.length,
       };
     } else {
-      // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
-      const searchOptions: AppMapSearchOptions = {
-        maxResults: DEFAULT_MAX_DIAGRAMS,
-      };
-      appmapSearchResponse = await AppMapIndex.search(
-        this.appmapDirectories,
-        this.vectorTerms.join(' '),
-        searchOptions
+      const appmapIndex = await buildIndex('appmaps', async (indexFile) => {
+        const db = new sqlite3(indexFile);
+        const fileIndex = new FileIndex(db);
+        await buildAppMapIndex(fileIndex, this.appmapDirectories);
+        return fileIndex;
+      });
+      const selectedAppMaps = await search(
+        appmapIndex.index,
+        this.vectorTerms.join(' OR '),
+        DEFAULT_MAX_DIAGRAMS
       );
+      appmapIndex.close();
+
+      appmapSearchResponse = {
+        results: selectedAppMaps.results,
+        numResults: selectedAppMaps.results.length,
+        stats: selectedAppMaps.stats,
+        type: 'appmap',
+      };
+
+      log(`[search-context] Matched ${selectedAppMaps.results.length} AppMaps.`);
     }
 
     const fileIndex = await buildIndex('files', async (indexFile) => {
