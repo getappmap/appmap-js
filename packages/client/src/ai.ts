@@ -2,50 +2,86 @@ import { io } from 'socket.io-client';
 import AIClient, { Callbacks } from './aiClient';
 import { getConfiguration } from './loadConfiguration';
 
+/**
+ * When a conversation is created, the AppMap service reports the permissions assigned to the user,
+ * directly or through an organization to which they belong.
+ */
 export type Permissions = {
   useNavieAIProxy: boolean;
 };
 
+/**
+ * An activity record for the user, indicating how many conversations were created over a given
+ * time period.
+ */
 export type ConversationCount = {
   daysAgo: number;
   count: number;
 };
 
+/**
+ * The usage report for a given user, which is reported back to the user when a conversation is
+ * created.
+ */
 export type Usage = {
   conversationCounts: ConversationCount[];
 };
 
+/**
+ * Model parameters are reported to the AppMap service when a conversation is created.
+ */
 export type ModelParameters = {
   baseUrl?: string;
   model?: string;
   aiKeyName?: string;
 };
 
+/**
+ * Project directory information is reported to the AppMap service when a conversation is created.
+ */
 export type ProjectDirectory = {
   hasAppMapConfig: boolean;
   language?: string;
 };
 
+/**
+ * The parameters for a project, which are reported to the AppMap service when a conversation is
+ * created.
+ */
 export type ProjectParameters = {
   directoryCount: number;
   codeEditor?: string;
   directories: ProjectDirectory[];
 };
 
+/**
+ * A specific product to which the user is subscribed.
+ */
 export type SubscriptionItem = {
   productName: string;
 };
 
+/**
+ * A record of all subscriptions for a given user, along with the date on which they were first
+ * enrolled.
+ */
 export type Subscription = {
   enrollmentDate: Date;
   subscriptions: SubscriptionItem[];
 };
 
+/**
+ * These parameters are passed from Navie Client to the Navie Service when a new conversation is
+ * created.
+ */
 export type CreateConversationThread = {
   modelParameters: ModelParameters;
   projectParameters: ProjectParameters;
 };
 
+/**
+ * This information is reported back to the Navie Client when a conversation is created.
+ */
 export type ConversationThread = {
   id: string;
   permissions: Permissions;
@@ -71,6 +107,17 @@ export type CreateUserMessage = {
   codeSelectionLength?: number;
 };
 
+/**
+ * When a user message is reported to the AppMap service, the agent name (aka command name) and
+ * automatically assigned classifications are reported.
+ *
+ * The agent name will be one of the published Navie commands, such as @explain, @diagram, @plan,
+ * @generate, @test, @search, @review, and @help.
+ *
+ * Classifications are question categories that are assigned by Navie to help the AI respond
+ * in the most appropriate way. Classifications are single words like overview, architecture,
+ * troubleshoot, feature, generate-diagram, generate-code, explain, and help.
+ */
 export type UpdateUserMessage = {
   agentName?: string;
   classification?: Classification[];
