@@ -1,11 +1,11 @@
 import { ContextV2 } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
+import { queryKeywords } from '@appland/search';
 
 import { SearchResult as EventSearchResult } from '../../fulltext/FindEvents';
 import Location from './location';
 import SearchContextCollector from './SearchContextCollector';
 import LocationContextCollector from './LocationContextCollector';
-import queryKeywords from '../../fulltext/queryKeywords';
 import { warn } from 'console';
 
 export const buildExclusionPattern = (dirName: string): RegExp => {
