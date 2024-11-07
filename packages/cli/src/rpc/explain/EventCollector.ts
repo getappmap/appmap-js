@@ -1,13 +1,11 @@
 import { isAbsolute, join } from 'path';
 import { ContextV2 } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
-import {
-  SearchResponse as AppMapSearchResponse,
-  SearchOptions as AppMapSearchOptions,
-} from '../../fulltext/AppMapIndex';
+import { SearchResponse as AppMapSearchResponse } from '../../fulltext/appmap-match';
 import FindEvents, {
   SearchResponse as EventSearchResponse,
   SearchOptions as EventsSearchOptions,
+  SearchOptions,
 } from '../../fulltext/FindEvents';
 import buildContext from './buildContext';
 import { textSearchResultToRpcSearchResult } from './collectContext';
@@ -71,7 +69,7 @@ export default class EventCollector {
     return index;
   }
 
-  async findEvents(appmap: string, options: AppMapSearchOptions): Promise<EventSearchResponse> {
+  async findEvents(appmap: string, options: SearchOptions): Promise<EventSearchResponse> {
     if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, -'.appmap.json'.length);
 
     const index = await this.appmapIndex(appmap);

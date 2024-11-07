@@ -9,7 +9,7 @@ import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
 import { warn } from 'console';
 import EventEmitter from 'events';
-import { basename } from 'path';
+import { basename, join } from 'path';
 
 import { LRUCache } from 'lru-cache';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
@@ -104,12 +104,7 @@ export class Explain extends EventEmitter {
       }
     }
 
-    await navie.ask(
-      this.status.threadId,
-      this.question,
-      this.codeSelection,
-      this.prompt
-    );
+    await navie.ask(this.status.threadId, this.question, this.codeSelection, this.prompt);
   }
 
   async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
@@ -152,6 +147,17 @@ export class Explain extends EventEmitter {
     // pruned by the client AI anyway.
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
+
+    // const appmapDirectories = this.appmapDirectories.map((dir) => {
+    //   const path = dir.directory;
+    //   const appmapDir = dir.appmapConfig?.appmap_dir ?? 'tmp/appmap';
+    //   if (path.endsWith(appmapDir)) {
+    //     return path;
+    //   } else {
+    //     return join(path, appmapDir);
+    //   }
+    // });
+
     const searchResult = await collectContext(
       this.appmapDirectories.map((dir) => dir.directory),
       this.projectDirectories,
