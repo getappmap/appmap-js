@@ -13,6 +13,9 @@ packages:
       - .yarn
   - path: packages/search
     exclude:
+      - search/built/tokenize
+      - search/built/query-keywords
+      - search/built/split-camelized
       - node_modules
       - .yarn
   - path: packages/client
