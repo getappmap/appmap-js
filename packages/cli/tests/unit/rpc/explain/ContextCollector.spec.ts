@@ -5,7 +5,6 @@ import * as navie from '@appland/navie';
 import Location from '../../../../src/rpc/explain/location';
 
 jest.mock('@appland/navie');
-jest.mock('../../../../src/fulltext/AppMapIndex');
 jest.mock('../../../../src/rpc/explain/SearchContextCollector');
 jest.mock('../../../../src/rpc/explain/LocationContextCollector');
 
