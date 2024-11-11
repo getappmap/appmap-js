@@ -1,3 +1,10 @@
+# [@appland/navie-v1.36.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.35.1...@appland/navie-v1.36.0) (2024-11-11)
+
+
+### Features
+
+* Add `[@review](https://github.com/review)` command ([3a6f741](https://github.com/getappmap/appmap-js/commit/3a6f7413dd9343b79067fbe7b1dd19322dbbc61f))
+
 # [@appland/navie-v1.35.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.35.0...@appland/navie-v1.35.1) (2024-10-31)
 
 
