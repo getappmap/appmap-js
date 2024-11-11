@@ -30,6 +30,7 @@ step: 6
   - [@NoAppMap](#noappmap)
     - [Usage](#usage-1)
 - [System Properties](#system-properties)
+- [Troubleshooting](#troubleshooting)
 - [GitHub repository](#github-repository)
 
 ## About
@@ -74,9 +75,11 @@ $ java -javaagent:$HOME/.appmap/lib/java/appmap.jar myapp.jar
 ```
 
 ## Requests recording
+
 `appmap-java` can automatically record and save an AppMap for each HTTP server request which it processes. This functionality is currently supported for applications built using [Spring Boot](https://spring.io/projects/spring-boot), Servlet-stack web applications built using [Spring Framework](https://docs.spring.io/spring-framework/reference/web.html), and [Spark Framework](http://sparkjava.com/).
 
 ### Requests recording in Spring Boot and Spring Web Framework
+
 For Spring Boot and Spring Web Framework applications, `appmap-java` installs a ServletListener during initialization that will create recordings. The listener starts the recording before the servlet's `service` method is called, and ends the recording once `service` returns.
 
 For Spring Boot, `appmap-java` adds the listener when the Spring Application is initialized.
@@ -84,6 +87,7 @@ For Spring Boot, `appmap-java` adds the listener when the Spring Application is 
 For Spring Web Framework, `appmap-java` adds the listener when Spring's servlet container is initialized.
 
 ### Requests recording in Spark Framework
+
 For Spark Framework, `appmap-java` wraps Sparks' Handler with a HandlerWrapper that manages recording.
 
 ## Remote recording
@@ -110,8 +114,8 @@ $ java -javaagent:$HOME/.appmap/lib/java/appmap.jar -jar target/*.jar
 `appmap-java` can record an entire Java process from start to finish.
 
 1. Set the Java system property `appmap.recording.auto=true`. You must set this system property as a JVM argument.
-  If you are using a graphical run configuration, add the option `-Dappmap.recording.auto=true` to the "VM options" field.
-  If you are running on the command line, add the option `-Dappmap.recording.auto=true` to the JVM CLI arguments.
+   If you are using a graphical run configuration, add the option `-Dappmap.recording.auto=true` to the "VM options" field.
+   If you are running on the command line, add the option `-Dappmap.recording.auto=true` to the JVM CLI arguments.
 
 2. Start your application with the AppMap agent enabled using one of these approaches:
    1. [IntelliJ - "Start with Appmap"](/docs/reference/jetbrains.html#start-with-appmap-for-java)
@@ -150,8 +154,8 @@ catch (FileNotFoundException ex) {
   System.exit(1);
 }
 ```
-{: .example-code}
 
+{: .example-code}
 
 ## Configuration
 
@@ -185,20 +189,20 @@ packages:
 
 Each entry in the `packages` list is a YAML object which has the following keys:
 
-* **path** A Java package, class, or method that will be instrumented.
-* **exclude** A list of fully-qualified sub-packages, sub-classes
+- **path** A Java package, class, or method that will be instrumented.
+- **exclude** A list of fully-qualified sub-packages, sub-classes
   and sub-methods that will be ignored. The exclude list only applies to the
   `path` specified in the same package entry.
 
-* **shallow** When set to `true`, only the first function call entry into a
+- **shallow** When set to `true`, only the first function call entry into a
   package will be recorded. Subsequent function calls within the same package
   are not recorded unless code execution leaves the package and re-enters it.
   Default: `false`.
 
-* **methods** A list of YAML objects describing how specific methods should be handled.
-  * **class** a regular expression matching names of classes in the package
-  * **name** a regular expression matching names of methods in **class** that should be instrumented
-  * **labels** (optional) a list of labels that should be applied to all matching methods.
+- **methods** A list of YAML objects describing how specific methods should be handled.
+  - **class** a regular expression matching names of classes in the package
+  - **name** a regular expression matching names of methods in **class** that should be instrumented
+  - **labels** (optional) a list of labels that should be applied to all matching methods.
 
 Each of the **class** and **name** regular expressions is a
 [java.util.regex.Pattern
@@ -215,12 +219,15 @@ be instrumented. When the **methods** attribute is set, the **exclude**
 attribute is ignored.
 
 ## Annotations
+
 The `appmap-java` annotations are provided in the package `com.appland:appmap-annotation`, available on [Maven Central](https://search.maven.org/artifact/com.appland/appmap-annotation). To use them, add that package as a dependency in your build configuration file (`pom.xml`, `build.gradle`).
 
 ### @Labels
+
 `appmap-java` supports the addition of [code labels](/docs/reference/appmap-java.html#annotations) through the `com.appland.appmap.annotation.Labels` annotation.
 
 #### Usage
+
 Once the `Labels` annotation is available, you can apply it to methods in your application. For example:
 
 ```
@@ -238,9 +245,11 @@ public class ExampleClass {
 When `labeledFunction` appears in an AppMap, it will have the labels `label1` and `label2`.
 
 ### @NoAppMap
+
 The `NoAppMap` annotation can be used to disable recording of JUnit test methods. If applied to a specific method, that method will not generate an AppMap. Alternatively, it can be applied to a test class to disable generation of AppMap Data for all test methods in the class.
 
 #### Usage
+
 Example of annotating a test method:
 
 ```
@@ -260,9 +269,11 @@ public class TestClass {
   }
 }
 ```
+
 `testMethod1` will generate an AppMap, and `testMethod2` will not.
 
 Example of annotating a test class:
+
 ```
 import com.appland.appmap.annotation.NoAppMap;
 ...
@@ -280,6 +291,7 @@ public class UnrecordedTestClass {
   }
 }
 ```
+
 No AppMap Data will be generated for the tests in `UnrecordedTestClass`.
 
 ## System Properties
@@ -304,8 +316,20 @@ No AppMap Data will be generated for the tests in `UnrecordedTestClass`.
 - `appmap.recording.name` Populates the `metadata.name` field of the AppMap.
   Default: `$TIMESTAMP`
 
+## Troubleshooting
+
+##### I'm getting the error `java.lang.NoClassDefFoundError: com/appland/appmap/runtime/HookFunctions`
+
+In environments using Java application servers with modular class loading (such as WildFly, Tomcat, WebSphere, WebLogic, or GlassFish), you may encounter class visibility issues when using Java agents for instrumentation. The AppMap agent's classes, loaded by the bootstrap class loader, may not be accessible to applications due to class loader isolation.
+
+To resolve this, adjust your application server's class loading configuration to expose the `com.appland.appmap.runtime` package to your applications. This typically involves adding the package name to a server-specific system property or placing the AppMap agent's classes in a shared library directory.
+
+For instance, in WildFly, you can add the `com.appland.appmap.runtime` package to the `jboss.modules.system.pkgs` system property:
+
+```sh
+-Djboss.modules.system.pkgs=org.jboss.byteman,com.appland.appmap.runtime
+```
 
 ## GitHub repository
 
 [https://github.com/getappmap/appmap-java](https://github.com/getappmap/appmap-java)
-
