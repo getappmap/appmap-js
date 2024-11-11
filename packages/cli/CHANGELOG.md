@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.174.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.173.1...@appland/appmap-v3.174.0) (2024-11-11)
+
+
+### Features
+
+* Integrate `[@review](https://github.com/review)` command ([b21f36e](https://github.com/getappmap/appmap-js/commit/b21f36ed02929a479ea9512a4a81d8b7777f1b01))
+
 # [@appland/appmap-v3.173.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.173.0...@appland/appmap-v3.173.1) (2024-11-06)
 
 
