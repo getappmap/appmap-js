@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable class-methods-use-this */
-const { CodeObject } = require('@appland/models');
+const { CodeObjectType } = require('@appland/models');
 const Unique = require('./unique');
 
 function packageOf(codeObject) {
@@ -9,7 +9,7 @@ function packageOf(codeObject) {
   }
 
   const ancestors = [codeObject, ...codeObject.ancestors()];
-  let packageObject = ancestors.find((a) => a.type === CodeObject.PACKAGE);
+  let packageObject = ancestors.find((a) => a.type === CodeObjectType.PACKAGE);
   if (!packageObject && ancestors.length >= 1) {
     packageObject = ancestors[ancestors.length - 1];
   }
