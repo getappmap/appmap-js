@@ -35,8 +35,9 @@ export default class ContextService {
         searchTerms.push(...additionalTerms);
       }
 
-      const filters = { ...options.buildContextFilters() };
-
+      // Locations are not considered when searching for context. Use the `locationContext` method
+      // to retrieve context for specific files.
+      const filters = { ...options.buildContextFilters(), locations: undefined };
       const tokenCount = tokensAvailable();
       let context = await this.lookupContextService.lookupContext(searchTerms, tokenCount, filters);
       context = ContextService.guardContextType(context);
@@ -73,6 +74,11 @@ export default class ContextService {
       this.history.addEvent(contextItem);
     }
     this.history.log(`[context-service] Added ${charsAdded} characters of file context`);
+  }
+
+  locationContextFromOptions(options: AgentOptions): Promise<void> {
+    const { locations } = options.buildContextFilters();
+    return locations && locations.length > 0 ? this.locationContext(locations) : Promise.resolve();
   }
 
   static guardContextType(

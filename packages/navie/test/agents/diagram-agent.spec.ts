@@ -5,6 +5,7 @@ import DiagramAgent, { DIAGRAM_AGENT_PROMPT } from '../../src/agents/diagram-age
 import { UserOptions } from '../../src/lib/parse-options';
 import MermaidFixerService from '../../src/services/mermaid-fixer-service';
 import { DIAGRAM_FORMAT_PROMPT } from '../../src/agents/explain-agent';
+import { UserContext } from '../../src/user-context';
 
 describe('@diagram agent', () => {
   let interactionHistory: InteractionHistory;
@@ -36,6 +37,8 @@ describe('@diagram agent', () => {
     interactionHistory = new InteractionHistory();
     contextService = {
       searchContext: jest.fn(),
+      locationContext: jest.fn(),
+      locationContextFromOptions: ContextService.prototype.locationContextFromOptions, // eslint-disable-line @typescript-eslint/unbound-method
     } as unknown as ContextService;
     mermaidFixerService = {
       repairDiagram: jest.fn(),
@@ -73,5 +76,19 @@ describe('@diagram agent', () => {
 
     // Verify that the result returned by the perform method is as expected
     expect(result).toBeUndefined();
+  });
+
+  it('looks up location context if code selection is provided', async () => {
+    const codeSelection: UserContext.FileItem[] = [
+      { type: 'file', location: 'file1' },
+      { type: 'file', location: 'file2' },
+    ];
+
+    const options = new AgentOptions('', '', new UserOptions(new Map()), [], [], codeSelection);
+    const diagramAgent = new DiagramAgent(interactionHistory, contextService, mermaidFixerService);
+    await diagramAgent.perform(options, () => tokensAvailable);
+
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(contextService.locationContext).toHaveBeenCalledWith(['file1', 'file2']);
   });
 });

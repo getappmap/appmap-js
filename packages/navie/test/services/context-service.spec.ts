@@ -1,4 +1,3 @@
-import { lookup } from 'dns';
 import { AgentOptions } from '../../src/agent';
 import ContextService from '../../src/services/context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';

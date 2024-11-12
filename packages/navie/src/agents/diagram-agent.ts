@@ -48,6 +48,7 @@ export default class DiagramAgent implements Agent {
       )
     );
 
+    await this.contextService.locationContextFromOptions(options);
     await this.contextService.searchContext(options, tokensAvailable);
   }
 
