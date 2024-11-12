@@ -80,15 +80,15 @@ const cli = yargs(hideBin(process.argv))
         return `.../${parts.slice(-3).join('/')}`;
       };
 
-      const printResult = (filePath: string, score: number) =>
-        console.log('%s   %s', filePathAtMostThreeEntries(filePath), score.toPrecision(3));
+      const printResult = (type: string, id: string, score: number) =>
+        console.log('%s %s   %s', type, filePathAtMostThreeEntries(id), score.toPrecision(3));
 
       console.log('File search results');
       console.log('-------------------');
       const fileSearchResults = fileIndex.search(query as string);
       for (const result of fileSearchResults) {
         const { filePath, score } = result;
-        printResult(filePath, score);
+        printResult('file', filePath, score);
       }
 
       const splitter = langchainSplitter;
@@ -104,8 +104,11 @@ const cli = yargs(hideBin(process.argv))
 
       const snippetSearchResults = snippetIndex.searchSnippets(query as string);
       for (const result of snippetSearchResults) {
-        const { snippetId, filePath, startLine, endLine, score } = result;
-        printResult(snippetId, score);
+        const { snippetId, score } = result;
+        printResult(snippetId.type, snippetId.id, score);
+
+        const [filePath, range] = snippetId.id.split(':');
+        const [startLine, endLine] = range.split('-').map((n) => parseInt(n, 10));
 
         if (isNullOrUndefined(startLine) || isNullOrUndefined(endLine)) continue;
 

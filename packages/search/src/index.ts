@@ -2,7 +2,7 @@ export { ContentReader, readFileSafe } from './ioutil';
 export { Splitter, langchainSplitter } from './splitter';
 export { ListFn, FilterFn, Tokenizer, default as buildFileIndex } from './build-file-index';
 export { File, default as buildSnippetIndex } from './build-snippet-index';
-export { default as SnippetIndex, SnippetSearchResult } from './snippet-index';
+export { default as SnippetIndex, SnippetSearchResult, SnippetId } from './snippet-index';
 export { default as FileIndex, FileSearchResult } from './file-index';
 export { default as listProjectFiles } from './project-files';
 export { isBinaryFile, isDataFile, isLargeFile } from './file-type';

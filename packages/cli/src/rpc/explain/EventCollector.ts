@@ -59,7 +59,7 @@ export default class EventCollector {
     return { results, context, contextSize };
   }
 
-  async appmapIndex(appmap: string): Promise<FindEvents> {
+  protected async appmapIndex(appmap: string): Promise<FindEvents> {
     let index = this.appmapIndexes.get(appmap);
     if (!index) {
       index = new FindEvents(appmap);
@@ -69,7 +69,7 @@ export default class EventCollector {
     return index;
   }
 
-  async findEvents(appmap: string, options: SearchOptions): Promise<EventSearchResponse> {
+  protected async findEvents(appmap: string, options: SearchOptions): Promise<EventSearchResponse> {
     if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, -'.appmap.json'.length);
 
     const index = await this.appmapIndex(appmap);

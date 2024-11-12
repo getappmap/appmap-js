@@ -3,16 +3,21 @@ import sqlite3 from 'better-sqlite3';
 
 import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
-import { FileIndex, FileSearchResult } from '@appland/search';
+import { FileIndex, FileSearchResult, SnippetSearchResult } from '@appland/search';
 
 import { SearchResponse as AppMapSearchResponse } from '../../fulltext/appmap-match';
 import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
-import EventCollector from './EventCollector';
 import indexFiles from './index-files';
 import indexSnippets from './index-snippets';
-import collectSnippets from './collect-snippets';
 import buildIndex from './buildIndex';
 import { buildAppMapIndex, search } from '../../fulltext/appmap-index';
+import indexEvents from './index-events';
+
+type ContextCandidate = {
+  results: SearchRpc.SearchResult[];
+  context: ContextV2.ContextResponse;
+  contextSize: number;
+};
 
 export default class SearchContextCollector {
   public excludePatterns: RegExp[] | undefined;
@@ -98,41 +103,71 @@ export default class SearchContextCollector {
 
     const snippetIndex = await buildIndex('snippets', async (indexFile) => {
       const db = new sqlite3(indexFile);
-      return await indexSnippets(db, fileSearchResults);
+      const snippetIndex = await indexSnippets(db, fileSearchResults);
+      await indexEvents(snippetIndex, appmapSearchResponse.results);
+      return snippetIndex;
     });
 
-    let contextCandidate: {
-      results: SearchRpc.SearchResult[];
-      context: ContextV2.ContextResponse;
-      contextSize: number;
-    };
+    let contextCandidate: ContextCandidate;
     try {
-      const eventsCollector = new EventCollector(this.vectorTerms.join(' '), appmapSearchResponse);
-
       let charCount = 0;
-      let maxEventsPerDiagram = 5;
+      let maxSnippets = 50;
       log(`[search-context] Requested char limit: ${this.charLimit}`);
       for (;;) {
-        log(`[search-context] Collecting context with ${maxEventsPerDiagram} events per diagram.`);
+        log(`[search-context] Collecting context with ${maxSnippets} events per diagram.`);
 
-        contextCandidate = await eventsCollector.collectEvents(
-          maxEventsPerDiagram,
-          this.excludePatterns,
-          this.includePatterns,
-          this.includeTypes
-        );
+        // Collect all code objects from AppMaps and use them to build the sequence diagram
+        // const codeSnippets = new Array<SnippetSearchResult>();
+        // TODO: Apply this.includeTypes
 
-        const codeSnippetCount = contextCandidate.context.filter(
-          (item) => item.type === ContextV2.ContextItemType.CodeSnippet
-        ).length;
+        const snippetContextItem = (
+          snippet: SnippetSearchResult
+        ): ContextV2.ContextItem | ContextV2.FileContextItem | undefined => {
+          const { snippetId, directory, score, content } = snippet;
 
-        const charLimit = codeSnippetCount === 0 ? this.charLimit : this.charLimit / 4;
-        const sourceContext = collectSnippets(
-          snippetIndex.index,
+          switch (snippetId.type) {
+            case 'query':
+            case 'route':
+            case 'external-route':
+              return {
+                type: ContextV2.ContextItemType.DataRequest,
+                content,
+                directory,
+                score,
+              };
+            case 'code-snippet':
+              return {
+                type: ContextV2.ContextItemType.CodeSnippet,
+                content,
+                directory,
+                score,
+              };
+            // TODO: Collect all matching events, then build a sequence diagram
+            // case 'event':
+            //   return await buildSequenceDiagram(snippet);
+            // default:
+            //   codeSnippets.push(snippet);
+          }
+        };
+
+        const snippetSearchResults = snippetIndex.index.searchSnippets(
           this.vectorTerms.join(' OR '),
-          charLimit
+          maxSnippets
         );
-        contextCandidate.context = contextCandidate.context.concat(sourceContext);
+        const context: ContextV2.ContextItem[] = [];
+        for (const result of snippetSearchResults) {
+          const contextItem = snippetContextItem(result);
+          if (contextItem) context.push(contextItem);
+        }
+
+        // TODO: Build sequence diagrams
+
+        contextCandidate = {
+          // TODO: Fixme remove hard coded cast
+          results: appmapSearchResponse.results as SearchRpc.SearchResult[],
+          context,
+          contextSize: snippetSearchResults.reduce((acc, result) => acc + result.content.length, 0),
+        };
 
         const appliedContext = applyContext(contextCandidate.context, this.charLimit);
         const appliedContextSize = appliedContext.reduce(
@@ -147,8 +182,8 @@ export default class SearchContextCollector {
           break;
         }
         charCount = appliedContextSize;
-        maxEventsPerDiagram = Math.ceil(maxEventsPerDiagram * 1.5);
-        log(`[search-context] Increasing max events per diagram to ${maxEventsPerDiagram}.`);
+        maxSnippets = Math.ceil(maxSnippets * 1.5);
+        log(`[search-context] Increasing max events per diagram to ${maxSnippets}.`);
       }
     } finally {
       snippetIndex.close();

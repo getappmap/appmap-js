@@ -109,7 +109,7 @@ export default async function collectContext(
 }> {
   const keywords = searchTerms.map((term) => queryKeywords(term)).flat();
 
-  //   recent?: boolean;
+  // recent?: boolean;
   // locations?: string[];
   // itemTypes?: ContextItemType[];
   // labels?: ContextLabel[];
