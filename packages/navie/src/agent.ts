@@ -29,15 +29,22 @@ export class AgentOptions {
     return this.projectInfo.some((info) => info.appmapStats && info.appmapStats?.numAppMaps > 0);
   }
 
+  get contextLocations(): string[] {
+    return this.codeSelection && typeof this.codeSelection !== 'string'
+      ? this.codeSelection.filter(UserContext.hasLocation).map((cs) => cs.location)
+      : [];
+  }
+
   buildContextFilters(): ContextV2.ContextFilters {
     const filters: ContextV2.ContextFilters = {};
     if (this.contextLabels) filters.labels = this.contextLabels;
-    if (this.codeSelection && typeof this.codeSelection !== 'string') {
-      filters.locations = this.codeSelection
-        .filter(UserContext.hasLocation)
-        .map((cs) => cs.location);
-    }
     this.userOptions.populateContextFilters(filters);
+    const contextLocations = this.contextLocations;
+    if (contextLocations.length > 0) {
+      filters.locations = contextLocations;
+      filters.exclude ||= [];
+      filters.exclude.push(...contextLocations);
+    }
     return filters;
   }
 }

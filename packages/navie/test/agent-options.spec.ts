@@ -16,5 +16,19 @@ describe('AgentOptions', () => {
         include: ['test'],
       });
     });
+
+    it('builds locations and excludes from code selection locations', () => {
+      const userOptions = new UserOptions(new Map());
+      const agentOptions = new AgentOptions(
+        question,
+        question,
+        userOptions,
+        [],
+        [],
+        [{ type: 'file', location: 'file1.md' }]
+      );
+      const filters = agentOptions.buildContextFilters();
+      expect(filters).toEqual({ locations: ['file1.md'], exclude: ['file1.md'] });
+    });
   });
 });

@@ -79,6 +79,7 @@ export default class TestAgent implements Agent {
       await contentFetcher.applyFileContext(options, options.chatHistory);
     }
 
+    await this.contextService.locationContextFromOptions(options);
     await this.contextService.searchContext(options, tokensAvailable, ['test', 'spec']);
   }
 
