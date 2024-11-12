@@ -75,7 +75,7 @@ Click the `Sign in to GitHub` and login with an account that has a valid paid or
 
 ## OpenAI
 
-**Note:** We recommend configuring your OpenAI key using the code editor extension. Follow the [Bring Your Own Key](/docs/using-navie-ai/bring-your-own-model.html#configuring-your-openai-key) docs for instructions.  
+**Note:** We recommend configuring your OpenAI key using the code editor extension. Follow the [Bring Your Own Key](/docs/using-navie-ai/bring-your-own-model.html#configuring-your-openai-key) docs for instructions.  The configuration options below are for advanced users. 
 
 Only `OPENAI_API_KEY` needs to be set, other settings can stay default:
 
