@@ -222,11 +222,11 @@ export function builder<T>(args: yargs.Argv<T>) {
     });
 }
 
-type HandlerArguments = yargs.ArgumentsCamelCase<
+export type NavieHandlerArguments = yargs.ArgumentsCamelCase<
   ReturnType<typeof builder> extends yargs.Argv<infer A> ? A : never
 >;
 
-export async function handler(argv: HandlerArguments) {
+export async function handler(argv: NavieHandlerArguments) {
   verbose(argv.verbose);
   await configureRpcDirectories(argv.directory);
 

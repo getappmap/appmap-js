@@ -34,6 +34,8 @@ const CompareReportCommand = require('./cmds/compare-report/compareReport');
 const InventoryCommand = require('./cmds/inventory/inventory');
 const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport');
 const SearchCommand = require('./cmds/search/search');
+import * as ListFeaturesCommand from './cmds/autodoc/list-features';
+import * as DocumentFeatureCommand from './cmds/autodoc/document-feature';
 import * as RpcCommand from './cmds/index/rpc';
 import * as RpcClientCommand from './cmds/rpcClient';
 import * as NavieCommand from './cmds/navie';
@@ -144,6 +146,8 @@ yargs(process.argv.slice(2))
   .command(RpcClientCommand)
   .command(NavieCommand)
   .command(ApplyCommand)
+  .command(ListFeaturesCommand)
+  .command(DocumentFeatureCommand)
   .option('verbose', {
     alias: 'v',
     type: 'boolean',
