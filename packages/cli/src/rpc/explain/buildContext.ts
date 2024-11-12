@@ -1,11 +1,10 @@
 import { SearchRpc } from '@appland/rpc';
-import { AppMapFilter, serializeFilter } from '@appland/models';
-import assert from 'assert';
-
-import { handler as sequenceDiagramHandler } from '../appmap/sequenceDiagram';
-import lookupSourceCode from './lookupSourceCode';
 import { warn } from 'console';
 import { ContextV2 } from '@appland/navie';
+
+import lookupSourceCode from './lookupSourceCode';
+import buildSequenceDiagram from './build-sequence-diagram';
+import appmapLocation from './appmap-location';
 
 /**
  * Processes search results to build sequence diagrams, code snippets, and code object sets. This is the format
@@ -33,39 +32,10 @@ export default async function buildContext(
   const codeSnippetLocations = new Set<string>();
   const dataRequestContent = new Set<string>();
 
-  const appmapLocation = (appmap: string, event?: SearchRpc.EventMatch) => {
-    const appmapFile = [appmap, 'appmap.json'].join('.');
-    const tokens = [appmapFile];
-    if (event?.eventIds.length) tokens.push(String(event.eventIds[0]));
-    return tokens.join(':');
-  };
-
-  const buildSequenceDiagram = async (result: SearchRpc.SearchResult) => {
-    const codeObjects = result.events.map((event) => event.fqid);
-    const appmapFilter = new AppMapFilter();
-    appmapFilter.declutter.context.on = true;
-    appmapFilter.declutter.context.names = codeObjects;
-    const filterState = serializeFilter(appmapFilter);
-
-    const plantUML = await sequenceDiagramHandler(result.appmap, {
-      filter: filterState,
-      format: 'plantuml',
-      formatOptions: { disableMarkup: true },
-    });
-    assert(typeof plantUML === 'string');
-    sequenceDiagrams.push({
-      directory: result.directory,
-      location: appmapLocation(result.appmap),
-      type: ContextV2.ContextItemType.SequenceDiagram,
-      content: plantUML,
-      score: result.score,
-    });
-  };
-
   const examinedLocations = new Set<string>();
   for (const result of searchResults) {
     try {
-      await buildSequenceDiagram(result);
+      sequenceDiagrams.push(await buildSequenceDiagram(result));
     } catch (e) {
       warn(`Failed to build sequence diagram for ${result.appmap}`);
       warn(e);
@@ -93,6 +63,8 @@ export default async function buildContext(
 
       codeSnippetLocations.add(event.location);
 
+      // TODO: Snippets from appmap events will no longer be needed, because the snippets come
+      // from the search results in the index (boosted by AppMap references).
       const snippets = await lookupSourceCode(result.directory, event.location);
       if (snippets) {
         codeSnippets.push({
