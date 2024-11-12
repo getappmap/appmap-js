@@ -39,6 +39,18 @@ export function navieMetadataV1(): RpcHandler<
         {
           name: '@test',
           description: 'Write tests for your code.',
+          referenceUrl: 'https://appmap.io/docs/navie-reference/navie-commands.html#test',
+        },
+        {
+          name: '@search',
+          description: 'Search your codebase with Navie.',
+          referenceUrl: 'https://appmap.io/docs/navie-reference/navie-commands.html#review',
+        },
+        {
+          name: '@review',
+          description:
+            'Navie will provide feedback on the changes in your current branch. Use /base=<ref> to specify the base reference.',
+          referenceUrl: 'https://appmap.io/docs/navie-reference/navie-commands.html#search',
         },
         {
           name: '@help',
