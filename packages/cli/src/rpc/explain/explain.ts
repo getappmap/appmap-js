@@ -9,7 +9,7 @@ import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
 import { warn } from 'console';
 import EventEmitter from 'events';
-import { basename, join } from 'path';
+import { basename } from 'path';
 
 import { LRUCache } from 'lru-cache';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
@@ -18,7 +18,7 @@ import collectProjectInfos from '../../cmds/navie/projectInfo';
 import configuration, { AppMapDirectory } from '../configuration';
 import { getLLMConfiguration } from '../llmConfiguration';
 import { RpcError, RpcHandler } from '../rpc';
-import collectContext from './collectContext';
+import collectContext, { buildContextRequest } from './collect-context';
 import { initializeHistory } from './navie/historyHelper';
 import { ThreadAccessError } from './navie/ihistory';
 import INavie, { INavieProvider } from './navie/inavie';
@@ -148,17 +148,7 @@ export class Explain extends EventEmitter {
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
 
-    // const appmapDirectories = this.appmapDirectories.map((dir) => {
-    //   const path = dir.directory;
-    //   const appmapDir = dir.appmapConfig?.appmap_dir ?? 'tmp/appmap';
-    //   if (path.endsWith(appmapDir)) {
-    //     return path;
-    //   } else {
-    //     return join(path, appmapDir);
-    //   }
-    // });
-
-    const searchResult = await collectContext(
+    const contextRequest = buildContextRequest(
       this.appmapDirectories.map((dir) => dir.directory),
       this.projectDirectories,
       this.appmaps,
@@ -167,6 +157,15 @@ export class Explain extends EventEmitter {
       data
     );
 
+    const searchResult = await collectContext(
+      this.appmapDirectories.map((dir) => dir.directory),
+      this.projectDirectories,
+      charLimit,
+      contextRequest.vectorTerms,
+      contextRequest.request
+    );
+
+    // TODO: Append this result rather than over-writing, to allow Navie to request context more than once.
     this.status.searchResponse = searchResult.searchResponse;
     this.status.contextResponse = searchResult.context;
 
