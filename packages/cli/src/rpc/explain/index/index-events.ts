@@ -1,9 +1,9 @@
-import { SnippetId, SnippetIndex } from '@appland/search';
+import { queryKeywords, SnippetId, SnippetIndex } from '@appland/search';
 import { warn } from 'console';
 import crypto from 'crypto';
 
-import { SearchResult } from '../../fulltext/appmap-match';
-import { ClassMapEntry, readIndexFile } from '../../fulltext/appmap-index';
+import { SearchResult } from '../../../fulltext/appmap-match';
+import { ClassMapEntry, readIndexFile } from '../../../fulltext/appmap-index';
 
 function hexDigest(input: string): string {
   const hash = crypto.createHash('sha256');
@@ -26,15 +26,16 @@ async function indexAppMapEvents(
   }
 
   const indexCodeObject = (type: string, id: string, content: string, ...tags: string[]) => {
-    const words = [content, ...tags].join(' ');
+    const words = [content, ...tags];
+    const wordList = queryKeywords(words);
 
     const snippetId: SnippetId = {
       type,
       id,
     };
 
-    // TODO: Include event id in the snippet id
-    snippetIndex.indexSnippet(snippetId, directory, '', words, content);
+    // TODO: Include event id in the snippet id?
+    snippetIndex.indexSnippet(snippetId, directory, '', wordList.join(' '), content);
   };
 
   const boostCodeObject = (location: string) => {
@@ -61,7 +62,10 @@ async function indexAppMapEvents(
 
     if (id) indexCodeObject(cme.type, id, cme.name, ...tags);
 
-    if (cme.sourceLocation) boostCodeObject(cme.sourceLocation);
+    if (cme.sourceLocation) {
+      // TODO: Which event ids should this be associated with?
+      boostCodeObject(cme.sourceLocation);
+    }
 
     cme.children?.forEach((child) => {
       indexClassMapEntry(child);
