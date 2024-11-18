@@ -1,8 +1,10 @@
-import { Feature } from './types';
-import { listProjectFiles } from '@appland/search';
-import { navie } from './navie';
-import { parseJSON } from '@appland/navie';
 import { warn } from 'console';
+import { parseJSON } from '@appland/navie';
+import { listProjectFiles } from '@appland/search';
+
+import { Feature } from './types';
+import { navie } from './navie';
+import { verbose } from '../utils';
 
 const PROMPT = `## List Features
 
@@ -40,6 +42,7 @@ export type ListFeatureOptions = {
   prompt?: string;
   includePatterns?: RegExp[];
   excludePatterns?: RegExp[];
+  filter?: string;
 };
 
 /**
@@ -78,20 +81,23 @@ emission of the feature.
 `);
   if (options.prompt) prompt.push(options.prompt);
 
-  const featureStr = await navie(
-    '.',
-    '@explain /noprojectinfo /nocontext Enumerate ten (10) of the most important features in the code base.',
-    {
-      codeSelection: projectFiles.sort().join('\n'),
-      prompt: prompt.join('\n\n'),
-    }
-  );
+  const command = '@explain /noprojectinfo /nocontext';
+  let question: string;
+  if (options.filter) question = `Enumerate ten (10) sub-featurse of "${options.filter}".`;
+  else question = 'Enumerate ten (10) of the most important features in the code base.';
+
+  const featureStr = await navie('.', [command, question].join(' '), {
+    codeSelection: projectFiles.sort().join('\n'),
+    prompt: prompt.join('\n\n'),
+  });
 
   const features = parseJSON(featureStr, true, undefined) as undefined | string[];
   if (!features) throw new Error(`Unable to parse feature list from Navie response: ${featureStr}`);
 
-  warn('Features:');
-  warn(`  ${features.join('\n  ')}`);
+  if (verbose()) {
+    warn('Features:');
+    warn(`  ${features.join('\n  ')}`);
+  }
 
   return features.map((name) => ({ name }));
 }

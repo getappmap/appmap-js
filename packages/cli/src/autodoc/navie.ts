@@ -56,8 +56,6 @@ export async function navie(
   }
   args.push(question);
 
-  warn(args.join(' '));
-
   const processResult = child_process.spawn(cliCommandName, args);
   let output = '';
   const readProcessOutput = new Promise<string>((resolve, reject) => {
@@ -69,6 +67,7 @@ export async function navie(
     });
     processResult.on('close', (code: number) => {
       if (code !== 0) {
+        warn(`Command failed: ` + args.join(' '));
         reject(new Error(`navie exited with code ${code}`));
       }
       resolve(output);
@@ -76,8 +75,6 @@ export async function navie(
   });
 
   await readProcessOutput;
-
-  console.log(output);
 
   return output;
 }

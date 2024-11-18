@@ -6,7 +6,12 @@ import { warn } from 'console';
 import { verbose } from '../../utils';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { readPrompt } from './read-prompt';
-import documentFeature, { DocumentFeatureOptions } from '../../autodoc/document-feature';
+import documentFeature, {
+  DocumentFeatureOptions,
+  FeatureArtifact,
+} from '../../autodoc/document-feature';
+import assert from 'assert';
+import { Feature } from '../../autodoc/types';
 
 export const command = 'document-feature [feature]';
 export const describe = 'Document the architecture of a feature.';
@@ -74,6 +79,21 @@ export const handler = async (argv: ArgumentTypes) => {
   let prompt: string | undefined;
   if (promptStr) prompt = readPrompt(promptStr);
 
+  const saveArtifact = (
+    directory: string,
+    artifactName: string,
+    fileName: string,
+    artifact: FeatureArtifact
+  ): void => {
+    mkdirSync(directory, { recursive: true });
+    writeFileSync(join(directory, fileName), artifact.content);
+
+    const navieDir = join(directory, '.navie', artifactName);
+    mkdirSync(navieDir, { recursive: true });
+    writeFileSync(join(navieDir, 'question.md'), artifact.question);
+    if (artifact.prompt) writeFileSync(join(navieDir, 'prompt.md'), artifact.prompt);
+  };
+
   warn(`Documenting features: ${features.join(', ')}`);
   const featureOptions: DocumentFeatureOptions = {
     prompt,
@@ -81,10 +101,24 @@ export const handler = async (argv: ArgumentTypes) => {
     exclude,
   };
   for (const featureName of features) {
-    const feature = { name: featureName };
+    const names = featureName.split('/');
+    const childName = names.pop();
+    assert(childName, 'Child name is required');
+    const parentName = names.join('/');
+    const feature: Feature = { name: childName };
+    if (parentName) feature.parent = parentName;
+
     const doc = await documentFeature(feature, featureOptions);
-    const readmeFile = join(architectureDir, featureName, 'README.md');
-    warn(`Writing documentation to ${readmeFile}`);
-    writeFileSync(readmeFile, doc);
+
+    const featureDir = join([architectureDir, parentName, childName].filter(Boolean).join('/'));
+    warn(`Writing documentation to ${featureDir}`);
+    saveArtifact(featureDir, 'readme', 'README.md', doc.readme);
+    saveArtifact(featureDir, 'class-diagram', 'class-diagram.md', doc.classDiagram);
+
+    const navieDir = join(featureDir, '.navie');
+    writeFileSync(
+      join(navieDir, 'dependencyFiles.json'),
+      JSON.stringify(doc.dependencyFiles, null, 2)
+    );
   }
 };

@@ -5,7 +5,14 @@ export type MixedContent = {
 
 export type Feature = {
   name: string;
+  parent?: string;
 };
+
+export function featureSearchString(feature: Feature): string {
+  const tokens = [feature.name.split('-').join(' ')];
+  if (feature.parent) tokens.push(feature.parent.split('-').join(' '));
+  return tokens.join(', a subfeature of  ');
+}
 
 export type Document = {
   title: string;

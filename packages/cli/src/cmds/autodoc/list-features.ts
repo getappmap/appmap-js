@@ -23,6 +23,11 @@ export const builder = (args: yargs.Argv) => {
     alias: 'd',
   });
 
+  args.option('filter', {
+    describe: 'List a subset of a named feature or keywords',
+    type: 'string',
+  });
+
   args.option('include', {
     describe: 'Include patterns',
     type: 'array',
@@ -42,7 +47,7 @@ export const builder = (args: yargs.Argv) => {
   args.option('create-template-dirs', {
     describe: 'Create a template directory for each new feature',
     type: 'boolean',
-    alias: '-c',
+    alias: 'c',
     default: false,
   });
 
@@ -58,6 +63,7 @@ export const builder = (args: yargs.Argv) => {
 type ArgumentTypes = {
   verbose: boolean;
   directory: string;
+  filter?: string;
   prompt?: string;
   include?: string[];
   exclude?: string[];
@@ -69,7 +75,8 @@ async function listFeatures(
   knownFeatures: string[],
   includeStr?: string[],
   excludeStr?: string[],
-  prompt?: string
+  prompt?: string,
+  filter?: string
 ): Promise<Feature[]> {
   let includePatterns: RegExp[] | undefined = undefined;
   if (includeStr) includePatterns = includeStr.map((pattern) => new RegExp(pattern));
@@ -85,6 +92,7 @@ async function listFeatures(
     includePatterns,
     excludePatterns,
     knownFeatures,
+    filter,
   });
 }
 
@@ -96,6 +104,7 @@ export const handler = async (argv: ArgumentTypes) => {
   const {
     directory,
     prompt: listFeaturesPrompt,
+    filter,
     include: includeStr,
     exclude: excludeStr,
     createTemplateDirs,
@@ -111,17 +120,21 @@ export const handler = async (argv: ArgumentTypes) => {
   const featureIds = readdirSync(architectureDir);
   knownFeatures.push(...featureIds);
 
-  const features = await listFeatures(knownFeatures, includeStr, excludeStr, listFeaturesPrompt);
+  const features = await listFeatures(
+    knownFeatures,
+    includeStr,
+    excludeStr,
+    listFeaturesPrompt,
+    filter
+  );
 
   warn(`Detected features: ${features.map((feature) => feature.name).join(', ')}`);
 
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  const confirmTemplate = async (feature: Feature): Promise<ConfirmResponse> => {
-    if (!confirmTemplateDirs) return true;
+  const confirmTemplate = async (
+    rl: readline.Interface,
+    feature: Feature
+  ): Promise<ConfirmResponse> => {
+    if (!confirmTemplateDirs) return 'y';
 
     const response = await ask(
       rl,
@@ -131,10 +144,10 @@ export const handler = async (argv: ArgumentTypes) => {
     return response as ConfirmResponse;
   };
 
-  const createTemplateDirsUI = async () => {
+  const createTemplateDirsUI = async (rl: readline.Interface) => {
     for (const feature of features) {
       const { name } = feature;
-      const confirmResponse = await confirmTemplate(feature);
+      const confirmResponse = await confirmTemplate(rl, feature);
       if (confirmResponse === 'q') break;
 
       if (confirmResponse === 'n') continue;
@@ -142,20 +155,16 @@ export const handler = async (argv: ArgumentTypes) => {
       const slugName = name.toLowerCase().replace(/[^\w]+/g, '-');
       const featureDir = join(architectureDir, slugName);
       mkdirSync(featureDir, { recursive: true });
-      const dataDir = join(featureDir, 'data');
-      mkdirSync(dataDir, { recursive: true });
-      const dataKeepFile = join(dataDir, '.keep');
-      writeFileSync(dataKeepFile, '');
-      const promptDir = join(featureDir, 'prompt');
-      mkdirSync(promptDir, { recursive: true });
-      const promptKeepFile = join(promptDir, '.keep');
-      writeFileSync(promptKeepFile, '');
     }
   };
 
   if (createTemplateDirs) {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
     try {
-      await createTemplateDirsUI();
+      await createTemplateDirsUI(rl);
     } finally {
       rl.close();
     }
