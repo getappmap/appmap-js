@@ -63,6 +63,8 @@ export default async function buildContext(
 
       codeSnippetLocations.add(event.location);
 
+      // TODO: Snippets from appmap events will no longer be needed, because the snippets come
+      // from the search results in the index (boosted by AppMap references).
       const snippets = await lookupSourceCode(result.directory, event.location);
       if (snippets) {
         codeSnippets.push({

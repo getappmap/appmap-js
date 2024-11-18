@@ -5,6 +5,7 @@ export { default as extractFileChanges } from './lib/extract-file-changes';
 export { default as Message } from './message';
 export { default as InteractionState } from './interaction-state';
 export { default as navie } from './navie';
+export { default as trimFences } from './lib/trim-fences';
 export { AgentMode as Agents } from './agent';
 export { ContextV1, ContextV2 } from './context';
 export { UserContext } from './user-context';

@@ -1,4 +1,4 @@
-import { log } from 'console';
+import { log, warn } from 'console';
 import sqlite3 from 'better-sqlite3';
 
 import { ContextV2, applyContext } from '@appland/navie';
@@ -125,6 +125,11 @@ export default class SearchContextCollector {
         ): ContextV2.ContextItem | ContextV2.FileContextItem | undefined => {
           const { snippetId, directory, score, content } = snippet;
 
+          const { type: snippetIdType, id: snippetIdValue } = snippetId;
+
+          let location: string | undefined;
+          if (snippetIdType === 'code-snippet') location = snippetIdValue;
+
           switch (snippetId.type) {
             case 'query':
             case 'route':
@@ -141,7 +146,11 @@ export default class SearchContextCollector {
                 content,
                 directory,
                 score,
+                location,
               };
+            default:
+              warn(`[search-context] Unknown snippet type: ${snippetId.type}`);
+
             // TODO: Collect all matching events, then build a sequence diagram
             // case 'event':
             //   return await buildSequenceDiagram(snippet);
