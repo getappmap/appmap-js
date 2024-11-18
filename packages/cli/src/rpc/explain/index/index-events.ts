@@ -61,7 +61,10 @@ async function indexAppMapEvents(
 
     if (id) indexCodeObject(cme.type, id, cme.name, ...tags);
 
-    if (cme.sourceLocation) boostCodeObject(cme.sourceLocation);
+    if (cme.sourceLocation) {
+      // TODO: Which event ids should this be associated with?
+      boostCodeObject(cme.sourceLocation);
+    }
 
     cme.children?.forEach((child) => {
       indexClassMapEntry(child);

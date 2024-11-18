@@ -96,7 +96,10 @@ export default async function collectSearchContext(
     for (;;) {
       log(`[search-context] Collecting context with ${maxSnippets} events per diagram.`);
 
-      // Collect all code objects from AppMaps and use them to build the sequence diagram
+      // Collect all events from AppMaps and use them to build the sequence diagram
+      // The unsolved part here is getting event ids from code snippets that are associated with
+      // AppMap events, because this association is not yet implemented.
+
       // const codeSnippets = new Array<SnippetSearchResult>();
       // TODO: Apply this.includeTypes
 
@@ -110,11 +113,17 @@ export default async function collectSearchContext(
         if (contextItem) context.push(contextItem);
       }
 
-      // TODO: Build sequence diagrams
+      const appmapSearchResults: SearchRpc.SearchResult[] = appmapSearchResponse.results.map(
+        (result) => ({
+          appmap: result.appmap,
+          directory: result.directory,
+          score: result.score,
+          events: [],
+        })
+      );
 
       contextCandidate = {
-        // TODO: Fixme remove hard coded cast
-        results: appmapSearchResponse.results as SearchRpc.SearchResult[],
+        results: appmapSearchResults,
         context,
         contextSize: snippetSearchResults.reduce((acc, result) => acc + result.content.length, 0),
       };

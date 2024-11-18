@@ -26,10 +26,13 @@ export function snippetContextItem(
   let location: string | undefined;
   if (snippetIdType === 'code-snippet') location = snippetIdValue;
 
+  const eventIds: number[] = [];
+
   switch (snippetId.type) {
     case 'query':
     case 'route':
     case 'external-route':
+      // TODO: Collect event ids from these.
       return {
         type: ContextV2.ContextItemType.DataRequest,
         content,
@@ -37,6 +40,7 @@ export function snippetContextItem(
         score,
       };
     case 'code-snippet':
+      // TODO: Collect event ids from these.
       return {
         type: ContextV2.ContextItemType.CodeSnippet,
         content,
