@@ -2,8 +2,8 @@ import { SnippetId, SnippetIndex } from '@appland/search';
 import { warn } from 'console';
 import crypto from 'crypto';
 
-import { SearchResult } from '../../fulltext/appmap-match';
-import { ClassMapEntry, readIndexFile } from '../../fulltext/appmap-index';
+import { SearchResult } from '../../../fulltext/appmap-match';
+import { ClassMapEntry, readIndexFile } from '../../../fulltext/appmap-index';
 
 function hexDigest(input: string): string {
   const hash = crypto.createHash('sha256');

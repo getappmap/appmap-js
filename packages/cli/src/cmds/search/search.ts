@@ -16,7 +16,7 @@ import {
 } from '../../fulltext/FindEvents';
 import { openInBrowser } from '../open/openers';
 import { buildAppMapIndex, search } from '../../fulltext/appmap-index';
-import buildIndexInTempDir from '../../rpc/explain/build-index-in-temp-dir';
+import buildIndexInTempDir from '../../rpc/explain/index/build-index-in-temp-dir';
 
 export const command = 'search <query>';
 export const describe =

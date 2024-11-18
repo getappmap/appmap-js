@@ -1,18 +1,16 @@
-import { log, warn } from 'console';
-import sqlite3 from 'better-sqlite3';
+import { log } from 'console';
 
 import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
-import { FileIndex, FileSearchResult, SnippetSearchResult } from '@appland/search';
 
-import indexFiles from './index-files';
-import indexSnippets from './index-snippets';
-import buildIndexInTempDir from './build-index-in-temp-dir';
-import indexEvents from './index-events';
-
-import { SearchResponse as AppMapSearchResponse } from '../../fulltext/appmap-match';
 import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
-import { buildAppMapIndex, search } from '../../fulltext/appmap-index';
+import { SearchResponse as AppMapSearchResponse } from '../../fulltext/appmap-match';
+import { searchAppMapFiles } from './index/appmap-file-index';
+import { searchProjectFiles } from './index/project-file-index';
+import {
+  buildProjectFileSnippetIndex,
+  snippetContextItem,
+} from './index/project-file-snippet-index';
 
 type ContextCandidate = {
   results: SearchRpc.SearchResult[];
@@ -63,18 +61,11 @@ export default async function collectSearchContext(
       numResults: request.appmaps.length,
     };
   } else {
-    const appmapIndex = await buildIndexInTempDir('appmaps', async (indexFile) => {
-      const db = new sqlite3(indexFile);
-      const fileIndex = new FileIndex(db);
-      await buildAppMapIndex(fileIndex, appmapDirectories);
-      return fileIndex;
-    });
-    const selectedAppMaps = await search(
-      appmapIndex.index,
-      vectorTerms.join(' OR '),
+    const selectedAppMaps = await searchAppMapFiles(
+      appmapDirectories,
+      vectorTerms,
       DEFAULT_MAX_DIAGRAMS
     );
-    appmapIndex.close();
 
     appmapSearchResponse = {
       results: selectedAppMaps.results,
@@ -86,29 +77,17 @@ export default async function collectSearchContext(
     log(`[search-context] Matched ${selectedAppMaps.results.length} AppMaps.`);
   }
 
-  const fileIndex = await buildIndexInTempDir('files', async (indexFile) => {
-    const db = new sqlite3(indexFile);
-    return await indexFiles(
-      db,
-      sourceDirectories,
-      request.includePatterns,
-      request.excludePatterns
-    );
-  });
-  let fileSearchResults: FileSearchResult[];
-  try {
-    fileSearchResults = fileIndex.index.search(vectorTerms.join(' OR '));
-  } finally {
-    fileIndex.close();
-  }
+  const fileSearchResults = await searchProjectFiles(
+    sourceDirectories,
+    request.includePatterns,
+    request.excludePatterns,
+    vectorTerms
+  );
 
-  const snippetIndex = await buildIndexInTempDir('snippets', async (indexFile) => {
-    const db = new sqlite3(indexFile);
-    const snippetIndex = await indexSnippets(db, fileSearchResults);
-    await indexEvents(snippetIndex, appmapSearchResponse.results);
-    return snippetIndex;
-  });
-
+  const snippetIndex = await buildProjectFileSnippetIndex(
+    fileSearchResults,
+    appmapSearchResponse.results
+  );
   let contextCandidate: ContextCandidate;
   try {
     let charCount = 0;
@@ -120,45 +99,6 @@ export default async function collectSearchContext(
       // Collect all code objects from AppMaps and use them to build the sequence diagram
       // const codeSnippets = new Array<SnippetSearchResult>();
       // TODO: Apply this.includeTypes
-
-      const snippetContextItem = (
-        snippet: SnippetSearchResult
-      ): ContextV2.ContextItem | ContextV2.FileContextItem | undefined => {
-        const { snippetId, directory, score, content } = snippet;
-
-        const { type: snippetIdType, id: snippetIdValue } = snippetId;
-
-        let location: string | undefined;
-        if (snippetIdType === 'code-snippet') location = snippetIdValue;
-
-        switch (snippetId.type) {
-          case 'query':
-          case 'route':
-          case 'external-route':
-            return {
-              type: ContextV2.ContextItemType.DataRequest,
-              content,
-              directory,
-              score,
-            };
-          case 'code-snippet':
-            return {
-              type: ContextV2.ContextItemType.CodeSnippet,
-              content,
-              directory,
-              score,
-              location,
-            };
-          default:
-            warn(`[search-context] Unknown snippet type: ${snippetId.type}`);
-
-          // TODO: Collect all matching events, then build a sequence diagram
-          // case 'event':
-          //   return await buildSequenceDiagram(snippet);
-          // default:
-          //   codeSnippets.push(snippet);
-        }
-      };
 
       const snippetSearchResults = snippetIndex.index.searchSnippets(
         vectorTerms.join(' OR '),

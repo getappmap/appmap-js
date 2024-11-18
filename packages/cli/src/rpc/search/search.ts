@@ -8,7 +8,7 @@ import { SearchResponse } from '../../fulltext/appmap-match';
 import { search as searchAppMaps } from '../../fulltext/appmap-index';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
 import configuration, { AppMapDirectory } from '../configuration';
-import buildIndexInTempDir from '../explain/build-index-in-temp-dir';
+import buildIndexInTempDir from '../explain/index/build-index-in-temp-dir';
 import { buildAppMapIndex } from '../../fulltext/appmap-index';
 
 export const DEFAULT_MAX_DIAGRAMS = 3;
