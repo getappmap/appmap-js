@@ -58,7 +58,7 @@ export default async function collectSearchContext(
         stddev: 0,
       },
       results,
-      numResults: request.appmaps.length,
+      numResults: results.length,
     };
   } else {
     const selectedAppMaps = await searchAppMapFiles(

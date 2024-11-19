@@ -31,8 +31,8 @@ describe('collectSearchContext', () => {
   const vectorTerms = ['term1', 'term2'];
   const charLimit = 1000;
 
-  it('should handle appmaps provided in the request', async () => {
-    const request = { appmaps: ['appmap1', 'appmap2'] };
+  it('should emit appmaps provided in the request', async () => {
+    const request = { appmaps: ['dir1/appmap1', 'dir2/appmap2'] };
     const result = await collectSearchContext(
       appmapDirectories,
       sourceDirectories,
