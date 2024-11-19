@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.174.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.174.1...@appland/appmap-v3.174.2) (2024-11-19)
+
+
+### Bug Fixes
+
+* Add `[@search](https://github.com/search)` and `[@review](https://github.com/review)` to command completions ([c0c40f4](https://github.com/getappmap/appmap-js/commit/c0c40f466791f95f3428dad87faac9f952d7e8d2))
+
 # [@appland/appmap-v3.174.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.174.0...@appland/appmap-v3.174.1) (2024-11-11)
 
 
