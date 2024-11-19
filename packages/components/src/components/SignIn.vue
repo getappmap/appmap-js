@@ -2,7 +2,7 @@
   <div class="signin-sidebar">
     <AppMapLogo width="120" />
     <div v-if="!submitted" class="content-wrap">
-      <div class="sidebar-title" data-cy="title">Activate AppMap</div>
+      <div data-cy="title">Activate AppMap</div>
 
       <div class="signin-buttons">
         <p v-if="error" class="error">{{ error }}</p>
@@ -20,7 +20,7 @@
           data-cy="email-activation-button"
           @click.prevent="activateWithEmail"
         >
-          Activate with<span><EmailIcon class="small-logo" /> Email</span>
+          Get activation code by <span><EmailIcon class="small-logo" /> Email</span>
         </a>
 
         <div class="or-divider-container">
@@ -250,6 +250,10 @@ export default {
   padding: 1.5rem;
   line-height: 1.4rem;
 
+  .content-wrap {
+    max-width: 500px;
+  }
+
   a.link {
     color: $brightblue;
     text-decoration: none;
@@ -384,7 +388,6 @@ export default {
   .your-data {
     display: flex;
     flex-direction: row;
-    align-items: center;
     gap: 1rem;
     padding: 1rem;
     border: 1px solid $gray3;
@@ -395,6 +398,10 @@ export default {
       width: 100%;
       max-width: 33px;
       height: 42px;
+    }
+
+    .your-data-text {
+      font-size: 0.85rem;
     }
   }
 
