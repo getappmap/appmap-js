@@ -1,4 +1,4 @@
-import { SnippetId, SnippetIndex } from '@appland/search';
+import { queryKeywords, SnippetId, SnippetIndex } from '@appland/search';
 import { warn } from 'console';
 import crypto from 'crypto';
 
@@ -26,15 +26,16 @@ async function indexAppMapEvents(
   }
 
   const indexCodeObject = (type: string, id: string, content: string, ...tags: string[]) => {
-    const words = [content, ...tags].join(' ');
+    const words = [content, ...tags];
+    const wordList = queryKeywords(words);
 
     const snippetId: SnippetId = {
       type,
       id,
     };
 
-    // TODO: Include event id in the snippet id
-    snippetIndex.indexSnippet(snippetId, directory, '', words, content);
+    // TODO: Include event id in the snippet id?
+    snippetIndex.indexSnippet(snippetId, directory, '', wordList.join(' '), content);
   };
 
   const boostCodeObject = (location: string) => {

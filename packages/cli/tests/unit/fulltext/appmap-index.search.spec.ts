@@ -1,5 +1,5 @@
 import * as utils from '../../../src/utils';
-import UpToDate, { AppMapIndex } from '../../../src/lib/UpToDate';
+import UpToDate from '../../../src/lib/UpToDate';
 import { PathLike } from 'fs';
 import { join } from 'path';
 import { FileIndex, FileSearchResult } from '@appland/search';

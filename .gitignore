@@ -46,4 +46,5 @@ tmp/appmap
 packages/*/tmp/
 *.appmap.json
 .navie
+.run-stats
 

@@ -1,3 +1,4 @@
+import { isAbsolute, join } from 'path';
 import { Tokenizer } from './build-file-index';
 import { ContentReader } from './ioutil';
 import SnippetIndex, { SnippetId } from './snippet-index';
@@ -16,7 +17,9 @@ type Context = {
 };
 
 async function indexFile(context: Context, file: File) {
-  const fileContent = await context.contentReader(file.filePath);
+  const filePath = isAbsolute(file.filePath) ? file.filePath : join(file.directory, file.filePath);
+
+  const fileContent = await context.contentReader(filePath);
   if (!fileContent) return;
 
   const extension = file.filePath.split('.').pop() || '';
@@ -24,7 +27,7 @@ async function indexFile(context: Context, file: File) {
 
   chunks.forEach((chunk) => {
     const { content, startLine } = chunk;
-    const id = [file.filePath, startLine].filter(Boolean).join(':');
+    const id = [filePath, startLine].filter(Boolean).join(':');
     const snippetId: SnippetId = {
       type: 'code-snippet',
       id,

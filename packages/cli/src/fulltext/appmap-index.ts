@@ -19,7 +19,7 @@ import loadAppMapConfig from '../lib/loadAppMapConfig';
 export type ClassMapEntry = {
   name: string;
   type: string;
-  labels: string[];
+  labels?: string[];
   children: ClassMapEntry[];
   static?: boolean;
   sourceLocation?: string;
