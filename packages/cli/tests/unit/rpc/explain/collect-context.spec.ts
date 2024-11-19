@@ -1,12 +1,17 @@
-import * as navie from '@appland/navie';
-
 import * as collectSearchContext from '../../../../src/rpc/explain/collect-search-context';
-import collectContext, { buildContextRequest } from '../../../../src/rpc/explain/collect-context';
+import * as collectLocationContext from '../../../../src/rpc/explain/collect-location-context';
+import collectContext, {
+  buildContextRequest,
+  ContextRequest,
+} from '../../../../src/rpc/explain/collect-context';
+import Location from '../../../../src/rpc/explain/location';
 
 jest.mock('../../../../src/rpc/explain/collect-search-context');
+jest.mock('../../../../src/rpc/explain/collect-location-context');
 jest.mock('@appland/navie');
 
 describe('collect-context', () => {
+  afterEach(() => jest.resetAllMocks());
   afterEach(() => jest.restoreAllMocks());
 
   describe('buildContextRequest', () => {
@@ -40,10 +45,6 @@ describe('collect-context', () => {
   describe('collectContext', () => {
     const charLimit = 5000;
 
-    beforeEach(() => {
-      jest.mocked(navie.applyContext).mockImplementation((context) => context);
-    });
-
     describe('with empty vector terms', () => {
       it('returns an empty context', async () => {
         const emptyVectorTerms = [];
@@ -62,6 +63,7 @@ describe('collect-context', () => {
           },
           context: [],
         });
+        expect(collectLocationContext.default).not.toHaveBeenCalled();
       });
     });
 
@@ -92,8 +94,34 @@ describe('collect-context', () => {
           charLimit,
           request
         );
+        expect(collectLocationContext.default).not.toHaveBeenCalled();
 
         expect(result.searchResponse.numResults).toBe(2);
+        expect(result.context).toEqual(['context1', 'context2']);
+      });
+    });
+
+    describe('with locations specified', () => {
+      it('should process locations and char limit correctly', async () => {
+        (collectLocationContext.default as jest.Mock).mockResolvedValue(['context1', 'context2']);
+
+        const request: ContextRequest = {
+          locations: [Location.parse('location1')!, Location.parse('location2')!],
+        };
+        const result = await collectContext(
+          ['dir1', 'dir2'],
+          ['src1', 'src2'],
+          charLimit,
+          [],
+          request
+        );
+
+        expect(collectSearchContext.default).not.toHaveBeenCalled();
+        expect(collectLocationContext.default).toHaveBeenCalledWith(
+          ['src1', 'src2'],
+          request.locations
+        );
+        expect(result.searchResponse.numResults).toBe(0);
         expect(result.context).toEqual(['context1', 'context2']);
       });
     });

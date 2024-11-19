@@ -30,7 +30,7 @@ export function textSearchResultToRpcSearchResult(
 
 export const CHARS_PER_SNIPPET = 50;
 
-type ContextRequest = {
+export type ContextRequest = {
   appmaps?: string[];
   excludePatterns?: RegExp[];
   includePatterns?: RegExp[];
