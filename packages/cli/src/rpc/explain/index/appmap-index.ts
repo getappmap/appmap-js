@@ -5,7 +5,7 @@ import { readFile } from 'fs/promises';
 import { Metadata } from '@appland/models';
 import { buildFileIndex, FileIndex, fileTokens } from '@appland/search';
 
-import { findFiles, isNodeError, verbose } from '../utils';
+import { findFiles, isNodeError, verbose } from '../../../utils';
 import {
   downscoreOutOfDateMatches,
   Match,
@@ -14,7 +14,7 @@ import {
   scoreMatches,
   SearchResponse,
 } from './appmap-match';
-import loadAppMapConfig from '../lib/loadAppMapConfig';
+import loadAppMapConfig from '../../../lib/loadAppMapConfig';
 
 export type ClassMapEntry = {
   name: string;

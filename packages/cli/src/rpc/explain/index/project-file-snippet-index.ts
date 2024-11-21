@@ -14,7 +14,7 @@ import {
 
 import buildIndexInTempDir, { CloseableIndex } from './build-index-in-temp-dir';
 import indexEvents from './index-events';
-import { SearchResult } from '../../../fulltext/appmap-match';
+import { SearchResult } from './appmap-match';
 
 export function snippetContextItem(
   snippet: SnippetSearchResult
@@ -38,6 +38,7 @@ export function snippetContextItem(
         content,
         directory,
         score,
+        location: appmapLocation(result.appmap, eventId),
       };
     case 'code-snippet':
       // TODO: Collect event ids from these.

@@ -2,8 +2,8 @@ import { queryKeywords, SnippetId, SnippetIndex } from '@appland/search';
 import { warn } from 'console';
 import crypto from 'crypto';
 
-import { SearchResult } from '../../../fulltext/appmap-match';
-import { ClassMapEntry, readIndexFile } from '../../../fulltext/appmap-index';
+import { SearchResult } from './appmap-match';
+import { ClassMapEntry, readIndexFile } from './appmap-index';
 
 function hexDigest(input: string): string {
   const hash = crypto.createHash('sha256');
@@ -51,6 +51,12 @@ async function indexAppMapEvents(
     let tags: string[] = [];
     if (cme.type === 'query') {
       id = hexDigest(cme.name);
+      // TODO: We really want an event id for this code object.
+      // TODO: Include an index file that maps fqids to event ids?
+      // sequence.json does have the fqid -> event id mapping, but it's not
+      // in the index by default.
+      // TODO: Can we just link over to the appmap by fqid?
+      // Yes it can definitely be done.
       tags = ['sql', 'query', 'database'];
     } else if (cme.type === 'route') {
       id = cme.name;

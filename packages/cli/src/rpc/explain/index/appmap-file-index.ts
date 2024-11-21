@@ -3,8 +3,8 @@ import sqlite3 from 'better-sqlite3';
 import { FileIndex } from '@appland/search';
 
 import buildIndexInTempDir, { CloseableIndex } from './build-index-in-temp-dir';
-import { buildAppMapIndex, search } from '../../../fulltext/appmap-index';
-import { SearchResponse } from '../../../fulltext/appmap-match';
+import { buildAppMapIndex, search } from './appmap-index';
+import { SearchResponse } from './appmap-match';
 
 export async function buildAppMapFileIndex(
   appmapDirectories: string[]

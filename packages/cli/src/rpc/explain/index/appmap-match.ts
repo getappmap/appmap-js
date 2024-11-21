@@ -1,5 +1,5 @@
-import UpToDate from '../lib/UpToDate';
-import { exists } from '../utils';
+import UpToDate from '../../../lib/UpToDate';
+import { exists } from '../../../utils';
 
 import makeDebug from 'debug';
 

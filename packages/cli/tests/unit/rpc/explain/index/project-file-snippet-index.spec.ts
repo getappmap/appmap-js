@@ -7,17 +7,17 @@ import {
   buildProjectFileSnippetIndex,
   snippetContextItem,
 } from '../../../../../src/rpc/explain/index/project-file-snippet-index';
-import * as AppMapIndex from '../../../../../src/fulltext/appmap-index';
+import * as AppMapIndex from '../../../../../src/rpc/explain/index/appmap-index';
 import { CloseableIndex } from '../../../../../src/rpc/explain/index/build-index-in-temp-dir';
-import { SearchResult } from '../../../../../src/fulltext/appmap-match';
+import { SearchResult } from '../../../../../src/rpc/explain/index/appmap-match';
 
 jest.mock('@appland/search', () => ({
   ...jest.requireActual('@appland/search'),
   readFileSafe: jest.fn(),
 }));
 
-jest.mock('../../../../../src/fulltext/appmap-index', () => ({
-  ...jest.requireActual('../../../../../src/fulltext/appmap-index'),
+jest.mock('../../../../../src/rpc/explain/index/appmap-index', () => ({
+  ...jest.requireActual('../../../../../src/rpc/explain/index/appmap-index'),
   readIndexFile: jest.fn(),
 }));
 
