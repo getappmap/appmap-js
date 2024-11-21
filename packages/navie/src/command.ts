@@ -2,6 +2,7 @@ import { UserOptions } from './lib/parse-options';
 import { ChatHistory, ClientRequest } from './navie';
 
 export enum CommandMode {
+  Document = 'document',
   Explain = 'explain',
   Classify = 'classify',
   Context = 'context',

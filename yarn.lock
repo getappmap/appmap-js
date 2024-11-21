@@ -458,6 +458,7 @@ __metadata:
     "@langchain/anthropic": ^0.3.1
     "@langchain/core": ^0.2.27
     "@langchain/google-vertexai-web": ^0.1.0
+    "@langchain/langgraph": ^0.2.22
     "@langchain/openai": ^0.2.7
     "@tsconfig/node-lts": ^20.1.3
     "@types/jest": ^29.5.14
@@ -6876,6 +6877,43 @@ __metadata:
   peerDependencies:
     "@langchain/core": ">=0.2.21 <0.4.0"
   checksum: 90d7c04f95e9950ec5fb39a779352f145efa319d2003564b82a183809ef92d64f8f878999e5cb9c75b1bfda83e38c9b650946c928b1d137dd8bf0bebbaddca74
+  languageName: node
+  linkType: hard
+
+"@langchain/langgraph-checkpoint@npm:~0.0.12":
+  version: 0.0.12
+  resolution: "@langchain/langgraph-checkpoint@npm:0.0.12"
+  dependencies:
+    uuid: ^10.0.0
+  peerDependencies:
+    "@langchain/core": ">=0.2.31 <0.4.0"
+  checksum: 2e431b00083db874a329de10143d35d6a870265c0665056a05541c32b1cdc6b84424f6e54e08b5716a3ee189e09642402e9e088567a8fa1d6954d258ba3cad3e
+  languageName: node
+  linkType: hard
+
+"@langchain/langgraph-sdk@npm:~0.0.21":
+  version: 0.0.26
+  resolution: "@langchain/langgraph-sdk@npm:0.0.26"
+  dependencies:
+    "@types/json-schema": ^7.0.15
+    p-queue: ^6.6.2
+    p-retry: 4
+    uuid: ^9.0.0
+  checksum: ae3a0ade1856b4a9f4fd302cc0086b8f7516a1da7b75d9fe6f3b9718f84bc54434cae967f82e95998f5bb551f56d5bc5316465fc89994464d954e60fadba828d
+  languageName: node
+  linkType: hard
+
+"@langchain/langgraph@npm:^0.2.22":
+  version: 0.2.22
+  resolution: "@langchain/langgraph@npm:0.2.22"
+  dependencies:
+    "@langchain/langgraph-checkpoint": ~0.0.12
+    "@langchain/langgraph-sdk": ~0.0.21
+    uuid: ^10.0.0
+    zod: ^3.23.8
+  peerDependencies:
+    "@langchain/core": ">=0.2.36 <0.3.0 || >=0.3.9 < 0.4.0"
+  checksum: 9e7c61dc298a746bd670471c4adac61b384b5596835b217434d1fca83e4af60ee0a53892e5180c239f24c6b4eb95eb122260457d142cdea0aac6da392c798654
   languageName: node
   linkType: hard
 

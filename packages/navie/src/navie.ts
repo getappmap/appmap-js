@@ -39,6 +39,7 @@ import createCompletionService from './services/completion-service-factory';
 import NextStepClassificationService from './services/next-step-classification-service';
 import SuggestCommand from './commands/suggest-command';
 import ObserveCommand from './commands/observe-command';
+import documentCommand from './commands/document-command';
 
 export type ChatHistory = Message[];
 
@@ -182,6 +183,7 @@ export default function navie(
   };
 
   const commandBuilders: Record<CommandMode, () => Command> = {
+    [CommandMode.Document]: () => documentCommand,
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
     [CommandMode.ListFiles]: buildListFileCommand,

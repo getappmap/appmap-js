@@ -42,6 +42,7 @@
     "@langchain/anthropic": "^0.3.1",
     "@langchain/core": "^0.2.27",
     "@langchain/google-vertexai-web": "^0.1.0",
+    "@langchain/langgraph": "^0.2.22",
     "@langchain/openai": "^0.2.7",
     "fast-xml-parser": "^4.4.0",
     "js-yaml": "^4.1.0",
