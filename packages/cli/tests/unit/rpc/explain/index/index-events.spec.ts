@@ -5,11 +5,11 @@ import { SnippetIndex } from '@appland/search';
 import sqlite3 from 'better-sqlite3';
 
 import indexEvents from '../../../../../src/rpc/explain/index/index-events';
-import { SearchResult } from '../../../../../src/fulltext/appmap-match';
-import * as AppMapIndex from '../../../../../src/fulltext/appmap-index';
+import { SearchResult } from '../../../../../src/rpc/explain/index/appmap-match';
+import * as AppMapIndex from '../../../../../src/rpc/explain/index/appmap-index';
 
-jest.mock('../../../../../src/fulltext/appmap-index', () => ({
-  ...jest.requireActual('../../../../../src/fulltext/appmap-index'),
+jest.mock('../../../../../src/rpc/explain/index/appmap-index', () => ({
+  ...jest.requireActual('../../../../../src/rpc/explain/index/appmap-index'),
   readIndexFile: jest.fn(),
 }));
 

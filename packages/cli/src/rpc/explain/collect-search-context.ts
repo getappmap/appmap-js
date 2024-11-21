@@ -4,7 +4,7 @@ import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
 
 import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
-import { SearchResponse as AppMapSearchResponse } from '../../fulltext/appmap-match';
+import { SearchResponse as AppMapSearchResponse } from './index/appmap-match';
 import { searchAppMapFiles } from './index/appmap-file-index';
 import { searchProjectFiles } from './index/project-file-index';
 import {
