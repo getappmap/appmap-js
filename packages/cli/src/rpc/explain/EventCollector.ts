@@ -8,7 +8,7 @@ import FindEvents, {
   SearchOptions,
 } from '../../fulltext/FindEvents';
 import buildContext from './buildContext';
-import { textSearchResultToRpcSearchResult } from './collectContext';
+import { textSearchResultToRpcSearchResult } from './textSearchResultToRpcSearchResult';
 
 export default class EventCollector {
   appmapIndexes = new Map<string, FindEvents>();

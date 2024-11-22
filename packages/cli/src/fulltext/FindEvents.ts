@@ -7,7 +7,7 @@ import assert from 'assert';
 
 import { verbose } from '../utils';
 import { collectParameters } from './collectParameters';
-import { fileNameMatchesFilterPatterns } from './fileNameMatchesFilterPatterns';
+import { fileNameMatchesFilterPatterns } from './filter-patterns';
 
 type IndexItem = {
   fqid: string;

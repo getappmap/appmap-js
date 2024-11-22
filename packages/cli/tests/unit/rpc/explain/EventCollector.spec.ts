@@ -1,7 +1,7 @@
 import { SearchRpc } from '@appland/rpc';
 import { join } from 'path';
 
-import { textSearchResultToRpcSearchResult } from '../../../../src/rpc/explain/collectContext';
+import { textSearchResultToRpcSearchResult } from '../../../../src/rpc/explain/textSearchResultToRpcSearchResult';
 import buildContext from '../../../../src/rpc/explain/buildContext';
 import { SearchResponse as AppMapSearchResponse } from '../../../../src/fulltext/appmap-match';
 import FindEvents, {

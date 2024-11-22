@@ -11,7 +11,7 @@ import EventCollector from './EventCollector';
 import indexFiles from './index-files';
 import indexSnippets from './index-snippets';
 import collectSnippets from './collect-snippets';
-import buildIndex from './buildIndex';
+import buildIndexInTempDir from './build-index-in-temp-dir';
 import { buildAppMapIndex, search } from '../../fulltext/appmap-index';
 
 export default class SearchContextCollector {
@@ -57,7 +57,7 @@ export default class SearchContextCollector {
         numResults: this.appmaps.length,
       };
     } else {
-      const appmapIndex = await buildIndex('appmaps', async (indexFile) => {
+      const appmapIndex = await buildIndexInTempDir('appmaps', async (indexFile) => {
         const db = new sqlite3(indexFile);
         const fileIndex = new FileIndex(db);
         await buildAppMapIndex(fileIndex, this.appmapDirectories);
@@ -80,7 +80,7 @@ export default class SearchContextCollector {
       log(`[search-context] Matched ${selectedAppMaps.results.length} AppMaps.`);
     }
 
-    const fileIndex = await buildIndex('files', async (indexFile) => {
+    const fileIndex = await buildIndexInTempDir('files', async (indexFile) => {
       const db = new sqlite3(indexFile);
       return await indexFiles(
         db,
@@ -96,7 +96,7 @@ export default class SearchContextCollector {
       fileIndex.close();
     }
 
-    const snippetIndex = await buildIndex('snippets', async (indexFile) => {
+    const snippetIndex = await buildIndexInTempDir('snippets', async (indexFile) => {
       const db = new sqlite3(indexFile);
       return await indexSnippets(db, fileSearchResults);
     });

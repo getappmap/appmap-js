@@ -8,7 +8,7 @@ import { SearchResponse } from '../../fulltext/appmap-match';
 import { search as searchAppMaps } from '../../fulltext/appmap-index';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
 import configuration, { AppMapDirectory } from '../configuration';
-import buildIndex from '../explain/buildIndex';
+import buildIndexInTempDir from '../explain/build-index-in-temp-dir';
 import { buildAppMapIndex } from '../../fulltext/appmap-index';
 
 export const DEFAULT_MAX_DIAGRAMS = 10;
@@ -59,7 +59,7 @@ export async function handler(
   } else {
     // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
     const maxResults = options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS;
-    const index = await buildIndex('appmaps', async (indexFile) => {
+    const index = await buildIndexInTempDir('appmaps', async (indexFile) => {
       const db = new sqlite3(indexFile);
       const fileIndex = new FileIndex(db);
       await buildAppMapIndex(
