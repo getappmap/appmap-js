@@ -4,6 +4,7 @@ import makeDebug from 'debug';
 import {
   buildFileIndex,
   FileIndex,
+  FileSearchResult,
   fileTokens,
   FilterFn,
   isBinaryFile,
@@ -12,9 +13,11 @@ import {
   listProjectFiles,
   readFileSafe,
 } from '@appland/search';
-import { fileNameMatchesFilterPatterns } from './index/filter-patterns';
+import { fileNameMatchesFilterPatterns } from './filter-patterns';
 
-const debug = makeDebug('appmap:rpc:explain:index-files');
+import buildIndexInTempDir, { CloseableIndex } from './build-index-in-temp-dir';
+
+const debug = makeDebug('appmap:index:project-files');
 
 function fileFilter(
   includePatterns: RegExp[] | undefined,
@@ -40,7 +43,7 @@ function fileFilter(
   };
 }
 
-export default async function indexFiles(
+async function indexFiles(
   db: sqlite3.Database,
   directories: string[],
   includePatterns: RegExp[] | undefined,
@@ -52,4 +55,29 @@ export default async function indexFiles(
   await buildFileIndex(fileIndex, directories, listProjectFiles, filter, readFileSafe, fileTokens);
 
   return fileIndex;
+}
+
+export async function buildProjectFileIndex(
+  sourceDirectories: string[],
+  includePatterns: RegExp[] | undefined,
+  excludePatterns: RegExp[] | undefined
+): Promise<CloseableIndex<FileIndex>> {
+  return await buildIndexInTempDir('files', async (indexFile) => {
+    const db = new sqlite3(indexFile);
+    return await indexFiles(db, sourceDirectories, includePatterns, excludePatterns);
+  });
+}
+
+export async function searchProjectFiles(
+  sourceDirectories: string[],
+  includePatterns: RegExp[] | undefined,
+  excludePatterns: RegExp[] | undefined,
+  vectorTerms: string[]
+): Promise<FileSearchResult[]> {
+  const index = await buildProjectFileIndex(sourceDirectories, includePatterns, excludePatterns);
+  try {
+    return index.index.search(vectorTerms.join(' OR '));
+  } finally {
+    index.close();
+  }
 }

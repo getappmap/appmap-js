@@ -9,14 +9,14 @@ import { FileIndex } from '@appland/search';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import searchSingleAppMap, { SearchOptions as SingleSearchOptions } from './searchSingleAppMap';
-import { SearchResponse as DiagramsSearchResponse } from '../../fulltext/appmap-match';
+import { SearchResponse as DiagramsSearchResponse } from '../../rpc/explain/index/appmap-match';
 import {
   SearchResult as EventSearchResult,
   SearchResponse as EventSearchResponse,
 } from '../../fulltext/FindEvents';
 import { openInBrowser } from '../open/openers';
-import { buildAppMapIndex, search } from '../../fulltext/appmap-index';
-import buildIndex from '../../rpc/explain/buildIndex';
+import { buildAppMapIndex, search } from '../../rpc/explain/index/appmap-index';
+import buildIndexInTempDir from '../../rpc/explain/index/build-index-in-temp-dir';
 
 export const command = 'search <query>';
 export const describe =
@@ -183,7 +183,7 @@ export const handler = async (argv: ArgumentTypes) => {
       maxResults,
     };
 
-    const index = await buildIndex('appmaps', async (indexFile) => {
+    const index = await buildIndexInTempDir('appmaps', async (indexFile) => {
       const db = new sqlite3(indexFile);
       const fileIndex = new FileIndex(db);
       await buildAppMapIndex(fileIndex, [process.cwd()]);

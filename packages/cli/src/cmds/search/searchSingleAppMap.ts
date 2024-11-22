@@ -12,6 +12,7 @@ export default async function searchSingleAppMap(
   query: string,
   options: SearchOptions = {}
 ): Promise<SearchResponse> {
+  // eslint-disable-next-line no-param-reassign
   if (appmap.endsWith('.appmap.json')) appmap = appmap.slice(0, -'.appmap.json'.length);
 
   const findEvents = new FindEvents(appmap);

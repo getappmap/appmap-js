@@ -10,12 +10,12 @@ export interface Closeable {
   close(): void;
 }
 
-type CloseableIndex<T> = {
+export type CloseableIndex<T> = {
   index: T;
   close: () => void;
 };
 
-export default async function buildIndex<T extends Closeable>(
+export default async function buildIndexInTempDir<T extends Closeable>(
   indexName: string,
   builder: (indexFile: string) => Promise<T>
 ): Promise<CloseableIndex<T>> {
