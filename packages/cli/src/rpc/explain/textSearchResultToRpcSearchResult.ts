@@ -13,4 +13,3 @@ export function textSearchResultToRpcSearchResult(
   if (eventResult.elapsed) result.elapsed = eventResult.elapsed;
   return result;
 }
-
