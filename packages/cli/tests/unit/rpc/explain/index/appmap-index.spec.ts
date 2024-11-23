@@ -1,5 +1,5 @@
 import { vol } from 'memfs';
-import { readAppMapContent } from '../../../src/fulltext/appmap-index';
+import { readAppMapContent } from '../../../../../src/rpc/explain/index/appmap-index';
 import { Metadata } from '@appland/models';
 
 jest.mock('fs/promises', () => require('memfs').promises);

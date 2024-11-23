@@ -1,7 +1,7 @@
 import { isAbsolute, join } from 'path';
 import { ContextV2 } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
-import { SearchResponse as AppMapSearchResponse } from '../../fulltext/appmap-match';
+import { SearchResponse as AppMapSearchResponse } from './index/appmap-match';
 import FindEvents, {
   SearchResponse as EventSearchResponse,
   SearchOptions as EventsSearchOptions,

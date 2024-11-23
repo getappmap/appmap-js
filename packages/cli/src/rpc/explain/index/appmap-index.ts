@@ -5,7 +5,7 @@ import { readFile } from 'fs/promises';
 import { Metadata } from '@appland/models';
 import { buildFileIndex, FileIndex, fileTokens } from '@appland/search';
 
-import { findFiles, isNodeError, verbose } from '../utils';
+import { findFiles, isNodeError, verbose } from '../../../utils';
 import {
   downscoreOutOfDateMatches,
   Match,
@@ -14,12 +14,12 @@ import {
   scoreMatches,
   SearchResponse,
 } from './appmap-match';
-import loadAppMapConfig from '../lib/loadAppMapConfig';
+import loadAppMapConfig from '../../../lib/loadAppMapConfig';
 
-type ClassMapEntry = {
+export type ClassMapEntry = {
   name: string;
   type: string;
-  labels: string[];
+  labels?: string[];
   children: ClassMapEntry[];
   static?: boolean;
   sourceLocation?: string;
@@ -48,6 +48,29 @@ export async function listAppMaps(directory: string): Promise<string[]> {
   return appmapFiles.map(relativeToPath);
 }
 
+export async function readIndexFile<T>(
+  appmapName: string,
+  indexName: string
+): Promise<T | undefined> {
+  const indexFile = join(appmapName, [indexName, '.json'].join(''));
+  let indexStr: string;
+  try {
+    indexStr = await readFile(indexFile, 'utf-8');
+  } catch (e) {
+    if (isNativeError(e) && !isNodeError(e, 'ENOENT')) {
+      warn(`Error reading metadata file ${indexFile}: ${e.message}`);
+    }
+    return undefined;
+  }
+
+  try {
+    return JSON.parse(indexStr) as T;
+  } catch (e) {
+    const errorMessage = isNativeError(e) ? e.message : String(e);
+    warn(`Error parsing metadata file ${indexFile}: ${errorMessage}`);
+  }
+}
+
 /**
  * Read all content for an AppMap. For efficiency, utilizes the AppMap index files, rather
  * than reading the entire AppMap file directly.
@@ -55,36 +78,16 @@ export async function listAppMaps(directory: string): Promise<string[]> {
 export async function readAppMapContent(appmapFile: string): Promise<string> {
   const appmapName = appmapFile.replace(/\.appmap\.json$/, '');
 
-  async function readIndexFile<T>(name: string): Promise<T | undefined> {
-    const indexFile = join(appmapName, [name, '.json'].join(''));
-    let indexStr: string;
-    try {
-      indexStr = await readFile(indexFile, 'utf-8');
-    } catch (e) {
-      if (isNativeError(e) && !isNodeError(e, 'ENOENT')) {
-        warn(`Error reading metadata file ${indexFile}: ${e.message}`);
-      }
-      return undefined;
-    }
-
-    try {
-      return JSON.parse(indexStr) as T;
-    } catch (e) {
-      const errorMessage = isNativeError(e) ? e.message : String(e);
-      warn(`Error parsing metadata file ${indexFile}: ${errorMessage}`);
-    }
-  }
-
   const appmapWords = new Array<string>();
 
-  const metadata = await readIndexFile<Metadata>('metadata');
+  const metadata = await readIndexFile<Metadata>(appmapName, 'metadata');
   if (metadata) {
     appmapWords.push(metadata.name);
     if (metadata.labels) appmapWords.push(...metadata.labels);
     if (metadata.exception) appmapWords.push(metadata.exception.message);
   }
 
-  const classMap = (await readIndexFile<ClassMapEntry[]>('classMap')) ?? [];
+  const classMap = (await readIndexFile<ClassMapEntry[]>(appmapName, 'classMap')) ?? [];
 
   const queries = new Array<string>();
   const codeObjects = new Array<string>();
@@ -119,7 +122,7 @@ export async function readAppMapContent(appmapFile: string): Promise<string> {
   classMap.forEach((co) => collectClassMapEntry(co));
   appmapWords.push(...queries, ...codeObjects, ...routes, ...externalRoutes);
 
-  const parameters = (await readIndexFile<string[]>('canonical.parameters')) ?? [];
+  const parameters = (await readIndexFile<string[]>(appmapName, 'canonical.parameters')) ?? [];
   appmapWords.push(...parameters);
   appmapWords.push(...types);
 

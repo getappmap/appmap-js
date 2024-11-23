@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import { textSearchResultToRpcSearchResult } from '../../../../src/rpc/explain/textSearchResultToRpcSearchResult';
 import buildContext from '../../../../src/rpc/explain/buildContext';
-import { SearchResponse as AppMapSearchResponse } from '../../../../src/fulltext/appmap-match';
+import { SearchResponse as AppMapSearchResponse } from '../../../../src/rpc/explain/index/appmap-match';
 import FindEvents, {
   SearchResponse as EventSearchResponse,
 } from '../../../../src/fulltext/FindEvents';
