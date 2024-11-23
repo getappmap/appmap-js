@@ -1,13 +1,13 @@
-import * as utils from '../../../src/utils';
-import UpToDate, { AppMapIndex } from '../../../src/lib/UpToDate';
+import * as utils from '../../../../../src/utils';
+import UpToDate from '../../../../../src/lib/UpToDate';
 import { PathLike } from 'fs';
 import { join } from 'path';
 import { FileIndex, FileSearchResult } from '@appland/search';
-import { search } from '../../../src/rpc/explain/index/appmap-index';
-import { SearchStats } from '../../../src/rpc/explain/index/appmap-match';
+import { search } from '../../../../../src/rpc/explain/index/appmap-index';
+import { SearchStats } from '../../../../../src/rpc/explain/index/appmap-match';
 
-jest.mock('../../../src/utils');
-jest.mock('../../../src/lib/UpToDate');
+jest.mock('../../../../../src/utils');
+jest.mock('../../../../../src/lib/UpToDate');
 
 describe('AppMapIndex', () => {
   let mockAppmapIndex: FileIndex;

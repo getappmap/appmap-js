@@ -1,4 +1,4 @@
-import { ContextCollector } from '../../../../src/rpc/explain/collectContext';
+import { ContextCollector } from '../../../../src/rpc/explain/collect-context';
 import * as SearchContextCollector from '../../../../src/rpc/explain/SearchContextCollector';
 import * as LocationContextCollector from '../../../../src/rpc/explain/LocationContextCollector';
 import * as navie from '@appland/navie';

@@ -1,6 +1,6 @@
 import { FilterFn, isBinaryFile, isDataFile, isLargeFile } from '@appland/search';
 import makeDebug from 'debug';
-import { fileNameMatchesFilterPatterns } from '../../fulltext/filter-patterns';
+import { fileNameMatchesFilterPatterns } from './index/filter-patterns';
 
 const debug = makeDebug('appmap:rpc:explain:file-filter');
 

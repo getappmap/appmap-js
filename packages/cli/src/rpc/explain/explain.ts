@@ -18,7 +18,7 @@ import collectProjectInfos from '../../cmds/navie/projectInfo';
 import configuration, { AppMapDirectory } from '../configuration';
 import { getLLMConfiguration } from '../llmConfiguration';
 import { RpcError, RpcHandler } from '../rpc';
-import collectContext from './collectContext';
+import collectContext from './collect-context';
 import { initializeHistory } from './navie/historyHelper';
 import { ThreadAccessError } from './navie/ihistory';
 import INavie, { INavieProvider } from './navie/inavie';

@@ -10,7 +10,7 @@ export interface Closeable {
   close(): void;
 }
 
-type CloseableIndex<T> = {
+export type CloseableIndex<T> = {
   index: T;
   close: () => void;
 };

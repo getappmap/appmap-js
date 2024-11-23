@@ -4,12 +4,12 @@ import { FileIndex } from '@appland/search';
 import { SearchRpc } from '@appland/rpc';
 
 import { RpcHandler } from '../rpc';
-import { SearchResponse } from '../../fulltext/appmap-match';
-import { search as searchAppMaps } from '../../fulltext/appmap-index';
+import { SearchResponse } from '../explain/index/appmap-match';
+import { search as searchAppMaps } from '../explain/index/appmap-index';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
 import configuration, { AppMapDirectory } from '../configuration';
-import buildIndexInTempDir from '../explain/build-index-in-temp-dir';
-import { buildAppMapIndex } from '../../fulltext/appmap-index';
+import buildIndexInTempDir from '../explain/index/build-index-in-temp-dir';
+import { buildAppMapIndex } from '../explain/index/appmap-index';
 
 export const DEFAULT_MAX_DIAGRAMS = 10;
 export const DEFAULT_MAX_EVENTS_PER_DIAGRAM = 100;

@@ -1,6 +1,6 @@
 import { ContextV2 } from '@appland/navie';
 import { parseFileChunkSnippetId, SnippetIndex, SnippetSearchResult } from '@appland/search';
-import { CHARS_PER_SNIPPET } from './collectContext';
+import { CHARS_PER_SNIPPET } from './collect-context';
 
 export default function collectSnippets(
   snippetIndex: SnippetIndex,

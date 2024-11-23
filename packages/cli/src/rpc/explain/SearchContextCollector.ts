@@ -5,14 +5,14 @@ import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
 import { FileIndex, FileSearchResult } from '@appland/search';
 
-import { SearchResponse as AppMapSearchResponse } from '../../fulltext/appmap-match';
+import { SearchResponse as AppMapSearchResponse } from './index/appmap-match';
 import { DEFAULT_MAX_DIAGRAMS } from '../search/search';
 import EventCollector from './EventCollector';
 import indexFiles from './index-files';
 import indexSnippets from './index-snippets';
 import collectSnippets from './collect-snippets';
-import buildIndexInTempDir from './build-index-in-temp-dir';
-import { buildAppMapIndex, search } from '../../fulltext/appmap-index';
+import buildIndexInTempDir from './index/build-index-in-temp-dir';
+import { buildAppMapIndex, search } from './index/appmap-index';
 
 export default class SearchContextCollector {
   public excludePatterns: RegExp[] | undefined;
