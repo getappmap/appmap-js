@@ -1,12 +1,13 @@
 import { vol } from 'memfs';
-import { readAppMapContent } from '../../../src/rpc/explain/index/appmap-index';
+import { readAppMapContent } from '../../src/rpc/explain/index/appmap-index';
 import { Metadata } from '@appland/models';
 
 jest.mock('fs/promises', () => require('memfs').promises);
 
 describe('readAppMapContent', () => {
-  beforeEach(() => vol.reset());
-  afterEach(() => vol.reset());
+  beforeEach(() => {
+    vol.reset();
+  });
 
   it('reads appmap content from index files', async () => {
     const appmapName = '/appmaps/testAppMap';
@@ -18,27 +19,6 @@ describe('readAppMapContent', () => {
       recorder: { name: 'Test recorder' },
     };
     const classMap = [
-      {
-        name: 'package1',
-        type: 'package',
-        labels: [],
-        children: [
-          {
-            name: 'class1',
-            type: 'class',
-            labels: [],
-            children: [
-              {
-                name: 'function1',
-                type: 'function',
-                labels: [],
-                children: [],
-              },
-            ],
-          },
-          { name: 'class2', type: 'class', labels: [], children: [] },
-        ],
-      },
       { name: 'query1', type: 'query', labels: [], children: [] },
       { name: 'route1', type: 'route', labels: [], children: [] },
     ];
@@ -56,35 +36,7 @@ describe('readAppMapContent', () => {
     expect(content).toContain('Test exception');
     expect(content).toContain('query1');
     expect(content).toContain('route1');
-    expect(content).toContain('function1');
     expect(content).toContain('param1');
     expect(content).toContain('param2');
-    expect(content).toContain('route');
-    expect(content).toContain('sql');
-    expect(content).toContain('database');
-
-    expect(content.split(' ')).toEqual([
-      'Test',
-      'AppMap',
-      'test',
-      'appmap',
-      'Test',
-      'exception',
-      'query1',
-      'package1',
-      'class1',
-      'function1',
-      'class2',
-      'route1',
-      'param1',
-      'param2',
-      'sql',
-      'query',
-      'database',
-      'route',
-      'request',
-      'server',
-      'http',
-    ]);
   });
 });

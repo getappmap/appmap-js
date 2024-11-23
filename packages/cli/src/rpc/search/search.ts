@@ -11,7 +11,7 @@ import configuration, { AppMapDirectory } from '../configuration';
 import buildIndexInTempDir from '../explain/index/build-index-in-temp-dir';
 import { buildAppMapIndex } from '../explain/index/appmap-index';
 
-export const DEFAULT_MAX_DIAGRAMS = 10;
+export const DEFAULT_MAX_DIAGRAMS = 3;
 export const DEFAULT_MAX_EVENTS_PER_DIAGRAM = 100;
 export const DEFAULT_MAX_FILES = 10;
 

@@ -1,4 +1,4 @@
-import { SearchRpc } from '@appland/rpc';
+import { SearchRpc } from "@appland/rpc";
 
 export default function appmapLocation(appmap: string, event?: SearchRpc.EventMatch): string {
   const appmapFile = [appmap, 'appmap.json'].join('.');
