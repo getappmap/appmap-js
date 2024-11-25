@@ -12,6 +12,7 @@ import {
   isLargeFile,
   listProjectFiles,
   readFileSafe,
+  SessionId,
 } from '@appland/search';
 import { fileNameMatchesFilterPatterns } from './filter-patterns';
 
@@ -69,6 +70,7 @@ export async function buildProjectFileIndex(
 }
 
 export async function searchProjectFiles(
+  sessionId: SessionId,
   sourceDirectories: string[],
   includePatterns: RegExp[] | undefined,
   excludePatterns: RegExp[] | undefined,
@@ -76,7 +78,7 @@ export async function searchProjectFiles(
 ): Promise<FileSearchResult[]> {
   const index = await buildProjectFileIndex(sourceDirectories, includePatterns, excludePatterns);
   try {
-    return index.index.search(vectorTerms.join(' OR '));
+    return index.index.search(sessionId, vectorTerms.join(' OR '));
   } finally {
     index.close();
   }

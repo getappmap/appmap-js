@@ -2,7 +2,7 @@ import * as utils from '../../../../../src/utils';
 import UpToDate from '../../../../../src/lib/UpToDate';
 import { PathLike } from 'fs';
 import { join } from 'path';
-import { FileIndex, FileSearchResult } from '@appland/search';
+import { FileIndex, FileSearchResult, generateSessionId } from '@appland/search';
 import { search } from '../../../../../src/rpc/explain/index/appmap-index';
 import { SearchStats } from '../../../../../src/rpc/explain/index/appmap-match';
 
@@ -11,6 +11,7 @@ jest.mock('../../../../../src/lib/UpToDate');
 
 describe('AppMapIndex', () => {
   let mockAppmapIndex: FileIndex;
+  const sessionId = generateSessionId();
 
   afterEach(() => jest.resetAllMocks());
 
@@ -68,7 +69,7 @@ describe('AppMapIndex', () => {
       });
 
       it('downscores the out of date matches', async () => {
-        const searchResults = await search(mockAppmapIndex, 'login', 5);
+        const searchResults = await search(mockAppmapIndex, sessionId, 'login', 5);
         expect(searchResults.numResults).toEqual(5);
         expect(searchResults.results.map((r) => r.appmap)).toEqual([
           'appmap5',
@@ -82,7 +83,7 @@ describe('AppMapIndex', () => {
       });
 
       it('only computes downscore until maxResults is reached', async () => {
-        const searchResults = await search(mockAppmapIndex, 'login', 1);
+        const searchResults = await search(mockAppmapIndex, sessionId, 'login', 1);
         expect(searchResults.numResults).toEqual(5);
         expect(searchResults.results.map((r) => r.appmap)).toEqual(['appmap5']);
         expect(searchResults.results.map((r) => r.score)).toEqual([5]);
@@ -93,7 +94,7 @@ describe('AppMapIndex', () => {
     it(`reports statistics`, async () => {
       mockUpToDate();
 
-      const searchResults = await search(mockAppmapIndex, 'login', 10);
+      const searchResults = await search(mockAppmapIndex, sessionId, 'login', 10);
       expect(searchResults.numResults).toEqual(5);
       expect(searchResults.results.map((r) => r.score)).toEqual([5, 4, 3, 2, 1]);
 
@@ -115,7 +116,7 @@ describe('AppMapIndex', () => {
       mockAppmapIndex = {
         search: jest.fn().mockReturnValue([]),
       } as unknown as FileIndex;
-      const searchResults = await search(mockAppmapIndex, 'the search', 10);
+      const searchResults = await search(mockAppmapIndex, sessionId, 'the search', 10);
       expect(searchResults).toStrictEqual({
         type: 'appmap',
         results: [],
@@ -153,7 +154,7 @@ describe('AppMapIndex', () => {
     beforeEach(() => mockUpToDate());
 
     it(`removes the search result from the reported matches`, async () => {
-      const searchResults = await search(mockAppmapIndex, 'login', 10);
+      const searchResults = await search(mockAppmapIndex, sessionId, 'login', 10);
       expect(searchResults.numResults).toEqual(1);
       expect(searchResults.results).toEqual([
         { appmap: 'appmap1', directory: 'the-dir', score: 1 },

@@ -3,7 +3,7 @@ import { isNativeError } from 'util/types';
 import { log, warn } from 'console';
 import { readFile } from 'fs/promises';
 import { Metadata } from '@appland/models';
-import { buildFileIndex, FileIndex, fileTokens } from '@appland/search';
+import { buildFileIndex, FileIndex, fileTokens, SessionId } from '@appland/search';
 
 import { findFiles, isNodeError, verbose } from '../../../utils';
 import {
@@ -149,10 +149,11 @@ export async function buildAppMapIndex(fileIndex: FileIndex, directories: string
 
 export async function search(
   index: FileIndex,
+  sessionId: SessionId,
   search: string,
   maxResults: number
 ): Promise<SearchResponse> {
-  const searchMatches = index.search(search, maxResults);
+  const searchMatches = index.search(sessionId, search, maxResults);
   let matches: Match[] = searchMatches.map((match) => {
     let appmapId = match.filePath;
     if (appmapId.endsWith('.appmap.json'))

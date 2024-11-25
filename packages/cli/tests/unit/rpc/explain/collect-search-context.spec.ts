@@ -61,6 +61,7 @@ describe('collectSearchContext', () => {
     );
 
     expect(AppMapFileIndex.searchAppMapFiles as jest.Mock).toHaveBeenCalledWith(
+      expect.any(String),
       appmapDirectories,
       vectorTerms,
       expect.any(Number)
@@ -101,6 +102,7 @@ describe('collectSearchContext', () => {
     );
 
     expect(ProjectFileIndex.searchProjectFiles as jest.Mock).toHaveBeenCalledWith(
+      expect.any(String),
       sourceDirectories,
       undefined,
       undefined,

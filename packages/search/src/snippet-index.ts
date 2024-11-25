@@ -1,5 +1,6 @@
 import assert from 'assert';
 import sqlite3 from 'better-sqlite3';
+import { SessionId } from './session-id';
 
 const CREATE_SNIPPET_CONTENT_TABLE_SQL = `CREATE VIRTUAL TABLE snippet_content USING fts5(
   snippet_id UNINDEXED,
@@ -11,8 +12,10 @@ const CREATE_SNIPPET_CONTENT_TABLE_SQL = `CREATE VIRTUAL TABLE snippet_content U
 )`;
 
 const CREATE_SNIPPET_BOOST_TABLE_SQL = `CREATE TABLE snippet_boost (
-  snippet_id TEXT PRIMARY KEY,
-  boost_factor REAL
+  session_id TEXT,
+  snippet_id TEXT,
+  boost_factor REAL,
+  PRIMARY KEY (session_id, snippet_id)
 )`;
 
 const INSERT_SNIPPET_SQL = `INSERT INTO snippet_content 
@@ -20,8 +23,8 @@ const INSERT_SNIPPET_SQL = `INSERT INTO snippet_content
 VALUES (?, ?, ?, ?, ?)`;
 
 const UPDATE_SNIPPET_BOOST_SQL = `INSERT OR REPLACE INTO snippet_boost 
-(snippet_id, boost_factor)
-VALUES (?, ?)`;
+(session_id, snippet_id, boost_factor)
+VALUES (?, ?, ?)`;
 
 const SEARCH_SNIPPET_SQL = `SELECT
   snippet_content.directory,
@@ -36,6 +39,7 @@ LEFT JOIN
   snippet_boost
 ON
   snippet_content.snippet_id = snippet_boost.snippet_id
+  AND snippet_boost.session_id = ?
 WHERE
   snippet_content MATCH ?
 ORDER BY
@@ -106,7 +110,7 @@ type SnippetSearchRow = {
 export default class SnippetIndex {
   #insertSnippet: sqlite3.Statement;
   #updateSnippetBoost: sqlite3.Statement;
-  #searchSnippet: sqlite3.Statement<[string, number]>;
+  #searchSnippet: sqlite3.Statement<[string, string, number]>;
 
   constructor(public database: sqlite3.Database) {
     this.database.exec(CREATE_SNIPPET_CONTENT_TABLE_SQL);
@@ -118,6 +122,14 @@ export default class SnippetIndex {
     this.#searchSnippet = this.database.prepare(SEARCH_SNIPPET_SQL);
   }
 
+  /**
+   * Indexes a code snippet for searchability.
+   * @param snippetId - The unique identifier for the snippet.
+   * @param directory - The directory where the snippet is located.
+   * @param symbols - Symbols (e.g., class names) in the snippet.
+   * @param words - General words in the snippet.
+   * @param content - The actual content of the snippet.
+   */
   indexSnippet(
     snippetId: SnippetId,
     directory: string,
@@ -128,12 +140,18 @@ export default class SnippetIndex {
     this.#insertSnippet.run(encodeSnippetId(snippetId), directory, symbols, words, content);
   }
 
-  boostSnippet(snippetId: SnippetId, boostFactor: number): void {
-    this.#updateSnippetBoost.run(encodeSnippetId(snippetId), boostFactor);
+  /**
+   * Boosts the relevance score of a specific snippet for a given session.
+   * @param sessionId - The session identifier to associate the boost with.
+   * @param snippetId - The identifier of the snippet to boost.
+   * @param boostFactor - The factor by which to boost the snippet's relevance.
+   */
+  boostSnippet(sessionId: SessionId, snippetId: SnippetId, boostFactor: number): void {
+    this.#updateSnippetBoost.run(sessionId, encodeSnippetId(snippetId), boostFactor);
   }
 
-  searchSnippets(query: string, limit = 10): SnippetSearchResult[] {
-    const rows = this.#searchSnippet.all(query, limit) as SnippetSearchRow[];
+  searchSnippets(sessionId: SessionId, query: string, limit = 10): SnippetSearchResult[] {
+    const rows = this.#searchSnippet.all(sessionId, query, limit) as SnippetSearchRow[];
     return rows.map((row) => ({
       directory: row.directory,
       snippetId: parseSnippetId(row.snippet_id),
