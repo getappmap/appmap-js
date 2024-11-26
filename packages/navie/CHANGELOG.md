@@ -1,3 +1,10 @@
+# [@appland/navie-v1.36.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.36.1...@appland/navie-v1.36.2) (2024-11-26)
+
+
+### Bug Fixes
+
+* `[@review](https://github.com/review)` searches with vector terms ([1fdebed](https://github.com/getappmap/appmap-js/commit/1fdebede0771262c391a86aa7fc3824b06a18b0f))
+
 # [@appland/navie-v1.36.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.36.0...@appland/navie-v1.36.1) (2024-11-26)
 
 
