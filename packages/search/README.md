@@ -33,6 +33,14 @@ The main goal of introducing a `session id` is to:
   over and impact the results of another session. This isolation is crucial in multi-user systems
   where search personalization is required.
 
+### Session Deletion
+
+The system provides a mechanism to delete all data associated with a specific session. This is
+achieved through the `deleteSession` method available in both the `FileIndex` and `SnippetIndex`
+classes. By invoking this method with a session id, all boost factors and related data tied to that
+session are removed from the database, ensuring that no residual data affects future search
+operations.
+
 ### Entity-Relationship Diagram
 
 ```mermaid

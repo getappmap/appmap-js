@@ -3,6 +3,12 @@ import sqlite3 from 'better-sqlite3';
 import FileIndex, { FileSearchResult } from '../src/file-index';
 import { generateSessionId, SessionId } from '../src/session-id';
 
+type FileBoost = {
+  session_id: SessionId;
+  file_path: string;
+  boost: number;
+};
+
 describe('FileIndex', () => {
   let db: sqlite3.Database;
   let index: FileIndex;
@@ -58,5 +64,21 @@ describe('FileIndex', () => {
 
     results = index.search(sessionId, 'symbol2');
     expect(results.map((r: FileSearchResult) => r.filePath)).toEqual(['test4.txt']);
+  });
+
+  describe('session deletion', () => {
+    it('should delete the session data', () => {
+      index.indexFile(directory, 'test2.txt', 'symbol2', 'word2');
+      index.boostFile(sessionId, 'test2.txt', 2.0);
+
+      let boostRecords = db.prepare('SELECT * FROM file_boost').all() as FileBoost[];
+      expect(boostRecords.length).toEqual(1);
+      expect(boostRecords[0].session_id).toEqual(sessionId);
+
+      index.deleteSession(sessionId);
+
+      boostRecords = db.prepare('SELECT * FROM file_boost').all() as FileBoost[];
+      expect(boostRecords.length).toEqual(0);
+    });
   });
 });

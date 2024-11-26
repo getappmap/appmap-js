@@ -4,6 +4,12 @@ import sqlite3 from 'better-sqlite3';
 import SnippetIndex, { SnippetId } from '../src/snippet-index';
 import { generateSessionId, SessionId } from '../src/session-id';
 
+type SnippetBoost = {
+  session_id: SessionId;
+  snippet_id: string;
+  boost: number;
+};
+
 describe('SnippetIndex', () => {
   let db: sqlite3.Database;
   let index: SnippetIndex;
@@ -97,6 +103,23 @@ describe('SnippetIndex', () => {
       assert.equal(JSON.stringify(results[1].snippetId), JSON.stringify(snippet3));
 
       expect(results[1].score).toBeCloseTo(unboostedScore);
+    });
+  });
+
+  describe('session deletion', () => {
+    it('should delete the session data', () => {
+      const content = 'symbol2 word2';
+      index.indexSnippet(snippet2, directory, 'symbol2', 'word2', content);
+      index.boostSnippet(sessionId, snippet2, 2.0);
+
+      let boostRecords = db.prepare('SELECT * FROM snippet_boost').all() as SnippetBoost[];
+      expect(boostRecords.length).toEqual(1);
+      expect(boostRecords[0].session_id).toEqual(sessionId);
+
+      index.deleteSession(sessionId);
+
+      boostRecords = db.prepare('SELECT * FROM snippet_boost').all() as SnippetBoost[];
+      expect(boostRecords.length).toEqual(0);
     });
   });
 });

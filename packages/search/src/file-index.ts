@@ -22,6 +22,8 @@ VALUES (?, ?, ?, ?)`;
 const UPDATE_BOOST_SQL = `INSERT OR REPLACE INTO file_boost (session_id, file_path, boost_factor)
 VALUES (?, ?, ?)`;
 
+const DELETE_SESSION_SQL = `DELETE FROM file_boost WHERE session_id LIKE ?`;
+
 const SEARCH_SQL = `SELECT
     file_content.directory,
     file_content.file_path,
@@ -72,6 +74,7 @@ export type FileSearchResult = {
 export default class FileIndex {
   #insert: sqlite3.Statement;
   #updateBoost: sqlite3.Statement;
+  #deleteSession: sqlite3.Statement<string>;
   #search: sqlite3.Statement<[string, string, number]>;
 
   constructor(public database: sqlite3.Database) {
@@ -81,6 +84,7 @@ export default class FileIndex {
     this.database.pragma('synchronous = OFF');
     this.#insert = this.database.prepare(INSERT_SQL);
     this.#updateBoost = this.database.prepare(UPDATE_BOOST_SQL);
+    this.#deleteSession = this.database.prepare(DELETE_SESSION_SQL);
     this.#search = this.database.prepare(SEARCH_SQL);
   }
 
@@ -96,6 +100,14 @@ export default class FileIndex {
    */
   boostFile(sessionId: SessionId, filePath: string, boostFactor: number): void {
     this.#updateBoost.run(sessionId, filePath, boostFactor);
+  }
+
+  /**
+   * Deletes all data associated with a specific session.
+   * @param sessionId - The session identifier to delete data for.
+   */
+  deleteSession(sessionId: string): void {
+    this.#deleteSession.run(sessionId);
   }
 
   /**

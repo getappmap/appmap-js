@@ -22,6 +22,8 @@ const INSERT_SNIPPET_SQL = `INSERT INTO snippet_content
 (snippet_id, directory, file_symbols, file_words, content)
 VALUES (?, ?, ?, ?, ?)`;
 
+const DELETE_SESSION_SQL = `DELETE FROM snippet_boost WHERE session_id LIKE ?`;
+
 const UPDATE_SNIPPET_BOOST_SQL = `INSERT OR REPLACE INTO snippet_boost 
 (session_id, snippet_id, boost_factor)
 VALUES (?, ?, ?)`;
@@ -110,6 +112,7 @@ type SnippetSearchRow = {
 export default class SnippetIndex {
   #insertSnippet: sqlite3.Statement;
   #updateSnippetBoost: sqlite3.Statement;
+  #deleteSession: sqlite3.Statement<[string]>;
   #searchSnippet: sqlite3.Statement<[string, string, number]>;
 
   constructor(public database: sqlite3.Database) {
@@ -118,8 +121,17 @@ export default class SnippetIndex {
     this.database.pragma('journal_mode = OFF');
     this.database.pragma('synchronous = OFF');
     this.#insertSnippet = this.database.prepare(INSERT_SNIPPET_SQL);
+    this.#deleteSession = this.database.prepare(DELETE_SESSION_SQL);
     this.#updateSnippetBoost = this.database.prepare(UPDATE_SNIPPET_BOOST_SQL);
     this.#searchSnippet = this.database.prepare(SEARCH_SNIPPET_SQL);
+  }
+
+  /**
+   * Deletes all data associated with a specific session.
+   * @param sessionId - The session identifier to delete data for.
+   */
+  deleteSession(sessionId: string): void {
+    this.#deleteSession.run(sessionId);
   }
 
   /**
