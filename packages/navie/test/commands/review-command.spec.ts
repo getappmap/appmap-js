@@ -12,13 +12,16 @@ import InteractionHistory from '../../src/interaction-history';
 import { UserOptions } from '../../src/lib/parse-options';
 import CompletionService from '../../src/services/completion-service';
 import LookupContextService from '../../src/services/lookup-context-service';
+import VectorTermsService from '../../src/services/vector-terms-service';
 
 describe('ReviewCommand', () => {
   let command: ReviewCommand;
   let completionService: CompletionService;
   let lookupContextService: LookupContextService;
   let interactionHistory: InteractionHistory;
+  let vectorTermsService: VectorTermsService;
   let lookupContext: jest.Mock;
+  const vectorTerms = ['test', 'terms'];
   const tokenLimit = 1000;
   const responseTokens = 1000;
   const modelName = 'exampleModel';
@@ -82,10 +85,14 @@ lgtm
       lookupContext,
       jest.fn().mockResolvedValue([])
     );
+    vectorTermsService = {
+      suggestTerms: jest.fn().mockResolvedValue(vectorTerms),
+    } as any;
     command = new ReviewCommand(
       { tokenLimit, responseTokens },
       completionService,
-      lookupContextService
+      lookupContextService,
+      vectorTermsService
     );
   });
 
@@ -192,11 +199,14 @@ lgtm
 
     expect(result).toEqual(exampleSummaryMarkdown);
     expect(completionService.complete).toHaveBeenCalledTimes(1);
+    expect(vectorTermsService.suggestTerms).toHaveBeenCalledWith(
+      'diff content\nsecurity performance'
+    );
     expect(lookupContext).toHaveBeenCalledWith({
       tokenCount: tokenLimit,
       type: 'search',
-      vectorTerms: ['security performance', 'diff content'],
       version: 2,
+      vectorTerms,
     });
   });
 

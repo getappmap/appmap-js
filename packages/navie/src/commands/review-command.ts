@@ -6,6 +6,7 @@ import { UserContext } from '../user-context';
 import { ExplainOptions } from './explain-command';
 import { ContextV2 } from '../context';
 import z from 'zod';
+import VectorTermsService from '../services/vector-terms-service';
 
 // These are the default review domains that will be used in the absence of any user input.
 const GENERIC_REVIEW_DOMAINS = `- **Correctness**: Identify bugs, flaws, defects, logical errors, or edge cases that will cause the code to fail. This includes checking for copy-paste errors, incorrect variable usage, and any inconsistencies in the code.
@@ -85,7 +86,8 @@ export default class ReviewCommand implements Command {
   constructor(
     private readonly options: ExplainOptions,
     private readonly completionService: CompletionService,
-    private readonly lookupContextService: LookupContextService
+    private readonly lookupContextService: LookupContextService,
+    private readonly vectorTermsService: VectorTermsService
   ) {}
 
   /**
@@ -223,8 +225,11 @@ ${userPrompt}
   ): ReviewAnalysis {
     const pinnedItems = await this.getPinnedItems(req.codeSelection, gitDiff);
     const userPrompt = ReviewCommand.buildUserPrompt(req.question, pinnedItems);
+    const vectorTerms = await this.vectorTermsService.suggestTerms(
+      [gitDiff.content, userPrompt].join('\n')
+    );
     const context = await this.lookupContextService.lookupContext(
-      [userPrompt, gitDiff.content],
+      vectorTerms,
       this.options.tokenLimit
     );
     const messages: Message[] = ReviewCommand.buildMessages(userPrompt, gitDiff, context);

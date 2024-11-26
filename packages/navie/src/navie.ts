@@ -183,7 +183,7 @@ export default function navie(
   };
 
   const buildReviewCommand = () =>
-    new ReviewCommand(options, completionService, lookupContextService);
+    new ReviewCommand(options, completionService, lookupContextService, vectorTermsService);
 
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
