@@ -1,3 +1,10 @@
+# [@appland/navie-v1.36.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.36.0...@appland/navie-v1.36.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* Retrieve pinned items via location context lookup ([7941082](https://github.com/getappmap/appmap-js/commit/7941082fd60b03ecb6ab19961a87ddf22a4cb369))
+
 # [@appland/navie-v1.36.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.35.1...@appland/navie-v1.36.0) (2024-11-11)
 
 
