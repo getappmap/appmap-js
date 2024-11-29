@@ -602,6 +602,7 @@ __metadata:
     eslint-plugin-jest: ^28.8.3
     eslint-plugin-prettier: ^5.2.1
     eslint-plugin-promise: ^7.1.0
+    isbinaryfile: ^5.0.4
     jest: ^29.7.0
     prettier: ^3.3.3
     ts-jest: ^29.2.5
@@ -26869,6 +26870,13 @@ __metadata:
   version: 2.0.5
   resolution: "isarray@npm:2.0.5"
   checksum: bd5bbe4104438c4196ba58a54650116007fa0262eccef13a4c55b2e09a5b36b59f1e75b9fcc49883dd9d4953892e6fc007eef9e9155648ceea036e184b0f930a
+  languageName: node
+  linkType: hard
+
+"isbinaryfile@npm:^5.0.4":
+  version: 5.0.4
+  resolution: "isbinaryfile@npm:5.0.4"
+  checksum: d88982a889369d83a5937b4b4d2288ed3b3dbbcee8fc74db40058f3c089a2c7beb9e5305b7177e82d87ff38fb62be8d60960f7a2d669ca08240ef31c1435b884
   languageName: node
   linkType: hard
 
