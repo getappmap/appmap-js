@@ -26,14 +26,23 @@ type Context = {
 };
 
 async function indexFile(context: Context, filePath: string) {
+  debug('Indexing file: %s', filePath);
   const fileContents = await context.contentReader(filePath);
   if (!fileContents) return;
 
+  debug(
+    'Read file: %s, length: %d (%s...)',
+    filePath,
+    fileContents.length,
+    fileContents.slice(0, 40)
+  );
   const tokens = context.tokenizer(fileContents, filePath);
   const symbols = tokens.symbols.join(' ');
   const words = tokens.words.join(' ');
 
+  debug('Tokenized file: %s', filePath);
   context.fileIndex.indexFile(context.baseDirectory, filePath, symbols, words);
+  debug('Wrote file to index: %s', filePath);
 }
 
 async function indexDirectory(context: Context, directory: string) {
