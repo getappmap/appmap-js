@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.175.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.174.3...@appland/appmap-v3.175.0) (2024-12-01)
+
+
+### Bug Fixes
+
+* Import and use CodeObjectType ([c0b0e6a](https://github.com/getappmap/appmap-js/commit/c0b0e6adc514847f59885b7d7a7da4132e9c1574))
+
+
+### Features
+
+* Associate boost factor data with a session id ([7031193](https://github.com/getappmap/appmap-js/commit/70311932553adb0aca4ae7f6f11af23790921bdf))
+* Define and export SnippetId type ([8e3be79](https://github.com/getappmap/appmap-js/commit/8e3be7949c62a11ed1d57b1c88df2868aa3f10cd))
+* Search for AppMap data using @appland/search ([ac00047](https://github.com/getappmap/appmap-js/commit/ac0004717147a095f1fa609c2aa341dec6e6c7bc))
+
 # [@appland/appmap-v3.174.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.174.2...@appland/appmap-v3.174.3) (2024-11-26)
 
 
