@@ -8,6 +8,7 @@ import { SearchResponse as AppMapSearchResponse } from './index/appmap-match';
 import { searchAppMapFiles } from './index/appmap-file-index';
 import { searchProjectFiles } from './index/project-file-index';
 import { buildProjectFileSnippetIndex } from './index/project-file-snippet-index';
+import { generateSessionId } from '@appland/search';
 
 export type SearchContextRequest = {
   appmaps?: string[];
@@ -26,6 +27,8 @@ export default async function collectSearchContext(
   searchResponse: SearchRpc.SearchResponse;
   context: ContextV2.ContextResponse;
 }> {
+  const sessionId = generateSessionId();
+
   let appmapSearchResponse: AppMapSearchResponse;
   if (request.appmaps) {
     const results = request.appmaps
@@ -53,6 +56,7 @@ export default async function collectSearchContext(
     };
   } else {
     const selectedAppMaps = await searchAppMapFiles(
+      sessionId,
       appmapDirectories,
       vectorTerms,
       DEFAULT_MAX_DIAGRAMS
@@ -69,6 +73,7 @@ export default async function collectSearchContext(
   }
 
   const fileSearchResults = await searchProjectFiles(
+    sessionId,
     sourceDirectories,
     request.includePatterns,
     request.excludePatterns,
@@ -76,6 +81,7 @@ export default async function collectSearchContext(
   );
 
   const snippetIndex = await buildProjectFileSnippetIndex(
+    sessionId,
     vectorTerms,
     appmapSearchResponse,
     fileSearchResults

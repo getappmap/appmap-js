@@ -1,5 +1,5 @@
 import sqlite3 from 'better-sqlite3';
-import { FileSearchResult, SnippetIndex } from '@appland/search';
+import { FileSearchResult, SessionId, SnippetIndex } from '@appland/search';
 
 import buildIndexInTempDir, { CloseableIndex } from './build-index-in-temp-dir';
 import { SearchResponse as AppMapSearchResponse } from './appmap-match';
@@ -28,6 +28,7 @@ class ProjectFileSnippetIndexImpl implements ProjectFileSnippetIndex {
   constructor(
     private vectorTerms: string[],
     private index: CloseableIndex<SnippetIndex>,
+    private sessionId: SessionId,
     private eventsCollector: EventCollector
   ) {}
 
@@ -54,6 +55,7 @@ class ProjectFileSnippetIndexImpl implements ProjectFileSnippetIndex {
     const codeSnippetCharLimit = codeSnippetCount === 0 ? charLimit : charLimit / 4;
     const sourceContext = collectSnippets(
       this.index.index,
+      this.sessionId,
       this.vectorTerms.join(' OR '),
       codeSnippetCharLimit
     );
@@ -68,6 +70,7 @@ class ProjectFileSnippetIndexImpl implements ProjectFileSnippetIndex {
 }
 
 export async function buildProjectFileSnippetIndex(
+  sessionId: SessionId,
   vectorTerms: string[],
   appmapSearchResponse: AppMapSearchResponse,
   fileSearchResults: FileSearchResult[]
@@ -79,5 +82,5 @@ export async function buildProjectFileSnippetIndex(
 
   const eventsCollector = new EventCollector(vectorTerms.join(' '), appmapSearchResponse);
 
-  return new ProjectFileSnippetIndexImpl(vectorTerms, snippetIndex, eventsCollector);
+  return new ProjectFileSnippetIndexImpl(vectorTerms, snippetIndex, sessionId, eventsCollector);
 }

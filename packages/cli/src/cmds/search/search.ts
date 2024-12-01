@@ -4,7 +4,7 @@ import assert from 'assert';
 import { readFileSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import { AppMap, AppMapFilter, buildAppMap, deserializeFilter } from '@appland/models';
-import { FileIndex } from '@appland/search';
+import { FileIndex, generateSessionId } from '@appland/search';
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
@@ -104,6 +104,8 @@ export const handler = async (argv: ArgumentTypes) => {
 
   handleWorkingDirectory(directory);
 
+  const sessionId = generateSessionId();
+
   function printResultsJSON(response: EventSearchResponse | DiagramsSearchResponse) {
     console.log(JSON.stringify(response, null, 2));
   }
@@ -190,7 +192,12 @@ export const handler = async (argv: ArgumentTypes) => {
       return fileIndex;
     });
 
-    const response = await search(index.index, query.split(/\s+/).join(' OR '), maxResults);
+    const response = await search(
+      index.index,
+      sessionId,
+      query.split(/\s+/).join(' OR '),
+      maxResults
+    );
     index.close();
 
     if (findEvents) {

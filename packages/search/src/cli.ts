@@ -13,6 +13,7 @@ import buildSnippetIndex from './build-snippet-index';
 import { readFileSafe } from './ioutil';
 import { langchainSplitter } from './splitter';
 import assert from 'assert';
+import { generateSessionId } from './session-id';
 
 const debug = makeDebug('appmap:search:cli');
 const cli = yargs(hideBin(process.argv))
@@ -63,6 +64,7 @@ const cli = yargs(hideBin(process.argv))
 
       const db = new sqlite3(':memory:');
       const fileIndex = new FileIndex(db);
+      const sessionId = generateSessionId();
 
       await buildFileIndex(
         fileIndex,
@@ -85,7 +87,7 @@ const cli = yargs(hideBin(process.argv))
 
       console.log('File search results');
       console.log('-------------------');
-      const fileSearchResults = fileIndex.search(query as string);
+      const fileSearchResults = fileIndex.search(sessionId, query as string);
       for (const result of fileSearchResults) {
         const { filePath, score } = result;
         printResult('file', filePath, score);
@@ -102,7 +104,7 @@ const cli = yargs(hideBin(process.argv))
 
       const isNullOrUndefined = (value: unknown) => value === null || value === undefined;
 
-      const snippetSearchResults = snippetIndex.searchSnippets(query as string);
+      const snippetSearchResults = snippetIndex.searchSnippets(sessionId, query as string);
       for (const result of snippetSearchResults) {
         const { snippetId, score } = result;
         printResult(snippetId.type, snippetId.id, score);

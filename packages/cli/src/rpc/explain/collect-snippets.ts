@@ -1,13 +1,23 @@
 import { ContextV2 } from '@appland/navie';
-import { parseFileChunkSnippetId, SnippetIndex, SnippetSearchResult } from '@appland/search';
+import {
+  parseFileChunkSnippetId,
+  SessionId,
+  SnippetIndex,
+  SnippetSearchResult,
+} from '@appland/search';
 import { CHARS_PER_SNIPPET } from './collect-context';
 
 export default function collectSnippets(
   snippetIndex: SnippetIndex,
+  sessionId: SessionId,
   query: string,
   charLimit: number
 ): ContextV2.ContextResponse {
-  const snippets = snippetIndex.searchSnippets(query, Math.round(charLimit / CHARS_PER_SNIPPET));
+  const snippets = snippetIndex.searchSnippets(
+    sessionId,
+    query,
+    Math.round(charLimit / CHARS_PER_SNIPPET)
+  );
 
   const buildLocation = (result: SnippetSearchResult) => {
     const snippetId = parseFileChunkSnippetId(result.snippetId);

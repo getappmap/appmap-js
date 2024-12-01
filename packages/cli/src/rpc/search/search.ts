@@ -1,6 +1,6 @@
 import { isAbsolute, join } from 'path';
 import sqlite3 from 'better-sqlite3';
-import { FileIndex } from '@appland/search';
+import { FileIndex, generateSessionId } from '@appland/search';
 import { SearchRpc } from '@appland/rpc';
 
 import { RpcHandler } from '../rpc';
@@ -27,6 +27,8 @@ export async function handler(
   options: HandlerOptions
 ): Promise<SearchRpc.SearchResponse> {
   const config = configuration();
+  const sessionId = generateSessionId();
+
   const appmapDirectories = await config.appmapDirectories();
   let appmapSearchResponse: SearchResponse;
   if (appmaps) {
@@ -71,6 +73,7 @@ export async function handler(
 
     appmapSearchResponse = await searchAppMaps(
       index.index,
+      sessionId,
       query.split(/\s+/).join(' OR '),
       maxResults
     );
