@@ -1,11 +1,9 @@
 import { SearchRpc } from '@appland/rpc';
-import { AppMapFilter, serializeFilter } from '@appland/models';
-import assert from 'assert';
 
-import { handler as sequenceDiagramHandler } from '../appmap/sequenceDiagram';
 import lookupSourceCode from './lookupSourceCode';
 import { warn } from 'console';
 import { ContextV2 } from '@appland/navie';
+import buildSequenceDiagram from './build-sequence-diagram';
 
 /**
  * Processes search results to build sequence diagrams, code snippets, and code object sets. This is the format
@@ -40,32 +38,11 @@ export default async function buildContext(
     return tokens.join(':');
   };
 
-  const buildSequenceDiagram = async (result: SearchRpc.SearchResult) => {
-    const codeObjects = result.events.map((event) => event.fqid);
-    const appmapFilter = new AppMapFilter();
-    appmapFilter.declutter.context.on = true;
-    appmapFilter.declutter.context.names = codeObjects;
-    const filterState = serializeFilter(appmapFilter);
-
-    const plantUML = await sequenceDiagramHandler(result.appmap, {
-      filter: filterState,
-      format: 'plantuml',
-      formatOptions: { disableMarkup: true },
-    });
-    assert(typeof plantUML === 'string');
-    sequenceDiagrams.push({
-      directory: result.directory,
-      location: appmapLocation(result.appmap),
-      type: ContextV2.ContextItemType.SequenceDiagram,
-      content: plantUML,
-      score: result.score,
-    });
-  };
-
   const examinedLocations = new Set<string>();
   for (const result of searchResults) {
     try {
-      await buildSequenceDiagram(result);
+      const diagram = await buildSequenceDiagram(result);
+      sequenceDiagrams.push(diagram);
     } catch (e) {
       warn(`Failed to build sequence diagram for ${result.appmap}`);
       warn(e);

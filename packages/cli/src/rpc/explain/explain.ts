@@ -9,7 +9,7 @@ import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
 import { warn } from 'console';
 import EventEmitter from 'events';
-import { basename } from 'path';
+import { basename, join } from 'path';
 
 import { LRUCache } from 'lru-cache';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
@@ -18,7 +18,7 @@ import collectProjectInfos from '../../cmds/navie/projectInfo';
 import configuration, { AppMapDirectory } from '../configuration';
 import { getLLMConfiguration } from '../llmConfiguration';
 import { RpcError, RpcHandler } from '../rpc';
-import collectContext from './collectContext';
+import collectContext, { buildContextRequest } from './collect-context';
 import { initializeHistory } from './navie/historyHelper';
 import { ThreadAccessError } from './navie/ihistory';
 import INavie, { INavieProvider } from './navie/inavie';
@@ -105,12 +105,7 @@ export class Explain extends EventEmitter {
       }
     }
 
-    await navie.ask(
-      this.status.threadId,
-      this.question,
-      this.codeSelection,
-      this.prompt
-    );
+    await navie.ask(this.status.threadId, this.question, this.codeSelection, this.prompt);
   }
 
   async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
@@ -153,13 +148,22 @@ export class Explain extends EventEmitter {
     // pruned by the client AI anyway.
     // The meaning of tokenCount is "try and get at least this many tokens"
     const charLimit = tokenCount * 3;
-    const searchResult = await collectContext(
+
+    const contextRequest = buildContextRequest(
       this.appmapDirectories.map((dir) => dir.directory),
       this.projectDirectories,
       this.appmaps,
       keywords,
       charLimit,
       data
+    );
+
+    const searchResult = await collectContext(
+      this.appmapDirectories.map((dir) => dir.directory),
+      this.projectDirectories,
+      charLimit,
+      contextRequest.vectorTerms,
+      contextRequest.request
     );
 
     this.status.searchResponse = searchResult.searchResponse;

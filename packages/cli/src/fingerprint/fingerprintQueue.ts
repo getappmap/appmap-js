@@ -1,10 +1,7 @@
 import { queue, QueueObject } from 'async';
 import FileTooLargeError from './fileTooLargeError';
 import Fingerprinter from './fingerprinter';
-
-function isNodeError(error: unknown, code?: string): error is NodeJS.ErrnoException {
-  return error instanceof Error && (!code || (error as NodeJS.ErrnoException).code === code);
-}
+import { isNodeError } from '../utils';
 
 export default class FingerprintQueue {
   public handler: Fingerprinter;

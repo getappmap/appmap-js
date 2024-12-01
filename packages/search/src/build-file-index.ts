@@ -1,9 +1,10 @@
 import makeDebug from 'debug';
-import { join } from 'path';
+import { isAbsolute, join } from 'path';
 
 import FileIndex from './file-index';
 import { ContentReader } from './ioutil';
 import { warn } from 'console';
+import { isNativeError } from 'util/types';
 
 export type ListFn = (path: string) => Promise<string[]>;
 
@@ -50,14 +51,19 @@ async function indexDirectory(context: Context, directory: string) {
   if (!dirContents) return;
 
   for (const dirContentItem of dirContents) {
-    const filePath = join(directory, dirContentItem);
+    let filePath: string;
+    if (isAbsolute(dirContentItem)) filePath = dirContentItem;
+    else filePath = join(directory, dirContentItem);
+
     debug('Indexing: %s', filePath);
 
     if (await context.fileFilter(filePath)) {
-      indexFile(context, filePath).catch((e) => {
-        warn(`Error indexing file: ${filePath}`);
-        warn(e);
-      });
+      try {
+        await indexFile(context, filePath);
+      } catch (e) {
+        const message = isNativeError(e) ? e.message : String(e);
+        warn(`Error indexing file ${filePath}: ${message}`);
+      }
     }
   }
 }

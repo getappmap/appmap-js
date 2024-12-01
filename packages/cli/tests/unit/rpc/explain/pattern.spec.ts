@@ -1,4 +1,4 @@
-import { buildExclusionPattern } from '../../../../src/rpc/explain/collectContext';
+import { buildExclusionPattern } from '../../../../src/rpc/explain/collect-context';
 
 describe('Regex patterns', () => {
   const EXCLUDE_DOT_APPMAP_DIR = buildExclusionPattern('.appmap');

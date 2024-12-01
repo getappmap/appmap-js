@@ -1,9 +1,15 @@
+import { isAbsolute, join } from 'path';
+import sqlite3 from 'better-sqlite3';
+import { FileIndex } from '@appland/search';
 import { SearchRpc } from '@appland/rpc';
+
 import { RpcHandler } from '../rpc';
-import AppMapIndex, { SearchResponse } from '../../fulltext/AppMapIndex';
+import { SearchResponse } from '../explain/index/appmap-match';
+import { search as searchAppMaps } from '../explain/index/appmap-index';
 import searchSingleAppMap from '../../cmds/search/searchSingleAppMap';
 import configuration, { AppMapDirectory } from '../configuration';
-import { isAbsolute, join } from 'path';
+import buildIndexInTempDir from '../explain/index/build-index-in-temp-dir';
+import { buildAppMapIndex } from '../explain/index/appmap-index';
 
 export const DEFAULT_MAX_DIAGRAMS = 10;
 export const DEFAULT_MAX_EVENTS_PER_DIAGRAM = 100;
@@ -52,14 +58,23 @@ export async function handler(
     };
   } else {
     // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
-    const searchOptions = {
-      maxResults: options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS,
-    };
-    appmapSearchResponse = await AppMapIndex.search(
-      appmapDirectories.map((d) => d.directory),
-      query,
-      searchOptions
+    const maxResults = options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS;
+    const index = await buildIndexInTempDir('appmaps', async (indexFile) => {
+      const db = new sqlite3(indexFile);
+      const fileIndex = new FileIndex(db);
+      await buildAppMapIndex(
+        fileIndex,
+        appmapDirectories.map((d) => d.directory)
+      );
+      return fileIndex;
+    });
+
+    appmapSearchResponse = await searchAppMaps(
+      index.index,
+      query.split(/\s+/).join(' OR '),
+      maxResults
     );
+    index.close();
   }
 
   // For each AppMap, search for events within the map that match the query.

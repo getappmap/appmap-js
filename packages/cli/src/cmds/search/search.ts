@@ -1,22 +1,22 @@
 import yargs from 'yargs';
-
+import sqlite3 from 'better-sqlite3';
 import assert from 'assert';
 import { readFileSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import { AppMap, AppMapFilter, buildAppMap, deserializeFilter } from '@appland/models';
+import { FileIndex } from '@appland/search';
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { verbose } from '../../utils';
 import searchSingleAppMap, { SearchOptions as SingleSearchOptions } from './searchSingleAppMap';
-import AppMapIndex, {
-  SearchResponse as DiagramsSearchResponse,
-  SearchOptions,
-} from '../../fulltext/AppMapIndex';
+import { SearchResponse as DiagramsSearchResponse } from '../../rpc/explain/index/appmap-match';
 import {
   SearchResult as EventSearchResult,
   SearchResponse as EventSearchResponse,
 } from '../../fulltext/FindEvents';
 import { openInBrowser } from '../open/openers';
+import { buildAppMapIndex, search } from '../../rpc/explain/index/appmap-index';
+import buildIndexInTempDir from '../../rpc/explain/index/build-index-in-temp-dir';
 
 export const command = 'search <query>';
 export const describe =
@@ -83,7 +83,21 @@ export const builder = (args: yargs.Argv) => {
   return args.strict();
 };
 
-export const handler = async (argv: any) => {
+type ArgumentTypes = {
+  directory: string;
+  query: string;
+  appmap: string;
+  contextDepth: number;
+  maxSize: string;
+  filter: string;
+  show: boolean;
+  maxResults: number;
+  findEvents: boolean;
+  format: 'json' | 'appmap';
+  verbose: boolean;
+};
+
+export const handler = async (argv: ArgumentTypes) => {
   verbose(argv.verbose);
 
   const { directory, query, appmap, contextDepth, show, maxResults, findEvents, format } = argv;
@@ -160,19 +174,29 @@ export const handler = async (argv: any) => {
       maxResults,
     };
     const { maxSize, filter: filterStr } = argv;
-    if (maxSize) options.maxSize = maxSize;
+    if (maxSize) options.maxSize = parseInt(maxSize);
     if (filterStr) options.filter = deserializeFilter(filterStr);
     const response = await searchSingleAppMap(appmap, query, options);
     await presentResults(response);
   } else {
-    const options: SearchOptions = {
+    const options = {
       maxResults,
     };
-    const response = await AppMapIndex.search([process.cwd()], query, options);
+
+    const index = await buildIndexInTempDir('appmaps', async (indexFile) => {
+      const db = new sqlite3(indexFile);
+      const fileIndex = new FileIndex(db);
+      await buildAppMapIndex(fileIndex, [process.cwd()]);
+      return fileIndex;
+    });
+
+    const response = await search(index.index, query.split(/\s+/).join(' OR '), maxResults);
+    index.close();
+
     if (findEvents) {
       const eventOptions: SingleSearchOptions = { maxResults };
       const { maxSize, filter: filterStr } = argv;
-      if (maxSize) eventOptions.maxSize = maxSize;
+      if (maxSize) eventOptions.maxSize = parseInt(maxSize, 10);
       if (filterStr) eventOptions.filter = deserializeFilter(filterStr);
 
       const { results } = response;
