@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.176.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.175.0...@appland/appmap-v3.176.0) (2024-12-02)
+
+
+### Features
+
+* Update @appland/search ([46ef62f](https://github.com/getappmap/appmap-js/commit/46ef62f91991f347124e9c9956a80ca011f5d5ff))
+
 # [@appland/appmap-v3.175.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.174.3...@appland/appmap-v3.175.0) (2024-12-01)
 
 

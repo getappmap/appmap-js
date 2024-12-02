@@ -1,6 +1,6 @@
 {
   "name": "@appland/appmap",
-  "version": "3.175.0",
+  "version": "3.176.0",
   "description": "",
   "bin": "built/cli.js",
   "engines": {
