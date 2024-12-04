@@ -12,7 +12,7 @@ export function navieMetadataV1(): RpcHandler<
 
 I can help you answer questions about your codebase, plan solutions, create diagrams, and generate code. Enter \`@\` to see a list of commands.
 
-Navie's responses are generated using AI, so mistakes are possible. Always review responses for accuracy before use.`,
+_Navie's responses are generated using AI, so mistakes are possible. Always review responses for accuracy before use._`,
       inputPlaceholder: "Ask a question or enter '@' for commands",
       commands: [
         {
