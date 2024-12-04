@@ -8,8 +8,11 @@ export function navieMetadataV1(): RpcHandler<
   return {
     name: NavieRpc.V1.Metadata.Method,
     handler: () => ({
-      welcomeMessage:
-        "### Hi, I'm Navie!\n\nI can help you answer questions about your codebase, plan solutions, create diagrams, and generate code. Enter `@` to see a list of commands.",
+      welcomeMessage: `### Hi, I'm Navie!
+
+I can help you answer questions about your codebase, plan solutions, create diagrams, and generate code. Enter \`@\` to see a list of commands.
+
+Navie's responses are generated using AI, so mistakes are possible. Always review responses for accuracy before use.`,
       inputPlaceholder: "Ask a question or enter '@' for commands",
       commands: [
         {
