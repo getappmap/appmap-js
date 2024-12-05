@@ -1,6 +1,6 @@
 import { parseOptions, REVIEW_DIFF_LOCATION, UserContext } from '@appland/navie';
 import configuration from '../configuration';
-import { execute } from '../../lib/executeCommand';
+import { getDiffLog } from '../../lib/git';
 
 /**
  * This function is responsible for transforming user context to include diff content when the
@@ -15,7 +15,7 @@ export default async function handleReview(
   if (mode !== '@review') return { applied: false };
 
   const result = parseOptions(question);
-  const base = result.options.stringValue('base', 'main');
+  const base = result.options.stringValue('base');
   const cwd = result.options.stringValue('project', configuration().projectDirectories[0]);
   return {
     applied: true,
@@ -26,7 +26,7 @@ export default async function handleReview(
       {
         type: 'code-snippet',
         location: REVIEW_DIFF_LOCATION, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-        content: await execute('git', ['log', '-p', '--full-diff', `${base}..HEAD`], { cwd }),
+        content: await getDiffLog(undefined, base, cwd),
       },
     ],
   };
