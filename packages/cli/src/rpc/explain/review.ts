@@ -1,28 +1,6 @@
 import { parseOptions, REVIEW_DIFF_LOCATION, UserContext } from '@appland/navie';
 import configuration from '../configuration';
-import { execFile } from 'node:child_process';
-
-const exec = (command: string, args: string[], options?: { cwd?: string }) =>
-  new Promise<string>((resolve, reject) => {
-    const child = execFile(command, args, { ...(options ?? {}) });
-
-    let stdout = '';
-    child.stdout?.setEncoding('utf8');
-    child.stdout?.on('data', (data: string) => {
-      stdout += data.toString();
-    });
-
-    let stderr = '';
-    child.stderr?.setEncoding('utf8');
-    child.stderr?.on('data', (data: string) => {
-      stderr += data.toString();
-    });
-
-    child.on('close', (code) => {
-      if (code === 0) resolve(stdout);
-      else reject(new Error(stderr));
-    });
-  });
+import { execute } from '../../lib/executeCommand';
 
 /**
  * This function is responsible for transforming user context to include diff content when the
@@ -48,7 +26,7 @@ export default async function handleReview(
       {
         type: 'code-snippet',
         location: REVIEW_DIFF_LOCATION, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-        content: await exec('git', ['log', '-p', '--full-diff', `${base}..HEAD`], { cwd }),
+        content: await execute('git', ['log', '-p', '--full-diff', `${base}..HEAD`], { cwd }),
       },
     ],
   };
