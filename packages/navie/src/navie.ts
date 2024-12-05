@@ -40,6 +40,7 @@ import NextStepClassificationService from './services/next-step-classification-s
 import SuggestCommand from './commands/suggest-command';
 import ObserveCommand from './commands/observe-command';
 import ReviewCommand from './commands/review-command';
+import WelcomeCommand from './commands/welcome-command';
 
 export type ChatHistory = Message[];
 
@@ -185,6 +186,8 @@ export default function navie(
   const buildReviewCommand = () =>
     new ReviewCommand(options, completionService, lookupContextService, vectorTermsService);
 
+  const buildWelcomeCommand = () => new WelcomeCommand(completionService);
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
@@ -196,6 +199,7 @@ export default function navie(
     [CommandMode.Suggest]: buildSuggestCommand,
     [CommandMode.Observe]: buildObserveCommand,
     [CommandMode.Review]: buildReviewCommand,
+    [CommandMode.Welcome]: buildWelcomeCommand,
   };
 
   let { question } = clientRequest;
