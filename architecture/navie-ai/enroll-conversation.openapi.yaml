@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Navie Conversation Enrollment API
+  version: 1.0.0
+paths:
+  /conversations/enroll:
+    post:
+      summary: Enroll a new conversation thread
+      description: Creates a new conversation thread and returns the conversation details.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConversationThreadRequest'
+      responses:
+        '200':
+          description: Successful enrollment of the conversation thread.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationThreadResponse'
+        '400':
+          description: Invalid request parameters.
+        '403':
+          description: Forbidden. The request cannot proceed due to lack of proxy permissions.
+components:
+  schemas:
+    CreateConversationThreadRequest:
+      type: object
+      properties:
+        modelParameters:
+          $ref: '#/components/schemas/ModelParameters'
+        projectParameters:
+          $ref: '#/components/schemas/ProjectParameters'
+      required:
+        - modelParameters
+        - projectParameters
+
+    ModelParameters:
+      type: object
+      properties:
+        baseUrl:
+          type: string
+        model:
+          type: string
+        aiKeyName:
+          type: string
+
+    ProjectParameters:
+      type: object
+      properties:
+        directoryCount:
+          type: integer
+        directories:
+          type: array
+          items:
+            type: object
+            properties:
+              hasAppMapConfig:
+                type: boolean
+              language:
+                type: string
+
+    ConversationThreadResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        permissions:
+          $ref: '#/components/schemas/Permissions'
+        usage:
+          $ref: '#/components/schemas/Usage'
+        subscription:
+          $ref: '#/components/schemas/Subscription'
+
+    Permissions:
+      type: object
+      properties:
+        useNavieAIProxy:
+          type: boolean
+
+    Usage:
+      type: object
+      properties:
+        conversationCounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConversationCount'
+
+    Subscription:
+      type: object
+      properties:
+        enrollmentDate:
+          type: string
+          format: date-time
+        subscriptions:
+          type: array
+          items:
+            type: string
+
+    ConversationCount:
+      type: object
+      properties:
+        daysAgo:
+          type: integer
+        count:
+          type: integer

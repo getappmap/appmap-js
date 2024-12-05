@@ -9,7 +9,7 @@ import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
 import { warn } from 'console';
 import EventEmitter from 'events';
-import { basename, join } from 'path';
+import { basename } from 'path';
 
 import { LRUCache } from 'lru-cache';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
@@ -25,6 +25,14 @@ import INavie, { INavieProvider } from './navie/inavie';
 import reportFetchError from './navie/report-fetch-error';
 import Thread from './navie/thread';
 import handleReview from './review';
+import {
+  checkProxyPermissions,
+  checkSubscription,
+  EnrollmentStatus,
+  FREE_USAGE_DURATION,
+  FREE_USAGE_LIMIT,
+} from './enroll-conversation';
+import { randomUUID } from 'crypto';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -61,6 +69,38 @@ export class Explain extends EventEmitter {
     super();
   }
 
+  async enrollConversation(navie: INavie): Promise<boolean> {
+    if (this.status.threadId) return Promise.resolve(true);
+
+    const thread = await reportFetchError('enrollConversationThread', () =>
+      this.enrollConversationThread(navie)
+    );
+    if (!thread) {
+      // This is allowed, we don't want to block the rest of the procedure.
+      warn('Failed to enroll conversation thread');
+      return true;
+    }
+
+    this.conversationThread = thread;
+    this.status.threadId = thread.id;
+
+    const checkEnrollment = (enrollmentStatus: EnrollmentStatus): boolean => {
+      this.status.explanation ||= [];
+
+      if (enrollmentStatus.message) this.status.explanation.push(enrollmentStatus.message);
+
+      if (!enrollmentStatus.status) this.status.step = ExplainRpc.Step.COMPLETE;
+
+      return enrollmentStatus.status;
+    };
+
+    if (!checkEnrollment(checkProxyPermissions(thread))) return false;
+
+    if (!checkEnrollment(checkSubscription(thread))) return false;
+
+    return true;
+  }
+
   async explain(navie: INavie): Promise<void> {
     navie.on('ack', (userMessageId, threadId) => {
       // threadId is now pre-allocated by the enrollConversationThread call
@@ -89,21 +129,6 @@ export class Explain extends EventEmitter {
         };
       this.emit('error', err);
     });
-
-    if (!this.status.threadId) {
-      const thread = await reportFetchError('enrollConversationThread', () =>
-        this.enrollConversationThread(navie)
-      );
-      if (thread) {
-        this.conversationThread = thread;
-        this.status.threadId = thread.id;
-        if (!thread.permissions.useNavieAIProxy) {
-          warn(
-            `Use of Navie AI proxy is forbidden by your organization policy.\nYou can ignore this message if you're using your own AI API key or connecting to your own model.`
-          );
-        }
-      }
-    }
 
     await navie.ask(this.status.threadId, this.question, this.codeSelection, this.prompt);
   }
@@ -298,6 +323,21 @@ export async function explain(
   const helpProvider: Help.HelpProvider = async (data: any) => invokeContextFunction(data);
 
   const navie = navieProvider(contextProvider, projectInfoProvider, helpProvider);
+
+  const enrollmentStatus = await explain.enrollConversation(navie);
+  if (!enrollmentStatus) {
+    const fakeThreadId = randomUUID();
+    const fakeMessageId = randomUUID();
+
+    status.threadId = threadId;
+    searchStatusByUserMessageId.set(fakeMessageId, status);
+
+    return {
+      userMessageId: fakeMessageId,
+      threadId: fakeThreadId,
+    };
+  }
+
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 
