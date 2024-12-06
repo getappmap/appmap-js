@@ -53,7 +53,15 @@ export default class AgentSelectionService {
     private applyContextService: ApplyContextService,
     private techStackService: TechStackService,
     private mermaidFixerService: MermaidFixerService
-  ) {}
+  ) {
+    this.contextService = new ContextService(
+      this.history,
+      this.vectorTermsService,
+      this.lookupContextService,
+      this.applyContextService
+    );
+  }
+  contextService: ContextService;
 
   selectAgent(
     question: string,
@@ -61,13 +69,6 @@ export default class AgentSelectionService {
     userOptions: UserOptions
   ): AgentModeResult {
     let modifiedQuestion = question;
-
-    const contextService = new ContextService(
-      this.history,
-      this.vectorTermsService,
-      this.lookupContextService,
-      this.applyContextService
-    );
 
     const helpAgent = () =>
       new HelpAgent(
@@ -78,20 +79,20 @@ export default class AgentSelectionService {
       );
 
     const testAgent = () =>
-      new TestAgent(this.history, contextService, this.fileChangeExtractorService);
+      new TestAgent(this.history, this.contextService, this.fileChangeExtractorService);
 
-    const planAgent = () => new PlanAgent(this.history, contextService);
+    const planAgent = () => new PlanAgent(this.history, this.contextService);
 
     const generateAgent = () =>
-      new GenerateAgent(this.history, contextService, this.fileChangeExtractorService);
+      new GenerateAgent(this.history, this.contextService, this.fileChangeExtractorService);
 
     const diagramAgent = () =>
-      new DiagramAgent(this.history, contextService, this.mermaidFixerService);
+      new DiagramAgent(this.history, this.contextService, this.mermaidFixerService);
 
     const explainAgent = () =>
-      new ExplainAgent(this.history, contextService, this.mermaidFixerService);
+      new ExplainAgent(this.history, this.contextService, this.mermaidFixerService);
 
-    const searchAgent = () => new SearchAgent(this.history, contextService);
+    const searchAgent = () => new SearchAgent(this.history, this.contextService);
 
     const buildAgent: { [key in AgentMode]: () => Agent } = {
       [AgentMode.Explain]: explainAgent,
