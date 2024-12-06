@@ -12,6 +12,8 @@ redirect_from: [/docs/navie-reference/navie-copilot-backend]
 # Bring Your Own Model Examples
 
 - [GitHub Copilot Language Model](#github-copilot-language-model)
+    - [Changing the Copilot Language Model](#changing-the-copilot-language-model)
+- [Google Gemini](#google-gemini)
 - [OpenAI](#openai)
 - [Anthropic (Claude)](#anthropic-claude)
 - [Azure OpenAI](#azure-openai)
@@ -69,9 +71,44 @@ If you have the Copilot extension installed, but have not signed in, you'll see 
 
 Click the `Sign in to GitHub` and login with an account that has a valid paid or trial GitHub Copilot subscription.
 
+#### Changing the Copilot Language Model
+
+GitHub Copilot supports a variety of different language models. Use the VS Code command "AppMap: Select Copilot Model" in the command palette.
+
+To open the Command Palette.
+
+You can use a hotkey to open the VS Code Command Palette
+   - Mac: `Cmd + Shift + P`
+   - Windows/Linux: `Ctrl + Shift + P`
+
+Search for `AppMap: Select Copilot Model` in the command palette.
+  
+![Select copilot model](/assets/img/product/select-copilot-model-1.webp)
+
+Then select the specific model you'd like to use with AppMap Navie
+
+![Select copilot model](/assets/img/product/select-copilot-model-2.webp)
+
 #### Video Demo  <!-- omit in toc -->
 
 {% include vimeo.html id='992238965' %}
+
+## Google Gemini
+
+After configuring your [Google Cloud authentication keys](https://cloud.google.com/docs/authentication/api-keys) and ensuring you have access to the Google Gemini services on your Google Cloud account, configure the following environment variables in your VS Code editor.  [Refer to the Navie documentation](/docs/using-navie-ai/bring-your-own-model.html#configuring-in-vs-code) for more details on where to set the Navie environment variables.
+
+| `GOOGLE_WEB_CREDENTIALS` | `[contents of downloaded JSON]`
+| `APPMAP_NAVIE_MODEL` | `gemini-1.5-pro-002`
+| `APPMAP_NAVIE_COMPLETION_BACKEND` | `vertex-ai`
+
+![Configure navie environment variables](/assets/img/product/navie-gemini-config-1.webp)
+
+***NOTE:*** If your code editor previously used the default GitHub Copilot backend, open the "gear" icon in the Navie chat window to reset the language model setting to use the environment variables instead by selecting "Use AppMap Hosted Provider". This will disable the GitHub Copilot Language Model backend and will by default use your environment variable configuration. 
+
+![use appmap model to disable copilot as a backend](/assets/img/product/navie-llm-configuration.webp)
+
+You can confirm your model and API endpoint after making this change in the Navie chat window, which will display the currently configured language model backend. 
+![confirm LLM backend and api endpoint](/assets/img/product/navie-gemini-config-2.webp)
 
 ## OpenAI
 
