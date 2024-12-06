@@ -2,6 +2,8 @@ import { readFile } from 'fs/promises';
 import { warn } from 'console';
 import { isAbsolute, join } from 'path';
 import { ContextV2 } from '@appland/navie';
+import { isBinaryFile } from '@appland/search';
+
 import Location from './location';
 import { exists, isFile, verbose } from '../../utils';
 
@@ -66,6 +68,11 @@ export default async function collectLocationContext(
     }
     if (!(await isFile(path))) {
       if (verbose()) warn(`[location-context] Skipping non-file location: ${path}`);
+      continue;
+    }
+
+    if (isBinaryFile(path)) {
+      if (verbose()) warn(`[location-context] Skipping binary file: ${path}`);
       continue;
     }
 
