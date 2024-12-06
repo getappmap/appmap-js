@@ -37,6 +37,7 @@ export default async function collectLocationContext(
         warn(`[location-context] Skipping location outside source directories: ${location.path}`);
         continue;
       }
+      location.path = location.path.slice(directory.length + 1);
       candidateLocations.push({ location, directory });
     } else {
       for (const sourceDirectory of sourceDirectories) {

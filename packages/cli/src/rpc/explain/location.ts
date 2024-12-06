@@ -15,7 +15,7 @@ export default class Location {
     return this.lineRange ? `${this.path}:${this.lineRange}` : this.path;
   }
 
-  static parse(location: string): Location | undefined {
+  static parse(location: string): Location {
     const tokens = location.split(':');
     if (tokens.length === 1) return new Location(tokens[0]);
 
