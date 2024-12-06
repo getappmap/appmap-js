@@ -25,7 +25,7 @@ export default class Location {
     const [start, end] = this.lineRange.split('-').map(Number);
 
     const lines = contents.split('\n');
-    const snippet = lines.slice(start - 1, end || lines.length);
+    const snippet = lines.slice(Math.max(start - 1, 0), end || lines.length);
     return snippet.join('\n');
   }
 
