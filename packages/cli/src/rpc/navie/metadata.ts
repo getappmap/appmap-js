@@ -2,8 +2,9 @@ import { NavieRpc } from '@appland/rpc';
 import { RpcHandler } from '../rpc';
 import configuration from '../configuration';
 import { getDiffLog, getWorkingDiff } from '../../lib/git';
-import { INavieProvider } from '../explain/navie/inavie';
+import INavie, { INavieProvider } from '../explain/navie/inavie';
 import { UserContext } from '@appland/navie';
+import isCustomWelcomeMessageEnabled from './isCustomWelcomeMessageEnabled';
 
 interface WelcomeSuggestion {
   activity: string;
@@ -24,10 +25,9 @@ function parseWelcomeSuggestion(response: string): WelcomeSuggestion | undefined
 }
 
 async function getWelcomeSuggestion(
-  navieProvider: INavieProvider,
+  navie: INavie,
   diffs: string[]
 ): Promise<WelcomeSuggestion | undefined> {
-  const navie = navieProvider(NOP, NOP, NOP);
   const userContext: UserContext.ContextItem[] = diffs.map((diff) => ({
     type: 'code-selection',
     content: diff,
@@ -56,10 +56,16 @@ async function getChangeDiffs(projectDirectories: string[]): Promise<string[]> {
 }
 
 async function getWelcomeMessage(navieProvider: INavieProvider): Promise<string> {
+  const navie = navieProvider(NOP, NOP, NOP);
+
+  // Case 1: Custom welcome message may not be enabled at all
+  if (!isCustomWelcomeMessageEnabled(navie))
+    return "### Hi, I'm Navie!\n\nI can help you answer questions about your codebase, create diagrams, plan solutions, generate code and tests, and review code changes. Type `@` to see a list of commands.";
+
   const result: string[] = ["### Hi, I'm Navie!", ''];
   const { projectDirectories } = configuration();
 
-  // Case 1: No open project directories
+  // Case 2: Remote Navie, no open project directories
   if (projectDirectories.length === 0) {
     result.push(
       "It looks like there's no project open in your code editor. To get started, try opening a project so I can help you more effectively.",
@@ -69,11 +75,11 @@ async function getWelcomeMessage(navieProvider: INavieProvider): Promise<string>
     return result.join('\n');
   }
 
-  // Case 2: Check for uncommitted changes or diffs on the current branch
+  // Case 2: Remote Navie, check for uncommitted changes or diffs on the current branch
   const diffs = await getChangeDiffs(projectDirectories);
   const hasChanges = diffs.some((diff) => diff.length > 0);
 
-  // Case 2a: No uncommitted changes or diff on this branch
+  // Case 2a: Remote Navie, no uncommitted changes or diff on this branch
   if (!hasChanges) {
     result.push(
       "It looks like you haven't started working on a task yet, as there are no changes to your workspace or branch. To begin, you can check out a different branch or start editing files. I'll keep track of your progress, so you can return anytime for help with your task.",
@@ -83,8 +89,8 @@ async function getWelcomeMessage(navieProvider: INavieProvider): Promise<string>
     return result.join('\n');
   }
 
-  // Case 2b: Changes in progress
-  const welcomeSuggestion = await getWelcomeSuggestion(navieProvider, diffs);
+  // Case 2b: Remote Navie, changes in progress
+  const welcomeSuggestion = await getWelcomeSuggestion(navie, diffs);
   if (!welcomeSuggestion) {
     // This shouldn't really ever happen, but it's possible if the LLM fails to generate a
     // structured response.

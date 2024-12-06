@@ -1,9 +1,11 @@
 import { navieMetadataV1 } from '../../../../src/rpc/navie/metadata';
+import * as isNavieCustomWelcomeMessageEnabled from '../../../../src/rpc/navie/isCustomWelcomeMessageEnabled';
 import INavie, { INavieProvider } from '../../../../src/rpc/explain/navie/inavie';
 import * as configuration from '../../../../src/rpc/configuration';
 import * as git from '../../../../src/lib/git';
 import EventEmitter from 'node:events';
 
+jest.mock('../../../../src/rpc/navie/isCustomWelcomeMessageEnabled');
 jest.mock('../../../../src/lib/git');
 jest.mock('../../../../src/rpc/configuration');
 
@@ -32,6 +34,7 @@ describe('navieMetadataV1', () => {
       });
       return navie;
     });
+    jest.mocked(isNavieCustomWelcomeMessageEnabled).default.mockImplementation(() => true);
     jest
       .mocked(configuration)
       .default.mockImplementation(
