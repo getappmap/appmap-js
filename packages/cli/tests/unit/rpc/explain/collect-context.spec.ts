@@ -106,7 +106,7 @@ describe('collect-context', () => {
         (collectLocationContext.default as jest.Mock).mockResolvedValue(['context1', 'context2']);
 
         const request: ContextRequest = {
-          locations: [Location.parse('location1')!, Location.parse('location2')!],
+          locations: [Location.parse('location1'), Location.parse('location2')],
         };
         const result = await collectContext(
           ['dir1', 'dir2'],

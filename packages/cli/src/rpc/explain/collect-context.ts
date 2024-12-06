@@ -86,9 +86,8 @@ export function buildContextRequest(
     request.includePatterns = filters.include.map((pattern) => new RegExp(pattern));
   if (filters?.itemTypes) request.includeTypes = filters.itemTypes.map((type) => type);
   if (filters?.locations) {
-    request.locations = filters.locations
-      .map((location) => Location.parse(location))
-      .filter(Boolean) as Location[];
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    request.locations = filters.locations.map(Location.parse);
     warn(`Parsed locations: ${request.locations.map((loc) => loc.toString()).join(', ')}`);
   }
 

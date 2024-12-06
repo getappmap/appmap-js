@@ -25,11 +25,7 @@ describe('collectLocationContext', () => {
   });
 
   describe('with valid locations', () => {
-    const locations: Location[] = [
-      { path: 'file1.js', snippet: (contents: string) => contents.slice(0, 10) },
-      { path: '/src/file2.js', snippet: (contents: string) => contents.slice(0, 10) },
-      { path: '/other/file3.js', snippet: (contents: string) => contents.slice(0, 10) }, // This should be skipped
-    ];
+    const locations = ['file1.js:1-1', '/src/file2.js', '/other/file3.js'].map(Location.parse);
 
     const collect = async () => collectLocationContext(sourceDirectories, locations);
 
@@ -38,11 +34,28 @@ describe('collectLocationContext', () => {
       jest.spyOn(utils, 'isFile').mockResolvedValue(true);
       jest.spyOn(fs, 'readFile').mockResolvedValue('file contents');
 
-      const result = await collect();
-      expect(result.length).toBe(3);
-      expect(result[0].content).toBe('file conte');
-      expect(result[1].content).toBe('file conte');
-      expect(result[2].content).toBe('file conte');
+      expect(await collect()).toMatchInlineSnapshot(`
+        [
+          {
+            "content": "file contents",
+            "directory": "/src",
+            "location": "file1.js:1-1",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/lib",
+            "location": "file1.js:1-1",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/src",
+            "location": "file2.js",
+            "type": "code-snippet",
+          },
+        ]
+      `);
 
       expect(utils.exists).toHaveBeenCalledTimes(3);
       expect(utils.exists).toHaveBeenCalledWith('/src/file1.js');
@@ -78,7 +91,7 @@ describe('collectLocationContext', () => {
     it('extracts snippets correctly', async () => {
       jest.spyOn(utils, 'exists').mockResolvedValue(true);
       jest.spyOn(utils, 'isFile').mockResolvedValue(true);
-      jest.spyOn(fs, 'readFile').mockResolvedValue('file contents');
+      jest.spyOn(fs, 'readFile').mockResolvedValue('file conte\nnts');
 
       const result = await collect();
       expect(result[0].content).toBe('file conte');
