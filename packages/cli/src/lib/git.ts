@@ -3,6 +3,8 @@ import assert from 'node:assert';
 import { pathToFileURL } from 'node:url';
 import { promisify, types } from 'util';
 import { execute } from './executeCommand';
+import { warn } from 'node:console';
+import { verbose } from '../utils';
 
 // Attempt to parse special syntax allowed by git:
 // - scp-style urls ([user@]host.xz:path/to/repo.git/),
@@ -86,8 +88,11 @@ async function getCommitDistance(
     const result = await execute('git', ['rev-list', '--count', `${base}..${head}`], { cwd });
     const distance = parseInt(result);
     return Number.isNaN(distance) ? undefined : distance;
-  } catch {
-    return undefined;
+  } catch (e: unknown) {
+    if (verbose()) {
+      warn(`Failed to retrieve commit distance between ${base} and ${head}`);
+      warn(String(e));
+    }
   }
 }
 
@@ -134,8 +139,11 @@ export async function findBaseCommit(headRef = 'HEAD', cwd?: string): Promise<st
     let baseCommit = await execute('git', ['merge-base', nearestBase, headRef], { cwd });
     baseCommit = baseCommit.trim();
     return baseCommit !== '' ? baseCommit : undefined;
-  } catch {
-    return;
+  } catch (e: unknown) {
+    if (verbose()) {
+      warn(`Failed to find base commit for ${headRef}`);
+      warn(String(e));
+    }
   }
 }
 

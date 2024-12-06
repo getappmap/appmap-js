@@ -97,7 +97,7 @@ async function getWelcomeMessage(navieProvider: INavieProvider): Promise<string>
     result.push(
       `It looks like you're ${welcomeSuggestion.activity}.`,
       '',
-      'Here are some prompts you might want to try:',
+      'Here are some questions you might want to try:',
       ...welcomeSuggestion.suggestions.map((suggestion) => `- ${suggestion}`)
     );
   }
