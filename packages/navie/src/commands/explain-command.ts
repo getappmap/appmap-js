@@ -1,6 +1,7 @@
 import { warn } from 'console';
 
 import { AgentOptions } from '../agent';
+import Gatherer from '../agents/gatherer';
 import AgentSelectionService from '../services/agent-selection-service';
 import ClassificationService from '../services/classification-service';
 import CodeSelectionService from '../services/code-selection-service';
@@ -151,6 +152,23 @@ export default class ExplainCommand implements Command {
 
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
+
+    if (request.userOptions.isEnabled('gather', !!process.env.APPMAP_NAVIE_GATHER)) {
+      const gatherer = new Gatherer(
+        this.interactionHistory.events,
+        this.completionService,
+        this.agentSelectionService.contextService
+      );
+      await gatherer.step();
+      if (!gatherer.done) {
+        yield 'Gathering additional information, please wait..';
+        while (!gatherer.done) {
+          yield '.';
+          await gatherer.step();
+        }
+        yield ' done!\n\n';
+      }
+    }
 
     const { messages } = this.interactionHistory.buildState();
 
