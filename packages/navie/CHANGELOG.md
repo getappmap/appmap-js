@@ -1,3 +1,10 @@
+# [@appland/navie-v1.37.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.36.2...@appland/navie-v1.37.0) (2024-12-06)
+
+
+### Features
+
+* Add `[@welcome](https://github.com/welcome)` command ([ad19ea2](https://github.com/getappmap/appmap-js/commit/ad19ea248e1c316707d03964f2d4611b97f2ed76))
+
 # [@appland/navie-v1.36.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.36.1...@appland/navie-v1.36.2) (2024-11-26)
 
 
