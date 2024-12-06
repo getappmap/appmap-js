@@ -80,9 +80,12 @@ export default class ContextService {
     return events;
   }
 
-  locationContextFromOptions(options: AgentOptions): Promise<void> {
-    const { locations } = options.buildContextFilters();
-    return locations && locations.length > 0 ? this.locationContext(locations) : Promise.resolve();
+  async locationContextFromOptions(options: AgentOptions): Promise<void> {
+    const locations = options.buildContextFilters().locations ?? [];
+    // Also list project directories
+    locations.unshift('./:0');
+    console.log(locations);
+    await this.locationContext(locations);
   }
 
   static guardContextType(
