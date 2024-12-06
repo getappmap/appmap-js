@@ -69,6 +69,7 @@ export default class ContextService {
       const contextItem = new ContextItemEvent(promptType(item.type), item.content);
       if (ContextV2.isFileContextItem(item)) {
         contextItem.location = item.location;
+        contextItem.directory = item.directory;
       }
       charsAdded += contextItem.content.length;
       this.history.addEvent(contextItem);

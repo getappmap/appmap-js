@@ -1,12 +1,14 @@
+import assert from 'node:assert';
+
 import { AgentOptions } from '../../src/agent';
 import ContextService from '../../src/services/context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import ApplyContextService from '../../src/services/apply-context-service';
 import { UserOptions } from '../../src/lib/parse-options';
-import InteractionHistory from '../../src/interaction-history';
 import { SEARCH_CONTEXT } from '../fixture';
 import { ContextV2 } from '../../src/context';
+import InteractionHistory, { ContextItemEvent } from '../../src/interaction-history';
 
 describe('ContextService', () => {
   let history: InteractionHistory;
@@ -147,6 +149,26 @@ describe('ContextService', () => {
           type: 'contextItem',
         },
       ]);
+    });
+
+    it('sets the directory field on ContextItemEvent', async () => {
+      const locationContextWithDirectory = [
+        {
+          type: ContextV2.ContextItemType.CodeSnippet,
+          location: 'file1',
+          content: 'the file 1',
+          directory: 'dir1',
+        },
+      ];
+      lookupContextService.lookupContext = jest
+        .fn()
+        .mockResolvedValue(locationContextWithDirectory);
+
+      await contextService.locationContext(['file1']);
+
+      const event = history.events[0];
+      assert(event instanceof ContextItemEvent);
+      expect(event.directory).toEqual('dir1');
     });
   });
 });
