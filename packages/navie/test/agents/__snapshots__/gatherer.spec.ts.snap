@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Gatherer buildConversation transforms interaction history events into a conversation 1`] = `
+"system: <SYSTEM PROMPT>
+
+
+
+**AppMap configuration**
+
+You're provided with all
+
+**AppMap statistics**
+
+You're provided with information about the AppMaps that have been recorded and are available in the user's workspace.
+
+**Code editor**
+
+You're provided
+
+**The problem statement**
+This is a description of the problem that the user wants you to help them with. Your response should be
+
+**Sequence diagrams**
+
+You're provided with sequence diagrams that are relevant to the task.
+
+**Data requests**
+
+You're provided with data requests that are relevant to the task.
+
+**The user's code selection**
+
+The user is asking about specific lines of code that they have selected in their code editor.
+
+The code selection will be provided as context within a \`<code-selection>\` tag.
+user: <USER PROMPT>
+
+<context>
+<appmap-config>
+- name: getappmap/appmap-server
+  language: ruby
+
+</appmap-config>
+<appmap-stats>
+- numAppMaps: 530
+
+</appmap-stats>
+<code-editor>
+The code editor is not specified.
+</code-editor>
+<task>
+**Task: Specification of Software Issues**
+
+## About you**
+
+Your name is Navie.
+
+</task>
+
+<sequence-diagram location="/test/appmap-server/tmp/appmap/rspec/RecordingMethod_on_a_mapset_shows_the_recording_method_breakdown.appmap.json" project-directory="/test/appmap-server">
+@startuml
+!includeurl 
+</sequence-diagram>
+<code-snippet location="app/models/api_key.rb:53" project-directory="/test/appmap-server">
+# @label security.api_key.touch
+    def touch(api_key)
+      if api_key.last_used.nil? || api_key.last_used > 15.minutes.ago
+</code-snippet>
+<code-snippet location="app/models/api_key.rb:66" project-directory="/test/appmap-server">
+# @label security.api_key.revoke
+    def revoke_from_user(login, key_id)
+      DAO::ApiKey
+</code-snippet>
+<code-snippet location="app/models/api_key.rb:15" project-directory="/test/appmap-server">
+def decode(api_key)
+      Base64.urlsafe_decode64(api_key).split(SEPARATOR)
+    end
+</code-snippet>
+<data-request location="/test/appmap-server/tmp/appmap/rspec/API_APIKeysController_revoke_an_existing_api_key.appmap.json:66" project-directory="/test/appmap-server">
+query:SELECT * FROM "users" WHERE ("users"."login" = 'admin') LIMIT 1
+</data-request>
+<data-request location="/test/appmap-server/tmp/appmap/rspec/API_APIKeysController_revoke_an_existing_api_key.appmap.json:44" project-directory="/test/appmap-server">
+query:SELECT * FROM "api_keys" WHERE ("login" = 'admin')
+</data-request>
+<sequence-diagram location="/test/appmap-server/tmp/appmap/rspec/Activation_Validate_verify_when_valid_parameters_are_provided_marks_the_user_as_having_accepted_the_most_recent_EULA.appmap.json" project-directory="/test/appmap-server">
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+</sequence-diagram>
+<data-request location="/test/appmap-server/tmp/appmap/rspec/RecordingMethod_on_a_mapset_shows_the_recording_method_breakdown.appmap.json:6" project-directory="/test/appmap-server">
+query:WITH "recording_methods" AS (SELECT scenarios.metadata->'recorder'->>'name' 
+</data-request>
+<data-request location="/test/appmap-server/tmp/appmap/rspec/Activation_Validate_verify_when_valid_parameters_are_provided_marks_the_user_as_having_accepted_the_most_recent_EULA.appmap.json:95" project-directory="/test/appmap-server">
+query:INSERT INTO "api_keys" ("login") VALUES ('user@example.com') RETURNING *
+</data-request>
+<sequence-diagram location="/test/appmap-server/tmp/appmap/rspec/Key_data_stats_messages_one_unique_on_each_of_two_scenarios_in_a_shared_mapset_indicates_2_messages_on_the_app.appmap.json" project-directory="/test/appmap-server">
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant 
+</sequence-diagram>
+<code-selection>
+Users are listed on the admin page.
+
+Some users are in the system using invalid or disallowed email addresses.
+
+Add a link or button to "Deactivate" a user on the admin page.
+
+The button should:
+
+* Revoke the user's API keys.
+* Mark the user record as deactivated.
+* Indicate on the user record who deactivated the user, and when.
+
+</code-selection>
+<problem-statement>
+A resolution to the given issue, also recording who and when deactivated the account
+</problem-statement>
+
+</context>"
+`;
