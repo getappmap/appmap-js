@@ -303,6 +303,34 @@ lgtm
     });
   });
 
+  it('includes the code selections which have been sent without a location', async () => {
+    const content = 'here is some review criteria';
+    const result = await read(
+      command.execute({
+        question: 'review',
+        userOptions: new UserOptions(new Map()),
+        codeSelection: [
+          {
+            type: 'code-selection',
+            content,
+          },
+          {
+            type: 'code-snippet',
+            location: 'git diff',
+            content: 'diff content',
+          },
+        ],
+      })
+    );
+
+    const [firstArgument]: [Message[]] = (completionService.complete as jest.Mock).mock.calls[0];
+    expect(result).toEqual(exampleSummaryMarkdown);
+    expect(firstArgument[1]).toStrictEqual({
+      role: 'user',
+      content: expect.stringContaining(`<code-selection>\n${content}\n</code-selection>`),
+    });
+  });
+
   it('includes the diff in the initial user prompt', async () => {
     const content = 'truly unique diff content';
     const result = await read(
