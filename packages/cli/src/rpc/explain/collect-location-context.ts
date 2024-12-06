@@ -28,11 +28,15 @@ export default async function collectLocationContext(
 ): Promise<ContextV2.ContextResponse> {
   const result: ContextV2.ContextResponse = [];
 
-  const candidateLocations = new Array<{ location: Location; directory?: string }>();
+  const candidateLocations = new Array<{ location: Location; directory: string }>();
   for (const location of locations) {
     const { path } = location;
     if (isAbsolute(path)) {
       const directory = sourceDirectories.find((dir) => path.startsWith(dir));
+      if (!directory) {
+        warn(`[location-context] Skipping location outside source directories: ${location.path}`);
+        continue;
+      }
       candidateLocations.push({ location, directory });
     } else {
       for (const sourceDirectory of sourceDirectories) {
