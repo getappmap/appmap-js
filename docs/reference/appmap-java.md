@@ -71,8 +71,10 @@ the JVM. This is done by passing the `-javaagent` argument to your
 JVM when recording tests. For example:
 
 ```shell
-$ java -javaagent:$HOME/.appmap/lib/java/appmap.jar myapp.jar
+$ java -javaagent:$HOME/.appmap/lib/java/appmap.jar -jar myapp.jar
 ```
+
+Note that, when using the <code>-jar</code> option as described above, the <code>-javaagent</code> argument must come first. Otherwise, the agent will not be loaded.
 
 ## Requests recording
 
