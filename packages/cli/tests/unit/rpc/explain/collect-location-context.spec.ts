@@ -113,6 +113,15 @@ describe('collectLocationContext', () => {
       const result = await collect();
       expect(result[0].content).toBe('file conte');
     });
+
+    it('handles large files by setting line range', async () => {
+      const largeContent = 'aaa\n'.repeat(6_000);
+      jest.spyOn(fs, 'readFile').mockResolvedValue(largeContent);
+
+      // note the limit currently only applies to unbounded requests
+      const [, , result] = await collect();
+      expect(result.content.length).toBeLessThanOrEqual(20_000);
+    });
   });
 });
 
