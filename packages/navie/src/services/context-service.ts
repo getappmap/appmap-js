@@ -48,10 +48,10 @@ export default class ContextService {
     }
   }
 
-  async locationContext(fileNames: string[]): Promise<void> {
+  async locationContext(fileNames: string[]): Promise<ContextItemEvent[]> {
     if (!fileNames || fileNames.length === 0) {
       this.history.log('[context-service] No file names provided for location context');
-      return;
+      return [];
     }
 
     this.history.log(`[context-service] Retrieving full context of files: ${fileNames.join(', ')}`);
@@ -65,6 +65,7 @@ export default class ContextService {
     // Full text of requested files is always added to the prompt. Context limits are not applied
     // in this case due to their important role in generating code.
     let charsAdded = 0;
+    const events: ContextItemEvent[] = [];
     for (const item of context) {
       const contextItem = new ContextItemEvent(promptType(item.type), item.content);
       if (ContextV2.isFileContextItem(item)) {
@@ -72,9 +73,11 @@ export default class ContextService {
         contextItem.directory = item.directory;
       }
       charsAdded += contextItem.content.length;
+      events.push(contextItem);
       this.history.addEvent(contextItem);
     }
     this.history.log(`[context-service] Added ${charsAdded} characters of file context`);
+    return events;
   }
 
   locationContextFromOptions(options: AgentOptions): Promise<void> {
