@@ -1,5 +1,6 @@
 import * as fs from 'fs/promises';
 import * as utils from '../../../../src/utils';
+import { isBinaryFile } from '@appland/search';
 
 import Location from '../../../../src/rpc/explain/location';
 import collectLocationContext from '../../../../src/rpc/explain/collect-location-context';
@@ -11,6 +12,8 @@ jest.mock('../../../../src/utils', () => ({
   exists: jest.fn(),
   isFile: jest.fn(),
 }));
+
+jest.mock('@appland/search');
 
 describe('collectLocationContext', () => {
   const sourceDirectories = ['/src', '/lib'];
@@ -33,6 +36,7 @@ describe('collectLocationContext', () => {
       jest.spyOn(utils, 'exists').mockResolvedValue(true);
       jest.spyOn(utils, 'isFile').mockResolvedValue(true);
       jest.spyOn(fs, 'readFile').mockResolvedValue('file contents');
+      jest.mocked(isBinaryFile).mockReturnValue(false);
 
       expect(await collect()).toMatchInlineSnapshot(`
         [
@@ -62,6 +66,15 @@ describe('collectLocationContext', () => {
       expect(utils.exists).toHaveBeenCalledWith('/lib/file1.js');
       expect(utils.exists).toHaveBeenCalledWith('/src/file2.js');
       // note file in /other is skipped
+    });
+
+    it('skips binary files', async () => {
+      jest.spyOn(utils, 'exists').mockResolvedValue(true);
+      jest.spyOn(utils, 'isFile').mockResolvedValue(true);
+      jest.mocked(isBinaryFile).mockReturnValue(true);
+
+      const result = await collect();
+      expect(result).toEqual([]);
     });
 
     it('handles non-file locations', async () => {
