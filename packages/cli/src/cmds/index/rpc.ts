@@ -69,7 +69,7 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     getConfigurationV1(),
     setConfigurationV2(),
     getConfigurationV2(),
-    navieMetadataV1(),
+    navieMetadataV1(navie),
     navieSuggestHandlerV1(navie),
   ];
 }

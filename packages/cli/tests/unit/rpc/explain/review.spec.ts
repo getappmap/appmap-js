@@ -1,3 +1,10 @@
+/*
+  eslint
+  @typescript-eslint/no-unsafe-return: 0,
+  @typescript-eslint/no-unsafe-assignment: 0,
+  @typescript-eslint/no-unsafe-member-access: 0,
+  @typescript-eslint/no-unsafe-call: 0
+*/
 import { EventEmitter } from 'stream';
 
 const eventEmitter = new EventEmitter();
@@ -22,6 +29,19 @@ const childProcess = {
 jest.mock('node:child_process', () => ({
   execFile: jest.fn().mockReturnValue(childProcess),
 }));
+
+jest.mock('../../../../src/lib/git', () => {
+  const originalModule = jest.requireActual('../../../../src/lib/git');
+  return {
+    ...originalModule,
+    getDiffLog: jest
+      .fn()
+      .mockImplementation((headCommit = 'HEAD', _baseCommit?: string, cwd?: string) => {
+        // Force `baseCommit` to be set, so it will not be looked up.
+        return originalModule.getDiffLog(headCommit, 'base', cwd);
+      }),
+  };
+});
 
 import handleReview from '../../../../src/rpc/explain/review';
 

@@ -2,6 +2,9 @@ import gitconfig from 'gitconfiglocal';
 import assert from 'node:assert';
 import { pathToFileURL } from 'node:url';
 import { promisify, types } from 'util';
+import { execute } from './executeCommand';
+import { warn } from 'node:console';
+import { verbose } from '../utils';
 
 // Attempt to parse special syntax allowed by git:
 // - scp-style urls ([user@]host.xz:path/to/repo.git/),
@@ -65,4 +68,114 @@ async function findAndSanitizeRepository(dir: string): Promise<SanitizedUri | vo
 
 export async function findRepository(dir: string): Promise<string | undefined> {
   return (await findAndSanitizeRepository(dir))?.toString();
+}
+
+/**
+ * Find the distance between the base commit and the head commit.
+ *
+ * @param {string} [base='HEAD'] - The base commit to compare against.
+ * @param {string} [head='HEAD'] - The head commit to compare against.
+ * @param {string} [cwd] - The working directory to run the command in.
+ * @returns {Promise<number | undefined>} A promise containing the distance between the base and
+ * head commits, or undefined if the distance could not be resolved.
+ */
+async function getCommitDistance(
+  base: string,
+  head: string,
+  cwd?: string
+): Promise<number | undefined> {
+  try {
+    const result = await execute('git', ['rev-list', '--count', `${base}..${head}`], { cwd });
+    const distance = parseInt(result);
+    return Number.isNaN(distance) ? undefined : distance;
+  } catch (e: unknown) {
+    if (verbose()) {
+      warn(`Failed to retrieve commit distance between ${base} and ${head}`);
+      warn(String(e));
+    }
+  }
+}
+
+/**
+ * Find the nearest base commit for the given head commit.
+ *
+ * @param {string[]} baseRefs - The base commits to compare against.
+ * @param {string} headRef - The head commit to compare against.
+ * @param {string} [cwd] - The working directory to run the command in.
+ * @returns {Promise<string | undefined>} A promise containing the nearest base commit, or
+ * undefined if no base commit could be resolved.
+ */
+async function findNearestBranch(
+  baseRefs: string[],
+  headRef: string,
+  cwd?: string
+): Promise<string | undefined> {
+  const distances = await Promise.all(
+    baseRefs.map((branch) => getCommitDistance(branch, headRef, cwd))
+  );
+
+  const validDistances = distances.filter((distance): distance is number => distance !== undefined);
+  if (validDistances.length === 0) return undefined;
+
+  return baseRefs[distances.indexOf(Math.min(...validDistances))];
+}
+
+// These are the default branch names that we'll use to find the nearest base commit.
+const mainBranches = ['main', 'master', 'develop'];
+
+/**
+ * Find the base commit of the current branch.
+ *
+ * @param {string} [headRef='HEAD'] - The reference to identify the base commit.
+ * @param {string} [cwd] - The working directory to run the command in.
+ * @returns {Promise<string | undefined>} A promise containing the base commit, or undefined if the
+ * base commit could not be found.
+ */
+export async function findBaseCommit(headRef = 'HEAD', cwd?: string): Promise<string | undefined> {
+  try {
+    const nearestBase = await findNearestBranch(mainBranches, headRef, cwd);
+    if (!nearestBase) return;
+
+    let baseCommit = await execute('git', ['merge-base', nearestBase, headRef], { cwd });
+    baseCommit = baseCommit.trim();
+    return baseCommit !== '' ? baseCommit : undefined;
+  } catch (e: unknown) {
+    if (verbose()) {
+      warn(`Failed to find base commit for ${headRef}`);
+      warn(String(e));
+    }
+  }
+}
+
+/**
+ * This method produces the diff between your working directory and HEAD, returning the changes that
+ * have not yet been committed.
+ *
+ * @param {string} [baseRef='HEAD'] - The base commit to compare against.
+ * @param {string} [cwd] - The working directory to run the command in.
+ * @returns {Promise<string>} A promise containing the diff.
+ */
+export function getWorkingDiff(cwd?: string): Promise<string> {
+  return execute('git', ['diff', 'HEAD'], { cwd });
+}
+
+/**
+ * Get the diff between the base commit and the head commit. The diff produced by this function
+ * is in the form of a git log, so commit messages are included.
+ *
+ * @param {string} [headCommit='HEAD'] - The head commit to compare against.
+ * @param {string} baseCommit - The base commit to compare against. If not provided, the base commit
+ * will be found automatically via {@link findBaseCommit}.
+ * @param {string} [cwd] - The working directory to run the command in.
+ * @returns {Promise<string>} A promise containing the diff.
+ */
+export async function getDiffLog(
+  headCommit = 'HEAD',
+  baseCommit?: string,
+  cwd?: string
+): Promise<string> {
+  const base = baseCommit ?? (await findBaseCommit(headCommit, cwd));
+  if (!base) return '';
+
+  return execute('git', ['log', '-p', '--full-diff', `${base}..${headCommit}`], { cwd });
 }
