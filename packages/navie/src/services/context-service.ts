@@ -66,7 +66,7 @@ export default class ContextService {
     // in this case due to their important role in generating code.
     let charsAdded = 0;
     for (const item of context) {
-      const contextItem = new ContextItemEvent(PromptType.CodeSnippet, item.content);
+      const contextItem = new ContextItemEvent(promptType(item.type), item.content);
       if (ContextV2.isFileContextItem(item)) {
         contextItem.location = item.location;
       }
@@ -94,5 +94,14 @@ export default class ContextService {
     }
 
     return context;
+  }
+}
+
+function promptType(type: ContextV2.ContextItemType): PromptType {
+  switch (type) {
+    case ContextV2.ContextItemType.DirectoryListing:
+      return PromptType.DirectoryListing;
+    default:
+      return PromptType.CodeSnippet;
   }
 }
