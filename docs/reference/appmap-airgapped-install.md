@@ -5,7 +5,7 @@ description: "Learn how to install AppMap components like IDE plugins, libraries
 toc: true
 reference: true
 name: AppMap Offline Install for Secure Environments
-step: 19
+step: 20
 ---
 
 # AppMap Offline Install for Secure Environments
