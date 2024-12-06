@@ -71,7 +71,7 @@ describe('navieMetadataV1', () => {
 
       const response = await getResponse();
 
-      expect(response.welcomeMessage).toContain("I can tell you're working on something.");
+      expect(response.welcomeMessage).toContain('I can help you answer questions');
     });
 
     it('provides a response when there are no changes', async () => {
