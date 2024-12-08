@@ -7,6 +7,7 @@ export enum PromptType {
   AppMapStats = 'appmapStats',
   SequenceDiagram = 'sequenceDiagrams',
   CodeSnippet = 'codeSnippets',
+  DirectoryListing = 'directoryListings',
   DataRequest = 'dataRequest',
   HelpDoc = 'helpDoc',
   CodeEditor = 'codeEditor',
@@ -22,6 +23,7 @@ const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
   [PromptType.AppMapStats]: { singular: 'AppMap statistics', plural: 'AppMap statistics' },
   [PromptType.SequenceDiagram]: { singular: 'sequence diagram', plural: 'sequence diagrams' },
   [PromptType.CodeSnippet]: { singular: 'code snippet', plural: 'code snippets' },
+  [PromptType.DirectoryListing]: { singular: 'directory listing', plural: 'directory listings' },
   [PromptType.DataRequest]: { singular: 'data request', plural: 'data requests' },
   [PromptType.HelpDoc]: { singular: 'help document', plural: 'help documents' },
   [PromptType.CodeEditor]: { singular: 'code editor', plural: 'code editors' },
@@ -70,7 +72,7 @@ focused on describing the problem fully as a software Issue, aka Ticket.
   [PromptType.AppMapConfig]: {
     content: `**AppMap configuration**
 
-You're provided with all AppMap configuration files within the user's workspace. The project information 
+You're provided with all AppMap configuration files within the user's workspace. The project information
 is encoded as an array of AppMap configurations (\`appmap.yml\`) provided in JSON format. The contents
 of each element contain the configuration of the AppMap agent, including:
 
@@ -151,6 +153,15 @@ app.listen(3000, () => console.log('Server started on port 3000'));
 \`\`\`
 `,
     tagName: 'code-snippet',
+    multiple: true,
+  },
+  [PromptType.DirectoryListing]: {
+    content: `**Directory listings**
+
+You're provided with directory listings that are relevant to the task.
+Each directory listing contains a list of files and directories within that directory.
+`,
+    tagName: 'directory-listing',
     multiple: true,
   },
   [PromptType.DataRequest]: {

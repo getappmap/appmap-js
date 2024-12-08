@@ -46,6 +46,8 @@ export namespace ContextV2 {
     // A selection from a source file, including the location (specified as a path
     // and range of lines), as well as the content extracted from the location
     CodeSelection = 'code-selection',
+    // A directory listing
+    DirectoryListing = 'directory-listing',
   }
 
   // A specific context item that is returned in the response.
@@ -63,7 +65,8 @@ export namespace ContextV2 {
     type:
       | ContextItemType.CodeSnippet
       | ContextItemType.SequenceDiagram
-      | ContextItemType.DataRequest;
+      | ContextItemType.DataRequest
+      | ContextItemType.DirectoryListing;
     // The directory in which the context item is located.
     directory: string;
     // Identifies the location in the project directory from which the context was obtained.
@@ -78,7 +81,8 @@ export namespace ContextV2 {
     return (
       contextItem.type === ContextItemType.CodeSnippet ||
       contextItem.type === ContextItemType.SequenceDiagram ||
-      contextItem.type === ContextItemType.DataRequest
+      contextItem.type === ContextItemType.DataRequest ||
+      contextItem.type === ContextItemType.DirectoryListing
     );
   }
 

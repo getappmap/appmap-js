@@ -48,10 +48,10 @@ export default class ContextService {
     }
   }
 
-  async locationContext(fileNames: string[]): Promise<void> {
+  async locationContext(fileNames: string[]): Promise<ContextItemEvent[]> {
     if (!fileNames || fileNames.length === 0) {
       this.history.log('[context-service] No file names provided for location context');
-      return;
+      return [];
     }
 
     this.history.log(`[context-service] Retrieving full context of files: ${fileNames.join(', ')}`);
@@ -65,20 +65,27 @@ export default class ContextService {
     // Full text of requested files is always added to the prompt. Context limits are not applied
     // in this case due to their important role in generating code.
     let charsAdded = 0;
+    const events: ContextItemEvent[] = [];
     for (const item of context) {
-      const contextItem = new ContextItemEvent(PromptType.CodeSnippet, item.content);
+      const contextItem = new ContextItemEvent(promptType(item.type), item.content);
       if (ContextV2.isFileContextItem(item)) {
         contextItem.location = item.location;
+        contextItem.directory = item.directory;
       }
       charsAdded += contextItem.content.length;
+      events.push(contextItem);
       this.history.addEvent(contextItem);
     }
     this.history.log(`[context-service] Added ${charsAdded} characters of file context`);
+    return events;
   }
 
-  locationContextFromOptions(options: AgentOptions): Promise<void> {
-    const { locations } = options.buildContextFilters();
-    return locations && locations.length > 0 ? this.locationContext(locations) : Promise.resolve();
+  async locationContextFromOptions(options: AgentOptions): Promise<void> {
+    const locations = options.buildContextFilters().locations ?? [];
+    // Also list project directories
+    locations.unshift('./:0');
+    console.log(locations);
+    await this.locationContext(locations);
   }
 
   static guardContextType(
@@ -94,5 +101,14 @@ export default class ContextService {
     }
 
     return context;
+  }
+}
+
+function promptType(type: ContextV2.ContextItemType): PromptType {
+  switch (type) {
+    case ContextV2.ContextItemType.DirectoryListing:
+      return PromptType.DirectoryListing;
+    default:
+      return PromptType.CodeSnippet;
   }
 }

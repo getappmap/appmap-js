@@ -1,0 +1,183 @@
+{
+  "_events": {},
+  "_eventsCount": 1,
+  "events": [
+    {
+      "type": "classification",
+      "classification": [
+        {
+          "name": "feature",
+          "weight": "medium"
+        }
+      ]
+    },
+    {
+      "type": "agentSelection",
+      "agent": "plan"
+    },
+    {
+      "type": "prompt",
+      "name": "appmapConfig",
+      "role": "system",
+      "content": "**AppMap configuration**\n\nYou're provided with all"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "appmapConfig",
+      "content": "- name: getappmap/appmap-server\n  language: ruby\n"
+    },
+    {
+      "type": "prompt",
+      "name": "appmapStats",
+      "role": "system",
+      "content": "**AppMap statistics**\n\nYou're provided with information about the AppMaps that have been recorded and are available in the user's workspace."
+    },
+    {
+      "type": "contextItem",
+      "promptType": "appmapStats",
+      "content": "- numAppMaps: 530\n"
+    },
+    {
+      "type": "prompt",
+      "name": "codeEditor",
+      "role": "system",
+      "content": "**Code editor**\n\nYou're provided"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "codeEditor",
+      "content": "The code editor is not specified."
+    },
+    {
+      "type": "prompt",
+      "name": "agent",
+      "role": "system",
+      "content": "**Task: Specification of Software Issues**\n\n## About you**\n\nYour name is Navie.\n"
+    },
+    {
+      "type": "prompt",
+      "name": "problemStatement",
+      "role": "system",
+      "content": "**The problem statement**\nThis is a description of the problem that the user wants you to help them with. Your response should be"
+    },
+    {
+      "type": "vectorTerms",
+      "terms": ["deactivate"]
+    },
+    {
+      "type": "contextLookup",
+      "context": []
+    },
+    {
+      "type": "prompt",
+      "name": "sequenceDiagrams",
+      "role": "system",
+      "content": "**Sequence diagrams**\n\nYou're provided with sequence diagrams that are relevant to the task."
+    },
+    {
+      "type": "prompt",
+      "name": "codeSnippets",
+      "role": "system",
+      "content": "**Code snippets**\n\nYou're provided with code snippets that are relevant to the task.\n\nSequence diagrams,"
+    },
+    {
+      "type": "prompt",
+      "name": "dataRequest",
+      "role": "system",
+      "content": "**Data requests**\n\nYou're provided with data requests that are relevant to the task."
+    },
+    {
+      "type": "contextItem",
+      "promptType": "sequenceDiagrams",
+      "content": "@startuml\n!includeurl ",
+      "location": "/test/appmap-server/tmp/appmap/rspec/RecordingMethod_on_a_mapset_shows_the_recording_method_breakdown.appmap.json",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "codeSnippets",
+      "content": "# @label security.api_key.touch\n    def touch(api_key)\n      if api_key.last_used.nil? || api_key.last_used > 15.minutes.ago",
+      "location": "app/models/api_key.rb:53",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "codeSnippets",
+      "content": "# @label security.api_key.revoke\n    def revoke_from_user(login, key_id)\n      DAO::ApiKey",
+      "location": "app/models/api_key.rb:66",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "codeSnippets",
+      "content": "def decode(api_key)\n      Base64.urlsafe_decode64(api_key).split(SEPARATOR)\n    end",
+      "location": "app/models/api_key.rb:15",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "dataRequest",
+      "content": "query:SELECT * FROM \"users\" WHERE (\"users\".\"login\" = 'admin') LIMIT 1",
+      "location": "/test/appmap-server/tmp/appmap/rspec/API_APIKeysController_revoke_an_existing_api_key.appmap.json:66",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "dataRequest",
+      "content": "query:SELECT * FROM \"api_keys\" WHERE (\"login\" = 'admin')",
+      "location": "/test/appmap-server/tmp/appmap/rspec/API_APIKeysController_revoke_an_existing_api_key.appmap.json:44",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "sequenceDiagrams",
+      "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml",
+      "location": "/test/appmap-server/tmp/appmap/rspec/Activation_Validate_verify_when_valid_parameters_are_provided_marks_the_user_as_having_accepted_the_most_recent_EULA.appmap.json",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "dataRequest",
+      "content": "query:WITH \"recording_methods\" AS (SELECT scenarios.metadata->'recorder'->>'name' ",
+      "location": "/test/appmap-server/tmp/appmap/rspec/RecordingMethod_on_a_mapset_shows_the_recording_method_breakdown.appmap.json:6",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "dataRequest",
+      "content": "query:INSERT INTO \"api_keys\" (\"login\") VALUES ('user@example.com') RETURNING *",
+      "location": "/test/appmap-server/tmp/appmap/rspec/Activation_Validate_verify_when_valid_parameters_are_provided_marks_the_user_as_having_accepted_the_most_recent_EULA.appmap.json:95",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "contextItem",
+      "promptType": "sequenceDiagrams",
+      "content": "@startuml\n!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml\nparticipant ",
+      "location": "/test/appmap-server/tmp/appmap/rspec/Key_data_stats_messages_one_unique_on_each_of_two_scenarios_in_a_shared_mapset_indicates_2_messages_on_the_app.appmap.json",
+      "directory": "/test/appmap-server"
+    },
+    {
+      "type": "prompt",
+      "name": "codeSelection",
+      "role": "system",
+      "content": "**The user's code selection**\n\nThe user is asking about specific lines of code that they have selected in their code editor.\n\nThe code selection will be provided as context within a `<code-selection>` tag."
+    },
+    {
+      "type": "prompt",
+      "name": "codeSelection",
+      "role": "user",
+      "content": "<code-selection>\nUsers are listed on the admin page.\n\nSome users are in the system using invalid or disallowed email addresses.\n\nAdd a link or button to \"Deactivate\" a user on the admin page.\n\nThe button should:\n\n* Revoke the user's API keys.\n* Mark the user record as deactivated.\n* Indicate on the user record who deactivated the user, and when.\n\n</code-selection>"
+    },
+    {
+      "type": "prompt",
+      "name": "problemStatement",
+      "role": "user",
+      "content": "<problem-statement>\nA resolution to the given issue, also recording who and when deactivated the account\n</problem-statement>"
+    },
+    {
+      "type": "completion",
+      "model": "gemini-1.5-pro-002",
+      "temperature": 0.2
+    }
+  ]
+}
