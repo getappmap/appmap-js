@@ -14,6 +14,7 @@ redirect_from: [/docs/setup-appmap-in-your-code-editor/navie-ai-quickstart]
 - [Open AppMap Navie AI](#open-appmap-navie-ai)
 - [Ask Navie about your App](#ask-navie-about-your-app)
 - [Improve Navie AI Responses with AppMap Data](#improve-navie-ai-responses-with-appmap-data)
+- [Using Navie with JetBrains IDEs + Corporate-provided Github Copilot LLM Backend](#using-navie-with-jetbrains-ides--corporate-provided-github-copilot-llm-backend)
 - [Next Steps](#next-steps)
 
 ## Choose your AI Provider (Optional)
@@ -56,6 +57,11 @@ The Navie UI includes a standard chat window, and a context panel which will inc
 - SQL Queries
 - Other I/O Data
 
+**Navie will look for the files listed above in the following locations:**  
+- The currently open project
+- All workspace folders in Visual Studio Code
+- All modules available in JetBrains IDEs
+
 ![Navie Context Window](/assets/img/navie-context-window.webp)
 
 ## Improve Navie AI Responses with AppMap Data
@@ -71,6 +77,62 @@ After your AppMap Data is generated, the Navie window will indicate the AppMap D
 With this AppMap Data in your project, asking questions to Navie will now include data flows, sequence diagrams, traces, in addition to the relevant code snippets for the project. 
 
 ![Navie AppMap context window 2](/assets/img/navie-appmap-context-window.webp)
+
+## Using Navie with JetBrains IDEs + Corporate-provided GitHub Copilot LLM backend
+
+Organizations that must use Copilot language models and primarily use JetBrains IDEs, such as IntelliJ, must install AppMap in both IntelliJ and Visual Studio Code to access the full features of AppMap's Navie AI Software Architect. This setup allows you to toggle between the two environments and integrate AI capabilities into your development tools.
+
+AppMap Navie, backed by GitHub Copilot language models, is exclusively available within the Visual Studio Code.
+
+![IntelliJ with Corporate Backend Diagram](/assets/img/docs/intellij-with-corp-copilot-backend.png)
+
+### Step-by-Step Installation Instructions for using JetBrains IDEs with Corporate-provided GitHub Copilot LLM backend
+
+
+**Visual Studio Code Setup**
+
+<ol>
+  <li>Install Visual Studio Code </li>
+  <li>Install Copilot in Visual Studio Code </li>
+  <li>Install AppMap in Visual Studio Code</li>
+<li>Sign in to AppMap using your corporate email address. AppMap Navie will connect to Copilot automatically. If you don’t see a message confirming this, try reloading the window or contact AppMap support at <a href="mailto:support@appmap.io">support@appmap.io</a>.</li>
+  <li>Open your project in Visual Studio Code. Confirm that your code is visible in Visual Studio Code in the Workspace / Explorer View.</li>
+</ol>
+
+**JetBrains IDE Setup**
+
+<ol start="6">
+  <li>Install the AppMap plugin for JetBrains</li>
+  <li>Sign in to AppMap using your company email address</li>
+</ol>
+
+**Make AppMap Data to enhance the responses of Navie AI**
+
+<ol start="8">
+  <li><a href="https://appmap.io/docs/get-started-with-appmap/making-appmap-data.html">Make AppMap Observability Data (if desired).</a></li>
+  <li> After making AppMap data, confirm that AppMap data files are available in the AppMap plugin panel</li>
+</ol>
+
+**Use Navie AI in Visual Studio Code**
+
+<ol start="10">
+  <li>Return to Visual Studio Code</li>
+  <li>Open the AppMap sidebar panel, confirm that AppMap data files are visible</li>
+  <li>Open Navie using the “New Navie Chat” button, or run the command “AppMap: Ask Navie AI”
+    <img src="/assets/img/docs/navie-from-the-command-window.png" alt="Navie from the command window in Visual Studio Code"/>
+    </li>
+  <li>Ask Navie a question or request a diagram of your code.</li>
+  <li>Select some code in a code editor, then open Navie. You’ll be chatting about the selected code.</li>
+  <li>Drag and drop a file into a Navie chat, while using the Shift key. You’ll be chatting about the selected file. It can also contain prompt information, such as instructions that you want Navie to follow.</li>
+</ol>
+
+**Clean Up**
+
+When you are done with a task, run “Delete All AppMaps” from the command window.
+<img src="/assets/img/docs/delete-all-appmaps-command.png" alt="Delete all AppMaps command in Visual Studio Code"/>  
+
+Keep the AppMap data in your workspace focused on the task that you are working on. This will ensure that Navie references the most recent and relevant information available. 
+
 
 ## Next Steps
 
