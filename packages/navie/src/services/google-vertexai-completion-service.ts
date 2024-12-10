@@ -136,7 +136,7 @@ export default class GoogleVertexAICompletionService implements CompletionServic
         temperature += 0.1;
         if (attempt < maxAttempts - 1 && tokens.length === 0) {
           const nextAttempt = CompletionRetryDelay * 2 ** attempt;
-          warn(`Received ${JSON.stringify(cause)}, retrying in ${nextAttempt}ms`);
+          warn(`Received ${JSON.stringify(cause).slice(0, 400)}, retrying in ${nextAttempt}ms`);
           await new Promise<void>((resolve) => {
             setTimeout(resolve, nextAttempt);
           });
