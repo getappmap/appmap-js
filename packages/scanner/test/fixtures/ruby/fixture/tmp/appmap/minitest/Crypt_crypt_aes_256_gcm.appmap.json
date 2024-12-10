@@ -314,9 +314,6 @@
       "repository": "git@github.com:applandinc/appmap-js.git",
       "branch": "feat/rule-unauthenticated-encryption",
       "commit": "9f81b2cf8ad2313ee5751a41719edc321c6e9227",
-      "status": [
-        "?? ../../../../../cli/src/cmds/sequenceDiagram/"
-      ],
       "git_last_annotated_tag": "@appland/appmap-v2.3.4",
       "git_last_tag": "@appland/scanner-v1.63.0",
       "git_commits_since_last_annotated_tag": 0,

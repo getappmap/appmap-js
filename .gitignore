@@ -44,7 +44,10 @@ notebooks
 # AppMap
 tmp/appmap
 packages/*/tmp/
+packages/cli/tests/unit/fixtures/malformedParentId/parent_id_49_does_not_exist/
 *.appmap.json
 .navie
 .run-stats
+.ele*
+*.log.json
 

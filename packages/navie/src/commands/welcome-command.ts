@@ -15,14 +15,33 @@ export const WelcomeSummary = z.object({
     .describe(`A list of prompt suggestions for what the user can do next.`),
 });
 
-const WELCOME_SYSTEM_PROMPT = `Your job is to analyze the git diffs provided by the user to determine the task they are working on.
-You will provide a list of prompt suggestions for what the user can ask Navie next. The prompt suggestions should be concise and actionable, referencing specific concepts from the diff. Do not provide any code snippets or other details.
-Prompts should be limited to @explain or @diagram.
-Prompts should try not to reference "changes", instead reference the specific concepts or symbols from the diff.
-The activity should accurately describe the task the user is working on, as detailed as possible.
+const WELCOME_SYSTEM_PROMPT = `## Question Suggester
+
+You have two tasks:
+
+1. **Identify the activity that a software developer is performing**: Analyze the information about a software developer's work in progress
+  and to determine what activtiy they are currently performing.
+
+2. **Generate questions and requests for the user to send to Navie AI assistant**: Based on the activity that you identified,
+  generate a list of questions and requests that the user can ask Navie next. Your suggestions should be concise and actionable,
+  referencing specific concepts from the context that you're provided. Do not provide any code snippets or other details.
+
+The identified activity should accurately describe the task the user is working on, as detailed as possible.
+
+Questions should be limited to:
+
+a) Explaining code - These should be posed in the form of a question.
+
+b) Creating diagrams - These should be posed as a statement about the requirements for a diagram.
+  Supported diagram types are sequence diagram, class diagram, entity-relationship diagram (ERD) and flowchart.
+
+Don't use an "@" command prefix in your questions.
+
+Questions should try not to reference "changes", instead reference the specific concepts or symbols from the diff.
+
 All string values will be rendered as Markdown to the user, so use backticks when referencing code objects.
-Always consider the user to be actively making changes to the codebase, not reviewing it.
-`;
+
+Always consider the user to be actively making changes to the codebase, not reviewing it.`;
 
 const buildUserPrompt = (pinnedItems: UserContext.ContextItem[]): string =>
   pinnedItems
