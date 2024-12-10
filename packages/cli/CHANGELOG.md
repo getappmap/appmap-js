@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.177.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.177.0...@appland/appmap-v3.177.1) (2024-12-10)
+
+
+### Bug Fixes
+
+* Update gitignore ([2d349b0](https://github.com/getappmap/appmap-js/commit/2d349b0f9945c41cec8e1d997231da1a1e185c10))
+
 # [@appland/appmap-v3.177.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.176.0...@appland/appmap-v3.177.0) (2024-12-10)
 
 
