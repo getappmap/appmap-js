@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.177.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.176.0...@appland/appmap-v3.177.0) (2024-12-10)
+
+
+### Bug Fixes
+
+* `[@review](https://github.com/review)` base branch is now main, master or develop ([77a8d86](https://github.com/getappmap/appmap-js/commit/77a8d863d8ca232aa6fd7f9924b4c4e3ba526e04))
+
+
+### Features
+
+* Add welcome message completions ([5e627d2](https://github.com/getappmap/appmap-js/commit/5e627d20ed0bc19a92938203641848f338ac1e37))
+* Dynamic welcome message is not always enabled ([24034cf](https://github.com/getappmap/appmap-js/commit/24034cfc35ecd2894ac1cba66332179501e5ce31))
+
 # [@appland/appmap-v3.176.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.175.0...@appland/appmap-v3.176.0) (2024-12-02)
 
 
