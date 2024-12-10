@@ -684,12 +684,6 @@
       "repository": "git@github.com:getappmap/appmap-js.git",
       "branch": "feat/sequence-diagram-component",
       "commit": "5beffbe0fd925765d056d09471558a835fa34f61",
-      "status": [
-        "M ../../../../components/jest.config.js",
-        "M tmp/appmap/list_users.appmap.json",
-        "?? ../../../../../appmap.yml",
-        "?? ../../../appmap.yml"
-      ],
       "git_last_annotated_tag": "@appland/scanner-latest",
       "git_last_tag": "@appland/components-v2.29.0",
       "git_commits_since_last_annotated_tag": 0,
