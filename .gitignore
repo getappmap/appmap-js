@@ -47,4 +47,6 @@ packages/*/tmp/
 *.appmap.json
 .navie
 .run-stats
+.ele*
+*.log.json
 
