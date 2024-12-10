@@ -208,6 +208,15 @@ ${userPrompt}
         { locations }
       );
     }
+
+    // For backwards compatibility, include the code selections which have been sent
+    // without a location.
+    pinnedItemLookup.push(
+      ...pinnedItems
+        .filter(UserContext.isCodeSelectionItem)
+        .map((cs) => ({ ...cs, type: ContextV2.ContextItemType.CodeSelection }))
+    );
+
     return pinnedItemLookup;
   }
 
