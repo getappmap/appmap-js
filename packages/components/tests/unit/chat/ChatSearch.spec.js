@@ -32,7 +32,7 @@ describe('pages/ChatSearch.vue', () => {
   const noConfig = () => [[null, null, { projectDirectories: [] }]];
 
   const navieMetadata = {
-    welcomeMessage: 'Welcome to Navie!',
+    welcomeMessage: `Welcome to Navie!`,
     inputPlaceholder: 'Type something',
     commands: [
       {
@@ -608,7 +608,9 @@ describe('pages/ChatSearch.vue', () => {
       });
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find('[data-cy="welcome-message"]').text()).toBe(navieMetadata.welcomeMessage);
+      expect(wrapper.find('[data-cy="welcome-message"]').text()).toBe(
+        `Hi, I'm Navie! ${navieMetadata.welcomeMessage}`
+      );
       expect(
         wrapper
           .find(`[data-cy="chat-input"][placeholder="${navieMetadata.inputPlaceholder}"]`)
@@ -630,7 +632,6 @@ describe('pages/ChatSearch.vue', () => {
     });
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find('[data-cy="welcome-message"]').exists()).toBe(false);
     expect(wrapper.find('[data-cy="chat-input"]').attributes('placeholder')).toBe(
       'What are you working on today?'
     );

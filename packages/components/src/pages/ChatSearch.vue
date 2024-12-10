@@ -32,7 +32,7 @@
         />
         <template #not-chatting>
           <div class="message-box__footer">
-            <v-welcome-message :message="welcomeMessage" />
+            <v-welcome-message :dynamicMessage="welcomeMessage" />
           </div>
         </template>
       </v-chat>
