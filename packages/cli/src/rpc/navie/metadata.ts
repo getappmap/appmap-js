@@ -60,9 +60,9 @@ async function getWelcomeMessage(navieProvider: INavieProvider): Promise<string>
 
   // Case 1: Custom welcome message may not be enabled at all
   if (!isCustomWelcomeMessageEnabled(navie))
-    return "### Hi, I'm Navie!\n\nI can help you answer questions about your codebase, create diagrams, plan solutions, generate code and tests, and review code changes. Type `@` to see a list of commands.";
+    return 'I can help you answer questions about your codebase, create diagrams, plan solutions, generate code and tests, and review code changes. Type `@` to see a list of commands.';
 
-  const result: string[] = ["### Hi, I'm Navie!", ''];
+  const result: string[] = [];
   const { projectDirectories } = configuration();
 
   // Case 2: Remote Navie, no open project directories
@@ -102,13 +102,12 @@ async function getWelcomeMessage(navieProvider: INavieProvider): Promise<string>
   } else {
     result.push(
       `It looks like you're ${welcomeSuggestion.activity}.`,
-      '',
       'Here are some questions you might want to try:',
-      ...welcomeSuggestion.suggestions.map((suggestion) => `- ${suggestion}`)
+      ...welcomeSuggestion.suggestions.map((s) => `- ${s}`)
     );
   }
 
-  return result.join('\n');
+  return result.join('\n\n');
 }
 
 export function navieMetadataV1(

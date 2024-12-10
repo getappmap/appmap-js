@@ -391,7 +391,7 @@ function buildMockRpc(
     } else if (method === 'v1.navie.metadata') {
       callback(null, null, {
         welcomeMessage:
-          "### Hi, I'm Navie!\n\nI can help you answer questions about your codebase, plan solutions, create diagrams, and generate code. Enter `@` to see a list of commands.",
+          'I can help you answer questions about your codebase, plan solutions, create diagrams, and generate code. Enter `@` to see a list of commands.',
         inputPlaceholder: "Ask a question or enter '@' for commands",
         commands: [
           {
