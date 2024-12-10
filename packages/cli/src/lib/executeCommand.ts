@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { ExecOptions, exec } from 'child_process';
+import { ExecOptions, exec, execFile } from 'node:child_process';
 import { verbose } from '../utils';
 
 function commandStyle(message: string): string {
@@ -45,3 +45,34 @@ export function executeCommand(
     });
   });
 }
+
+/**
+ * This is a wrapper around `execFile` that returns a promise containing the stdout. `execFile` will
+ * not spawn a shell, so it is less likely to be vulnerable to shell injection attacks.
+ *
+ * @param {string} command - The command to execute. This should be resolvable via `PATH`, and contain no arguments.
+ * @param {string[]} args - The arguments to pass to the command.
+ * @param {object} [options] - Options to pass to `execFile`.
+ * @returns {Promise<string>} A promise containing the stdout of the command.
+ */
+export const execute = (command: string, args: string[], options?: { cwd?: string }) =>
+  new Promise<string>((resolve, reject) => {
+    const child = execFile(command, args, { ...(options ?? {}) });
+
+    let stdout = '';
+    child.stdout?.setEncoding('utf8');
+    child.stdout?.on('data', (data: string) => {
+      stdout += data.toString();
+    });
+
+    let stderr = '';
+    child.stderr?.setEncoding('utf8');
+    child.stderr?.on('data', (data: string) => {
+      stderr += data.toString();
+    });
+
+    child.on('close', (code) => {
+      if (code === 0) resolve(stdout);
+      else reject(new Error(stderr));
+    });
+  });
