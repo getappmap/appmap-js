@@ -25,12 +25,13 @@ import {
 import detectCodeEditor from '../../lib/detectCodeEditor';
 import { update } from '../../rpc/file/update';
 import { INavieProvider } from '../../rpc/explain/navie/inavie';
-import { navieMetadataV1 } from '../../rpc/navie/metadata';
+import { navieMetadataV1, navieMetadataV2 } from '../../rpc/navie/metadata';
 import { navieSuggestHandlerV1 } from '../../rpc/navie/suggest';
 import { initializeHistory } from '../../rpc/explain/navie/historyHelper';
 import History from '../../rpc/explain/navie/history';
 import { join } from 'path';
 import { homedir } from 'os';
+import { navieWelcomeV2 } from '../../rpc/navie/welcome';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -69,8 +70,10 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     getConfigurationV1(),
     setConfigurationV2(),
     getConfigurationV2(),
-    navieMetadataV1(navie),
+    navieMetadataV1(),
+    navieMetadataV2(),
     navieSuggestHandlerV1(navie),
+    navieWelcomeV2(navie),
   ];
 }
 

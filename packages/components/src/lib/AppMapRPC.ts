@@ -212,12 +212,49 @@ export default class AppMapRPC {
     });
   }
 
-  metadata(): Promise<NavieRpc.V1.Metadata.Response> {
+  // If the server does not provide v2.navie.metadata, use this method to obtain the welcome
+  // message, input placeholder, and commands.
+  metadataV1(): Promise<NavieRpc.V1.Metadata.Response> {
     return new Promise((resolve, reject) => {
       this.client.request(
         NavieRpc.V1.Metadata.Method,
         undefined,
         (err: any, error: any, result: NavieRpc.V1.Metadata.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
+
+  // If the server provides v2.navie.metadata, use this method to obtain the input placeholder and
+  // commands. It will return without delay, enabling the input placeholder and command list to
+  // be displayed immediately.
+  //
+  // Use the welcome method to obtain the activity name and the suggestions.
+  metadataV2(): Promise<NavieRpc.V2.Metadata.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V2.Metadata.Method,
+        undefined,
+        (err: any, error: any, result: NavieRpc.V2.Metadata.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
+
+  // If the server provides v2.navie.welcome, use this method to obtain the welcome message, activity
+  // name, and suggestions. There will be some delay while the project state is analyzed.
+  welcome(codeSelection?: string): Promise<NavieRpc.V2.Welcome.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V2.Welcome.Method,
+        { codeSelection },
+        (err: any, error: any, result: NavieRpc.V2.Welcome.Response) => {
           if (err || error) return reportError(reject, err, error);
 
           resolve(result);
