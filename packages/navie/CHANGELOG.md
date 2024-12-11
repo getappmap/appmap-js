@@ -1,3 +1,10 @@
+# [@appland/navie-v1.38.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.37.0...@appland/navie-v1.38.0) (2024-12-11)
+
+
+### Features
+
+* Update the welcome command prompt ([6999935](https://github.com/getappmap/appmap-js/commit/6999935a210dba52b56b98a8f2f0a0ee3cf565ff))
+
 # [@appland/navie-v1.37.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.36.2...@appland/navie-v1.37.0) (2024-12-06)
 
 
