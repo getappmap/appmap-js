@@ -1,4 +1,4 @@
-## Navie Chat Welcome Message
+## Navie Chat Welcome Message V1
 
 The welcome message is a dynamic greeting that appears when the user opens the Navie Chat window.
 The message is based on the user's current workspace activity and the status of their projects.
