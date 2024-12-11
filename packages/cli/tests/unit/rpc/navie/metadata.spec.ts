@@ -1,4 +1,4 @@
-import { navieMetadataV1 } from '../../../../src/rpc/navie/metadata';
+import { navieMetadataV1, navieMetadataV2 } from '../../../../src/rpc/navie/metadata';
 import * as isNavieCustomWelcomeMessageEnabled from '../../../../src/rpc/navie/isCustomWelcomeMessageEnabled';
 import INavie, { INavieProvider } from '../../../../src/rpc/explain/navie/inavie';
 import * as configuration from '../../../../src/rpc/configuration';
@@ -92,6 +92,30 @@ describe('navieMetadataV1', () => {
       const response = await getResponse();
 
       expect(response.welcomeMessage).toContain(welcomeSuggestion.activity);
+    });
+  });
+});
+
+describe('navieMetadataV2', () => {
+  let projectDirectories: string[] = [];
+
+  beforeEach(() => {
+    projectDirectories = ['/home/user/project'];
+    jest
+      .mocked(configuration)
+      .default.mockImplementation(
+        () => ({ projectDirectories } as unknown as configuration.Configuration)
+      );
+  });
+
+  afterEach(() => jest.clearAllMocks());
+
+  it('provides expected fields', () => {
+    const response = navieMetadataV2().handler({});
+
+    expect(response).toEqual({
+      inputPlaceholder: expect.any(String),
+      commands: expect.any(Object),
     });
   });
 });

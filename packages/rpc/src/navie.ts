@@ -31,4 +31,27 @@ export namespace NavieRpc {
       export type Response = NextStep[];
     }
   }
+
+  export namespace V2 {
+    export namespace Metadata {
+      export const Method = 'v2.navie.metadata';
+      export type Params = {};
+      export type Response = {
+        inputPlaceholder?: string;
+        commands: NavieRpc.V1.Metadata.Command[];
+      };
+    }
+
+    export namespace Welcome {
+      export const Method = 'v2.navie.welcome';
+      export type Params = {
+        codeSelection?: string;
+      };
+      export type Response = {
+        message?: string;
+        activity?: string;
+        suggestions?: string[];
+      };
+    }
+  }
 }
