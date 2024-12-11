@@ -52,6 +52,10 @@ export default class RPCServer {
       return acc;
     }, {});
 
+    rpcMethods['system.listMethods'] = (args, callback) => {
+      callback(null, Object.keys(rpcMethods));
+    };
+
     log(`Available JSON-RPC methods: ${Object.keys(rpcMethods).sort().join(', ')}`);
     warn(`Consult @appland/rpc for request and response data types.`);
 
