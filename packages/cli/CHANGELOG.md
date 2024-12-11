@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.178.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.177.1...@appland/appmap-v3.178.0) (2024-12-11)
+
+
+### Features
+
+* Add loading indicator and static header to welcome message component ([4bd6fda](https://github.com/getappmap/appmap-js/commit/4bd6fdad8a9377b723ff463caa26a6d7a6e58da9))
+
 # [@appland/appmap-v3.177.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.177.0...@appland/appmap-v3.177.1) (2024-12-10)
 
 
