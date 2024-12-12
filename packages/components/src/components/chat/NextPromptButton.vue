@@ -4,7 +4,7 @@
     @click.shift.native="onSubmit"
     @click.exact.native="onChangeInput"
     size="small"
-    kind="ghost"
+    kind="native-ghost"
   >
     <slot />
   </v-button>

@@ -91,7 +91,7 @@ export default {
 
 <style lang="scss" scoped>
 .context {
-  color: $gray4;
+  color: $color-foreground;
   width: 100%;
   min-height: 100%;
 
@@ -108,7 +108,7 @@ export default {
   &__count {
     font-size: 0.8rem;
     font-weight: 400;
-    color: lighten($gray4, 20%);
+    color: $color-foreground;
     margin-left: 0.5rem;
     background-color: rgb(168, 168, 255, 0.15);
     border-radius: 4rem;
@@ -121,7 +121,7 @@ export default {
 
   h3 {
     margin: 0.65rem;
-    color: $gray5;
+    color: $color-foreground;
   }
 
   &__body {
@@ -147,7 +147,7 @@ export default {
     margin: 0 2rem;
     min-width: 180px;
     border-radius: 0.5rem;
-    color: rgba(white, 0.66);
+    color: $color-foreground;
     line-height: 1.5;
   }
 }

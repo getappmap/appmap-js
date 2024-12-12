@@ -109,7 +109,6 @@ export default Vue.extend({
     gap: 0.5em;
     padding: 0.65rem;
     cursor: pointer;
-    color: lighten($gray4, 20%);
     height: 100%;
 
     .row-icon {

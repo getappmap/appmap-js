@@ -778,6 +778,14 @@ export default {
 };
 </script>
 
+<style lang="scss">
+@import '~highlight.js/styles/base16/snazzy.css';
+pre code {
+  background-color: transparent;
+  color: #e2e4e5; // snazzy
+}
+</style>
+
 <style lang="scss" scoped>
 $border-color: darken($gray4, 10%);
 
@@ -787,7 +795,8 @@ $border-color: darken($gray4, 10%);
   min-width: 100%;
   max-width: 100vw;
   height: 100vh;
-  background-color: $gray2;
+  background-color: $color-background;
+  color: $color-foreground;
 
   .search-header {
     display: flex;
@@ -810,8 +819,8 @@ $border-color: darken($gray4, 10%);
   }
 
   h1 {
+    color: $color-foreground;
     margin: 0.5rem;
-    color: $white;
     font-size: 1.17em;
   }
 
@@ -822,7 +831,7 @@ $border-color: darken($gray4, 10%);
     svg {
       width: 18px;
       height: 18px;
-      fill: $white;
+      fill: $color-foreground;
     }
   }
 
@@ -830,12 +839,12 @@ $border-color: darken($gray4, 10%);
     &::v-deep {
       .popper__text {
         position: absolute;
-        color: $white;
-        background: $black;
+        color: $color-foreground;
+        background: $color-background;
         left: unset;
         right: 100%;
         transform: translateX(0.65rem) translateY(+1.65rem);
-        border: 1px solid;
+        border: 1px solid $color-border;
       }
     }
   }
@@ -843,7 +852,7 @@ $border-color: darken($gray4, 10%);
   h2 {
     margin-left: 0.75rem;
     margin-bottom: 0.5rem;
-    color: $white;
+    color: $color-foreground;
     font-size: 1.17em;
   }
 
@@ -854,7 +863,7 @@ $border-color: darken($gray4, 10%);
 
     display: flex;
     flex-direction: column;
-    background-color: #292c39;
+    background-color: $color-background;
 
     .message-box__footer {
       padding: 2rem 2rem;
@@ -869,11 +878,11 @@ $border-color: darken($gray4, 10%);
       padding-bottom: 0;
 
       a {
-        color: #768ecb;
+        color: $color-link;
         text-decoration: none;
 
         &:hover {
-          color: #4362b1;
+          color: $color-link-hover;
         }
       }
     }
@@ -886,7 +895,7 @@ $border-color: darken($gray4, 10%);
   }
   .chat-search-container--drag {
     width: 4px;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.2);
     cursor: col-resize;
     z-index: 100;
 
@@ -900,7 +909,7 @@ $border-color: darken($gray4, 10%);
     grid-template-rows: min-content min-content 1fr;
 
     max-height: 100vh;
-    background-color: darken(#292c39, 10%);
+    background-color: $color-background-dark;
 
     .pinned-items-wrapper,
     .context-wrapper {
@@ -912,17 +921,15 @@ $border-color: darken($gray4, 10%);
 
     .pinned-items-wrapper .search-container {
       max-height: 33vh;
-      border-bottom: 1px solid rgba(white, 0.1);
+      border-bottom: 1px solid $color-border;
     }
   }
 
   .search-container,
   .context-container {
     font-size: 1em;
-    color: $white;
     flex-direction: column;
     overflow-y: auto;
-    background-color: darken(#292c39, 10%);
   }
 
   .instructions {
@@ -954,7 +961,6 @@ $border-color: darken($gray4, 10%);
   .pinned-item__count {
     font-size: 0.8rem;
     font-weight: 400;
-    color: lighten($gray4, 20%);
     margin-left: 0.5rem;
     background-color: rgb(168, 168, 255, 0.15);
     border-radius: 4rem;

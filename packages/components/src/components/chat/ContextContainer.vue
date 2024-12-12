@@ -277,11 +277,10 @@ export default Vue.extend({
 .context-container {
   margin: 1rem 0;
   border-radius: $border-radius;
-  background-color: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(black, 0.1);
+  background-color: $color-background-dark;
+  border: 1px solid $color-border;
   line-height: 1 !important;
   position: relative;
-  box-shadow: 0 0 1rem 0 rgba(black, 0.33);
 
   &[is-reference] {
     .context-container__button:last-of-type {
@@ -304,8 +303,8 @@ export default Vue.extend({
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(black, 0.2);
-    border-bottom: 1px solid rgba(white, 0.1);
+    background-color: $color-background-dark;
+    border-bottom: 1px solid $color-border;
     border-radius: $border-radius $border-radius 0 0;
 
     &--collapsable {
@@ -322,10 +321,11 @@ export default Vue.extend({
 
     &--file {
       .context-container__title {
-        color: $brightblue;
+        color: $color-link;
         cursor: pointer;
 
         &:hover {
+          color: $color-link-hover;
           text-decoration: underline;
         }
       }
@@ -335,7 +335,6 @@ export default Vue.extend({
   &__title {
     display: inline-block;
     padding: 0.5rem 1rem;
-    color: #e2e4e5;
     text-wrap: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -356,6 +355,7 @@ export default Vue.extend({
 
     &::v-deep {
       .popper__text {
+        color: $color-foreground;
         backdrop-filter: blur(12px);
         background-color: transparent;
         border-color: rgba(white, 0.2);
@@ -378,8 +378,7 @@ export default Vue.extend({
   &__button {
     display: inline-block;
     padding: 0.5rem 1rem;
-    // background-color: rgba(black, 0.1);
-    color: #e2e4e5;
+    color: $color-foreground;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     user-select: none;
@@ -396,19 +395,19 @@ export default Vue.extend({
 
       &::v-deep > .loader .dot {
         filter: drop-shadow(0 0 0.25rem rgba(white, 1));
-        background-color: #e2e4e5 !important;
+        background-color: $color-foreground !important;
       }
     }
 
     &--failure {
       svg path {
-        fill: $red2 !important;
+        fill: $color-error !important;
       }
     }
 
     &--success {
       svg path {
-        fill: $success-indicator !important;
+        fill: $color-success !important;
       }
     }
 
@@ -419,53 +418,47 @@ export default Vue.extend({
       overflow: visible;
 
       path {
-        fill: #e2e4e5;
+        fill: $color-foreground;
       }
     }
 
     &--toggled {
-      background-color: rgba(white, 0.25);
+      background-color: $color-button-bg-hover;
       svg {
         transform: scale(1.1);
-        filter: drop-shadow(2px 2px 2px rgba(black, 0.75));
+        filter: drop-shadow(2px 2px 2px $color-tile-shadow);
         path {
-          fill: white;
-          // stroke: white;
+          fill: $color-button-fg;
         }
       }
       &:hover {
-        background-color: rgba(white, 0.5) !important;
+        background-color: $color-button-bg !important;
       }
     }
 
     &:hover {
-      background-color: rgba(white, 0.25);
-    }
-
-    &:active {
-      background-color: $blue;
-      transition: background-color 0s;
+      background-color: $color-button-bg;
     }
   }
 
   &__menu {
-    background-color: rgba(black, 0.5);
+    background-color: $color-background;
     border-radius: 0 0 0 $border-radius;
-    border: 1px solid rgba(white, 0.1);
-    border-top: 1px solid rgba(black, 0.2);
+    border: 1px solid $color-border;
     border-right: none;
     overflow: hidden;
-    backdrop-filter: blur(10px);
   }
 
   &__menu-item {
+    color: $color-foreground;
     padding: 0.5rem 1rem;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     user-select: none;
 
     &:hover {
-      background-color: rgba(white, 0.25);
+      background-color: $color-button-bg-hover;
+      color: $color-button-fg;
     }
 
     &:active {
@@ -474,9 +467,11 @@ export default Vue.extend({
     }
 
     &--link {
+      color: $color-link;
       cursor: initial;
       &:hover {
         background-color: transparent;
+        color: $color-link-hover;
       }
     }
   }

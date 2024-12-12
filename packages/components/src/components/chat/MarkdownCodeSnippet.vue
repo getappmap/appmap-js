@@ -12,7 +12,9 @@
     @pin="onPin"
     @apply="onApply"
   >
-    <pre><code data-cy="content" v-html="highlightedCode" /><slot name="cursor" /></pre>
+    <pre
+      class="hljs"
+    ><code data-cy="content"  v-html="highlightedCode" /><slot name="cursor" /></pre>
   </v-context-container>
 </template>
 
@@ -156,25 +158,18 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss"></style>
-
 <style lang="scss" scoped>
-@import '~highlight.js/styles/base16/snazzy.css';
 .code-snippet::v-deep {
-  color: #e2e4e5;
-
   pre {
     margin: 0;
     border: 0;
-    border-radius: 0;
+    border-radius: 0 0 $border-radius $border-radius;
     padding: 0.5rem 1rem 0.25rem 1rem;
     overflow: auto;
   }
 
   code {
     line-height: 1.6;
-    color: inherit;
-    background-color: inherit;
   }
 }
 </style>

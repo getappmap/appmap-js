@@ -120,7 +120,7 @@ import { PropType } from 'vue';
 import VNavieCompass from '@/assets/compass-icon.svg';
 import VUserAvatar from '@/assets/user-avatar.svg';
 import VThumbIcon from '@/assets/thumb.svg';
-import VClipboardIcon from '@/assets/plain-clipboard.svg';
+import VClipboardIcon from '@/assets/copy-icon.svg';
 import VCheckIcon from '@/assets/success-checkmark.svg';
 import VButton from '@/components/Button.vue';
 import VToolStatus from '@/components/chat/ToolStatus.vue';
@@ -409,7 +409,7 @@ export default {
   grid-template-rows: 16px 1fr;
   gap: 0.5rem 1rem;
   padding: 0 1rem;
-  color: #ececec;
+  color: $color-foreground;
   overflow: visible;
 
   &[data-actor='user'] .message-body span {
@@ -426,8 +426,12 @@ export default {
     svg {
       overflow: visible;
 
+      path,
+      circle {
+        fill: $color-foreground;
+      }
       rect {
-        fill: rgba($color: #000000, $alpha: 0.2);
+        fill: $color-background;
       }
     }
 
@@ -565,11 +569,14 @@ export default {
     }
 
     .copy-icon {
-      fill: desaturate(lighten($gray2, 20%), 10%);
+      fill: $color-foreground;
       width: 90%;
+      transform: scale(0.75);
+      overflow: visible;
 
       &:hover {
-        fill: white;
+        fill: $color-highlight;
+        transform: scale(0.85);
       }
     }
 
@@ -577,7 +584,7 @@ export default {
       width: 85%;
 
       path {
-        fill: white;
+        fill: $color-foreground;
       }
     }
 
@@ -589,14 +596,14 @@ export default {
         height: 100%;
 
         path {
-          stroke: desaturate(lighten($gray2, 25%), 10%);
+          stroke: $color-foreground;
           fill: none;
         }
       }
 
       &:hover {
         svg path {
-          stroke: white;
+          stroke: $color-highlight;
         }
       }
 
@@ -615,12 +622,12 @@ export default {
 
       &--selected {
         border-radius: $border-radius;
-        background: rgba(white, 0.05);
-        border: 1px solid rgba(white, 0.02);
+        background: $color-button-bg;
+        border: 1px solid $color-highlight;
         padding: 0px;
         opacity: 100% !important;
         svg path {
-          stroke: white;
+          stroke: $color-highlight;
         }
       }
     }
@@ -636,7 +643,7 @@ export default {
     animation-duration: 530ms;
     animation-iteration-count: infinite;
     animation-direction: alternate;
-    color: white;
+    color: $color-foreground;
     font-size: 1rem;
   }
 }
@@ -675,16 +682,16 @@ export default {
   div {
     hr {
       border: none;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(white, 0.1);
       margin: 1rem 0;
     }
 
     a {
-      color: #0097fa;
+      color: $color-link;
       text-decoration: none;
 
       &:hover {
-        color: lighten(#0097fa, 10%);
+        color: $color-link-hover;
         text-decoration: underline;
       }
     }
@@ -706,17 +713,14 @@ export default {
 
   code {
     border-radius: 6px;
-    background-color: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0.25rem;
     padding-bottom: 0;
     font-family: monospace;
-    color: #e2e4e5;
   }
 
   pre code {
     border: 0;
-    background-color: transparent;
     padding: 0;
   }
 }

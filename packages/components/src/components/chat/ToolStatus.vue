@@ -59,11 +59,11 @@ export default Vue.extend({
   display: grid;
   grid-template-columns: 1.5rem 1fr;
   flex-direction: column;
-  border: 1px solid #7289c5;
+  border: 1px solid $color-highlight;
   border-radius: $border-radius;
   padding: 0.75rem;
   width: fit-content;
-  color: #ececec;
+  color: $color-foreground;
   align-items: stretch;
 
   &__info {
@@ -85,14 +85,14 @@ export default Vue.extend({
     width: 75%;
 
     path {
-      fill: #ececec;
+      fill: $color-foreground;
     }
   }
 
   &--interactive {
     &:hover {
       cursor: pointer;
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: $color-background-light;
     }
   }
 }

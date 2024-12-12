@@ -1,5 +1,5 @@
 <template>
-  <v-button class="add-file__button" size="small" kind="ghost">
+  <v-button class="add-file__button" size="small" kind="native-ghost">
     <PlusIcon />Add content...
   </v-button>
 </template>
@@ -21,21 +21,19 @@ export default {
 <style lang="scss" scoped>
 .add-file__button {
   padding: 0.5rem 1rem;
-  transition-duration: 0.25s;
 
   &:hover {
-    background-color: rgba(white, 0.05);
-  }
-
-  &:active {
-    background-color: rgba(white, 0.2);
+    svg {
+      fill: $color-highlight;
+    }
   }
 
   svg {
     width: 1rem;
     height: 1rem;
     margin-right: 0.63em;
-    fill: $white;
+    fill: $color-input-fg;
+    transition: $transition;
   }
 }
 </style>
