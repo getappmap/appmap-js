@@ -1,12 +1,12 @@
-import VWelcomeMessage from '@/components/chat/WelcomeMessage.vue';
+import VWelcomeMessageV1 from '@/components/chat/WelcomeMessageV1.vue';
 
 export default {
   title: 'Components/WelcomeMessage',
-  component: VWelcomeMessage,
+  component: VWelcomeMessageV1,
 };
 
 const Template = (args) => ({
-  components: { VWelcomeMessage },
+  components: { VWelcomeMessageV1 },
   setup() {
     return { args };
   },

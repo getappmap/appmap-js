@@ -72,7 +72,6 @@ import VPopper from '@/components/Popper.vue';
 import VAutoComplete from '@/components/chat/AutoComplete.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
 import { NavieRpc } from '@appland/rpc';
-import type { PropType } from 'vue';
 
 export default {
   name: 'v-chat-input',
@@ -102,9 +101,12 @@ export default {
       type: Boolean,
       default: false,
     },
-    metadata: {
-      type: Object as PropType<NavieRpc.V1.Metadata.Response | undefined>,
-      default: undefined,
+    inputPlaceholder: {
+      type: String,
+      default: '',
+    },
+    commands: {
+      type: Array<NavieRpc.V1.Metadata.Command[]>,
     },
     useAnimation: {
       type: Boolean,
@@ -117,11 +119,8 @@ export default {
     };
   },
   computed: {
-    commands(): NavieRpc.V1.Metadata.Command[] {
-      return this.metadata?.commands ?? [];
-    },
     placeholderOverride(): string | undefined {
-      return this.metadata?.inputPlaceholder ?? this.placeholder;
+      return this.inputPlaceholder ?? this.placeholder;
     },
     hasInput() {
       return this.input !== '';

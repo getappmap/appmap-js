@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils';
-import VWelcomeMessage from '@/components/chat/WelcomeMessage.vue';
+import VWelcomeMessageV1 from '@/components/chat/WelcomeMessageV1.vue';
 
-describe('VWelcomeMessage', () => {
+describe('VWelcomeMessageV1', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(VWelcomeMessage, {
+    wrapper = mount(VWelcomeMessageV1, {
       props: {
         dynamicMessage: '',
       },
@@ -14,7 +14,6 @@ describe('VWelcomeMessage', () => {
 
   it('renders static message by default', () => {
     expect(wrapper.text()).toContain("Hi, I'm Navie");
-    // Check that the dynamic placeholder is shown
     expect(wrapper.find('.welcome-message-dynamic-placeholder').exists()).toBe(true);
   });
 
