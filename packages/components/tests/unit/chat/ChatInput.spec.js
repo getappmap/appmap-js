@@ -9,14 +9,12 @@ describe('ChatInput', () => {
     document.getSelection = jest.fn().mockImplementation(() => ({ focusOffset: caretPosition }));
     wrapper = mount(VChatInput, {
       propsData: {
-        metadata: {
-          commands: [
-            {
-              name: '@example',
-              description: 'An example command',
-            },
-          ],
-        },
+        commands: [
+          {
+            name: '@example',
+            description: 'An example command',
+          },
+        ],
       },
     });
   });

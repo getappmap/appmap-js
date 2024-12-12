@@ -1,10 +1,6 @@
 <template>
-  <div class="welcome-message" data-cy="welcome-message">
-    <div class="welcome-message-static">
-      <h3>Hi, I'm Navie!</h3>
-    </div>
+  <div class="welcome-message" data-cy="welcome-message" data-version="1">
     <div class="welcome-message-dynamic" v-if="dynamicMessage" v-html="renderedDynamicMessage" />
-    <div class="welcome-message-dynamic-placeholder" v-else>Analyzing workspace...</div>
   </div>
 </template>
 

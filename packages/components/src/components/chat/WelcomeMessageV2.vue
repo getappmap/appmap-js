@@ -1,20 +1,27 @@
 <template>
-  <div class="welcome-message" data-cy="welcome-message">
+  <div class="welcome-message" data-cy="welcome-message" data-version="2">
     <div class="welcome-message-static">
       <h3>Hi, I'm Navie!</h3>
     </div>
     <div class="welcome-message-dynamic" v-if="welcomeLoaded">
-      <div v-if="welcomeMessage" v-html="welcomeMessage" class="welcome-message-text" />
+      <div v-if="welcomeMessage" v-html="renderedWelcomeMessage" class="welcome-message-text" />
       <div v-else-if="activityName" class="welcome-message-structured">
-        <p>I see you're working on {{ activityName }}. Here are some things you can try:</p>
+        <p>I see you're working on {{ activityName }}.</p>
+        <p>Here are some suggestions for what you can do next:</p>
         <ul>
           <li v-for="suggestion in trimmedSuggestions" :key="suggestion">
-            {{ suggestion }}
+            <a
+              href="#"
+              @click.prevent="onSuggestionClick(suggestion)"
+              v-html="renderMarkdown(suggestion)"
+            />
           </li>
         </ul>
       </div>
     </div>
-    <v-skeleton-loader class="welcome-message__loading" v-else />
+    <div class="welcome-message__loading" data-cy="loading" v-else>
+      <v-skeleton-loader />
+    </div>
   </div>
 </template>
 
@@ -51,12 +58,24 @@ export default Vue.extend({
     welcomeLoaded(): boolean {
       return !!(this.welcomeMessage || this.activityName);
     },
-    renderedDynamicMessage(): string {
+    renderedWelcomeMessage(): string {
       return DOMPurify.sanitize(marked.parse(this.welcomeMessage));
     },
     trimmedSuggestions(): string[] {
       // First N suggestions
       return this.suggestions.slice(0, this.maxSuggestions);
+    },
+  },
+
+  methods: {
+    stripBackticks(markdown: string): string {
+      return markdown.replace(/`+/g, '');
+    },
+    renderMarkdown(markdown: string): string {
+      return DOMPurify.sanitize(marked.parse(markdown));
+    },
+    onSuggestionClick(suggestion: string) {
+      this.$root.$emit('change-input', this.stripBackticks(suggestion));
     },
   },
 });
@@ -83,6 +102,7 @@ export default Vue.extend({
     width: 100%;
     height: 10em;
     border-radius: $border-radius;
+    overflow: hidden;
   }
 }
 </style>

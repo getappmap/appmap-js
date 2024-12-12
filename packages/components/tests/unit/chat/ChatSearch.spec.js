@@ -44,16 +44,23 @@ describe('pages/ChatSearch.vue', () => {
   const rpcNavieMetadata = () => [[null, null, navieMetadata]];
   const rpcNavieMetadataEmpty = () => [[null, null, { commands: [] }]];
   const rpcNavieNextSteps = () => [[null, null, []]];
+  const rpcSystemListMethods = () => [[null, null, ['v1.navie.suggest', 'v1.navie.metadata']]];
 
   const emptySearchResponse = {
     results: [],
   };
+
+  // It now takes a couple of event loops to get into a finalized state. This event will be
+  // most reliable.
+  const waitForInitialized = (wrapper) =>
+    new Promise((resolve) => wrapper.vm.$root.$on('chat-search-loaded', resolve));
 
   const buildComponent = (searchResponse, contextResponse, hasMetadata) => {
     const messagesCalled = {
       'v1.navie.suggest': rpcNavieNextSteps(),
       'v1.navie.metadata': rpcNavieMetadata(),
       'v2.configuration.get': noConfig(),
+      'system.listMethods': rpcSystemListMethods(),
       explain: [[null, null, { userMessageId, threadId }]],
       'explain.status': [
         [null, null, { step: 'build-vector-terms' }],
@@ -176,6 +183,7 @@ describe('pages/ChatSearch.vue', () => {
     const wrapper = chatSearchWrapper({
       'v1.navie.metadata': rpcNavieMetadata(),
       'v2.configuration.get': noConfig(),
+      'system.listMethods': rpcSystemListMethods(),
     });
 
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
@@ -211,6 +219,7 @@ describe('pages/ChatSearch.vue', () => {
       const performSearch = async () => {
         const { messagesCalled, wrapper } = buildComponent(searchResponse, navieContext, true);
 
+        await waitForInitialized(wrapper);
         await wrapper.vm.sendMessage('How do I reset my password?');
         await wrapper.vm.$nextTick();
 
@@ -258,6 +267,7 @@ describe('pages/ChatSearch.vue', () => {
           'appmap.metadata': [[null, null, {}]],
           'v1.navie.metadata': rpcNavieMetadata(),
           'v2.configuration.get': noConfig(),
+          'system.listMethods': rpcSystemListMethods(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [
@@ -272,6 +282,8 @@ describe('pages/ChatSearch.vue', () => {
             ],
           ],
         });
+
+        await waitForInitialized(wrapper);
 
         const messageSent = wrapper.vm.sendMessage('How do I reset my password?');
 
@@ -346,12 +358,13 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v2.configuration.get': noConfig(),
         'v1.navie.metadata': rpcNavieMetadata(),
+        'system.listMethods': rpcSystemListMethods(),
       });
 
       expect(wrapper.find('[data-cy="llm-config"] [data-cy="loading"]').exists()).toBe(true);
       expect(wrapper.vm.configLoaded).toBe(false);
 
-      await wrapper.vm.$nextTick();
+      await waitForInitialized(wrapper);
 
       expect(wrapper.vm.configLoaded).toBe(true);
       expect(wrapper.find('[data-cy="llm-config"] [data-cy="loading"]').exists()).toBe(false);
@@ -361,6 +374,7 @@ describe('pages/ChatSearch.vue', () => {
     it('renders a local configuration', async () => {
       const wrapper = chatSearchWrapper({
         'v1.navie.metadata': rpcNavieMetadata(),
+        'system.listMethods': rpcSystemListMethods(),
         'v2.configuration.get': [
           [
             null,
@@ -370,7 +384,7 @@ describe('pages/ChatSearch.vue', () => {
         ],
       });
 
-      await wrapper.vm.$nextTick();
+      await waitForInitialized(wrapper);
 
       const llmConfig = wrapper.find('[data-cy="llm-config"]');
       expect(llmConfig.exists()).toBe(true);
@@ -382,9 +396,10 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': [[null, null, { projectDirectories: [] }]],
+        'system.listMethods': rpcSystemListMethods(),
       });
 
-      await wrapper.vm.$nextTick();
+      await waitForInitialized(wrapper);
 
       const llmConfig = wrapper.find('[data-cy="llm-config"]');
       expect(llmConfig.exists()).toBe(true);
@@ -395,6 +410,7 @@ describe('pages/ChatSearch.vue', () => {
     it('renders an azure configuration', async () => {
       const wrapper = chatSearchWrapper({
         'v1.navie.metadata': rpcNavieMetadata(),
+        'system.listMethods': rpcSystemListMethods(),
         'v2.configuration.get': [
           [
             null,
@@ -408,7 +424,7 @@ describe('pages/ChatSearch.vue', () => {
         ],
       });
 
-      await wrapper.vm.$nextTick();
+      await waitForInitialized(wrapper);
 
       const llmConfig = wrapper.find('[data-cy="llm-config"]');
       expect(llmConfig.exists()).toBe(true);
@@ -419,6 +435,7 @@ describe('pages/ChatSearch.vue', () => {
     it('renders an OpenAI configuration', async () => {
       const wrapper = chatSearchWrapper({
         'v1.navie.metadata': rpcNavieMetadata(),
+        'system.listMethods': rpcSystemListMethods(),
         'v2.configuration.get': [
           [
             null,
@@ -446,6 +463,7 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': noConfig(),
+        'system.listMethods': rpcSystemListMethods(),
         explain: [[err, error]],
       });
 
@@ -605,12 +623,12 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v2.configuration.get': noConfig(),
         'v1.navie.metadata': rpcNavieMetadata(),
+        'system.listMethods': rpcSystemListMethods(),
       });
-      await wrapper.vm.$nextTick();
 
-      expect(wrapper.find('[data-cy="welcome-message"]').text()).toBe(
-        `Hi, I'm Navie! ${navieMetadata.welcomeMessage}`
-      );
+      await waitForInitialized(wrapper);
+
+      expect(wrapper.find('[data-cy="welcome-message"]').text()).toBe(navieMetadata.welcomeMessage);
       expect(
         wrapper
           .find(`[data-cy="chat-input"][placeholder="${navieMetadata.inputPlaceholder}"]`)
@@ -628,9 +646,11 @@ describe('pages/ChatSearch.vue', () => {
   it('renders default metadata when no metadata is available', async () => {
     const wrapper = chatSearchWrapper({
       'v2.configuration.get': noConfig(),
+      'system.listMethods': rpcSystemListMethods(),
       'v1.navie.metadata': rpcNavieMetadataEmpty(),
     });
-    await wrapper.vm.$nextTick();
+
+    await waitForInitialized(wrapper);
 
     expect(wrapper.find('[data-cy="chat-input"]').attributes('placeholder')).toBe(
       'What are you working on today?'
@@ -647,6 +667,7 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v2.configuration.get': noConfig(),
         'v1.navie.metadata': rpcNavieMetadata(),
+        'system.listMethods': rpcSystemListMethods(),
         'explain.thread.load': [
           [
             null,
@@ -679,6 +700,52 @@ describe('pages/ChatSearch.vue', () => {
 
       expect(wrapper.vm.$refs.vchat.threadId).toBe('the-thread-id');
       expect(wrapper.vm.$refs.vchat.messages).toBeArrayOfSize(2);
+    });
+  });
+
+  describe('welcome message versioning', () => {
+    const welcomeDynamic = {
+      activity: 'something interesting',
+      suggestions: ['read this', 'write that'],
+    };
+
+    const rpcWelcomeDynamic = () => [[null, null, welcomeDynamic]];
+
+    it('falls back to v1 if v2 is not available', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.configuration.get': noConfig(),
+        'v1.navie.metadata': rpcNavieMetadata(),
+        'system.listMethods': rpcSystemListMethods(),
+      });
+
+      await waitForInitialized(wrapper);
+
+      expect(wrapper.find('[data-cy="welcome-message"]').attributes('data-version')).toBe('1');
+    });
+
+    it('renders v2 if v2 is available', async () => {
+      const wrapper = chatSearchWrapper({
+        'v2.configuration.get': noConfig(),
+        'v2.navie.metadata': rpcNavieMetadata(),
+        'v2.navie.welcome': rpcWelcomeDynamic(),
+        'system.listMethods': [[null, null, ['v2.navie.welcome']]],
+      });
+
+      await waitForInitialized(wrapper);
+
+      // We have to consider that we now have async methods waiting for other async methods.
+      // A single frame artificial delay is additionally added to allow the owner of the frontend to
+      // initialize as well (see `loadDynamicWelcomeMessages` in ChatSearch.vue).
+      //
+      // The delay is at least deterministic (I believe it's two event loops and a render frame),
+      // so this test will not be flaky.
+      await new Promise((resolve) => setTimeout(resolve, 16));
+
+      const welcomeMessage = wrapper.find('[data-cy="welcome-message"]');
+      expect(welcomeMessage.attributes('data-version')).toBe('2');
+      expect(welcomeMessage.text()).toContain(welcomeDynamic.activity);
+      expect(welcomeMessage.text()).toContain(welcomeDynamic.suggestions[0]);
+      expect(welcomeMessage.text()).toContain(welcomeDynamic.suggestions[1]);
     });
   });
 });
