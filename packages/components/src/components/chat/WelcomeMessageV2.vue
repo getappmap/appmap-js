@@ -14,7 +14,7 @@
         </ul>
       </div>
     </div>
-    <div class="welcome-message-dynamic-placeholder" v-else>Analyzing workspace...</div>
+    <v-skeleton-loader class="welcome-message__loading" v-else />
   </div>
 </template>
 
@@ -22,9 +22,14 @@
 import Vue from 'vue';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 
 export default Vue.extend({
   name: 'v-welcome-message-v2',
+
+  components: {
+    VSkeletonLoader,
+  },
 
   props: {
     welcomeMessage: {
@@ -74,20 +79,10 @@ export default Vue.extend({
     }
   }
 
-  .welcome-message-dynamic-placeholder {
-    $alpha: 0.075;
+  &__loading {
     width: 100%;
-    height: 1.5rem;
+    height: 10em;
     border-radius: $border-radius;
-    background-color: rgba(black, 0.1);
-    background: linear-gradient(
-      90deg,
-      rgba(black, $alpha) 0%,
-      rgba(white, $alpha) 50%,
-      rgba(black, $alpha) 100%
-    );
-    background-size: 200% 100%;
-    animation: skeleton 3s linear infinite;
   }
 }
 </style>
