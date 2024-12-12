@@ -336,6 +336,12 @@ export default {
     onNavieRestarting() {
       this.configLoaded = false;
     },
+    async rpcMethods() {
+      return await this.rpcClient.listMethods();
+    },
+    async hasMetadataV2() {
+      return await this.rpcMethods.includes('metadataV2');
+    },
     async loadThread(threadId: string) {
       const thread = await this.rpcClient.loadThread(threadId);
       const chat = this.$refs.vchat;
@@ -598,6 +604,15 @@ export default {
     async loadMetadata() {
       const metadata = await this.rpcClient.metadata();
       this.metadata = metadata;
+    },
+    async loadWelcome() {
+      const codeSelections = this.$refs.vchat.codeSelections;
+      let codeSelection;
+      if (codeSelections.length > 0) {
+        codeSelection = codeSelections.join('\n\n');
+      }
+      const welcome = await this.rpcClient.welcome(codeSelection);
+      this.welcome = welcome;
     },
     async onDrop(evt: any) {
       const items = evt.dataTransfer.items;

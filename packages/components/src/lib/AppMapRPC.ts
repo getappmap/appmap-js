@@ -226,12 +226,40 @@ export default class AppMapRPC {
     });
   }
 
-  metadata(): Promise<NavieRpc.V1.Metadata.Response> {
+  metadataV1(): Promise<NavieRpc.V1.Metadata.Response> {
     return new Promise((resolve, reject) => {
       this.client.request(
         NavieRpc.V1.Metadata.Method,
         undefined,
         (err: any, error: any, result: NavieRpc.V1.Metadata.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
+
+  metadataV2(): Promise<NavieRpc.V2.Metadata.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V2.Metadata.Method,
+        undefined,
+        (err: any, error: any, result: NavieRpc.V2.Metadata.Response) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
+
+  welcome(codeSelection?: string): Promise<NavieRpc.V2.Welcome.Response> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V2.Welcome.Method,
+        { codeSelection },
+        (err: any, error: any, result: NavieRpc.V2.Welcome.Response) => {
           if (err || error) return reportError(reject, err, error);
 
           resolve(result);
