@@ -368,6 +368,14 @@ function buildMockRpc(
         baseUrl,
         model: 'gpt-4-turbo',
       });
+    } else if (method === 'system.listMethods') {
+      callback(null, null, [
+        'explain',
+        'explain.status',
+        'appmap.stats',
+        'appmap.data',
+        'appmap.metadata',
+      ]);
     } else if (method == 'explain.thread.load') {
       callback(null, null, {
         timestamp: Date.now(),
@@ -391,7 +399,7 @@ function buildMockRpc(
     } else if (method === 'v1.navie.metadata') {
       callback(null, null, {
         welcomeMessage:
-          'I can help you answer questions about your codebase, plan solutions, create diagrams, and generate code. Enter `@` to see a list of commands.',
+          "### Hi, I'm Navie!\n\nI can help you answer questions about your codebase, plan solutions, create diagrams, and generate code. Enter `@` to see a list of commands.",
         inputPlaceholder: "Ask a question or enter '@' for commands",
         commands: [
           {

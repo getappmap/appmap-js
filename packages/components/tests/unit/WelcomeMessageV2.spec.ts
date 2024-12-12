@@ -14,9 +14,17 @@ describe('VWelcomeMessageV2', () => {
     });
   });
 
-  it('renders static message by default', () => {
+  it('renders a loading state when all props are empty', async () => {
+    expect(wrapper.find('[data-cy="loading"]').exists()).toBe(true);
+  });
+
+  it('renders `message` when provided', async () => {
+    const welcomeMessage = 'hello world';
+    await wrapper.setProps({ welcomeMessage });
+
     expect(wrapper.text()).toContain("Hi, I'm Navie");
-    expect(wrapper.find('.welcome-message-dynamic-placeholder').exists()).toBe(true);
+    expect(wrapper.text()).toContain(welcomeMessage);
+    expect(wrapper.find('[data-cy="loading"]').exists()).toBe(false);
   });
 
   it('renders activity-based message when activityName is provided', async () => {
@@ -27,5 +35,6 @@ describe('VWelcomeMessageV2', () => {
 
     expect(wrapper.text()).toContain("I see you're working on coding.");
     expect(wrapper.findAll('li').length).toBe(2);
+    expect(wrapper.find('[data-cy="loading"]').exists()).toBe(false);
   });
 });

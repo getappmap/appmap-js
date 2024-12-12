@@ -12,12 +12,7 @@ describe('VWelcomeMessageV1', () => {
     });
   });
 
-  it('renders static message by default', () => {
-    expect(wrapper.text()).toContain("Hi, I'm Navie");
-    expect(wrapper.find('.welcome-message-dynamic-placeholder').exists()).toBe(true);
-  });
-
-  it('renders dynamic message when provided', async () => {
+  it('renders markdown', async () => {
     await wrapper.setProps({
       dynamicMessage: '**Welcome!** This dynamic message is loaded and sanitized.',
     });
@@ -26,8 +21,5 @@ describe('VWelcomeMessageV1', () => {
     expect(wrapper.find('.welcome-message-dynamic').html()).toContain(
       '<strong>Welcome!</strong> This dynamic message is loaded and sanitized.'
     );
-
-    // Check that the placeholder is not visible anymore
-    expect(wrapper.find('.welcome-message-dynamic-placeholder').exists()).toBe(false);
   });
 });

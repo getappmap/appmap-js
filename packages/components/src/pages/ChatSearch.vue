@@ -222,6 +222,7 @@ export default {
       welcomeMessage: undefined,
       activityName: undefined,
       suggestedQuestions: undefined,
+      isWelcomeV2Available: false,
     };
   },
   provide() {
@@ -604,18 +605,21 @@ export default {
       if (this.rpcMethodsAvailable !== undefined) {
         return this.rpcMethodsAvailable;
       }
-      this.rpcMethodsAvailable = await this.rpcClient.listMethods();
+
+      try {
+        this.rpcMethodsAvailable = await this.rpcClient.listMethods();
+      } catch (e) {
+        console.error(e);
+        this.rpcMethodsAvailable = [];
+      }
+
+      this.isWelcomeV2Available = this.rpcMethodsAvailable.includes('v2.navie.welcome');
     },
     async isRpcMethodAvailable(methodName) {
-      await this.listRpcMethods();
       return this.rpcMethodsAvailable.includes(methodName);
     },
-    async isWelcomeV2Available() {
-      await this.listRpcMethods();
-      return this.isRpcMethodAvailable('v2.navie.welcome');
-    },
     async loadStaticMessages() {
-      if (await this.isWelcomeV2Available()) {
+      if (this.isWelcomeV2Available) {
         const metadata = await this.rpcClient.metadataV2();
         this.inputPlaceholder = metadata.inputPlaceholder;
         this.commands = metadata.commands;
@@ -630,9 +634,16 @@ export default {
       }
     },
     async loadDynamicWelcomeMessages() {
-      if (!this.isRpcMethodAvailable('v2.navie.welcome')) return;
+      if (!this.isWelcomeV2Available) return;
 
-      const welcome = await this.rpcClient.welcome();
+      // The code editor may not immediately add a code selection to the chat. Wait a frame.
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      const codeSelections = this.$refs.vchat.codeSelections || [];
+      const codeSelection = codeSelections.length
+        ? codeSelections.map((c) => c.code).join('\n')
+        : undefined;
+      const welcome = await this.rpcClient.welcome(codeSelection);
       // The welcome message is provided as a fallback, in case there is not discernable activity.
       this.welcomeMessage = welcome.message;
       // If the activity is available, the welcome message should be undefined and the activity
@@ -693,15 +704,35 @@ export default {
     addFiles() {
       this.$root.$emit('choose-files-to-pin');
     },
+
+    /**
+     * Runs all the necessary initialization steps, mainly loading data from the RPC server.
+     */
+    async initialize() {
+      try {
+        // v2.configuration.get
+        this.loadNavieConfig();
+
+        // system.listMethods
+        await this.listRpcMethods();
+
+        // If v2.navie.welcome is available: v2.navie.metadata
+        // otherwise: v1.navie.metadata
+        this.loadStaticMessages();
+
+        // v2.navie.welcome
+        this.loadDynamicWelcomeMessages();
+      } catch (e) {
+        console.error(e);
+      }
+    },
   },
   async mounted() {
     if (this.$refs.vappmap && this.targetAppmap && this.targetAppmapFsPath) {
       this.includeAppMap(this.targetAppmapFsPath);
       await this.$refs.vappmap.loadData(this.targetAppmap);
     }
-    this.loadNavieConfig();
-    this.loadStaticMessages();
-    this.loadDynamicWelcomeMessages();
+
     this.$root
       .$on('pin', (pin: PinEvent) => {
         const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
@@ -737,6 +768,9 @@ export default {
           this.$root.$emit('pin', eventData);
         });
       });
+
+    await this.initialize();
+
     this.$nextTick(() => {
       this.$root.$emit('chat-search-loaded');
     });
