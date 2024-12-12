@@ -63,7 +63,8 @@
       :question="question"
       :code-selections="codeSelections"
       :is-stop-active="isResponseStreaming"
-      :metadata="metadata"
+      :input-placeholder="inputPlaceholder"
+      :commands="commands"
       :use-animation="useAnimation"
       :is-disabled="isInputDisabled"
       ref="input"
@@ -172,12 +173,12 @@ export default {
       type: String,
       default: 'What are you working on today?',
     },
+    commands: {
+      type: Array<NavieRpc.V1.Metadata.Command[]>,
+    },
     isInputDisabled: {
       type: Boolean,
       default: false,
-    },
-    metadata: {
-      type: Object as PropType<NavieRpc.V1.Metadata.Response | undefined>,
     },
     useAnimation: {
       type: Boolean,

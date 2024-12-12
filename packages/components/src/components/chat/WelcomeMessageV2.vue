@@ -3,7 +3,17 @@
     <div class="welcome-message-static">
       <h3>Hi, I'm Navie!</h3>
     </div>
-    <div class="welcome-message-dynamic" v-if="dynamicMessage" v-html="renderedMarkdown" />
+    <div class="welcome-message-dynamic" v-if="welcomeLoaded">
+      <div v-if="welcomeMessage" v-html="welcomeMessage" class="welcome-message-text" />
+      <div v-else-if="activityName" class="welcome-message-structured">
+        <p>I see you're working on {{ activityName }}. Here are some things you can try:</p>
+        <ul>
+          <li v-for="suggestion in trimmedSuggestions" :key="suggestion">
+            {{ suggestion }}
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="welcome-message-dynamic-placeholder" v-else>Analyzing workspace...</div>
   </div>
 </template>
@@ -14,22 +24,34 @@ import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
 export default Vue.extend({
-  name: 'v-welcome-message',
+  name: 'v-welcome-message-v2',
 
   props: {
-    staticMessage: {
+    welcomeMessage: {
       type: String,
-      default: `### Hi, I'm Navie`,
     },
-    dynamicMessage: {
+    activityName: {
       type: String,
-      default: '',
+    },
+    suggestions: {
+      type: Array<string>,
+    },
+    maxSuggestions: {
+      type: Number,
+      default: 3,
     },
   },
 
   computed: {
-    renderedMarkdown(): string {
-      return DOMPurify.sanitize(marked.parse(this.dynamicMessage));
+    welcomeLoaded(): boolean {
+      return !!(this.welcomeMessage || this.activityName);
+    },
+    renderedDynamicMessage(): string {
+      return DOMPurify.sanitize(marked.parse(this.welcomeMessage));
+    },
+    trimmedSuggestions(): string[] {
+      // First N suggestions
+      return this.suggestions.slice(0, this.maxSuggestions);
     },
   },
 });

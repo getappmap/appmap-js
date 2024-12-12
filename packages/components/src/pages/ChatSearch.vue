@@ -17,8 +17,8 @@
         :status-label="searchStatusLabel"
         :question="question"
         :input-placeholder="inputPlaceholder"
+        :commands="commands"
         :is-input-disabled="isNavieLoading"
-        :metadata="metadata"
         :use-animation="useAnimation"
         @isChatting="setIsChatting"
         @stop="onStop"
@@ -32,7 +32,13 @@
         />
         <template #not-chatting>
           <div class="message-box__footer">
-            <v-welcome-message :dynamicMessage="welcomeMessage" />
+            <v-welcome-message-v2
+              v-if="isWelcomeV2Available"
+              :welcomeMessage="welcomeMessage"
+              :activityName="activityName"
+              :suggestions="suggestedQuestions"
+            />
+            <v-welcome-message-v1 v-else :dynamicMessage="welcomeMessage" />
           </div>
         </template>
       </v-chat>
@@ -107,7 +113,8 @@ import type { CodeSelection, ITool } from '@/components/chat/Chat.vue';
 import VChat from '@/components/chat/Chat.vue';
 import { getNextHandle } from '@/components/chat/Handle';
 import type { PinEvent, PinFile } from '@/components/chat/PinEvent';
-import VWelcomeMessage from '@/components/chat/WelcomeMessage.vue';
+import VWelcomeMessageV1 from '@/components/chat/WelcomeMessageV1.vue';
+import VWelcomeMessageV2 from '@/components/chat/WelcomeMessageV2.vue';
 import authenticatedClient from '@/components/mixins/authenticatedClient';
 import AppMapRPC from '@/lib/AppMapRPC';
 import { PinFileRequest } from '@/lib/PinFileRequest';
@@ -124,7 +131,8 @@ export default {
     VLlmConfiguration,
     VPinnedItems,
     VPopper,
-    VWelcomeMessage,
+    VWelcomeMessageV1,
+    VWelcomeMessageV2,
   },
   mixins: [authenticatedClient],
   props: {
@@ -208,7 +216,12 @@ export default {
       contextItems: {},
       pinnedItems: [] as PinItem[],
       projectDirectories: [] as string[],
-      metadata: undefined as NavieRpc.V1.Metadata.Response | undefined,
+      rpcMethodsAvailable: undefined,
+      inputPlaceholder: undefined,
+      commands: undefined,
+      welcomeMessage: undefined,
+      activityName: undefined,
+      suggestedQuestions: undefined,
     };
   },
   provide() {
@@ -283,11 +296,6 @@ export default {
     targetAppmapName() {
       return this.targetAppmap?.metadata?.name;
     },
-    inputPlaceholder() {
-      return this.targetAppmap
-        ? 'What do you want to know about this AppMap?'
-        : 'What are you working on today?';
-    },
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
@@ -314,9 +322,6 @@ export default {
       return new AppMapRPC(
         this.appmapRpcFn ? { request: this.appmapRpcFn } : this.appmapRpcPort || 30101
       );
-    },
-    welcomeMessage(): string {
-      return this.metadata?.welcomeMessage ?? '';
     },
     hasPinnedItems() {
       return this.pinnedItemCount > 0;
@@ -595,9 +600,45 @@ export default {
 
       this.configLoaded = true;
     },
-    async loadMetadata() {
-      const metadata = await this.rpcClient.metadata();
-      this.metadata = metadata;
+    async listRpcMethods() {
+      if (this.rpcMethodsAvailable !== undefined) {
+        return this.rpcMethodsAvailable;
+      }
+      this.rpcMethodsAvailable = await this.rpcClient.listMethods();
+    },
+    async isRpcMethodAvailable(methodName) {
+      await this.listRpcMethods();
+      return this.rpcMethodsAvailable.includes(methodName);
+    },
+    async isWelcomeV2Available() {
+      await this.listRpcMethods();
+      return this.isRpcMethodAvailable('v2.navie.welcome');
+    },
+    async loadStaticMessages() {
+      if (await this.isWelcomeV2Available()) {
+        const metadata = await this.rpcClient.metadataV2();
+        this.inputPlaceholder = metadata.inputPlaceholder;
+        this.commands = metadata.commands;
+      } else {
+        // If only the old metadata method is available, both the static and dynamic welcome
+        // messages will be loaded from the same method. Also the welcome message is a string
+        // which we will do the best we can to display.
+        const metadata = await this.rpcClient.metadataV1();
+        this.inputPlaceholder = metadata.inputPlaceholder;
+        this.commands = metadata.commands;
+        this.welcomeMessage = metadata.welcomeMessage;
+      }
+    },
+    async loadDynamicWelcomeMessages() {
+      if (!this.isRpcMethodAvailable('v2.navie.welcome')) return;
+
+      const welcome = await this.rpcClient.welcome();
+      // The welcome message is provided as a fallback, in case there is not discernable activity.
+      this.welcomeMessage = welcome.message;
+      // If the activity is available, the welcome message should be undefined and the activity
+      // name should be used to construct the greeting.
+      this.activityName = welcome.activity;
+      this.suggestedQuestions = welcome.suggestions;
     },
     async onDrop(evt: any) {
       const items = evt.dataTransfer.items;
@@ -659,7 +700,8 @@ export default {
       await this.$refs.vappmap.loadData(this.targetAppmap);
     }
     this.loadNavieConfig();
-    this.loadMetadata();
+    this.loadStaticMessages();
+    this.loadDynamicWelcomeMessages();
     this.$root
       .$on('pin', (pin: PinEvent) => {
         const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
