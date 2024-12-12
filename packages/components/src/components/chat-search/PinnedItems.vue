@@ -89,7 +89,6 @@ export default {
 
 <style lang="scss" scoped>
 .pinned-items {
-  color: $gray4;
   width: 100%;
   min-height: 100%;
 
@@ -106,7 +105,6 @@ export default {
   &__count {
     font-size: 0.8rem;
     font-weight: 400;
-    color: lighten($gray4, 20%);
     margin-left: 0.5rem;
     background-color: rgb(168, 168, 255, 0.15);
     border-radius: 4rem;
@@ -123,13 +121,8 @@ export default {
     color: $white;
   }
 
-  h3 {
-    color: $gray5;
-  }
-
   &__header {
     flex: none;
-    background-color: $gray3;
     padding: 1rem;
     position: sticky;
     top: 0;
@@ -157,22 +150,17 @@ export default {
   }
 
   &__notice {
-    $fg: rgb(255, 255, 255, 0.75);
-
     margin: 0 auto;
     width: 80%;
     min-width: 180px;
-    background-color: rgb(0, 0, 0, 0.25);
     border: 1px solid rgb(255, 255, 255, 0.1);
     border-radius: 0.5rem;
     padding: 1rem;
-    color: $fg;
     line-height: 1.5;
 
     h2 {
       margin-top: 0;
       margin-bottom: 0.5rem;
-      color: $fg;
     }
   }
 }

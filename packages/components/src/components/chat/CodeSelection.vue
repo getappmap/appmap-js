@@ -15,7 +15,7 @@
         :interactive="true"
       />
     </template>
-    <pre v-html="highlightedCode" data-cy="code-selection-content" />
+    <pre v-html="highlightedCode" data-cy="code-selection-content" class="hljs" />
   </v-accordion>
 </template>
 
@@ -54,6 +54,11 @@ export default Vue.extend({
     },
     language: {
       type: String,
+    },
+  },
+  inject: {
+    theme: {
+      default: 'dark',
     },
   },
   data() {
@@ -102,11 +107,11 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .code-selection {
-  color: #ececec;
+  color: $color-foreground;
 
   &--open {
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: $color-background;
+    border: 1px solid $color-border;
     border-radius: $border-radius;
   }
   pre {
@@ -115,15 +120,14 @@ export default Vue.extend({
     overflow: auto;
     margin: 0;
     border: none;
-    background-color: transparent;
     padding-top: 5px;
+    border-radius: 0 0 $border-radius $border-radius;
   }
 
   .tool-status--open {
     width: auto;
     border-radius: $border-radius $border-radius 0 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    margin-bottom: 0.5rem;
+    background-color: rgba(black, 0.4);
   }
 }
 </style>

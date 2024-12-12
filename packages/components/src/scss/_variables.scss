@@ -29,20 +29,26 @@ $light-purple2: #5a43ca;
 $white: lighten($appland-text, 35);
 $almost-white: lighten($appland-text, 35);
 $red2: #fd3055;
-$appland-gradient-1: linear-gradient(90deg,
-    rgba(0, 1, 104, 1) 0%,
-    rgba(197, 12, 228, 1) 48%,
-    rgba(255, 7, 170, 1) 100%);
+$appland-gradient-1: linear-gradient(
+  90deg,
+  rgba(0, 1, 104, 1) 0%,
+  rgba(197, 12, 228, 1) 48%,
+  rgba(255, 7, 170, 1) 100%
+);
 $appland-gradient-2: linear-gradient(90deg, rgba(255, 7, 170, 1) 0%, rgba(156, 47, 186, 1) 100%);
 $appland-gradient-3: linear-gradient(0deg, rgba(156, 47, 186, 1) 0%, rgba(255, 7, 170, 1) 100%);
-$appland-gradient-4: linear-gradient(90deg,
-    rgba(255, 7, 170, 1) 0%,
-    rgba(156, 47, 186, 1) 50%,
-    rgba(67, 98, 177, 1) 100%);
-$navie-gradient: linear-gradient(45deg,
-    rgba(255, 7, 170, 1) 0%,
-    rgba(156, 47, 186, 1) 50%,
-    rgba(67, 98, 177, 1) 100%);
+$appland-gradient-4: linear-gradient(
+  90deg,
+  rgba(255, 7, 170, 1) 0%,
+  rgba(156, 47, 186, 1) 50%,
+  rgba(67, 98, 177, 1) 100%
+);
+$navie-gradient: linear-gradient(
+  45deg,
+  rgba(255, 7, 170, 1) 0%,
+  rgba(156, 47, 186, 1) 50%,
+  rgba(67, 98, 177, 1) 100%
+);
 $deep-purple-gradient: linear-gradient(180deg, rgba(17, 1, 38, 1) 37%, rgba(110, 14, 114, 1) 110%);
 $alert-danger: #cd1414;
 
@@ -71,7 +77,9 @@ $appland-code: $white;
 $appmap-labels: $white;
 $appmap-bg: $gray1;
 $form-border: $gray2;
-$scrollHeight: calc(100% - 65px); // a magic number that compensates for header and footer in forcing scrollbars
+$scrollHeight: calc(
+  100% - 65px
+); // a magic number that compensates for header and footer in forcing scrollbars
 
 $box-shadow: 0px -13px 13px 13px rgba(0, 0, 0, 0.41);
 $box-shadow-min: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
@@ -131,17 +139,34 @@ $base19: #292929;
 $alert-success: #7fc14a;
 
 // Editor common
-$color-background: var(--vscode-editor-background, $vs-code-gray1);
-$color-highlight: var(--vscode-list-highlightForeground, #3794ff);
-$color-foreground: var(--vscode-editor-foreground, $base07);
-$color-foreground-light: var(--vscode-inputOption-activeForeground, white);
-$font-family: var(--vscode-font-family, $appland-text-font-family);
-$font-size: var(--vscode-font-size, 14px);
-$font-weight: var(--vscode-font-weight, normal);
-$color-success: var(--vscode-terminal-ansiGreen, #44cf6c);
-$color-error: var(--vscode-terminal-ansiRed, #cd1414);
-$color-warning: var(--vscode-terminal-ansiYellow, #ecc30b);
-$color-link: var(--vscode-textLink-foreground, #2a84ef);
-$color-tile-background: var(--vscode-welcomePage-tileBackground, #252526);
-$color-tile-shadow: var(--vscode-welcomePage-tileShadow, rgba(0, 0, 0, 0.36));
+$color-background: var(--appmap-color-background, #292c39);
+$color-background-light: var(--appmap-color-background-light, rgba(white, 0.1));
+$color-background-dark: var(--appmap-color-background-dark, rgba(black, 0.1));
+$color-highlight: var(--appmap-color-highlight, #3794ff);
+$color-highlight-light: var(--appmap-color-highlight-light, #97c8ff);
+$color-highlight-dark: var(--appmap-color-highlight-dark, #292c39);
+$color-input-bg: var(--appmap-color-input-bg, #171b25);
+$color-input-fg: var(--appmap-color-input-fg, #cecece);
+$color-button-fg: var(--appmap-color-button-fg, $white);
+$color-button-bg: var(--appmap-color-button-bg, $brightblue);
+$color-button-bg-hover: var(
+  --appmap-color-button-bg-hover,
+  darken(desaturate($brightblue, 50%), 20%)
+);
+$color-selection: var(--appmap-color-selection, #264f78);
+$color-border: var(--appmap-color-border, rgba(255, 255, 255, 0.1));
+$color-foreground: var(--appmap-color-foreground, $base07);
+$color-foreground-secondary: var(--appmap-color-foreground-secondary, rgba(white, 0.6));
+$color-foreground-light: var(--appmap-color-foreground-light, white);
+$color-foreground-dark: var(--appmap-color-foreground-dark, #cecece);
+$font-family: var(--appmap-font-family, $appland-text-font-family);
+$font-size: var(--appmap-font-size, 14px);
+$font-weight: var(--appmap-font-weight, normal);
+$color-success: var(--appmap-color-success, #44cf6c);
+$color-error: var(--appmap-color-error, #cd1414);
+$color-warning: var(--appmap-color-warning, #ecc30b);
+$color-link: var(--appmap-color-link, #2a84ef);
+$color-link-hover: var(--appmap-color-link-hover, #2a84ef);
+$color-tile-background: var(--appmap-color-tile-background, #252526);
+$color-tile-shadow: var(--appmap-color-tile-shadow, rgba(0, 0, 0, 0.36));
 $shadow-tile: drop-shadow(2px 2px 2px $color-tile-shadow);

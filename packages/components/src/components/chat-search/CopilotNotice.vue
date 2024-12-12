@@ -34,7 +34,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  color: $white;
+  color: $color-foreground;
   gap: 0.5rem;
 
   &__notification {
@@ -47,8 +47,8 @@ export default Vue.extend({
     max-width: 20rem;
     gap: 1rem;
     border-radius: $border-radius;
-    background-color: #32354d;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: $color-background-dark;
+    border: 1px solid $color-border;
 
     &-icon {
       svg {
@@ -60,11 +60,11 @@ export default Vue.extend({
   &__sub-notification {
     a {
       text-decoration: none;
-      color: desaturate($brightblue, 30%);
+      color: $color-link;
 
       &:hover,
       &:active {
-        color: $brightblue;
+        color: $color-link-hover;
         text-decoration: underline;
       }
     }

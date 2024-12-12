@@ -84,7 +84,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .welcome-message {
   line-height: 1.5;
-  color: $white;
+  color: $color-foreground;
   max-height: 100%;
   overflow-y: auto;
 
@@ -95,6 +95,17 @@ export default Vue.extend({
       border: 1px solid rgba(black, 0.05);
       padding: 0.1rem 0.25rem;
       padding-top: 0.2rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: $color-link;
+
+      &:hover,
+      &:active {
+        color: $color-link-hover;
+        text-decoration: underline;
+      }
     }
   }
 

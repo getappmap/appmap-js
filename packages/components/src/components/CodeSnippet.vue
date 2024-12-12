@@ -102,7 +102,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~highlight.js/styles/base16/snazzy.css';
 .code-snippet {
   margin: 1rem 0;
   border-radius: $border-radius;

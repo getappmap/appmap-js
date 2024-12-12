@@ -36,7 +36,7 @@ export default Vue.extend({
     aspect-ratio: 1 / 1;
     width: 33%;
     border-radius: 2em;
-    background-color: #7196f6;
+    background-color: $color-foreground;
     animation: 1s infinite loading ease-in-out;
   }
 }

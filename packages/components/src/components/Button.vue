@@ -24,7 +24,7 @@ export default {
       type: String,
       default: 'primary',
       validator(value) {
-        return ['primary', 'secondary', 'ghost'].indexOf(value) !== -1;
+        return ['primary', 'secondary', 'ghost', 'native', 'native-ghost'].indexOf(value) !== -1;
       },
     },
     size: {
@@ -130,6 +130,33 @@ export default {
 
     .btn__content {
       color: rgba(0, 0, 0, 0);
+    }
+  }
+
+  &--native {
+    background-color: $color-button-bg;
+    color: $color-button-fg;
+    &:hover {
+      background-color: $color-button-bg-hover;
+    }
+    &:active {
+      background-color: $color-highlight-dark;
+    }
+  }
+
+  &--native-ghost {
+    background-color: transparent;
+    border: 1px solid $color-input-fg;
+    color: $color-input-fg;
+
+    &:hover {
+      border-color: $color-highlight;
+      color: $color-highlight;
+    }
+
+    &:active {
+      border-color: $color-highlight-dark;
+      color: $color-highlight-dark;
     }
   }
 

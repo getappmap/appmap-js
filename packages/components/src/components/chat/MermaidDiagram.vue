@@ -196,6 +196,8 @@ export default Vue.extend({
     display: flex;
     width: 100%;
     place-content: center;
+    background-color: #282a36; // snazzy
+    border-radius: 0 0 $border-radius $border-radius;
   }
 
   &__modal {

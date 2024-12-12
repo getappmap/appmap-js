@@ -209,14 +209,14 @@ export default {
 @keyframes glow {
   0%,
   100% {
-    filter: drop-shadow(0 0 0.5rem #4983e0);
+    filter: drop-shadow(0 0 0.25rem $color-highlight);
   }
   50% {
-    filter: drop-shadow(0 0 1rem #7289c5);
+    filter: drop-shadow(0 0 0.5rem $color-highlight-light);
   }
 }
 
-$border-color: #7289c5;
+$border-color: rgba(white, 0.333);
 
 .chat-input {
   position: relative;
@@ -224,8 +224,8 @@ $border-color: #7289c5;
   flex-direction: column;
   gap: 1rem;
   padding: 1.5rem;
-  border-top: 1px solid darken($gray4, 10%);
-  box-shadow: 0 0 1rem 0rem $gray1;
+  border-top: 1px solid $color-background-dark;
+  box-shadow: 0 0 1rem 0rem $color-tile-shadow;
   border-radius: $border-radius $border-radius 0 0;
 
   .attachments {
@@ -243,12 +243,12 @@ $border-color: #7289c5;
     position: relative;
 
     div[contenteditable] {
-      border: 3px solid $border-color;
+      border: 3px solid $color-highlight;
       padding: 0.66rem;
       padding-right: 3rem;
-      background-color: #171b25;
+      background-color: $color-input-bg;
       font-size: 1rem;
-      color: white;
+      color: $color-input-fg;
       font-family: inherit;
       resize: none;
       max-height: 200px;
@@ -302,17 +302,17 @@ $border-color: #7289c5;
         padding: 0.25rem;
         border: none;
         border-radius: $border-radius;
-        background-color: #6c81ba;
+        background-color: $color-highlight;
         transition: background-color 0.5s ease-in-out;
 
         svg {
           path {
-            fill: #fff;
+            fill: $color-foreground;
           }
         }
 
         &:disabled {
-          background-color: rgba($color: #7289c5, $alpha: 0.25);
+          background-color: $color-highlight-dark;
           cursor: not-allowed !important;
 
           svg {
@@ -322,13 +322,13 @@ $border-color: #7289c5;
           }
 
           &:hover {
-            background-color: rgba($color: #7289c5, $alpha: 0.25);
+            background-color: $color-highlight-dark;
           }
         }
 
         &:hover {
           cursor: pointer;
-          background-color: $hotpink;
+          background-color: $color-highlight-light;
         }
       }
     }

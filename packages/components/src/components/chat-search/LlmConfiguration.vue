@@ -24,6 +24,7 @@
             <div class="action">
               <v-button
                 size="medium"
+                kind="native"
                 @click.native="selectOption('copilot')"
                 :disabled="selectedOption === 'copilot'"
                 data-cy="llm-select"
@@ -40,6 +41,7 @@
             <div class="action">
               <v-button
                 size="medium"
+                kind="native"
                 @click.native="selectOption('default')"
                 :disabled="selectedOption === 'default'"
                 data-cy="llm-select"
@@ -54,7 +56,12 @@
               <p>Input your own OpenAI API key to use it with Navie.</p>
             </div>
             <div class="action">
-              <v-button size="medium" @click.native="selectOption('own-key')" data-cy="llm-select">
+              <v-button
+                size="medium"
+                kind="native"
+                @click.native="selectOption('own-key')"
+                data-cy="llm-select"
+              >
                 Select
               </v-button>
             </div>
@@ -77,6 +84,7 @@
               >
                 <v-button
                   size="medium"
+                  kind="native"
                   @click.native="selectOption('own-model')"
                   data-cy="llm-select"
                 >
@@ -98,7 +106,7 @@
       <div class="llm-configuration__indicator">
         <v-button
           v-if="!vsCodeLMVendor"
-          kind="ghost"
+          kind="native-ghost"
           class="button"
           @click.native="showModal"
           data-cy="llm-config-button"
@@ -220,6 +228,7 @@ export default Vue.extend({
   display: flex;
   padding: 1rem;
   width: fit-content;
+  color: $color-foreground;
 
   .skeleton-loader {
     @keyframes skeleton {
@@ -251,8 +260,8 @@ export default Vue.extend({
     padding: 1rem;
     align-items: center;
     border-radius: $border-radius;
-    background-color: #32354d;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: $color-background-dark;
+    border: 1px solid $color-border;
   }
 
   &__content {
@@ -266,7 +275,7 @@ export default Vue.extend({
     padding: 0.5rem;
 
     &:hover {
-      background-color: #32354d;
+      background-color: $color-background-light;
     }
   }
   .config-header {
@@ -305,11 +314,10 @@ export default Vue.extend({
   }
 
   .config-options {
-    $bg: #32354d;
-    background-color: $bg;
+    background-color: $color-background;
     padding: 1em;
     border-radius: $border-radius;
-    border: 1px solid desaturate(lighten($bg, 15%), 10%);
+    border: 1px solid $color-background-light;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -322,7 +330,7 @@ export default Vue.extend({
       display: flex;
       flex-direction: row;
       padding: 1em;
-      border-bottom: 1px solid desaturate(lighten($bg, 15%), 10%);
+      border-bottom: 1px solid $color-background-light;
       gap: 1em;
 
       &:last-child {
@@ -350,11 +358,11 @@ export default Vue.extend({
 
       a {
         text-decoration: none;
-        color: desaturate($brightblue, 30%);
+        color: $color-link;
 
         &:hover,
         &:active {
-          color: $brightblue;
+          color: $color-link-hover;
           text-decoration: underline;
         }
       }

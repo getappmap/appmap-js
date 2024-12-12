@@ -10,13 +10,13 @@
         data-cy="new-chat-btn"
         class="clear"
         size="small"
-        kind="ghost"
+        kind="native-ghost"
         @click.native="openNewChat"
       >
         New chat
       </v-button>
     </div>
-    <div class="explainer">
+    <div class="explainer" v-if="$slots.default">
       <slot />
     </div>
     <div
@@ -392,7 +392,7 @@ $border-color: darken($gray4, 10%);
 
 #header-logo {
   margin-right: auto;
-  color: white;
+  color: $color-foreground;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -400,6 +400,19 @@ $border-color: darken($gray4, 10%);
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
+
+  svg {
+    path:last-child {
+      fill: $color-foreground;
+    }
+    path:not(:last-child) {
+      fill: $color-background;
+      stroke: transparent;
+    }
+    circle {
+      fill: $color-foreground;
+    }
+  }
 }
 
 #header-navie-logo {
@@ -439,23 +452,17 @@ $border-color: darken($gray4, 10%);
   }
 
   .button-panel {
-    $panel-bg: #2c3545;
     justify-content: end;
     display: flex;
     padding: 1rem 0.75rem;
-    background-color: $panel-bg;
-    border-bottom: 1px solid fade-in($panel-bg, 0.11);
-    box-shadow: 0 0 0.7rem 0rem lighten($gray1, 5%);
+    background-color: $color-background;
+    border-bottom: 1px solid rgba(white, 0.05);
+    box-shadow: 0 0 0.7rem 0rem $color-tile-shadow;
     border-radius: 0 0 $border-radius $border-radius;
   }
 
   .clear {
     padding: 0.5rem 1rem;
-    background-color: #262d3e;
-
-    &:hover {
-      background-color: darken(#262d3e, 10%);
-    }
   }
 
   .messages {

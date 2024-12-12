@@ -34,14 +34,13 @@ export default {
     user-select: none;
     line-height: 1.5;
     font-size: 1em;
-    color: rgba(white, 0.66);
 
     svg {
       height: 16px;
       width: 16px;
 
       path {
-        fill: $gray4;
+        fill: $color-foreground;
       }
     }
 
