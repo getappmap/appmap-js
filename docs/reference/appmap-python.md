@@ -353,11 +353,15 @@ you can generate a recording of the code
 
 ### Django
 
+AppMap integrates with Django by injecting middleware to capture HTTP requests.
+
 To start a Django app with AppMap integration enabled, add
 ```
 DEBUG = True
 ```
-to your application's `settings.py`.
+to your application's `settings.py`; this should cause the required middleware to be injected automatically.
+
+If the automatic injection doesn't work, you can explicitly add `_appmap.django.RemoteRecording` and `appmap.django.Middleware` to the top of your `MIDDLEWARE` stack.
 
 ### Flask
 
