@@ -1,4 +1,3 @@
-import { ConfigurationRpc } from './configuration';
 import { SearchRpc } from './search';
 
 export namespace ExplainRpc {

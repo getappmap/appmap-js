@@ -32,6 +32,7 @@ import History from '../../rpc/explain/navie/history';
 import { join } from 'path';
 import { homedir } from 'os';
 import { navieWelcomeV2 } from '../../rpc/navie/welcome';
+import { navieRegisterV1 } from '../../rpc/navie/register';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -74,6 +75,7 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     navieMetadataV2(),
     navieSuggestHandlerV1(navie),
     navieWelcomeV2(navie),
+    navieRegisterV1(codeEditor),
   ];
 }
 

@@ -1,5 +1,22 @@
 <template>
   <div class="chat-input">
+    <template v-if="freeUsage && threadCount > 0">
+      <div class="usage" :data-usage="freeUsage" data-cy="usage-message">
+        <span class="usage__message">
+          You've used
+          <span :class="{ 'usage--count': freeUsage === 'overLimit' }">{{ threadCount }}</span> of
+          your
+          <span :class="{ 'usage--count': freeUsage === 'overLimit' }">{{ maxThreadCount }}</span>
+          chat sessions allowed with the free plan.
+        </span>
+        <a href="https://getappmap.com" target="_blank">
+          <v-button class="sub-btn" kind="native-ghost" size="small">
+            <v-external-link-icon class="sub-btn__icon" />
+            Subscribe
+          </v-button>
+        </a>
+      </div>
+    </template>
     <div
       v-if="codeSelections && codeSelections.length"
       class="attachments"
@@ -71,7 +88,10 @@ import VStopIcon from '@/assets/stop-icon.svg';
 import VPopper from '@/components/Popper.vue';
 import VAutoComplete from '@/components/chat/AutoComplete.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
+import VButton from '@/components/Button.vue';
+import VExternalLinkIcon from '@/assets/external-link.svg';
 import { NavieRpc } from '@appland/rpc';
+import { PropType } from 'vue';
 
 export default {
   name: 'v-chat-input',
@@ -81,6 +101,8 @@ export default {
     VPopper,
     VCodeSelection,
     VAutoComplete,
+    VButton,
+    VExternalLinkIcon,
   },
   props: {
     question: {
@@ -112,6 +134,19 @@ export default {
       type: Boolean,
       default: true,
     },
+    usage: {
+      type: Object as PropType<{
+        conversationCounts: {
+          daysAgo: number;
+          count: number;
+        }[];
+      }>,
+      default: () => ({ conversationCounts: [] }),
+    },
+    subscription: {
+      type: Object as PropType<Object | undefined>,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -127,6 +162,23 @@ export default {
     },
     isSelectingCommand() {
       return this.$refs.autocomplete.isVisible;
+    },
+    threadCount(): number {
+      return this.usage.conversationCounts
+        .filter(({ daysAgo }) => daysAgo === 7)
+        .reduce((acc, { count }) => acc + count, 0);
+    },
+    maxThreadCount(): number {
+      return 7;
+    },
+    isSubscribed(): boolean {
+      return this.subscription?.subscriptions?.length > 0;
+    },
+    freeUsage(): 'withinLimits' | 'atMaxLimit' | 'overLimit' | undefined {
+      if (this.isSubscribed) return undefined;
+      if (this.threadCount > this.maxThreadCount) return 'overLimit';
+      if (this.threadCount === this.maxThreadCount) return 'atMaxLimit';
+      return 'withinLimits';
     },
   },
   methods: {
@@ -227,6 +279,72 @@ $border-color: rgba(white, 0.333);
   border-top: 1px solid $color-background-dark;
   box-shadow: 0 0 1rem 0rem $color-tile-shadow;
   border-radius: $border-radius $border-radius 0 0;
+
+  .usage {
+    font-size: 0.8em;
+    margin-top: -0.5rem;
+    line-height: 1.5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__message {
+      padding-right: 0.1em;
+    }
+
+    &--count {
+      font-weight: bold;
+      background-color: $color-foreground;
+      color: $color-background;
+      padding: 0.05em 0.25em 0.1em 0.2em;
+      border-radius: 1em;
+    }
+
+    &[data-usage='overLimit'] {
+      color: $color-error;
+      .usage--count {
+        background-color: $color-error;
+        color: $color-background;
+      }
+      .sub-btn {
+        border-color: $color-error;
+        color: $color-error;
+
+        &__icon {
+          fill: $color-error;
+        }
+
+        &:hover {
+          color: inherit;
+          border-color: inherit;
+          .sub-btn__icon {
+            fill: $color-highlight !important;
+          }
+        }
+      }
+    }
+
+    .sub-btn {
+      margin-left: auto;
+      &__icon {
+        fill: $color-foreground;
+        width: 1em;
+        height: 1em;
+        margin-right: 0.25em;
+        vertical-align: middle;
+        transition: fill 0.2s ease-in-out;
+      }
+    }
+
+    a {
+      color: $color-link;
+      text-decoration: none;
+      &:hover {
+        color: $color-link-hover;
+        text-decoration: underline;
+      }
+    }
+  }
 
   .attachments {
     color: $gray5;

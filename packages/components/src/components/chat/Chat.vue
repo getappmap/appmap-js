@@ -67,6 +67,8 @@
       :commands="commands"
       :use-animation="useAnimation"
       :is-disabled="isInputDisabled"
+      :usage="usage"
+      :subscription="subscription"
       ref="input"
     />
   </div>
@@ -183,6 +185,12 @@ export default {
     useAnimation: {
       type: Boolean,
       default: true,
+    },
+    usage: {
+      type: Object,
+    },
+    subscription: {
+      type: Object,
     },
   },
   data() {
@@ -311,8 +319,10 @@ export default {
     },
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);
-      this.threadId = threadId;
-      this.$root.$emit('thread-id', threadId);
+      if (threadId !== this.threadId) {
+        this.threadId = threadId;
+        this.$root.$emit('thread-id', threadId);
+      }
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied
@@ -445,7 +455,6 @@ $border-color: darken($gray4, 10%);
 
   .explainer {
     color: #e3e5e8;
-    padding: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

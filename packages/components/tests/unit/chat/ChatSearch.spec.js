@@ -41,6 +41,20 @@ describe('pages/ChatSearch.vue', () => {
       },
     ],
   };
+  const rpcNavieRegister = () => [
+    [
+      null,
+      null,
+      {
+        thread: {
+          id: '00000000-0000-0000-0000-000000000000',
+          permissions: { useNavieAIProxy: true },
+          usage: { conversationCounts: [] },
+          subscription: { subscriptions: [] },
+        },
+      },
+    ],
+  ];
   const rpcNavieMetadata = () => [[null, null, navieMetadata]];
   const rpcNavieMetadataEmpty = () => [[null, null, { commands: [] }]];
   const rpcNavieNextSteps = () => [[null, null, []]];
@@ -61,6 +75,7 @@ describe('pages/ChatSearch.vue', () => {
       'v1.navie.metadata': rpcNavieMetadata(),
       'v2.configuration.get': noConfig(),
       'system.listMethods': rpcSystemListMethods(),
+      'v1.navie.register': rpcNavieRegister(),
       explain: [[null, null, { userMessageId, threadId }]],
       'explain.status': [
         [null, null, { step: 'build-vector-terms' }],
@@ -184,6 +199,7 @@ describe('pages/ChatSearch.vue', () => {
       'v1.navie.metadata': rpcNavieMetadata(),
       'v2.configuration.get': noConfig(),
       'system.listMethods': rpcSystemListMethods(),
+      'v1.navie.register': rpcNavieRegister(),
     });
 
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
@@ -268,6 +284,7 @@ describe('pages/ChatSearch.vue', () => {
           'v1.navie.metadata': rpcNavieMetadata(),
           'v2.configuration.get': noConfig(),
           'system.listMethods': rpcSystemListMethods(),
+          'v1.navie.register': rpcNavieRegister(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [
@@ -359,6 +376,7 @@ describe('pages/ChatSearch.vue', () => {
         'v2.configuration.get': noConfig(),
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
       });
 
       expect(wrapper.find('[data-cy="llm-config"] [data-cy="loading"]').exists()).toBe(true);
@@ -375,6 +393,7 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
         'v2.configuration.get': [
           [
             null,
@@ -397,6 +416,7 @@ describe('pages/ChatSearch.vue', () => {
         'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': [[null, null, { projectDirectories: [] }]],
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
       });
 
       await waitForInitialized(wrapper);
@@ -411,6 +431,7 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
         'v2.configuration.get': [
           [
             null,
@@ -436,6 +457,7 @@ describe('pages/ChatSearch.vue', () => {
       const wrapper = chatSearchWrapper({
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
         'v2.configuration.get': [
           [
             null,
@@ -464,6 +486,7 @@ describe('pages/ChatSearch.vue', () => {
         'v1.navie.metadata': rpcNavieMetadata(),
         'v2.configuration.get': noConfig(),
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
         explain: [[err, error]],
       });
 
@@ -624,6 +647,7 @@ describe('pages/ChatSearch.vue', () => {
         'v2.configuration.get': noConfig(),
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
       });
 
       await waitForInitialized(wrapper);
@@ -648,6 +672,7 @@ describe('pages/ChatSearch.vue', () => {
       'v2.configuration.get': noConfig(),
       'system.listMethods': rpcSystemListMethods(),
       'v1.navie.metadata': rpcNavieMetadataEmpty(),
+      'v1.navie.register': rpcNavieRegister(),
     });
 
     await waitForInitialized(wrapper);
@@ -668,6 +693,7 @@ describe('pages/ChatSearch.vue', () => {
         'v2.configuration.get': noConfig(),
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
         'explain.thread.load': [
           [
             null,
@@ -716,6 +742,7 @@ describe('pages/ChatSearch.vue', () => {
         'v2.configuration.get': noConfig(),
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': rpcNavieRegister(),
       });
 
       await waitForInitialized(wrapper);
@@ -728,6 +755,7 @@ describe('pages/ChatSearch.vue', () => {
         'v2.configuration.get': noConfig(),
         'v2.navie.metadata': rpcNavieMetadata(),
         'v2.navie.welcome': rpcWelcomeDynamic(),
+        'v1.navie.register': rpcNavieRegister(),
         'system.listMethods': [[null, null, ['v2.navie.welcome']]],
       });
 
