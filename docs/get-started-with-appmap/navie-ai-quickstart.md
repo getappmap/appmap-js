@@ -57,6 +57,11 @@ The Navie UI includes a standard chat window, and a context panel which will inc
 - SQL Queries
 - Other I/O Data
 
+**Navie will look for the files listed above in the following locations:**  
+- The currently open project
+- All workspace folders in Visual Studio Code
+- All modules available in JetBrains IDEs
+
 ![Navie Context Window](/assets/img/navie-context-window.webp)
 
 ## Improve Navie AI Responses with AppMap Data
