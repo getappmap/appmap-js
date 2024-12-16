@@ -171,6 +171,9 @@ export default {
       validator: (value) => ['vscode', 'intellij'].indexOf(value) !== -1,
     },
   },
+  created() {
+    this.initConversationThread();
+  },
   data() {
     return {
       searchResponse: undefined,
@@ -345,6 +348,18 @@ export default {
     },
   },
   methods: {
+    async initConversationThread() {
+      try {
+        this.registrationData = await this.rpcClient.register();
+      } catch (error) {
+        console.error('Failed to register conversation thread', error);
+        return;
+      }
+
+      const { registrationData } = this;
+
+      this.threadId = registrationData.thread.id;
+    },
     onNavieRestarting() {
       this.configLoaded = false;
     },
@@ -558,7 +573,8 @@ export default {
         if (userProvidedContext.length > 0) {
           explainRequest.codeSelection = userProvidedContext;
         }
-        this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
+        const threadId = this.$refs.vchat.threadId || this.threadId;
+        this.ask.explain(explainRequest, threadId).catch(onError);
       });
     },
     setAppMapStats(stats) {

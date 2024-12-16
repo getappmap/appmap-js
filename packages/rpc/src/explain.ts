@@ -1,4 +1,3 @@
-import { Subscription } from '@appland/client';
 import { SearchRpc } from './search';
 
 export namespace ExplainRpc {
@@ -68,7 +67,6 @@ export namespace ExplainRpc {
     searchResponse?: SearchRpc.SearchResponse;
     contextResponse?: ContextItem[];
     explanation?: string[];
-    subscription?: Subscription;
   };
 
   export type Message = {
