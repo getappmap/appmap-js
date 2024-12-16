@@ -20,16 +20,23 @@
         :commands="commands"
         :is-input-disabled="isNavieLoading"
         :use-animation="useAnimation"
+        :usage="usage"
+        :subscription="subscription"
         @isChatting="setIsChatting"
         @stop="onStop"
       >
-        <v-llm-configuration
-          data-cy="llm-config"
-          v-if="!disableLlmConfig && !isChatting"
-          :is-loading="isNavieLoading"
-          :base-url="baseUrl"
-          :model="model"
-        />
+        <div class="configuration-container" v-if="!isChatting">
+          <v-llm-configuration
+            data-cy="llm-config"
+            v-if="!disableLlmConfig"
+            :is-loading="isNavieLoading"
+            :base-url="baseUrl"
+            :model="model"
+            :subscription="subscription"
+            :usage="usage"
+          />
+        </div>
+
         <template #not-chatting>
           <div class="message-box__footer">
             <v-welcome-message-v2
@@ -223,6 +230,7 @@ export default {
       activityName: undefined,
       suggestedQuestions: undefined,
       isWelcomeV2Available: false,
+      registrationData: undefined,
     };
   },
   provide() {
@@ -300,6 +308,12 @@ export default {
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
+    subscription() {
+      return this.registrationData ? this.registrationData.thread.subscription : undefined;
+    },
+    usage() {
+      return this.registrationData ? this.registrationData.thread.usage : undefined;
+    },
     numCodeSnippets() {
       return this.getContextItems('code-snippet').length;
     },
@@ -339,6 +353,24 @@ export default {
     },
   },
   methods: {
+    async initConversationThread() {
+      try {
+        this.registrationData = await this.rpcClient.register();
+      } catch (error) {
+        console.error('Failed to register conversation thread', error);
+        this.registrationData = {
+          thread: {
+            subscription: { subscriptions: [] },
+            usage: { conversationCounts: [] },
+          },
+        };
+        return;
+      }
+
+      const { registrationData } = this;
+
+      this.threadId = registrationData.thread.id;
+    },
     onNavieRestarting() {
       this.configLoaded = false;
     },
@@ -552,7 +584,8 @@ export default {
         if (userProvidedContext.length > 0) {
           explainRequest.codeSelection = userProvidedContext;
         }
-        this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
+        const threadId = this.$refs.vchat.threadId || this.threadId;
+        this.ask.explain(explainRequest, threadId).catch(onError);
       });
     },
     setAppMapStats(stats) {
@@ -716,6 +749,9 @@ export default {
         // system.listMethods
         await this.listRpcMethods();
 
+        // v1.navie.register
+        this.initConversationThread();
+
         // If v2.navie.welcome is available: v2.navie.metadata
         // otherwise: v1.navie.metadata
         this.loadStaticMessages();
@@ -866,7 +902,7 @@ $border-color: darken($gray4, 10%);
     background-color: $color-background;
 
     .message-box__footer {
-      padding: 2rem 2rem;
+      padding: 1rem 2rem;
       padding-top: 0;
     }
 
@@ -893,6 +929,11 @@ $border-color: darken($gray4, 10%);
       max-width: none !important;
     }
   }
+
+  .configuration-container {
+    padding: 1em 0 0 2em;
+  }
+
   .chat-search-container--drag {
     width: 4px;
     background: rgba(0, 0, 0, 0.2);

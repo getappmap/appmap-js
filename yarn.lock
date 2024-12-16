@@ -258,7 +258,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/client@^1.12.0, @appland/client@workspace:^1.12.0, @appland/client@workspace:^1.17.0, @appland/client@workspace:packages/client":
+"@appland/client@^1.12.0, @appland/client@workspace:*, @appland/client@workspace:^1.12.0, @appland/client@workspace:^1.17.0, @appland/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@appland/client@workspace:packages/client"
   dependencies:
@@ -511,6 +511,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/rpc@workspace:packages/rpc"
   dependencies:
+    "@appland/client": "workspace:*"
     jest: ^29.7.0
     ts-jest: ^29.1.1
     tsc: ^2.0.4

@@ -135,4 +135,62 @@ describe('components/LlmConfiguration.vue', () => {
 
     expect(wrapper.find('[data-cy="llm-config"]').exists()).toBe(false);
   });
+
+  describe('subscription status', () => {
+    describe('default', () => {
+      it('shows the free plan', async () => {
+        const wrapper = mount(LlmConfiguration, {
+          propsData: {
+            subscription: {
+              subscriptions: [],
+            },
+          },
+        });
+        expect(wrapper.find('[data-cy="plan-status-free"]').exists()).toBe(true);
+      });
+
+      it('shows the pro plan', async () => {
+        const wrapper = mount(LlmConfiguration, {
+          propsData: {
+            subscription: {
+              subscriptions: [{ productName: 'AppMap Pro' }],
+            },
+          },
+        });
+        expect(wrapper.find('[data-cy="plan-status-pro"]').exists()).toBe(true);
+      });
+    });
+
+    describe('copilot', () => {
+      it('shows the free plan', async () => {
+        const wrapper = mount(LlmConfiguration, {
+          propsData: {
+            model: 'gpt-4o',
+            baseUrl: 'http://localhost:11434/vscode/copilot',
+            subscription: {
+              subscriptions: [],
+            },
+          },
+        });
+        expect(
+          wrapper.find('[data-cy="copilot-notice"] [data-cy="plan-status-free"]').exists()
+        ).toBe(true);
+      });
+
+      it('shows the pro plan', async () => {
+        const wrapper = mount(LlmConfiguration, {
+          propsData: {
+            model: 'gpt-4o',
+            baseUrl: 'http://localhost:11434/vscode/copilot',
+            subscription: {
+              subscriptions: [{ productName: 'AppMap Pro' }],
+            },
+          },
+        });
+        expect(
+          wrapper.find('[data-cy="copilot-notice"] [data-cy="plan-status-pro"]').exists()
+        ).toBe(true);
+      });
+    });
+  });
 });
