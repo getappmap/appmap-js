@@ -83,6 +83,7 @@ export class Explain extends EventEmitter {
 
     this.conversationThread = thread;
     this.status.threadId = thread.id;
+    this.status.subscription = thread.subscription;
 
     const checkEnrollment = (enrollmentStatus: EnrollmentStatus): boolean => {
       this.status.explanation ||= [];

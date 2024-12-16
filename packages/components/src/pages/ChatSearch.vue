@@ -30,6 +30,9 @@
           :base-url="baseUrl"
           :model="model"
         />
+
+        <v-subscription-status data-cy="subscription-status" :subscription="subscription" />
+
         <template #not-chatting>
           <div class="message-box__footer">
             <v-welcome-message :message="welcomeMessage" />
@@ -102,6 +105,7 @@ import VAddFileButton from '@/components/AddFileButton.vue';
 import VPopper from '@/components/Popper.vue';
 import VContext from '@/components/chat-search/Context.vue';
 import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
+import VSubscriptionStatus from '@/components/chat-search/SubscriptionStatus.vue';
 import VPinnedItems from '@/components/chat-search/PinnedItems.vue';
 import type { CodeSelection, ITool } from '@/components/chat/Chat.vue';
 import VChat from '@/components/chat/Chat.vue';
@@ -122,6 +126,7 @@ export default {
     VChat,
     VContext,
     VLlmConfiguration,
+    VSubscriptionStatus,
     VPinnedItems,
     VPopper,
     VWelcomeMessage,
@@ -290,6 +295,13 @@ export default {
     },
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
+    },
+    subscription() {
+      return this.searchStatus &&
+        this.searchStatus.subscription &&
+        typeof this.searchStatus.subscription === 'object'
+        ? this.searchStatus.subscription
+        : undefined;
     },
     numCodeSnippets() {
       return this.getContextItems('code-snippet').length;

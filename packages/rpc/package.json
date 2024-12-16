@@ -19,6 +19,9 @@
     "access": "public"
   },
   "packageManager": "yarn@3.2.1",
+  "dependencies": {
+    "@appland/client": "workspace:*"
+  },
   "devDependencies": {
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1",
