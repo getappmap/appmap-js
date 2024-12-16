@@ -95,4 +95,3 @@ For all subscription-related issues, contact AppMap support at support@appmap.io
 - [License Key Installation Guide](/docs/reference/license-key-install)
 - [Terms and Conditions](/community/terms-and-conditions)
 - [Privacy Policy](/community/privacy-policy)
-- [Enterprise Features](/enterprise-features)
