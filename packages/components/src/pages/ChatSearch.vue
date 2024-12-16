@@ -23,15 +23,21 @@
         @isChatting="setIsChatting"
         @stop="onStop"
       >
-        <v-llm-configuration
-          data-cy="llm-config"
-          v-if="!disableLlmConfig && !isChatting"
-          :is-loading="isNavieLoading"
-          :base-url="baseUrl"
-          :model="model"
-        />
+        <div class="configuration-container">
+          <v-llm-configuration
+            data-cy="llm-config"
+            v-if="!disableLlmConfig && !isChatting"
+            :is-loading="isNavieLoading"
+            :base-url="baseUrl"
+            :model="model"
+          />
 
-        <v-subscription-status data-cy="subscription-status" :subscription="subscription" />
+          <v-subscription-status
+            data-cy="subscription-status"
+            :subscription="subscription"
+            :usage="usage"
+          />
+        </div>
 
         <template #not-chatting>
           <div class="message-box__footer">
@@ -171,9 +177,6 @@ export default {
       validator: (value) => ['vscode', 'intellij'].indexOf(value) !== -1,
     },
   },
-  created() {
-    this.initConversationThread();
-  },
   data() {
     return {
       searchResponse: undefined,
@@ -217,6 +220,7 @@ export default {
       pinnedItems: [] as PinItem[],
       projectDirectories: [] as string[],
       metadata: undefined as NavieRpc.V1.Metadata.Response | undefined,
+      registrationData: undefined,
     };
   },
   provide() {
@@ -300,11 +304,10 @@ export default {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
     subscription() {
-      return this.searchStatus &&
-        this.searchStatus.subscription &&
-        typeof this.searchStatus.subscription === 'object'
-        ? this.searchStatus.subscription
-        : undefined;
+      return this.registrationData ? this.registrationData.thread.subscription : undefined;
+    },
+    usage() {
+      return this.registrationData ? this.registrationData.thread.usage : undefined;
     },
     numCodeSnippets() {
       return this.getContextItems('code-snippet').length;
@@ -688,6 +691,7 @@ export default {
     }
     this.loadNavieConfig();
     this.loadMetadata();
+    this.initConversationThread();
     this.$root
       .$on('pin', (pin: PinEvent) => {
         const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
@@ -836,6 +840,13 @@ $border-color: darken($gray4, 10%);
       max-width: none !important;
     }
   }
+
+  .configuration-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
   .chat-search-container--drag {
     width: 4px;
     background: rgba(0, 0, 0, 0.1);
