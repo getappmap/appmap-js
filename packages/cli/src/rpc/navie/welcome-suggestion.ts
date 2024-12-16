@@ -79,8 +79,7 @@ export function formatWelcomeMessage(message: WelcomeMessage): string {
 
 export async function getWelcomeMessage(
   navieProvider: INavieProvider,
-  // TODO: Consider the code selection when building the welcome message and suggestions.
-  _codeSelection?: string
+  codeSelection?: string
 ): Promise<WelcomeMessage> {
   const navie = navieProvider(NOP, NOP, NOP);
 
@@ -92,9 +91,20 @@ export async function getWelcomeMessage(
     };
   }
 
+  // Case 2: A code selection is present - use it.
+  if (codeSelection) {
+    const welcomeSuggestion = await getWelcomeSuggestion(navie, [codeSelection]);
+    if (welcomeSuggestion) {
+      return {
+        activity: welcomeSuggestion.activity,
+        suggestions: welcomeSuggestion.suggestions,
+      };
+    }
+  }
+
   const { projectDirectories } = configuration() ?? [];
 
-  // Case 2: Remote Navie, no open project directories
+  // Case 3: Remote Navie, no open project directories
   if (projectDirectories.length === 0) {
     const message = [
       "It looks like there's no project open in your code editor. To get started, try opening a project so I can help you more effectively.",
