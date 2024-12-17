@@ -23,10 +23,10 @@
         @isChatting="setIsChatting"
         @stop="onStop"
       >
-        <div class="configuration-container">
+        <div class="configuration-container" v-if="!isChatting">
           <v-llm-configuration
             data-cy="llm-config"
-            v-if="!disableLlmConfig && !isChatting"
+            v-if="!disableLlmConfig"
             :is-loading="isNavieLoading"
             :base-url="baseUrl"
             :model="model"
@@ -845,6 +845,7 @@ $border-color: darken($gray4, 10%);
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    align-items: center;
   }
 
   .chat-search-container--drag {
