@@ -81,8 +81,11 @@
         data-cy="copy-message"
         @click="copyToClipboard"
       >
-        <v-check-icon v-if="copiedMessageTimeout" class="check-icon" />
-        <v-clipboard-icon v-else class="copy-icon" />
+        <v-check-icon v-if="copiedMessageTimeout" class="check-icon" data-cy="check-icon" />
+        <v-clipboard-icon v-else class="copy-icon small" data-cy="copy-icon" />
+      </span>
+      <span class="button" v-if="!isUser" data-cy="save-message" @click="saveMessage">
+        <v-save-icon class="copy-icon small" />
       </span>
       <span
         v-if="!isUser && id"
@@ -122,6 +125,7 @@ import VUserAvatar from '@/assets/user-avatar.svg';
 import VThumbIcon from '@/assets/thumb.svg';
 import VClipboardIcon from '@/assets/copy-icon.svg';
 import VCheckIcon from '@/assets/success-checkmark.svg';
+import VSaveIcon from '@/assets/download.svg';
 import VButton from '@/components/Button.vue';
 import VToolStatus from '@/components/chat/ToolStatus.vue';
 import VCodeSelection from '@/components/chat/CodeSelection.vue';
@@ -246,6 +250,7 @@ export default {
     VCodeSelection,
     VClipboardIcon,
     VCheckIcon,
+    VSaveIcon,
     VStreamingMessageContent,
     VNextPromptButton,
     VPopper,
@@ -382,6 +387,13 @@ export default {
 
         await this.writeToClipboard(text);
       }
+    },
+    saveMessage() {
+      this.$root.$emit('save-message', {
+        messageId: this.id,
+        threadId: this.threadId,
+        content: this.message,
+      });
     },
   },
 
@@ -568,15 +580,21 @@ export default {
       padding: 1px;
     }
 
-    .copy-icon {
-      fill: $color-foreground;
+    .small {
       width: 90%;
       transform: scale(0.75);
+
+      &:hover {
+        transform: scale(0.85);
+      }
+    }
+
+    .copy-icon {
+      fill: $color-foreground;
       overflow: visible;
 
       &:hover {
         fill: $color-highlight;
-        transform: scale(0.85);
       }
     }
 

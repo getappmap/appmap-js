@@ -187,6 +187,32 @@ describe('components/UserMessage.vue', () => {
     });
   });
 
+  describe('Save Button', () => {
+    it('should emit a root event when clicked', async () => {
+      const props = {
+        id: 'id',
+        isUser: false,
+        threadId: 'threadId',
+        message: 'Hello world!',
+        complete: true,
+      };
+
+      const wrapper = mount(VUserMessage, { propsData: props });
+      const saveButton = wrapper.find('[data-cy="save-message"]');
+      await saveButton.trigger('click');
+
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+      expect(rootWrapper.emitted()['save-message']).toBeTruthy();
+      expect(rootWrapper.emitted()['save-message'][0]).toEqual([
+        {
+          messageId: props.id,
+          threadId: props.threadId,
+          content: props.message,
+        },
+      ]);
+    });
+  });
+
   describe('Copy Button for entire message', () => {
     let wrapper;
     let clipboardText;
@@ -224,15 +250,15 @@ describe('components/UserMessage.vue', () => {
       await wrapper.get('[data-cy="copy-message"]').trigger('click');
 
       // check that the check icon is displayed
-      expect(wrapper.find('.copy-icon').exists()).toBe(false);
-      expect(wrapper.find('.check-icon').exists()).toBe(true);
+      expect(wrapper.find('[data-cy="copy-message"] [data-cy="copy-icon"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="copy-message"] [data-cy="check-icon"]').exists()).toBe(true);
 
       // wait for check to go away
       await new Promise((resolve) => setTimeout(resolve, 2100));
 
       // check that the copy icon is displayed
-      expect(wrapper.find('.check-icon').exists()).toBe(false);
-      expect(wrapper.find('.copy-icon').exists()).toBe(true);
+      expect(wrapper.find('[data-cy="copy-message"] [data-cy="check-icon"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="copy-message"] [data-cy="copy-icon"]').exists()).toBe(true);
     });
   });
 
