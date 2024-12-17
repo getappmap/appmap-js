@@ -2,61 +2,9 @@
 
 exports[`Gatherer buildConversation transforms interaction history events into a conversation 1`] = `
 "system: <SYSTEM PROMPT>
-
-
-
-**AppMap configuration**
-
-You're provided with all
-
-**AppMap statistics**
-
-You're provided with information about the AppMaps that have been recorded and are available in the user's workspace.
-
-**Code editor**
-
-You're provided
-
-**The problem statement**
-This is a description of the problem that the user wants you to help them with. Your response should be
-
-**Sequence diagrams**
-
-You're provided with sequence diagrams that are relevant to the task.
-
-**Data requests**
-
-You're provided with data requests that are relevant to the task.
-
-**The user's code selection**
-
-The user is asking about specific lines of code that they have selected in their code editor.
-
-The code selection will be provided as context within a \`<code-selection>\` tag.
 user: <USER PROMPT>
 
 <context>
-<appmap-config>
-- name: getappmap/appmap-server
-  language: ruby
-
-</appmap-config>
-<appmap-stats>
-- numAppMaps: 530
-
-</appmap-stats>
-<code-editor>
-The code editor is not specified.
-</code-editor>
-<task>
-**Task: Specification of Software Issues**
-
-## About you**
-
-Your name is Navie.
-
-</task>
-
 <sequence-diagram location="/test/appmap-server/tmp/appmap/rspec/RecordingMethod_on_a_mapset_shows_the_recording_method_breakdown.appmap.json" project-directory="/test/appmap-server">
 @startuml
 !includeurl 

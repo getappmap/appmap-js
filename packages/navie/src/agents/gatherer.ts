@@ -94,12 +94,20 @@ export default class Gatherer {
     // case in the conditional below can be removed) -divide
     const snippetsAsCat = false;
 
-    for (const event of events)
+    // Seems to work fine without all the prompts. Leaving this here in case we want to switch.
+    // Maybe a more granular approach would work even better (ie. including only some prompts).
+    const includePrompts = false;
+
+    for (const event of events) {
       if (event instanceof PromptInteractionEvent && event.name !== PromptType.CodeSnippet) {
-        // TBD: do we need the full prompts? All of them?
-        if (event.name === 'agent') context += `<task>\n${event.content}\n</task>\n\n`;
-        else if (event.role === 'system') system += '\n\n' + event.content;
-        else if (event.role === 'user') context += toContext(event) + '\n';
+        if (event.name === 'agent' && includePrompts)
+          context += `<task>\n${event.content}\n</task>\n\n`;
+        else if (event.role === 'system' && includePrompts) system += '\n\n' + event.content;
+        else if (event.role === 'user') {
+          if (event.name === PromptType.Question)
+            context += `<user-question>\n${event.content}\n</user-question>\n\n`;
+          else context += toContext(event) + '\n';
+        }
       } else if (event instanceof ContextItemEvent) {
         // sometime the location is relative, sometimes absolute
         const location = event.location?.startsWith(event.directory ?? '')
@@ -113,10 +121,16 @@ export default class Gatherer {
           const [path, depth] = splitDirDepth(location);
           commands += `!!find ${path} -depth ${depth}\n`;
           response += toFindOutput(path, depth, event.content);
-        } else {
-          context += toContext(event) + '\n';
-        }
+        } else if (
+          event.promptType === PromptType.AppMapConfig ||
+          event.promptType === PromptType.AppMapStats ||
+          event.promptType === PromptType.CodeEditor
+        )
+          // ignore things irrelevant for context gathering
+          continue;
+        else context += toContext(event) + '\n';
       }
+    }
     if (system) result.push({ role: 'system', content: system });
     if (context)
       result.push({
@@ -162,7 +176,9 @@ Respond with commands ONLY.`;
 Please help me gather information about a software project for an AI agent accomplish a task, based on the following context.
 DO NOT answer the question; the information you gather will be automatically used to answer the question later.
 
-When no more information is required, respond with !!finish ONLY..`;
+When no more information is required, respond with !!finish ONLY.
+
+If the question is generic and unrelated to the user's project, just finish.`;
 }
 
 function toContext(event: InteractionEvent): string {

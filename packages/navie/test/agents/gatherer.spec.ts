@@ -31,7 +31,8 @@ describe('Gatherer', () => {
       ]).toMatchInlineSnapshot(`"system: <SYSTEM PROMPT>"`);
     });
 
-    it('adds prompts into the system prompt', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('adds prompts into the system prompt', () => {
       expectResult([
         {
           type: 'prompt',
@@ -125,7 +126,8 @@ describe('Gatherer', () => {
       `);
     });
 
-    it('puts the agent prompt in the context', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('puts the agent prompt in the context', () => {
       expectResult([
         {
           type: 'prompt',
