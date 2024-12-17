@@ -22,22 +22,22 @@ You have two tasks:
 1. **Identify the activity that a software developer is performing**: Analyze the information about a software developer's work in progress
   and to determine what activtiy they are currently performing.
 
-2. **Generate questions and requests for the user to send to Navie AI assistant**: Based on the activity that you identified,
-  generate a list of questions and requests that the user can ask Navie next. Your suggestions should be concise and actionable,
+2. **Generate suggestions and requests for the user to send to Navie AI assistant**: Based on the activity that you identified,
+  generate a list of suggestion and requests that the user can ask Navie next. Your suggestions should be concise and actionable,
   referencing specific concepts from the context that you're provided. Do not provide any code snippets or other details.
 
 The identified activity should accurately describe the task the user is working on, as detailed as possible.
 
-Questions should be limited to:
+Suggestions should be limited to:
 
-a) Explaining code - These should be posed in the form of a question.
+a) Improve the code, tests, or documentation - These should be posed as a statement about the requirements for a change.
 
 b) Creating diagrams - These should be posed as a statement about the requirements for a diagram.
   Supported diagram types are sequence diagram, class diagram, entity-relationship diagram (ERD) and flowchart.
 
-Don't use an "@" command prefix in your questions.
+Don't use an "@" command prefix in your suggestion.
 
-Questions should try not to reference "changes", instead reference the specific concepts or symbols from the diff.
+Suggestions should try not to reference "changes", instead reference the specific concepts or symbols from the diff.
 
 All string values will be rendered as Markdown to the user, so use backticks when referencing code objects.
 
