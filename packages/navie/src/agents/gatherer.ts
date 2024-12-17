@@ -46,22 +46,38 @@ export default class Gatherer {
   }
 
   async executeCommands(commands: string[]) {
-    const result = await this.context.locationContext(
-      commands.map(locationOfCommand).filter(isDefined)
-    );
-    let response = '';
-    for (const event of result) {
-      const location = event.location?.startsWith(event.directory ?? '')
-        ? event.location
-        : [event.directory, event.location].filter(Boolean).join('/');
-      if (event.promptType === PromptType.CodeSnippet && event.location) {
-        response += toCatOutput(location, event.content);
-      } else if (event.promptType === PromptType.DirectoryListing && event.location) {
-        const [path, depth] = splitDirDepth(location);
-        response += toFindOutput(path, depth, event.content);
-      }
+    const locations: string[] = [],
+      terms: string[] = [];
+    let badCommand = false;
+    for (const cmd of commands) {
+      if (cmd.startsWith('!!find') || cmd.startsWith('!!cat')) {
+        const location = locationOfCommand(cmd);
+        if (!location) badCommand = true;
+        else locations.push(location);
+      } else if (cmd.startsWith('!!search')) {
+        const searchTerms = searchTermsOfCommand(cmd);
+        if (!searchTerms) badCommand = true;
+        else terms.push(...searchTerms);
+      } else if (cmd === '!!finish') continue;
+      else badCommand = true;
     }
-    response ||= 'No content found.';
+
+    let response = '';
+    if (locations.length > 0 || terms.length > 0) {
+      for (const event of await this.context.searchContextWithLocations(terms, locations)) {
+        const location = event.location?.startsWith(event.directory ?? '')
+          ? event.location
+          : [event.directory, event.location].filter(Boolean).join('/');
+        if (event.promptType === PromptType.CodeSnippet && event.location) {
+          response += toCatOutput(location, event.content);
+        } else if (event.promptType === PromptType.DirectoryListing && event.location) {
+          const [path, depth] = splitDirDepth(location);
+          response += toFindOutput(path, depth, event.content);
+        }
+      }
+      response ||= 'No content found.';
+    }
+    if (badCommand) response += '\n\n' + Gatherer.COMMANDS;
     return response;
   }
 
@@ -105,13 +121,21 @@ export default class Gatherer {
     if (context)
       result.push({
         role: 'user',
-        content: `${Gatherer.USER_PROMPT}\n\n<context>\n${context}\n</context>`,
+        content: [Gatherer.USER_PROMPT, `<context>\n${context}\n</context>`].join('\n\n'),
       });
     if (commands)
       result.push({ role: 'assistant', content: commands }, { role: 'user', content: response });
 
     return result;
   }
+
+  static readonly COMMANDS = `\
+  Supported commands:
+  !!find <path> [-depth <depth>]
+  !!cat <path>[:<start-line>[-<end-line>]]
+  !!search <terms>
+  !!finish
+`;
 
   static readonly SYSTEM_PROMPT = `\
 You are a helper for an AI agent. Your task is to gather all the information about a software project (such as relevant file contents)
@@ -126,10 +150,19 @@ To gather the information, respond with the following commands:
 !!find <path> [-depth <depth>]
 !!cat <path>[:<start-line>[-<end-line>]]
 
-If you don't need any further information, respond with !!finish on a single line.
-Remember, it's not your job to address the question, just to gather the information. Be thorough.`;
+You can also do a full-text search using
+!!search <search terms>
 
-  static readonly USER_PROMPT = `Please help me gather information about a software project for an AI agent accomplish a task, based on the following context.`;
+When you're done, simply respond with !!finish on a single line.
+All the information gathered will be passed to the agent so you don't need to repeat or summarize it.
+
+Respond with commands ONLY.`;
+
+  static readonly USER_PROMPT = `\
+Please help me gather information about a software project for an AI agent accomplish a task, based on the following context.
+DO NOT answer the question; the information you gather will be automatically used to answer the question later.
+
+When no more information is required, respond with !!finish ONLY..`;
 }
 
 function toContext(event: InteractionEvent): string {
@@ -185,8 +218,9 @@ function locationOfCommand(command: string): string | undefined {
     return `${match[1]}:${match[3] || 0}`;
 }
 
-function isDefined<T>(x: T): x is Exclude<T, undefined> {
-  return !!x;
+function searchTermsOfCommand(command: string): string[] | undefined {
+  let match;
+  if ((match = /^!!search (.*)/.exec(command))) return match[1].split(' ');
 }
 
 const debug = makeDebug('appmap:navie:gatherer');
