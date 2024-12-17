@@ -1,3 +1,10 @@
+# [@appland/navie-v1.38.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.38.0...@appland/navie-v1.38.1) (2024-12-17)
+
+
+### Bug Fixes
+
+* Review now includes code selections ([8ea7137](https://github.com/getappmap/appmap-js/commit/8ea713712a8d20f5211d0380e435bdbfd914df83))
+
 # [@appland/navie-v1.38.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.37.0...@appland/navie-v1.38.0) (2024-12-11)
 
 
