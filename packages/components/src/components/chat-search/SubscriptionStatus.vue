@@ -42,7 +42,9 @@ export default Vue.extend({
       return this.subscription.subscriptions.length > 0;
     },
     usage7days(): number | undefined {
-      const item = this.usage.conversationCounts.find((item) => item.daysAgo === 7);
+      const item = this.usage.conversationCounts.find(
+        (item: { daysAgo: number; count: number }) => item.daysAgo === 7
+      );
       if (item) return item.count;
 
       return undefined;
@@ -50,7 +52,7 @@ export default Vue.extend({
     limit7days(): number {
       return 7;
     },
-    remainingChatsClass(): number | undefined {
+    remainingChatsClass(): string {
       const usage = this.usage7days;
       if (usage === undefined) return 'usage-ok';
 
