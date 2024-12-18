@@ -1,21 +1,18 @@
-import * as fs from 'fs/promises';
-import * as utils from '../../../../src/utils';
+import { type Dirent, type Stats } from 'node:fs';
+import * as fs from 'node:fs/promises';
+
+import { isBinaryFile } from '@appland/search';
 
 import Location from '../../../../src/rpc/explain/location';
 import collectLocationContext from '../../../../src/rpc/explain/collect-location-context';
 
-jest.mock('fs/promises');
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-jest.mock('../../../../src/utils', () => ({
-  ...jest.requireActual('../../../../src/utils'),
-  exists: jest.fn(),
-  isFile: jest.fn(),
-}));
+jest.mock('node:fs/promises');
+jest.mock('@appland/search');
 
 describe('collectLocationContext', () => {
   const sourceDirectories = ['/src', '/lib'];
 
-  beforeEach(() => jest.resetAllMocks());
+  afterEach(jest.resetAllMocks);
 
   describe('with empty locations', () => {
     it('handles empty locations', async () => {
@@ -25,51 +22,131 @@ describe('collectLocationContext', () => {
   });
 
   describe('with valid locations', () => {
-    const locations: Location[] = [
-      { path: 'file1.js', snippet: (contents: string) => contents.slice(0, 10) },
-      { path: '/src/file2.js', snippet: (contents: string) => contents.slice(0, 10) },
-      { path: '/other/file3.js', snippet: (contents: string) => contents.slice(0, 10) },
-    ];
+    const locations = ['file1.js:1-1', '/src/file2.js', '/other/file3.js'].map(Location.parse);
+    const explicitFiles = ['/other/file3.js'];
 
-    const collect = async () => collectLocationContext(sourceDirectories, locations);
+    const collect = async () => collectLocationContext(sourceDirectories, locations, explicitFiles);
 
-    it('handles valid locations', async () => {
-      jest.spyOn(utils, 'exists').mockResolvedValue(true);
-      jest.spyOn(utils, 'isFile').mockResolvedValue(true);
+    const stat = jest.mocked(fs.stat);
+    beforeEach(() => {
+      stat.mockResolvedValue({ isDirectory: () => false, isFile: () => true } as Stats);
       jest.spyOn(fs, 'readFile').mockResolvedValue('file contents');
+    });
+
+    it('includes explicitly named files even if outside source directories', async () => {
+      jest.mocked(isBinaryFile).mockReturnValue(false);
+
+      expect(await collect()).toMatchInlineSnapshot(`
+        [
+          {
+            "content": "file contents",
+            "directory": "/src",
+            "location": "file1.js:1-1",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/lib",
+            "location": "file1.js:1-1",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/src",
+            "location": "file2.js",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/other",
+            "location": "file3.js",
+            "type": "code-snippet",
+          },
+        ]
+      `);
+
+      expect(stat.mock.calls).toStrictEqual([
+        ['/src/file1.js'],
+        ['/lib/file1.js'],
+        ['/src/file2.js'],
+        ['/other/file3.js'],
+      ]);
+    });
+
+    it('excludes non-explicitly named files outside source directories', async () => {
+      const nonExplicitLocations = ['file1.js:1-1', '/src/file2.js', '/other/file4.js'].map(
+        Location.parse
+      );
+      const collectNonExplicit = async () =>
+        collectLocationContext(sourceDirectories, nonExplicitLocations, explicitFiles);
+
+      jest.mocked(isBinaryFile).mockReturnValue(false);
+
+      expect(await collectNonExplicit()).toMatchInlineSnapshot(`
+        [
+          {
+            "content": "file contents",
+            "directory": "/src",
+            "location": "file1.js:1-1",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/lib",
+            "location": "file1.js:1-1",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/src",
+            "location": "file2.js",
+            "type": "code-snippet",
+          },
+        ]
+      `);
+
+      expect(stat.mock.calls).toStrictEqual([
+        ['/src/file1.js'],
+        ['/lib/file1.js'],
+        ['/src/file2.js'],
+      ]);
+    });
+
+    it('handles directory listings', async () => {
+      stat.mockResolvedValue({ isDirectory: () => true, isFile: () => false } as Stats);
+      jest.spyOn(fs, 'readdir').mockResolvedValue(['file1.js', 'file2.js'].map(mockDirent));
+
+      const result = await collectLocationContext(sourceDirectories, [Location.parse('/src:0')]);
+      expect(result).toEqual([
+        {
+          type: 'directory-listing',
+          content: 'file1.js\nfile2.js',
+          location: ':0',
+          directory: '/src',
+        },
+      ]);
+    });
+
+    it('skips binary files', async () => {
+      jest.mocked(isBinaryFile).mockReturnValue(true);
 
       const result = await collect();
-      expect(result.length).toBe(4);
-      expect(result[0].content).toBe('file conte');
-      expect(result[1].content).toBe('file conte');
-      expect(result[2].content).toBe('file conte');
-      expect(result[3].content).toBe('file conte');
-
-      expect(utils.exists).toHaveBeenCalledTimes(4);
-      expect(utils.exists).toHaveBeenCalledWith('/src/file1.js');
-      expect(utils.exists).toHaveBeenCalledWith('/lib/file1.js');
-      expect(utils.exists).toHaveBeenCalledWith('/src/file2.js');
-      expect(utils.exists).toHaveBeenCalledWith('/other/file3.js');
+      expect(result).toEqual([]);
     });
 
     it('handles non-file locations', async () => {
-      jest.spyOn(utils, 'exists').mockResolvedValue(true);
-      jest.spyOn(utils, 'isFile').mockResolvedValue(false);
-
+      stat.mockResolvedValue({ isDirectory: () => false, isFile: () => false } as Stats);
       const result = await collect();
       expect(result).toEqual([]);
     });
 
     it('handles non-existent files', async () => {
-      jest.spyOn(utils, 'exists').mockResolvedValue(false);
-
+      stat.mockRejectedValue(new Error('Not found'));
       const result = await collect();
       expect(result).toEqual([]);
     });
 
     it('handles file reading errors', async () => {
-      jest.spyOn(utils, 'exists').mockResolvedValue(true);
-      jest.spyOn(utils, 'isFile').mockResolvedValue(true);
       jest.spyOn(fs, 'readFile').mockRejectedValue(new Error('Read error'));
 
       const result = await collect();
@@ -77,12 +154,32 @@ describe('collectLocationContext', () => {
     });
 
     it('extracts snippets correctly', async () => {
-      jest.spyOn(utils, 'exists').mockResolvedValue(true);
-      jest.spyOn(utils, 'isFile').mockResolvedValue(true);
-      jest.spyOn(fs, 'readFile').mockResolvedValue('file contents');
+      jest.spyOn(fs, 'readFile').mockResolvedValue('file conte\nnts');
 
       const result = await collect();
       expect(result[0].content).toBe('file conte');
     });
+
+    it('handles large files by setting line range', async () => {
+      const largeContent = 'aaa\n'.repeat(6_000);
+      jest.spyOn(fs, 'readFile').mockResolvedValue(largeContent);
+
+      // note the limit currently only applies to unbounded requests
+      const [, , result] = await collect();
+      expect(result.content.length).toBeLessThanOrEqual(20_000);
+    });
   });
 });
+
+function mockDirent(name: string): Dirent {
+  return {
+    name,
+    isFile: () => true,
+    isDirectory: () => false,
+    isBlockDevice: () => false,
+    isCharacterDevice: () => false,
+    isSymbolicLink: () => false,
+    isFIFO: () => false,
+    isSocket: () => false,
+  };
+}

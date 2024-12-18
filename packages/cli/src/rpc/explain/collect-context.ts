@@ -86,9 +86,8 @@ export function buildContextRequest(
     request.includePatterns = filters.include.map((pattern) => new RegExp(pattern));
   if (filters?.itemTypes) request.includeTypes = filters.itemTypes.map((type) => type);
   if (filters?.locations) {
-    request.locations = filters.locations
-      .map((location) => Location.parse(location))
-      .filter(Boolean) as Location[];
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    request.locations = filters.locations.map(Location.parse);
     warn(`Parsed locations: ${request.locations.map((loc) => loc.toString()).join(', ')}`);
   }
 
@@ -109,13 +108,18 @@ export default async function collectContext(
   sourceDirectories: string[],
   charLimit: number,
   vectorTerms: string[],
-  request: ContextRequest
+  request: ContextRequest,
+  explicitFiles: string[] = []
 ): Promise<{ searchResponse: SearchRpc.SearchResponse; context: ContextV2.ContextResponse }> {
   let searchResponse: SearchRpc.SearchResponse = { results: [], numResults: 0 };
   const context: ContextV2.ContextResponse = [];
 
   if (request.locations && request.locations.length > 0) {
-    const locationResult = await collectLocationContext(sourceDirectories, request.locations);
+    const locationResult = await collectLocationContext(
+      sourceDirectories,
+      request.locations,
+      explicitFiles
+    );
     context.push(...locationResult);
   }
 

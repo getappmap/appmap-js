@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Gatherer buildConversation transforms interaction history events into a conversation 1`] = `
+"system: <SYSTEM PROMPT>
+user: <USER PROMPT>
+
+<context>
+<sequence-diagram location="/test/appmap-server/tmp/appmap/rspec/RecordingMethod_on_a_mapset_shows_the_recording_method_breakdown.appmap.json" project-directory="/test/appmap-server">
+@startuml
+!includeurl 
+</sequence-diagram>
+<data-request location="/test/appmap-server/tmp/appmap/rspec/API_APIKeysController_revoke_an_existing_api_key.appmap.json:66" project-directory="/test/appmap-server">
+query:SELECT * FROM "users" WHERE ("users"."login" = 'admin') LIMIT 1
+</data-request>
+<data-request location="/test/appmap-server/tmp/appmap/rspec/API_APIKeysController_revoke_an_existing_api_key.appmap.json:44" project-directory="/test/appmap-server">
+query:SELECT * FROM "api_keys" WHERE ("login" = 'admin')
+</data-request>
+<sequence-diagram location="/test/appmap-server/tmp/appmap/rspec/Activation_Validate_verify_when_valid_parameters_are_provided_marks_the_user_as_having_accepted_the_most_recent_EULA.appmap.json" project-directory="/test/appmap-server">
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+</sequence-diagram>
+<data-request location="/test/appmap-server/tmp/appmap/rspec/RecordingMethod_on_a_mapset_shows_the_recording_method_breakdown.appmap.json:6" project-directory="/test/appmap-server">
+query:WITH "recording_methods" AS (SELECT scenarios.metadata->'recorder'->>'name' 
+</data-request>
+<data-request location="/test/appmap-server/tmp/appmap/rspec/Activation_Validate_verify_when_valid_parameters_are_provided_marks_the_user_as_having_accepted_the_most_recent_EULA.appmap.json:95" project-directory="/test/appmap-server">
+query:INSERT INTO "api_keys" ("login") VALUES ('user@example.com') RETURNING *
+</data-request>
+<sequence-diagram location="/test/appmap-server/tmp/appmap/rspec/Key_data_stats_messages_one_unique_on_each_of_two_scenarios_in_a_shared_mapset_indicates_2_messages_on_the_app.appmap.json" project-directory="/test/appmap-server">
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant 
+</sequence-diagram>
+<code-selection>
+Users are listed on the admin page.
+
+Some users are in the system using invalid or disallowed email addresses.
+
+Add a link or button to "Deactivate" a user on the admin page.
+
+The button should:
+
+* Revoke the user's API keys.
+* Mark the user record as deactivated.
+* Indicate on the user record who deactivated the user, and when.
+
+</code-selection>
+<problem-statement>
+A resolution to the given issue, also recording who and when deactivated the account
+</problem-statement>
+
+</context>
+assistant: !!cat /test/appmap-server/app/models/api_key.rb:53
+!!cat /test/appmap-server/app/models/api_key.rb:66
+!!cat /test/appmap-server/app/models/api_key.rb:15
+user: Here's the output of \`cat -n /test/appmap-server/app/models/api_key.rb:53\`:
+    53	# @label security.api_key.touch
+    54	    def touch(api_key)
+    55	      if api_key.last_used.nil? || api_key.last_used > 15.minutes.ago
+
+Here's the output of \`cat -n /test/appmap-server/app/models/api_key.rb:66\`:
+    66	# @label security.api_key.revoke
+    67	    def revoke_from_user(login, key_id)
+    68	      DAO::ApiKey
+
+Here's the output of \`cat -n /test/appmap-server/app/models/api_key.rb:15\`:
+    15	def decode(api_key)
+    16	      Base64.urlsafe_decode64(api_key).split(SEPARATOR)
+    17	    end"
+`;

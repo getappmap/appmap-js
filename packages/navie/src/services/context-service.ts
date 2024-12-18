@@ -1,12 +1,11 @@
 import { warn } from 'console';
 import { AgentOptions } from '../agent';
 import transformSearchTerms from '../lib/transform-search-terms';
-import ApplyContextService from './apply-context-service';
 import LookupContextService from './lookup-context-service';
 import VectorTermsService from './vector-terms-service';
 import { ContextV2 } from '../context';
 import InteractionHistory, { ContextItemEvent } from '../interaction-history';
-import { PromptType } from '../prompt';
+import ApplyContextService, { eventOfContextItem } from './apply-context-service';
 
 export default class ContextService {
   constructor(
@@ -48,10 +47,10 @@ export default class ContextService {
     }
   }
 
-  async locationContext(fileNames: string[]): Promise<void> {
+  async locationContext(fileNames: string[]): Promise<ContextItemEvent[]> {
     if (!fileNames || fileNames.length === 0) {
       this.history.log('[context-service] No file names provided for location context');
-      return;
+      return [];
     }
 
     this.history.log(`[context-service] Retrieving full context of files: ${fileNames.join(', ')}`);
@@ -65,20 +64,46 @@ export default class ContextService {
     // Full text of requested files is always added to the prompt. Context limits are not applied
     // in this case due to their important role in generating code.
     let charsAdded = 0;
+    const events: ContextItemEvent[] = [];
     for (const item of context) {
-      const contextItem = new ContextItemEvent(PromptType.CodeSnippet, item.content);
-      if (ContextV2.isFileContextItem(item)) {
-        contextItem.location = item.location;
-      }
+      const contextItem = eventOfContextItem(item);
+      if (!contextItem) continue;
       charsAdded += contextItem.content.length;
+      events.push(contextItem);
       this.history.addEvent(contextItem);
     }
     this.history.log(`[context-service] Added ${charsAdded} characters of file context`);
+    return events;
   }
 
-  locationContextFromOptions(options: AgentOptions): Promise<void> {
-    const { locations } = options.buildContextFilters();
-    return locations && locations.length > 0 ? this.locationContext(locations) : Promise.resolve();
+  async searchContextWithLocations(
+    searchTerms: string[],
+    fileNames: string[]
+  ): Promise<ContextItemEvent[]> {
+    this.history.log('[context-service] Searching for context with locations');
+
+    const filters = { locations: fileNames };
+    const context = await this.lookupContextService.lookupContext(searchTerms, 1024, filters);
+
+    let charsAdded = 0;
+    const events: ContextItemEvent[] = [];
+    for (const item of ContextService.guardContextType(context)) {
+      const contextItem = eventOfContextItem(item);
+      if (!contextItem) continue;
+      charsAdded += contextItem.content.length;
+      events.push(contextItem);
+      this.history.addEvent(contextItem);
+    }
+    this.history.log(`[context-service] Added ${charsAdded} characters of context`);
+    return events;
+  }
+
+  async locationContextFromOptions(options: AgentOptions): Promise<void> {
+    const locations = options.buildContextFilters().locations ?? [];
+    // Also list project directories
+    locations.unshift(':0');
+    console.log(locations);
+    await this.locationContext(locations);
   }
 
   static guardContextType(

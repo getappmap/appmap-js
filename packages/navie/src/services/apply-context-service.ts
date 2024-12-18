@@ -44,35 +44,8 @@ export default class ApplyContextService {
     const charsRemaining = characterLimit - charsApplied;
 
     for (const item of appliedContextItems) {
-      let promptType: PromptType | undefined;
-      switch (item.type) {
-        case ContextV2.ContextItemType.SequenceDiagram:
-          promptType = PromptType.SequenceDiagram;
-          break;
-        case ContextV2.ContextItemType.CodeSnippet:
-          promptType = PromptType.CodeSnippet;
-          break;
-        case ContextV2.ContextItemType.DataRequest:
-          promptType = PromptType.DataRequest;
-          break;
-        case ContextV2.ContextItemType.HelpDoc:
-          promptType = PromptType.HelpDoc;
-          break;
-        default:
-      }
-      if (promptType) {
-        const isFile = ContextV2.isFileContextItem(item);
-        this.interactionHistory.addEvent(
-          new ContextItemEvent(
-            promptType,
-            item.content,
-            isFile ? item.location : undefined,
-            isFile ? item.directory : undefined
-          )
-        );
-      } else {
-        warn(`Unknown context item type: ${item.type} for content: ${item.content}`);
-      }
+      const event = eventOfContextItem(item);
+      if (event) this.interactionHistory.addEvent(event);
     }
 
     this.interactionHistory.log(`Remaining characters after context: ${charsRemaining}`);
@@ -126,5 +99,37 @@ export default class ApplyContextService {
           buildPromptDescriptor(PromptType.HelpDoc)
         )
       );
+  }
+}
+
+export function eventOfContextItem(item: ContextV2.ContextItem): undefined | ContextItemEvent {
+  let promptType: PromptType | undefined;
+  switch (item.type) {
+    case ContextV2.ContextItemType.SequenceDiagram:
+      promptType = PromptType.SequenceDiagram;
+      break;
+    case ContextV2.ContextItemType.CodeSnippet:
+      promptType = PromptType.CodeSnippet;
+      break;
+    case ContextV2.ContextItemType.DataRequest:
+      promptType = PromptType.DataRequest;
+      break;
+    case ContextV2.ContextItemType.HelpDoc:
+      promptType = PromptType.HelpDoc;
+      break;
+    case ContextV2.ContextItemType.DirectoryListing:
+      promptType = PromptType.DirectoryListing;
+    default:
+  }
+  if (promptType) {
+    const isFile = ContextV2.isFileContextItem(item);
+    return new ContextItemEvent(
+      promptType,
+      item.content,
+      isFile ? item.location : undefined,
+      isFile ? item.directory : undefined
+    );
+  } else {
+    warn(`Unknown context item type: ${item.type} for content: ${item.content}`);
   }
 }

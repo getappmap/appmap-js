@@ -55,9 +55,11 @@ export async function langchainSplitter(content: string, fileExtension: string):
     const loc = doc.metadata?.loc as { lines: { from: number; to: number } } | undefined;
     const lines = loc?.lines;
     const result: Chunk = {
-      content: doc.pageContent,
+      content: '',
     };
     if (lines) {
+      const contentLines = content.split('\n');
+      result.content = contentLines.slice(lines.from - 1, lines.to).join('\n');
       result.startLine = lines.from;
       result.endLine = lines.to;
     }

@@ -188,6 +188,8 @@ export default class GenerateAgent implements Agent {
       )
     );
 
+    await this.contextService.locationContextFromOptions(options);
+
     if (options.userOptions.booleanValue('listfiles', true)) {
       const contentFetcher = new FileContentFetcher(
         this.fileChangeExtractorService,

@@ -1,3 +1,5 @@
+import makeDebug from 'debug';
+
 import {
   AI,
   ConversationThread,
@@ -27,6 +29,8 @@ import Thread from './navie/thread';
 import handleReview from './review';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
+
+const debug = makeDebug('appmap:explain:rpc');
 
 export type SearchContextOptions = {
   tokenCount: number;
@@ -158,12 +162,17 @@ export class Explain extends EventEmitter {
       data
     );
 
+    const explicitFiles = Array.isArray(this.codeSelection)
+      ? this.codeSelection.filter(UserContext.hasLocation).map((cs) => cs.location)
+      : [];
+
     const searchResult = await collectContext(
       this.appmapDirectories.map((dir) => dir.directory),
       this.projectDirectories,
       charLimit,
       contextRequest.vectorTerms,
-      contextRequest.request
+      contextRequest.request,
+      explicitFiles
     );
 
     this.status.searchResponse = searchResult.searchResponse;
@@ -248,6 +257,8 @@ export async function explain(
   codeEditor: string | undefined,
   prompt: string | undefined
 ): Promise<ExplainRpc.ExplainResponse> {
+  debug('Code selection: ', codeSelection);
+
   const status: ExplainRpc.ExplainStatusResponse = {
     step: ExplainRpc.Step.NEW,
     threadId,

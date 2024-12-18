@@ -1,6 +1,7 @@
 import { warn } from 'console';
 
-import { AgentOptions } from '../agent';
+import { AgentMode, AgentOptions } from '../agent';
+import Gatherer from '../agents/gatherer';
 import AgentSelectionService from '../services/agent-selection-service';
 import ClassificationService from '../services/classification-service';
 import CodeSelectionService from '../services/code-selection-service';
@@ -15,6 +16,7 @@ import { ProjectInfo } from '../project-info';
 import Command, { CommandRequest } from '../command';
 import { ChatHistory } from '../navie';
 import getMostRecentMessages from '../lib/get-most-recent-messages';
+import { type UserOptions } from '../lib/parse-options';
 import { ContextV2 } from '../context';
 import assert from 'assert';
 import { UserContext } from '../user-context';
@@ -76,7 +78,7 @@ export default class ExplainCommand implements Command {
       contextLabels,
       request.userOptions
     );
-    const { question, agent: mode } = agentSelectionResult;
+    const { agentMode, question, agent: mode } = agentSelectionResult;
 
     if (agentSelectionResult.selectionMessage) {
       yield agentSelectionResult.selectionMessage;
@@ -152,6 +154,10 @@ export default class ExplainCommand implements Command {
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
 
+    if (gathererEnabled(request.userOptions, agentMode, contextLabels)) {
+      yield* this.gatherAdditionalInformation();
+    }
+
     const { messages } = this.interactionHistory.buildState();
 
     this.interactionHistory.addEvent(
@@ -165,4 +171,33 @@ export default class ExplainCommand implements Command {
     if (mode.filter) yield* mode.filter(response);
     else yield* response;
   }
+
+  private async *gatherAdditionalInformation(maxSteps = 10) {
+    let steps = 0;
+    try {
+      const gatherer = new Gatherer(
+        this.interactionHistory.events,
+        this.completionService,
+        this.agentSelectionService.contextService
+      );
+      for (steps = 0; steps < maxSteps && !(await gatherer.step()); steps++)
+        yield steps > 0 ? '.' : 'Gathering additional information, please wait...';
+    } catch (err) {
+      console.warn('Error while gathering: ', err);
+    } finally {
+      if (steps > 0) yield ' done!\n\n';
+    }
+  }
+}
+
+function gathererEnabled(
+  userOptions: UserOptions,
+  agentMode: AgentMode,
+  contextLabels: ContextV2.ContextLabel[]
+): boolean {
+  const enabledByDefault =
+    [AgentMode.Generate, AgentMode.Test].includes(agentMode) ||
+    !!contextLabels.find((l) => l.name === ContextV2.ContextLabelName.Overview);
+
+  return userOptions.isEnabled('gatherer', enabledByDefault);
 }

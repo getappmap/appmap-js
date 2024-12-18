@@ -77,4 +77,10 @@ describe('Location', () => {
     const location = Location.parse('path/to/file.rb:1a');
     expect(location).toEqual(new Location('path/to/file.rb:1a'));
   });
+
+  it('handles zero starting line correctly', () => {
+    const location = Location.parse('file1.js:0-2');
+    const snippet = location.snippet('line 1\nline 2\nline 3');
+    expect(snippet).toBe('line 1\nline 2');
+  });
 });

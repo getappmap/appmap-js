@@ -22,7 +22,12 @@ export default function collectSnippets(
   const buildLocation = (result: SnippetSearchResult) => {
     const snippetId = parseFileChunkSnippetId(result.snippetId);
     const { filePath, startLine } = snippetId;
-    return [filePath, startLine].filter(Boolean).join(':');
+    let location = filePath;
+    if (startLine) {
+      const endLine = startLine + result.content.split('\n').length - 1;
+      location += `:${startLine}-${endLine}`;
+    }
+    return location;
   };
 
   return snippets.map((snippet) => ({

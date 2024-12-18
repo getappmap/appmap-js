@@ -89,6 +89,8 @@ describe('@diagram agent', () => {
     await diagramAgent.perform(options, () => tokensAvailable);
 
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(contextService.locationContext).toHaveBeenCalledWith(['file1', 'file2']);
+    expect(contextService.locationContext).toHaveBeenCalledWith(
+      expect.arrayContaining(['file1', 'file2'])
+    );
   });
 });

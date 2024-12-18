@@ -1,13 +1,31 @@
+import { warn } from 'node:console';
+
 export default class Location {
   constructor(public path: string, public lineRange?: string) {}
 
   snippet(contents: string): string {
-    if (!this.lineRange) return contents;
+    if (!this.lineRange) {
+      if (contents.length > MAX_BYTES) {
+        // collect only as many COMPLETE lines as will fit
+        const lines = contents.split('\n');
+        let bytes = 0;
+        let i = 0;
+        for (; i < lines.length; i++) {
+          bytes += lines[i].length + 1;
+          if (bytes > MAX_BYTES) break;
+        }
+        if (i === 0) i++; // at least one line
+        warn(`Snippet too large, showing only ${i} lines`);
+        // set the line range to reflect this
+        this.lineRange = `1-${i}`;
+        return lines.slice(0, i).join('\n');
+      } else return contents;
+    }
 
     const [start, end] = this.lineRange.split('-').map(Number);
 
     const lines = contents.split('\n');
-    const snippet = lines.slice(start - 1, end || lines.length);
+    const snippet = lines.slice(Math.max(start - 1, 0), end || lines.length);
     return snippet.join('\n');
   }
 
@@ -15,7 +33,7 @@ export default class Location {
     return this.lineRange ? `${this.path}:${this.lineRange}` : this.path;
   }
 
-  static parse(location: string): Location | undefined {
+  static parse(location: string): Location {
     const tokens = location.split(':');
     if (tokens.length === 1) return new Location(tokens[0]);
 
@@ -31,3 +49,7 @@ export default class Location {
     return new Location(path, lineRange);
   }
 }
+
+// Note this is somewhat of a tradeoff between speed and cost.
+// The client can always request additional lines.
+const MAX_BYTES = 20_000;
