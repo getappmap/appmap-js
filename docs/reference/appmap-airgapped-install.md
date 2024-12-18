@@ -5,24 +5,61 @@ description: "Learn how to install AppMap components like IDE plugins, libraries
 toc: true
 reference: true
 name: AppMap Offline Install for Secure Environments
-step: 19
+step: 20
 ---
 
 # AppMap Offline Install for Secure Environments
+
+For best results, ensure you are downloading the latest versions of the AppMap software. 
+
+We recommend running at least the following versions.
+
+<table class="table table-striped table-bordered">
+    <tr>
+        <th></th>
+        <th>Version Number</th>
+    </tr>
+    <tr>
+        <td><b>VS Code Extension</b></td>
+        <td><code>>= 0.130.0</code></td>
+    </tr>
+    <tr>
+        <td><b>JetBrains Extension</b></td>
+        <td><code>>= 0.74.1</code></td>
+    </tr>
+    <tr>
+        <td><b>AppMap Binary</b></td>
+        <td><code>>= 3.168.1</code></td>
+    </tr>
+    <tr>
+        <td><b>(Optional) Java Jar</b></td>
+        <td><code>>= 1.27.1</code></td>
+    </tr>
+</table>
+
 
 - [Assumptions](#assumptions)
 - [Download Steps](#download-steps)
   - [Download the AppMap VS Code Plugin (VSIX)](#download-the-appmap-vs-code-plugin-vsix)
   - [Download the AppMap JetBrains Plugin (zip)](#download-the-appmap-jetbrains-plugin-zip)
   - [Download the AppMap Application Binaries](#download-the-appmap-application-binaries)
-  - [Download the AppMap Java Jar file](#download-the-appmap-java-jar-file)
 - [Installation Steps](#installation-steps)
   - [Install the AppMap VS Code Plugin (VSIX)](#install-the-appmap-vs-code-plugin-vsix)
   - [Install the AppMap Plugin for JetBrains (zip)](#install-the-appmap-plugin-for-jetbrains-zip)
   - [Install the AppMap Application Binaries for VS Code](#install-the-appmap-application-binaries-for-vs-code)
   - [Install the AppMap Application Binaries for JetBrains](#install-the-appmap-application-binaries-for-jetbrains)
+- [(Optional) Java Application Install Details](#optional-java-application-install-details)
+  - [Download the AppMap Java Jar file](#download-the-appmap-java-jar-file)
   - [Install the AppMap Java Jar file](#install-the-appmap-java-jar-file)
-- [Confirm Successful Installation](#confirm-successful-installation)
+- [Post-Installation Configuration](#post-installation-configuration)
+  - [Configure the LLM Provider](#configure-the-llm-provider)
+  - [Open a Navie Chat](#open-a-navie-chat)
+  - [(Optional) Record a Java Application](#optional-record-a-java-application)
+- [Troubleshooting](#troubleshooting)
+  - [Accessing Navie Logs](#accessing-navie-logs)
+    - [Visual Studio Code](#visual-studio-code)
+    - [JetBrains](#jetbrains)
+- [Support](#support)
 
 ## Assumptions
 
@@ -75,17 +112,6 @@ Click on the “Assets” button to expand all the available AppMap binaries.
 
 Download the binary that is specific to your computers’ operating system and architecture.  Optionally download the sha256 file as well if you wish to validate the files’ integrity on your local machine. 
 
-### Download the AppMap Java Jar file
-
-<div class="alert alert-info">NOTE: The VSIX will be bundled with the latest java jar file from the same release, but this is not guaranteed to be the same as the most recently released version. The steps below will ensure you can download the latest release if your machine is unable to manually update.</div>
-
-To record Java applications, you’ll need to download the AppMap Java Jar file for the code editor extension to use.  
-Navigate to the [AppMap Java releases page](https://github.com/getappmap/appmap-java/releases/latest) for the latest releases of this project.
-
-
-In the Assets section, download the `appmap-<version>.jar` file and optionally the .asc file if you would like to validate the file integrity on your local machine. 
-
-<img class="video-screenshot" src="/assets/img/docs/offline-install-4.webp"/> 
 
 ## Installation Steps
 
@@ -247,6 +273,22 @@ For Example:
 
 <pre><code>C:\Users\BobSmith\AppData\Local\JetBrains\appland-plugin\appmap\3.164.0\appmap-win-x64.exe</code></pre>
 
+## (Optional) Java Application Install Details
+
+If you plan on using Navie with a Java application, follow the steps below to add the AppMap jar file to your local system to enable recording of AppMap data.
+
+### Download the AppMap Java Jar file
+
+<div class="alert alert-info">NOTE: The VSIX will be bundled with the latest java jar file from the same release, but this is not guaranteed to be the same as the most recently released version. The steps below will ensure you can download the latest release if your machine is unable to manually update.</div>
+
+To record Java applications, you’ll need to download the AppMap Java Jar file for the code editor extension to use.  
+Navigate to the [AppMap Java releases page](https://github.com/getappmap/appmap-java/releases/latest) for the latest releases of this project.
+
+
+In the Assets section, download the `appmap-<version>.jar` file and optionally the .asc file if you would like to validate the file integrity on your local machine. 
+
+<img class="video-screenshot" src="/assets/img/docs/offline-install-4.webp"/> 
+
 ### Install the AppMap Java Jar file
 
 Copy the <code>appmap-&lt;version&gt;.jar</code> downloaded in the [previous step](#download-the-appmap-java-jar-file) to the following location. Ensure the file is renamed to `appmap.jar`
@@ -266,23 +308,31 @@ When recording your Java application, you will pass this file location to the JV
 When recording your Java application, you will pass this file location to the JVM running your application like:
 `-javaagent:%USERPROFILE%\.appmap\lib\java\appmap.jar`
 
+## Post-Installation Configuration
 
-## Confirm Successful Installation
+### Configure the LLM Provider
 
-After completing the install steps, you can confirm the installation was done correctly by doing the following:
+After completing the install steps, you can now [configure the LLM provider](/docs/using-navie-ai/bring-your-own-model.html) you wish to use with Navie. 
+
+* [Integrate Navie with GitHub Copilot Backend](/docs/using-navie-ai/bring-your-own-model.html#using-github-copilot-language-models)
+* [Bring Your Own OpenAI API Key](/docs/using-navie-ai/bring-your-own-model.html#bring-your-own-openai-api-key-byok)
+* [Bring Your Own Anthropic (Claude) API Key](/docs/using-navie-ai/bring-your-own-model.html#bring-your-own-anthropic-claude-api-key-byok)
+* [Bring Your Own Model](/docs/using-navie-ai/bring-your-own-model.html#bring-your-own-model-byom)
+
+<div class="alert alert-info">If you have an existing subscription to GitHub Copilot, we recommend <a href="/docs/using-navie-ai/bring-your-own-model.html#using-github-copilot-language-models">using the GitHub Copilot backend </a> for best results.</div>
 
 ### Open a Navie Chat 
 
-Follow the [getting started instructions](/docs/using-navie-ai/how-to-open-navie) to open a new Navie chat window.  
+After configuring your chosen LLM provider, follow the [getting started instructions](/docs/using-navie-ai/how-to-open-navie) to open a new Navie chat window.  
 If the AppMap binaries are installed and executable, you should see a new Navie chat window open successfully. 
 
 <img class="video-screenshot" src="/assets/img/docs/offline-install-14.webp"/>
 
-If the binaries are not installed in the correct location, or are not executable, you will show a new Navie window prompt attempting to open but will hang until timeout. 
+If the binaries are not installed in the correct location, or are not executable, the AppMap Navie RPC service will be unable to start.  In the event that happens, you can click "View output log" (on VS Code) to get more information about the failure. Alternatively, you can navigate to the [Navie logs](#accessing-navie-logs) for more information.
 
 <img class="video-screenshot" src="/assets/img/docs/offline-install-15.webp"/>
 
-### Record a Java Application
+### (Optional) Record a Java Application
 
 To test your Java Jar file is in the right location and working correctly, simply record a java application using the Java command flag.  
 
@@ -291,3 +341,48 @@ Refer to the [AppMap Agent for Java](/docs/reference/appmap-java) documentation 
 ```shell
 $ java -javaagent:$HOME/.appmap/lib/java/appmap.jar -jar target/*.jar
 ```
+
+## Troubleshooting
+
+### Accessing Navie Logs
+
+#### Visual Studio Code
+
+You can access the Navie logs in VS Code by opening the `Output` tab and selecting `AppMap Services` from the list of available output logs.  
+
+To open the Output window, on the menu bar, choose View > Output, or in Windows press `Ctrl+Shift+U` or in Mac use `Shift+Command+U`
+
+![Open View in VS Code](/assets/img/docs/vscode-output-1.webp)
+
+Click on the output log dropdown in the right corner to view a list of all the available output logs. 
+
+![Open Output logs list](/assets/img/docs/vscode-output-2.webp)
+
+Select on the `AppMap: Services` log to view the logs from Navie. 
+
+![Select AppMap Services](/assets/img/docs/vscode-output-3.webp)
+
+#### JetBrains
+
+You can enable debug logging of Navie in your JetBrains code editor by first opening `Help` > `Diagnostic Tools` > `Debug Log Settings`. 
+
+![JetBrains Debug Log menu](/assets/img/jetbrains-debug-logs.webp)  
+
+In the `Custom Debug Log Configuration` enter `appland` to enable DEBUG level logging for the AppMap plugin. 
+
+![JetBrains Debug Log Configuration](/assets/img/jetbrains-logging-configuration.webp)  
+
+Next, open `Help` > `Show Log...` will open the IDE log file. 
+
+![JetBrains Debug Show Log](/assets/img/jetbrains-show-log.webp)
+
+## Support
+
+For help with your offline install of AppMap Navie, please open a new support request by emailing [support@appmap.io](mailto:support@appmap.io)
+
+Include the following information in your support request.
+
+* Company Name
+* Code editor name and version (e.g. VS Code or JetBrains)
+* AppMap binary version
+* Detailed log information available [from your Navie logs](#accessing-navie-logs)

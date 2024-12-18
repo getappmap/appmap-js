@@ -33,6 +33,8 @@ The following items are required to use the GitHub Copilot Language Model with N
 - GitHub Copilot VS Code extension must be installed
 - Signed into an active paid or trial GitHub Copilot subscription
 
+<div class="alert alert-info">NOTE: If you have configured your <code>OPENAI_API_KEY</code> or other environment variables these will override any settings chosen from within the code editor extension. Unset these environment variables before changing your LLM or API key in your code editor</div>
+
 #### Setup <!-- omit in toc -->
 
 Open the VS Code Settings, and search for `navie vscode`
@@ -48,7 +50,6 @@ For more details about using the GitHub Copilot Language Model as a supported Na
 #### Video Demo
 
 {% include vimeo.html id='992238965' %}
-
 
 ## Bring Your Own OpenAI API Key (BYOK)
 
@@ -130,6 +131,8 @@ When setting the `APPMAP_NAVIE_MODEL` refer to the [Anthropic documentation](htt
 Navie currently supports any OpenAI-compatible model running locally or remotely. When configured like this, as in the BYOK case, Navie won't contact the AppMap hosted proxy and your conversations will stay private between you and the model provider.
 
 ### Configuration
+
+<div class="alert alert-info">We only recommend setting the environment variables below for advanced users. These settings will override any settings configured with the "gear" icon in your code editor. Unset these environment variables before using the "gear" icon to configure your model.</div>
 
 In order to configure Navie for your own LLM, certain environment variables need to be set for AppMap services.
 

@@ -48,11 +48,18 @@ The Navie UI includes a standard chat window, and a context panel which will inc
 - Code Snippets
 - Pinned Content
 
+<p class="alert alert-warning"><b>Note:</b> Only code files and other files that are tracked by Git will be included as context and sent to the LLM when you ask a question. AppMap Navie will respect your <code>.gitignore</code> and will not access files which are not tracked or ignored by Git (such as passwords or sensitive data).</p>
+
 **If AppMap Data exists:**  
 - Sequence Diagrams
 - HTTP Requests
 - SQL Queries
 - Other I/O Data
+
+**Navie will look for the files listed above in the following locations:**  
+- The currently open project
+- All workspace folders in Visual Studio Code
+- All modules available in JetBrains IDEs
 
 ![Navie Context Window](/assets/img/navie-context-window.webp)
 
