@@ -108,13 +108,18 @@ export default async function collectContext(
   sourceDirectories: string[],
   charLimit: number,
   vectorTerms: string[],
-  request: ContextRequest
+  request: ContextRequest,
+  explicitFiles: string[] = []
 ): Promise<{ searchResponse: SearchRpc.SearchResponse; context: ContextV2.ContextResponse }> {
   let searchResponse: SearchRpc.SearchResponse = { results: [], numResults: 0 };
   const context: ContextV2.ContextResponse = [];
 
   if (request.locations && request.locations.length > 0) {
-    const locationResult = await collectLocationContext(sourceDirectories, request.locations);
+    const locationResult = await collectLocationContext(
+      sourceDirectories,
+      request.locations,
+      explicitFiles
+    );
     context.push(...locationResult);
   }
 

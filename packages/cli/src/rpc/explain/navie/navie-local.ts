@@ -1,7 +1,8 @@
 import { log, warn } from 'console';
 import EventEmitter from 'events';
 import { randomUUID } from 'crypto';
-import { ContextV2, Navie, Help, ProjectInfo, navie } from '@appland/navie';
+
+import { ContextV2, Help, Navie, navie, ProjectInfo, UserContext } from '@appland/navie';
 
 import INavie from './inavie';
 import Telemetry from '../../../telemetry';
@@ -78,7 +79,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
   async ask(
     threadId: string | undefined,
     question: string,
-    codeSelection?: string,
+    codeSelection?: UserContext.Context,
     prompt?: string
   ): Promise<void> {
     if (!threadId) {

@@ -119,7 +119,8 @@ describe('collect-context', () => {
         expect(collectSearchContext.default).not.toHaveBeenCalled();
         expect(collectLocationContext.default).toHaveBeenCalledWith(
           ['src1', 'src2'],
-          request.locations
+          request.locations,
+          []
         );
         expect(result.searchResponse.numResults).toBe(0);
         expect(result.context).toEqual(['context1', 'context2']);

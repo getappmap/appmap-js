@@ -23,8 +23,9 @@ describe('collectLocationContext', () => {
 
   describe('with valid locations', () => {
     const locations = ['file1.js:1-1', '/src/file2.js', '/other/file3.js'].map(Location.parse);
+    const explicitFiles = ['/other/file3.js'];
 
-    const collect = async () => collectLocationContext(sourceDirectories, locations);
+    const collect = async () => collectLocationContext(sourceDirectories, locations, explicitFiles);
 
     const stat = jest.mocked(fs.stat);
     beforeEach(() => {
@@ -32,10 +33,56 @@ describe('collectLocationContext', () => {
       jest.spyOn(fs, 'readFile').mockResolvedValue('file contents');
     });
 
-    it('handles valid locations and skips those outside source directories', async () => {
+    it('includes explicitly named files even if outside source directories', async () => {
       jest.mocked(isBinaryFile).mockReturnValue(false);
 
       expect(await collect()).toMatchInlineSnapshot(`
+        [
+          {
+            "content": "file contents",
+            "directory": "/src",
+            "location": "file1.js:1-1",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/lib",
+            "location": "file1.js:1-1",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/src",
+            "location": "file2.js",
+            "type": "code-snippet",
+          },
+          {
+            "content": "file contents",
+            "directory": "/other",
+            "location": "file3.js",
+            "type": "code-snippet",
+          },
+        ]
+      `);
+
+      expect(stat.mock.calls).toStrictEqual([
+        ['/src/file1.js'],
+        ['/lib/file1.js'],
+        ['/src/file2.js'],
+        ['/other/file3.js'],
+      ]);
+    });
+
+    it('excludes non-explicitly named files outside source directories', async () => {
+      const nonExplicitLocations = ['file1.js:1-1', '/src/file2.js', '/other/file4.js'].map(
+        Location.parse
+      );
+      const collectNonExplicit = async () =>
+        collectLocationContext(sourceDirectories, nonExplicitLocations, explicitFiles);
+
+      jest.mocked(isBinaryFile).mockReturnValue(false);
+
+      expect(await collectNonExplicit()).toMatchInlineSnapshot(`
         [
           {
             "content": "file contents",
@@ -63,7 +110,6 @@ describe('collectLocationContext', () => {
         ['/lib/file1.js'],
         ['/src/file2.js'],
       ]);
-      // note file in /other is skipped
     });
 
     it('handles directory listings', async () => {

@@ -1,6 +1,6 @@
 import { warn } from 'console';
 import { readdir, readFile, stat } from 'node:fs/promises';
-import { isAbsolute, join } from 'path';
+import { basename, dirname, isAbsolute, join } from 'node:path';
 
 import { ContextV2 } from '@appland/navie';
 import { isBinaryFile } from '@appland/search';
@@ -27,7 +27,8 @@ export type LocationContextRequest = {
  */
 export default async function collectLocationContext(
   sourceDirectories: string[],
-  locations: Location[]
+  locations: Location[],
+  explicitFiles: string[] = []
 ): Promise<ContextV2.ContextResponse> {
   const result: ContextV2.ContextResponse = [];
 
@@ -36,12 +37,16 @@ export default async function collectLocationContext(
     const { path } = location;
     if (isAbsolute(path)) {
       const directory = sourceDirectories.find((dir) => path.startsWith(dir));
-      if (!directory) {
+      if (directory) {
+        location.path = location.path.slice(directory.length + 1) || '.';
+        candidateLocations.push({ location, directory });
+      } else if (explicitFiles.includes(path)) {
+        location.path = basename(path);
+        candidateLocations.push({ location, directory: dirname(path) });
+      } else {
         warn(`[location-context] Skipping location outside source directories: ${location.path}`);
         continue;
       }
-      location.path = location.path.slice(directory.length + 1) || '.';
-      candidateLocations.push({ location, directory });
     } else {
       for (const sourceDirectory of sourceDirectories) {
         candidateLocations.push({ location, directory: sourceDirectory });
