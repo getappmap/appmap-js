@@ -1,3 +1,22 @@
+# [@appland/appmap-v3.180.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.179.0...@appland/appmap-v3.180.0) (2024-12-18)
+
+
+### Bug Fixes
+
+* Add end line in snippet locations ([1d52bff](https://github.com/getappmap/appmap-js/commit/1d52bff1f8379b62d919941c0738649ef1ed8066))
+* Allow pinning files outside source directories ([2c41140](https://github.com/getappmap/appmap-js/commit/2c4114047c4c61595f3bfe5d7f3ec1697e6be3ea))
+* Always make location relative in context items ([959d57f](https://github.com/getappmap/appmap-js/commit/959d57f780bc7d125fb315e87294e36849ae7295))
+* Collect only a snippet if the requested file would be too large ([ce0a324](https://github.com/getappmap/appmap-js/commit/ce0a3249df46b4d03d32b493b28dc34eedac8287))
+* Don't allow location lookup to go outside of source directories ([b911dab](https://github.com/getappmap/appmap-js/commit/b911dabda7c0494daedc7152215fd67b2d2683af))
+* Get rid of ./ when listing project root directories ([526b9c4](https://github.com/getappmap/appmap-js/commit/526b9c4d89e0b658210237cac301b61f43e17302))
+* Handle location requests with 0 as the starting line ([8efb2aa](https://github.com/getappmap/appmap-js/commit/8efb2aa10fc12e800ff6380af262c2686c49c16f))
+* Skip binary files when collecting context ([2f06be2](https://github.com/getappmap/appmap-js/commit/2f06be21def666fc07800ee5f9be15e2516a19eb))
+
+
+### Features
+
+* Allow looking up directory listings when collecting context ([b1f8441](https://github.com/getappmap/appmap-js/commit/b1f8441b07ae3619b2279bc4fe3c90e7afe4ee8d))
+
 # [@appland/appmap-v3.179.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.178.0...@appland/appmap-v3.179.0) (2024-12-18)
 
 
