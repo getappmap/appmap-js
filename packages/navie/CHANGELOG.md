@@ -1,3 +1,10 @@
+# [@appland/navie-v1.38.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.38.1...@appland/navie-v1.38.2) (2024-12-18)
+
+
+### Bug Fixes
+
+* `[@welcome](https://github.com/welcome)` suggests improvements ([5d25ea3](https://github.com/getappmap/appmap-js/commit/5d25ea3e08ed82d1f1b3baa7631aacb542f78337))
+
 # [@appland/navie-v1.38.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.38.0...@appland/navie-v1.38.1) (2024-12-17)
 
 
