@@ -154,20 +154,7 @@ export default class ExplainCommand implements Command {
     mode.applyQuestionPrompt(question);
 
     if (request.userOptions.isEnabled('gather', !!process.env.APPMAP_NAVIE_GATHER)) {
-      const gatherer = new Gatherer(
-        this.interactionHistory.events,
-        this.completionService,
-        this.agentSelectionService.contextService
-      );
-      await gatherer.step();
-      if (!gatherer.done) {
-        yield 'Gathering additional information, please wait..';
-        while (!gatherer.done) {
-          yield '.';
-          await gatherer.step();
-        }
-        yield ' done!\n\n';
-      }
+      yield * this.gatherAdditionalInformation();
     }
 
     const { messages } = this.interactionHistory.buildState();
@@ -182,5 +169,22 @@ export default class ExplainCommand implements Command {
     const response = this.completionService.complete(messages, { temperature: mode.temperature });
     if (mode.filter) yield* mode.filter(response);
     else yield* response;
+  }
+
+  private async *gatherAdditionalInformation(maxSteps = 10) {
+    let steps = 0;
+    try {
+      const gatherer = new Gatherer(
+        this.interactionHistory.events,
+        this.completionService,
+        this.agentSelectionService.contextService
+      );
+      for (steps = 0; steps < maxSteps && !(await gatherer.step()); steps++)
+        yield steps > 0 ? '.' : 'Gathering additional information, please wait...';
+    } catch (err) {
+      console.warn('Error while gathering: ', err);
+    } finally {
+      if (steps > 0) yield ' done!\n\n';
+    }
   }
 }
