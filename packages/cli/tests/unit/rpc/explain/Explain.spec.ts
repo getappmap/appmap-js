@@ -149,10 +149,31 @@ describe('Explain', () => {
           ask: jest.fn().mockResolvedValue('the-answer'),
           on: jest.fn(),
         } as unknown as INavie;
+        await explain.enrollConversation(navie);
         await explain.explain(navie);
 
         expect(explain.conversationThread).toEqual(conversationThread);
-        expect(status).toEqual({ step: ExplainRpc.Step.NEW, threadId: conversationThread.id });
+        expect(status).toEqual({
+          step: ExplainRpc.Step.NEW,
+          threadId: conversationThread.id,
+          explanation: [],
+        });
+      });
+
+      describe('but usage of the AI proxy is not allowed', () => {
+        beforeEach(() => {
+          conversationThread.permissions.useNavieAIProxy = false;
+        });
+
+        it('the conversation is stopped', async () => {
+          const navie = {
+            on: jest.fn(),
+          } as unknown as INavie;
+          await explain.enrollConversation(navie);
+
+          expect(status.explanation).toHaveLength(1);
+          expect(status.step).toEqual(ExplainRpc.Step.COMPLETE);
+        });
       });
     });
 
@@ -166,6 +187,7 @@ describe('Explain', () => {
           ask: jest.fn().mockResolvedValue('the-answer'),
           on: jest.fn(),
         } as unknown as INavie;
+        await explain.enrollConversation(navie);
         await explain.explain(navie);
 
         expect(explain.conversationThread).toBeUndefined();

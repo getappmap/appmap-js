@@ -310,8 +310,10 @@ export default {
     },
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);
-      this.threadId = threadId;
-      this.$root.$emit('thread-id', threadId);
+      if (threadId !== this.threadId) {
+        this.threadId = threadId;
+        this.$root.$emit('thread-id', threadId);
+      }
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied

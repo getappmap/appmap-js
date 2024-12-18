@@ -23,13 +23,22 @@
         @isChatting="setIsChatting"
         @stop="onStop"
       >
-        <v-llm-configuration
-          data-cy="llm-config"
-          v-if="!disableLlmConfig && !isChatting"
-          :is-loading="isNavieLoading"
-          :base-url="baseUrl"
-          :model="model"
-        />
+        <div class="configuration-container" v-if="!isChatting">
+          <v-llm-configuration
+            data-cy="llm-config"
+            v-if="!disableLlmConfig"
+            :is-loading="isNavieLoading"
+            :base-url="baseUrl"
+            :model="model"
+          />
+
+          <v-subscription-status
+            data-cy="subscription-status"
+            :subscription="subscription"
+            :usage="usage"
+          />
+        </div>
+
         <template #not-chatting>
           <div class="message-box__footer">
             <v-welcome-message :dynamicMessage="welcomeMessage" />
@@ -102,6 +111,7 @@ import VAddFileButton from '@/components/AddFileButton.vue';
 import VPopper from '@/components/Popper.vue';
 import VContext from '@/components/chat-search/Context.vue';
 import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
+import VSubscriptionStatus from '@/components/chat-search/SubscriptionStatus.vue';
 import VPinnedItems from '@/components/chat-search/PinnedItems.vue';
 import type { CodeSelection, ITool } from '@/components/chat/Chat.vue';
 import VChat from '@/components/chat/Chat.vue';
@@ -122,6 +132,7 @@ export default {
     VChat,
     VContext,
     VLlmConfiguration,
+    VSubscriptionStatus,
     VPinnedItems,
     VPopper,
     VWelcomeMessage,
@@ -209,6 +220,7 @@ export default {
       pinnedItems: [] as PinItem[],
       projectDirectories: [] as string[],
       metadata: undefined as NavieRpc.V1.Metadata.Response | undefined,
+      registrationData: undefined,
     };
   },
   provide() {
@@ -291,6 +303,12 @@ export default {
     statusStep() {
       return this.searchStatus ? this.searchStatus.step : undefined;
     },
+    subscription() {
+      return this.registrationData ? this.registrationData.thread.subscription : undefined;
+    },
+    usage() {
+      return this.registrationData ? this.registrationData.thread.usage : undefined;
+    },
     numCodeSnippets() {
       return this.getContextItems('code-snippet').length;
     },
@@ -333,6 +351,18 @@ export default {
     },
   },
   methods: {
+    async initConversationThread() {
+      try {
+        this.registrationData = await this.rpcClient.register();
+      } catch (error) {
+        console.error('Failed to register conversation thread', error);
+        return;
+      }
+
+      const { registrationData } = this;
+
+      this.threadId = registrationData.thread.id;
+    },
     onNavieRestarting() {
       this.configLoaded = false;
     },
@@ -546,7 +576,8 @@ export default {
         if (userProvidedContext.length > 0) {
           explainRequest.codeSelection = userProvidedContext;
         }
-        this.ask.explain(explainRequest, this.$refs.vchat.threadId).catch(onError);
+        const threadId = this.$refs.vchat.threadId || this.threadId;
+        this.ask.explain(explainRequest, threadId).catch(onError);
       });
     },
     setAppMapStats(stats) {
@@ -660,6 +691,7 @@ export default {
     }
     this.loadNavieConfig();
     this.loadMetadata();
+    this.initConversationThread();
     this.$root
       .$on('pin', (pin: PinEvent) => {
         const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pin.handle);
@@ -808,6 +840,14 @@ $border-color: darken($gray4, 10%);
       max-width: none !important;
     }
   }
+
+  .configuration-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
   .chat-search-container--drag {
     width: 4px;
     background: rgba(0, 0, 0, 0.1);
