@@ -1,3 +1,21 @@
+# [@appland/navie-v1.39.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.38.2...@appland/navie-v1.39.0) (2024-12-18)
+
+
+### Bug Fixes
+
+* Always set directory field on a context item event ([545e2fe](https://github.com/getappmap/appmap-js/commit/545e2fe258a5de152d9e4c1a13f241b566235424))
+* Collect location context in the generate agent ([6c3d0b7](https://github.com/getappmap/appmap-js/commit/6c3d0b75ea6d556b89e60f6800fceb72efb912f0))
+* Get rid of ./ when listing project root directories ([526b9c4](https://github.com/getappmap/appmap-js/commit/526b9c4d89e0b658210237cac301b61f43e17302))
+* When Vertex AI errors out, don't print the entire error ([20b55bf](https://github.com/getappmap/appmap-js/commit/20b55bfacd464e25712135fe599526a936ccff6a))
+
+
+### Features
+
+* Allow gatherer to do full text search ([efcb903](https://github.com/getappmap/appmap-js/commit/efcb9036d1c0afd96132d821cf560c78441f0b7b))
+* Allow looking up directory listings when collecting context ([b1f8441](https://github.com/getappmap/appmap-js/commit/b1f8441b07ae3619b2279bc4fe3c90e7afe4ee8d))
+* Gather additional context from the project ([3fa028d](https://github.com/getappmap/appmap-js/commit/3fa028d1095ba9d98265a79d3aa5b9621439fcab))
+* When asking for location context, ask for root directory listing ([5a1a7e1](https://github.com/getappmap/appmap-js/commit/5a1a7e193c498602e94513d0570f0e24c10c0b34))
+
 # [@appland/navie-v1.38.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.38.1...@appland/navie-v1.38.2) (2024-12-18)
 
 
