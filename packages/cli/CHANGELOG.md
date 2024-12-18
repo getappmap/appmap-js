@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.179.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.178.0...@appland/appmap-v3.179.0) (2024-12-18)
+
+
+### Features
+
+* Add rpc command system.listMethods ([6edf167](https://github.com/getappmap/appmap-js/commit/6edf1671dc69288fe18173769299e64a212c0950))
+* Define v2.navie.metadata and v2.navie.welcome ([1f9346d](https://github.com/getappmap/appmap-js/commit/1f9346d08f211ce4c1cb53c3ab3ee190ee45b707))
+* The welcome message considers any code selections ([b859cf5](https://github.com/getappmap/appmap-js/commit/b859cf54e0d6e2f25b3c52476b7a1583d313f857))
+
 # [@appland/appmap-v3.178.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.177.1...@appland/appmap-v3.178.0) (2024-12-11)
 
 
