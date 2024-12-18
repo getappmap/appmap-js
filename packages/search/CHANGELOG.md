@@ -1,3 +1,10 @@
+# [@appland/search-v1.1.1](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.1.0...@appland/search-v1.1.1) (2024-12-18)
+
+
+### Bug Fixes
+
+* Extract complete chunk when splitting text ([75d2f5d](https://github.com/getappmap/appmap-js/commit/75d2f5df06c9794b772116c2facde366d5e1cd7d))
+
 # [@appland/search-v1.1.0](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.0.1...@appland/search-v1.1.0) (2024-12-01)
 
 
