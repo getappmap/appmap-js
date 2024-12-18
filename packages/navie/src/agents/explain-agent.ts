@@ -282,17 +282,8 @@ export default class ExplainAgent implements Agent {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', EXPLAIN_AGENT_PROMPT));
 
     // Check for presence of "generate-diagram" classifier and its confidence level.
-    const classifier = options.contextLabels?.find(
-      (label) =>
-        label.name === ContextV2.ContextLabelName.GenerateDiagram &&
-        [ContextV2.ContextLabelWeight.Medium, ContextV2.ContextLabelWeight.High].includes(
-          label.weight
-        )
-    );
-
-    if (classifier) {
+    if (hasLabel(options.contextLabels, ContextV2.ContextLabelName.GenerateDiagram))
       this.history.addEvent(new PromptInteractionEvent('agent', 'system', DIAGRAM_FORMAT_PROMPT));
-    }
 
     this.history.addEvent(
       new PromptInteractionEvent(
@@ -303,10 +294,22 @@ export default class ExplainAgent implements Agent {
     );
 
     await this.contextService.locationContextFromOptions(options);
-    await this.contextService.searchContext(options, tokensAvailable);
+    if (
+      hasLabel(options.contextLabels, ContextV2.ContextLabelName.Overview)?.weight !==
+      ContextV2.ContextLabelWeight.High
+    )
+      await this.contextService.searchContext(options, tokensAvailable);
   }
 
   applyQuestionPrompt(question: string): void {
     this.history.addEvent(new PromptInteractionEvent(PromptType.Question, 'user', question));
   }
+}
+
+function hasLabel(
+  labels: ContextV2.ContextLabel[] | undefined,
+  name: ContextV2.ContextLabelName
+): ContextV2.ContextLabel | undefined {
+  if (!labels) return;
+  return labels.find((label) => label.name === name);
 }
