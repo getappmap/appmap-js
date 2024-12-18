@@ -38,7 +38,7 @@ export default async function collectLocationContext(
     if (isAbsolute(path)) {
       const directory = sourceDirectories.find((dir) => path.startsWith(dir));
       if (directory) {
-        location.path = location.path.slice(directory.length + 1) || '.';
+        location.path = location.path.slice(directory.length + 1);
         candidateLocations.push({ location, directory });
       } else if (explicitFiles.includes(path)) {
         location.path = basename(path);

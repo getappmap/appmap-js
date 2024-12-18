@@ -101,7 +101,7 @@ export default class ContextService {
   async locationContextFromOptions(options: AgentOptions): Promise<void> {
     const locations = options.buildContextFilters().locations ?? [];
     // Also list project directories
-    locations.unshift('./:0');
+    locations.unshift(':0');
     console.log(locations);
     await this.locationContext(locations);
   }

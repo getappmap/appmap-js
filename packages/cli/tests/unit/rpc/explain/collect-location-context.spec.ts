@@ -121,7 +121,7 @@ describe('collectLocationContext', () => {
         {
           type: 'directory-listing',
           content: 'file1.js\nfile2.js',
-          location: '.:0',
+          location: ':0',
           directory: '/src',
         },
       ]);
