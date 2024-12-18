@@ -1,3 +1,14 @@
+# [@appland/components-v4.42.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.41.0...@appland/components-v4.42.0) (2024-12-18)
+
+
+### Features
+
+* Add a save button to assistant messages ([0133759](https://github.com/getappmap/appmap-js/commit/0133759167bd917868a19e66e6ae72deb810e731))
+* Add rpc command system.listMethods ([6edf167](https://github.com/getappmap/appmap-js/commit/6edf1671dc69288fe18173769299e64a212c0950))
+* Define v2.navie.metadata and v2.navie.welcome ([1f9346d](https://github.com/getappmap/appmap-js/commit/1f9346d08f211ce4c1cb53c3ab3ee190ee45b707))
+* Handle metadata v1 and v2 on the frontend ([93087dc](https://github.com/getappmap/appmap-js/commit/93087dc58de418f3e134347d30472eb7dd416b98))
+* Navie now supports user themes ([9511527](https://github.com/getappmap/appmap-js/commit/9511527fe5b37858ce8c8181328ae0d2aa627fcf))
+
 # [@appland/components-v4.41.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.40.1...@appland/components-v4.41.0) (2024-12-11)
 
 
