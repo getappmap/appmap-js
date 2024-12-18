@@ -88,11 +88,12 @@ export default class Gatherer {
       response = '';
     const result: Message[] = [];
 
-    // I tried passing the code snippets from context search as cat commands multi-shot style
-    // but the LLM seems to assume it must have known what it was doing and is obviously all done
-    // (I'm leaving this here for now in case we find a way to make it work, but if not the whole
-    // case in the conditional below can be removed) -divide
-    const snippetsAsCat = false;
+    // I'm on the fence about this. Sometimes including the code snippets as cat commands multi-shot style
+    // causes the LLM to assume it must have known what it was doing and is obviously all done.
+    // On the other hand if pinned files are passed as context snippets it causes the gatherer
+    // to re-request them. There might be a middle ground here (eg. only !!catting pinned files,
+    // representing search results with !!search command). -divide
+    const snippetsAsCat = true;
 
     // Seems to work fine without all the prompts. Leaving this here in case we want to switch.
     // Maybe a more granular approach would work even better (ie. including only some prompts).

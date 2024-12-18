@@ -106,23 +106,24 @@ describe('Gatherer', () => {
         user: <USER PROMPT>
 
         <context>
-        <code-snippet location="app/models/api_key.rb:53" project-directory="/test/appmap-server">
-        # @label security.api_key.touch
-            def touch(api_key)
-              if api_key.last_used.nil?
-        </code-snippet>
         <sequence-diagram location="/test/appmap-server/tmp/appmap" project-directory="/test/appmap-server">
         @startuml
         !includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
         participant
         </sequence-diagram>
-        <code-snippet location="app/models/api_key.rb:66" project-directory="/test/appmap-server">
-        # @label security.api_key.revoke
-            def revoke_from_user(login, key_id)
-              DAO::ApiKey
-        </code-snippet>
 
-        </context>"
+        </context>
+        assistant: !!cat /test/appmap-server/app/models/api_key.rb:53
+        !!cat /test/appmap-server/app/models/api_key.rb:66
+        user: Here's the output of \`cat -n /test/appmap-server/app/models/api_key.rb:53\`:
+            53	# @label security.api_key.touch
+            54	    def touch(api_key)
+            55	      if api_key.last_used.nil?
+
+        Here's the output of \`cat -n /test/appmap-server/app/models/api_key.rb:66\`:
+            66	# @label security.api_key.revoke
+            67	    def revoke_from_user(login, key_id)
+            68	      DAO::ApiKey"
       `);
     });
 
