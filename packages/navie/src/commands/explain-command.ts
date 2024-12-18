@@ -1,6 +1,6 @@
 import { warn } from 'console';
 
-import { AgentOptions } from '../agent';
+import { AgentMode, AgentOptions } from '../agent';
 import Gatherer from '../agents/gatherer';
 import AgentSelectionService from '../services/agent-selection-service';
 import ClassificationService from '../services/classification-service';
@@ -16,6 +16,7 @@ import { ProjectInfo } from '../project-info';
 import Command, { CommandRequest } from '../command';
 import { ChatHistory } from '../navie';
 import getMostRecentMessages from '../lib/get-most-recent-messages';
+import { type UserOptions } from '../lib/parse-options';
 import { ContextV2 } from '../context';
 import assert from 'assert';
 import { UserContext } from '../user-context';
@@ -77,7 +78,7 @@ export default class ExplainCommand implements Command {
       contextLabels,
       request.userOptions
     );
-    const { question, agent: mode } = agentSelectionResult;
+    const { agentMode, question, agent: mode } = agentSelectionResult;
 
     if (agentSelectionResult.selectionMessage) {
       yield agentSelectionResult.selectionMessage;
@@ -153,8 +154,8 @@ export default class ExplainCommand implements Command {
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
 
-    if (request.userOptions.isEnabled('gather', !!process.env.APPMAP_NAVIE_GATHER)) {
-      yield * this.gatherAdditionalInformation();
+    if (gathererEnabled(request.userOptions, agentMode, contextLabels)) {
+      yield* this.gatherAdditionalInformation();
     }
 
     const { messages } = this.interactionHistory.buildState();
@@ -187,4 +188,16 @@ export default class ExplainCommand implements Command {
       if (steps > 0) yield ' done!\n\n';
     }
   }
+}
+
+function gathererEnabled(
+  userOptions: UserOptions,
+  agentMode: AgentMode,
+  contextLabels: ContextV2.ContextLabel[]
+): boolean {
+  const enabledByDefault =
+    [AgentMode.Generate, AgentMode.Test].includes(agentMode) ||
+    !!contextLabels.find((l) => l.name === ContextV2.ContextLabelName.Overview);
+
+  return userOptions.isEnabled('gatherer', enabledByDefault);
 }
