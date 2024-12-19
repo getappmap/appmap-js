@@ -38,11 +38,6 @@ export default class GoogleVertexAICompletionService implements CompletionServic
     });
   }
 
-  get miniModelName(): string {
-    const miniModel = process.env.APPMAP_NAVIE_MINI_MODEL;
-    return miniModel ?? 'gemini-1.5-flash-002';
-  }
-
   // Request a JSON object with a given JSON schema.
   async json<Schema extends z.ZodType>(
     messages: Message[],

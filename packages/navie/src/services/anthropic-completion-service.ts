@@ -130,11 +130,6 @@ export default class AnthropicCompletionService implements CompletionService {
     });
   }
 
-  get miniModelName(): string {
-    const miniModel = process.env.APPMAP_NAVIE_MINI_MODEL;
-    return miniModel ?? this.modelName;
-  }
-
   // Request a JSON object with a given JSON schema.
   async json<Schema extends z.ZodType>(
     messages: Message[],

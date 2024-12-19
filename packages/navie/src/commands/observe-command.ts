@@ -109,7 +109,7 @@ export default class ObserveCommand implements Command {
     userOptions: UserOptions,
     fileContextItems: ContextV2.FileContextItem[]
   ): Promise<z.infer<typeof RelevantTest> | undefined> {
-    const model = this.completionService.miniModelName;
+    const model = this.completionService.modelName;
     const temperature = 0;
     const context = fileContextItems.map(
       ({ content, location }) =>

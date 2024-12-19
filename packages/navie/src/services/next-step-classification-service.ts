@@ -61,7 +61,7 @@ export default class NextStepClassificationService {
 
   private async getCompletion(messages: Message[]): Promise<NextStepResponse> {
     const response = await this.completionService.json(messages, NextStepResponseFormat, {
-      model: this.completionService.miniModelName,
+      model: this.completionService.modelName,
       temperature: 0.2,
     });
     return response?.nextSteps ?? [];

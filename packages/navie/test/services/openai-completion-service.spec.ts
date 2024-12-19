@@ -183,7 +183,7 @@ describe('OpenAICompletionService', () => {
         { role: 'user', content: 'the question' },
       ];
       const schema = z.object({ answer: z.string() });
-      const options = { temperature: 1.0, model: service.miniModelName };
+      const options = { temperature: 1.0, model: service.modelName };
       await service.json(messages, schema, options);
       expect(completionWithRetry).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -193,7 +193,7 @@ describe('OpenAICompletionService', () => {
             ...messages.slice(1),
           ],
           temperature: options.temperature,
-          model: service.miniModelName,
+          model: service.modelName,
         })
       );
     });
@@ -311,49 +311,6 @@ describe('OpenAICompletionService', () => {
         const schema = z.object({ answer: z.string() });
         const result = await service.json([], schema);
         expect(result).toEqual({ answer: '42' });
-      });
-    });
-  });
-
-  describe('model names', () => {
-    it('returns the full model name by default', () => {
-      expect(service.modelName).toEqual(modelName);
-    });
-
-    it('returns the mini model name', () => {
-      //.When using the official OpenAI endpoint, the mini model name
-      // will default to `gpt-4o-mini`.
-      expect(service.miniModelName).toEqual('gpt-4o-mini');
-    });
-
-    describe('when running locally', () => {
-      const originalVars = {
-        OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
-        APPMAP_NAVIE_MINI_MODEL: process.env.APPMAP_NAVIE_MINI_MODEL,
-      };
-
-      beforeEach(() => {
-        process.env.OPENAI_BASE_URL = 'http://localhost:8080';
-      });
-
-      afterEach(() => {
-        Object.entries(originalVars).forEach(([key, value]) => {
-          if (value) {
-            process.env[key] = value;
-          } else {
-            delete process.env[key];
-          }
-        });
-      });
-
-      it('returns the full model name as the mini model name by default', () => {
-        expect(service.miniModelName).toEqual(modelName);
-      });
-
-      it('overrides the mini model name with the environment variable', () => {
-        const miniModelName = 'the-mini-model-name';
-        process.env.APPMAP_NAVIE_MINI_MODEL = miniModelName;
-        expect(service.miniModelName).toEqual(miniModelName);
       });
     });
   });

@@ -17,7 +17,6 @@ export default interface CompletionService {
     options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined>;
   readonly modelName: string;
-  readonly miniModelName: string;
   readonly temperature?: number;
   readonly model?: BaseLanguageModelInterface;
 }

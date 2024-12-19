@@ -29,7 +29,6 @@ describe('ObserveCommand', () => {
   const tokenLimit = 1000;
   const responseTokens = 1000;
   const modelName = 'exampleModel';
-  const miniModelName = 'exampleMiniModel';
   const exampleGeneration = 'example generation';
   const exampleContext = [
     {
@@ -63,7 +62,6 @@ describe('ObserveCommand', () => {
         yield exampleGeneration;
       }),
       modelName: modelName,
-      miniModelName: miniModelName,
     } as any;
     interactionHistory = new InteractionHistory();
     lookupContextService = new LookupContextService(
@@ -175,7 +173,7 @@ describe('ObserveCommand', () => {
       },
       {
         type: 'completion',
-        model: miniModelName,
+        model: modelName,
         temperature: 0,
       },
       {

@@ -99,18 +99,6 @@ describe('GoogleVertexAICompletionService', () => {
       jest.useRealTimers();
     });
   });
-
-  describe('miniModelName', () => {
-    it('returns the default mini model name', () => {
-      expect(service.miniModelName).toEqual('gemini-1.5-flash-002');
-    });
-
-    it('overrides the mini model name with the environment variable', () => {
-      const miniModelName = 'the-mini-model-name';
-      process.env.APPMAP_NAVIE_MINI_MODEL = miniModelName;
-      expect(service.miniModelName).toEqual(miniModelName);
-    });
-  });
 });
 
 async function collect(generator: AsyncIterable<string>): Promise<string[]> {

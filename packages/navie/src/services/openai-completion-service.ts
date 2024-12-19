@@ -186,14 +186,6 @@ export default class OpenAICompletionService implements CompletionService {
   }
   model: ChatOpenAI;
 
-  get miniModelName(): string {
-    const miniModel = process.env.APPMAP_NAVIE_MINI_MODEL;
-    if (miniModel) return miniModel;
-
-    // If the mini model is not specified, fall back to `APPMAP_NAVIE_MODEL` when running locally.
-    return this.isLocalModel ? this.modelName : 'gpt-4o-mini';
-  }
-
   // eslint-disable-next-line class-methods-use-this
   private get isLocalModel(): boolean {
     const baseUrl = process.env.OPENAI_BASE_URL ?? process.env.AZURE_OPENAI_BASE_PATH;
@@ -241,7 +233,7 @@ export default class OpenAICompletionService implements CompletionService {
 
       return this.model.completionWithRetry({
         messages: sentMessages,
-        model: options?.model ?? this.miniModelName,
+        model: options?.model ?? this.modelName,
         stream: false,
         temperature: options?.temperature,
         response_format: schemaSupported

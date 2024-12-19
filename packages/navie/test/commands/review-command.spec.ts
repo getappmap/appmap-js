@@ -25,7 +25,6 @@ describe('ReviewCommand', () => {
   const tokenLimit = 1000;
   const responseTokens = 1000;
   const modelName = 'exampleModel';
-  const miniModelName = 'exampleMiniModel';
   const exampleGeneration = 'example generation';
   const exampleContext = [
     {
@@ -76,7 +75,6 @@ lgtm
       }),
       json: jest.fn().mockResolvedValue(exampleSummaryObject),
       modelName: modelName,
-      miniModelName: miniModelName,
     } as any;
     interactionHistory = new InteractionHistory();
     lookupContext = jest.fn().mockResolvedValue(exampleContext);

@@ -177,7 +177,7 @@ export default class ClassificationService {
     );
 
     const response = await this.completion.json(messages, schema, {
-      model: this.completion.miniModelName,
+      model: this.completion.modelName,
     });
 
     debug('Classification response: %s', response);

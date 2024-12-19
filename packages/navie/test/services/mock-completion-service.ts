@@ -50,6 +50,5 @@ export default class MockCompletionService implements CompletionService {
   }
 
   modelName = 'mock-model';
-  miniModelName = 'mock-mini-model';
   temperature = 0.7;
 }

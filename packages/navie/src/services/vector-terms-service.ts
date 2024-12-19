@@ -123,7 +123,7 @@ export default class VectorTermsService {
     ];
 
     const response = await this.completionsService.json(messages, schema, {
-      model: this.completionsService.miniModelName,
+      model: this.completionsService.modelName,
     });
 
     debug(`Vector terms response: ${JSON.stringify(response, undefined, 2)}`);
