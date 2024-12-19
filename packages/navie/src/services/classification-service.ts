@@ -1,9 +1,13 @@
+import { debug as makeDebug } from 'node:util';
+
 import InteractionHistory, { ClassificationEvent } from '../interaction-history';
 import getMostRecentMessages from '../lib/get-most-recent-messages';
 import Message from '../message';
 import { ContextV2 } from '../context';
 import { ChatHistory } from '../navie';
 import CompletionService from './completion-service';
+
+const debug = makeDebug('appmap:navie:classification-service');
 
 const SYSTEM_PROMPT = `**Question classifier**
 
@@ -63,7 +67,7 @@ Each classification category is assigned one of the following likelihoods:
 
 **Response**
 
-Respond with a "Mode" and "Scope", and the likelihood of each one. 
+Respond with a "Mode" and "Scope", and the likelihood of each one.
 
 **Examples**
 
@@ -154,6 +158,8 @@ export default class ClassificationService {
       tokens.push(token);
     }
     const rawTerms = tokens.join('');
+
+    debug('Classification response: %s', rawTerms);
 
     const lines = rawTerms.split('\n');
     const classification: (ContextV2.ContextLabel | null)[] = lines
