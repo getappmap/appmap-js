@@ -54,8 +54,13 @@ export function executeCommand(
  * @param {string[]} args - The arguments to pass to the command.
  * @param {object} [options] - Options to pass to `execFile`.
  * @returns {Promise<string>} A promise containing the stdout of the command.
+ * @throws {Error} If the command fails with a non-zero (or anything other than the specified) exit code.
  */
-export const execute = (command: string, args: string[], options?: { cwd?: string }) =>
+export const execute = (
+  command: string,
+  args: string[],
+  options?: { cwd?: string; exitCode?: number }
+): Promise<string> =>
   new Promise<string>((resolve, reject) => {
     const child = execFile(command, args, { ...(options ?? {}) });
 
@@ -72,7 +77,7 @@ export const execute = (command: string, args: string[], options?: { cwd?: strin
     });
 
     child.on('close', (code) => {
-      if (code === 0) resolve(stdout);
+      if (code === (options?.exitCode ?? 0)) resolve(stdout);
       else reject(new Error(stderr));
     });
   });
