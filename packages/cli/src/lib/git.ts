@@ -6,6 +6,8 @@ import { execute } from './executeCommand';
 import { warn } from 'node:console';
 import { verbose } from '../utils';
 
+const DEV_NULL = process.platform === 'win32' ? 'NUL' : '/dev/null';
+
 // Attempt to parse special syntax allowed by git:
 // - scp-style urls ([user@]host.xz:path/to/repo.git/),
 // - bare file paths.
@@ -148,6 +150,21 @@ export async function findBaseCommit(headRef = 'HEAD', cwd?: string): Promise<st
 }
 
 /**
+ * Get the list of untracked files in the working directory.
+ *
+ * @param {string} [cwd] - The working directory to run the command in.
+ * @returns {Promise<string[]>} A promise containing the list of untracked files.
+ * @throws {Error} If the command fails.
+ */
+export async function getUntrackedFiles(cwd?: string): Promise<string[]> {
+  const result = await execute('git', ['ls-files', '--others', '--exclude-standard'], { cwd });
+  return result
+    .split('\n')
+    .map((f) => f.trim())
+    .filter(Boolean);
+}
+
+/**
  * This method produces the diff between your working directory and HEAD, returning the changes that
  * have not yet been committed.
  *
@@ -155,8 +172,43 @@ export async function findBaseCommit(headRef = 'HEAD', cwd?: string): Promise<st
  * @param {string} [cwd] - The working directory to run the command in.
  * @returns {Promise<string>} A promise containing the diff.
  */
-export function getWorkingDiff(cwd?: string): Promise<string> {
-  return execute('git', ['diff', 'HEAD'], { cwd });
+export async function getWorkingDiff(cwd?: string): Promise<string> {
+  let untrackedFiles: string[] = [];
+  try {
+    untrackedFiles = await getUntrackedFiles(cwd);
+  } catch (e) {
+    if (verbose()) {
+      warn(`Failed to retrieve untracked files`);
+      warn(e);
+    }
+  }
+
+  const untrackedDiffs: string[] = [];
+
+  // Do this serially to avoid spawning too many processes.
+  // TODO: Perhaps this could be done in a queue.
+  for (const file of untrackedFiles) {
+    try {
+      untrackedDiffs.push(
+        // When using `--no-index`, an exit code of 1 is expected.
+        await execute('git', ['--no-pager', 'diff', '--no-index', DEV_NULL, file], {
+          cwd,
+          exitCode: 1,
+        })
+      );
+    } catch (e) {
+      warn(`Failed to retrieve diff for ${file}`);
+      warn(e);
+    }
+  }
+
+  const indexedDiff = await execute('git', ['--no-pager', 'diff', 'HEAD'], { cwd }).catch((e) => {
+    warn(`Failed to retrieve diff for HEAD`);
+    warn(e);
+    return '';
+  });
+
+  return [indexedDiff, ...untrackedDiffs].filter(Boolean).join('\n');
 }
 
 /**
@@ -177,5 +229,7 @@ export async function getDiffLog(
   const base = baseCommit ?? (await findBaseCommit(headCommit, cwd));
   if (!base) return '';
 
-  return execute('git', ['log', '-p', '--full-diff', `${base}..${headCommit}`], { cwd });
+  return execute('git', ['--no-pager', 'log', '-p', '--full-diff', `${base}..${headCommit}`], {
+    cwd,
+  });
 }
