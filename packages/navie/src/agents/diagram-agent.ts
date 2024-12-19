@@ -1,5 +1,6 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
+import applyFormat from '../lib/apply-format';
 import MermaidFilter from '../lib/mermaid-filter';
 import { PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
@@ -33,12 +34,9 @@ export default class DiagramAgent implements Agent {
   }
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
-    const agentPrompt = [DIAGRAM_AGENT_PROMPT];
-    // With the /noformat option, the user will explain the desired output format in their message.
-    if (options.userOptions.isEnabled('format', true)) {
-      agentPrompt.push(DIAGRAM_FORMAT_PROMPT);
-    }
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
+    this.history.addEvent(new PromptInteractionEvent('agent', 'system', DIAGRAM_AGENT_PROMPT));
+
+    applyFormat(this.history, options.userOptions, DIAGRAM_FORMAT_PROMPT);
 
     this.history.addEvent(
       new PromptInteractionEvent(

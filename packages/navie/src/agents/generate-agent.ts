@@ -172,13 +172,15 @@ export default class GenerateAgent implements Agent {
   ) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
-    const agentPrompt = [GENERATE_AGENT_PROMPT];
-    if (options.userOptions.stringValue('format') === 'xml')
-      agentPrompt.push(GENERATE_AGENT_FORMAT);
-    else if (options.userOptions.isEnabled('format', true))
-      agentPrompt.push(GENERATE_AGENT_FORMAT_OLD);
+    this.history.addEvent(new PromptInteractionEvent('agent', 'system', GENERATE_AGENT_PROMPT));
 
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
+    let formatPrompt: string | undefined;
+    if (options.userOptions.stringValue('format') === 'xml') formatPrompt = GENERATE_AGENT_FORMAT;
+    else if (options.userOptions.isEnabled('format', true))
+      formatPrompt = GENERATE_AGENT_FORMAT_OLD;
+
+    if (formatPrompt)
+      this.history.addEvent(new PromptInteractionEvent('format', 'system', formatPrompt));
 
     this.history.addEvent(
       new PromptInteractionEvent(

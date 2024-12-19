@@ -55,13 +55,14 @@ export default class TestAgent implements Agent {
   ) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
-    const agentPrompt = [TEST_AGENT_PROMPT];
-    // With the /noformat option, the user will explain the desired output format in their message.
-    if (options.userOptions.stringValue('format') === 'xml')
-      agentPrompt.push(TEST_AGENT_FORMAT, GENERATE_AGENT_FORMAT);
-    else if (options.userOptions.isEnabled('format', true)) agentPrompt.push(TEST_AGENT_FORMAT);
+    this.history.addEvent(new PromptInteractionEvent('agent', 'system', TEST_AGENT_PROMPT));
 
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
+    let formatPrompt: string | undefined;
+    if (options.userOptions.stringValue('format') === 'xml') formatPrompt = GENERATE_AGENT_FORMAT;
+    else if (options.userOptions.isEnabled('format', true)) formatPrompt = TEST_AGENT_FORMAT;
+
+    if (formatPrompt)
+      this.history.addEvent(new PromptInteractionEvent('format', 'system', formatPrompt));
 
     this.history.addEvent(
       new PromptInteractionEvent(

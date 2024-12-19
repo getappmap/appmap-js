@@ -283,7 +283,7 @@ export default class ExplainAgent implements Agent {
 
     // Check for presence of "generate-diagram" classifier and its confidence level.
     if (hasLabel(options.contextLabels, ContextV2.ContextLabelName.GenerateDiagram))
-      this.history.addEvent(new PromptInteractionEvent('agent', 'system', DIAGRAM_FORMAT_PROMPT));
+      this.history.addEvent(new PromptInteractionEvent('format', 'system', DIAGRAM_FORMAT_PROMPT));
 
     this.history.addEvent(
       new PromptInteractionEvent(
