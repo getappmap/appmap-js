@@ -165,7 +165,7 @@ describe('@explain agent', () => {
           {
             type: 'prompt',
             role: 'system',
-            name: 'agent',
+            name: 'format',
           },
           {
             type: 'prompt',

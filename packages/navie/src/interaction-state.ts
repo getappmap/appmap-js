@@ -1,3 +1,4 @@
+import * as zod from 'zod';
 import { ContextV2 } from './context';
 import { HelpResponse } from './help';
 import Message from './message';
@@ -11,6 +12,7 @@ export default class InteractionState {
   public contextAvailable?: ContextV2.ContextResponse;
   public helpAvailable?: HelpResponse;
   public techStackTerms?: string[];
+  public schema?: zod.Schema<unknown>;
 
   addContextItem(contextItem: ContextV2.ContextItem) {
     this.messages.push({ content: contextItem.content, role: 'user' });

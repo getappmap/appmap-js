@@ -57,6 +57,14 @@ export type AgentResponse = {
 export interface Agent {
   readonly filter?: (stream: AsyncIterable<string>) => AsyncIterable<string>;
 
+  /**
+   * Perform the agent's task, optionally returning a response. If the response is void, then
+   * the enclosing command will continue by applying the prompts defined in the InteractionHistory
+   * with which the agent is constructed.
+   *
+   * Returning a response from this method essentially allows the agent to short-circuit the
+   * normal prompt flow and provide a response directly.
+   */
   perform(options: AgentOptions, tokensAvailable: () => number): Promise<AgentResponse | void>;
 
   temperature: number | undefined;

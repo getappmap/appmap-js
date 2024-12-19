@@ -53,11 +53,10 @@ describe('@diagram agent', () => {
 
     // Verify that the perform method writes the correct prompt interactions to the history
     expect(interactionHistory.events).toContainEqual(
-      new PromptInteractionEvent(
-        'agent',
-        'system',
-        [DIAGRAM_AGENT_PROMPT, DIAGRAM_FORMAT_PROMPT].join('\n\n')
-      )
+      new PromptInteractionEvent('agent', 'system', DIAGRAM_AGENT_PROMPT)
+    );
+    expect(interactionHistory.events).toContainEqual(
+      new PromptInteractionEvent('format', 'system', DIAGRAM_FORMAT_PROMPT)
     );
     expect(interactionHistory.events).toContainEqual(
       expect.objectContaining({

@@ -1,5 +1,6 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
+import applyFormat from '../lib/apply-format';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 
@@ -77,13 +78,9 @@ export class PlanAgent implements Agent {
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
-    const agentPrompt = [PLAN_AGENT_PROMPT];
-    // With the /noformat option, the user will explain the desired output format in their message.
-    if (options.userOptions.isEnabled('format', true)) {
-      agentPrompt.push(PLAN_AGENT_FORMAT);
-    }
+    this.history.addEvent(new PromptInteractionEvent('agent', 'system', PLAN_AGENT_PROMPT));
 
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
+    applyFormat(this.history, options.userOptions, PLAN_AGENT_FORMAT);
 
     this.history.addEvent(
       new PromptInteractionEvent(

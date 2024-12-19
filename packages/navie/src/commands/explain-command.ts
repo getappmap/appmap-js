@@ -163,7 +163,7 @@ export default class ExplainCommand implements Command {
       yield* this.gatherAdditionalInformation();
     }
 
-    const { messages } = this.interactionHistory.buildState();
+    const { messages, schema } = this.interactionHistory.buildState();
 
     this.interactionHistory.addEvent(
       new CompletionEvent(
@@ -172,9 +172,16 @@ export default class ExplainCommand implements Command {
       )
     );
 
-    const response = this.completionService.complete(messages, { temperature: mode.temperature });
-    if (mode.filter) yield* mode.filter(response);
-    else yield* response;
+    if (schema) {
+      const response = this.completionService.json(messages, schema, {
+        temperature: mode.temperature,
+      });
+      yield JSON.stringify(response, null, 2);
+    } else {
+      const response = this.completionService.complete(messages, { temperature: mode.temperature });
+      if (mode.filter) yield* mode.filter(response);
+      else yield* response;
+    }
   }
 
   private async *gatherAdditionalInformation(maxSteps = 10) {

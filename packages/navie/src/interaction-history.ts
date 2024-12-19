@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import EventEmitter from 'events';
+import * as zod from 'zod';
+
 import InteractionState from './interaction-state';
 import { ContextV2 } from './context';
 import { PROMPTS, PromptType } from './prompt';
@@ -102,6 +104,26 @@ export class PromptInteractionEvent extends InteractionEvent {
 
   updateState(state: InteractionState) {
     state.messages.push({ content: this.fullContent, role: this.role });
+  }
+}
+
+export class SchemaInteractionEvent extends InteractionEvent {
+  constructor(public role: 'user' | 'assistant' | 'system', public schema: zod.Schema<unknown>) {
+    super('schema');
+  }
+
+  get metadata() {
+    return {
+      type: this.type,
+    };
+  }
+
+  get message() {
+    return `[schema] ${JSON.stringify(this.schema)}`;
+  }
+
+  updateState(state: InteractionState): void {
+    state.schema = this.schema;
   }
 }
 

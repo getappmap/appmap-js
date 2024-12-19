@@ -94,6 +94,11 @@ describe('@generate agent', () => {
         {
           type: 'prompt',
           role: 'system',
+          name: 'format',
+        },
+        {
+          type: 'prompt',
+          role: 'system',
           name: 'issueDescription',
         },
       ]);

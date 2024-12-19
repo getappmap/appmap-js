@@ -1,7 +1,10 @@
+import { z } from 'zod';
+
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
+import applyFormat from '../lib/apply-format';
 
 export const SEARCH_AGENT_PROMPT = `**Task: Search**
 
@@ -19,7 +22,8 @@ expect the user to be proficient in software development.
 
 **About your response**
 
-Your response should be a list of locations in the codebase that are most relevant to the user's question.
+Your response should be a list of locations in the codebase that are most relevant to the user's question,
+along with a description for each location that explains why it's relevant.
 `;
 
 export const SEARCH_AGENT_FORMAT = `**Response format**
@@ -34,19 +38,20 @@ The links should be formatted as Markdown links, like this:
   Some classes, modules, or functions that are relevant to the user's question are...
 `;
 
+const SCHEMA = z.object({
+  location: z.string(),
+  description: z.string(),
+});
+
 export default class SearchAgent implements Agent {
   public temperature = 0;
 
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
-    const agentPrompt = [SEARCH_AGENT_PROMPT];
-    // With the /noformat option, the user will explain the desired output format in their message.
-    if (options.userOptions.isEnabled('format', true)) {
-      agentPrompt.push(SEARCH_AGENT_FORMAT);
-    }
+    this.history.addEvent(new PromptInteractionEvent('agent', 'system', SEARCH_AGENT_PROMPT));
 
-    this.history.addEvent(new PromptInteractionEvent('agent', 'system', agentPrompt.join('\n\n')));
+    applyFormat(this.history, options.userOptions, SEARCH_AGENT_FORMAT, SCHEMA);
 
     this.history.addEvent(
       new PromptInteractionEvent(
