@@ -84,7 +84,7 @@ export async function getWelcomeMessage(
   const navie = navieProvider(NOP, NOP, NOP);
 
   // Case 1: Custom welcome message may not be enabled at all
-  if (!isCustomWelcomeMessageEnabled(navie)) {
+  if (!isCustomWelcomeMessageEnabled()) {
     return {
       message:
         'I can help you answer questions about your codebase, create diagrams, plan solutions, generate code and tests, and review code changes. Type `@` to see a list of commands.',
