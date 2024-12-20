@@ -1,3 +1,12 @@
+# [@appland/navie-v1.39.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.39.0...@appland/navie-v1.39.1) (2024-12-20)
+
+
+### Bug Fixes
+
+* Fix a typo in `/gather` option ([9962675](https://github.com/getappmap/appmap-js/commit/9962675b0a5431b741388109456335f439634459))
+* Log the error when json generation with anthropic fails ([61f817f](https://github.com/getappmap/appmap-js/commit/61f817f1233c16bd7ce4f4936fffb3400c31967a))
+* More robust classification service ([8e421c2](https://github.com/getappmap/appmap-js/commit/8e421c20e49ce6c8cd4899c257940b69851bf889))
+
 # [@appland/navie-v1.39.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.38.2...@appland/navie-v1.39.0) (2024-12-18)
 
 
