@@ -13,6 +13,7 @@ export default class InteractionState {
   public helpAvailable?: HelpResponse;
   public techStackTerms?: string[];
   public schema?: zod.Schema<unknown>;
+  public defaultResponse?: unknown;
 
   addContextItem(contextItem: ContextV2.ContextItem) {
     this.messages.push({ content: contextItem.content, role: 'user' });

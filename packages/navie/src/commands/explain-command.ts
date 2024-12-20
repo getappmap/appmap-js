@@ -158,7 +158,7 @@ export default class ExplainCommand implements Command {
       yield* this.gatherAdditionalInformation();
     }
 
-    const { messages, schema } = this.interactionHistory.buildState();
+    const { messages, schema, defaultResponse } = this.interactionHistory.buildState();
 
     this.interactionHistory.addEvent(
       new CompletionEvent(
@@ -168,12 +168,19 @@ export default class ExplainCommand implements Command {
     );
 
     if (schema) {
-      const response = this.completionService.json(messages, schema, {
+      assert(defaultResponse);
+      let response = await this.completionService.json(messages, schema, {
         temperature: mode.temperature,
       });
+      if (!response) {
+        warn(`Completion service failed to return a structured response`);
+        response = defaultResponse;
+      }
       yield JSON.stringify(response, null, 2);
     } else {
-      const response = this.completionService.complete(messages, { temperature: mode.temperature });
+      const response = this.completionService.complete(messages, {
+        temperature: mode.temperature,
+      });
       if (mode.filter) yield* mode.filter(response);
       else yield* response;
     }

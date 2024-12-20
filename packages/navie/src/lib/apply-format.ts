@@ -12,7 +12,8 @@ export default function applyFormat(
   interactionHistory: InteractionHistory,
   userOptions: UserOptions,
   defaultFormatPrompt: string,
-  jsonSchema?: zod.Schema<unknown>
+  jsonSchema?: zod.Schema<unknown>,
+  defaultResponse?: unknown
 ): void {
   const applyJSONFormat = (): boolean => {
     const formatName = userOptions.stringValue('format', undefined);
@@ -33,7 +34,8 @@ export default function applyFormat(
 
   if (applyJSONFormat()) {
     assert(jsonSchema);
-    interactionHistory.addEvent(new SchemaInteractionEvent('system', jsonSchema));
+    assert(defaultResponse);
+    interactionHistory.addEvent(new SchemaInteractionEvent('system', jsonSchema, defaultResponse));
   } else if (applyDefault()) {
     interactionHistory.addEvent(
       new PromptInteractionEvent('format', 'system', defaultFormatPrompt)
