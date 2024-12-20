@@ -24,11 +24,12 @@ expect the user to be proficient in software development.
 
 Your response should be a list of locations in the codebase that are most relevant to the user's question,
 along with a description for each location that explains why it's relevant.
+
+The locations in your response should be selected from files in the codebase that are relevant to the user's
+question. These locations are provided as code snippets with associated locations.
 `;
 
 export const SEARCH_AGENT_FORMAT = `**Response format**
-
-Your response should be a list of links to files in the codebase that are relevant to the user's question.
 
 The links should be formatted as Markdown links, like this:
 
@@ -38,20 +39,28 @@ The links should be formatted as Markdown links, like this:
   Some classes, modules, or functions that are relevant to the user's question are...
 `;
 
-const SCHEMA = z.object({
-  location: z.string(),
-  description: z.string(),
-});
+const SCHEMA = z.array(
+  z
+    .object({
+      location: z
+        .string()
+        .describe('The location of the relevant code file, search result, or snippet'),
+      description: z.string().describe('A description of why the location is relevant'),
+    })
+    .describe(
+      "A location in the codebase that is relevant to the user's question, along with a description of why it's relevant"
+    )
+);
 
 export default class SearchAgent implements Agent {
-  public temperature = 0;
+  public temperature = 0.05;
 
   constructor(public history: InteractionHistory, private contextService: ContextService) {}
 
   async perform(options: AgentOptions, tokensAvailable: () => number): Promise<void> {
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', SEARCH_AGENT_PROMPT));
 
-    applyFormat(this.history, options.userOptions, SEARCH_AGENT_FORMAT, SCHEMA);
+    applyFormat(this.history, options.userOptions, SEARCH_AGENT_FORMAT, SCHEMA, []);
 
     this.history.addEvent(
       new PromptInteractionEvent(

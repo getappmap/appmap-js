@@ -108,7 +108,11 @@ export class PromptInteractionEvent extends InteractionEvent {
 }
 
 export class SchemaInteractionEvent extends InteractionEvent {
-  constructor(public role: 'user' | 'assistant' | 'system', public schema: zod.Schema<unknown>) {
+  constructor(
+    public role: 'user' | 'assistant' | 'system',
+    public schema: zod.Schema<unknown>,
+    public defaultResponse: unknown
+  ) {
     super('schema');
   }
 
@@ -124,6 +128,7 @@ export class SchemaInteractionEvent extends InteractionEvent {
 
   updateState(state: InteractionState): void {
     state.schema = this.schema;
+    state.defaultResponse = this.defaultResponse;
   }
 }
 
