@@ -39,18 +39,20 @@ The links should be formatted as Markdown links, like this:
   Some classes, modules, or functions that are relevant to the user's question are...
 `;
 
-const SCHEMA = z.array(
-  z
-    .object({
-      location: z
-        .string()
-        .describe('The location of the relevant code file, search result, or snippet'),
-      description: z.string().describe('A description of why the location is relevant'),
-    })
-    .describe(
-      "A location in the codebase that is relevant to the user's question, along with a description of why it's relevant"
-    )
-);
+const SCHEMA = z.object({
+  searchResults: z.array(
+    z
+      .object({
+        location: z
+          .string()
+          .describe('The location of the relevant code file, search result, or snippet'),
+        description: z.string().describe('A description of why the location is relevant'),
+      })
+      .describe(
+        "A location in the codebase that is relevant to the user's question, along with a description of why it's relevant"
+      )
+  ),
+});
 
 export default class SearchAgent implements Agent {
   public temperature = 0.05;

@@ -3,10 +3,11 @@ import { TestCommand } from '../configuration';
 import RecordContext from '../recordContext';
 import TestCaseRecording from '../testCaseRecording';
 
+// TODO: This is old code. Consider removing it?
 export default async function areTestCasesConfigured({
   configuration,
 }: RecordContext): Promise<boolean> {
-  let testCommands: TestCommand[] | undefined = configuration.configOption(
+  const testCommands: TestCommand[] | undefined = configuration.configOption(
     'test_recording.test_commands',
     []
   ) as TestCommand[];
