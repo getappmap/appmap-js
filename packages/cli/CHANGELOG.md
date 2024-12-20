@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.180.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.180.0...@appland/appmap-v3.180.1) (2024-12-20)
+
+
+### Bug Fixes
+
+* Working changes now include untracked files ([98299ca](https://github.com/getappmap/appmap-js/commit/98299cacc178798e1cf624b1aa21b805ba7aec23))
+
 # [@appland/appmap-v3.180.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.179.0...@appland/appmap-v3.180.0) (2024-12-18)
 
 
