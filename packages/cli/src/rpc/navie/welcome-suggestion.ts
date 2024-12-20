@@ -1,9 +1,9 @@
 import configuration from '../configuration';
-import { getDiffLog, getWorkingDiff } from '../../lib/git';
 import INavie, { INavieProvider } from '../explain/navie/inavie';
 import { UserContext } from '@appland/navie';
 import isCustomWelcomeMessageEnabled from './isCustomWelcomeMessageEnabled';
 import { NavieRpc } from '@appland/rpc';
+import { getChangeDiffs } from './get-change-diffs';
 
 interface WelcomeSuggestion {
   activity: string;
@@ -29,18 +29,6 @@ function parseWelcomeSuggestion(response: string): WelcomeSuggestion | undefined
   } catch {
     return undefined;
   }
-}
-
-async function getChangeDiffs(projectDirectories: string[]): Promise<string[]> {
-  const diffs = await Promise.allSettled(
-    [
-      projectDirectories.map((d) => getDiffLog('HEAD', undefined, d)),
-      projectDirectories.map((d) => getWorkingDiff(d)),
-    ].flat()
-  );
-  return diffs
-    .filter((result): result is PromiseFulfilledResult<string> => result.status === 'fulfilled')
-    .map((result) => result.value);
 }
 
 export async function getWelcomeSuggestion(
@@ -98,7 +86,7 @@ export async function getWelcomeMessage(
       return {
         activity: welcomeSuggestion.activity,
         suggestions: welcomeSuggestion.suggestions,
-      };
+      } as unknown as WelcomeMessage;
     }
   }
 
@@ -140,5 +128,5 @@ export async function getWelcomeMessage(
   return {
     activity: welcomeSuggestion.activity,
     suggestions: welcomeSuggestion.suggestions,
-  };
+  } as unknown as WelcomeMessage;
 }
