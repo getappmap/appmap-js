@@ -153,8 +153,8 @@ export default class AnthropicCompletionService implements CompletionService {
         .withStructuredOutput<Schema>(schema)
         .withRetry({ stopAfterAttempt: maxRetries })
         .invoke(sentMessages.map(convertToMessage));
-    } catch {
-      warn(`Failed to generate JSON after ${maxRetries} attempts`);
+    } catch (err) {
+      warn(`Failed to generate JSON after ${maxRetries} attempts: ${String(err)}`);
       return undefined;
     }
 
