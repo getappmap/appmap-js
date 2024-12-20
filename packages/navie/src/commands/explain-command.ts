@@ -199,5 +199,5 @@ function gathererEnabled(
     [AgentMode.Generate, AgentMode.Test].includes(agentMode) ||
     !!contextLabels.find((l) => l.name === ContextV2.ContextLabelName.Overview);
 
-  return userOptions.isEnabled('gatherer', enabledByDefault);
+  return userOptions.isEnabled('gather', enabledByDefault);
 }
