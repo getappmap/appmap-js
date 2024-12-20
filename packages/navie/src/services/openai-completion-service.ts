@@ -214,20 +214,14 @@ export default class OpenAICompletionService implements CompletionService {
     schema: Schema,
     options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined> {
+    const jsonSchema = zodResponseFormat(schema, 'requestedObject').json_schema.schema;
+    if (!jsonSchema)
+      throw new Error(`Unable to generate JSON schema for ${schema.constructor.name}`);
+
     // If using a local model, provide the JSON schema to the model in the system prompt.
     // This method is more likely to generate failure cases, but will be retried.
     const generateLocal = () => {
-      const sentMessages = mergeSystemMessages([
-        ...messages,
-        {
-          role: 'system',
-          content: `Use the following JSON schema for your response:\n\n${JSON.stringify(
-            zodResponseFormat(schema, 'requestedObject').json_schema.schema,
-            null,
-            2
-          )}`,
-        },
-      ]);
+      const sentMessages = mergeSystemMessages([...messages, schemaPrompt(jsonSchema)]);
       for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
       return this.model.completionWithRetry({
@@ -240,7 +234,9 @@ export default class OpenAICompletionService implements CompletionService {
     // If using the OpenAI API, use the structured output response format.
     // This method unlikely to generate failure cases.
     const generateOpenAi = () => {
+      const schemaSupported = !isSchemaUnsupported(jsonSchema);
       const sentMessages = mergeSystemMessages(messages);
+      if (!schemaSupported) sentMessages.push(schemaPrompt(jsonSchema));
       for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
       return this.model.completionWithRetry({
@@ -248,7 +244,9 @@ export default class OpenAICompletionService implements CompletionService {
         model: options?.model ?? this.miniModelName,
         stream: false,
         temperature: options?.temperature,
-        response_format: zodResponseFormat(schema, 'requestedObject'),
+        response_format: schemaSupported
+          ? zodResponseFormat(schema, 'requestedObject')
+          : { type: jsonSchema.type === 'object' ? 'json_object' : 'text' },
       });
     };
 
@@ -386,4 +384,25 @@ export default class OpenAICompletionService implements CompletionService {
     warn(usage.toString());
     return usage;
   }
+}
+
+/**
+ * Returns true if the schema is not supported by the OpenAI API.
+ * See https://platform.openai.com/docs/guides/structured-outputs#supported-schemas
+ * for details. Note currently this is a partial implementation; additional checks
+ * should be added as needed.
+ */
+function isSchemaUnsupported(schema: Record<string, unknown>): boolean {
+  return schema.type !== 'object' || !!schema.additionalProperties;
+}
+
+function schemaPrompt(jsonSchema: Record<string, unknown>): Message {
+  return {
+    role: 'system',
+    content: `Use the following JSON schema for your response:\n\n${JSON.stringify(
+      jsonSchema,
+      null,
+      2
+    )}`,
+  };
 }
