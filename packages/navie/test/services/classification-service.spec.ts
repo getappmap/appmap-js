@@ -7,7 +7,7 @@ describe('ClassificationService', () => {
   let interactionHistory: InteractionHistory;
   let service: ClassificationService;
   const completion = new MockCompletionService();
-  const completeSpy = jest.spyOn(completion, 'complete');
+  const completeSpy = jest.spyOn(completion, 'json');
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
@@ -18,8 +18,8 @@ describe('ClassificationService', () => {
 
   describe('when LLM responds', () => {
     const classification = `
-- architecture: high
-- troubleshoot: medium
+{ "architecture": "high",
+"troubleshoot": "medium" }
 `;
 
     beforeEach(() => completion.mock(classification));
