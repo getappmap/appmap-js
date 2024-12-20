@@ -87,14 +87,18 @@ export namespace ContextV2 {
   }
 
   export enum ContextLabelName {
-    HelpWithAppMap = 'help-with-appmap',
+    Greeting = 'greeting',
+    Explain = 'explain',
+    Plan = 'plan',
+    Troubleshoot = 'troubleshoot',
+    GenerateCode = 'generate-code',
     GenerateDiagram = 'generate-diagram',
+    HelpWithAppMap = 'help-with-appmap',
+    Chatting = 'chatting',
+
     Architecture = 'architecture',
     Feature = 'feature',
     Overview = 'overview',
-    Troubleshoot = 'troubleshoot',
-    Explain = 'explain',
-    Generate = 'generate',
   }
 
   export enum ContextLabelWeight {
