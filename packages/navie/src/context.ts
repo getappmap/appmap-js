@@ -106,6 +106,8 @@ export namespace ContextV2 {
     High = 'high',
     // The label is somewhat relevant to the request.
     Medium = 'medium',
+    // The label is probably not relevant to the request.
+    Low = 'low',
   }
 
   // A label that describes the nature of the user's request.
