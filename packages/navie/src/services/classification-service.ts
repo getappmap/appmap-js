@@ -48,6 +48,8 @@ const SCORES = {
   low: 'The question is unlikely to be of this type.',
 };
 
+void assertNever<TypeDifference<keyof typeof SCORES, `${ContextV2.ContextLabelWeight}`>>();
+
 const SYSTEM_PROMPT = `**Question classifier**
 
 A software developer is asking a question about a project. Your task is to classify their MOST RECENT
@@ -173,7 +175,7 @@ export default class ClassificationService {
 
     const schema = z.record(
       z.enum(Object.keys(LABELS) as [string, ...string[]]),
-      z.enum(['high', 'medium'])
+      z.enum(Object.keys(SCORES) as [string, ...string[]])
     );
 
     const response = await this.completion.json(messages, schema, {
