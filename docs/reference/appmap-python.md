@@ -183,6 +183,10 @@ options:
   --enable-log, --no-enable-log
                         create a log file (default: False)
 ```
+
+Note when executing a plain Python script with `appmap-python`, the `python` interpreter must
+be explicitly invoked. For example: `appmap-python python my_script.py`
+
 ## Test recording
 
 `appmap` supports recording [pytest](https://pytest.org) and
