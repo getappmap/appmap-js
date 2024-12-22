@@ -1,3 +1,10 @@
+# [@appland/navie-v1.39.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.39.1...@appland/navie-v1.39.2) (2024-12-22)
+
+
+### Bug Fixes
+
+* Allow 'low' classification score ([7dc034e](https://github.com/getappmap/appmap-js/commit/7dc034eac69ea316a92c7fadc7aed1909c37f367))
+
 # [@appland/navie-v1.39.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.39.0...@appland/navie-v1.39.1) (2024-12-20)
 
 
