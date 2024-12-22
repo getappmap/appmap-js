@@ -79,10 +79,16 @@ export async function activityTestsV1(
     warn(`[activity-tests] Failed to parse response: ${outputStr}`);
   }
 
-  // TODO: Filter out results that don't match the required paths
-  // TODO: Fix output like "<!-- file: /Users/kgilpin/source/appland/appmap-js/packages/navie/test/services/classification-service.spec.ts -->"
-  //       (best done in the @search command itself)
+  // Filter results based on specified paths
+  if (paths && paths.length > 0) {
+    response = response.filter((result) => paths.some((path) => result.location.includes(path)));
+  }
 
+  // Refine results by removing file path comments
+  response = response.map((result) => ({
+    ...result,
+    location: result.location.replace(/<!-- file: .* -->/g, '').trim(),
+  }));
   return response;
 }
 
