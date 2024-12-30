@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.180.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.180.1...@appland/appmap-v3.180.2) (2024-12-30)
+
+
+### Bug Fixes
+
+* Default the custom welcome message to ON ([10e227c](https://github.com/getappmap/appmap-js/commit/10e227c337c0c6708276c46e26c6bf489effea3a))
+
 # [@appland/appmap-v3.180.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.180.0...@appland/appmap-v3.180.1) (2024-12-20)
 
 
