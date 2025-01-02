@@ -90,7 +90,7 @@
     "@appland/components": "workspace:^4.12.0",
     "@appland/diagrams": "workspace:^1.8.0",
     "@appland/models": "workspace:^2.10.2",
-    "@appland/navie": "^1.36.2",
+    "@appland/navie": "^1.39.3",
     "@appland/openapi": "workspace:^1.8.0",
     "@appland/rpc": "workspace:^1.13.0",
     "@appland/scanner": "workspace:^1.86.0",
