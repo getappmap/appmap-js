@@ -16,22 +16,20 @@ jest.mock('../../../../src/rpc/activity/current');
 describe('activityTestsV1', () => {
   const mockNavieProvider: INavieProvider = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
+  beforeEach(() => jest.clearAllMocks());
+  afterEach(() => jest.resetAllMocks());
 
-    // Setup mock implementation for explain
+  function mockExplain(response: string[]) {
     (explain as jest.Mock).mockResolvedValue({
       userMessageId: 'testUserMessageId',
       threadId: 'testThreadId',
     });
 
-    // Setup mock implementation for explainStatus
     (explainStatus as jest.Mock).mockReturnValue({
       step: ExplainRpc.Step.COMPLETE,
+      explanation: response,
     });
-  });
-
-  afterEach(() => jest.resetAllMocks());
+  }
 
   it('should return test suggestions based on current activity', async () => {
     const mockActivityResponse: ActivityRpc.V1.Current.Response = {
@@ -52,20 +50,27 @@ describe('activityTestsV1', () => {
     };
 
     (currentActivity as jest.Mock).mockResolvedValue(mockActivityResponse);
+    mockExplain([
+      JSON.stringify([
+        {
+          location: 'tests/test_1.spec.js',
+          description: 'a test spec',
+        },
+      ]),
+    ]);
 
     const args: ActivityRpc.V1.Suggest.Tests.Params = {
       taskId: 'task1',
-      codeSelection: 'some code selection',
-      prompt: 'some prompt',
-      paths: ['/path/to/project'],
-      keywords: ['keyword1', 'keyword2'],
     };
 
     const result = await activityTestsV1(mockNavieProvider, args);
 
     expect(result).toBeDefined();
     expect(result).toBeInstanceOf(Array);
-    // TODO: Add more specific assertions based on the expected structure of the response
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toHaveProperty('location', 'tests/test_1.spec.js');
+    expect(result[0]).toHaveProperty('description', 'a test spec');
   });
 
   it('should filter results based on specified paths', async () => {
@@ -87,19 +92,29 @@ describe('activityTestsV1', () => {
     };
 
     (currentActivity as jest.Mock).mockResolvedValue(mockActivityResponse);
+    mockExplain([
+      JSON.stringify([
+        {
+          location: 'tests/test_1.spec.js',
+          description: 'a test spec',
+        },
+        {
+          location: 'src/test_1.spec.js',
+          description: 'a test spec',
+        },
+      ]),
+    ]);
 
     const args: ActivityRpc.V1.Suggest.Tests.Params = {
       taskId: 'task1',
-      codeSelection: 'some code selection',
-      prompt: 'some prompt',
-      paths: ['/path/to/project'],
-      keywords: ['keyword1', 'keyword2'],
+      paths: ['tests'],
     };
 
     const result = await activityTestsV1(mockNavieProvider, args);
 
     expect(result).toBeDefined();
     expect(result).toBeInstanceOf(Array);
-    // TODO: Add more specific assertions based on the expected structure of the response
+    expect(result).toHaveLength(1);
+    expect(result[0]).toHaveProperty('location', 'tests/test_1.spec.js');
   });
 });
