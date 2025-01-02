@@ -49,7 +49,12 @@ export default class ExplainCommand implements Command {
     let contextLabelsFn: Promise<ContextV2.ContextLabel[]> | undefined;
 
     if (classifyEnabled)
-      contextLabelsFn = this.classifierService.classifyQuestion(baseQuestion, chatHistory);
+      contextLabelsFn = this.classifierService
+        .classifyQuestion(baseQuestion, chatHistory)
+        .catch((err) => {
+          warn(`Error classifying question: ${err}`);
+          return [];
+        });
 
     let projectInfo: ProjectInfo[] = [];
     if (request.userOptions.isEnabled('projectinfo', true)) {
