@@ -1,6 +1,6 @@
 {
   "name": "@appland/navie",
-  "version": "1.39.2",
+  "version": "1.39.3",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

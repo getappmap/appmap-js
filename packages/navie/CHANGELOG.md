@@ -1,3 +1,10 @@
+# [@appland/navie-v1.39.3](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.39.2...@appland/navie-v1.39.3) (2025-01-02)
+
+
+### Bug Fixes
+
+* Only try once in classifier, ignore classifier errors ([e792acb](https://github.com/getappmap/appmap-js/commit/e792acbdad2a4a0878c9b7c7a8785140f105494c))
+
 # [@appland/navie-v1.39.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.39.1...@appland/navie-v1.39.2) (2024-12-22)
 
 
