@@ -1,9 +1,13 @@
+import * as zod from 'zod';
+
 import { ContextV2 } from '../src/context';
 import InteractionHistory, {
   ContextItemEvent,
   ContextLookupEvent,
+  SchemaInteractionEvent,
 } from '../src/interaction-history';
 import { PromptType } from '../src/prompt';
+import InteractionState from '../src/interaction-state';
 
 describe('InteractionHistory', () => {
   describe('#buildState', () => {
@@ -112,5 +116,41 @@ describe('InteractionHistory', () => {
         });
       });
     });
+  });
+});
+
+describe('SchemaInteractionEvent', () => {
+  it('should instantiate correctly', () => {
+    const schema = zod.object({ key: zod.string() });
+    const event = new SchemaInteractionEvent('assistant', schema, 'default');
+
+    expect(event.role).toBe('assistant');
+    expect(event.schema).toBe(schema);
+    expect(event.defaultResponse).toBe('default');
+  });
+
+  it('should return correct metadata', () => {
+    const schema = zod.object({});
+    const event = new SchemaInteractionEvent('system', schema, null);
+
+    expect(event.metadata).toEqual({ type: 'schema' });
+  });
+
+  it('should produce the correct message string', () => {
+    const schema = zod.object({ key: zod.number() });
+    const event = new SchemaInteractionEvent('user', schema, 42);
+
+    expect(event.message).toContain('[schema]');
+  });
+
+  it('should update interaction state properly', () => {
+    const schema = zod.object({ key: zod.string() });
+    const state = new InteractionState();
+    const event = new SchemaInteractionEvent('user', schema, 'default');
+
+    event.updateState(state);
+
+    expect(state.schema).toBe(schema);
+    expect(state.defaultResponse).toBe('default');
   });
 });
