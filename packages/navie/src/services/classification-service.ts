@@ -180,6 +180,7 @@ export default class ClassificationService {
 
     const response = await this.completion.json(messages, schema, {
       model: this.completion.miniModelName,
+      maxRetries: 1,
     });
 
     debug('Classification response: %s', response);
