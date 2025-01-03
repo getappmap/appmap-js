@@ -16,8 +16,7 @@ export async function activityTestsV1(
   navieProvider: INavieProvider,
   args: ActivityRpc.V1.Suggest.Tests.Params
 ): Promise<ActivityRpc.V1.Suggest.Tests.Response> {
-  // TODO: Incorporate these other parameters into the output.
-  const { taskId, codeSelection, prompt, paths, keywords } = args;
+  const { codeSelection, paths, keywords } = args;
 
   const activity = await currentActivity();
   // TODO: If the activity has not changed, return cached results
@@ -36,16 +35,29 @@ export async function activityTestsV1(
     });
   }
 
-  // TODO: Apply keywords and custom prompt
-
+  const questionTokens = [
+    '@search',
+    '/noprojectinfo',
+    '/noclassify',
+    '/format=json',
+    '/tokenlimit=4000',
+    '/include=test|spec',
+    'Identify test cases that are relevant to',
+  ];
+  if (keywords) {
+    questionTokens.push('the following keywords:');
+    questionTokens.push(...keywords);
+  } else {
+    questionTokens.push('the work in progress');
+  }
   const explainResponse = await explain(
     navieProvider,
-    '@search /noprojectinfo /noclassify /format=json /tokenlimit=4000 /include=test|spec identify test cases that are relevant to the work in progress',
+    questionTokens.join(' '),
     userContext,
     undefined, // appmaps
     undefined, // threadId
     undefined, // codeEditor
-    prompt // prompt
+    undefined // prompt
   );
 
   let status: ExplainRpc.ExplainStatusResponse | undefined;

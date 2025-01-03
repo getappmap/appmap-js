@@ -39,48 +39,15 @@ export namespace ActivityRpc {
     }
 
     export namespace Suggest {
-      export namespace Tasks {
-        export const Method = 'v1.activity.suggest.tasks';
-        export type TaskOption = {
-          name: string;
-          value: string | number;
-        };
-        export type TaskType =
-          | 'explain'
-          | 'document'
-          | 'plan'
-          | 'generate'
-          | 'diagram'
-          | 'test'
-          | 'review';
-        export type Task = {
-          id: string;
-          type: TaskType;
-          prompt: string;
-          options: TaskOption[];
-          temperature?: number;
-          modelName?: string;
-          elapsedTime?: number;
-        };
-        export type Params = {
-          taskId?: string;
-          taskTypes?: TaskType[];
-          prompt?: string;
-          codeSelection?: string;
-        };
-        export type Response = {
-          tasks: string[];
-        };
-      }
-
       export namespace Tests {
         export const Method = 'v1.activity.suggest.tests';
         export type Params = {
-          taskId?: string;
-          prompt?: string;
+          keywords?: string;
           codeSelection?: string;
           paths?: string[];
-          keywords?: string[];
+          baseBranch?: string;
+          tokenLimit?: number;
+          limit?: number;
         };
         export type SuggestedTest = {
           location: string;
@@ -90,7 +57,7 @@ export namespace ActivityRpc {
       }
     }
 
-    export namespace FileAccessEvent {
+    export namespace FileAccess {
       export const OpenMethod = 'v1.activity.fileAccess.open';
       export type Params = {
         location: string;
