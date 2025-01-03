@@ -25,6 +25,19 @@ export default {
       immediate: true,
     },
   },
+  computed: {
+    email() {
+      if (!this.apiKey) return;
+      try {
+        const decodedKey = atob(this.apiKey);
+        const [email] = decodedKey.split(':');
+        return email;
+      } catch (e) {
+        console.error('Failed to decode apiKey', e);
+        return;
+      }
+    },
+  },
   methods: {
     updateClientConfiguration() {
       setConfiguration({ apiKey: this.apiKey, apiURL: this.apiUrl || DefaultApiURL });

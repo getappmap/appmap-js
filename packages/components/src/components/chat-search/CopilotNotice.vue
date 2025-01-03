@@ -1,7 +1,11 @@
 <template>
   <div class="copilot-notice" data-cy="copilot-notice">
     <div class="copilot-notice__container">
-      <v-subscription-status class="subscription-status" :subscription="subscription" />
+      <v-subscription-status
+        class="subscription-status"
+        :subscription="subscription"
+        :email="email"
+      />
       <div class="copilot-notice__notification">
         <div class="copilot-notice__notification-icon">
           <v-shield-icon />
@@ -33,6 +37,9 @@ export default Vue.extend({
   props: {
     subscription: {
       type: Object,
+    },
+    email: {
+      type: String,
     },
   },
 });

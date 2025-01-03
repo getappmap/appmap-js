@@ -7,16 +7,17 @@
     <v-skeleton-loader class="loader" />
   </div>
   <div class="subscription-status" data-cy="plan-status-free" v-else-if="!isSubscribed">
-    Limited free plan <a href="https://getappmap.com">Subscribe now</a>
+    Limited free plan <a :href="subscribeUrl" target="_blank">Subscribe now</a>
   </div>
   <div class="subscription-status" data-cy="plan-status-pro" v-else>
-    {{ planName }} <a href="https://getappmap.com">Manage Subscription</a>
+    {{ planName }} <a :href="subscribeUrl" target="_blank">Manage Subscription</a>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
+import { getSubscribeUrl } from '@/lib/subscribe';
 
 export default Vue.extend({
   name: 'v-subscription-status',
@@ -25,6 +26,9 @@ export default Vue.extend({
     subscription: {
       type: Object,
     },
+    email: {
+      type: String,
+    },
   },
   computed: {
     isSubscribed(): boolean {
@@ -32,6 +36,9 @@ export default Vue.extend({
     },
     planName(): string {
       return this.subscription?.subscriptions?.[0]?.productName ?? 'AppMap Pro';
+    },
+    subscribeUrl(): string {
+      return getSubscribeUrl(this.email);
     },
   },
 });

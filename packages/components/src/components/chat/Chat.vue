@@ -69,6 +69,7 @@
       :is-disabled="isInputDisabled"
       :usage="usage"
       :subscription="subscription"
+      :email="email"
       ref="input"
     />
   </div>
@@ -191,6 +192,9 @@ export default {
     },
     subscription: {
       type: Object,
+    },
+    email: {
+      type: String,
     },
   },
   data() {

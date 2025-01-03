@@ -9,7 +9,7 @@
           <span :class="{ 'usage--count': freeUsage === 'overLimit' }">{{ maxThreadCount }}</span>
           chat sessions allowed with the free plan.
         </span>
-        <a href="https://getappmap.com" target="_blank">
+        <a :href="subscribeUrl" data-cy="input-subscribe-link" target="_blank">
           <v-button class="sub-btn" kind="native-ghost" size="small">
             <v-external-link-icon class="sub-btn__icon" />
             Subscribe
@@ -92,6 +92,7 @@ import VButton from '@/components/Button.vue';
 import VExternalLinkIcon from '@/assets/external-link.svg';
 import { NavieRpc } from '@appland/rpc';
 import { PropType } from 'vue';
+import { getSubscribeUrl } from '@/lib/subscribe';
 
 export default {
   name: 'v-chat-input',
@@ -147,6 +148,9 @@ export default {
       type: Object as PropType<Object | undefined>,
       default: undefined,
     },
+    email: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -179,6 +183,9 @@ export default {
       if (this.threadCount > this.maxThreadCount) return 'overLimit';
       if (this.threadCount === this.maxThreadCount) return 'atMaxLimit';
       return 'withinLimits';
+    },
+    subscribeUrl(): string {
+      return getSubscribeUrl(this.email);
     },
   },
   methods: {
