@@ -7,7 +7,7 @@
 */
 import { EventEmitter } from 'stream';
 
-const eventEmitter = new EventEmitter();
+let eventEmitter: EventEmitter;
 const childProcess = {
   stdout: {
     setEncoding: jest.fn(),
@@ -47,6 +47,12 @@ import handleReview from '../../../../src/rpc/explain/review';
 
 describe('handleReview', () => {
   const diffContent = 'git diff here';
+  const workingDiffContent = 'working changes here';
+
+  beforeEach(() => {
+    // Prevent re-binding listeners to the same event emitter.
+    eventEmitter = new EventEmitter();
+  });
 
   afterAll(() => {
     jest.resetAllMocks();
@@ -65,11 +71,16 @@ describe('handleReview', () => {
   it('converts string user context to a context array', async () => {
     const result = handleReview('@review', 'print("hello")');
     emitResult(diffContent);
+    emitResult(workingDiffContent);
     await expect(result).resolves.toStrictEqual({
       applied: true,
       userContext: [
         { type: 'code-selection', content: 'print("hello")' },
-        { type: 'code-snippet', location: 'git diff', content: diffContent },
+        {
+          type: 'code-snippet',
+          location: 'git diff',
+          content: `${diffContent}\n\n${workingDiffContent}`,
+        },
       ],
     });
   });
@@ -77,6 +88,7 @@ describe('handleReview', () => {
   it('returns an expected user context when it was initially undefined', async () => {
     const result = handleReview('@review');
     emitResult(diffContent);
+    emitResult('');
     await expect(result).resolves.toStrictEqual({
       applied: true,
       userContext: [{ type: 'code-snippet', location: 'git diff', content: diffContent }],
@@ -86,6 +98,7 @@ describe('handleReview', () => {
   it('returns an expected user context when it was initially a context array', async () => {
     const result = handleReview('@review', [{ type: 'code-selection', content: 'print("hello")' }]);
     emitResult(diffContent);
+    emitResult('');
     await expect(result).resolves.toStrictEqual({
       applied: true,
       userContext: [
@@ -98,6 +111,7 @@ describe('handleReview', () => {
   it('raises an error if the command fails', async () => {
     const result = handleReview('@review');
     emitResult('git diff here', 1);
+    emitResult('');
     await expect(result).rejects.toThrowError('git diff here');
   });
 });
