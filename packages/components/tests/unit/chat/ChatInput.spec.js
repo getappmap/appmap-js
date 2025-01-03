@@ -59,4 +59,89 @@ describe('ChatInput', () => {
       'plaintext-only'
     );
   });
+
+  describe('usage indicator', () => {
+    const messageRegex = (numThreads) =>
+      new RegExp(`You've used\\s+${numThreads}\\s+of\\s+your\\s+7\\s+chat sessions`);
+
+    it('is not displayed before the subscription is loaded', async () => {
+      await wrapper.setProps({ subscription: undefined });
+      expect(wrapper.find('[data-cy="usage-message"]').exists()).toBe(false);
+    });
+
+    it('is not displayed if a subscription is present', async () => {
+      await wrapper.setProps({
+        subscription: { subscriptions: [{ productName: 'AppMap Pro' }] },
+        usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
+      });
+      expect(wrapper.find('[data-cy="usage-message"]').exists()).toBe(false);
+    });
+
+    it('is not displayed at zero chats', async () => {
+      await wrapper.setProps({
+        usage: { conversationCounts: [{ daysAgo: 7, count: 0 }] },
+        subscription: {},
+      });
+      expect(wrapper.find('[data-cy="usage-message"]').exists()).toBe(false);
+    });
+
+    it('is displayed when above the limit', async () => {
+      const count = 8;
+      await wrapper.setProps({
+        usage: { conversationCounts: [{ daysAgo: 7, count }] },
+        subscription: {},
+      });
+      expect(wrapper.find('[data-cy="usage-message"]').text()).toMatch(messageRegex(count));
+      expect(
+        wrapper.find('[data-cy="usage-message"][data-usage="overLimit"]').exists()
+      ).toBeTruthy();
+    });
+
+    it('is displayed when nearing the limit', async () => {
+      const count = 6;
+      await wrapper.setProps({
+        usage: { conversationCounts: [{ daysAgo: 7, count }] },
+        subscription: {},
+      });
+      expect(wrapper.find('[data-cy="usage-message"]').text()).toMatch(messageRegex(count));
+      expect(
+        wrapper.find('[data-cy="usage-message"][data-usage="withinLimits"]').exists()
+      ).toBeTruthy();
+    });
+
+    it('is displayed when at the limit', async () => {
+      const count = 7;
+      await wrapper.setProps({
+        usage: { conversationCounts: [{ daysAgo: 7, count }] },
+        subscription: {},
+      });
+      expect(wrapper.find('[data-cy="usage-message"]').text()).toMatch(messageRegex(count));
+      expect(
+        wrapper.find('[data-cy="usage-message"][data-usage="atMaxLimit"]').exists()
+      ).toBeTruthy();
+    });
+
+    it('includes the email in the subscribe url', async () => {
+      const wrapper = mount(VChatInput, {
+        propsData: {
+          usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
+          email: 'test@example.com',
+        },
+      });
+      expect(wrapper.find('[data-cy="usage-message"] a').attributes('href')).toStrictEqual(
+        'https://getappmap.com/?email=test%40example.com'
+      );
+    });
+
+    it('omits the email in the subscribe url when not provided', async () => {
+      const wrapper = mount(VChatInput, {
+        propsData: {
+          usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
+        },
+      });
+      expect(wrapper.find('[data-cy="usage-message"] a').attributes('href')).toStrictEqual(
+        'https://getappmap.com'
+      );
+    });
+  });
 });

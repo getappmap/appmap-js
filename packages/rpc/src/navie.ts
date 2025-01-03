@@ -1,3 +1,5 @@
+import { ConversationThread } from '@appland/client';
+
 export namespace NavieRpc {
   export namespace V1 {
     export namespace Metadata {
@@ -29,6 +31,14 @@ export namespace NavieRpc {
         threadId: string;
       };
       export type Response = NextStep[];
+    }
+
+    export namespace Register {
+      export const Method = 'v1.navie.register';
+      export type Params = {};
+      export type Response = {
+        thread: ConversationThread;
+      };
     }
   }
 

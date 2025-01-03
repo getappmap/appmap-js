@@ -100,24 +100,31 @@
       <div class="skeleton-loader" data-cy="loading" />
     </template>
     <template v-else-if="vsCodeLMVendor">
-      <v-copilot-notice @on-configure="showModal" />
+      <v-copilot-notice :subscription="subscription" :email="email" @on-configure="showModal" />
     </template>
     <template v-else>
-      <div class="llm-configuration__indicator">
-        <v-button
-          v-if="!vsCodeLMVendor"
-          kind="native-ghost"
-          class="button"
-          @click.native="showModal"
-          data-cy="llm-config-button"
-        >
-          <v-cog-solid class="icon" />
-        </v-button>
-        <span>
-          <b>Model:</b>
-          <span class="llm-model-name" data-cy="llm-model">{{ modelName }}</span>
-          <span class="llm-provider" data-cy="llm-provider">({{ modelSubtext }})</span>
-        </span>
+      <div class="llm-configuration__container">
+        <v-subscription-status
+          class="subscription-status"
+          :subscription="subscription"
+          :email="email"
+        />
+        <div class="llm-configuration__indicator">
+          <v-button
+            v-if="!vsCodeLMVendor"
+            kind="native-ghost"
+            class="button"
+            @click.native="showModal"
+            data-cy="llm-config-button"
+          >
+            <v-cog-solid class="icon" />
+          </v-button>
+          <span>
+            <b>Model:</b>
+            <span class="llm-model-name" data-cy="llm-model">{{ modelName }}</span>
+            <span class="llm-provider" data-cy="llm-provider">({{ modelSubtext }})</span>
+          </span>
+        </div>
       </div>
     </template>
   </div>
@@ -130,6 +137,7 @@ import VCogSolid from '@/assets/cog-solid.svg';
 import VModal from '@/components/Modal.vue';
 import VCloseIcon from '@/assets/x-icon.svg';
 import VCopilotNotice from '@/components/chat-search/CopilotNotice.vue';
+import VSubscriptionStatus from '@/components/chat-search/SubscriptionStatus.vue';
 
 type LLMConfigOption = 'default' | 'own-key' | 'own-model' | 'copilot';
 
@@ -140,6 +148,7 @@ export default Vue.extend({
     VModal,
     VCloseIcon,
     VCopilotNotice,
+    VSubscriptionStatus,
   },
 
   props: {
@@ -155,6 +164,12 @@ export default Vue.extend({
       type: Boolean,
       required: false,
       default: false,
+    },
+    subscription: {
+      type: Object,
+    },
+    email: {
+      type: String,
     },
   },
 
@@ -206,6 +221,9 @@ export default Vue.extend({
       if (this.vsCodeLMVendor) return 'copilot';
       return this.isLocal ? 'other' : 'default';
     },
+    isSubscribed(): boolean {
+      return this.subscription?.subscriptions?.length > 0;
+    },
   },
 
   methods: {
@@ -226,9 +244,31 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .llm-configuration {
   display: flex;
-  padding: 1rem;
+  flex-direction: column;
+
   width: fit-content;
   color: $color-foreground;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    background-color: $color-background-dark;
+    border-radius: $border-radius;
+    border: 1px solid $color-border;
+
+    .subscription-status {
+      padding: 0.5rem;
+    }
+  }
+
+  a {
+    color: $color-link;
+    text-decoration: none;
+    &:hover {
+      color: $color-link-hover;
+      text-decoration: underline;
+    }
+  }
 
   .skeleton-loader {
     @keyframes skeleton {
@@ -258,10 +298,9 @@ export default Vue.extend({
 
   &__indicator {
     padding: 1rem;
-    align-items: center;
-    border-radius: $border-radius;
+    border-radius: 0 0 $border-radius $border-radius;
     background-color: $color-background-dark;
-    border: 1px solid $color-border;
+    border-top: 1px solid $color-border;
   }
 
   &__content {
@@ -354,17 +393,6 @@ export default Vue.extend({
       p {
         opacity: 0.8;
         margin: 0 0 0.5rem 0;
-      }
-
-      a {
-        text-decoration: none;
-        color: $color-link;
-
-        &:hover,
-        &:active {
-          color: $color-link-hover;
-          text-decoration: underline;
-        }
       }
     }
   }
