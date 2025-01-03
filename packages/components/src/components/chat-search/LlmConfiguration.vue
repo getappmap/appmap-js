@@ -100,11 +100,15 @@
       <div class="skeleton-loader" data-cy="loading" />
     </template>
     <template v-else-if="vsCodeLMVendor">
-      <v-copilot-notice :subscription="subscription" @on-configure="showModal" />
+      <v-copilot-notice :subscription="subscription" :email="email" @on-configure="showModal" />
     </template>
     <template v-else>
       <div class="llm-configuration__container">
-        <v-subscription-status class="subscription-status" :subscription="subscription" />
+        <v-subscription-status
+          class="subscription-status"
+          :subscription="subscription"
+          :email="email"
+        />
         <div class="llm-configuration__indicator">
           <v-button
             v-if="!vsCodeLMVendor"
@@ -163,6 +167,9 @@ export default Vue.extend({
     },
     subscription: {
       type: Object,
+    },
+    email: {
+      type: String,
     },
   },
 

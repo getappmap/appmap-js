@@ -30,4 +30,31 @@ describe('components/SubscriptionStatus.vue', () => {
       'Manage Subscription'
     );
   });
+
+  it('includes the email in the subscribe url', () => {
+    const wrapper = mount(SubscriptionStatus, {
+      propsData: {
+        subscription: {
+          subscriptions: [{ productName: 'AppMap Pro' }],
+        },
+        email: 'test@example.com',
+      },
+    });
+    expect(wrapper.find('[data-cy="plan-status-pro"] a').attributes('href')).toStrictEqual(
+      'https://getappmap.com/?email=test%40example.com'
+    );
+  });
+
+  it('omits the email in the subscribe url when not provided', () => {
+    const wrapper = mount(SubscriptionStatus, {
+      propsData: {
+        subscription: {
+          subscriptions: [{ productName: 'AppMap Pro' }],
+        },
+      },
+    });
+    expect(wrapper.find('[data-cy="plan-status-pro"] a').attributes('href')).toStrictEqual(
+      'https://getappmap.com'
+    );
+  });
 });

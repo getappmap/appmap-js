@@ -776,4 +776,48 @@ describe('pages/ChatSearch.vue', () => {
       expect(welcomeMessage.text()).toContain(welcomeDynamic.suggestions[1]);
     });
   });
+
+  describe('email prop', () => {
+    it('is correctly propagated', async () => {
+      const wrapper = chatSearchWrapper({
+        'v1.navie.metadata': rpcNavieMetadata(),
+        'v2.configuration.get': noConfig(),
+        'system.listMethods': rpcSystemListMethods(),
+        'v1.navie.register': [
+          [
+            null,
+            null,
+            {
+              thread: {
+                id: '00000000-0000-0000-0000-000000000000',
+                permissions: { useNavieAIProxy: true },
+                usage: {
+                  conversationCounts: [
+                    {
+                      daysAgo: 7,
+                      count: 7,
+                    },
+                  ],
+                },
+                subscription: { subscriptions: [] },
+              },
+            },
+          ],
+        ],
+      });
+
+      await waitForInitialized(wrapper);
+      await wrapper.setProps({
+        apiKey: Buffer.from('test@example.com:test', 'utf-8').toString('base64'),
+      });
+
+      const expectedHref = 'https://getappmap.com/?email=test%40example.com';
+      expect(wrapper.find('[data-cy="plan-status-free"] a').attributes('href')).toStrictEqual(
+        expectedHref
+      );
+      expect(wrapper.find('a[data-cy="input-subscribe-link"]').attributes('href')).toStrictEqual(
+        expectedHref
+      );
+    });
+  });
 });

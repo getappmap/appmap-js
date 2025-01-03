@@ -120,5 +120,28 @@ describe('ChatInput', () => {
         wrapper.find('[data-cy="usage-message"][data-usage="atMaxLimit"]').exists()
       ).toBeTruthy();
     });
+
+    it('includes the email in the subscribe url', async () => {
+      const wrapper = mount(VChatInput, {
+        propsData: {
+          usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
+          email: 'test@example.com',
+        },
+      });
+      expect(wrapper.find('[data-cy="usage-message"] a').attributes('href')).toStrictEqual(
+        'https://getappmap.com/?email=test%40example.com'
+      );
+    });
+
+    it('omits the email in the subscribe url when not provided', async () => {
+      const wrapper = mount(VChatInput, {
+        propsData: {
+          usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
+        },
+      });
+      expect(wrapper.find('[data-cy="usage-message"] a').attributes('href')).toStrictEqual(
+        'https://getappmap.com'
+      );
+    });
   });
 });

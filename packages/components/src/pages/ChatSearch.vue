@@ -22,6 +22,7 @@
         :use-animation="useAnimation"
         :usage="usage"
         :subscription="subscription"
+        :email="email"
         @isChatting="setIsChatting"
         @stop="onStop"
       >
@@ -34,6 +35,7 @@
             :model="model"
             :subscription="subscription"
             :usage="usage"
+            :email="email"
           />
         </div>
 
