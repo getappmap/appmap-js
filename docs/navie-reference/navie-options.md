@@ -62,6 +62,40 @@ To set the temperature to 0, you can use:
 - It's important to ensure that the value provided for `/temperature` is a valid float.
 - The effect of `/temperature` can directly impact the creativity and diversity of the generated text.
 
+## /gather
+
+The `/gather` option is used to enable or disable the context gathering feature. This option allows
+you to control whether Navie should gather additional context from the repository to enhance its
+responses. By default, context gathering is enabled in the following situations:
+
+- When performing `@generate` and `@plan`.
+- When the `overview` classifier is applied automatically by Navie to the question.
+
+When enabled, gather will perform any or all of the following actions:
+
+- List files in the repository.
+- Fetch full the full content of a file in the repository.
+- Search the repository for context by keyword.
+
+Gatherer runs autonomously, there's no user control over what actions it will take. To explicitly
+control the context that's available to Navie, you can other features such as pinned files,
+`/include` and `/exclude` options.
+
+**Syntax**
+
+```shell
+/gather=<true|false>
+```
+
+- `<true|false>`: A boolean value indicating whether to enable (`true`) or disable (`false`) the
+  context gathering feature.
+
+**Example** To enable context gathering, you can use:
+
+```shell
+@generate /gather=true <question>
+```
+
 ## /include and /exclude
 
 The `/include` and `/exclude` options are used to include or exclude specific file patterns from the retrieved context.
