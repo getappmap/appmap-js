@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.180.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.180.3...@appland/appmap-v3.180.4) (2025-01-06)
+
+
+### Bug Fixes
+
+* Include working changes during [@review](https://github.com/review) ([d2b8535](https://github.com/getappmap/appmap-js/commit/d2b85351d6f510409bd36025983a5cdd378845ef))
+
 # [@appland/appmap-v3.180.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.180.2...@appland/appmap-v3.180.3) (2025-01-02)
 
 
