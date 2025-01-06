@@ -7,7 +7,8 @@
 */
 import { EventEmitter } from 'stream';
 
-const eventEmitter = new EventEmitter();
+let eventEmitter: EventEmitter;
+let workingDiffContent: string;
 const childProcess = {
   stdout: {
     setEncoding: jest.fn(),
@@ -34,6 +35,7 @@ jest.mock('../../../../src/lib/git', () => {
   const originalModule = jest.requireActual('../../../../src/lib/git');
   return {
     ...originalModule,
+    getWorkingDiff: jest.fn().mockImplementation(() => Promise.resolve(workingDiffContent)),
     getDiffLog: jest
       .fn()
       .mockImplementation((headCommit = 'HEAD', _baseCommit?: string, cwd?: string) => {
@@ -47,6 +49,12 @@ import handleReview from '../../../../src/rpc/explain/review';
 
 describe('handleReview', () => {
   const diffContent = 'git diff here';
+
+  beforeEach(() => {
+    // Prevent re-binding listeners to the same event emitter.
+    eventEmitter = new EventEmitter();
+    workingDiffContent = '';
+  });
 
   afterAll(() => {
     jest.resetAllMocks();
@@ -63,13 +71,18 @@ describe('handleReview', () => {
   });
 
   it('converts string user context to a context array', async () => {
+    workingDiffContent = 'working changes here';
     const result = handleReview('@review', 'print("hello")');
     emitResult(diffContent);
     await expect(result).resolves.toStrictEqual({
       applied: true,
       userContext: [
         { type: 'code-selection', content: 'print("hello")' },
-        { type: 'code-snippet', location: 'git diff', content: diffContent },
+        {
+          type: 'code-snippet',
+          location: 'git diff',
+          content: `${workingDiffContent}\n\n${diffContent}`,
+        },
       ],
     });
   });
