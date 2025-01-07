@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.181.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.180.4...@appland/appmap-v3.181.0) (2025-01-07)
+
+
+### Features
+
+* Display conversation quota and status ([3149116](https://github.com/getappmap/appmap-js/commit/3149116296140b6fb4d236079eecb0ed7b3f47e9))
+
 # [@appland/appmap-v3.180.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.180.3...@appland/appmap-v3.180.4) (2025-01-06)
 
 
