@@ -1,3 +1,10 @@
+# [@appland/components-v4.43.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.42.0...@appland/components-v4.43.0) (2025-01-07)
+
+
+### Features
+
+* Display conversation quota and status ([3149116](https://github.com/getappmap/appmap-js/commit/3149116296140b6fb4d236079eecb0ed7b3f47e9))
+
 # [@appland/components-v4.42.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.41.0...@appland/components-v4.42.0) (2024-12-18)
 
 
