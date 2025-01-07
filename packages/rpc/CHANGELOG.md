@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.17.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.16.0...@appland/rpc-v1.17.0) (2025-01-07)
+
+
+### Features
+
+* Display conversation quota and status ([3149116](https://github.com/getappmap/appmap-js/commit/3149116296140b6fb4d236079eecb0ed7b3f47e9))
+
 # [@appland/rpc-v1.16.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.15.0...@appland/rpc-v1.16.0) (2024-12-18)
 
 
