@@ -19,8 +19,8 @@ describe('AgentSelectionService', () => {
   let fileChangeExtractorService: FileChangeExtractorService;
   let techStackService: TechStackService;
   let mermaidFixerService: MermaidFixerService;
-  let genericQuestion = 'How does user management work?';
-  let helpAgentQueston = '@help How to make a diagram?';
+  const genericQuestion = 'How does user management work?';
+  const helpAgentQueston = '@help How to make a diagram?';
   const emptyUserOptions = new UserOptions(new Map());
 
   function buildAgentSelectionService() {
@@ -57,7 +57,7 @@ describe('AgentSelectionService', () => {
       expect(agent).toBeInstanceOf(HelpAgent);
     });
     it('emits the agent selection event', () => {
-      const { agent } = invokeAgent();
+      invokeAgent();
       expect(agentSelectionEvent()?.metadata).toEqual({
         agent: 'help',
         type: 'agentSelection',
@@ -82,7 +82,7 @@ describe('AgentSelectionService', () => {
   });
 
   describe('when the question is classified as help-with-appmap', () => {
-    it('creates a Help agent', () => {
+    it('creates an explain agent', () => {
       const { agent } = buildAgentSelectionService().selectAgent(
         genericQuestion,
         [
@@ -93,23 +93,7 @@ describe('AgentSelectionService', () => {
         ],
         emptyUserOptions
       );
-      expect(agent).toBeInstanceOf(HelpAgent);
-    });
-
-    describe('but /nohelp is specified', () => {
-      it('creates an Explain agent', () => {
-        const { agent } = buildAgentSelectionService().selectAgent(
-          genericQuestion,
-          [
-            {
-              name: ContextV2.ContextLabelName.GenerateDiagram,
-              weight: ContextV2.ContextLabelWeight.High,
-            },
-          ],
-          new UserOptions(new Map([['help', false]]))
-        );
-        expect(agent).toBeInstanceOf(ExplainAgent);
-      });
+      expect(agent).toBeInstanceOf(ExplainAgent);
     });
   });
 });
