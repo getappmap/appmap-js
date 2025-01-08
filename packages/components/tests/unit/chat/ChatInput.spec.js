@@ -121,6 +121,19 @@ describe('ChatInput', () => {
       ).toBeTruthy();
     });
 
+    it('is not displayed when displaySubscription feature flag is false', async () => {
+      const wrapper = mount(VChatInput, {
+        propsData: {
+          usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
+          subscription: {},
+        },
+        provide: {
+          displaySubscription: false,
+        },
+      });
+      expect(wrapper.find('[data-cy="usage-message"]').exists()).toBeFalsy();
+    });
+
     it('includes the email in the subscribe url', async () => {
       const wrapper = mount(VChatInput, {
         propsData: {

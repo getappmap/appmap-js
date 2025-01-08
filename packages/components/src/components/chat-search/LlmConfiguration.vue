@@ -108,8 +108,14 @@
           class="subscription-status"
           :subscription="subscription"
           :email="email"
+          v-if="displaySubscription"
         />
-        <div class="llm-configuration__indicator">
+        <div
+          :class="{
+            'llm-configuration__indicator': 1,
+            'llm-configuration__indicator--no-subscription': !displaySubscription,
+          }"
+        >
           <v-button
             v-if="!vsCodeLMVendor"
             kind="native-ghost"
@@ -170,6 +176,12 @@ export default Vue.extend({
     },
     email: {
       type: String,
+    },
+  },
+
+  inject: {
+    displaySubscription: {
+      default: true,
     },
   },
 
@@ -301,6 +313,11 @@ export default Vue.extend({
     border-radius: 0 0 $border-radius $border-radius;
     background-color: $color-background-dark;
     border-top: 1px solid $color-border;
+
+    &--no-subscription {
+      border-top: none;
+      border-radius: $border-radius;
+    }
   }
 
   &__content {

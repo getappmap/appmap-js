@@ -1,6 +1,6 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import navieContext from '../../../src/stories/data/navie_context.json';
 
 describe('pages/ChatSearch.vue', () => {
@@ -218,6 +218,16 @@ describe('pages/ChatSearch.vue', () => {
     const newWidth = Number.parseInt(lhsPanel.element.style.width.replace('px', ''), 10);
 
     expect(newWidth).toBe(initialWidth + resizeBy);
+  });
+
+  it('provides a displaySubscription feature flag via prop', async () => {
+    [true, false].forEach((displaySubscription) => {
+      const wrapper = mount(VChatSearch, {
+        propsData: { appmapRpcFn: jest.fn(), displaySubscription },
+      });
+      // eslint-disable-next-line no-underscore-dangle
+      expect(wrapper.vm._provided.displaySubscription).toBe(displaySubscription);
+    });
   });
 
   describe('when AppMaps are available', () => {
@@ -804,6 +814,7 @@ describe('pages/ChatSearch.vue', () => {
             },
           ],
         ],
+        propsData: { displaySubscription: true },
       });
 
       await waitForInitialized(wrapper);
