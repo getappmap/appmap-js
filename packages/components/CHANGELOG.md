@@ -1,3 +1,10 @@
+# [@appland/components-v4.43.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.43.0...@appland/components-v4.43.1) (2025-01-08)
+
+
+### Bug Fixes
+
+* Subscription indicators are now behind a feature flag ([1779b49](https://github.com/getappmap/appmap-js/commit/1779b499313197bbc2f822c15edbad2ead5021c6))
+
 # [@appland/components-v4.43.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.42.0...@appland/components-v4.43.0) (2025-01-07)
 
 
