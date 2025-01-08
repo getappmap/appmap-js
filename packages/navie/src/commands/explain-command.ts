@@ -45,6 +45,7 @@ export default class ExplainCommand implements Command {
     const { question: baseQuestion, codeSelection } = request;
 
     const classifyEnabled = request.userOptions.isEnabled('classify', true);
+    const tokenLimit = request.userOptions.numberValue('tokenlimit') || this.options.tokenLimit;
 
     let contextLabelsFn: Promise<ContextV2.ContextLabel[]> | undefined;
 
@@ -91,9 +92,7 @@ export default class ExplainCommand implements Command {
     }
 
     const tokensAvailable = (): number =>
-      this.options.tokenLimit -
-      this.options.responseTokens -
-      this.interactionHistory.computeTokenSize();
+      tokenLimit - this.options.responseTokens - this.interactionHistory.computeTokenSize();
 
     const aggregateQuestion = [
       ...(chatHistory || [])
