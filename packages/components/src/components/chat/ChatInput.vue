@@ -1,6 +1,6 @@
 <template>
   <div class="chat-input">
-    <template v-if="freeUsage && threadCount > 0">
+    <template v-if="freeUsage && threadCount > 0 && displaySubscription">
       <div class="usage" :data-usage="freeUsage" data-cy="usage-message">
         <span class="usage__message">
           You've used
@@ -150,6 +150,11 @@ export default {
     },
     email: {
       type: String,
+    },
+  },
+  inject: {
+    displaySubscription: {
+      default: true,
     },
   },
   data() {

@@ -137,6 +137,18 @@ describe('components/LlmConfiguration.vue', () => {
   });
 
   describe('subscription status', () => {
+    it('is not displayed when displaySubscription feature flag is false', async () => {
+      const wrapper = mount(LlmConfiguration, {
+        propsData: {
+          subscription: {},
+        },
+        provide: {
+          displaySubscription: false,
+        },
+      });
+      expect(wrapper.find('[data-cy="plan-status-free"]').exists()).toBeFalsy();
+    });
+
     describe('default', () => {
       it('shows the free plan', async () => {
         const wrapper = mount(LlmConfiguration, {

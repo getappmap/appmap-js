@@ -182,6 +182,10 @@ export default {
       default: 'vscode',
       validator: (value) => ['vscode', 'intellij'].indexOf(value) !== -1,
     },
+    displaySubscription: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -240,6 +244,7 @@ export default {
       pinnedItems: this.pinnedItems,
       rpcClient: this.rpcClient,
       projectDirectories: this.projectDirectories,
+      displaySubscription: this.displaySubscription,
     };
   },
   watch: {
