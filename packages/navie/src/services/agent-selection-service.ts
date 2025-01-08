@@ -30,10 +30,6 @@ type AgentModeResult = {
   selectionMessage?: string;
 };
 
-const HELP_AGENT_SELECTED_MESSAGE = `It looks like you are asking for help using AppMap, so
-I'm activating \`@help\` mode and basing my answer primarily on AppMap documentation. To disable this
-behavior, re-ask your question and start with the option \`/nohelp\` or with a mode selector such as \`@explain\`.`;
-
 const MODE_PREFIXES = {
   '@explain ': AgentMode.Explain,
   '@search ': AgentMode.Search,
@@ -126,49 +122,12 @@ export default class AgentSelectionService {
       }
     };
 
-    const classifierSelections: {
-      name: ContextV2.ContextLabelName;
-      mode: AgentMode;
-      disableOption?: string;
-      message?: string;
-    }[] = [
-      {
-        name: ContextV2.ContextLabelName.HelpWithAppMap,
-        mode: AgentMode.Help,
-        disableOption: 'help',
-        message: HELP_AGENT_SELECTED_MESSAGE,
-      },
-    ];
-
-    const classifierMode = (): AgentModeResult | undefined => {
-      const classifierSelection = classifierSelections.find((selection) =>
-        classification.some(
-          (label) =>
-            label.name === selection.name &&
-            label.weight === ContextV2.ContextLabelWeight.High &&
-            (!selection.disableOption || userOptions.booleanValue(selection.disableOption, true))
-        )
-      );
-      if (classifierSelection) {
-        const { mode } = classifierSelection;
-        this.history.log(`[mode-selection] Activating agent due to classifier: ${mode}`);
-        const agent = buildAgent[mode]();
-        return {
-          agentMode: mode,
-          question,
-          agent,
-          selectedByClassifier: true,
-          selectionMessage: classifierSelection.message,
-        };
-      }
-    };
-
     const defaultMode = () => {
       this.history.log(`[mode-selection] Using default mode: ${AgentMode.Explain}`);
       return { agentMode: AgentMode.Explain, question, agent: explainAgent() };
     };
 
-    const result = questionPrefixMode() || classifierMode() || defaultMode();
+    const result = questionPrefixMode() || defaultMode();
     this.history.addEvent(new AgentSelectionEvent(result.agentMode));
     return result;
   }
