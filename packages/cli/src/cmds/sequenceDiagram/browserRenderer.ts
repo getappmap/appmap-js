@@ -49,6 +49,10 @@ export default class BrowserRenderer {
     const puppeteer = require('puppeteer');
 
     if (verbose()) console.warn(`Preparing browser for PNG rendering`);
-    this._browser = await puppeteer.launch({ timeout: 120 * 1000, headless: !this.showBrowser });
+    this._browser = await puppeteer.launch({
+      timeout: 120 * 1000,
+      headless: !this.showBrowser,
+      args: ['--no-sandbox'],
+    });
   }
 }
