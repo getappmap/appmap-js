@@ -20,6 +20,9 @@ import detectAIEnvVar, { AI_KEY_ENV_VARS } from './index/aiEnvVar';
 import detectCodeEditor from '../lib/detectCodeEditor';
 import { verbose } from '../utils';
 import Trajectory from '../rpc/explain/navie/trajectory';
+import { serveAndOpenNavie } from '../lib/serveAndOpen';
+import RPCServer from './index/rpcServer';
+import { rpcMethods } from './index/rpc';
 
 interface ExplainArgs {
   verbose: boolean;
@@ -91,6 +94,10 @@ export function commonNavieArgsBuilder<T>(args: yargs.Argv<T>): yargs.Argv<T & N
     .option('trajectory-file', {
       describe: 'File to write the LLM interaction history, in JSONL format',
       type: 'string',
+    })
+    .option('ui', {
+      describe: 'Open Navie UI in the browser',
+      boolean: true,
     });
 }
 
@@ -247,20 +254,40 @@ export async function handler(argv: HandlerArguments) {
     if (codeEditor) warn(`Detected code editor: ${codeEditor}`);
   }
 
-  let codeSelection: string | undefined;
-  if (argv.codeSelection) codeSelection = await readFile(argv.codeSelection, 'utf-8');
-
-  let prompt: string | undefined;
-  if (argv.prompt) prompt = await readFile(argv.prompt, 'utf-8');
-
-  const question = await getQuestion(argv.input, argv.question);
   const capturingProvider = (...args: Parameters<INavieProvider>) =>
     attachNavie(buildNavieProvider(argv)(...args));
 
   // WIP: Help the @apply command to resolve paths
   if (argv.directory.length === 1) process.chdir(argv.directory[0]);
 
-  await explainHandler(capturingProvider, codeEditor).handler({ question, codeSelection, prompt });
+  const openInTerminal = async () => {
+    let codeSelection: string | undefined;
+    if (argv.codeSelection) codeSelection = await readFile(argv.codeSelection, 'utf-8');
+
+    let prompt: string | undefined;
+    if (argv.prompt) prompt = await readFile(argv.prompt, 'utf-8');
+
+    const question = await getQuestion(argv.input, argv.question);
+
+    return await explainHandler(capturingProvider, codeEditor).handler({
+      question,
+      codeSelection,
+      prompt,
+    });
+  };
+
+  const openInBrowser = (): void => {
+    const rpcServer = new RPCServer(0, rpcMethods(buildNavieProvider(argv), codeEditor));
+    rpcServer.start((port) => {
+      serveAndOpenNavie(port);
+    });
+  };
+
+  if (argv.ui) {
+    openInBrowser();
+  } else {
+    await openInTerminal();
+  }
 }
 
 function openOutput(outputPath: string | undefined): Writable {

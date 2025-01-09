@@ -1,4 +1,4 @@
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import open from 'open';
@@ -18,18 +18,19 @@ function mimeTypeOfName(filename: string): string {
   );
 }
 
-export default async function serveAndOpen(
+export default function serveAndOpen(
   file: string,
   resources: Record<string, string>,
   verifyInSubdir: boolean,
-  onListen: (url: string) => void
+  onListen: (url: string) => void,
+  unrefOnServe = true
 ) {
   UI.progress(`Opening ${file}`);
 
   const baseDir = join(__dirname, '..', '..', 'built', 'html');
-  if (!(await exists(join(baseDir, file)))) throw new Error(`File ${file} does not exist`);
+  if (!existsSync(join(baseDir, file))) throw new Error(`File ${file} does not exist`);
 
-  const server = createServer(async (req, res) => {
+  const server = createServer((req, res) => {
     const send404 = () => {
       res.writeHead(404);
       res.end();
@@ -39,6 +40,7 @@ export default async function serveAndOpen(
       const path = isAbsolute(fileName) ? fileName : join(dir, fileName);
       if (verifyInSubdir && !path.startsWith(dir)) return send404();
 
+      // eslint-disable-next-line no-param-reassign
       if (!contentType) contentType = mimeTypeOfName(fileName);
 
       const fileStream = createReadStream(path);
@@ -73,8 +75,13 @@ export default async function serveAndOpen(
       } else {
         serveStaticFile(baseDir, (pathname || '/').slice(1));
       }
-    } catch (e: any) {
-      console.log(e.stack);
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e.message);
+        console.log(e.stack);
+      } else {
+        console.log(e);
+      }
       res.writeHead(500);
       res.end(); // end the response so browsers don't hang
     }
@@ -92,8 +99,8 @@ export default async function serveAndOpen(
     .on('connection', function (socket) {
       // Don't let the open socket keep the process alive.
       socket.unref();
-    })
-    .unref();
+    });
+  if (unrefOnServe) server.unref();
 }
 
 export async function serveAndOpenSequenceDiagram(
@@ -135,6 +142,25 @@ export async function serveAndOpenAppMap(
   });
 }
 
+export async function serveAndOpenNavie(rpcPort: number, question?: string): Promise<string> {
+  const params: Record<string, string> = {
+    rpcPort: rpcPort.toString(),
+  };
+  if (question) params.question = question;
+
+  return new Promise((resolve) => {
+    serveAndOpen(
+      'navie.html',
+      params,
+      false,
+      async (url) => {
+        await tryOpen(url);
+        resolve(url);
+      },
+      false
+    );
+  });
+}
 async function tryOpen(url: string) {
   const showMessage = () =>
     UI.warn(`\nWe could not open the browser automatically.\nOpen ${url} to view the content.\n`);
