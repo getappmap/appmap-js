@@ -150,9 +150,9 @@ __metadata:
     "@appland/models": "workspace:^2.10.2"
     "@appland/navie": ^1.39.3
     "@appland/openapi": "workspace:^1.8.0"
-    "@appland/rpc": "workspace:^1.13.0"
+    "@appland/rpc": "workspace:^1.17.0"
     "@appland/scanner": "workspace:^1.86.0"
-    "@appland/search": "workspace:^1.1.0"
+    "@appland/search": "workspace:^1.1.1"
     "@appland/sequence-diagram": "workspace:^1.12.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@eslint/js": ~8.57.0
@@ -507,7 +507,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/rpc@workspace:^1.13.0, @appland/rpc@workspace:packages/rpc":
+"@appland/rpc@workspace:^1.13.0, @appland/rpc@workspace:^1.17.0, @appland/rpc@workspace:packages/rpc":
   version: 0.0.0-use.local
   resolution: "@appland/rpc@workspace:packages/rpc"
   dependencies:
@@ -588,7 +588,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/search@workspace:^1.1.0, @appland/search@workspace:packages/search":
+"@appland/search@workspace:^1.1.1, @appland/search@workspace:packages/search":
   version: 0.0.0-use.local
   resolution: "@appland/search@workspace:packages/search"
   dependencies:
