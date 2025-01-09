@@ -77,21 +77,14 @@
 
 <script lang="ts">
 //@ts-nocheck
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
 import VButton from '@/components/Button.vue';
 import { AI } from '@appland/client';
 import { ExplainRpc, NavieRpc } from '@appland/rpc';
-
-export type CodeSelection = {
-  path: string;
-  lineStart: number;
-  lineEnd: number;
-  code: string;
-  language: string;
-};
+import { CodeSelection } from './CodeSelection';
 
 export interface ITool {
   title: string;
@@ -237,8 +230,34 @@ export default {
           const userMessage = this.addUserMessage(content);
           if (codeSelection && !populatedCodeSelection) {
             populatedCodeSelection = true;
-            // TODO: There's some mismatch here between what the UI shows & what's in the thread data.
-            userMessage.codeSelections = [codeSelection];
+
+            let parsedCodeSelections: CodeSelection[];
+            try {
+              // Code selections are stored natively as a CodeSelection object, but restored from
+              // serialization as a string.
+              parsedCodeSelections = JSON.parse(codeSelection);
+            } catch {
+              // Issue a warning
+              console.warn('Code selection is not valid JSON');
+
+              // If the codeSelection is not valid JSON, it's likely a string.
+              // This is a temporary fix to handle the string case.
+              parsedCodeSelections = [
+                {
+                  content: codeSelection,
+                },
+              ];
+            }
+            userMessage.codeSelections = parsedCodeSelections;
+
+            if (typeof codeSelection === 'string') {
+              const codeSelectionObj: CodeSelection = {
+                content: codeSelection,
+              };
+              userMessage.codeSelections = [codeSelectionObj];
+            } else {
+              userMessage.codeSelections = [codeSelection];
+            }
           }
         }
         if (exchange.answer) {
@@ -310,11 +329,7 @@ export default {
       const userMessage = this.addUserMessage(message);
       userMessage.codeSelections = this.codeSelections;
 
-      this.sendMessage(
-        message,
-        this.codeSelections.map((s) => s.code),
-        this.appmaps
-      );
+      this.sendMessage(message, this.codeSelections, this.appmaps);
 
       this.codeSelections = [];
     },
