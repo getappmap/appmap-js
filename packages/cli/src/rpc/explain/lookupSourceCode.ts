@@ -29,7 +29,7 @@ const FILE_NAMES = new Set<string>();
 export default async function lookupSourceCode(
   directory: string,
   location: string
-): Promise<string[] | undefined> {
+): Promise<{ content: string; location: string } | undefined> {
   const parsedLocation = parseLocation(location);
   if (!parsedLocation) return;
 
@@ -77,9 +77,9 @@ export default async function lookupSourceCode(
   }
 
   const fileContent = await readFile(fileName, 'utf-8');
-  if (!lineNo) return [fileContent];
+  const path = fileName.slice(directory.length + 1);
 
-  if (lineNo <= 0) return [fileContent];
+  if (!lineNo || lineNo <= 0) return { content: fileContent, location: path };
 
   const fileExtension = fileName.slice(fileName.lastIndexOf('.'));
   const language = LANGUAGE_BY_FILE_EXTENSION[fileExtension];
@@ -100,6 +100,30 @@ export default async function lookupSourceCode(
   const matches = chunks.filter(
     (chunk) => chunk.metadata.loc.lines.from <= lineNo && chunk.metadata.loc.lines.to >= lineNo
   );
-  if (verbose()) warn(chalk.gray(`Obtained ${matches.length} source code chunks for ${location}`));
-  return matches.map((match) => match.pageContent);
+
+  // determine the extent of the snippets and return a single snippet that contains all the complete lines
+  if (matches.length === 0) {
+    warn(chalk.gray(`No source code found for ${location}`));
+    return;
+  }
+
+  const extent = {
+    from: Math.min(...matches.map((match) => match.metadata.loc.lines.from)),
+    to: Math.max(...matches.map((match) => match.metadata.loc.lines.to)),
+  };
+
+  if (verbose())
+    warn(
+      chalk.gray(
+        `Found ${matches.length} matches for ${location} (extent: ${extent.from}-${extent.to})`
+      )
+    );
+
+  return {
+    content: fileContent
+      .split('\n')
+      .slice(extent.from - 1, extent.to)
+      .join('\n'),
+    location: `${path}:${extent.from}-${extent.to}`,
+  };
 }

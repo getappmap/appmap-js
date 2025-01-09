@@ -70,13 +70,13 @@ export default async function buildContext(
 
       codeSnippetLocations.add(event.location);
 
-      const snippets = await lookupSourceCode(result.directory, event.location);
-      if (snippets) {
+      const snippet = await lookupSourceCode(result.directory, event.location);
+      if (snippet) {
         codeSnippets.push({
           directory: result.directory,
           type: ContextV2.ContextItemType.CodeSnippet,
-          location: event.location,
-          content: snippets.join('\n'),
+          location: snippet.location,
+          content: snippet.content,
           score: event.score,
         });
       }

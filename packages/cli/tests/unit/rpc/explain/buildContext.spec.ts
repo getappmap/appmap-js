@@ -36,7 +36,9 @@ describe('buildContext', () => {
 
   describe('function call', () => {
     it('is emitted with source code', async () => {
-      jest.mocked(lookupSourceCode).mockResolvedValue(['the code']);
+      jest
+        .mocked(lookupSourceCode)
+        .mockResolvedValue({ content: 'the code', location: 'app/models/user.rb:42-47' });
 
       const context = await buildContext([
         {
@@ -53,7 +55,7 @@ describe('buildContext', () => {
       ).toEqual([
         {
           directory: 'a',
-          location: 'app/models/user.rb',
+          location: 'app/models/user.rb:42-47',
           type: 'code-snippet',
           score: 1,
           content: 'the code',
