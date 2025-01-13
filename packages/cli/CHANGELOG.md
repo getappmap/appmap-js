@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.181.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.181.0...@appland/appmap-v3.181.1) (2025-01-13)
+
+
+### Bug Fixes
+
+* Return whole lines when looking up source code ([1061f19](https://github.com/getappmap/appmap-js/commit/1061f19a53adfe8fd98e554cea7e020ad9f9eb16))
+
 # [@appland/appmap-v3.181.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.180.4...@appland/appmap-v3.181.0) (2025-01-07)
 
 
