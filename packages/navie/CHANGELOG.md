@@ -1,3 +1,15 @@
+# [@appland/navie-v1.40.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.39.3...@appland/navie-v1.40.0) (2025-01-13)
+
+
+### Bug Fixes
+
+* /tokenlimit is not overriding the TOKEN_LIMIT env var ([e5ba762](https://github.com/getappmap/appmap-js/commit/e5ba762c63273f546ac13cec907264d34c8559d1))
+
+
+### Features
+
+* Disable the selection of help mode by default ([2489694](https://github.com/getappmap/appmap-js/commit/2489694031a69c13ab5a291d683856e79353a4e1))
+
 # [@appland/navie-v1.39.3](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.39.2...@appland/navie-v1.39.3) (2025-01-02)
 
 
