@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.181.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.181.1...@appland/appmap-v3.181.2) (2025-01-13)
+
+
+### Bug Fixes
+
+* --no-sandbox to generate PNG from sequence diagram ([d7a4c99](https://github.com/getappmap/appmap-js/commit/d7a4c99a846d43bc30b9a132bf733291e0672e85))
+
 # [@appland/appmap-v3.181.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.181.0...@appland/appmap-v3.181.1) (2025-01-13)
 
 
