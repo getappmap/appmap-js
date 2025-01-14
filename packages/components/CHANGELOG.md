@@ -1,3 +1,10 @@
+# [@appland/components-v4.43.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.43.1...@appland/components-v4.43.2) (2025-01-14)
+
+
+### Bug Fixes
+
+* Hide AppMap subscription status in Copilot indicator ([8954422](https://github.com/getappmap/appmap-js/commit/89544229a051e48d55b3ae27c5f68e9cf23f2391))
+
 # [@appland/components-v4.43.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.43.0...@appland/components-v4.43.1) (2025-01-08)
 
 
