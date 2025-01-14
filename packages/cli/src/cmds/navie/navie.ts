@@ -12,7 +12,7 @@ import { Agents, ContextV2, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
-import { explainHandler } from '../../rpc/explain/explain';
+import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain';
 import INavie, { INavieProvider } from '../../rpc/explain/navie/inavie';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import RemoteNavie from '../../rpc/explain/navie/navie-remote';
@@ -22,6 +22,8 @@ import { verbose } from '../../utils';
 import Trajectory from '../../rpc/explain/navie/trajectory';
 import { serveAndOpenNavie } from '../../lib/serveAndOpen';
 import UI from './ui';
+import { ExplainRpc } from '@appland/rpc';
+import assert from 'node:assert';
 
 interface ExplainArgs {
   verbose: boolean;
@@ -240,7 +242,12 @@ export async function handler(argv: HandlerArguments) {
   verbose(argv.verbose);
   await configureRpcDirectories(argv.directory);
 
-  const output = openOutput(argv.output);
+  let output: Writable;
+  if (argv.interactive) {
+    output = openOutput('navie.txt');
+  } else {
+    output = openOutput(argv.output);
+  }
 
   function attachNavie(navie: INavie): INavie {
     return navie
@@ -280,7 +287,81 @@ export async function handler(argv: HandlerArguments) {
   };
 
   const openInteractive = async () => {
-    const ui = new UI(capturingProvider, codeEditor);
+    process.on('uncaughtException', function (err) {
+      console.error(err instanceof Error ? err.stack : err);
+    });
+
+    const access = createWriteStream('navie.log');
+
+    console.log = console.debug = console.warn;
+
+    // console.log = () => {};
+    // console.info = () => {};
+    // console.warn = () => {};
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
+    (process.stderr as any).write = access.write.bind(access);
+    // (console.log as any) = access.write.bind(access);
+    // (console.info as any) = access.write.bind(access);
+    // (console.warn as any) = access.write.bind(access);
+
+    const ui = new UI();
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    ui.on('ask', async (question: string) => {
+      if (!question) return;
+
+      // ui.addResponseToken('How are you doing today?');
+      // ui.addResponseToken(' I am Navie, your AI assistant. ');
+      // ui.addResponseToken(`Thanks for asking: '${question}'`);
+
+      // return;
+
+      const response = await explainHandler(capturingProvider, codeEditor).handler({
+        question,
+        // TODO: Add codeSelection, prompt, and other options
+      });
+
+      const readStatus = async () =>
+        await explainStatusHandler().handler({
+          userMessageId: response.userMessageId,
+          threadId: response.threadId,
+        });
+
+      let numTokens = 0;
+      let status: ExplainRpc.ExplainStatusResponse | undefined;
+
+      const applyStatus = () => {
+        if (!status) return;
+
+        const tokenCount = status.explanation?.length;
+        if (tokenCount && tokenCount > 0) {
+          const newTokens = status.explanation?.slice(numTokens);
+          for (const token of newTokens ?? []) {
+            ui.addResponseToken(token);
+          }
+
+          numTokens = tokenCount;
+        }
+      };
+
+      do {
+        await new Promise<void>((resolve) =>
+          setTimeout(() => {
+            void readStatus().then((newStatus) => {
+              status = newStatus;
+              resolve();
+            });
+          }, 250)
+        );
+        applyStatus();
+      } while (
+        status &&
+        status.step !== ExplainRpc.Step.COMPLETE &&
+        status.step !== ExplainRpc.Step.ERROR
+      );
+    });
+
     return await ui.run();
   };
 
@@ -296,18 +377,23 @@ export async function handler(argv: HandlerArguments) {
 }
 
 function openOutput(outputPath: string | undefined): Writable {
-  switch (outputPath) {
-    case '-':
-    case undefined:
-      // prevent other things from messing with the output
-      console.log = console.debug = console.warn;
+  const writeToStdout = () => {
+    console.log = console.debug = console.warn;
+    warn('No output specified, writing to stdout');
+    return process.stdout;
+  };
 
-      warn('No output specified, writing to stdout');
-      return process.stdout;
-    default:
-      warn(`Writing output to ${outputPath}`);
-      return createWriteStream(outputPath);
-  }
+  const writeToFile = () => {
+    assert(outputPath);
+    warn(`Writing output to ${outputPath}`);
+    return createWriteStream(outputPath);
+  };
+
+  const flagsIndicateStdout = () => outputPath === '-' || outputPath === undefined;
+
+  if (flagsIndicateStdout()) return writeToStdout();
+
+  return writeToFile();
 }
 
 async function getQuestion(path?: string, literal?: string[]): Promise<string> {
