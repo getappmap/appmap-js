@@ -5,8 +5,14 @@
         class="subscription-status"
         :subscription="subscription"
         :email="email"
+        v-if="displaySubscription"
       />
-      <div class="copilot-notice__notification">
+      <div
+        :class="{
+          'copilot-notice__notification': 1,
+          'copilot-notice__notification--no-subscription': !displaySubscription,
+        }"
+      >
         <div class="copilot-notice__notification-icon">
           <v-shield-icon />
         </div>
@@ -40,6 +46,11 @@ export default Vue.extend({
     },
     email: {
       type: String,
+    },
+  },
+  inject: {
+    displaySubscription: {
+      default: true,
     },
   },
 });
@@ -84,6 +95,10 @@ export default Vue.extend({
       svg {
         width: 24px;
       }
+    }
+
+    &--no-subscription {
+      border-top: none;
     }
   }
 
