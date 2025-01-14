@@ -11,7 +11,7 @@ import { RpcHandler } from '../../rpc/rpc';
 import metadata from '../../rpc/appmap/metadata';
 import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
 import { explainHandler, explainStatusHandler, loadThreadHandler } from '../../rpc/explain/explain';
-import { buildNavieProvider, commonNavieArgsBuilder as navieBuilder } from '../navie';
+import { buildNavieProvider, commonNavieArgsBuilder as navieBuilder } from '../navie/navie';
 import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';

@@ -36,7 +36,7 @@ const InventoryReportCommand = require('./cmds/inventory-report/inventoryReport'
 const SearchCommand = require('./cmds/search/search');
 import * as RpcCommand from './cmds/index/rpc';
 import * as RpcClientCommand from './cmds/rpcClient';
-import * as NavieCommand from './cmds/navie';
+import * as NavieCommand from './cmds/navie/navie';
 import * as ApplyCommand from './cmds/apply';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
 

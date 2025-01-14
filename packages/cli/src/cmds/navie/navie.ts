@@ -11,16 +11,17 @@ import { loadConfiguration } from '@appland/client';
 import { Agents, ContextV2, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
-import { configureRpcDirectories } from '../lib/handleWorkingDirectory';
-import { explainHandler } from '../rpc/explain/explain';
-import INavie, { INavieProvider } from '../rpc/explain/navie/inavie';
-import LocalNavie from '../rpc/explain/navie/navie-local';
-import RemoteNavie from '../rpc/explain/navie/navie-remote';
-import detectAIEnvVar, { AI_KEY_ENV_VARS } from './index/aiEnvVar';
-import detectCodeEditor from '../lib/detectCodeEditor';
-import { verbose } from '../utils';
-import Trajectory from '../rpc/explain/navie/trajectory';
-import { serveAndOpenNavie } from '../lib/serveAndOpen';
+import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
+import { explainHandler } from '../../rpc/explain/explain';
+import INavie, { INavieProvider } from '../../rpc/explain/navie/inavie';
+import LocalNavie from '../../rpc/explain/navie/navie-local';
+import RemoteNavie from '../../rpc/explain/navie/navie-remote';
+import detectAIEnvVar, { AI_KEY_ENV_VARS } from '../index/aiEnvVar';
+import detectCodeEditor from '../../lib/detectCodeEditor';
+import { verbose } from '../../utils';
+import Trajectory from '../../rpc/explain/navie/trajectory';
+import { serveAndOpenNavie } from '../../lib/serveAndOpen';
+import UI from './ui';
 
 interface ExplainArgs {
   verbose: boolean;
@@ -92,10 +93,6 @@ export function commonNavieArgsBuilder<T>(args: yargs.Argv<T>): yargs.Argv<T & N
     .option('trajectory-file', {
       describe: 'File to write the LLM interaction history, in JSONL format',
       type: 'string',
-    })
-    .option('ui', {
-      describe: 'Open Navie UI in the browser',
-      boolean: true,
     });
 }
 
@@ -224,6 +221,14 @@ export function builder<T>(args: yargs.Argv<T>) {
       describe: 'Code selection path',
       type: 'string',
       alias: 'c',
+    })
+    .option('browser', {
+      describe: 'Open Navie UI in the browser',
+      boolean: true,
+    })
+    .option('interactive', {
+      describe: 'Run in interactive mode',
+      boolean: true,
     });
 }
 
@@ -237,7 +242,7 @@ export async function handler(argv: HandlerArguments) {
 
   const output = openOutput(argv.output);
 
-  function attachNavie(navie: INavie) {
+  function attachNavie(navie: INavie): INavie {
     return navie
       .on('error', (err) => {
         warn(err);
@@ -274,10 +279,17 @@ export async function handler(argv: HandlerArguments) {
     });
   };
 
+  const openInteractive = async () => {
+    const ui = new UI(capturingProvider, codeEditor);
+    return await ui.run();
+  };
+
   const openInBrowser = async (): Promise<string> => serveAndOpenNavie();
 
-  if (argv.ui) {
+  if (argv.browser) {
     await openInBrowser();
+  } else if (argv.interactive) {
+    await openInteractive();
   } else {
     await openInTerminal();
   }

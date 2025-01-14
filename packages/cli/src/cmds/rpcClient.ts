@@ -2,7 +2,7 @@ import { log, warn } from 'node:console';
 import yargs from 'yargs';
 import { configureRpcDirectories } from '../lib/handleWorkingDirectory';
 import detectCodeEditor from '../lib/detectCodeEditor';
-import { buildNavieProvider, commonNavieArgsBuilder } from './navie';
+import { buildNavieProvider, commonNavieArgsBuilder } from './navie/navie';
 import INavie, { INavieProvider } from '../rpc/explain/navie/inavie';
 import { rpcMethods } from './index/rpc';
 import { readFile } from 'node:fs/promises';
