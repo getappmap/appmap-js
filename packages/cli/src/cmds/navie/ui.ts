@@ -1,5 +1,38 @@
 import EventEmitter from 'events';
-import { Widgets, screen, box, form, textbox, button, textarea, log } from 'blessed';
+import { Widgets, screen, box, form, textbox, button, textarea, list } from 'blessed';
+
+class JobDescription {
+  descriptionTextBox: Widgets.TextareaElement;
+
+  constructor(private screen: Widgets.Screen) {
+    this.descriptionTextBox = textbox({
+      parent: this.screen,
+      top: 0,
+      left: '50%',
+      width: '50%',
+      height: 10,
+      mouse: true,
+      keys: true,
+      inputOnFocus: true,
+      label: 'Job Description',
+      border: {
+        type: 'line',
+      },
+    });
+
+    this.descriptionTextBox.on('click', () => {
+      // this.descriptionTextBox.focus();
+      // screen.render();
+      this.descriptionTextBox.editor((err, value) => {
+        if (err) return;
+
+        this.descriptionTextBox.setContent(value ?? '');
+        screen.render();
+      });
+      return false;
+    });
+  }
+}
 
 class ChatResponse {
   responseTextArea: Widgets.TextElement;
@@ -10,7 +43,7 @@ class ChatResponse {
       top: 0,
       left: 0,
       width: '50%',
-      height: '100%-7',
+      height: '100%-6',
       align: 'left',
       valign: 'top',
       label: 'Response',
@@ -29,10 +62,6 @@ class ChatResponse {
       border: {
         type: 'line',
       },
-      style: {
-        fg: 'white',
-        bg: 'black',
-      },
     });
   }
 
@@ -41,7 +70,51 @@ class ChatResponse {
   }
 }
 
+class TestList extends EventEmitter {
+  list: Widgets.ListElement;
+
+  constructor(private screen: Widgets.Screen) {
+    super();
+
+    this.list = list({
+      parent: this.screen,
+      label: 'Test List',
+      left: '50%',
+      top: 10,
+      width: '50%',
+      height: '50%-10',
+      border: {
+        type: 'line',
+      },
+    });
+  }
+}
+
+class TaskList extends EventEmitter {
+  list: Widgets.ListElement;
+
+  constructor(private screen: Widgets.Screen) {
+    super();
+
+    this.list = list({
+      parent: this.screen,
+      label: 'Task List',
+      left: '50%',
+      top: '50%',
+      width: '50%',
+      height: '50%',
+      border: {
+        type: 'line',
+      },
+    });
+  }
+}
+
 class ChatInput extends EventEmitter {
+  questionBox: Widgets.TextboxElement;
+  questionSubmit: Widgets.ButtonElement;
+  questionSubmitName = 'ask';
+
   constructor(private screen: Widgets.Screen, private question?: string) {
     super();
 
@@ -52,16 +125,17 @@ class ChatInput extends EventEmitter {
       label: 'Question',
       keys: true,
       left: '0',
-      top: '100%-7',
+      top: '100%-6',
       width: '50%',
       height: 5,
       autoNext: true,
+      wrap: true,
       border: {
         type: 'line',
       },
     });
 
-    const questionBox = textbox({
+    this.questionBox = textbox({
       parent: chatForm,
       name: 'question',
       top: 0,
@@ -70,45 +144,40 @@ class ChatInput extends EventEmitter {
       width: '100%-2',
       fg: 'white',
       bg: 'black',
+      keys: true,
       inputOnFocus: true,
       value: this.question,
     });
 
-    const questionSubmit = button({
+    this.questionSubmit = button({
       parent: chatForm,
-      mouse: true,
+      // mouse: true,
       keys: true,
-      shrink: true,
-      padding: {
-        left: 1,
-        right: 1,
-      },
-      left: 10,
-      width: 'submitting'.length + 2,
+      right: 0,
+      width: 'submitting'.length + 4,
       top: 2,
-      // left: 10,
-      // bottom: 2,
       name: 'ask',
       content: 'ask',
+      align: 'center',
       style: {
-        bg: 'blue',
-        fg: 'white',
+        bg: 'cyan',
+        fg: 'black',
         focus: {
-          bg: 'red',
+          bg: 'white',
         },
         hover: {
-          bg: 'red',
+          bg: 'white',
         },
       },
     });
 
-    questionBox.on('submit', () => {
-      questionSubmit.press();
+    this.questionBox.on('submit', () => {
+      this.questionSubmit.press();
     });
 
-    questionSubmit.on('press', () => {
-      questionBox.setContent('');
-      questionSubmit.setContent('submitting');
+    this.questionSubmit.on('press', () => {
+      this.questionBox.setContent('');
+      this.questionSubmit.setContent('submitting');
       // TODO: Disable the button for a moment
       chatForm.submit();
       screenObj.render();
@@ -120,19 +189,34 @@ class ChatInput extends EventEmitter {
 
     chatForm.on('submit', (form: Widgets.FormElement<unknown>) => {
       const question = (form as unknown as QuestionForm).question;
+      if (!question) return;
+
       this.emit('ask', question);
     });
 
-    this.screen.append(chatForm);
+    this.questionBox.on('click', () => {
+      this.questionBox.focus();
+      screen.render();
+      return false;
+    });
 
-    // Focus our element.
-    questionBox.focus();
+    this.screen.append(chatForm);
+  }
+
+  focusOnInput() {
+    this.questionBox.focus();
+    this.screen.render();
+  }
+
+  clearButtonState() {
+    this.questionSubmit.setContent(this.questionSubmitName);
   }
 }
 
 class MainWindow extends EventEmitter {
   screen?: Widgets.Screen;
   response?: ChatResponse;
+  chatInput?: ChatInput;
 
   question: string | undefined;
   codeSelection: string | undefined;
@@ -161,15 +245,20 @@ class MainWindow extends EventEmitter {
       });
     }
 
-    const chatInput = new ChatInput(this.screen, this.question);
-    chatInput.on('ask', (data) => this.emit('ask', data));
+    this.chatInput = new ChatInput(this.screen, this.question);
+    this.chatInput.on('ask', (data) => this.emit('ask', data));
 
     this.response = new ChatResponse(this.screen);
+    new JobDescription(this.screen);
+    new TestList(this.screen);
+    new TaskList(this.screen);
 
     // Render the screen.
     this.screen.key(['escape', 'C-c'], () => {
       this.emit('exit');
     });
+
+    this.chatInput.focusOnInput();
     this.screen.render();
   }
 
@@ -181,6 +270,7 @@ class MainWindow extends EventEmitter {
 
   addResponseToken(token: string) {
     this.response?.addToken(token);
+    this.chatInput?.clearButtonState();
     this.screen?.render();
   }
 }
