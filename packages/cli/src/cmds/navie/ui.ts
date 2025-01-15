@@ -1,45 +1,54 @@
 import EventEmitter from 'events';
 import { Widgets, screen, box, form, textbox, button, textarea, list } from 'blessed';
+import assert from 'assert';
+
+interface IUI {
+  enrollComponent(component: Widgets.BlessedElement): void;
+
+  get jobDescription(): string;
+
+  get screen(): Widgets.Screen;
+}
 
 class JobDescription {
+  descriptionForm: Widgets.FormElement<unknown>;
   descriptionTextBox: Widgets.TextareaElement;
 
-  constructor(private screen: Widgets.Screen) {
-    this.descriptionTextBox = textbox({
-      parent: this.screen,
+  constructor(private ui: IUI) {
+    this.descriptionForm = form({
+      parent: ui.screen,
       top: 0,
       left: '50%',
       width: '50%',
       height: 10,
-      mouse: true,
-      keys: true,
-      inputOnFocus: true,
-      label: 'Job Description',
       border: {
         type: 'line',
       },
+      label: 'Job Description',
     });
 
-    this.descriptionTextBox.on('click', () => {
-      // this.descriptionTextBox.focus();
-      // screen.render();
-      this.descriptionTextBox.editor((err, value) => {
-        if (err) return;
-
-        this.descriptionTextBox.setContent(value ?? '');
-        screen.render();
-      });
-      return false;
+    this.descriptionTextBox = textbox({
+      parent: this.descriptionForm,
+      name: 'description',
+      top: 0,
+      left: 0,
+      width: '100%-2',
+      height: '100%-2',
+      inputOnFocus: true,
+      fg: 'white',
+      bg: 'black',
     });
+
+    this.ui.enrollComponent(this.descriptionTextBox);
   }
 }
 
 class ChatResponse {
   responseTextArea: Widgets.TextElement;
 
-  constructor(private screen: Widgets.Screen) {
+  constructor(private ui: IUI) {
     this.responseTextArea = textarea({
-      parent: this.screen,
+      parent: ui.screen,
       top: 0,
       left: 0,
       width: '50%',
@@ -47,7 +56,7 @@ class ChatResponse {
       align: 'left',
       valign: 'top',
       label: 'Response',
-      mouse: true,
+      mouse: false,
       alwaysScroll: true,
       scrollable: true,
       scrollbar: {
@@ -63,6 +72,7 @@ class ChatResponse {
         type: 'line',
       },
     });
+    this.ui.enrollComponent(this.responseTextArea);
   }
 
   addToken(token: string) {
@@ -71,13 +81,13 @@ class ChatResponse {
 }
 
 class TestList extends EventEmitter {
-  list: Widgets.ListElement;
+  testList: Widgets.ListElement;
 
-  constructor(private screen: Widgets.Screen) {
+  constructor(private ui: IUI) {
     super();
 
-    this.list = list({
-      parent: this.screen,
+    this.testList = list({
+      parent: ui.screen,
       label: 'Test List',
       left: '50%',
       top: 10,
@@ -87,17 +97,18 @@ class TestList extends EventEmitter {
         type: 'line',
       },
     });
+    this.ui.enrollComponent(this.testList);
   }
 }
 
 class TaskList extends EventEmitter {
-  list: Widgets.ListElement;
+  taskList: Widgets.ListElement;
 
-  constructor(private screen: Widgets.Screen) {
+  constructor(private ui: IUI) {
     super();
 
-    this.list = list({
-      parent: this.screen,
+    this.taskList = list({
+      parent: ui.screen,
       label: 'Task List',
       left: '50%',
       top: '50%',
@@ -107,6 +118,7 @@ class TaskList extends EventEmitter {
         type: 'line',
       },
     });
+    this.ui.enrollComponent(this.taskList);
   }
 }
 
@@ -115,15 +127,14 @@ class ChatInput extends EventEmitter {
   questionSubmit: Widgets.ButtonElement;
   questionSubmitName = 'ask';
 
-  constructor(private screen: Widgets.Screen, private question?: string) {
+  constructor(private ui: IUI, private question?: string) {
     super();
 
-    const screenObj = this.screen;
+    const screenObj = ui.screen;
 
     const chatForm = form({
-      parent: this.screen,
+      parent: ui.screen,
       label: 'Question',
-      keys: true,
       left: '0',
       top: '100%-6',
       width: '50%',
@@ -144,15 +155,12 @@ class ChatInput extends EventEmitter {
       width: '100%-2',
       fg: 'white',
       bg: 'black',
-      keys: true,
       inputOnFocus: true,
       value: this.question,
     });
 
     this.questionSubmit = button({
       parent: chatForm,
-      // mouse: true,
-      keys: true,
       right: 0,
       width: 'submitting'.length + 4,
       top: 2,
@@ -178,7 +186,6 @@ class ChatInput extends EventEmitter {
     this.questionSubmit.on('press', () => {
       this.questionBox.setContent('');
       this.questionSubmit.setContent('submitting');
-      // TODO: Disable the button for a moment
       chatForm.submit();
       screenObj.render();
     });
@@ -196,16 +203,18 @@ class ChatInput extends EventEmitter {
 
     this.questionBox.on('click', () => {
       this.questionBox.focus();
-      screen.render();
+      screenObj.render();
       return false;
     });
 
-    this.screen.append(chatForm);
+    screenObj.append(chatForm);
+
+    ui.enrollComponent(this.questionBox);
   }
 
   focusOnInput() {
     this.questionBox.focus();
-    this.screen.render();
+    this.ui.screen.render();
   }
 
   clearButtonState() {
@@ -213,26 +222,36 @@ class ChatInput extends EventEmitter {
   }
 }
 
-class MainWindow extends EventEmitter {
-  screen?: Widgets.Screen;
-  response?: ChatResponse;
-  chatInput?: ChatInput;
+class MainWindow extends EventEmitter implements IUI {
+  screen: Widgets.Screen;
+  response: ChatResponse;
+  chatInput: ChatInput;
+  jobDescriptionComponent: JobDescription;
 
   question: string | undefined;
   codeSelection: string | undefined;
   prompt: string | undefined;
 
+  componentIndex = 0;
+  componentsList = new Array<Widgets.BlessedElement>();
+
   constructor(private ui: UI) {
     super();
-  }
 
-  run() {
     // Create a screen object.
     this.screen = screen({
       smartCSR: true,
     });
 
     this.screen.title = 'Navie';
+
+    this.chatInput = new ChatInput(this, this.question);
+    this.chatInput.on('ask', (data) => this.emit('ask', data));
+
+    this.response = new ChatResponse(this);
+    this.jobDescriptionComponent = new JobDescription(this);
+    new TestList(this);
+    new TaskList(this);
 
     {
       box({
@@ -241,31 +260,40 @@ class MainWindow extends EventEmitter {
         width: '50%',
         left: 'center',
         height: 1,
-        content: 'Press ESC twice to quit',
+        content: "Press ESC then 'tab' to cycle the focus, 'q' to quit",
       });
     }
 
-    this.chatInput = new ChatInput(this.screen, this.question);
-    this.chatInput.on('ask', (data) => this.emit('ask', data));
+    this.screen.key(['tab'], () => {
+      const activeElement = (this.componentIndex + 1) % this.componentsList.length;
+      this.componentIndex = activeElement;
+      this.componentsList[activeElement].focus();
+      this.screen?.render();
+    });
 
-    this.response = new ChatResponse(this.screen);
-    new JobDescription(this.screen);
-    new TestList(this.screen);
-    new TaskList(this.screen);
-
-    // Render the screen.
-    this.screen.key(['escape', 'C-c'], () => {
+    this.screen.key(['q', 'C-c'], () => {
       this.emit('exit');
     });
+  }
+
+  get jobDescription(): string {
+    return this.jobDescriptionComponent.descriptionTextBox.value;
+  }
+
+  enrollComponent(component: Widgets.BlessedElement): void {
+    this.componentsList.push(component);
+  }
+
+  run() {
+    assert(this.screen);
+    assert(this.chatInput);
 
     this.chatInput.focusOnInput();
     this.screen.render();
   }
 
   shutdown() {
-    if (this.screen) this.screen.destroy();
-
-    this.screen = undefined;
+    this.screen.destroy();
   }
 
   addResponseToken(token: string) {

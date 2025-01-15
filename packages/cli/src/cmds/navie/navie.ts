@@ -317,9 +317,12 @@ export async function handler(argv: HandlerArguments) {
 
       // return;
 
+      const jobDescription = ui.mainWindow?.jobDescription;
+
       const response = await explainHandler(capturingProvider, codeEditor).handler({
         question,
         // TODO: Add codeSelection, prompt, and other options
+        prompt: jobDescription,
       });
 
       const readStatus = async () =>
