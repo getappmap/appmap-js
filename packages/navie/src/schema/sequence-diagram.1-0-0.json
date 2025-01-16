@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AppMap Sequence Trace",
+  "description": "A JSON structure representing a trace of application events, optimized for sequence diagrams.",
+  "type": "object",
+  "properties": {
+    "actors": {
+      "type": "array",
+      "description": "Array of actor objects representing distinct parts of the application.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the actor."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name of the actor."
+          },
+          "order": {
+            "type": "number",
+            "description": "Order of the actor in the sequence."
+          }
+        },
+        "required": ["id", "name", "order"],
+        "additionalProperties": false
+      }
+    },
+    "rootActions": {
+      "type": "array",
+      "description": "Array of action objects representing top-level operations in the trace.",
+      "items": { "$ref": "#/definitions/actionObject" }
+    }
+  },
+  "required": ["actors", "rootActions"],
+  "additionalProperties": false,
+  "definitions": {
+    "actionObject": {
+      "type": "object",
+      "description": "Object representing a specific operation or event in the application.",
+      "properties": {
+        "nodeType": {
+          "type": "number",
+          "description": "Indicates the type of action node."
+        },
+        "digest": {
+          "type": "string",
+          "description": "A hash or unique identifier for the action."
+        },
+        "subtreeDigest": {
+          "type": "string",
+          "description": "Hash or identifier for the subtree of this action."
+        },
+        "children": {
+          "type": "array",
+          "description": "Array of child action objects.",
+          "items": { "$ref": "#/definitions/actionObject" }
+        },
+        "elapsed": {
+          "type": "number",
+          "description": "Execution time of the action in seconds.",
+          "minimum": 0
+        },
+        "eventIds": {
+          "type": "array",
+          "description": "Array of numeric event identifiers.",
+          "items": { "type": "number" }
+        },
+        "caller": {
+          "type": "string",
+          "description": "Actor identifier of the calling module (optional)."
+        },
+        "callee": {
+          "type": "string",
+          "description": "Actor identifier of the called module or service (optional)."
+        },
+        "query": {
+          "type": "string",
+          "description": "SQL query being executed (for Type 6 actions)."
+        },
+        "route": {
+          "type": "string",
+          "description": "HTTP method and URL of the external call or request (for Types 4 and 5 actions)."
+        },
+        "status": {
+          "type": "number",
+          "description": "HTTP status code of the response (for Types 4 and 5 actions)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the called function (for Type 3 actions)."
+        },
+        "static": {
+          "type": "boolean",
+          "description": "Indicates if the function is static (for Type 3 actions)."
+        },
+        "stableProperties": {
+          "type": "object",
+          "description": "Hashable properties of the function call (for Type 3 actions).",
+          "properties": {
+            "event_type": {
+              "type": "string",
+              "enum": ["function"]
+            },
+            "id": {
+              "type": "string",
+              "description": "Name of the function."
+            },
+            "raises_exception": {
+              "type": "boolean",
+              "description": "Indicates if the event raised an exception."
+            }
+          },
+          "required": ["event_type", "id", "raises_exception"]
+        },
+        "returnValue": {
+          "type": "object",
+          "description": "Object describing the return value (for Type 3 actions).",
+          "properties": {
+            "returnValueType": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Type of the return value."
+                }
+              },
+              "required": ["name"]
+            },
+            "raisesException": {
+              "type": "boolean",
+              "description": "Indicates if the return raised an exception."
+            }
+          }
+        },
+        "count": {
+          "type": "number",
+          "description": "Number of iterations (for Type 1 actions)."
+        }
+      },
+      "required": ["nodeType", "digest", "subtreeDigest", "elapsed", "eventIds"],
+      "additionalProperties": false
+    }
+  }
+}
