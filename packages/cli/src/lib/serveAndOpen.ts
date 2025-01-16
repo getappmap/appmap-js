@@ -1,4 +1,4 @@
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import open from 'open';
@@ -18,7 +18,7 @@ function mimeTypeOfName(filename: string): string {
   );
 }
 
-export default async function serveAndOpen(
+export default function serveAndOpen(
   file: string,
   resources: Record<string, string>,
   verifyInSubdir: boolean,
@@ -28,7 +28,7 @@ export default async function serveAndOpen(
   UI.progress(`Opening ${file}`);
 
   const baseDir = join(__dirname, '..', '..', 'built', 'html');
-  if (!(await exists(join(baseDir, file)))) throw new Error(`File ${file} does not exist`);
+  if (!existsSync(join(baseDir, file))) throw new Error(`File ${file} does not exist`);
 
   const server = createServer((req, res) => {
     const send404 = () => {
@@ -142,11 +142,16 @@ export async function serveAndOpenAppMap(
   });
 }
 
-export async function serveAndOpenNavie(): Promise<string> {
+export async function serveAndOpenNavie(rpcPort: number, question?: string): Promise<string> {
+  const params: Record<string, string> = {
+    rpcPort: rpcPort.toString(),
+  };
+  if (question) params.question = question;
+
   return new Promise((resolve) => {
     serveAndOpen(
       'navie.html',
-      {},
+      params,
       false,
       async (url) => {
         await tryOpen(url);

@@ -11,7 +11,7 @@ import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
 import { warn } from 'console';
 import EventEmitter from 'events';
-import { basename, join } from 'path';
+import { basename } from 'path';
 
 import { LRUCache } from 'lru-cache';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';

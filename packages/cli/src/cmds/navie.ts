@@ -21,6 +21,8 @@ import detectCodeEditor from '../lib/detectCodeEditor';
 import { verbose } from '../utils';
 import Trajectory from '../rpc/explain/navie/trajectory';
 import { serveAndOpenNavie } from '../lib/serveAndOpen';
+import RPCServer from './index/rpcServer';
+import { rpcMethods } from './index/rpc';
 
 interface ExplainArgs {
   verbose: boolean;
@@ -274,10 +276,15 @@ export async function handler(argv: HandlerArguments) {
     });
   };
 
-  const openInBrowser = async (): Promise<string> => serveAndOpenNavie();
+  const openInBrowser = (): void => {
+    const rpcServer = new RPCServer(0, rpcMethods(buildNavieProvider(argv), codeEditor));
+    rpcServer.start((port) => {
+      serveAndOpenNavie(port);
+    });
+  };
 
   if (argv.ui) {
-    await openInBrowser();
+    openInBrowser();
   } else {
     await openInTerminal();
   }
