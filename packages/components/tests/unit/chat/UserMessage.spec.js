@@ -373,7 +373,7 @@ describe('components/UserMessage.vue', () => {
       });
       expect(
         wrapper.findAll('[data-cy="next-step-button"]').wrappers.map((w) => w.text())
-      ).toStrictEqual(['Do this', 'Do that']);
+      ).toStrictEqual(['@do Do this', '@that Do that']);
     });
 
     it('automatically fetches next steps once the message is complete', async () => {
