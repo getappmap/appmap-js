@@ -15,6 +15,9 @@ export default class ContextService {
     private applyContextService: ApplyContextService
   ) {}
 
+  /**
+   * Populates the interaction history with context obtained by searching the project.
+   */
   async searchContext(
     options: AgentOptions,
     tokensAvailable: () => number,
@@ -24,6 +27,15 @@ export default class ContextService {
     const termsEnabled = options.userOptions.isEnabled('terms', true);
     if (contextEnabled) {
       this.history.log('[context-service] Searching for context');
+
+      const aggregateQuestion = [...options.aggregateQuestion];
+      // Add content obtained from pinned files
+      for (const event of this.history.events) {
+        // eventOfContextItem
+        if (!(event instanceof ContextItemEvent)) continue;
+
+        aggregateQuestion.push(event.content);
+      }
 
       const searchTerms = await transformSearchTerms(
         termsEnabled,
@@ -47,6 +59,9 @@ export default class ContextService {
     }
   }
 
+  /**
+   * Populates the interaction history with file contents of the provided file names.
+   */
   async locationContext(fileNames: string[]): Promise<ContextItemEvent[]> {
     if (!fileNames || fileNames.length === 0) {
       this.history.log('[context-service] No file names provided for location context');
@@ -68,6 +83,7 @@ export default class ContextService {
     for (const item of context) {
       const contextItem = eventOfContextItem(item);
       if (!contextItem) continue;
+
       charsAdded += contextItem.content.length;
       events.push(contextItem);
       this.history.addEvent(contextItem);
