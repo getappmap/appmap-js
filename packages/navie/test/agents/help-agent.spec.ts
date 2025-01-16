@@ -1,51 +1,62 @@
 import { AgentOptions } from '../../src/agent';
 import HelpAgent from '../../src/agents/help-agent';
-import { HelpRequest, HelpResponse } from '../../src/help';
+import { HelpResponse } from '../../src/help';
 import InteractionHistory from '../../src/interaction-history';
 import { AppMapConfig, AppMapStats } from '../../src/project-info';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import { suggestsVectorTerms } from '../fixture';
 import LookupContextService from '../../src/services/lookup-context-service';
-import TechStackService from '../../src/services/tech-stack-service';
 import { UserOptions } from '../../src/lib/parse-options';
+import { ContextV2 } from '../../src/context';
 
 describe('HelpAgent', () => {
   const question = 'How to make a diagram?';
   let history: InteractionHistory;
   let lookupService: LookupContextService;
   let vectorTermsService: VectorTermsService;
-  let techStackService: TechStackService;
 
   function receivesHelpDocs(): void {
     lookupService = {
       lookupHelp: jest
         .fn()
+        .mockImplementation((vectorTerms: string[], tokenCount: number): Promise<HelpResponse> => {
+          expect(vectorTerms).toEqual(['diagram']);
+          expect(tokenCount).toEqual(1000);
+          return Promise.resolve([
+            {
+              filePath: 'ruby-diagram.md',
+              from: 1,
+              to: 2,
+              content: 'steps to make a Ruby appmap diagram',
+              score: 1,
+            },
+          ]);
+        }),
+      lookupContext: jest
+        .fn()
         .mockImplementation(
           (
-            languages: string[],
-            vectorTerms: string[],
-            tokenCount: number
-          ): Promise<HelpResponse> => {
-            expect(languages).toEqual(['ruby']);
-            expect(vectorTerms).toEqual(['diagram']);
-            expect(tokenCount).toEqual(1000);
+            keywords: string[],
+            tokenCount: number,
+            filters: ContextV2.ContextFilters = {}
+          ): Promise<ContextV2.ContextResponse> => {
+            expect(keywords).toEqual([]);
+            expect(tokenCount).toEqual(500);
+            expect(filters).toEqual({
+              locations: ['.'],
+              itemTypes: [ContextV2.ContextItemType.DirectoryListing],
+            });
             return Promise.resolve([
               {
-                filePath: 'ruby-diagram.md',
-                from: 1,
-                to: 2,
-                content: 'steps to make a Ruby appmap diagram',
-                score: 1,
+                type: ContextV2.ContextItemType.DirectoryListing,
+                content: 'app/controllers/\napp/models/\napp/views/',
+                location: '.',
+                directory: '/the/directory',
               },
             ]);
           }
         ),
-      lookupContext: jest.fn().mockRejectedValue('lookupContext not implemented'),
     } as unknown as LookupContextService;
-
-    techStackService = {
-      detectTerms: jest.fn().mockResolvedValue(['ruby']),
-    } as unknown as TechStackService;
   }
 
   beforeEach(() => {
@@ -54,7 +65,7 @@ describe('HelpAgent', () => {
   });
 
   function buildAgent(): HelpAgent {
-    return new HelpAgent(history, lookupService, vectorTermsService, techStackService);
+    return new HelpAgent(history, lookupService, vectorTermsService);
   }
 
   describe('when there are no AppMaps', () => {
@@ -77,6 +88,7 @@ describe('HelpAgent', () => {
     it('searches for help docs', async () => {
       await buildAgent().perform(options, () => 1000);
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(lookupService.lookupHelp).toHaveBeenCalled();
     });
     it('prompts the user to create AppMaps', async () => {
@@ -94,8 +106,13 @@ describe('HelpAgent', () => {
           type: 'prompt',
         },
         {
-          name: 'techStack',
+          name: 'directoryListings',
           role: 'system',
+          type: 'prompt',
+        },
+        {
+          name: 'directoryListings',
+          role: 'user',
           type: 'prompt',
         },
         {
@@ -142,6 +159,7 @@ describe('HelpAgent', () => {
       it('searches for help docs', async () => {
         await buildAgent().perform(options, () => 1000);
 
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(lookupService.lookupHelp).toHaveBeenCalled();
       });
 
@@ -160,8 +178,13 @@ describe('HelpAgent', () => {
             type: 'prompt',
           },
           {
-            name: 'techStack',
+            name: 'directoryListings',
             role: 'system',
+            type: 'prompt',
+          },
+          {
+            name: 'directoryListings',
+            role: 'user',
             type: 'prompt',
           },
           {
@@ -198,8 +221,13 @@ describe('HelpAgent', () => {
             type: 'prompt',
           },
           {
-            name: 'techStack',
+            name: 'directoryListings',
             role: 'system',
+            type: 'prompt',
+          },
+          {
+            name: 'directoryListings',
+            role: 'user',
             type: 'prompt',
           },
           {

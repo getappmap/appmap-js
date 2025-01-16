@@ -40,14 +40,10 @@ export default class LookupContextService {
     return context;
   }
 
-  async lookupHelp(
-    languages: string[],
-    vectorTerms: string[],
-    tokenCount: number
-  ): Promise<HelpResponse> {
+  async lookupHelp(vectorTerms: string[], tokenCount: number): Promise<HelpResponse> {
     const help = await this.helpFn({
       type: 'help',
-      vectorTerms: [...languages, ...vectorTerms],
+      vectorTerms,
       tokenCount,
     });
 

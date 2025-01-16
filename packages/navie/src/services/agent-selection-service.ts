@@ -9,7 +9,6 @@ import VectorTermsService from './vector-terms-service';
 import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
 import { ContextV2 } from '../context';
-import TechStackService from './tech-stack-service';
 import TestAgent from '../agents/test-agent';
 import { PlanAgent } from '../agents/plan-agent';
 import ContextService from './context-service';
@@ -47,7 +46,6 @@ export default class AgentSelectionService {
     private lookupContextService: LookupContextService,
     private fileChangeExtractorService: FileChangeExtractorService,
     private applyContextService: ApplyContextService,
-    private techStackService: TechStackService,
     private mermaidFixerService: MermaidFixerService
   ) {
     this.contextService = new ContextService(
@@ -61,18 +59,13 @@ export default class AgentSelectionService {
 
   selectAgent(
     question: string,
-    classification: ContextV2.ContextLabel[],
-    userOptions: UserOptions
+    _classification: ContextV2.ContextLabel[],
+    _userOptions: UserOptions
   ): AgentModeResult {
     let modifiedQuestion = question;
 
     const helpAgent = () =>
-      new HelpAgent(
-        this.history,
-        this.lookupContextService,
-        this.vectorTermsService,
-        this.techStackService
-      );
+      new HelpAgent(this.history, this.lookupContextService, this.vectorTermsService);
 
     const testAgent = () =>
       new TestAgent(this.history, this.contextService, this.fileChangeExtractorService);

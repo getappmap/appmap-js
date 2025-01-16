@@ -168,7 +168,6 @@ ${context.join('\n')}
     }
 
     const helpDocs = await this.lookupContextService.lookupHelp(
-      [relevantTest.language],
       ['record', 'agent', 'tests', relevantTest.framework].filter(Boolean) as string[],
       tokenLimit
     );
