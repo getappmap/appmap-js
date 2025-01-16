@@ -10,7 +10,7 @@ const scoreSchema = z.object({
 const NextStepResponseFormat = z.object({
   nextSteps: z.array(
     z.object({
-      command: z.enum(['generate', 'diagram', 'plan', 'test', 'explain', 'help']),
+      command: z.enum(['explain', 'diagram', 'plan', 'generate', 'test', 'help']),
       prompt: z.string(),
       label: z.string(),
       reasoning: z.object({
@@ -30,15 +30,17 @@ const SYSTEM_PROMPT = `Your job is to predict the next step(s) for the user give
 
 ## Commands
 These are the actions that the user may request next:
-- \`plan\`: This is useful to create step by step plans to implement a code change in the user's application.
-- \`generate\`: This will generate code for the user. Always include this command if the transcript contains \`@plan\`.
-- \`test\`: This action will generate test cases for the user.
-- \`diagram\`: This will generate a (sequence, flow, class, entity relation) diagram for the user. This is useful for visualizing complex concepts, relationships, or processes.
-- \`explain\`: This action will explain parts of the codebase or application behavior.
-- \`help\`: This action will teach the user how to use AppMap Navie.
+- \`explain\`: Explain parts of the codebase or application behavior
+- \`goal\` Establish a new goal to be achieved to continue the task that's in progress.
+- \`diagram\`: Generate a (sequence, flow, class, entity relation) diagram. This is useful for visualizing complex concepts, relationships, or processes.
+- \`plan\`: Create step by step plans to implement a code change in the user's application.
+- \`generate\`: Generate code. Always include this command if the transcript contains \`@plan\`.
+- \`test\`: Generate test cases for the work in progress.
+- \`help\`: Teach the user how to use an AppMap or Navie feature.
 
 ## Labels
 The label is a short description of the option. It be brief and to the point. The user will see the label presented as a button. The user will have a poor experience if the label is too long. The label should reveal the key aspect of the prompt.
+The label should contain about 4 words. Only the first word should be capitalized.
 
 ## Scores
 The score for each option is a number between 0 and 10. A higher score indicates a higher likelihood of the option being selected.
@@ -79,11 +81,30 @@ export default class NextStepClassificationService {
       },
     ]);
 
-    return nextSteps.map(({ command, prompt, label, overallScore }) => ({
-      command,
-      prompt,
-      label,
-      overallScore,
-    }));
+    // If the label starts with the command, remove the redundant command name from the label.
+    // For example, we don't want to show "@generate generate login code", we want to show
+    // "@generate login code"
+    const formatStepLabel = ({ command, prompt, label, overallScore }: NextStep) => {
+      let adjustedLabel = label;
+      const labelWords = label.split(/\s+/);
+      if (labelWords.length > 1 && labelWords[0].toLowerCase() === command) {
+        adjustedLabel = labelWords.slice(1).join(' ');
+      }
+      return {
+        command,
+        prompt,
+        label: adjustedLabel,
+        overallScore,
+      };
+    };
+
+    return nextSteps
+      .map(({ command, prompt, label, overallScore }) => ({
+        command,
+        prompt,
+        label,
+        overallScore,
+      }))
+      .map(formatStepLabel);
   }
 }

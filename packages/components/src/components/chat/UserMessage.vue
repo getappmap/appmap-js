@@ -68,7 +68,7 @@
               :command="i.command"
               :prompt="i.prompt"
             >
-              {{ i.label }}
+              {{ nextStepSuggestionText(i) }}
             </v-next-prompt-button>
           </v-popper>
         </div>
@@ -394,6 +394,11 @@ export default {
         threadId: this.threadId,
         content: this.message,
       });
+    },
+    nextStepSuggestionText(suggestion) {
+      return suggestion.command !== 'explain'
+        ? `@${suggestion.command} ${suggestion.label}`
+        : suggestion.label;
     },
   },
 
