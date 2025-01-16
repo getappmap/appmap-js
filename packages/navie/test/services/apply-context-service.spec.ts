@@ -115,7 +115,7 @@ describe('ApplyContextService', () => {
         return Promise.resolve(SEARCH_CONTEXT);
       });
       const helpFn: HelpProvider = jest.fn().mockImplementation((request: HelpRequest) => {
-        expect(request.vectorTerms).toEqual(['ruby', 'user', 'management']);
+        expect(request.vectorTerms).toEqual(['user', 'management']);
         expect(request.tokenCount).toEqual(tokenCount);
         return Promise.resolve(HELP_CONTEXT);
       });
@@ -130,7 +130,7 @@ describe('ApplyContextService', () => {
 
     async function lookupAndApplyContext() {
       const context = await lookupContextService.lookupContext(vectorTerms, tokensAvailable);
-      const help = await lookupContextService.lookupHelp(['ruby'], vectorTerms, tokensAvailable);
+      const help = await lookupContextService.lookupHelp(vectorTerms, tokensAvailable);
       LookupContextService.applyContext(context, help, applyContextService, tokensAvailable);
     }
 

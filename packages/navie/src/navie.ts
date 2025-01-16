@@ -24,8 +24,6 @@ import ExplainCommand from './commands/explain-command';
 import ClassifyCommand from './commands/classify-command';
 import Message from './message';
 import VectorTermsCommand from './commands/vector-terms-command';
-import TechStackService from './services/tech-stack-service';
-import TechStackCommand from './commands/tech-stack-command';
 import ContextCommand from './commands/context-command';
 import FileChangeExtractorService from './services/file-change-extractor-service';
 import parseOptions from './lib/parse-options';
@@ -98,8 +96,6 @@ export default function navie(
 
   const vectorTermsService = new VectorTermsService(interactionHistory, completionService);
 
-  const techStackService = new TechStackService(interactionHistory, completionService);
-
   const contextProviderV2 = async (
     request: ContextV2.ContextRequest
   ): Promise<ContextV2.ContextResponse> =>
@@ -129,7 +125,6 @@ export default function navie(
       lookupContextService,
       fileChangeExtractorService,
       applyContextService,
-      techStackService,
       mermaidFixerService
     );
     const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
@@ -154,8 +149,6 @@ export default function navie(
   const buildClassifyCommand = () => new ClassifyCommand(classificationService);
 
   const buildVectorTermsCommand = () => new VectorTermsCommand(vectorTermsService);
-
-  const buildTechStackCommand = () => new TechStackCommand(techStackService);
 
   const buildListFileCommand = () => new ListFilesCommand(fileChangeExtractor);
 
@@ -194,7 +187,6 @@ export default function navie(
     [CommandMode.ListFiles]: buildListFileCommand,
     [CommandMode.Update]: buildUpdateCommand,
     [CommandMode.VectorTerms]: buildVectorTermsCommand,
-    [CommandMode.TechStack]: buildTechStackCommand,
     [CommandMode.Context]: buildContextCommand,
     [CommandMode.Suggest]: buildSuggestCommand,
     [CommandMode.Observe]: buildObserveCommand,

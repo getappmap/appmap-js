@@ -4,9 +4,9 @@ import InteractionHistory, { PromptInteractionEvent } from '../interaction-histo
 import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import VectorTermsService from '../services/vector-terms-service';
 import LookupContextService from '../services/lookup-context-service';
-import TechStackService from '../services/tech-stack-service';
 import { CHARACTERS_PER_TOKEN } from '../message';
 import transformSearchTerms from '../lib/transform-search-terms';
+import { ContextV2 } from '../context';
 
 export const HELP_AGENT_PROMPT = `**Task: Providing Help with AppMap**
 
@@ -40,31 +40,6 @@ The following are the official AppMap documentation references for each supporte
 
 Languages that do not appear in this list are not supported by AppMap at this time.
 
-**Navie agent modes**
-
-Navie has several modes that you can activate by starting your question with a mode selector. The modes are:
-
-- @explain: Get an explanation of a concept or process. It's the most flexible mode.
-- @generate: Generate code.
-- @help: Get help with AppMap.
-- @plan: Create a code design and implementation plan from an issue description.
-
-**AppMap setup instructions**
-
-Setup instructions for making AppMap data are built into the AppMap code editor extension.
-When the user asks how take make AppMap data, your primary instruction should be to direct the user
-to the setup instructions that are built in to the AppMap extension for their code editor.
-
-* **VSCode:** Open the AppMap panel and look for AppMap Recording Instructions.
-* **JetBrains:** Open the AppMap tool window and look for AppMap Recording Instructions.
-
-Unless you are asked about advanced usage, provide only the AppMap instructions that are
-essential to use AppMap data. If the user already has an AppMap configuration file, do not
-display it or instruct them to change it unless such changes are requested or necessary.
-
-Do not suggest that the user integration AppMap with CI tools such as GitHub Actions, Jenkins, or CircleCI,
-unless the user asks for this.
-
 **Opening AppMap diagrams**
 
 AppMap diagrams can be viewed by opening the AppMap panel (VSCode) or AppMap tool window (JetBrains)
@@ -89,8 +64,6 @@ runs their program with the AppMap library, package or JAR activated to record t
 
 **AppMap data commands - DO and DO NOT**
 
-* DO instruct the user to review the AppMap setup instructions in the AppMap panel or AppMap tool window for
-  getting started with AppMap.
 * For Ruby, DO NOT recommend \`APPMAP=true\`, because AppMap data is enabled automatically based on the Rails environment.
 * For Ruby, DO NOT tell the user to require \`appmap/rspec\`, \`appmap/cucumber\`, \`appmap/minitest\`, or \`appmap\rails\` because
   this happens automatically for Rails apps.
@@ -143,19 +116,6 @@ Your response should consist of short passages of descriptive text, emphasizing 
 For each documentation URL, provide a brief description of why the link is relevant.
 
 Do not emit code suggestions or code fences.
-
-_Example_
-
-\`\`\`markdown
-* Install the \`appmap\` gem - [Ruby AppMap documentation](https://appmap.io/docs/reference/appmap-ruby)
-
-* Start your Rails server with appmap enabled - [Ruby AppMap documentation](https://appmap.io/docs/reference/appmap-ruby)
-
-* Interact with the app to generate AppMaps via request recording
-
-* View and open AppMap diagrams in VSCode - [VSCode AppMap documentation](https://appmap.io/docs/reference/vscode)
-\`\`\`
-
 `;
 
 const MAKE_APPMAPS_PROMPT = `**Making AppMaps**
@@ -175,8 +135,7 @@ export default class HelpAgent implements Agent {
   constructor(
     public history: InteractionHistory,
     private lookupContextService: LookupContextService,
-    private vectorTermsService: VectorTermsService,
-    private techStackService: TechStackService
+    private vectorTermsService: VectorTermsService
   ) {}
 
   // eslint-disable-next-line consistent-return
@@ -184,24 +143,6 @@ export default class HelpAgent implements Agent {
     options: AgentOptions,
     tokensAvailable: () => number
   ): Promise<AgentResponse | void> {
-    const languages = [
-      ...new Set(
-        options.projectInfo.map((info) => info.appmapConfig?.language).filter(Boolean) as string[]
-      ),
-    ].sort();
-
-    const detectedTerms = await this.techStackService.detectTerms(options.aggregateQuestion);
-
-    const techStackTerms = [...languages, ...detectedTerms];
-    if (techStackTerms.length === 0) {
-      return {
-        response: `What programming language and frameworks do you want help with?
-        Many projects contain more than one language and framework, so I want to be sure
-        that I am helping you with the right information.`,
-        abort: true,
-      };
-    }
-
     this.history.addEvent(new PromptInteractionEvent('agent', 'system', HELP_AGENT_PROMPT));
     this.history.addEvent(
       new PromptInteractionEvent(
@@ -210,13 +151,36 @@ export default class HelpAgent implements Agent {
         buildPromptDescriptor(PromptType.Question)
       )
     );
-    this.history.addEvent(
-      new PromptInteractionEvent(
-        'techStack',
-        'system',
-        `Tech stack terms: ${techStackTerms.join(', ')}`
-      )
+
+    // Include the directory structure
+    const contextFilters: ContextV2.ContextFilters = {
+      locations: ['.'],
+      itemTypes: [ContextV2.ContextItemType.DirectoryListing],
+    };
+    const directoryContext = await this.lookupContextService.lookupContext(
+      [],
+      tokensAvailable() / 2,
+      contextFilters
     );
+    if (directoryContext.length > 0) {
+      this.history.addEvent(
+        new PromptInteractionEvent(
+          PromptType.DirectoryListing,
+          'system',
+          buildPromptDescriptor(PromptType.DirectoryListing)
+        )
+      );
+      this.history.addEvent(
+        new PromptInteractionEvent(
+          PromptType.DirectoryListing,
+          'user',
+          buildPromptValue(
+            PromptType.DirectoryListing,
+            directoryContext.map((item) => item.content).join('\n')
+          )
+        )
+      );
+    }
 
     if (!options.hasAppMaps) {
       this.history.addEvent(
@@ -233,20 +197,8 @@ export default class HelpAgent implements Agent {
       options.aggregateQuestion,
       this.vectorTermsService
     );
-    const tokenCount = tokensAvailable();
 
-    const collectLanguages = () => {
-      const languages = new Set(
-        options.projectInfo.map((info) => info.appmapConfig?.language).filter(Boolean)
-      );
-      return Array.from(languages).sort() as string[];
-    };
-
-    let helpContext = await this.lookupContextService.lookupHelp(
-      [...new Set([...collectLanguages(), ...techStackTerms])].sort(),
-      searchTerms,
-      tokenCount
-    );
+    let helpContext = await this.lookupContextService.lookupHelp(searchTerms, tokensAvailable());
 
     if (helpContext && helpContext.length > 0) {
       this.history.addEvent(

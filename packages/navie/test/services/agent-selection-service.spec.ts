@@ -8,7 +8,6 @@ import ApplyContextService from '../../src/services/apply-context-service';
 import FileChangeExtractorService from '../../src/services/file-change-extractor-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import MermaidFixerService from '../../src/services/mermaid-fixer-service';
-import TechStackService from '../../src/services/tech-stack-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 
 describe('AgentSelectionService', () => {
@@ -17,7 +16,6 @@ describe('AgentSelectionService', () => {
   let lookupContextService: LookupContextService;
   let applyContextService: ApplyContextService;
   let fileChangeExtractorService: FileChangeExtractorService;
-  let techStackService: TechStackService;
   let mermaidFixerService: MermaidFixerService;
   const genericQuestion = 'How does user management work?';
   const helpAgentQueston = '@help How to make a diagram?';
@@ -30,7 +28,6 @@ describe('AgentSelectionService', () => {
       lookupContextService,
       fileChangeExtractorService,
       applyContextService,
-      techStackService,
       mermaidFixerService
     );
   }
@@ -41,7 +38,6 @@ describe('AgentSelectionService', () => {
     lookupContextService = {} as LookupContextService;
     fileChangeExtractorService = {} as FileChangeExtractorService;
     applyContextService = {} as ApplyContextService;
-    techStackService = {} as TechStackService;
     mermaidFixerService = {} as MermaidFixerService;
   });
 
