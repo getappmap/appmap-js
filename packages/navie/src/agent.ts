@@ -29,21 +29,25 @@ export class AgentOptions {
     return this.projectInfo.some((info) => info.appmapStats && info.appmapStats?.numAppMaps > 0);
   }
 
-  get contextLocations(): string[] {
+  get pinnedFileLocations(): string[] {
     return this.codeSelection && typeof this.codeSelection !== 'string'
       ? this.codeSelection.filter(UserContext.hasLocation).map((cs) => cs.location)
       : [];
   }
 
+  /**
+   * Configure context filters to fetch the content that's relevant to the current user options,
+   * including /include and /exclude options and pinned file locations.
+   */
   buildContextFilters(): ContextV2.ContextFilters {
     const filters: ContextV2.ContextFilters = {};
     if (this.contextLabels) filters.labels = this.contextLabels;
     this.userOptions.populateContextFilters(filters);
-    const contextLocations = this.contextLocations;
-    if (contextLocations.length > 0) {
-      filters.locations = contextLocations;
+    const pinnedFileLocations = this.pinnedFileLocations;
+    if (pinnedFileLocations.length > 0) {
+      filters.locations = pinnedFileLocations;
       filters.exclude ||= [];
-      filters.exclude.push(...contextLocations);
+      filters.exclude.push(...pinnedFileLocations);
     }
     return filters;
   }

@@ -1,4 +1,7 @@
-import InteractionHistory, { PromptInteractionEvent } from '../../src/interaction-history';
+import InteractionHistory, {
+  ContextItemRequestor,
+  PromptInteractionEvent,
+} from '../../src/interaction-history';
 import { AgentOptions } from '../../src/agent';
 import ContextService from '../../src/services/context-service';
 import DiagramAgent, { DIAGRAM_AGENT_PROMPT } from '../../src/agents/diagram-agent';
@@ -90,6 +93,7 @@ describe('@diagram agent', () => {
 
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(contextService.locationContext).toHaveBeenCalledWith(
+      ContextItemRequestor.PinnedFile,
       expect.arrayContaining(['file1', 'file2'])
     );
   });

@@ -293,6 +293,7 @@ export default class ExplainAgent implements Agent {
     );
 
     await this.contextService.locationContextFromOptions(options);
+
     if (
       hasLabel(options.contextLabels, ContextV2.ContextLabelName.Overview)?.weight !==
       ContextV2.ContextLabelWeight.High

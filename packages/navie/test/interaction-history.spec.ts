@@ -1,6 +1,7 @@
 import { ContextV2 } from '../src/context';
 import InteractionHistory, {
   ContextItemEvent,
+  ContextItemRequestor,
   ContextLookupEvent,
 } from '../src/interaction-history';
 import { PromptType } from '../src/prompt';
@@ -50,7 +51,11 @@ describe('InteractionHistory', () => {
         it('adds a message to the state', () => {
           const interactionHistory = new InteractionHistory();
           interactionHistory.addEvent(
-            new ContextItemEvent(PromptType.SequenceDiagram, 'diagram-1')
+            new ContextItemEvent(
+              PromptType.SequenceDiagram,
+              ContextItemRequestor.Terms,
+              'diagram-1'
+            )
           );
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
@@ -64,7 +69,12 @@ describe('InteractionHistory', () => {
         it('adds a message to the state', () => {
           const interactionHistory = new InteractionHistory();
           interactionHistory.addEvent(
-            new ContextItemEvent(PromptType.CodeSnippet, 'code snippet content', 'file.py')
+            new ContextItemEvent(
+              PromptType.CodeSnippet,
+              ContextItemRequestor.Terms,
+              'code snippet content',
+              'file.py'
+            )
           );
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
@@ -83,6 +93,7 @@ describe('InteractionHistory', () => {
           interactionHistory.addEvent(
             new ContextItemEvent(
               PromptType.CodeSnippet,
+              ContextItemRequestor.Terms,
               'code snippet content',
               location,
               projectDirectory
@@ -102,7 +113,9 @@ describe('InteractionHistory', () => {
       describe('data request', () => {
         it('adds a message to the state', () => {
           const interactionHistory = new InteractionHistory();
-          interactionHistory.addEvent(new ContextItemEvent(PromptType.DataRequest, 'data request'));
+          interactionHistory.addEvent(
+            new ContextItemEvent(PromptType.DataRequest, ContextItemRequestor.Terms, 'data request')
+          );
           const state = interactionHistory.buildState();
           expect(state.messages).toEqual([
             { content: '<context>', role: 'system' },
