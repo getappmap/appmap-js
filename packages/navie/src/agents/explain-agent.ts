@@ -43,11 +43,10 @@ If the user requests code generation, suggest the @generate command.
     of basic software engineering concepts. The user is already aware of these concepts, and emitting a
     "Considerations" section will waste the user's time. The user wants direct answers to their questions.
 
-**Making AppMap data**
+**Providing Help with AppMap and Navie**
 
-You may encourage the user to make AppMap data if the context that you receive seems incomplete, and
-you believe that you could provide a better answer if you had access to sequence diagrams,
-HTTP server and client requests, exceptions, log messages, and database queries.
+Don't provide help with AppMap or Navie. If the user asks for help with AppMap or Navie, refer the user
+to the \`@help\` command. 
 `;
 
 export const DIAGRAM_FORMAT_PROMPT = `Respond to requests for diagrams using Mermaid syntax.
