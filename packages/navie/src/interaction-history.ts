@@ -211,9 +211,19 @@ export class HelpLookupEvent extends InteractionEvent {
   }
 }
 
+export enum ContextItemRequestor {
+  Gatherer = 'gatherer',
+  Memory = 'memory',
+  Mentions = 'mentions',
+  PinnedFile = 'pinnedFile',
+  ProjectInfo = 'projectInfo',
+  Terms = 'terms',
+}
+
 export class ContextItemEvent extends InteractionEvent {
   constructor(
     public promptType: PromptType,
+    public requestor: ContextItemRequestor,
     public content: string,
     public location?: string | undefined,
     public directory?: string | undefined
@@ -286,14 +296,22 @@ export class TechStackEvent extends InteractionEvent {
 class InteractionHistory extends EventEmitter {
   public readonly events: InteractionEvent[] = [];
 
+  private acceptPinnedFileContext = true;
+
   // eslint-disable-next-line class-methods-use-this
   log(message: string) {
-    console.log(message);
+    console.warn(message);
   }
 
   addEvent(event: InteractionEvent) {
+    if (!this.validateEvent(event)) return;
+
     this.emit('event', event);
     this.events.push(event);
+  }
+
+  stopAcceptingPinnedFileContext() {
+    this.acceptPinnedFileContext = false;
   }
 
   clear() {
@@ -327,6 +345,20 @@ class InteractionHistory extends EventEmitter {
     }
 
     return state;
+  }
+
+  protected validateEvent(event: InteractionEvent) {
+    if (event instanceof ContextItemEvent) {
+      if (event.requestor === ContextItemRequestor.PinnedFile && !this.acceptPinnedFileContext) {
+        this.log(
+          'WARNING Unexpected pinned file context item; no further pinned file context is expected.'
+        );
+        // This is a warning only. We don't want to stop the event from being added.
+        return true;
+      }
+    }
+
+    return true;
   }
 }
 

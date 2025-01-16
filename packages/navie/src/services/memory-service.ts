@@ -1,8 +1,12 @@
 import { ConversationSummaryMemory } from 'langchain/memory';
-import { AIMessage, HumanMessage } from '@langchain/core/messages';
-
 import { BaseLanguageModelInterface } from '@langchain/core/language_models/base';
-import { ContextItemEvent, InteractionEvent, PromptInteractionEvent } from '../interaction-history';
+
+import {
+  ContextItemEvent,
+  ContextItemRequestor,
+  InteractionEvent,
+  PromptInteractionEvent,
+} from '../interaction-history';
 import Message from '../message';
 import { PromptType, buildPromptDescriptor } from '../prompt';
 import { convertToMessage } from './completion-service';
@@ -29,7 +33,7 @@ export class LangchainMemoryService implements MemoryService {
         'system',
         buildPromptDescriptor(PromptType.ConversationSummary)
       ),
-      new ContextItemEvent(PromptType.ConversationSummary, summary),
+      new ContextItemEvent(PromptType.ConversationSummary, ContextItemRequestor.Memory, summary),
     ];
   }
 }
@@ -44,7 +48,11 @@ export const NaiveMemoryService: MemoryService = {
         'system',
         buildPromptDescriptor(PromptType.ConversationSummary)
       ),
-      new ContextItemEvent(PromptType.ConversationSummary, concatenatedMessages),
+      new ContextItemEvent(
+        PromptType.ConversationSummary,
+        ContextItemRequestor.Memory,
+        concatenatedMessages
+      ),
     ];
   },
 };

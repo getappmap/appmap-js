@@ -1,7 +1,11 @@
+import { ContextItemRequestor } from '../interaction-history';
 import { ClientRequest, ChatHistory } from '../navie';
 import ContextService from './context-service';
 import FileChangeExtractorService from './file-change-extractor-service';
 
+/**
+ * Used to detect file mentions within a chat interaction and to fetch their content using helper services.
+ */
 export default class FileContentFetcher {
   constructor(
     private fileChangeExtractor: FileChangeExtractorService,
@@ -17,6 +21,6 @@ export default class FileContentFetcher {
       return undefined;
     }
 
-    await this.contextService.locationContext(fileNames);
+    await this.contextService.locationContext(ContextItemRequestor.Mentions, fileNames);
   }
 }

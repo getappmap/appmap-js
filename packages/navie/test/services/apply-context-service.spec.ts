@@ -1,6 +1,9 @@
 import { ContextV2 } from '../../src/context';
 import { HelpProvider, HelpRequest, HelpResponse } from '../../src/help';
-import InteractionHistory, { ContextItemEvent } from '../../src/interaction-history';
+import InteractionHistory, {
+  ContextItemEvent,
+  ContextItemRequestor,
+} from '../../src/interaction-history';
 import ApplyContextService from '../../src/services/apply-context-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import { HELP_CONTEXT, SEARCH_CONTEXT } from '../fixture';
@@ -21,7 +24,13 @@ describe('ApplyContextService', () => {
     afterEach(() => jest.resetAllMocks());
 
     const collect = (characterLimit: number, maxContentLength = characterLimit / 5) =>
-      applyContextService.applyContext(context, help, characterLimit, maxContentLength);
+      applyContextService.applyContext(
+        ContextItemRequestor.Terms,
+        context,
+        help,
+        characterLimit,
+        maxContentLength
+      );
 
     it('collects samples of context into the output', () => {
       collect(1000 * 1000);
