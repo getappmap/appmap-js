@@ -1,11 +1,5 @@
 import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
-import configuration from '../../configuration';
-import INavie, { INavieProvider } from '../../explain/navie/inavie';
-import collectProjectInfos from '../../../cmds/navie/projectInfo';
-import collectHelp from '../../../cmds/navie/help';
-import { basename, dirname, join } from 'path';
-import collectContext, { buildContextRequest } from '../../explain/collect-context';
-import detectCodeEditor from '../../../lib/detectCodeEditor';
+import {  dirname, join } from 'path';
 import { EventEmitter } from 'stream';
 import { randomUUID } from 'crypto';
 import { ConversationThread } from '@appland/client';
@@ -14,6 +8,7 @@ import { NavieRpc } from '@appland/rpc';
 import { homedir } from 'os';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import sqlite3 from 'better-sqlite3';
+import NavieService from '../services/navieService';
 
 type NavieThreadInitEvent = {
   type: 'thread-init';
@@ -90,131 +85,6 @@ type NavieEvent =
 
 type TimestampNavieEvent = Timestamp & NavieEvent;
 
-interface ContextEvents {
-  on(
-    event: 'event',
-    listener: (data: NavieBeginContextSearchEvent | NavieCompleteContextSearchEvent) => void
-  ): this;
-}
-class Navie {
-  private readonly codeEditor?: string;
-
-  constructor(private readonly navieProvider: INavieProvider) {
-    this.codeEditor = detectCodeEditor();
-  }
-
-  getNavie(): [INavie, ContextEvents] {
-    const emitter = new EventEmitter();
-    const navie = this.navieProvider(
-      async (data: ContextV2.ContextRequest) => {
-        const id = randomUUID();
-        emitter.emit('event', { type: 'begin-context-search', contextType: 'context', id });
-        const result = await this.searchContext(data);
-        emitter.emit('event', { type: 'complete-context-search', id, result });
-        return result;
-      },
-      async () => {
-        const id = randomUUID();
-        emitter.emit('event', { type: 'begin-context-search', contextType: 'project-info', id });
-        const result = await this.projectInfoContext();
-        emitter.emit('event', { type: 'complete-context-search', id, result });
-        return result;
-      },
-      async (data: Help.HelpRequest) => {
-        const id = randomUUID();
-        emitter.emit('event', { type: 'begin-context-search', contextType: 'help', id });
-        const result = await this.helpContext(data);
-        emitter.emit('event', { type: 'complete-context-search', id, result });
-        return result;
-      }
-    );
-    return [navie, emitter as unknown as ContextEvents];
-  }
-
-  async searchContext(data: ContextV2.ContextRequest): Promise<ContextV2.ContextResponse> {
-    const { vectorTerms } = data;
-    const { tokenCount } = data;
-    const config = configuration();
-    const { projectDirectories } = configuration();
-    const appmapDirectories = await config.appmapDirectories();
-    const labels = data.labels ?? [];
-    const keywords = vectorTerms || [];
-    if (keywords.length > 0) {
-      if (
-        labels.find(
-          (label) =>
-            label.name === ContextV2.ContextLabelName.Architecture &&
-            label.weight === ContextV2.ContextLabelWeight.High
-        ) ??
-        labels.find(
-          (label) =>
-            label.name === ContextV2.ContextLabelName.Overview &&
-            label.weight === ContextV2.ContextLabelWeight.High
-        )
-      ) {
-        keywords.push('architecture');
-        keywords.push('design');
-        keywords.push('readme');
-        keywords.push('about');
-        keywords.push('overview');
-        for (const dir of projectDirectories) {
-          keywords.push(basename(dir));
-        }
-      }
-    }
-
-    // TODO: More accurate char limit? Probably doesn't matter because they will be
-    // pruned by the client AI anyway.
-    // The meaning of tokenCount is "try and get at least this many tokens"
-    const charLimit = tokenCount * 3;
-
-    const contextRequest = buildContextRequest(
-      appmapDirectories.map((dir) => dir.directory),
-      projectDirectories,
-      undefined,
-      keywords,
-      charLimit,
-      data
-    );
-
-    const searchResult = await collectContext(
-      appmapDirectories.map((dir) => dir.directory),
-      projectDirectories,
-      charLimit,
-      contextRequest.vectorTerms,
-      contextRequest.request
-    );
-
-    return searchResult.context;
-  }
-
-  async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
-    return await collectProjectInfos(this.codeEditor);
-  }
-
-  helpContext(data: Help.HelpRequest): Promise<Help.HelpResponse> {
-    return collectHelp(data);
-  }
-}
-
-let navieProvider: INavieProvider | undefined;
-export function registerNavieProvider(_navieProvider: INavieProvider): void {
-  navieProvider = _navieProvider;
-}
-
-export function getNavieProvider(): INavieProvider {
-  if (!navieProvider) {
-    throw new Error('No navie provider available');
-  }
-  return navieProvider;
-}
-
-function getNavie(_navieProvider?: INavieProvider): [INavie, ContextEvents] {
-  const provider = _navieProvider ?? getNavieProvider();
-  const navie = new Navie(provider);
-  return navie.getNavie();
-}
-
 type PinnedItem = {
   operation: 'pin' | 'unpin';
   uri?: string;
@@ -246,7 +116,10 @@ export class Thread {
   }
 
   private async emitSuggestions(messageId: string) {
-    const suggestions = await getSuggestions(getNavieProvider(), this.conversationThread.id);
+    const suggestions = await getSuggestions(
+      NavieService.getNavieProvider(),
+      this.conversationThread.id
+    );
     this.logEvent({ type: 'prompt-suggestions', suggestions, messageId });
   }
 
@@ -349,10 +222,11 @@ export class Thread {
   }
 
   sendMessage(message: string, codeSelection?: UserContext.Context) {
-    const [navie, contextEvents] = getNavie();
+    const [navie, contextEvents] = NavieService.getNavie();
     let responseId: string | undefined;
     contextEvents.on('event', (event) => {
-      this.logEvent(event);
+      event.complete ?
+      this.logEvent({type: 'complete-context-search', id: event.id, result: event.response}) :
     });
     return new Promise<void>((resolve, reject) => {
       navie
