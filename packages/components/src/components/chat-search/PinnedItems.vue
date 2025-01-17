@@ -16,7 +16,7 @@
             :is-reference="true"
             :key="pin.handle"
             :handle="pin.handle"
-            v-bind="getPinnedContent(pin.handle).metadata"
+            v-bind="getMetadata(pin)"
             class="pinned-items__pinned-item"
             @pin="unpin(pin.handle)"
             >{{ getPinnedContent(pin.handle).content }}</component
@@ -84,7 +84,11 @@ export default {
       return VMarkdownCodeSnippet;
     },
     getPinnedContent(handle: number): ObservableContent {
-      return pinnedItemRegistry.get(handle);
+      return pinnedItemRegistry.get(handle) ?? {};
+    },
+    getMetadata(pinnedItem: PinnedItem): Record<string, unknown> {
+      const registryItem = pinnedItemRegistry.get(pinnedItem.handle);
+      return registryItem?.metadata ?? pinnedItem;
     },
     unpin(handle: number) {
       this.$emit('pin', { handle, pinned: false });

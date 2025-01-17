@@ -76,8 +76,15 @@ export namespace NavieRpc {
         };
         export type Params = {
           threadId: string;
-          operation: 'pin' | 'unpin';
           pinnedItem: PinnedUri | PinnedConversationItem;
+        };
+        export type Response = void;
+      }
+      export namespace UnpinItem {
+        export const Method = 'v1.navie.thread.unpinItem';
+        export type Params = {
+          threadId: string;
+          pinnedItem: PinItem.PinnedUri | PinItem.PinnedConversationItem;
         };
         export type Response = void;
       }
@@ -89,6 +96,7 @@ export namespace NavieRpc {
           orderBy?: 'created_at' | 'updated_at';
           limit?: number;
           offset?: number;
+          projectDirectories?: string[];
         };
         export type Response = {
           id: string;

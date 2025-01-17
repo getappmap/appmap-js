@@ -677,15 +677,18 @@ export default {
         // system.listMethods
         await this.listRpcMethods();
 
-        // v1.navie.register
-        if (this.threadId) {
-          this.subscribeToThread(this.threadId);
-        } else {
-          this.initConversationThread();
-        }
         // If v2.navie.welcome is available: v2.navie.metadata
         // otherwise: v1.navie.metadata
         this.loadStaticMessages();
+
+        if (this.threadId) {
+          // v1.navie.thread.subscribe
+          this.subscribeToThread(this.threadId);
+          return;
+        }
+
+        // v1.navie.register
+        this.initConversationThread();
 
         // v2.navie.welcome
         this.loadDynamicWelcomeMessages();
@@ -693,9 +696,32 @@ export default {
         console.error(e);
       }
     },
+    getPinnedItem(event: { handle?: string; uri?: string }) {
+      if (event.handle) return { handle: event.handle };
+
+      if (event.uri) {
+        const uri = new URL(event.uri);
+        const pathname = decodeURIComponent(uri.pathname);
+        // TODO: This abstraction really isn't needed, we should just put the { uri: string } or
+        // { handle: string } in the pinnedItems array.
+        //
+        // We know it's a file because of the URI.
+        // We know it's pinned because it's in the pinnedItems array.
+        // We know the location because it's in the URI.
+        // We don't need a handle because we can use the URI.
+        return {
+          handle: event.uri,
+          pinned: true,
+          type: 'file',
+          location: pathname,
+        };
+      }
+
+      throw new Error('invalid pinned item, must provide either handle or uri');
+    },
     onReceiveEvent(event) {
       const chatApi = this.$refs.vchat;
-      console.log(event);
+      // console.log(event);
       switch (event.type) {
         case 'message': {
           if (event.role === 'assistant') {
@@ -711,9 +737,25 @@ export default {
           if (!message) {
             message = chatApi.addSystemMessage();
           }
+          let title;
+          if (event.contextType === 'project-info') {
+            title = 'Gathering project information';
+          } else if (event.contextType === 'help') {
+            title = 'Searching AppMap documentation';
+          } else if (event.contextType === 'context') {
+            const req = event.request ?? {};
+            if (Array.isArray(req.vectorTerms) && req.vectorTerms.length > 0) {
+              title = 'Searching for relevant content';
+            } else if (Array.isArray(req.locations) && req.locations.length > 0) {
+              title = 'Locating source files';
+            }
+          }
+          if (!title) {
+            return;
+          }
           message.tools.push({
+            title,
             id: event.id,
-            title: `Searching for ${event.contextType}`,
             status: 'Working...',
           });
           break;
@@ -791,24 +833,18 @@ export default {
         }
 
         case 'pin-item': {
-          let pinnedItem;
-          if (event.uri) {
-            const uri = new URL(event.uri);
-            const pathname = decodeURIComponent(uri.pathname);
-            pinnedItem = {
-              handle: getNextHandle(),
-              pinned: true,
-              type: 'file',
-              location: pathname,
-            };
-          } else {
-            pinnedItem = { handle: event.handle };
-          }
-
+          const pinnedItem = this.getPinnedItem(event);
           const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pinnedItem.handle);
-          if (event.operation === 'pin' && pinIndex === -1) {
+          if (pinIndex === -1) {
             this.pinnedItems.push(pinnedItem);
-          } else if (event.operation === 'unpin' && pinIndex !== -1) {
+          }
+          break;
+        }
+
+        case 'unpin-item': {
+          const pinnedItem = this.getPinnedItem(event);
+          const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pinnedItem.handle);
+          if (pinIndex !== -1) {
             this.pinnedItems.splice(pinIndex, 1);
           }
           break;
@@ -849,9 +885,9 @@ export default {
 
     this.$root
       .$on('pin', (pin: PinEvent) => {
-        this.rpcClient.thread.pinItem(this.activeThreadId, pin.pinned ? 'pin' : 'unpin', {
-          handle: pin.handle,
-        });
+        pin.pinned
+          ? this.rpcClient.thread.pinItem(this.activeThreadId, { handle: pin.handle })
+          : this.rpcClient.thread.unpinItem(this.activeThreadId, { handle: pin.handle });
       })
       .$on('jump-to', (handle: number) => {
         document
@@ -865,9 +901,9 @@ export default {
       .$on('change-input', (prompt: string) => {
         this.$refs.vchat.setInput(prompt);
       })
-      .$on('pin-files', (requests: PinFileRequests[]) => {
+      .$on('pin-files', (requests: { uri: string }[]) => {
         requests.forEach((r) => {
-          this.rpcClient.thread.pinItem(this.activeThreadId, 'pin', r.uri);
+          this.rpcClient.thread.pinItem(this.activeThreadId, r);
         });
       });
 

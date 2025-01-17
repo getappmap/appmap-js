@@ -464,15 +464,29 @@ export default class AppMapRPC {
       },
       pinItem: (
         threadId: string,
-        operation: string,
         pinnedItem:
           | NavieRpc.V1.Thread.PinItem.PinnedUri
           | NavieRpc.V1.Thread.PinItem.PinnedConversationItem
       ) =>
         this.client.request(
           NavieRpc.V1.Thread.PinItem.Method,
-          { threadId, operation, pinnedItem },
+          { threadId, pinnedItem },
           (err: any, error: any, result: NavieRpc.V1.Thread.PinItem.Response) => {
+            if (err || error) return reportError(Promise.reject, err, error);
+
+            return result;
+          }
+        ),
+      unpinItem: (
+        threadId: string,
+        pinnedItem:
+          | NavieRpc.V1.Thread.PinItem.PinnedUri
+          | NavieRpc.V1.Thread.PinItem.PinnedConversationItem
+      ) =>
+        this.client.request(
+          NavieRpc.V1.Thread.UnpinItem.Method,
+          { threadId, pinnedItem },
+          (err: any, error: any, result: NavieRpc.V1.Thread.UnpinItem.Response) => {
             if (err || error) return reportError(Promise.reject, err, error);
 
             return result;

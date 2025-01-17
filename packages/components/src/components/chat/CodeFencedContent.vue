@@ -7,6 +7,7 @@ import Vue from 'vue';
 import MarkdownCodeSnippet from './MarkdownCodeSnippet.vue';
 import MermaidDiagram from './MermaidDiagram.vue';
 import { pinnedItemRegistry } from '@/lib/pinnedItems';
+import stripCodeFences from '@/lib/stripCodeFences';
 
 export default Vue.extend({
   components: {
@@ -29,8 +30,7 @@ export default Vue.extend({
       return this.generatedContent?.metadata ?? {};
     },
     content(): string {
-      // Drop the first and last lines, which are the fences
-      return this.generatedContent?.content.split('\n').slice(1, -1).join('\n') ?? '';
+      return stripCodeFences(this.generatedContent?.content ?? '');
     },
   },
 });

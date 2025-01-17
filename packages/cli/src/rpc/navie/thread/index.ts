@@ -1,5 +1,5 @@
 import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
-import {  dirname, join } from 'path';
+import { dirname, join } from 'path';
 import { EventEmitter } from 'stream';
 import { randomUUID } from 'crypto';
 import { ConversationThread } from '@appland/client';
@@ -9,6 +9,7 @@ import { homedir } from 'os';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import sqlite3 from 'better-sqlite3';
 import NavieService from '../services/navieService';
+import configuration from '../../configuration';
 
 type NavieThreadInitEvent = {
   type: 'thread-init';
@@ -50,6 +51,10 @@ type NaviePinItemEvent = PinnedItem & {
   type: 'pin-item';
 };
 
+type NavieUnpinItemEvent = PinnedItem & {
+  type: 'unpin-item';
+};
+
 type NavieErrorEvent = {
   type: 'error';
   error: unknown;
@@ -59,12 +64,13 @@ type NavieBeginContextSearchEvent = {
   type: 'begin-context-search';
   contextType: 'help' | 'project-info' | 'context';
   id: string;
+  request?: Help.HelpRequest | ProjectInfo.ProjectInfoRequest | ContextV2.ContextRequest;
 };
 
 type NavieCompleteContextSearchEvent = {
   type: 'complete-context-search';
   id: string;
-  result: Help.HelpResponse | ProjectInfo.ProjectInfoResponse | ContextV2.ContextResponse;
+  result?: Help.HelpResponse | ProjectInfo.ProjectInfoResponse | ContextV2.ContextResponse;
 };
 
 type Timestamp = {
@@ -78,6 +84,7 @@ type NavieEvent =
   | NavieMessageEvent
   | NavieMessageCompleteEvent
   | NaviePinItemEvent
+  | NavieUnpinItemEvent
   | NaviePromptSuggestionsEvent
   | NavieThreadInitEvent
   | NavieTokenEvent
@@ -86,7 +93,6 @@ type NavieEvent =
 type TimestampNavieEvent = Timestamp & NavieEvent;
 
 type PinnedItem = {
-  operation: 'pin' | 'unpin';
   uri?: string;
   handle?: number;
 };
@@ -221,12 +227,22 @@ export class Thread {
     this.logEvent({ type: 'pin-item', ...item });
   }
 
+  unpinItem(item: PinnedItem) {
+    this.logEvent({ type: 'unpin-item', ...item });
+  }
+
   sendMessage(message: string, codeSelection?: UserContext.Context) {
     const [navie, contextEvents] = NavieService.getNavie();
     let responseId: string | undefined;
-    contextEvents.on('event', (event) => {
-      event.complete ?
-      this.logEvent({type: 'complete-context-search', id: event.id, result: event.response}) :
+    contextEvents.on('context', (event) => {
+      event.complete
+        ? this.logEvent({ type: 'complete-context-search', id: event.id, result: event.response })
+        : this.logEvent({
+            type: 'begin-context-search',
+            id: event.id,
+            request: event.request,
+            contextType: event.type,
+          });
     });
     return new Promise<void>((resolve, reject) => {
       navie
@@ -359,17 +375,31 @@ const INITIALIZE_SQL = `CREATE TABLE IF NOT EXISTS threads (
 
 CREATE INDEX IF NOT EXISTS idx_created_at ON threads (created_at);
 CREATE INDEX IF NOT EXISTS idx_uuid ON threads (uuid);
+
+CREATE TABLE IF NOT EXISTS project_directories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    path TEXT NOT NULL,
+    thread_id TEXT NOT NULL,
+    FOREIGN KEY(thread_id) REFERENCES threads(uuid),
+    UNIQUE (thread_id, path)
+);
+
+CREATE INDEX IF NOT EXISTS idx_thread_id ON project_directories (thread_id);
 `;
 
-const QUERY_INSERT_SQL = `INSERT INTO threads (uuid, path, title) VALUES (?, ?, ?)
+const QUERY_INSERT_THREAD_SQL = `INSERT INTO threads (uuid, path, title) VALUES (?, ?, ?)
 ON CONFLICT (uuid) DO UPDATE SET updated_at = CURRENT_TIMESTAMP, title = ?`;
-const QUERY_DELETE_SQL = `DELETE FROM threads WHERE uuid = ?`;
+const QUERY_DELETE_THREAD_SQL = `DELETE FROM threads WHERE uuid = ?`;
+const QUERY_INSERT_PROJECT_DIRECTORY_SQL = `INSERT INTO project_directories (thread_id, path) VALUES (?, ?)
+ON CONFLICT (thread_id, path) DO NOTHING`;
+
 interface QueryOptions {
   uuid?: string;
   maxCreatedAt?: Date;
   orderBy?: 'created_at' | 'updated_at';
   limit?: number;
   offset?: number;
+  projectDirectories?: string[];
 }
 
 interface ThreadIndexItem {
@@ -384,6 +414,7 @@ export class ThreadIndex {
   private readonly db: sqlite3.Database;
   private queryInsert: sqlite3.Statement;
   private queryDelete: sqlite3.Statement;
+  private queryInsertProjectDirectory: sqlite3.Statement;
 
   private static readonly DATABASE_PATH = join(homedir(), '.appmap', 'navie', 'thread-index.db');
   private static instance: ThreadIndex;
@@ -392,8 +423,9 @@ export class ThreadIndex {
     this.db = new sqlite3(ThreadIndex.DATABASE_PATH);
     this.db.exec(INITIALIZE_SQL);
 
-    this.queryInsert = this.db.prepare(QUERY_INSERT_SQL);
-    this.queryDelete = this.db.prepare(QUERY_DELETE_SQL);
+    this.queryInsert = this.db.prepare(QUERY_INSERT_THREAD_SQL);
+    this.queryDelete = this.db.prepare(QUERY_DELETE_THREAD_SQL);
+    this.queryInsertProjectDirectory = this.db.prepare(QUERY_INSERT_PROJECT_DIRECTORY_SQL);
   }
 
   static getInstance() {
@@ -404,7 +436,19 @@ export class ThreadIndex {
   }
 
   index(threadId: string, path: string, title?: string) {
-    return this.queryInsert.run(threadId, path, title, title);
+    const { projectDirectories } = configuration();
+    this.db.transaction(() => {
+      this.queryInsert.run(threadId, path, title, title);
+
+      // Project directories are written on every index update.
+      //
+      // This is likely not necessary but it'll handle the edge case where an additional project
+      // directory is added mid-way through a conversation.
+      projectDirectories.forEach((projectDirectory) => {
+        this.queryInsertProjectDirectory.run(threadId, projectDirectory);
+      });
+    })();
+    return;
   }
 
   delete(threadId: string) {
@@ -412,7 +456,7 @@ export class ThreadIndex {
   }
 
   query(options: QueryOptions): ThreadIndexItem[] {
-    let queryString = `SELECT uuid as id, path, title, created_at, updated_at FROM threads`;
+    let queryString = `SELECT uuid as id, threads.path, title, created_at, updated_at FROM threads`;
     const params: unknown[] = [];
     if (options.uuid) {
       queryString += ` WHERE uuid = ?`;
@@ -433,6 +477,22 @@ export class ThreadIndex {
     if (options.offset) {
       queryString += ` OFFSET ?`;
       params.push(options.offset);
+    }
+    if (options.projectDirectories) {
+      if (options.projectDirectories.length === 0) {
+        // If `projectDirectories` is an empty array, we want to return all threads that have no
+        // project directories associated with them. This is edge-casey, but this does occur in
+        // development.
+        //
+        // If you're looking to query for threads with any project directory, leave `projectDirectories`
+        // as `undefined`.
+        queryString += ` LEFT JOIN project_directories ON uuid = thread_id WHERE project_directories.path IS NULL`;
+      } else {
+        queryString += ` INNER JOIN project_directories ON uuid = thread_id WHERE project_directories.path IN (${options.projectDirectories
+          .map(() => '?')
+          .join(',')})`;
+        params.push(...options.projectDirectories);
+      }
     }
     const query = this.db.prepare(queryString);
     return query.all(...params) as ThreadIndexItem[];

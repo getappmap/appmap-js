@@ -34,9 +34,12 @@ import { homedir } from 'os';
 import { navieWelcomeV2 } from '../../rpc/navie/welcome';
 import { navieRegisterV1 } from '../../rpc/navie/register';
 import { navieThreadSendMessageHandler } from '../../rpc/navie/thread/sendMessage';
-import { navieThreadPinItemHandler } from '../../rpc/navie/thread/pinItem';
-import { registerNavieProvider } from '../../rpc/navie/thread';
+import {
+  navieThreadPinItemHandler,
+  navieThreadUnpinItemHandler,
+} from '../../rpc/navie/thread/pinItem';
 import { navieThreadQueryHandler } from '../../rpc/navie/thread/query';
+import NavieService from '../../rpc/navie/services/navieService';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -82,7 +85,7 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     navieRegisterV1(codeEditor),
     navieThreadSendMessageHandler(),
     navieThreadPinItemHandler(),
-    navieThreadPinItemHandler(),
+    navieThreadUnpinItemHandler(),
     navieThreadQueryHandler(),
   ];
 }
@@ -91,7 +94,7 @@ export const handler = async (argv: HandlerArguments) => {
   verbose(argv.verbose);
 
   const navie = buildNavieProvider(argv);
-  registerNavieProvider(navie);
+  NavieService.registerNavieProvider(navie);
 
   let codeEditor: string | undefined = argv.codeEditor;
   if (!codeEditor) {

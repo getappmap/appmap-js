@@ -26,18 +26,15 @@ import AppMapRPC from '@/lib/AppMapRPC';
 import Vue from 'vue';
 
 import hljs from 'highlight.js';
+import stripCodeFences from '@/lib/stripCodeFences';
 
 hljs.registerAliases(['rake', 'Gemfile'], { languageName: 'ruby' });
 hljs.registerAliases(['vue'], { languageName: 'xml' });
-
-import type { PinCodeSnippet, PinEvent } from './PinEvent';
 
 interface Injected {
   rpcClient: AppMapRPC;
   projectDirectories: string[];
 }
-
-const stripFileDirective = (code: string): string => code.replace(/^\s*?<!--\s*?file:.*?\n/, '');
 
 export default Vue.extend({
   props: {
@@ -70,7 +67,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      code: stripFileDirective(this.$slots.default?.[0].text ?? ''),
+      code: stripCodeFences(this.$slots.default?.[0].text ?? ''),
       pendingApply: false,
     };
   },
@@ -122,17 +119,7 @@ export default Vue.extend({
       navigator.clipboard.writeText(code);
     },
     onPin({ pinned, handle }: { pinned: boolean; handle: number }): void {
-      const eventData: PinEvent & Partial<PinCodeSnippet> = {
-        pinned,
-        handle,
-      };
-      if (pinned) {
-        eventData.type = 'code-snippet';
-        eventData.language = this.language;
-        eventData.location = this.decodedLocation;
-        eventData.content = this.code;
-      }
-      this.$root.$emit('pin', eventData);
+      this.$root.$emit('pin', { pinned, handle });
     },
     async onApply(resultCallback: (result: 'success' | 'failure') => void): Promise<void> {
       if (this.pendingApply) return;
@@ -157,7 +144,7 @@ export default Vue.extend({
   updated() {
     // Slots are not reactive unless written directly to the DOM.
     // Luckily for us, this method is called when the content within the slot changes.
-    this.code = stripFileDirective(this.$slots.default?.[0].text ?? '');
+    this.code = stripCodeFences(this.$slots.default?.[0].text ?? '');
   },
 });
 </script>

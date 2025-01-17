@@ -25,7 +25,7 @@
       <span>{{ message }}</span>
     </div>
     <div class="message-body" data-cy="message-text" v-else>
-      <div class="tools" v-if="tools">
+      <div class="tools" v-if="tools && !tokens.length">
         <v-tool-status
           v-for="(tool, i) in tools"
           :key="i"
@@ -34,7 +34,13 @@
           :status="tool.status"
         />
       </div>
-      <v-streaming-message-content :content="renderedMarkdown" :active="!complete" />
+      <v-streaming-message-content
+        ref="streamingContent"
+        class="streaming-content"
+        :data-active="!complete && !toolsPending"
+        :content="renderedMarkdown"
+        :active="!complete"
+      />
       <div
         v-if="complete"
         class="next-step-suggestions"
@@ -86,32 +92,6 @@
       </span>
       <span class="button" v-if="!isUser" data-cy="save-message" @click="saveMessage">
         <v-save-icon class="copy-icon small" />
-      </span>
-      <span
-        v-if="!isUser && id"
-        data-cy="feedback-good"
-        :class="{
-          button: 1,
-          sentiment: 1,
-          'sentiment--good': 1,
-          'sentiment--selected': sentiment > 0,
-        }"
-        @click="setSentiment(1)"
-      >
-        <v-thumb-icon />
-      </span>
-      <span
-        v-if="!isUser && id"
-        data-cy="feedback-bad"
-        :class="{
-          button: 1,
-          sentiment: 1,
-          'sentiment--bad': 1,
-          'sentiment--selected': sentiment < 0,
-        }"
-        @click="setSentiment(-1)"
-      >
-        <v-thumb-icon />
       </span>
     </div>
   </div>
@@ -168,7 +148,6 @@ export default {
   components: {
     VNavieCompass,
     VUserAvatar,
-    VThumbIcon,
     VButton,
     VToolStatus,
     VCodeSelection,
@@ -227,6 +206,12 @@ export default {
   },
 
   computed: {
+    toolsPending(): boolean {
+      // If we've began emitting tokens, ignore any tool status
+      if (this.tokens.length > 0) return false;
+
+      return this.tools.length > 0 && this.tools.some((t) => !t.complete);
+    },
     message(): string {
       return this.tokens
         .map((t) => {
@@ -266,20 +251,6 @@ export default {
   },
 
   methods: {
-    setSentiment(sentiment: number) {
-      // Throttle sentiment changes to avoid spamming the server
-      if (this.sentimentTimeout) return;
-      this.sentimentTimeout = setTimeout(() => {
-        this.sentimentTimeout = undefined;
-      }, 250);
-
-      // This shouldn't ever happen, but just in case
-      if (!this.id) return;
-
-      // If the sentiment is already set to this value, unset it
-      const newSentiment = this.sentiment === sentiment ? 0 : sentiment;
-      this.$emit('change-sentiment', this.id, newSentiment);
-    },
     async writeToClipboard(text) {
       if (text && typeof text === 'string' && this.hasClipboardAPI)
         await navigator.clipboard.writeText(text.replace(/\n/g, '\n'));
@@ -330,6 +301,30 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.streaming-content[data-active] {
+  @keyframes cursor-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    height: 1rem;
+    width: 1rem;
+    background-color: $color-foreground;
+    animation: cursor-blink 1s infinite ease;
+    display: inline-block;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 @keyframes skeleton {
@@ -610,7 +605,10 @@ export default {
   line-height: 1.6;
 
   .tools {
-    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    // padding: 0.5em 0;
     line-height: normal;
 
     &:empty {

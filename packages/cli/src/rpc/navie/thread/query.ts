@@ -8,8 +8,15 @@ export function navieThreadQueryHandler(): RpcHandler<
 > {
   return {
     name: NavieRpc.V1.Thread.Query.Method,
-    handler: ({ threadId, maxCreatedAt, orderBy, limit, offset }) =>
+    handler: ({ threadId, maxCreatedAt, orderBy, limit, offset, projectDirectories }) =>
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      ThreadIndex.getInstance().query({ uuid: threadId, maxCreatedAt, orderBy, limit, offset }),
+      ThreadIndex.getInstance().query({
+        uuid: threadId,
+        maxCreatedAt,
+        orderBy,
+        limit,
+        offset,
+        projectDirectories,
+      }),
   };
 }

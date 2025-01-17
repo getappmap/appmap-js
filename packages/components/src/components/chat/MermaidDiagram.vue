@@ -38,8 +38,8 @@ import pako from 'pako';
 import { fromUint8Array } from 'js-base64';
 
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
-import type { PinEvent, PinMermaid } from './PinEvent';
-import { pinnedItemRegistry } from '@/lib/pinnedItems';
+import type { PinEvent } from './PinEvent';
+import stripCodeFences from '@/lib/stripCodeFences';
 
 mermaid.initialize({
   startOnLoad: false,
@@ -78,7 +78,7 @@ export default Vue.extend({
     },
   },
   data() {
-    const definition = this.$slots.default?.[0].text ?? '';
+    let definition = stripCodeFences(this.$slots.default?.[0].text ?? '');
     return {
       definition,
       id: `mermaid-${diagramId++}`,
@@ -164,18 +164,13 @@ export default Vue.extend({
       navigator.clipboard.writeText(this.definition);
     },
     onPin({ pinned, handle }: PinEvent) {
-      const eventData: PinEvent & Partial<PinMermaid> = { pinned, handle };
-      if (pinned) {
-        eventData.type = 'mermaid';
-        eventData.content = this.definition;
-      }
-      this.$root.$emit('pin', eventData);
+      this.$root.$emit('pin', { pinned, handle });
     },
   },
   updated() {
     // Slots are not reactive unless written directly to the DOM.
     // Luckily for us, this method is called when the content within the slot changes.
-    this.definition = this.$slots.default?.[0].text ?? '';
+    this.definition = stripCodeFences(this.$slots.default?.[0].text ?? '');
   },
 });
 </script>

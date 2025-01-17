@@ -75,8 +75,8 @@ ChatSearch.args = {
   mostRecentAppMaps,
   appmapYmlPresent: true,
   appmapRpcPort: 3002,
-  threadId: 'ad74f14c-fdc5-4ebc-b8fd-549d17ca9ddb',
-  replay: true,
+  threadId: 'cefe75d4-e2ea-4ad1-866a-1c8cd54fc108',
+  // replay: true,
   openNewChat() {
     alert('open new chat');
   },
