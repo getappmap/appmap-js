@@ -15,9 +15,9 @@ import {
 } from '@appland/client';
 import reportFetchError from './report-fetch-error';
 import assert from 'assert';
-import { initializeHistory, loadThread } from './historyHelper';
-import { THREAD_ID_REGEX } from './history';
 import Trajectory from './trajectory';
+import { getThread } from '../../navie/thread';
+import { verbose } from '../../../utils';
 
 const OPTION_SETTERS: Record<
   string,
@@ -54,8 +54,6 @@ export default class LocalNavie extends EventEmitter implements INavie {
   // Sets a thread id to use with the request.
   // The caller is responsible for ensuring that the thread id is a unique, valid uuid.
   setThreadId(threadId: string) {
-    if (!THREAD_ID_REGEX.test(threadId)) throw new Error(`Invalid thread id: ${threadId}`);
-
     this.assignedThreadId = threadId;
   }
 
@@ -123,9 +121,6 @@ export default class LocalNavie extends EventEmitter implements INavie {
         )?.id ?? randomUUID();
     }
 
-    const history = initializeHistory();
-    const thread = await loadThread(history, threadId);
-
     this.#reportConfigTelemetry();
     log(`[local-navie] Processing question ${userMessageId} in thread ${threadId}`);
     this.emit('ack', userMessageId, threadId);
@@ -137,9 +132,18 @@ export default class LocalNavie extends EventEmitter implements INavie {
         prompt,
       };
 
-      await history.question(threadId, userMessageId, question, codeSelection, prompt);
-
       const startTime = Date.now();
+      let chatHistory: Navie.ChatHistory = [];
+      try {
+        const thread = await getThread(threadId);
+        chatHistory = thread.getChatHistory();
+      } catch (e) {
+        if (verbose()) {
+          console.warn(`Failed to load thread ${threadId}: ${e}`);
+        }
+        // If the thread failed to load, history will be empty.
+        // This is typically expected if the thread is new.
+      }
 
       const navieFn = navie(
         clientRequest,
@@ -147,7 +151,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
         this.projectInfoProvider,
         this.helpProvider,
         this.navieOptions,
-        thread.messages
+        chatHistory
       );
 
       let agentName: string | undefined;
@@ -162,7 +166,6 @@ export default class LocalNavie extends EventEmitter implements INavie {
       const response = new Array<string>();
       for await (const token of navieFn.execute()) {
         response.push(token);
-        await history.token(threadId, userMessageId, agentMessageId, token);
         this.emit('token', token, agentMessageId);
       }
       const endTime = Date.now();

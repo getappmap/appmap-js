@@ -1,4 +1,4 @@
-import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
+import { ContextV2, Help, Navie, ProjectInfo, UserContext } from '@appland/navie';
 import { dirname, join } from 'path';
 import { EventEmitter } from 'stream';
 import { randomUUID } from 'crypto';
@@ -330,6 +330,32 @@ export class Thread {
 
   getEvents(sinceNonce?: number): readonly TimestampNavieEvent[] {
     return this.log.slice(sinceNonce ?? 0);
+  }
+
+  getChatHistory(): Navie.ChatHistory {
+    const chatHistory: Navie.ChatHistory = [];
+    const streamingMessages = new Map<string, Navie.Message>();
+    for (const event of this.log) {
+      if (event.type === 'message') {
+        chatHistory.push(event);
+      }
+      if (event.type === 'token') {
+        let message = streamingMessages.get(event.messageId);
+        if (!message) {
+          message = {
+            role: 'assistant',
+            content: '',
+          };
+          streamingMessages.set(event.messageId, message);
+          chatHistory.push(message);
+        }
+        message.content += event.token;
+      }
+      if (event.type === 'message-complete') {
+        streamingMessages.delete(event.messageId);
+      }
+    }
+    return chatHistory;
   }
 }
 

@@ -42,6 +42,7 @@ import ObserveCommand from './commands/observe-command';
 import ReviewCommand from './commands/review-command';
 import WelcomeCommand from './commands/welcome-command';
 
+export type { default as Message } from './message';
 export type ChatHistory = Message[];
 
 export interface ClientRequest {
