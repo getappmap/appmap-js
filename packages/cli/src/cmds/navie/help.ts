@@ -8,6 +8,7 @@ import { join } from 'path';
 import { existsSync } from 'fs';
 import assert from 'assert';
 import { load } from 'js-yaml';
+import { queryKeywords } from '@appland/search';
 
 const DOCS_DIR = ['../../docs', '../../../built/docs']
   .map((dir) => join(__dirname, dir))
@@ -37,9 +38,12 @@ export class HelpIndex {
   ) {}
 
   async search(keywords: string[], maxResults = DEFAULT_MAX_RESULTS): Promise<Help.HelpDoc[]> {
+    // Normalize the terms. Multi-word terms will be split, and any non-alphanumeric characters will be removed.
+    const terms = queryKeywords(keywords.join(' '));
+
     return (
       this.idx
-        .search(keywords.join(' '))
+        .search(terms.join(' '))
         .map((result) => {
           let content = this.contentByRef.get(result.ref);
           const [filePath, from, to] = unpackRef(result.ref);
@@ -129,7 +133,6 @@ export class HelpIndex {
 
 let helpIndex: HelpIndex | undefined;
 
-// TODO: Store the help index JSON in the distribution, so that we don't have to rebuild it when the process loads.
 export function buildHelpIndex(directory: string): Promise<HelpIndex> {
   return HelpIndex.buildIndex(directory);
 }
