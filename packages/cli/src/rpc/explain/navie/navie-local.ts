@@ -16,8 +16,9 @@ import {
 import reportFetchError from './report-fetch-error';
 import assert from 'assert';
 import Trajectory from './trajectory';
-import { getThread } from '../../navie/thread';
 import { verbose } from '../../../utils';
+import { container } from 'tsyringe';
+import ThreadService from '../../navie/services/threadService';
 
 const OPTION_SETTERS: Record<
   string,
@@ -135,7 +136,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
       const startTime = Date.now();
       let chatHistory: Navie.ChatHistory = [];
       try {
-        const thread = await getThread(threadId);
+        const threadService = container.resolve(ThreadService);
+        const thread = await threadService.getThread(threadId);
         chatHistory = thread.getChatHistory();
       } catch (e) {
         if (verbose()) {

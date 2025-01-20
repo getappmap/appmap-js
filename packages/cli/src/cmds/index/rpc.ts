@@ -29,13 +29,16 @@ import { navieMetadataV1, navieMetadataV2 } from '../../rpc/navie/metadata';
 import { navieSuggestHandlerV1 } from '../../rpc/navie/suggest';
 import { navieWelcomeV2 } from '../../rpc/navie/welcome';
 import { navieRegisterV1 } from '../../rpc/navie/register';
-import { navieThreadSendMessageHandler } from '../../rpc/navie/thread/sendMessage';
+import { navieThreadSendMessageHandler } from '../../rpc/navie/thread/handlers/sendMessage';
 import {
   navieThreadPinItemHandler,
   navieThreadUnpinItemHandler,
-} from '../../rpc/navie/thread/pinItem';
-import { navieThreadQueryHandler } from '../../rpc/navie/thread/query';
+} from '../../rpc/navie/thread/handlers/pinItem';
+import { navieThreadQueryHandler } from '../../rpc/navie/thread/handlers/query';
 import NavieService from '../../rpc/navie/services/navieService';
+import { ThreadIndexService } from '../../rpc/navie/services/threadIndexService';
+import { container } from 'tsyringe';
+import ThreadService from '../../rpc/navie/services/threadService';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -58,6 +61,8 @@ type HandlerArguments = yargs.ArgumentsCamelCase<
 >;
 
 export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandler<any, any>[] {
+  const threadService = container.resolve(ThreadService);
+  const threadIndexService = container.resolve(ThreadIndexService);
   return [
     search(),
     appmapStatsV1(),
@@ -77,11 +82,11 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     navieMetadataV2(),
     navieSuggestHandlerV1(navie),
     navieWelcomeV2(navie),
-    navieRegisterV1(codeEditor),
-    navieThreadSendMessageHandler(),
-    navieThreadPinItemHandler(),
-    navieThreadUnpinItemHandler(),
-    navieThreadQueryHandler(),
+    navieRegisterV1(threadService, codeEditor),
+    navieThreadSendMessageHandler(threadService),
+    navieThreadPinItemHandler(threadService),
+    navieThreadUnpinItemHandler(threadService),
+    navieThreadQueryHandler(threadIndexService),
   ];
 }
 
@@ -89,7 +94,9 @@ export const handler = async (argv: HandlerArguments) => {
   verbose(argv.verbose);
 
   const navie = buildNavieProvider(argv);
-  NavieService.registerNavieProvider(navie);
+
+  ThreadIndexService.useDefault();
+  NavieService.bindNavieProvider(navie);
 
   let codeEditor: string | undefined = argv.codeEditor;
   if (!codeEditor) {

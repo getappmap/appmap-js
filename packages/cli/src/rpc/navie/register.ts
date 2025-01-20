@@ -12,10 +12,10 @@ import { RpcHandler } from '../rpc';
 import { getLLMConfiguration } from '../llmConfiguration';
 import detectAIEnvVar from '../../cmds/index/aiEnvVar';
 import configuration from '../configuration';
-import { INavieProvider } from '../explain/navie/inavie';
-import { registerThread } from './thread';
+import ThreadService from './services/threadService';
 
 export async function register(
+  threadService: ThreadService,
   codeEditor: string | undefined
 ): Promise<NavieRpc.V1.Register.Response> {
   const modelParameters = {
@@ -42,18 +42,19 @@ export async function register(
   if (codeEditor) projectParameters.codeEditor = codeEditor;
 
   const thread = await AI.createConversationThread({ modelParameters, projectParameters });
-  registerThread(thread);
+  threadService.registerThread(thread);
 
   return { thread };
 }
 
 export function navieRegisterV1(
+  threadService: ThreadService,
   codeEditor?: string
 ): RpcHandler<NavieRpc.V1.Register.Params, NavieRpc.V1.Register.Response> {
   return {
     name: NavieRpc.V1.Register.Method,
     handler: async () => {
-      return register(codeEditor);
+      return register(threadService, codeEditor);
     },
   };
 }

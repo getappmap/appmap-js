@@ -37,6 +37,9 @@ export namespace UserContext {
   }
 
   export function renderItems(items: ContextItem[], includeContent: boolean = true) {
+    console.log('##################');
+    console.log(JSON.stringify(items, null, 2));
+    console.log('##################');
     const renderItem = (i: UserContext.ContextItem) => {
       if (UserContext.isCodeSelectionItem(i) && includeContent) {
         return `<code-selection>\n${i.content}\n</code-selection>`;

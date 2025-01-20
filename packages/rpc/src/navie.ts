@@ -2,6 +2,30 @@ import { ConversationThread } from '@appland/client';
 
 export namespace NavieRpc {
   export namespace V1 {
+    export namespace UserContext {
+      /**
+       * A static item is content that cannot be refreshed, such as a code snippet previously
+       * generated.
+       */
+      export type StaticItem = {
+        type: 'static';
+        content: string;
+
+        // This is an optional identifier for the item. See how the `git diff` is retrieved from
+        // a code snippet in the Navie review command.
+        id?: string;
+      };
+
+      /**
+       * A dynamic item is a URI that can be resolved to a file, web page, or other resource.
+       */
+      export type DynamicItem = {
+        type: 'dynamic';
+        uri: string;
+      };
+
+      export type ContextItem = StaticItem | DynamicItem;
+    }
     export namespace Metadata {
       export type Command = {
         name: string;
@@ -62,7 +86,7 @@ export namespace NavieRpc {
         export type Params = {
           threadId: string;
           content: string;
-          codeSelection?: string;
+          userContext?: NavieRpc.V1.UserContext.ContextItem[];
         };
         export type Response = ResponseOk | ResponseError;
       }

@@ -6,6 +6,8 @@
 /* eslint-disable func-names */
 /* eslint-disable max-classes-per-file */
 
+import 'reflect-metadata';
+
 const yargs = require('yargs');
 const { promises: fsp, readFileSync } = require('fs');
 const { queue } = require('async');

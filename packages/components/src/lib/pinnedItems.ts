@@ -1,3 +1,4 @@
+import { NavieRpc } from '@appland/rpc';
 import Vue from 'vue';
 
 interface ObservableContent {

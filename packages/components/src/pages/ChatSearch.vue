@@ -505,12 +505,26 @@ export default {
       // and emit a stop event.
       this.ask?.stop();
     },
-    async sendMessage(message: string, codeSelections: string[] = [], appmaps: string[] = []) {
+    buildUserContext(codeSelections: string[]): NavieRpc.V1.UserContext.ContextItem[] {
+      const userContext = this.pinnedItems.map((p) => {
+        if (p.uri ?? p.location) {
+          return { type: 'dynamic', uri: p.uri ?? p.location };
+        }
+        if (p.handle) {
+          return { type: 'static', content: p.content };
+        }
+        throw new Error('invalid pinned item, must provide either handle or uri');
+      });
+      userContext.push(...codeSelections.map((c) => ({ type: 'static', content: c })));
+      console.log(userContext);
+      return userContext;
+    },
+    async sendMessage(message: string, codeSelections: string[] = [], _appmaps: string[] = []) {
       try {
         await this.rpcClient.thread.sendMessage(
           this.activeThreadId,
           message,
-          codeSelections.join('\n')
+          this.buildUserContext(codeSelections)
         );
       } catch (e) {
         console.error('Failed to send message', e);
@@ -721,7 +735,6 @@ export default {
     },
     onReceiveEvent(event) {
       const chatApi = this.$refs.vchat;
-      // console.log(event);
       switch (event.type) {
         case 'message': {
           if (event.role === 'assistant') {

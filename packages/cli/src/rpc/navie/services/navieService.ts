@@ -3,6 +3,7 @@ import INavie, { INavieProvider } from '../../explain/navie/inavie';
 import { ContextService } from './contextService';
 import { randomUUID } from 'node:crypto';
 import EventEmitter from 'node:events';
+import { autoInjectable, container, inject } from 'tsyringe';
 
 interface ContextEvent<Type, Req, Res> {
   type: Type;
@@ -44,22 +45,27 @@ function contextEvent<
   };
 }
 
+@autoInjectable()
 export default class NavieService {
-  private static readonly contextService = new ContextService();
-  private static navieProvider?: INavieProvider;
+  private static NAVIE_PROVIDER = 'INavieProvider';
 
-  static registerNavieProvider(navieProvider: INavieProvider): void {
-    NavieService.navieProvider = navieProvider;
+  constructor(
+    @inject(ContextService) private readonly contextService: ContextService,
+    @inject(NavieService.NAVIE_PROVIDER) private readonly navieProvider?: INavieProvider
+  ) {}
+
+  static bindNavieProvider(navieProvider?: INavieProvider) {
+    container.registerInstance(this.NAVIE_PROVIDER, navieProvider);
   }
 
-  static getNavieProvider(): INavieProvider {
+  getNavieProvider(): INavieProvider {
     if (!this.navieProvider) {
       throw new Error('No navie provider available');
     }
     return this.navieProvider;
   }
 
-  static getNavie(_navieProvider?: INavieProvider): [INavie, ContextEmitter] {
+  getNavie(_navieProvider?: INavieProvider): [INavie, ContextEmitter] {
     const navieProvider = _navieProvider ?? this.getNavieProvider();
     const contextEmitter = new EventEmitter();
     const navie = navieProvider(

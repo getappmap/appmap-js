@@ -5,7 +5,9 @@ import collectProjectInfos from '../../../cmds/navie/projectInfo';
 import collectHelp from '../../../cmds/navie/help';
 import detectCodeEditor from '../../../lib/detectCodeEditor';
 import configuration from '../../configuration';
+import { autoInjectable } from 'tsyringe';
 
+@autoInjectable()
 export class ContextService {
   private readonly codeEditor?: string;
 

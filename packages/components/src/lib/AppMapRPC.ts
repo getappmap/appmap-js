@@ -492,10 +492,14 @@ export default class AppMapRPC {
             return result;
           }
         ),
-      sendMessage: (threadId: string, content: string, codeSelection?: string) =>
+      sendMessage: (
+        threadId: string,
+        content: string,
+        userContext?: NavieRpc.V1.UserContext.ContextItem[]
+      ) =>
         this.client.request(
           NavieRpc.V1.Thread.SendMessage.Method,
-          { threadId, content, codeSelection },
+          { threadId, content, userContext },
           (err: any, error: any, result: NavieRpc.V1.Thread.SendMessage.Response) => {
             if (err || error) return reportError(Promise.reject, err, error);
 
