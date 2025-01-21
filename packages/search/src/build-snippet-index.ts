@@ -25,11 +25,11 @@ async function indexFile(context: Context, file: File) {
   const extension = file.filePath.split('.').pop() || '';
   const chunks = await context.splitter(fileContent, extension);
 
-  chunks.forEach((chunk) => {
+  for (const chunk of chunks) {
     const { content, startLine } = chunk;
     const snippetId = fileChunkSnippetId(filePath, startLine);
     const fileExtension = file.filePath.split('.').pop() ?? '';
-    const { symbols, words } = context.tokenizer(content, fileExtension);
+    const { symbols, words } = await context.tokenizer(content, fileExtension);
     context.snippetIndex.indexSnippet(
       snippetId,
       file.directory,
@@ -37,7 +37,7 @@ async function indexFile(context: Context, file: File) {
       words.join(' '),
       content
     );
-  });
+  }
 }
 
 export default async function buildSnippetIndex(
