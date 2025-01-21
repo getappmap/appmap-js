@@ -47,6 +47,7 @@ export async function langchainSplitter(content: string, fileExtension: string):
     splitter = new RecursiveCharacterTextSplitter();
   }
   const documents = await splitter.createDocuments([content]);
+  const contentLines = content.split('\n');
 
   // metadata includes:
   // { loc: { lines: { from: 1, to: 14 } } }
@@ -58,7 +59,6 @@ export async function langchainSplitter(content: string, fileExtension: string):
       content: '',
     };
     if (lines) {
-      const contentLines = content.split('\n');
       result.content = contentLines.slice(lines.from - 1, lines.to).join('\n');
       result.startLine = lines.from;
       result.endLine = lines.to;
