@@ -28,11 +28,12 @@ async function indexFile(context: Context, file: File) {
   chunks.forEach((chunk) => {
     const { content, startLine } = chunk;
     const snippetId = fileChunkSnippetId(filePath, startLine);
+    const { symbols, words } = context.tokenizer(content, file.filePath);
     context.snippetIndex.indexSnippet(
       snippetId,
       file.directory,
-      context.tokenizer(content, file.filePath).symbols.join(' '),
-      context.tokenizer(content, file.filePath).words.join(' '),
+      symbols.join(' '),
+      words.join(' '),
       content
     );
   });
