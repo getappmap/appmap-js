@@ -13,6 +13,19 @@ context('Chat search', () => {
     cy.get('[data-cy="stop-response"]').should('not.exist');
   });
 
+  describe('focus', () => {
+    const input = '[data-cy="chat-input"]';
+    it('should focus on the input on page load', () => {
+      cy.get(input).should('be.focused');
+    });
+
+    it('regains focus when the user comes back to the chat', () => {
+      cy.get(input).blur().should('not.be.focused');
+      cy.window().trigger('focus');
+      cy.get(input).should('be.focused');
+    });
+  });
+
   describe('when a file is dropped', () => {
     const listenForFetch = ($div) => {
       const root = $div[0].__vue__.$root;
