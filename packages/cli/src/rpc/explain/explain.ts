@@ -183,8 +183,10 @@ export class Explain extends EventEmitter {
     return searchResult.context;
   }
 
-  async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
-    return await collectProjectInfos(this.codeEditor);
+  async projectInfoContext(
+    data: ProjectInfo.ProjectInfoRequest
+  ): Promise<ProjectInfo.ProjectInfoResponse> {
+    return await collectProjectInfos(this.codeEditor, data);
   }
 
   helpContext(data: Help.HelpRequest): Promise<Help.HelpResponse> {

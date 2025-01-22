@@ -1,9 +1,11 @@
 import { ProjectInfo } from '@appland/navie';
 import { collectStats } from '../../rpc/appmap/stats';
 import configuration from '../../rpc/configuration';
+import { getDiffLog, getWorkingDiff } from '../../lib/git';
 
 export default async function collectProjectInfos(
-  codeEditor?: string
+  codeEditor: string | undefined,
+  params: ProjectInfo.ProjectInfoRequest = { type: 'projectInfo' }
 ): Promise<ProjectInfo.ProjectInfo[]> {
   const projectInfoByPath = new Map<string, ProjectInfo.ProjectInfo>();
 
@@ -37,6 +39,20 @@ export default async function collectProjectInfos(
       packages: dir.appmapConfig.packages,
     };
   });
+
+  if (params.includeDiff) {
+    const { baseBranch } = params;
+
+    for (const [directory, info] of projectInfoByPath) {
+      const diffContent = (
+        await Promise.all([getWorkingDiff(directory), getDiffLog(undefined, baseBranch, directory)])
+      )
+        .filter(Boolean)
+        .join('\n\n');
+
+      info.diff = diffContent;
+    }
+  }
 
   const { projectDirectories } = configuration();
   if (codeEditor) {

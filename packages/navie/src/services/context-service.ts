@@ -6,6 +6,7 @@ import VectorTermsService from './vector-terms-service';
 import { ContextV2 } from '../context';
 import InteractionHistory, { ContextItemEvent, ContextItemRequestor } from '../interaction-history';
 import ApplyContextService, { eventOfContextItem } from './apply-context-service';
+import { ProjectInfo } from '../project-info';
 
 export default class ContextService {
   constructor(
@@ -39,6 +40,8 @@ export default class ContextService {
 
         aggregateQuestion.push(event.content);
       }
+
+      if (options.diff) aggregateQuestion.push(options.diff);
 
       const searchTerms = await transformSearchTerms(
         termsEnabled,
