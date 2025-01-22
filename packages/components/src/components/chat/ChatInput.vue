@@ -66,7 +66,7 @@
           <v-send-icon />
         </button>
       </v-popper>
-      <v-popper v-if="isStopActive" text="Stop" placement="top" text-align="left">
+      <v-popper v-if="isStopActive" text="Stop" placement="top" text-align="left" align="right">
         <button
           class="control-button"
           data-cy="stop-response"
