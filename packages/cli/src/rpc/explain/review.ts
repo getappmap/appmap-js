@@ -16,6 +16,7 @@ export default async function handleReview(
 
   const result = parseOptions(question);
   const base = result.options.stringValue('base');
+  // Why not diff all of them?
   const cwd = result.options.stringValue('project', configuration().projectDirectories[0]);
   const diffContent = await Promise.all([getWorkingDiff(cwd), getDiffLog(undefined, base, cwd)]);
   return {

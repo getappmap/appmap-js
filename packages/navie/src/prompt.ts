@@ -12,6 +12,7 @@ export enum PromptType {
   HelpDoc = 'helpDoc',
   CodeEditor = 'codeEditor',
   ConversationSummary = 'conversationSummary',
+  Diff = 'Diff',
 }
 
 const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
@@ -31,6 +32,7 @@ const PROMPT_NAMES: Record<PromptType, { singular: string; plural: string }> = {
     singular: 'conversation summary',
     plural: 'conversation summary',
   },
+  [PromptType.Diff]: { singular: 'diff', plural: 'diffs' },
 };
 
 export type Prompt = {
@@ -196,6 +198,12 @@ Do not mention installation or activation of the AppMap extension, because the u
 You're provided with a summary of the entire conversation history.`,
     tagName: 'conversation-summary',
     multiple: false,
+  },
+  [PromptType.Diff]: {
+    content: `**Diff**
+
+You're provided with a diff of the changes that were made to the codebase.`,
+    tagName: 'diff',
   },
 };
 

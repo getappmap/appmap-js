@@ -58,8 +58,14 @@ export default class ExplainCommand implements Command {
         });
 
     let projectInfo: ProjectInfo[] = [];
-    if (request.userOptions.isEnabled('projectinfo', true)) {
-      const projectInfoResponse = await this.projectInfoService.lookupProjectInfo();
+    if (isProjectInfoEnabled(request.userOptions)) {
+      const baseBranch = request.userOptions.stringValue('base');
+      const diffEnabled = !!(baseBranch || request.userOptions.isEnabled('diff', false));
+
+      const projectInfoResponse = await this.projectInfoService.lookupProjectInfo(
+        diffEnabled,
+        baseBranch
+      );
       projectInfo = Array.isArray(projectInfoResponse)
         ? projectInfoResponse
         : [projectInfoResponse];
@@ -124,9 +130,7 @@ export default class ExplainCommand implements Command {
           label.name === ContextV2.ContextLabelName.Overview
       );
 
-    if (request.userOptions.isEnabled('projectinfo', true)) {
-      this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
-    }
+    if (projectInfo) this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
 
     const agentResponse = await mode.perform(agentOptions, tokensAvailable);
     if (agentResponse) {
@@ -158,7 +162,7 @@ export default class ExplainCommand implements Command {
     if (codeSelection) this.codeSelectionService.applyCodeSelection(codeSelection);
     mode.applyQuestionPrompt(question);
 
-    if (gathererEnabled(request.userOptions, agentMode, contextLabels)) {
+    if (isGathererEnabled(request.userOptions, agentMode, contextLabels)) {
       yield* this.gatherAdditionalInformation();
     }
 
@@ -194,7 +198,12 @@ export default class ExplainCommand implements Command {
   }
 }
 
-function gathererEnabled(
+function isProjectInfoEnabled(userOptions: UserOptions): boolean {
+  const isDiffRequested = userOptions.isEnabled('diff', false);
+  return isDiffRequested || userOptions.isEnabled('projectinfo', true);
+}
+
+function isGathererEnabled(
   userOptions: UserOptions,
   agentMode: AgentMode,
   contextLabels: ContextV2.ContextLabel[]

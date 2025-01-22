@@ -22,7 +22,8 @@ export class AgentOptions {
     public chatHistory: Message[],
     public projectInfo: ProjectInfo[],
     public codeSelection?: UserContext.Context,
-    public contextLabels?: ContextV2.ContextLabel[]
+    public contextLabels?: ContextV2.ContextLabel[],
+    public diff?: string
   ) {}
 
   get hasAppMaps() {

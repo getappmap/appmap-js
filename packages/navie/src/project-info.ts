@@ -1,4 +1,8 @@
-export type ProjectInfoRequest = { [key: string]: unknown };
+export type ProjectInfoRequest = {
+  type: 'projectInfo';
+  includeDiff?: boolean;
+  baseBranch?: string;
+};
 
 export type AppMapConfig = {
   name: string;
@@ -23,6 +27,7 @@ export type ProjectInfo = {
   appmapConfig?: AppMapConfig;
   appmapStats?: AppMapStats;
   codeEditor?: CodeEditorInfo;
+  diff?: string;
 };
 
 export type ProjectInfoResponse = ProjectInfo | Array<ProjectInfo>;
