@@ -37,7 +37,8 @@ async function indexFile(context: Context, filePath: string) {
     fileContents.length,
     fileContents.slice(0, 40)
   );
-  const tokens = context.tokenizer(fileContents, filePath);
+  const fileExtension = filePath.split('.').pop() ?? '';
+  const tokens = context.tokenizer(fileContents, fileExtension);
   const symbols = tokens.symbols.join(' ');
   const words = tokens.words.join(' ');
 
