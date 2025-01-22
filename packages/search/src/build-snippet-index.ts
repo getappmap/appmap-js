@@ -28,7 +28,8 @@ async function indexFile(context: Context, file: File) {
   chunks.forEach((chunk) => {
     const { content, startLine } = chunk;
     const snippetId = fileChunkSnippetId(filePath, startLine);
-    const { symbols, words } = context.tokenizer(content, file.filePath);
+    const fileExtension = file.filePath.split('.').pop() ?? '';
+    const { symbols, words } = context.tokenizer(content, fileExtension);
     context.snippetIndex.indexSnippet(
       snippetId,
       file.directory,
