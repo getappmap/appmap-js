@@ -41,7 +41,7 @@ export default class RPCServer {
     this.bindPort = port;
   }
 
-  start() {
+  start(portCb?: (port: number) => void) {
     assert(this.app === undefined, 'RPC server already started');
 
     const rpcMethods: Record<string, MethodLike> = this.rpcHandlers.reduce((acc, handler) => {
@@ -84,6 +84,7 @@ export default class RPCServer {
       } else {
         this.port = address.port;
         log(`Running JSON-RPC server on port: ${this.port}`);
+        if (portCb) portCb(this.port);
       }
     });
     this.app = listener;
