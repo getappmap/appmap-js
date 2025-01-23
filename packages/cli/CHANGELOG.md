@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.182.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.181.2...@appland/appmap-v3.182.0) (2025-01-23)
+
+
+### Bug Fixes
+
+* Convert raw keywords to query terms when searching for help ([1a9b88b](https://github.com/getappmap/appmap-js/commit/1a9b88b362ce40118a0611a873a36b0eb6a69cf4))
+* Tokenization no longer hangs the process ([a7df088](https://github.com/getappmap/appmap-js/commit/a7df088461add710b0f5e91aaec0ce92b2e1baed))
+
+
+### Features
+
+* navie --ui ([8a48e81](https://github.com/getappmap/appmap-js/commit/8a48e8154ac2d6b4976b1ef00d046d68d6709cb9))
+
 # [@appland/appmap-v3.181.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.181.1...@appland/appmap-v3.181.2) (2025-01-13)
 
 
