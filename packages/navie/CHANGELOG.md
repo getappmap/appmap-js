@@ -1,3 +1,17 @@
+# [@appland/navie-v1.41.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.40.0...@appland/navie-v1.41.0) (2025-01-23)
+
+
+### Bug Fixes
+
+* [@explain](https://github.com/explain) won't direct the user to provide help with AppMap or to make appmap data ([eff40ba](https://github.com/getappmap/appmap-js/commit/eff40baadc2c61f0373c4a2c308fb52e79198caf)), closes [#2195](https://github.com/getappmap/appmap-js/issues/2195)
+* Include pinned files in the content considered by vector terms ([355d931](https://github.com/getappmap/appmap-js/commit/355d931458dded962a186de86722c451e75c530d)), closes [#2199](https://github.com/getappmap/appmap-js/issues/2199)
+
+
+### Features
+
+* [@help](https://github.com/help) uses a directory listing rather than tech stack analysis ([b83566e](https://github.com/getappmap/appmap-js/commit/b83566e89098dd68928d9a4ef28ce2bc91f21fd1))
+* Display [@command](https://github.com/command) in next step suggestions ([ab1b0b6](https://github.com/getappmap/appmap-js/commit/ab1b0b6fc80a75d575592e488c738140ca871a9b)), closes [#2198](https://github.com/getappmap/appmap-js/issues/2198)
+
 # [@appland/navie-v1.40.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.39.3...@appland/navie-v1.40.0) (2025-01-13)
 
 
