@@ -1,5 +1,6 @@
 import configuration from '../configuration';
 import { getDiffLog, getWorkingDiff } from '../../lib/git';
+import processPatchset from '../../lib/processPatchset';
 import INavie, { INavieProvider } from '../explain/navie/inavie';
 import { UserContext } from '@appland/navie';
 import isCustomWelcomeMessageEnabled from './isCustomWelcomeMessageEnabled';
@@ -40,7 +41,7 @@ async function getChangeDiffs(projectDirectories: string[]): Promise<string[]> {
   );
   return diffs
     .filter((result): result is PromiseFulfilledResult<string> => result.status === 'fulfilled')
-    .map((result) => result.value);
+    .map((result) => processPatchset(result.value));
 }
 
 export async function getWelcomeSuggestion(

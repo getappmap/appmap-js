@@ -1,6 +1,7 @@
 import { parseOptions, REVIEW_DIFF_LOCATION, UserContext } from '@appland/navie';
 import configuration from '../configuration';
 import { getDiffLog, getWorkingDiff } from '../../lib/git';
+import processPatchset from '../../lib/processPatchset';
 
 /**
  * This function is responsible for transforming user context to include diff content when the
@@ -28,7 +29,10 @@ export default async function handleReview(
       {
         type: 'code-snippet',
         location: REVIEW_DIFF_LOCATION, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-        content: diffContent.filter(Boolean).join('\n\n'),
+        content: diffContent
+          .filter(Boolean)
+          .map((diff) => processPatchset(diff))
+          .join('\n\n'),
       },
     ],
   };
