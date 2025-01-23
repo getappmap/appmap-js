@@ -1,3 +1,17 @@
+# [@appland/components-v4.44.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.43.2...@appland/components-v4.44.0) (2025-01-23)
+
+
+### Bug Fixes
+
+* Chat input now gets focus automatically ([a5a69cd](https://github.com/getappmap/appmap-js/commit/a5a69cd8cf0a598f9fed922b3dee58596bc5eb36))
+* Don't cover the stop button with the tooltip ([de33df5](https://github.com/getappmap/appmap-js/commit/de33df52c14851e7a3043d7d041ebb795b5a98c8)), closes [#2048](https://github.com/getappmap/appmap-js/issues/2048)
+* Propagate code selection location to Navie ([7b54baa](https://github.com/getappmap/appmap-js/commit/7b54baaf6eb6c0c8ba54e2a4efefe8d2df039c98))
+
+
+### Features
+
+* Display [@command](https://github.com/command) in next step suggestions ([ab1b0b6](https://github.com/getappmap/appmap-js/commit/ab1b0b6fc80a75d575592e488c738140ca871a9b)), closes [#2198](https://github.com/getappmap/appmap-js/issues/2198)
+
 # [@appland/components-v4.43.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.43.1...@appland/components-v4.43.2) (2025-01-14)
 
 
