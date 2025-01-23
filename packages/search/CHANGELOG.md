@@ -1,3 +1,13 @@
+# [@appland/search-v1.1.2](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.1.1...@appland/search-v1.1.2) (2025-01-23)
+
+
+### Bug Fixes
+
+* Performance issue when chunking large documents ([cfff5a0](https://github.com/getappmap/appmap-js/commit/cfff5a0f9937f8fb57d3344812bc304e6292819e))
+* Prevent re-tokenization of chunks ([2b75aaf](https://github.com/getappmap/appmap-js/commit/2b75aafe35f40abae21961acf4363edbae810aee))
+* Tokenization no longer hangs the process ([a7df088](https://github.com/getappmap/appmap-js/commit/a7df088461add710b0f5e91aaec0ce92b2e1baed))
+* Tokenization will consider the file type ([727c29b](https://github.com/getappmap/appmap-js/commit/727c29be5f31c09e736b9ab0554a8094b46a01a4))
+
 # [@appland/search-v1.1.1](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.1.0...@appland/search-v1.1.1) (2024-12-18)
 
 
