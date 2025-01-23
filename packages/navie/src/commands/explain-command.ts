@@ -185,8 +185,10 @@ export default class ExplainCommand implements Command {
     try {
       const gatherer = new Gatherer(
         this.interactionHistory.events,
+        this.interactionHistory,
         this.completionService,
-        this.agentSelectionService.contextService
+        this.agentSelectionService.contextService,
+        this.projectInfoService
       );
       for (steps = 0; steps < maxSteps && !(await gatherer.step()); steps++)
         yield steps > 0 ? '.' : 'Gathering additional information, please wait...';

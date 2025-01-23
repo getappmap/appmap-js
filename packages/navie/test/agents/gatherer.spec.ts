@@ -1,14 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expectResult"]}] */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import Gatherer from '../../src/agents/gatherer';
-import {
+import InteractionHistory, {
   ContextItemEvent,
   ContextItemRequestor,
   type InteractionEvent,
   PromptInteractionEvent,
 } from '../../src/interaction-history';
+import { PromptType } from '../../src/prompt';
+import { Message } from '../../src';
+import CompletionService from '../../src/services/completion-service';
+import ContextService from '../../src/services/context-service';
+import ProjectInfoService from '../../src/services/project-info-service';
 
 describe('Gatherer', () => {
   describe('buildConversation', () => {
@@ -30,6 +37,46 @@ describe('Gatherer', () => {
           ],
         },
       ]).toMatchInlineSnapshot(`"system: <SYSTEM PROMPT>"`);
+    });
+
+    // eslint-disable-next-line jest/expect-expect
+    it('knows when a diff has already been requested', () => {
+      const messages = Gatherer.buildConversation([
+        new ContextItemEvent(PromptType.Diff, ContextItemRequestor.ProjectInfo, `diff --git a b`),
+      ]);
+      expect(messages.map(messageToEventLine).join('\n')).toMatchInlineSnapshot(`
+            "system: <SYSTEM PROMPT>
+            assistant: !!diff
+            user: Here's the diff of the project:
+            diff --git a b"
+            `);
+    });
+
+    it('includes diff information in the conversation when it consists of mixed events', () => {
+      const messages = Gatherer.buildConversation([
+        new ContextItemEvent(
+          PromptType.Diff,
+          ContextItemRequestor.ProjectInfo,
+          'diff --git a/file1 b/file1'
+        ),
+        new PromptInteractionEvent(PromptType.Question, 'user', 'What changed in file1?'),
+      ]);
+
+      expect(messages.map(messageToEventLine).join('\n')).toMatchInlineSnapshot(`
+    "system: <SYSTEM PROMPT>
+    user: <USER PROMPT>
+    
+    <context>
+    <user-question>
+    What changed in file1?
+    </user-question>
+    
+    
+    </context>
+    assistant: !!diff
+    user: Here's the diff of the project:
+    diff --git a/file1 b/file1"
+  `);
     });
 
     // eslint-disable-next-line jest/no-disabled-tests
@@ -63,7 +110,7 @@ describe('Gatherer', () => {
       `);
     });
 
-    it('ignores code snippets prompt', () => {
+    it('ignores code snippets system prompt', () => {
       expectResult([
         {
           type: 'prompt',
@@ -159,20 +206,22 @@ describe('Gatherer', () => {
     const expectResult = (xs: readonly EventData[]) => expect(perform(xs));
 
     function perform(events: readonly EventData[]) {
-      return Gatherer.buildConversation(events.map(event))
-        .map(({ role, content }) =>
-          [
-            role,
-            content
-              .replace(Gatherer.SYSTEM_PROMPT, '<SYSTEM PROMPT>')
-              .replace(Gatherer.USER_PROMPT, '<USER PROMPT>')
-              .trim(),
-          ].join(': ')
-        )
+      return Gatherer.buildConversation(events.map(eventDataToInteractionEvent))
+        .map(messageToEventLine)
         .join('\n');
     }
 
-    function event(ev: EventData): InteractionEvent {
+    function messageToEventLine(event: Message): string {
+      return [
+        event.role,
+        event.content
+          .replace(Gatherer.SYSTEM_PROMPT, '<SYSTEM PROMPT>')
+          .replace(Gatherer.USER_PROMPT, '<USER PROMPT>')
+          .trim(),
+      ].join(': ');
+    }
+
+    function eventDataToInteractionEvent(ev: EventData): InteractionEvent {
       switch (ev.type) {
         case 'prompt':
           return new PromptInteractionEvent(
@@ -198,5 +247,112 @@ describe('Gatherer', () => {
           };
       }
     }
+  });
+  describe('executeCommands', () => {
+    const events: InteractionEvent[] = [];
+    const interactionHistory: InteractionHistory = new InteractionHistory();
+    const completion: CompletionService = {} as any;
+    const context: ContextService = {
+      searchContextWithLocations: jest.fn(),
+    } as any;
+    const projectInfoService: ProjectInfoService = {
+      lookupProjectInfo: jest.fn(),
+      promptProjectInfo: jest.fn(),
+    } as any;
+
+    const gatherer = () =>
+      new Gatherer(events, interactionHistory, completion, context, projectInfoService);
+
+    describe('diff', () => {
+      // eslint-disable-next-line jest/expect-expect
+      it('fetches diff info via project info', async () => {
+        (projectInfoService.lookupProjectInfo as jest.Mock).mockResolvedValue([
+          {
+            directory: '/test/appmap-server',
+            diff: 'diff --git a b',
+          },
+        ]);
+
+        const messages = await gatherer().executeCommands(['!!diff']);
+        expect(messages).toEqual(
+          `Here's the diff of the project:
+diff --git a b
+
+`
+        );
+
+        expect(interactionHistory.events.map((event) => event.metadata)).toEqual([
+          {
+            name: 'Diff',
+            role: 'system',
+            type: 'prompt',
+          },
+          {
+            promptType: 'Diff',
+            type: 'contextItem',
+          },
+        ]);
+      });
+      // eslint-disable-next-line jest/expect-expect
+      it('fetches and combines diffs from multiple projects', async () => {
+        (projectInfoService.lookupProjectInfo as jest.Mock).mockResolvedValue([
+          {
+            directory: '/test/project1',
+            diff: 'diff --git a/project1/file1 b/project1/file1',
+          },
+          {
+            directory: '/test/project2',
+            diff: 'diff --git a/project2/file2 b/project2/file2',
+          },
+        ]);
+
+        const messages = await gatherer().executeCommands(['!!diff']);
+        expect(messages).toContain('diff --git a/project1/file1 b/project1/file1');
+        expect(messages).toContain('diff --git a/project2/file2 b/project2/file2');
+      });
+      it('handles empty diffs correctly', async () => {
+        (projectInfoService.lookupProjectInfo as jest.Mock).mockResolvedValue([
+          {
+            directory: '/test/project',
+            diff: '',
+          },
+        ]);
+
+        const messages = await gatherer().executeCommands(['!!diff']);
+        expect(messages).toBe('');
+      });
+      it('handles errors when fetching diffs', async () => {
+        (projectInfoService.lookupProjectInfo as jest.Mock).mockRejectedValue(
+          new Error('Fetch error')
+        );
+
+        await expect(gatherer().executeCommands(['!!diff'])).rejects.toThrow('Fetch error');
+      });
+      it('executes diff command along with other commands', async () => {
+        (projectInfoService.lookupProjectInfo as jest.Mock).mockResolvedValue([
+          {
+            directory: '/test/project',
+            diff: 'diff --git a b',
+          },
+        ]);
+        (context.searchContextWithLocations as jest.Mock).mockResolvedValue([
+          new ContextItemEvent(
+            PromptType.CodeSnippet,
+            ContextItemRequestor.Gatherer,
+            'code snippet',
+            'file.ts',
+            '/test/project'
+          ),
+        ]);
+
+        const messages = await gatherer().executeCommands([
+          '!!diff',
+          '!!find /test/project',
+          '!!cat file.ts',
+        ]);
+        expect(messages).toContain('diff --git a b');
+        expect(messages).toContain('code snippet');
+      });
+    });
   });
 });
