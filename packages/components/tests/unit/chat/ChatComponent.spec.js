@@ -195,7 +195,18 @@ describe('components/Chat.vue', () => {
 
       await wrapper.vm.$nextTick();
 
-      expect(sendMessage).toBeCalledWith('Hello from the user', [codeSelection.code], []);
+      expect(sendMessage).toBeCalledWith(
+        'Hello from the user',
+        [
+          {
+            code: '...',
+            lineEnd: 17,
+            lineStart: 6,
+            path: 'app/controllers/users_controller.rb',
+          },
+        ],
+        []
+      );
     });
 
     it('includes pending code snippets in the input area', async () => {

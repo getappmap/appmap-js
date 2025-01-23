@@ -15,6 +15,7 @@ const Template = (args, { argTypes }) => ({
     this.$nextTick(() => {
       const poppers = this.$el.querySelectorAll('.popper');
       poppers.forEach((popper) => {
+        // eslint-disable-next-line no-underscore-dangle
         const popperComponent = popper.__vue__;
         if (popperComponent) {
           popperComponent.visibleOverride = args.showTooltip;

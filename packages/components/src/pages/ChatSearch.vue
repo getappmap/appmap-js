@@ -118,7 +118,8 @@ import VPopper from '@/components/Popper.vue';
 import VContext from '@/components/chat-search/Context.vue';
 import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import VPinnedItems from '@/components/chat-search/PinnedItems.vue';
-import type { CodeSelection, ITool } from '@/components/chat/Chat.vue';
+import type { ITool } from '@/components/chat/Chat.vue';
+import type { CodeSelection } from '@/components/chat/CodeSelection';
 import VChat from '@/components/chat/Chat.vue';
 import { getNextHandle } from '@/components/chat/Handle';
 import type { PinEvent, PinFile } from '@/components/chat/PinEvent';
@@ -469,7 +470,11 @@ export default {
       // and emit a stop event.
       this.ask?.stop();
     },
-    async sendMessage(message: string, codeSelections: string[] = [], appmaps: string[] = []) {
+    async sendMessage(
+      message: string,
+      codeSelections: CodeSelection[] = [],
+      appmaps: string[] = []
+    ) {
       this.ask = this.rpcClient.explain();
       this.searching = true;
       this.lastStatusLabel = undefined;
@@ -562,35 +567,51 @@ export default {
 
         const userProvidedContext: ExplainRpc.UserContextItem[] = [];
         if (this.pinnedItems.length > 0) {
-          userProvidedContext.push(
-            ...this.pinnedItems.map((p) => {
-              if (p.type === 'file') {
-                return {
-                  type: 'file',
-                  location: p.location,
-                };
-              } else {
-                return {
-                  type: 'code-snippet',
-                  location: p.location,
-                  content: p.content,
-                };
-              }
-            })
-          );
+          const pinnedItemContextItems = this.pinnedItems.map((p) => {
+            if (p.type === 'file') {
+              return {
+                type: 'file',
+                location: p.location,
+              };
+            } else {
+              return {
+                type: 'code-snippet',
+                location: p.location,
+                content: p.content,
+              };
+            }
+          });
+          userProvidedContext.push(...pinnedItemContextItems);
         }
 
         if (codeSelections.length > 0) {
-          userProvidedContext.push(
-            ...codeSelections.map((c) => ({
+          const codeSelectionContextItems = codeSelections.map((c) => {
+            const result: ExplainRpc.UserContextItem = {
               type: 'code-selection',
-              content: c,
-            }))
-          );
+              content: c.code,
+            };
+            if (c.path) {
+              const tokens = [c.path];
+              const range = [];
+              if (c.lineStart) {
+                range.push(c.lineStart);
+                if (c.lineEnd && c.lineEnd !== c.lineStart) {
+                  range.push(c.lineEnd);
+                }
+              }
+              if (range.length) {
+                tokens.push(range.join('-'));
+              }
+              result.location = tokens.join(':');
+            }
+
+            return result;
+          });
+          userProvidedContext.push(...codeSelectionContextItems);
         }
-        if (userProvidedContext.length > 0) {
-          explainRequest.codeSelection = userProvidedContext;
-        }
+
+        if (userProvidedContext.length > 0) explainRequest.codeSelection = userProvidedContext;
+
         const threadId = this.$refs.vchat.threadId || this.threadId;
         this.ask.explain(explainRequest, threadId).catch(onError);
       });
