@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import { warn } from 'node:console';
 import { debug as makeDebug } from 'node:util';
 
-import {
+import InteractionHistory, {
   ContextItemEvent,
   ContextItemRequestor,
   type InteractionEvent,
@@ -11,15 +11,18 @@ import {
 } from '../interaction-history';
 import InteractionState from '../interaction-state';
 import type Message from '../message';
-import { PromptType } from '../prompt';
+import { buildPromptDescriptor, PromptType } from '../prompt';
 import type CompletionService from '../services/completion-service';
 import type ContextService from '../services/context-service';
+import ProjectInfoService from '../services/project-info-service';
 
 export default class Gatherer {
   constructor(
     events: readonly InteractionEvent[],
-    public completion: CompletionService,
-    public context: ContextService
+    public readonly interactionHistory: InteractionHistory,
+    public readonly completion: CompletionService,
+    public readonly context: ContextService,
+    public readonly projectInfoService: ProjectInfoService
   ) {
     this.conversation = Gatherer.buildConversation(events);
   }
@@ -49,7 +52,9 @@ export default class Gatherer {
   async executeCommands(commands: string[]) {
     const locations: string[] = [],
       terms: string[] = [];
+    let obtainDiff = false;
     let badCommand = false;
+
     for (const cmd of commands) {
       if (cmd.startsWith('!!find') || cmd.startsWith('!!cat')) {
         const location = locationOfCommand(cmd);
@@ -59,11 +64,36 @@ export default class Gatherer {
         const searchTerms = searchTermsOfCommand(cmd);
         if (!searchTerms) badCommand = true;
         else terms.push(...searchTerms);
+      } else if (cmd === '!!diff') {
+        obtainDiff = true;
       } else if (cmd === '!!finish') continue;
       else badCommand = true;
     }
 
     let response = '';
+
+    if (obtainDiff) {
+      const projectInfo = await this.projectInfoService.lookupProjectInfo(true);
+      for (const info of projectInfo) {
+        const { diff } = info;
+        if (diff) {
+          this.interactionHistory.addEvent(
+            new PromptInteractionEvent(
+              PromptType.Diff,
+              'system',
+              buildPromptDescriptor(PromptType.Diff)
+            )
+          );
+
+          this.interactionHistory.addEvent(
+            new ContextItemEvent(PromptType.Diff, ContextItemRequestor.ProjectInfo, diff)
+          );
+
+          response += toDiffOutput(diff);
+        }
+      }
+    }
+
     if (locations.length > 0 || terms.length > 0) {
       for (const event of await this.context.searchContextWithLocations(
         ContextItemRequestor.Gatherer,
@@ -127,6 +157,9 @@ export default class Gatherer {
           const [path, depth] = splitDirDepth(location);
           commands += `!!find ${path} -depth ${depth}\n`;
           response += toFindOutput(path, depth, event.content);
+        } else if (event.promptType == PromptType.Diff) {
+          commands += '!!diff\n';
+          response += toDiffOutput(event.content);
         } else if (
           event.promptType === PromptType.AppMapConfig ||
           event.promptType === PromptType.AppMapStats ||
@@ -154,6 +187,7 @@ export default class Gatherer {
   !!find <path> [-depth <depth>]
   !!cat <path>[:<start-line>[-<end-line>]]
   !!search <terms>
+  !!diff
   !!finish
 `;
 
@@ -164,14 +198,18 @@ that the agent will need to perform its task accurately and without any guesswor
 You will consider the context provided, which may include information about the task and about the software project
 and think about what else might be missing that's needed to perform the task. Remember, the agent will complete the task
 based only on the information provided, so make extra sure it's complete. For example, if the task will require modifying a file,
-make sure to check if the file exists and verify its contents.
+make sure to check if the file exists and verify its contents. If the task requires knowledge of the
+work-in-progress of a task, make sure to obtain the latest changes in the project.
 
 To gather the information, respond with the following commands:
 !!find <path> [-depth <depth>]
 !!cat <path>[:<start-line>[-<end-line>]]
 
-You can also do a full-text search using
+You can also do a full-text search using:
 !!search <search terms>
+
+You can also request a diff of the project code on the current branch using:
+!!diff
 
 When you're done, simply respond with !!finish on a single line.
 All the information gathered will be passed to the agent so you don't need to repeat or summarize it.
@@ -204,6 +242,10 @@ function toCatOutput(location: string, content: string): string {
   return (
     `Here's the output of \`cat -n ${location}\`:\n` + numberLines(content, startingLine) + '\n\n'
   );
+}
+
+function toDiffOutput(diff: string): string {
+  return `Here's the diff of the project:\n${diff}\n\n`;
 }
 
 function toFindOutput(path: string, depth: number, content: string): string {
