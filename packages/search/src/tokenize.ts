@@ -59,23 +59,55 @@ export function words(content: string): string[] {
   return content.match(/\b\w+\b/g) ?? [];
 }
 
+/**
+ * Prepares a string for tokenization by splitting it into batches of lines, each of which is
+ * no longer than the specified maximum length.
+ *
+ * @param content The content to split into batches
+ * @param batchSize The maximum number of characters per batch
+ * @param maxLineLength The maximum length of a line
+ * @returns an array of batches of content
+ */
+export function batch(content: string, batchSize = 1000, maxLineLength = 1000): string[] {
+  const lines = content.split('\n').filter(({ length }) => length <= maxLineLength);
+  const result = [];
+  for (let i = 0; i < lines.length; i += batchSize) {
+    result.push(lines.slice(i, i + batchSize).join('\n'));
+  }
+
+  return result;
+}
+
 type FileTokens = {
   symbols: string[];
   words: string[];
 };
 
-export function fileTokens(
+export async function fileTokens(
   content: string,
   fileExtension: string,
   enableGenericSymbolParsing = true
-): FileTokens {
+): Promise<FileTokens> {
   if (enableGenericSymbolParsing)
     debug('Using generic symbol parsing for file extension: %s', fileExtension);
 
-  const symbolList = queryKeywords(
-    symbols(content, fileExtension, enableGenericSymbolParsing)
-  ).sort();
-  const wordList = queryKeywords(words(content)).sort();
+  const batches = batch(content);
+  const symbolList: string[] = [];
+  const wordList: string[] = [];
+
+  for (let i = 0; i < batches.length; ++i) {
+    if (i && i % 5 === 0) {
+      // Every 5th batch, wait for the next tick to avoid blocking the event loop
+      await new Promise((resolve) => setImmediate(resolve));
+    }
+
+    const batch = batches[i];
+    symbolList.push(...queryKeywords(symbols(batch, fileExtension, enableGenericSymbolParsing)));
+    wordList.push(...queryKeywords(words(batch)));
+  }
+
+  symbolList.sort();
+  wordList.sort();
 
   // Iterate through words, with a corresponding pointer to symbols.
   // If the word at the word index does not match the symbol at the symbol index,

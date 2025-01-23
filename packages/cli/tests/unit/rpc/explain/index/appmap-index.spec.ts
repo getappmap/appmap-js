@@ -63,7 +63,7 @@ describe('readAppMapContent', () => {
     expect(content).toContain('sql');
     expect(content).toContain('database');
 
-    expect(content.split(' ')).toEqual([
+    expect(content.split(/\s+/)).toEqual([
       'Test',
       'AppMap',
       'test',

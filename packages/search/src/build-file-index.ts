@@ -15,7 +15,7 @@ const debug = makeDebug('appmap:search:build-index');
 export type Tokenizer = (
   content: string,
   fileExtension: string
-) => { symbols: string[]; words: string[] };
+) => Promise<{ symbols: string[]; words: string[] }>;
 
 type Context = {
   fileIndex: FileIndex;
@@ -37,7 +37,8 @@ async function indexFile(context: Context, filePath: string) {
     fileContents.length,
     fileContents.slice(0, 40)
   );
-  const tokens = context.tokenizer(fileContents, filePath);
+  const fileExtension = filePath.split('.').pop() ?? '';
+  const tokens = await context.tokenizer(fileContents, fileExtension);
   const symbols = tokens.symbols.join(' ');
   const words = tokens.words.join(' ');
 

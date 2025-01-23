@@ -5,6 +5,7 @@ import path from 'node:path';
 import Gatherer from '../../src/agents/gatherer';
 import {
   ContextItemEvent,
+  ContextItemRequestor,
   type InteractionEvent,
   PromptInteractionEvent,
 } from '../../src/interaction-history';
@@ -182,6 +183,7 @@ describe('Gatherer', () => {
         case 'contextItem':
           return new ContextItemEvent(
             (String(ev.promptType) ?? 'test') as never,
+            ContextItemRequestor.Gatherer,
             String(ev.content),
             ev.location as never,
             ev.directory as never

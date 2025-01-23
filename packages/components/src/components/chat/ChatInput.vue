@@ -40,8 +40,6 @@
         @submit="onAutoComplete"
         ref="autocomplete"
       />
-      <!-- See the comment in getappmap/vscode-appland/web/src/app.js for why `focus` is set on the
-        input -->
       <div
         :class="{ glow: useAnimation }"
         :contenteditable="isDisabled ? 'false' : 'plaintext-only'"
@@ -53,7 +51,6 @@
         tabindex="0"
         ref="input"
         data-cy="chat-input"
-        focus
       />
       <v-popper
         v-if="!isStopActive"
@@ -66,7 +63,7 @@
           <v-send-icon />
         </button>
       </v-popper>
-      <v-popper v-if="isStopActive" text="Stop" placement="top" text-align="left">
+      <v-popper v-if="isStopActive" text="Stop" placement="top" text-align="left" align="right">
         <button
           class="control-button"
           data-cy="stop-response"
@@ -264,7 +261,7 @@ export default {
       this.input = this.question;
     }
 
-    this.focus();
+    window.onfocus = () => this.focus();
   },
 };
 </script>

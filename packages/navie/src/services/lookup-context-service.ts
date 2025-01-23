@@ -1,5 +1,9 @@
 import { warn } from 'console';
-import InteractionHistory, { ContextLookupEvent, HelpLookupEvent } from '../interaction-history';
+import InteractionHistory, {
+  ContextItemRequestor,
+  ContextLookupEvent,
+  HelpLookupEvent,
+} from '../interaction-history';
 import { ContextV2 } from '../context';
 import { CHARACTERS_PER_TOKEN } from '../message';
 import ApplyContextService from './apply-context-service';
@@ -40,14 +44,10 @@ export default class LookupContextService {
     return context;
   }
 
-  async lookupHelp(
-    languages: string[],
-    vectorTerms: string[],
-    tokenCount: number
-  ): Promise<HelpResponse> {
+  async lookupHelp(vectorTerms: string[], tokenCount: number): Promise<HelpResponse> {
     const help = await this.helpFn({
       type: 'help',
-      vectorTerms: [...languages, ...vectorTerms],
+      vectorTerms,
       tokenCount,
     });
 
@@ -71,6 +71,11 @@ export default class LookupContextService {
   ) {
     applyContextService.addSystemPrompts(context, help);
 
-    applyContextService.applyContext(context, help, tokenCount * CHARACTERS_PER_TOKEN);
+    applyContextService.applyContext(
+      ContextItemRequestor.Terms,
+      context,
+      help,
+      tokenCount * CHARACTERS_PER_TOKEN
+    );
   }
 }

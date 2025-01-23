@@ -5,6 +5,7 @@ import { debug as makeDebug } from 'node:util';
 
 import {
   ContextItemEvent,
+  ContextItemRequestor,
   type InteractionEvent,
   PromptInteractionEvent,
 } from '../interaction-history';
@@ -64,7 +65,11 @@ export default class Gatherer {
 
     let response = '';
     if (locations.length > 0 || terms.length > 0) {
-      for (const event of await this.context.searchContextWithLocations(terms, locations)) {
+      for (const event of await this.context.searchContextWithLocations(
+        ContextItemRequestor.Gatherer,
+        terms,
+        locations
+      )) {
         const location = event.location?.startsWith(event.directory ?? '')
           ? event.location
           : [event.directory, event.location].filter(Boolean).join('/');

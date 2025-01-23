@@ -126,7 +126,9 @@ export async function readAppMapContent(appmapFile: string): Promise<string> {
   appmapWords.push(...parameters);
   appmapWords.push(...types);
 
-  return appmapWords.join(' ');
+  // Words are separated by new lines to reduce the time spent tokenizing the content.
+  // Long lines may be slower to tokenize or be skipped altogether.
+  return appmapWords.join('\n');
 }
 
 export function trueFilter(): Promise<boolean> {

@@ -1,6 +1,9 @@
 import { ContextV2 } from '../../src/context';
 import { HelpProvider, HelpRequest, HelpResponse } from '../../src/help';
-import InteractionHistory, { ContextItemEvent } from '../../src/interaction-history';
+import InteractionHistory, {
+  ContextItemEvent,
+  ContextItemRequestor,
+} from '../../src/interaction-history';
 import ApplyContextService from '../../src/services/apply-context-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import { HELP_CONTEXT, SEARCH_CONTEXT } from '../fixture';
@@ -21,7 +24,13 @@ describe('ApplyContextService', () => {
     afterEach(() => jest.resetAllMocks());
 
     const collect = (characterLimit: number, maxContentLength = characterLimit / 5) =>
-      applyContextService.applyContext(context, help, characterLimit, maxContentLength);
+      applyContextService.applyContext(
+        ContextItemRequestor.Terms,
+        context,
+        help,
+        characterLimit,
+        maxContentLength
+      );
 
     it('collects samples of context into the output', () => {
       collect(1000 * 1000);
@@ -115,7 +124,7 @@ describe('ApplyContextService', () => {
         return Promise.resolve(SEARCH_CONTEXT);
       });
       const helpFn: HelpProvider = jest.fn().mockImplementation((request: HelpRequest) => {
-        expect(request.vectorTerms).toEqual(['ruby', 'user', 'management']);
+        expect(request.vectorTerms).toEqual(['user', 'management']);
         expect(request.tokenCount).toEqual(tokenCount);
         return Promise.resolve(HELP_CONTEXT);
       });
@@ -130,7 +139,7 @@ describe('ApplyContextService', () => {
 
     async function lookupAndApplyContext() {
       const context = await lookupContextService.lookupContext(vectorTerms, tokensAvailable);
-      const help = await lookupContextService.lookupHelp(['ruby'], vectorTerms, tokensAvailable);
+      const help = await lookupContextService.lookupHelp(vectorTerms, tokensAvailable);
       LookupContextService.applyContext(context, help, applyContextService, tokensAvailable);
     }
 

@@ -1,3 +1,4 @@
+import { UserContext } from '../src/user-context';
 import { AgentOptions } from '../src/agent';
 import { UserOptions } from '../src/lib/parse-options';
 
@@ -29,6 +30,31 @@ describe('AgentOptions', () => {
       );
       const filters = agentOptions.buildContextFilters();
       expect(filters).toEqual({ locations: ['file1.md'], exclude: ['file1.md'] });
+    });
+  });
+
+  describe('pinned file inclusion', () => {
+    const pinnedFiles: UserContext.LocationItem[] = [
+      {
+        location: 'file1.md',
+        type: 'file',
+      },
+    ];
+
+    it('includes pinned file locations in the filters', () => {
+      const userOptions = new UserOptions(new Map());
+      const agentOptions = new AgentOptions(question, question, userOptions, [], [], pinnedFiles);
+
+      const filters = agentOptions.buildContextFilters();
+      expect(filters.locations).toContain('file1.md');
+    });
+
+    it('excludes pinned file locations', () => {
+      const userOptions = new UserOptions(new Map());
+      const agentOptions = new AgentOptions(question, question, userOptions, [], [], pinnedFiles);
+
+      const filters = agentOptions.buildContextFilters();
+      expect(filters.exclude).toContain('file1.md');
     });
   });
 });

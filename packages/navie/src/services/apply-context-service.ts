@@ -3,6 +3,7 @@ import { warn } from 'console';
 import { ContextV2 } from '../context';
 import InteractionHistory, {
   ContextItemEvent,
+  ContextItemRequestor,
   PromptInteractionEvent,
 } from '../interaction-history';
 import { PromptType, buildPromptDescriptor } from '../prompt';
@@ -13,6 +14,7 @@ export default class ApplyContextService {
   constructor(public readonly interactionHistory: InteractionHistory) {}
 
   applyContext(
+    requestor: ContextItemRequestor,
     context: ContextV2.ContextResponse | undefined,
     help: HelpResponse,
     characterLimit: number,
@@ -44,7 +46,7 @@ export default class ApplyContextService {
     const charsRemaining = characterLimit - charsApplied;
 
     for (const item of appliedContextItems) {
-      const event = eventOfContextItem(item);
+      const event = eventOfContextItem(requestor, item);
       if (event) this.interactionHistory.addEvent(event);
     }
 
@@ -102,7 +104,10 @@ export default class ApplyContextService {
   }
 }
 
-export function eventOfContextItem(item: ContextV2.ContextItem): undefined | ContextItemEvent {
+export function eventOfContextItem(
+  requestor: ContextItemRequestor,
+  item: ContextV2.ContextItem
+): undefined | ContextItemEvent {
   let promptType: PromptType | undefined;
   switch (item.type) {
     case ContextV2.ContextItemType.SequenceDiagram:
@@ -125,6 +130,7 @@ export function eventOfContextItem(item: ContextV2.ContextItem): undefined | Con
     const isFile = ContextV2.isFileContextItem(item);
     return new ContextItemEvent(
       promptType,
+      requestor,
       item.content,
       isFile ? item.location : undefined,
       isFile ? item.directory : undefined

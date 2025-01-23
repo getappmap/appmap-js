@@ -4,7 +4,7 @@ import transformSearchTerms from '../lib/transform-search-terms';
 import LookupContextService from './lookup-context-service';
 import VectorTermsService from './vector-terms-service';
 import { ContextV2 } from '../context';
-import InteractionHistory, { ContextItemEvent } from '../interaction-history';
+import InteractionHistory, { ContextItemEvent, ContextItemRequestor } from '../interaction-history';
 import ApplyContextService, { eventOfContextItem } from './apply-context-service';
 
 export default class ContextService {
@@ -15,6 +15,9 @@ export default class ContextService {
     private applyContextService: ApplyContextService
   ) {}
 
+  /**
+   * Populates the interaction history with context obtained by searching the project.
+   */
   async searchContext(
     options: AgentOptions,
     tokensAvailable: () => number,
@@ -24,6 +27,18 @@ export default class ContextService {
     const termsEnabled = options.userOptions.isEnabled('terms', true);
     if (contextEnabled) {
       this.history.log('[context-service] Searching for context');
+
+      this.history.stopAcceptingPinnedFileContext();
+
+      const aggregateQuestion = [...options.aggregateQuestion];
+      // Add content obtained from pinned files
+      for (const event of this.history.events) {
+        if (!(event instanceof ContextItemEvent)) continue;
+
+        if (!(event.requestor === ContextItemRequestor.PinnedFile)) continue;
+
+        aggregateQuestion.push(event.content);
+      }
 
       const searchTerms = await transformSearchTerms(
         termsEnabled,
@@ -47,7 +62,13 @@ export default class ContextService {
     }
   }
 
-  async locationContext(fileNames: string[]): Promise<ContextItemEvent[]> {
+  /**
+   * Populates the interaction history with file contents of the provided file names.
+   */
+  async locationContext(
+    requestor: ContextItemRequestor,
+    fileNames: string[]
+  ): Promise<ContextItemEvent[]> {
     if (!fileNames || fileNames.length === 0) {
       this.history.log('[context-service] No file names provided for location context');
       return [];
@@ -66,8 +87,9 @@ export default class ContextService {
     let charsAdded = 0;
     const events: ContextItemEvent[] = [];
     for (const item of context) {
-      const contextItem = eventOfContextItem(item);
+      const contextItem = eventOfContextItem(requestor, item);
       if (!contextItem) continue;
+
       charsAdded += contextItem.content.length;
       events.push(contextItem);
       this.history.addEvent(contextItem);
@@ -77,6 +99,7 @@ export default class ContextService {
   }
 
   async searchContextWithLocations(
+    requestor: ContextItemRequestor,
     searchTerms: string[],
     fileNames: string[]
   ): Promise<ContextItemEvent[]> {
@@ -88,7 +111,7 @@ export default class ContextService {
     let charsAdded = 0;
     const events: ContextItemEvent[] = [];
     for (const item of ContextService.guardContextType(context)) {
-      const contextItem = eventOfContextItem(item);
+      const contextItem = eventOfContextItem(requestor, item);
       if (!contextItem) continue;
       charsAdded += contextItem.content.length;
       events.push(contextItem);
@@ -102,8 +125,7 @@ export default class ContextService {
     const locations = options.buildContextFilters().locations ?? [];
     // Also list project directories
     locations.unshift(':0');
-    console.log(locations);
-    await this.locationContext(locations);
+    await this.locationContext(ContextItemRequestor.PinnedFile, locations);
   }
 
   static guardContextType(

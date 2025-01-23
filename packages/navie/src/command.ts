@@ -8,7 +8,6 @@ export enum CommandMode {
   Context = 'context',
   Update = 'update',
   VectorTerms = 'vector-terms',
-  TechStack = 'tech-stack',
   ListFiles = 'list-files',
   Suggest = 'suggest',
   Observe = 'observe',

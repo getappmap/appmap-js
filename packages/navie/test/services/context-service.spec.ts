@@ -8,7 +8,10 @@ import ApplyContextService from '../../src/services/apply-context-service';
 import { UserOptions } from '../../src/lib/parse-options';
 import { SEARCH_CONTEXT } from '../fixture';
 import { ContextV2 } from '../../src/context';
-import InteractionHistory, { ContextItemEvent } from '../../src/interaction-history';
+import InteractionHistory, {
+  ContextItemEvent,
+  ContextItemRequestor,
+} from '../../src/interaction-history';
 
 describe('ContextService', () => {
   let history: InteractionHistory;
@@ -110,7 +113,12 @@ describe('ContextService', () => {
 
         await contextService.searchContext(options, () => tokensAvailable);
 
-        expect(applyContextService.applyContext).toHaveBeenCalledWith([], [], 3000);
+        expect(applyContextService.applyContext).toHaveBeenCalledWith(
+          ContextItemRequestor.Terms,
+          [],
+          [],
+          3000
+        );
       });
     });
   });
@@ -132,7 +140,7 @@ describe('ContextService', () => {
     it('retrieves context for files', async () => {
       lookupContextService.lookupContext = jest.fn().mockResolvedValue(locationContext);
 
-      await contextService.locationContext(['file1', 'file2']);
+      await contextService.locationContext(ContextItemRequestor.Terms, ['file1', 'file2']);
 
       expect(lookupContextService.lookupContext).toHaveBeenCalledWith([], 0, {
         locations: ['file1', 'file2'],
@@ -151,7 +159,7 @@ describe('ContextService', () => {
       ]);
     });
 
-    it('sets the directory field on ContextItemEvent', async () => {
+    it('sets the directory and requestor on ContextItemEvent', async () => {
       const locationContextWithDirectory = [
         {
           type: ContextV2.ContextItemType.CodeSnippet,
@@ -164,11 +172,12 @@ describe('ContextService', () => {
         .fn()
         .mockResolvedValue(locationContextWithDirectory);
 
-      await contextService.locationContext(['file1']);
+      await contextService.locationContext(ContextItemRequestor.Terms, ['file1']);
 
       const event = history.events[0];
       assert(event instanceof ContextItemEvent);
       expect(event.directory).toEqual('dir1');
+      expect(event.requestor).toEqual(ContextItemRequestor.Terms);
     });
   });
 });
