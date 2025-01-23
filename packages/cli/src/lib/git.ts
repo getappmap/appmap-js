@@ -60,9 +60,9 @@ const mainBranches = ['main', 'master', 'develop'];
 /**
  * Find the base commit of the current branch.
  *
- * @param {string} [headRef='HEAD'] - The reference to identify the base commit.
- * @param {string} [cwd] - The working directory to run the command in.
- * @returns {Promise<string | undefined>} A promise containing the base commit, or undefined if the
+ * @param [headRef='HEAD'] - The reference to identify the base commit.
+ * @param [cwd] - The working directory to run the command in.
+ * @returns A promise containing the base commit, or undefined if the
  * base commit could not be found.
  */
 export async function findBaseCommit(headRef = 'HEAD', cwd?: string): Promise<string | undefined> {
@@ -84,8 +84,8 @@ export async function findBaseCommit(headRef = 'HEAD', cwd?: string): Promise<st
 /**
  * Get the list of untracked files in the working directory.
  *
- * @param {string} [cwd] - The working directory to run the command in.
- * @returns {Promise<string[]>} A promise containing the list of untracked files.
+ * @param [cwd] - The working directory to run the command in.
+ * @returns A promise containing the list of untracked files.
  * @throws {Error} If the command fails.
  */
 export async function getUntrackedFiles(cwd?: string): Promise<string[]> {
@@ -100,8 +100,7 @@ export async function getUntrackedFiles(cwd?: string): Promise<string[]> {
  * This method produces the diff between your working directory and HEAD, returning the changes that
  * have not yet been committed.
  *
- * @param {string} [baseRef='HEAD'] - The base commit to compare against.
- * @param {string} [cwd] - The working directory to run the command in.
+ * @param [cwd] - The working directory to run the command in.
  * @returns {Promise<string>} A promise containing the diff.
  */
 export async function getWorkingDiff(cwd?: string): Promise<string> {
@@ -118,7 +117,6 @@ export async function getWorkingDiff(cwd?: string): Promise<string> {
   const untrackedDiffs: string[] = [];
 
   // Do this serially to avoid spawning too many processes.
-  // TODO: Perhaps this could be done in a queue.
   for (const file of untrackedFiles) {
     try {
       untrackedDiffs.push(
@@ -147,11 +145,11 @@ export async function getWorkingDiff(cwd?: string): Promise<string> {
  * Get the diff between the base commit and the head commit. The diff produced by this function
  * is in the form of a git log, so commit messages are included.
  *
- * @param {string} [headCommit='HEAD'] - The head commit to compare against.
- * @param {string} baseCommit - The base commit to compare against. If not provided, the base commit
+ * @param [headCommit='HEAD'] - The head commit to compare against.
+ * @param baseCommit - The base commit to compare against. If not provided, the base commit
  * will be found automatically via {@link findBaseCommit}.
- * @param {string} [cwd] - The working directory to run the command in.
- * @returns {Promise<string>} A promise containing the diff.
+ * @param [cwd] - The working directory to run the command in.
+ * @returns A promise containing the diff.
  */
 export async function getDiffLog(
   headCommit = 'HEAD',
