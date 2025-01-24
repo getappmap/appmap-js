@@ -76,6 +76,7 @@ When enabled, gather will perform any or all of the following actions:
 - List files in the repository.
 - Fetch full the full content of a file in the repository.
 - Search the repository for context by keyword.
+- Fetch the diff between the current working code and the base branch.
 
 Gatherer runs autonomously, there's no user control over what actions it will take. To explicitly
 control the context that's available to Navie, you can other features such as pinned files,
@@ -118,4 +119,54 @@ To include only Python files and exclude files containing the word "test":
 
 ```shell
 @plan /include=\.py /exclude=test
+```
+
+## /diff
+
+The `/diff` option is used to enable or disable the diff feature. This option allows you to control whether Navie should show the difference between the current working code and the base branch.
+
+**Syntax**
+```shell
+/diff
+```
+
+**Description**
+
+While gathering context, Navie will automatically collect the diff between the current working code and the base branch. This feature can help provide more accurate and relevant responses by considering the changes made in the codebase.
+
+The diff information collected uses the git `log` format, so it includes individual commits as well as the commit messages.
+
+The base branch will be determined automatically based on the history. The history is searched for a branch called `main`, `master`, or `develop`. The base branch can be specified manually using the `/base` option.
+
+**Example**
+
+To enable the diff feature, you can use:
+
+```shell
+/diff <question>
+```
+
+## /base
+
+The `/base` option is used to specify the base branch for the diff feature. This option allows you to control which branch Navie should use as the base when showing the difference between the current working code and the base branch.
+
+**Syntax**
+```shell
+/base=<branch-name>
+```
+
+- `<branch-name>`: The name of the branch to be used as the base branch.
+
+**Description**
+
+When executing commands, the `/base` option specifies the base branch for the diff feature. If not specified, the base branch will be determined automatically based on the history. The history is searched for a branch called `main`, `master`, or `develop`.
+
+If you specify the `/base` option, then `/diff` option is automatically enabled.
+
+**Example**
+
+To specify the base branch as `work`, you can use:
+
+```shell
+@generate /base=work <question>
 ```
