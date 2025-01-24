@@ -1,3 +1,11 @@
+# [@appland/navie-v1.42.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.41.0...@appland/navie-v1.42.0) (2025-01-24)
+
+
+### Features
+
+* Add diff context to any question ([a0afcd9](https://github.com/getappmap/appmap-js/commit/a0afcd94b4de8a9ffe7ceb4fe95018894f517f80))
+* Enable gatherer to request the project diff ([014d762](https://github.com/getappmap/appmap-js/commit/014d7622345b01dfc68310a1c8d2bede23eb3308))
+
 # [@appland/navie-v1.41.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.40.0...@appland/navie-v1.41.0) (2025-01-23)
 
 
