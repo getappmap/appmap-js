@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.183.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.182.0...@appland/appmap-v3.183.0) (2025-01-24)
+
+
+### Features
+
+* Add diff context to any question ([a0afcd9](https://github.com/getappmap/appmap-js/commit/a0afcd94b4de8a9ffe7ceb4fe95018894f517f80))
+* Skip large diffs when generating context for the LLM ([4258181](https://github.com/getappmap/appmap-js/commit/425818119404f9ae471dee5c39c8258e718f7bd6)), closes [#2173](https://github.com/getappmap/appmap-js/issues/2173)
+
 # [@appland/appmap-v3.182.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.181.2...@appland/appmap-v3.182.0) (2025-01-23)
 
 
