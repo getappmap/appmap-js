@@ -112,6 +112,23 @@ export namespace NavieRpc {
         };
         export type Response = void;
       }
+      export namespace AddMessageAttachment {
+        export const Method = 'v1.navie.thread.addMessageAttachment';
+        export type Params = {
+          threadId: string;
+          content?: string;
+          uri?: string;
+        };
+        export type Response = { attachmentId: string };
+      }
+      export namespace RemoveMessageAttachment {
+        export const Method = 'v1.navie.thread.removeMessageAttachment';
+        export type Params = {
+          threadId: string;
+          attachmentId: string;
+        };
+        export type Response = void;
+      }
       export namespace Query {
         export const Method = 'v1.navie.thread.query';
         export type Params = {

@@ -315,13 +315,8 @@ export default {
       }
     },
     async onSend(message: string) {
-      this.sendMessage(
-        message,
-        this.codeSelections.map((s) => s.code),
-        this.appmaps
-      );
-
-      this.codeSelections = [];
+      this.sendMessage(message, [], this.appmaps);
+      this.$set(this, 'codeSelections', []);
     },
     onStop() {
       this.$emit('stop');
@@ -382,6 +377,13 @@ export default {
     },
     includeCodeSelection(codeSelection: CodeSelection) {
       this.codeSelections.push(codeSelection);
+    },
+    removeCodeSelection(attachmentId: string) {
+      this.$set(
+        this,
+        'codeSelections',
+        this.codeSelections.filter((c) => c.attachmentId !== attachmentId)
+      );
     },
     includeAppMap(appmap: string) {
       this.appmaps.push(appmap);

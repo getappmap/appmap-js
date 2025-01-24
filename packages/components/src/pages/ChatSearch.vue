@@ -405,7 +405,7 @@ export default {
         .on('connected', () => {
           console.log('Listening to thread', threadId);
           this.activeThreadId = threadId;
-          this.$emit('on-thread-subscription', threadId);
+          this.$root.$emit('on-thread-subscription', threadId);
         });
     },
     unsubscribeFromThread() {
@@ -556,7 +556,18 @@ export default {
       this.isPanelResizing = false;
     },
     includeCodeSelection(codeSelection: CodeSelection) {
-      this.$refs.vchat.includeCodeSelection(codeSelection);
+      if (!this.activeThreadId)
+        throw new Error('Failed to include code selection, no active thread ID');
+
+      let range = '';
+      if ([codeSelection.lineStart, codeSelection.lineEnd].every(Number.isInteger)) {
+        range = `:${codeSelection.lineStart}-${codeSelection.lineEnd}`;
+      }
+      this.rpcClient.thread.addMessageAttachment(
+        this.activeThreadId,
+        `file://${codeSelection.path}${range}`,
+        codeSelection.code
+      );
     },
     includeAppMap(appmap: string) {
       this.$refs.vchat.includeAppMap(appmap);
@@ -860,6 +871,16 @@ export default {
           if (pinIndex !== -1) {
             this.pinnedItems.splice(pinIndex, 1);
           }
+          break;
+        }
+
+        case 'add-message-attachment': {
+          this.$refs.vchat.includeCodeSelection(event);
+          break;
+        }
+
+        case 'remove-message-attachment': {
+          this.$refs.vchat.removeCodeSelection(event.attachmentId);
           break;
         }
 

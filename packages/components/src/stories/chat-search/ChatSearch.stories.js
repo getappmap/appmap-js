@@ -69,6 +69,9 @@ export const ChatSearch = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
     this.$refs.chatSearch.setAppMapStats(appmapStats);
+    this.$root.$on('on-thread-subscription', () => {
+      this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    });
   },
 });
 ChatSearch.args = {
@@ -89,7 +92,9 @@ export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
-    this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    this.$root.$on('on-thread-subscription', () => {
+      this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    });
   },
 });
 ChatSearchWithCodeSelection.args = {

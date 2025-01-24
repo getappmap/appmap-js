@@ -39,6 +39,10 @@ import NavieService from '../../rpc/navie/services/navieService';
 import { ThreadIndexService } from '../../rpc/navie/services/threadIndexService';
 import { container } from 'tsyringe';
 import ThreadService from '../../rpc/navie/services/threadService';
+import {
+  navieThreadAddMessageAttachmentHandler,
+  navieThreadRemoveMessageAttachmentHandler,
+} from '../../rpc/navie/thread/handlers/messageAttachment';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -87,6 +91,8 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     navieThreadPinItemHandler(threadService),
     navieThreadUnpinItemHandler(threadService),
     navieThreadQueryHandler(threadIndexService),
+    navieThreadAddMessageAttachmentHandler(threadService),
+    navieThreadRemoveMessageAttachmentHandler(threadService),
   ];
 }
 

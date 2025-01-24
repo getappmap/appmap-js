@@ -2,59 +2,38 @@
   <v-accordion
     :open="open"
     :class="{ 'code-selection': 1, 'code-selection--open': open }"
+    :data-attachment-id="attachmentId"
     data-cy="code-selection"
   >
     <template #header>
-      <v-tool-status
-        complete-icon="document"
-        :title="title"
-        :status="subTitle"
-        :complete="true"
-        @click.native="open = !open"
-        :class="{ 'tool-status--open': open }"
-        :interactive="true"
-      />
+      <div
+        :class="{ 'code-selection__header': 1, 'code-selection__header--no-content': !content }"
+        @click="onClick"
+      >
+        <v-document />
+        <div class="code-selection__title">{{ title }}</div>
+      </div>
     </template>
     <pre v-html="highlightedCode" data-cy="code-selection-content" class="hljs" />
   </v-accordion>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import hljs from 'highlight.js';
 import VAccordion from '@/components/Accordion.vue';
-import VToolStatus from '@/components/chat/ToolStatus.vue';
-
-// Array.prototype.findLastIndex polyfill
-function findLastIndex<T>(
-  array: T[],
-  predicate: (value: T, index: number, obj: T[]) => boolean
-): number {
-  for (let i = array.length - 1; i >= 0; i--) {
-    if (predicate(array[i], i, array)) {
-      return i;
-    }
-  }
-  return -1;
-}
+import VDocument from '@/assets/document.svg';
 
 export default Vue.extend({
   name: 'v-code-selection',
   components: {
     VAccordion,
-    VToolStatus,
+    VDocument,
   },
   props: {
-    path: String,
-    lineStart: Number,
-    lineEnd: Number,
-    code: {
-      type: String,
-      required: true,
-    },
-    language: {
-      type: String,
-    },
+    uri: String as PropType<string | undefined>,
+    content: String as PropType<string | undefined>,
+    attachmentId: String as PropType<string | undefined>,
   },
   inject: {
     theme: {
@@ -67,39 +46,37 @@ export default Vue.extend({
     };
   },
   computed: {
-    highlightedCode(): string {
-      let language = this.language;
-      if (!language && this.path) {
-        // Attempt to get the language from the file extension
-        const lastDot = this.path.lastIndexOf('.');
-        language = this.path.slice(lastDot + 1);
-      }
+    path(): string | undefined {
+      return this.uri?.replace(/(^file:\/\/)|(:\d+-\d+)$/g, '');
+    },
+    range(): string | undefined {
+      return this.uri?.match(/:(\d+-?\d+?)$/)?.[1];
+    },
+    fileExtension(): string | undefined {
+      if (!this.path) return;
 
-      if (!hljs.getLanguage(language)) {
+      return this.path.match(/\.(\w+)$/)?.[1];
+    },
+    highlightedCode(): string {
+      let language = this.fileExtension;
+      if (!language || !hljs.getLanguage(language)) {
         language = 'plaintext';
       }
-
-      return hljs.highlight(this.code, { language }).value;
+      return hljs.highlight(this.content ?? '', { language }).value;
     },
-    lineRange(): string {
-      if (this.lineStart !== 0 && !this.lineStart) return '';
-
-      if (this.lineStart === this.lineEnd || !this.lineEnd) {
-        return `:${this.lineStart}`;
-      }
-
-      return `:${this.lineStart}-${this.lineEnd}`;
+    fileName(): string | undefined {
+      if (!this.path) return;
+      return this.path.split(/[\\/]/).pop();
     },
     title(): string {
-      if (!this.path) return 'Code snippet';
-
-      const lastSeparator = findLastIndex([...this.path], (c) => c === '/' || c === '\\');
-      const fileName = this.path.slice(lastSeparator + 1);
-
-      return `${fileName}${this.lineRange}`;
+      if (!this.fileName) return 'Code snippet';
+      return [this.fileName, this.range].filter(Boolean).join(':');
     },
-    subTitle(): string {
-      return this.path ? this.path : `Click to ${this.open ? 'hide' : 'expand'}`;
+  },
+  methods: {
+    onClick() {
+      if (!this.content) return;
+      this.open = !this.open;
     },
   },
 });
@@ -108,11 +85,51 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .code-selection {
   color: $color-foreground;
+  width: 100%;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.25em;
+    font-size: 0.9em;
+
+    &--no-content {
+      cursor: initial;
+      user-select: text;
+      &:hover {
+        color: $color-foreground !important;
+        svg,
+        path {
+          fill: $color-foreground !important;
+        }
+      }
+    }
+
+    svg,
+    path {
+      width: 1em;
+      height: 1em;
+      fill: $color-foreground;
+    }
+
+    &:hover {
+      color: $color-highlight;
+      svg,
+      path {
+        fill: $color-highlight;
+      }
+    }
+  }
 
   &--open {
     background-color: $color-background;
     border: 1px solid $color-border;
     border-radius: $border-radius;
+    .code-selection__header {
+      padding: 0.5em 1em;
+      background-color: rgba(black, 0.2);
+    }
   }
   pre {
     max-height: 18rem;

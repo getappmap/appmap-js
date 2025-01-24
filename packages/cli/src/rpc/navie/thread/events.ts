@@ -2,6 +2,10 @@ import { ConversationThread } from '@appland/client';
 import { ContextV2, Help, ProjectInfo } from '@appland/navie';
 import { NavieRpc } from '@appland/rpc';
 
+export type Timestamp = {
+  time: number;
+};
+
 export type NavieThreadInitEvent = {
   type: 'thread-init';
   conversationThread: ConversationThread;
@@ -56,14 +60,23 @@ export type NavieBeginContextSearchEvent = {
   id: string;
   request?: Help.HelpRequest | ProjectInfo.ProjectInfoRequest | ContextV2.ContextRequest;
 };
+
 export type NavieCompleteContextSearchEvent = {
   type: 'complete-context-search';
   id: string;
   result?: Help.HelpResponse | ProjectInfo.ProjectInfoResponse | ContextV2.ContextResponse;
 };
 
-export type Timestamp = {
-  time: number;
+export type NavieAddMessageAttachmentEvent = {
+  type: 'add-message-attachment';
+  attachmentId: string;
+  uri?: string;
+  content?: string;
+};
+
+export type NavieRemoveMessageAttachmentEvent = {
+  type: 'remove-message-attachment';
+  attachmentId: string;
 };
 
 export type NavieEvent =
@@ -77,7 +90,9 @@ export type NavieEvent =
   | NaviePromptSuggestionsEvent
   | NavieThreadInitEvent
   | NavieTokenEvent
-  | NavieTokenMetadataEvent;
+  | NavieTokenMetadataEvent
+  | NavieAddMessageAttachmentEvent
+  | NavieRemoveMessageAttachmentEvent;
 
 export type TimestampNavieEvent = Timestamp & NavieEvent;
 

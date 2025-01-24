@@ -8,7 +8,13 @@ import { homedir } from 'os';
 import { mkdir, writeFile } from 'fs/promises';
 
 import NavieService from '../services/navieService';
-import { NavieEvent, NavieMessageEvent, PinnedItem, TimestampNavieEvent } from './events';
+import {
+  NavieAddMessageAttachmentEvent,
+  NavieEvent,
+  NavieMessageEvent,
+  PinnedItem,
+  TimestampNavieEvent,
+} from './events';
 import { ThreadIndexService } from '../services/threadIndexService';
 import { container } from 'tsyringe';
 import { NavieRpc } from '@appland/rpc';
@@ -25,13 +31,24 @@ type EventListener = (...args: any[]) => void;
  */
 function convertContext(
   context?: NavieRpc.V1.UserContext.ContextItem[]
-): undefined | UserContext.Context {
-  return context?.map((item) => {
+): UserContext.ContextItem[] {
+  if (!context) return [];
+  return context.map((item) => {
     if (item.type === 'static') {
       return { type: 'code-snippet', content: item.content, location: item.id };
     }
     return { type: 'file', location: item.uri };
   });
+}
+
+function convertMessageAttachmentToContextItem(
+  attachment: NavieAddMessageAttachmentEvent
+): UserContext.ContextItem {
+  return {
+    type: 'code-snippet',
+    content: attachment.content ?? '',
+    location: attachment.uri,
+  };
 }
 
 export class Thread {
@@ -236,10 +253,11 @@ export class Thread {
 
   /**
    * Send a user message to the thread. This will emit a `message` event. This promise will resolve
-   * once the message has been acknowledged by the backend, before the message is completed.
+   * once the message has been acknowledged by the backend, before the message is completed. Message
+   * attachments need NOT be included in the `userContext` parameter.
    *
    * @param message the message to send
-   * @param codeSelection (optional) the code selection to send
+   * @param codeSelection (optional) additional context to use, i.e., pinned items
    */
   async sendMessage(
     message: string,
@@ -248,8 +266,10 @@ export class Thread {
     const [navie, contextEvents] = this.navieService.getNavie();
 
     let context = convertContext(userContext);
+    context.push(...this.getMessageAttachments().map(convertMessageAttachmentToContextItem));
+
     const { applied, userContext: newUserContext } = await handleReview(message, context);
-    if (applied) {
+    if (applied && newUserContext) {
       context = newUserContext;
     }
 
@@ -294,6 +314,44 @@ export class Thread {
         .ask(this.conversationThread.id, message, context, undefined)
         .catch(reject);
     });
+  }
+
+  addMessageAttachment(uri?: string, content?: string): string {
+    const attachmentId = randomUUID();
+    this.logEvent({
+      type: 'add-message-attachment',
+      attachmentId,
+      uri,
+      content,
+    });
+    return attachmentId;
+  }
+
+  removeMessageAttachment(attachmentId: string) {
+    this.logEvent({ type: 'remove-message-attachment', attachmentId });
+  }
+
+  getMessageAttachments(): NavieAddMessageAttachmentEvent[] {
+    // Array.lastIndexOf is not supported until es2023.
+    let lastUserMessageIndex = 0;
+    for (let i = lastUserMessageIndex; i < this.log.length; ++i) {
+      const e = this.log[i];
+      if (e.type === 'message' && e.role === 'user') {
+        lastUserMessageIndex = i;
+      }
+    }
+
+    const attachments = new Map<string, NavieAddMessageAttachmentEvent>();
+    for (let i = lastUserMessageIndex + 1; i < this.log.length; ++i) {
+      const e = this.log[i];
+      if (e.type === 'add-message-attachment') {
+        attachments.set(e.attachmentId, e);
+      } else if (e.type === 'remove-message-attachment') {
+        attachments.delete(e.attachmentId);
+      }
+    }
+
+    return Array.from(attachments.values());
   }
 
   /**
