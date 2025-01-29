@@ -15,7 +15,7 @@ import { configureRpcDirectories } from '../lib/handleWorkingDirectory';
 import { explainHandler } from '../rpc/explain/explain';
 import INavie, { INavieProvider } from '../rpc/explain/navie/inavie';
 import LocalNavie from '../rpc/explain/navie/navie-local';
-import RemoteNavie from '../rpc/explain/navie/navie-remote';
+import type RemoteNavie from '../rpc/explain/navie/navie-remote';
 import detectAIEnvVar, { AI_KEY_ENV_VARS } from './index/aiEnvVar';
 import detectCodeEditor from '../lib/detectCodeEditor';
 import { verbose } from '../utils';
@@ -23,6 +23,7 @@ import Trajectory from '../rpc/explain/navie/trajectory';
 import { serveAndOpenNavie } from '../lib/serveAndOpen';
 import RPCServer from './index/rpcServer';
 import { rpcMethods } from './index/rpc';
+import NopNavie from '../rpc/explain/navie/navie-nop';
 
 interface ExplainArgs {
   verbose: boolean;
@@ -136,7 +137,7 @@ export function buildNavieProvider(argv: ExplainArgs) {
     return false;
   };
 
-  const applyAIOptions = (navie: LocalNavie | RemoteNavie) => {
+  const applyAIOptions = (navie: LocalNavie | RemoteNavie | NopNavie) => {
     if (aiOptions) {
       for (const option of aiOptions) {
         const [key, value] = option.split('=');
@@ -183,13 +184,9 @@ export function buildNavieProvider(argv: ExplainArgs) {
     return navie;
   };
 
-  const buildRemoteNavie = (
-    contextProvider: ContextV2.ContextProvider,
-    projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-    helpProvider: Help.HelpProvider
-  ) => {
+  const buildRemoteNavie = () => {
     loadConfiguration(true);
-    const navie = new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
+    const navie = new NopNavie();
     applyAIOptions(navie);
 
     if (argv.threadId) {
