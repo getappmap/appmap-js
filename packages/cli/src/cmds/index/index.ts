@@ -21,10 +21,10 @@ import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
-import RemoteNavie from '../../rpc/explain/navie/navie-remote';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { update } from '../../rpc/file/update';
 import { AI_KEY_ENV_VARS } from './aiEnvVar';
+import NopNavie from '../../rpc/explain/navie/navie-nop';
 
 export const command = 'index';
 export const describe =
@@ -131,11 +131,7 @@ export const handler = async (argv) => {
         navie.on('event', logEvent);
         return navie;
       };
-      const buildRemoteNavie = (
-        contextProvider: ContextV2.ContextProvider,
-        projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-        helpProvider: Help.HelpProvider
-      ) => new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
+      const buildRemoteNavie = () => new NopNavie();
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
 
