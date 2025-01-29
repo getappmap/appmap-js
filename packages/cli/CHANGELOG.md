@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.184.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.183.0...@appland/appmap-v3.184.0) (2025-01-29)
+
+
+### Features
+
+* Add a nop replacement for remote Navie ([42b446e](https://github.com/getappmap/appmap-js/commit/42b446e4267c51d53bf17b004db5fbeb448d48e0))
+
 # [@appland/appmap-v3.183.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.182.0...@appland/appmap-v3.183.0) (2025-01-24)
 
 
