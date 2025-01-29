@@ -131,11 +131,7 @@ export const handler = async (argv) => {
         navie.on('event', logEvent);
         return navie;
       };
-      const buildRemoteNavie = (
-        contextProvider: ContextV2.ContextProvider,
-        projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-        helpProvider: Help.HelpProvider
-      ) => new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
+      const buildRemoteNavie = () => new RemoteNavie();
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
 

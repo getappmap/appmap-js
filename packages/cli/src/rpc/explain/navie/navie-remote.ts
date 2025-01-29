@@ -1,195 +1,24 @@
-import { warn } from 'console';
 import EventEmitter from 'events';
-import { AI } from '@appland/client';
-import { ContextV1, ContextV2, Help, ProjectInfo } from '@appland/navie';
-
-import { verbose } from '../../../utils';
 import { default as INavie } from './inavie';
-import assert from 'assert';
-import { initializeHistory, loadThread } from './historyHelper';
-import Thread from './thread';
-import IHistory from './ihistory';
-
-export class RemtoteCallbackHandler {
-  thread: Thread | undefined;
-  userMessageId: string | undefined;
-  assistantMessageId: string | undefined;
-  tokens: string[] = [];
-
-  constructor(
-    private readonly history: IHistory,
-    private readonly contextProvider: ContextV2.ContextProvider,
-    private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-    private readonly helpProvider: Help.HelpProvider
-  ) {}
-
-  async onAck(
-    assignedUserMessageId: string,
-    threadId: string,
-    question: string,
-    codeSelection?: string,
-    prompt?: string
-  ): Promise<void> {
-    if (verbose())
-      warn(`Explain received ack (userMessageId=${assignedUserMessageId}, threadId=${threadId})`);
-
-    this.thread = await loadThread(this.history, threadId);
-    this.userMessageId = assignedUserMessageId;
-    await this.history.question(threadId, this.userMessageId, question, codeSelection, prompt);
-  }
-
-  async onToken(token: string, messageId: string): Promise<void> {
-    if (!this.assistantMessageId) this.assistantMessageId = messageId;
-
-    this.tokens.push(token);
-
-    if (this.thread && this.userMessageId)
-      await this.history.token(
-        this.thread.threadId,
-        this.userMessageId,
-        this.assistantMessageId,
-        token
-      );
-    else warn(`[remote-navie] Received token but no thread is available to store it`);
-  }
-
-  async onRequestContext(
-    data: Record<string, unknown>
-  ): Promise<Record<string, unknown> | unknown[]> {
-    try {
-      if (data.type === 'search') {
-        const { version } = data;
-        const isVersion1 = !version || version === 1;
-
-        // ContextV2.ContextRequest is a superset of ContextV1.ContextRequest, so whether the input
-        // version is V1 or V2, we can treat it as V2.
-        const contextRequestV2: ContextV2.ContextRequest = data as ContextV2.ContextRequest;
-
-        const responseV2: ContextV2.ContextResponse = await this.contextProvider({
-          ...contextRequestV2,
-          type: 'search',
-          version: 2,
-        });
-
-        if (isVersion1) {
-          // Adapt from V2 response back to V1. Some data may be lost in this process.
-          const responseV1: ContextV1.ContextResponse = {
-            sequenceDiagrams: responseV2
-              .filter((item) => item.type === ContextV2.ContextItemType.SequenceDiagram)
-              .map((item) => item.content),
-            codeSnippets: responseV2
-              .filter((item) => item.type === ContextV2.ContextItemType.CodeSnippet)
-              .reduce((acc, item) => {
-                assert(item.type === ContextV2.ContextItemType.CodeSnippet);
-                if (ContextV2.isFileContextItem(item)) {
-                  acc[item.location] = item.content;
-                }
-                return acc;
-              }, {} as Record<string, string>),
-            codeObjects: responseV2
-              .filter((item) => item.type === ContextV2.ContextItemType.DataRequest)
-              .map((item) => item.content),
-          };
-          return responseV1;
-        } else {
-          return responseV2;
-        }
-      }
-      if (data.type === 'projectInfo') {
-        return (
-          (await this.projectInfoProvider(data as unknown as ProjectInfo.ProjectInfoRequest)) ?? {}
-        );
-      }
-      if (data.type === 'help') {
-        return (await this.helpProvider(data as unknown as Help.HelpRequest)) || {};
-      } else {
-        warn(`Unhandled context request type: ${data.type}`);
-        // A response is required from this function.
-        return {};
-      }
-    } catch (e) {
-      warn(`Explain context function ${JSON.stringify(data)} threw an error: ${e}`);
-      return {};
-    }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  onComplete(): void {
-    if (verbose()) warn(`Explain is complete`);
-  }
-
-  onError(err: Error): void {
-    if (verbose()) warn(`Error handled by Explain: ${err}`);
-  }
-}
 
 export default class RemoteNavie extends EventEmitter implements INavie {
-  private history = initializeHistory();
+  public readonly providerName = 'remote';
 
-  constructor(
-    private contextProvider: ContextV2.ContextProvider,
-    private projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-    private helpProvider: Help.HelpProvider
-  ) {
-    super();
-  }
-
-  get providerName() {
-    return 'remote';
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setOption(key: string, _value: string | number) {
     throw new Error(`RemoteNavie does not support option '${key}'`);
   }
 
-  async ask(threadId: string, question: string, codeSelection?: string, prompt?: string) {
-    const callbackHandler = new RemtoteCallbackHandler(
-      this.history,
-      this.contextProvider,
-      this.projectInfoProvider,
-      this.helpProvider
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ask(_threadId: string, _question: string, _codeSelection?: string, _prompt?: string) {
+    this.emit(
+      'error',
+      new Error(`AppMap is transitioning to a fully open-source model where you bring your own LLM, giving you complete control and ensuring your data stays with you.
+
+With this change, the free hosted service is offline, but you can continue using Navie by configuring your own LLM provider.
+
+For guidance on using other LLM providers such as OpenAI and Copilot, [check out our documentation](https://appmap.io/docs/using-navie-ai/bring-your-own-model.html).`)
     );
-
-    const onAck = async (userMessageId: string, threadId: string) => {
-      await callbackHandler.onAck(userMessageId, threadId, question, codeSelection, prompt);
-
-      this.emit('ack', userMessageId, threadId);
-    };
-
-    const onToken = async (token: string, messageId: string): Promise<void> => {
-      this.emit('token', token, messageId);
-      await callbackHandler.onToken(token, messageId);
-    };
-
-    const onRequestContext = async (
-      data: Record<string, unknown>
-    ): Promise<Record<string, unknown> | unknown[]> => {
-      return await callbackHandler.onRequestContext(data);
-    };
-
-    const onComplete = () => {
-      callbackHandler.onComplete();
-
-      this.emit('complete');
-    };
-
-    const onError = (err: Error) => {
-      callbackHandler.onError(err);
-
-      this.emit('error', err);
-    };
-
-    const callbacksObj = {
-      onAck,
-      onToken,
-      onRequestContext,
-      onComplete,
-      onError,
-    };
-
-    (await AI.connect(callbacksObj)).inputPrompt(
-      { question: question, codeSelection: codeSelection },
-      { threadId, tool: 'explain' }
-    );
+    return Promise.resolve();
   }
 }

@@ -183,13 +183,9 @@ export function buildNavieProvider(argv: ExplainArgs) {
     return navie;
   };
 
-  const buildRemoteNavie = (
-    contextProvider: ContextV2.ContextProvider,
-    projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-    helpProvider: Help.HelpProvider
-  ) => {
+  const buildRemoteNavie = () => {
     loadConfiguration(true);
-    const navie = new RemoteNavie(contextProvider, projectInfoProvider, helpProvider);
+    const navie = new RemoteNavie();
     applyAIOptions(navie);
 
     if (argv.threadId) {
