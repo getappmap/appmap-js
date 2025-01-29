@@ -79,8 +79,6 @@ export namespace NavieRpc {
           */
         };
       }
-      export type ResponseOk = { ok: true };
-      export type ResponseError = { ok: false; error: unknown };
       export namespace SendMessage {
         export const Method = 'v1.navie.thread.sendMessage';
         export type Params = {
@@ -88,7 +86,7 @@ export namespace NavieRpc {
           content: string;
           userContext?: NavieRpc.V1.UserContext.ContextItem[];
         };
-        export type Response = ResponseOk | ResponseError;
+        export type Response = void;
       }
       export namespace PinItem {
         export const Method = 'v1.navie.thread.pinItem';

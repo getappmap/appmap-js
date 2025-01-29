@@ -4,7 +4,10 @@ import { join } from 'node:path';
 import configuration from '../../configuration';
 import { container, inject, injectable, singleton } from 'tsyringe';
 
-const INITIALIZE_SQL = `CREATE TABLE IF NOT EXISTS threads (
+const INITIALIZE_SQL = `
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS threads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   uuid TEXT NOT NULL UNIQUE,
   path TEXT NOT NULL,
@@ -21,7 +24,7 @@ CREATE TABLE IF NOT EXISTS project_directories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   path TEXT NOT NULL,
   thread_id TEXT NOT NULL,
-  FOREIGN KEY(thread_id) REFERENCES threads(uuid),
+  FOREIGN KEY(thread_id) REFERENCES threads(uuid) ON DELETE CASCADE,
   UNIQUE (thread_id, path)
 );
 

@@ -328,6 +328,8 @@ export class Thread {
   }
 
   removeMessageAttachment(attachmentId: string) {
+    // There's no validation that the attachmentId is valid.
+    // This will be up to the client to figure out.
     this.logEvent({ type: 'remove-message-attachment', attachmentId });
   }
 

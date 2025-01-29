@@ -13,18 +13,7 @@ export function navieThreadSendMessageHandler(
       userContext,
     }): Promise<NavieRpc.V1.Thread.SendMessage.Response> {
       const thread = await threadService.getThread(threadId);
-      if (!thread) {
-        const errorMessage = `Thread ${threadId} not found`;
-        console.warn(errorMessage);
-        return { ok: false, error: errorMessage };
-      }
-
-      try {
-        await thread.sendMessage(content, userContext);
-        return { ok: true };
-      } catch (err) {
-        return { ok: false, error: err };
-      }
+      await thread.sendMessage(content, userContext);
     },
   };
 }
