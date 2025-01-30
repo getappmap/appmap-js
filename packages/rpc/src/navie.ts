@@ -131,7 +131,7 @@ export namespace NavieRpc {
         export const Method = 'v1.navie.thread.query';
         export type Params = {
           threadId?: string;
-          maxCreatedAt?: Date;
+          maxCreatedAt?: string; // ISO 8601 date
           orderBy?: 'created_at' | 'updated_at';
           limit?: number;
           offset?: number;
@@ -141,8 +141,8 @@ export namespace NavieRpc {
           id: string;
           path: string;
           title: string;
-          createdAt: Date;
-          updatedAt: Date;
+          created_at: string;
+          updated_at: string;
         }[];
       }
     }

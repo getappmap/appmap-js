@@ -98,5 +98,5 @@ export type TimestampNavieEvent = Timestamp & NavieEvent;
 
 export type PinnedItem = {
   uri?: string;
-  handle?: number;
+  handle?: string;
 };

@@ -21,7 +21,7 @@ import { NavieRpc } from '@appland/rpc';
 import handleReview from '../../explain/review';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type EventListener = (...args: any[]) => void;
+export type EventListener = (...args: any[]) => void;
 
 /**
  * Converts the simplified context format back into the format expected by Navie.
@@ -57,7 +57,7 @@ export class Thread {
   private log: TimestampNavieEvent[] = [];
   private codeBlockId: string | undefined;
   private codeBlockLength: number | undefined;
-  private lastEventWritten: number | undefined;
+  private lastEventWritten = 0;
   private lastTokenBeganCodeBlock = false;
   private static readonly HISTORY_DIRECTORY = join(homedir(), '.appmap', 'navie', 'history');
 
@@ -84,7 +84,7 @@ export class Thread {
 
   private async emitSuggestions(messageId: string) {
     const suggestions = await getSuggestions(
-      this.navieService.getNavieProvider(),
+      this.navieService.navieProvider,
       this.conversationThread.id
     );
     this.logEvent({ type: 'prompt-suggestions', suggestions, messageId });
@@ -133,6 +133,8 @@ export class Thread {
     for (const listener of listeners) {
       this.eventEmitter.removeListener('event', listener);
     }
+
+    this.listeners.delete(clientId);
   }
 
   /**
@@ -149,7 +151,7 @@ export class Thread {
       await writeFile(historyFilePath, serialized.join('\n') + '\n', { flag: 'a' });
       this.lastEventWritten = this.log.length;
     } catch (e) {
-      console.error('Failed to write to history file', e);
+      console.error('failed to write to history file', e);
     }
 
     try {
@@ -165,7 +167,7 @@ export class Thread {
       const threadIndexService = container.resolve(ThreadIndexService);
       threadIndexService.index(this.conversationThread.id, historyFilePath, title);
     } catch (e) {
-      console.error('Failed to update thread index', e);
+      console.error('failed to update thread index', e);
     }
   }
 
@@ -198,10 +200,10 @@ export class Thread {
    */
   private onToken(token: string, messageId: string) {
     const subTokens = token.split(/^(`{3,})\n?/gm);
-    for (const subToken of subTokens) {
+    for (let subToken of subTokens) {
       if (subToken.length === 0) continue;
 
-      const fileMatch = subToken.match(/^<!-- file: (.*) -->/);
+      const fileMatch = subToken.match(/^<!-- file: (.*) -->\s*?\n?/m);
       if (fileMatch) {
         this.codeBlockId = this.codeBlockId ?? randomUUID();
         this.logEvent({
@@ -211,9 +213,13 @@ export class Thread {
             location: fileMatch[1],
           },
         });
-        // Don't emit this token
-        continue;
+
+        // Remove the file directive from the token
+        const index = fileMatch.index ?? 0;
+        subToken = subToken.slice(0, index) + subToken.slice(index + fileMatch[0].length);
+        if (subToken.length === 0) continue;
       }
+
       const language = this.lastTokenBeganCodeBlock ? subToken.match(/^[^\s]+\n/) : null;
       if (language && this.codeBlockId) {
         this.logEvent({
@@ -335,8 +341,8 @@ export class Thread {
 
   getMessageAttachments(): NavieAddMessageAttachmentEvent[] {
     // Array.lastIndexOf is not supported until es2023.
-    let lastUserMessageIndex = 0;
-    for (let i = lastUserMessageIndex; i < this.log.length; ++i) {
+    let lastUserMessageIndex = -1;
+    for (let i = 0; i < this.log.length; ++i) {
       const e = this.log[i];
       if (e.type === 'message' && e.role === 'user') {
         lastUserMessageIndex = i;
@@ -377,7 +383,7 @@ export class Thread {
     const streamingMessages = new Map<string, Navie.Message>();
     for (const event of this.log) {
       if (event.type === 'message') {
-        chatHistory.push(event);
+        chatHistory.push({ role: event.role, content: event.content });
       }
       if (event.type === 'token') {
         let message = streamingMessages.get(event.messageId);

@@ -47,26 +47,19 @@ function contextEvent<
 
 @autoInjectable()
 export default class NavieService {
-  private static NAVIE_PROVIDER = 'INavieProvider';
+  public static NAVIE_PROVIDER = 'INavieProvider';
 
   constructor(
     @inject(ContextService) private readonly contextService: ContextService,
-    @inject(NavieService.NAVIE_PROVIDER) private readonly navieProvider?: INavieProvider
+    @inject(NavieService.NAVIE_PROVIDER) public readonly navieProvider: INavieProvider
   ) {}
 
   static bindNavieProvider(navieProvider?: INavieProvider) {
     container.registerInstance(this.NAVIE_PROVIDER, navieProvider);
   }
 
-  getNavieProvider(): INavieProvider {
-    if (!this.navieProvider) {
-      throw new Error('No navie provider available');
-    }
-    return this.navieProvider;
-  }
-
   getNavie(_navieProvider?: INavieProvider): [INavie, ContextEmitter] {
-    const navieProvider = _navieProvider ?? this.getNavieProvider();
+    const navieProvider = _navieProvider ?? this.navieProvider;
     const contextEmitter = new EventEmitter();
     const navie = navieProvider(
       contextEvent(contextEmitter, 'context', this.contextService.searchContext.bind(this)),

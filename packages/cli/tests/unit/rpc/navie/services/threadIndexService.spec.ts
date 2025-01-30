@@ -5,7 +5,10 @@
 */
 
 import { container } from 'tsyringe';
-import { ThreadIndexService } from '../../../../../src/rpc/navie/services/threadIndexService';
+import {
+  ThreadIndexItem,
+  ThreadIndexService,
+} from '../../../../../src/rpc/navie/services/threadIndexService';
 import sqlite3 from 'better-sqlite3';
 import configuration from '../../../../../src/rpc/configuration';
 
@@ -79,5 +82,114 @@ describe('ThreadIndexService', () => {
       expect(() => threadIndexService.delete(threadId)).not.toThrow();
     });
   });
-  describe('query', () => {});
+  describe('query', () => {
+    const daysAgo = (days: number) => {
+      const d = new Date();
+      d.setDate(d.getDate() - days);
+      return d;
+    };
+
+    const threads = [
+      {
+        id: '00000000-0000-0000-0000-000000000001',
+        path: 'three-days-old.jsonl',
+        title: 'title',
+        createdAt: daysAgo(3),
+        updatedAt: new Date(),
+        projectDirectories: ['/home/user/dev/applandinc/appmap-golang'],
+      },
+      {
+        id: '00000000-0000-0000-0000-000000000000',
+        path: 'one-day-old.jsonl',
+        title: 'title',
+        createdAt: daysAgo(1),
+        updatedAt: new Date(),
+        projectDirectories: ['/home/user/dev/applandinc/appmap-js'],
+      },
+    ];
+
+    const toModel = (t: typeof threads[number]): ThreadIndexItem => {
+      const fixture: Partial<typeof threads[number]> = { ...t };
+      delete fixture.projectDirectories;
+
+      const thread = fixture as typeof threads[number];
+      return {
+        id: thread.id,
+        path: thread.path,
+        title: thread.title,
+        created_at: t.createdAt.toISOString(),
+        updated_at: t.updatedAt.toISOString(),
+      };
+    };
+
+    beforeEach(() => {
+      const insertThread = db.prepare(
+        'INSERT INTO threads (uuid, path, title, created_at, updated_at) VALUES (?, ?, ?, ?, ?)'
+      );
+      const insertProjectDirectory = db.prepare(
+        'INSERT INTO project_directories (thread_id, path) VALUES (?, ?)'
+      );
+      db.transaction(() => {
+        threads.forEach((thread) => {
+          insertThread.run(
+            thread.id,
+            thread.path,
+            thread.title,
+            thread.createdAt.toISOString(),
+            thread.updatedAt.toISOString()
+          );
+          thread.projectDirectories.forEach((projectDirectory) =>
+            insertProjectDirectory.run(thread.id, projectDirectory)
+          );
+        });
+      })();
+    });
+
+    it('returns everything if no options are provided', () => {
+      expect(threadIndexService.query({})).toEqual(threads.map(toModel));
+    });
+
+    it('looks up by uuid', () => {
+      expect(threadIndexService.query({ uuid: threads[1].id })).toEqual([toModel(threads[1])]);
+    });
+
+    it('looks up by max created at', () => {
+      expect(threadIndexService.query({ maxCreatedAt: daysAgo(2) })).toEqual([toModel(threads[1])]);
+    });
+
+    it('can look up by uuid and max created at', () => {
+      // This is an oddity, but its technically possible given the `QueryOptions` interface.
+      expect(threadIndexService.query({ uuid: threads[1].id, maxCreatedAt: daysAgo(2) })).toEqual([
+        toModel(threads[1]),
+      ]);
+    });
+
+    it('orders by', () => {
+      const result = threadIndexService.query({ orderBy: 'created_at' });
+      expect(result).toEqual([...threads].reverse().map(toModel));
+    });
+
+    it('limits', () => {
+      const result = threadIndexService.query({ limit: 1 });
+      expect(result).toEqual(threads.slice(0, 1).map(toModel));
+    });
+
+    it('offsets', () => {
+      const result = threadIndexService.query({ limit: 1, offset: 1 });
+      expect(result).toEqual(threads.slice(1).map(toModel));
+    });
+
+    it('fails if offset is used without a limit', () => {
+      expect(() => threadIndexService.query({ offset: 1 })).toThrowError(
+        'offset cannot be used without a limit'
+      );
+    });
+
+    it('validates orderBy option', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+      expect(() => threadIndexService.query({ orderBy: 'invalid' } as any)).toThrowError(
+        'invalid orderBy option: invalid'
+      );
+    });
+  });
 });

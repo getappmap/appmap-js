@@ -40,18 +40,18 @@ ON CONFLICT (thread_id, path) DO NOTHING`;
 interface QueryOptions {
   uuid?: string;
   maxCreatedAt?: Date;
-  orderBy?: 'created_at' | 'updated_at';
+  orderBy?: 'created_at' | 'updated_at' | 'title';
   limit?: number;
   offset?: number;
   projectDirectories?: string[];
 }
 
-interface ThreadIndexItem {
+export interface ThreadIndexItem {
   id: string;
   path: string;
   title: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
@@ -131,18 +131,25 @@ export class ThreadIndexService {
       params.push(options.uuid);
     }
     if (options.maxCreatedAt) {
-      queryString += ` AND created_at < ?`;
-      params.push(options.maxCreatedAt);
+      const appendKeyword = queryString.includes('WHERE') ? 'AND' : 'WHERE';
+      queryString += ` ${appendKeyword} created_at > ?`;
+      params.push(options.maxCreatedAt.toISOString());
     }
     if (options.orderBy) {
-      queryString += ` ORDER BY ? DESC`;
-      params.push(options.orderBy);
+      if (!['created_at', 'updated_at', 'title'].includes(options.orderBy)) {
+        throw new Error(`invalid orderBy option: ${options.orderBy}`);
+      }
+      // Note that this parameter is not escaped. It's validated directly above.
+      queryString += ` ORDER BY threads.${options.orderBy} DESC`;
     }
     if (options.limit) {
       queryString += ` LIMIT ?`;
       params.push(options.limit);
     }
     if (options.offset) {
+      if (!Number.isInteger(options.limit)) {
+        throw new Error(`offset cannot be used without a limit`);
+      }
       queryString += ` OFFSET ?`;
       params.push(options.offset);
     }
