@@ -6,28 +6,35 @@ import AnthropicCompletionService from './anthropic-completion-service';
 import CompletionService from './completion-service';
 import Trajectory from '../lib/trajectory';
 import MessageTokenReducerService from './message-token-reducer-service';
+import { NavieModel } from '../navie';
+import OllamaCompletionService from './ollama-completion-service';
 
 interface Options {
   modelName: string;
   temperature: number;
   trajectory: Trajectory;
   backend?: Backend;
+  selectedModel?: NavieModel;
 }
 
 const BACKENDS = {
   anthropic: AnthropicCompletionService,
   openai: OpenAICompletionService,
+  ollama: OllamaCompletionService,
   'vertex-ai': GoogleVertexAICompletionService,
 } as const;
 
 type Backend = keyof typeof BACKENDS;
 
-function determineCompletionBackend(): Backend {
-  switch (process.env.APPMAP_NAVIE_COMPLETION_BACKEND) {
+function determineCompletionBackend(
+  provider = process.env.APPMAP_NAVIE_COMPLETION_BACKEND
+): Backend {
+  switch (provider) {
     case 'anthropic':
     case 'openai':
     case 'vertex-ai':
-      return process.env.APPMAP_NAVIE_COMPLETION_BACKEND;
+    case 'ollama':
+      return provider;
     default:
     // pass
   }
@@ -43,9 +50,15 @@ export default function createCompletionService({
   modelName,
   temperature,
   trajectory,
-  backend = determineCompletionBackend(),
+  selectedModel,
+  backend = determineCompletionBackend(selectedModel?.provider),
 }: Options): CompletionService {
   const messageTokenReducerService = new MessageTokenReducerService();
   warn(`Using completion service ${backend}`);
-  return new BACKENDS[backend](modelName, temperature, trajectory, messageTokenReducerService);
+  return new BACKENDS[backend](
+    selectedModel?.id ?? modelName,
+    temperature,
+    trajectory,
+    messageTokenReducerService
+  );
 }
