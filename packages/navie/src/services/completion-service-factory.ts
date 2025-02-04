@@ -6,11 +6,13 @@ import AnthropicCompletionService from './anthropic-completion-service';
 import CompletionService from './completion-service';
 import Trajectory from '../lib/trajectory';
 import MessageTokenReducerService from './message-token-reducer-service';
+import { NavieHeaders } from '../lib/navie-headers';
 
 interface Options {
   modelName: string;
   temperature: number;
   trajectory: Trajectory;
+  headers: NavieHeaders;
   backend?: Backend;
 }
 
@@ -43,9 +45,16 @@ export default function createCompletionService({
   modelName,
   temperature,
   trajectory,
+  headers,
   backend = determineCompletionBackend(),
 }: Options): CompletionService {
   const messageTokenReducerService = new MessageTokenReducerService();
   warn(`Using completion service ${backend}`);
-  return new BACKENDS[backend](modelName, temperature, trajectory, messageTokenReducerService);
+  return new BACKENDS[backend](
+    modelName,
+    temperature,
+    trajectory,
+    messageTokenReducerService,
+    headers
+  );
 }

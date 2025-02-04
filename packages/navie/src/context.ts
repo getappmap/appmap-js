@@ -77,12 +77,24 @@ export namespace ContextV2 {
     location: string;
   };
 
+  export type AppMapContextItem = ContextItem & {
+    type: ContextItemType.DataRequest | ContextItemType.SequenceDiagram;
+    directory: string;
+    location: string;
+  };
+
   export function isFileContextItem(contextItem: ContextItem): contextItem is FileContextItem {
     return (
       contextItem.type === ContextItemType.CodeSnippet ||
       contextItem.type === ContextItemType.SequenceDiagram ||
       contextItem.type === ContextItemType.DataRequest ||
       contextItem.type === ContextItemType.DirectoryListing
+    );
+  }
+
+  export function isAppMapContextItem(contextItem: ContextItem): contextItem is AppMapContextItem {
+    return [ContextItemType.DataRequest, ContextItemType.SequenceDiagram].includes(
+      contextItem.type
     );
   }
 

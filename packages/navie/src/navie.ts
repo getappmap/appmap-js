@@ -7,6 +7,7 @@ import VectorTermsService from './services/vector-terms-service';
 import InteractionHistory, {
   AgentSelectionEvent,
   ClassificationEvent,
+  ContextLookupEvent,
   InteractionEvent,
 } from './interaction-history';
 import { ContextV2 } from './context';
@@ -39,6 +40,7 @@ import SuggestCommand from './commands/suggest-command';
 import ObserveCommand from './commands/observe-command';
 import ReviewCommand from './commands/review-command';
 import WelcomeCommand from './commands/welcome-command';
+import { NavieHeaders, NavieRequestMetadata } from './lib/navie-headers';
 
 export type ChatHistory = Message[];
 
@@ -70,6 +72,11 @@ export class NavieOptions {
   tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? DEFAULT_TOKEN_LIMIT);
   temperature = Number(process.env.APPMAP_NAVIE_TEMPERATURE ?? DEFAULT_TEMPERATURE);
   responseTokens = Number(process.env.APPMAP_NAVIE_RESPONSE_TOKENS ?? DEFAULT_RESPONSE_TOKENS);
+  metadata?: NavieRequestMetadata;
+
+  constructor(options: Partial<NavieOptions> = {}) {
+    Object.assign(this, options);
+  }
 }
 
 export default function navie(
@@ -90,7 +97,21 @@ export default function navie(
 
   const interactionHistory = new InteractionHistory();
 
-  const completionService = createCompletionService({ ...options, trajectory });
+  let { question } = clientRequest;
+  question = question.trim();
+
+  let commandName = CommandMode.Explain;
+  for (const commandMode of Object.values(CommandMode)) {
+    const prefix = `@${commandMode} `;
+    if (question.startsWith(prefix) || question.split('\n')[0].trim() === `@${commandMode}`) {
+      commandName = commandMode;
+      question = question.slice(prefix.length);
+      break;
+    }
+  }
+
+  const headers = new NavieHeaders(interactionHistory, options, commandName);
+  const completionService = createCompletionService({ ...options, headers, trajectory });
 
   const classificationService = new ClassificationService(interactionHistory, completionService);
 
@@ -194,21 +215,7 @@ export default function navie(
     [CommandMode.Welcome]: buildWelcomeCommand,
   };
 
-  let { question } = clientRequest;
-  question = question.trim();
-
-  let commandName = CommandMode.Explain;
-  for (const commandMode of Object.values(CommandMode)) {
-    const prefix = `@${commandMode} `;
-    if (question.startsWith(prefix) || question.split('\n')[0].trim() === `@${commandMode}`) {
-      commandName = commandMode;
-      question = question.slice(prefix.length);
-      break;
-    }
-  }
-
   const command = commandBuilders[commandName]();
-
   const { options: userOptions, question: questionText } = parseOptions(question);
 
   // some models balk at empty questions, so use the command name if the question is empty

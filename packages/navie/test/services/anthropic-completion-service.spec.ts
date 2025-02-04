@@ -7,12 +7,16 @@ import { z } from 'zod';
 import { RunnableBinding } from '@langchain/core/runnables';
 import Trajectory, { TrajectoryEvent } from '../../src/lib/trajectory';
 import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
+import { NavieHeaders } from '../../src/lib/navie-headers';
+import { NavieOptions } from '../../src/navie';
+import { CommandMode } from '../../src/command';
 
 describe('AnthropicCompletionService', () => {
   let interactionHistory: InteractionHistory;
   let messageTokenReducerService: MessageTokenReducerService;
   let trajectory: Trajectory;
   let service: AnthropicCompletionService;
+  let headers: NavieHeaders;
   const modelName = 'anthropic-model';
   const temperature = 0.3;
 
@@ -23,11 +27,19 @@ describe('AnthropicCompletionService', () => {
     interactionHistory = new InteractionHistory();
     messageTokenReducerService = new MessageTokenReducerService();
     trajectory = new Trajectory();
+    headers = new NavieHeaders(
+      interactionHistory,
+      new NavieOptions({
+        metadata: { product: 'navie-test', version: '0.0.0', codeEditor: 'vscode' },
+      }),
+      CommandMode.Explain
+    );
     service = new AnthropicCompletionService(
       modelName,
       temperature,
       trajectory,
-      messageTokenReducerService
+      messageTokenReducerService,
+      headers
     );
   });
 

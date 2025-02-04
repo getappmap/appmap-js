@@ -17,6 +17,7 @@ import CompletionService, {
 import Trajectory from '../lib/trajectory';
 import { APIError } from 'openai';
 import MessageTokenReducerService from './message-token-reducer-service';
+import { NavieHeaders } from '../lib/navie-headers';
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -175,7 +176,8 @@ export default class OpenAICompletionService implements CompletionService {
     public readonly modelName: string,
     public readonly temperature: number,
     private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService
+    private readonly messageTokenReducerService: MessageTokenReducerService,
+    private readonly headers: NavieHeaders
   ) {
     this.model = new ChatOpenAI({
       modelName: this.modelName,
@@ -224,12 +226,15 @@ export default class OpenAICompletionService implements CompletionService {
       const sentMessages = mergeSystemMessages([...messages, schemaPrompt(jsonSchema)]);
       for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
-      return this.model.completionWithRetry({
-        messages: sentMessages,
-        model: options?.model ?? this.modelName,
-        stream: false,
-        temperature: options?.temperature,
-      });
+      return this.model.completionWithRetry(
+        {
+          messages: sentMessages,
+          model: options?.model ?? this.modelName,
+          stream: false,
+          temperature: options?.temperature,
+        },
+        { headers: this.headers.buildHeaders() }
+      );
     };
     // If using the OpenAI API, use the structured output response format.
     // This method unlikely to generate failure cases.
@@ -239,15 +244,18 @@ export default class OpenAICompletionService implements CompletionService {
       if (!schemaSupported) sentMessages.push(schemaPrompt(jsonSchema));
       for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
-      return this.model.completionWithRetry({
-        messages: sentMessages,
-        model: options?.model ?? this.miniModelName,
-        stream: false,
-        temperature: options?.temperature,
-        response_format: schemaSupported
-          ? zodResponseFormat(schema, 'requestedObject')
-          : { type: jsonSchema.type === 'object' ? 'json_object' : 'text' },
-      });
+      return this.model.completionWithRetry(
+        {
+          messages: sentMessages,
+          model: options?.model ?? this.miniModelName,
+          stream: false,
+          temperature: options?.temperature,
+          response_format: schemaSupported
+            ? zodResponseFormat(schema, 'requestedObject')
+            : { type: jsonSchema.type === 'object' ? 'json_object' : 'text' },
+        },
+        { headers: this.headers.buildHeaders() }
+      );
     };
 
     const maxRetries = options?.maxRetries ?? 3;
@@ -287,7 +295,7 @@ export default class OpenAICompletionService implements CompletionService {
           const parsed = JSON.parse(sanitizedContent) as unknown;
           schema.parse(parsed);
           return parsed;
-        } catch (e) {
+        } catch {
           // fall through
         }
       }
@@ -318,19 +326,25 @@ export default class OpenAICompletionService implements CompletionService {
     const fetchResponse = async () => {
       return isO1
         ? // o1 currently doesn't support streaming or temperatures != 1
-          this.model.completionWithRetry({
-            messages: sentMessages,
-            model,
-            stream: false,
-            temperature: 1,
-          })
-        : this.model.completionWithRetry({
-            messages: sentMessages,
-            model,
-            stream: true,
-            temperature: options?.temperature,
-            stream_options: { include_usage: true },
-          });
+          this.model.completionWithRetry(
+            {
+              messages: sentMessages,
+              model,
+              stream: false,
+              temperature: 1,
+            },
+            { headers: this.headers.buildHeaders() }
+          )
+        : this.model.completionWithRetry(
+            {
+              messages: sentMessages,
+              model,
+              stream: true,
+              temperature: options?.temperature,
+              stream_options: { include_usage: true },
+            },
+            { headers: this.headers.buildHeaders() }
+          );
     };
 
     for (let attempt = 0; attempt < CompletionRetries; attempt++) {

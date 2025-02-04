@@ -16,6 +16,7 @@ import CompletionService, {
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
 import MessageTokenReducerService from './message-token-reducer-service';
+import { NavieHeaders } from '../lib/navie-headers';
 
 /*
   Generated on https://docs.anthropic.com/en/docs/about-claude/models with
@@ -110,7 +111,8 @@ export default class AnthropicCompletionService implements CompletionService {
     public readonly modelName: string,
     public readonly temperature: number,
     private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService
+    private readonly messageTokenReducerService: MessageTokenReducerService,
+    private readonly headers: NavieHeaders
   ) {
     this.model = this.buildModel({ temperature });
   }
@@ -127,6 +129,9 @@ export default class AnthropicCompletionService implements CompletionService {
       modelName: options?.model ?? this.modelName,
       temperature: options?.temperature ?? this.temperature,
       streaming: options?.streaming ?? true,
+      clientOptions: {
+        defaultHeaders: this.headers.buildHeaders(),
+      },
     });
   }
 

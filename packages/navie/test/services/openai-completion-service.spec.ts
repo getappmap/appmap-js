@@ -8,6 +8,9 @@ import Message from '../../src/message';
 import { PromptType } from '../../src/prompt';
 import { APIError } from 'openai';
 import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
+import { NavieHeaders } from '../../src/lib/navie-headers';
+import { NavieOptions } from '../../src/navie';
+import { CommandMode } from '../../src/command';
 
 jest.mock('@langchain/openai');
 
@@ -16,6 +19,7 @@ describe('OpenAICompletionService', () => {
   let messageTokenReducerService: MessageTokenReducerService;
   let service: OpenAICompletionService;
   let trajectory: Trajectory;
+  let headers: NavieHeaders;
   const modelName = 'the-model-name';
   const temperature = 0.2;
 
@@ -23,11 +27,19 @@ describe('OpenAICompletionService', () => {
     interactionHistory = new InteractionHistory();
     messageTokenReducerService = new MessageTokenReducerService();
     trajectory = new Trajectory();
+    headers = new NavieHeaders(
+      interactionHistory,
+      new NavieOptions({
+        metadata: { product: 'navie-test', version: '0.0.0', codeEditor: 'vscode' },
+      }),
+      CommandMode.Explain
+    );
     service = new OpenAICompletionService(
       modelName,
       temperature,
       trajectory,
-      messageTokenReducerService
+      messageTokenReducerService,
+      headers
     );
   });
 
@@ -146,7 +158,9 @@ describe('OpenAICompletionService', () => {
       it('completes the question', async () => {
         await complete({ temperature: 0.5 });
         expect(completionWithRetry).toHaveBeenCalledWith(
-          expect.objectContaining({ temperature: 0.5 })
+          expect.objectContaining({ temperature: 0.5 }),
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          { headers: expect.any(Object) }
         );
       });
     });
@@ -194,7 +208,9 @@ describe('OpenAICompletionService', () => {
           ],
           temperature: options.temperature,
           model: service.miniModelName,
-        })
+        }),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        { headers: expect.any(Object) }
       );
     });
 
@@ -277,7 +293,16 @@ describe('OpenAICompletionService', () => {
                 ),
               },
             ],
-          })
+          }),
+          {
+            headers: {
+              'user-agent': `navie-test/0.0.0 (${process.platform}-${process.arch}; ${process.release.name} ${process.versions.node}) vscode`,
+              'x-appmap-navie-command': 'explain',
+              'x-appmap-navie-model': 'gpt-4o',
+              'x-appmap-navie-request-id': headers.requestId,
+              'x-appmap-navie-runtime-refs': '0',
+            },
+          }
         );
       });
 
