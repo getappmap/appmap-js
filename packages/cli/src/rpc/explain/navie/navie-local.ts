@@ -18,6 +18,8 @@ import assert from 'assert';
 import { initializeHistory, loadThread } from './historyHelper';
 import { THREAD_ID_REGEX } from './history';
 import Trajectory from './trajectory';
+import detectCodeEditor from '../../../lib/detectCodeEditor';
+import getPackageVersion from '../../../lib/packageVersion';
 
 const OPTION_SETTERS: Record<
   string,
@@ -38,7 +40,13 @@ const OPTION_SETTERS: Record<
 };
 
 export default class LocalNavie extends EventEmitter implements INavie {
-  public navieOptions = new Navie.NavieOptions();
+  public navieOptions = new Navie.NavieOptions({
+    metadata: {
+      product: 'AppMap Navie',
+      version: getPackageVersion(),
+      codeEditor: detectCodeEditor(),
+    },
+  });
   public trajectory: Trajectory | undefined;
 
   assignedThreadId: string | undefined;
