@@ -6,6 +6,7 @@ import { ContextV2 } from '@appland/navie';
 import { isBinaryFile } from '@appland/search';
 
 import { verbose } from '../../utils';
+import ContentRestrictions from './ContentRestrictions';
 import Location from './location';
 
 export type LocationContextRequest = {
@@ -62,12 +63,20 @@ export default async function collectLocationContext(
     );
 
   for (const { location, directory } of candidateLocations) {
-    let pathTokens: string[] = [];
+    const path = join(directory, location.path);
 
-    if (isAbsolute(location.path)) pathTokens = [location.path];
-    else if (directory) pathTokens = [directory, location.path].filter(Boolean);
+    if (ContentRestrictions.instance.safeRestricted(directory, location.path)) {
+      if (verbose()) warn(`[location-context] Skipping restricted location: ${path}`);
+      result.push({
+        type: ContextV2.ContextItemType.CodeSnippet,
+        // TODO: tell the client out of band
+        content: '[file content access denied by security policy]',
+        location: location.toString(),
+        directory,
+      });
+      continue;
+    }
 
-    const path = join(...pathTokens);
     const stats = await stat(path).catch(() => undefined);
     if (!stats) {
       if (verbose()) warn(`[location-context] Skipping non-existent location: ${path}`);
