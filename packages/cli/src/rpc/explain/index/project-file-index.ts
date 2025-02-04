@@ -18,6 +18,8 @@ import { fileNameMatchesFilterPatterns } from './filter-patterns';
 
 import buildIndexInTempDir, { CloseableIndex } from './build-index-in-temp-dir';
 
+import ContentRestrictions from '../ContentRestrictions';
+
 const debug = makeDebug('appmap:index:project-files');
 
 function fileFilter(
@@ -33,6 +35,11 @@ function fileFilter(
 
     const includeFile = fileNameMatchesFilterPatterns(path, includePatterns, excludePatterns);
     if (!includeFile) return false;
+
+    if (ContentRestrictions.instance.safeRestricted(path)) {
+      debug('Skipping restricted file: %s', path);
+      return false;
+    }
 
     const isData = isDataFile(path);
     if (isData && (await isLargeFile(path))) {
