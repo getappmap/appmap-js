@@ -1,3 +1,10 @@
+# [@appland/search-v1.1.3](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.1.2...@appland/search-v1.1.3) (2025-02-05)
+
+
+### Bug Fixes
+
+* Snippet paths are URI encoded ([088ac7e](https://github.com/getappmap/appmap-js/commit/088ac7eb22dceadd320ae1a162ee8d7290f88b9b))
+
 # [@appland/search-v1.1.2](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.1.1...@appland/search-v1.1.2) (2025-01-23)
 
 
