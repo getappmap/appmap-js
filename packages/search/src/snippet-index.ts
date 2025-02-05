@@ -60,7 +60,10 @@ export type SnippetId = {
 export function fileChunkSnippetId(filePath: string, startLine?: number): SnippetId {
   return {
     type: 'file-chunk',
-    id: [filePath, startLine].filter(Boolean).join(':'),
+    id: [filePath, startLine]
+      .filter((t): t is string | number => Boolean(t))
+      .map(encodeURIComponent)
+      .join(':'),
   };
 }
 
@@ -75,7 +78,7 @@ export function parseFileChunkSnippetId(snippetId: SnippetId): {
   assert(filePath);
   const startLine = parts.shift();
   return {
-    filePath: filePath,
+    filePath: decodeURIComponent(filePath),
     startLine: startLine ? parseInt(startLine, 10) : undefined,
   };
 }
