@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.185.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.184.0...@appland/appmap-v3.185.0) (2025-02-05)
+
+
+### Features
+
+* Add basic memory persistence to Windows ([e5402af](https://github.com/getappmap/appmap-js/commit/e5402af09e693de5e482df2b22133aba95b15b13))
+* Support for file exclusion patterns in Navie ([2d1dcdf](https://github.com/getappmap/appmap-js/commit/2d1dcdf8caea5338be33da71ecb73900f0aa6882))
+
 # [@appland/appmap-v3.184.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.183.0...@appland/appmap-v3.184.0) (2025-01-29)
 
 
