@@ -5,7 +5,7 @@ import { NavieHeaders } from '../../src/lib/navie-headers';
 import { NavieOptions } from '../../src/navie';
 
 describe('NavieHeaders', () => {
-  describe('x-appmap-navie-runtime-refs', () => {
+  describe('x-appmap-navie-appmap-count', () => {
     it('collects appmap data references', () => {
       const history = new InteractionHistory();
       const headers = new NavieHeaders(history, new NavieOptions(), CommandMode.Explain);
@@ -32,14 +32,14 @@ describe('NavieHeaders', () => {
         ])
       );
       const result = headers.buildHeaders();
-      expect(result['x-appmap-navie-runtime-refs']).toEqual('2');
+      expect(result['x-appmap-navie-appmap-count']).toEqual('2');
     });
 
     it('is zero when no appmap data references are found', () => {
       const history = new InteractionHistory();
       const headers = new NavieHeaders(history, new NavieOptions(), CommandMode.Explain);
       const result = headers.buildHeaders();
-      expect(result['x-appmap-navie-runtime-refs']).toEqual('0');
+      expect(result['x-appmap-navie-appmap-count']).toEqual('0');
     });
   });
 

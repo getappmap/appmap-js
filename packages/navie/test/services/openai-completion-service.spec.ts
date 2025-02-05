@@ -300,7 +300,8 @@ describe('OpenAICompletionService', () => {
               'x-appmap-navie-command': 'explain',
               'x-appmap-navie-model': 'gpt-4o',
               'x-appmap-navie-request-id': headers.requestId,
-              'x-appmap-navie-runtime-refs': '0',
+              'x-appmap-navie-appmap-count': '0',
+              'x-appmap-navie-token-limit': '8000',
             },
           }
         );

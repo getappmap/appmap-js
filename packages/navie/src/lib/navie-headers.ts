@@ -21,6 +21,10 @@ export interface NavieRequestMetadata {
 
   // The @-command requested by the user.
   command?: string;
+
+  // Navie's token limit when serving the request. Not necessarily the same as the model's
+  // maximum token limit.
+  tokenLimit?: number;
 }
 
 export class NavieHeaders {
@@ -33,6 +37,7 @@ export class NavieHeaders {
     this.metadata.model ||= {};
     this.metadata.model.name = options.modelName;
     this.metadata.command = command;
+    this.metadata.tokenLimit = options.tokenLimit;
 
     interactionHistory.on('event', (event: InteractionEvent) => {
       if (event.type === 'contextLookup') {
@@ -56,8 +61,9 @@ export class NavieHeaders {
       'user-agent': userAgent,
       'x-appmap-navie-request-id': this.requestId,
       'x-appmap-navie-model': this.metadata.model?.name,
-      'x-appmap-navie-runtime-refs': this.appmapReferences.size,
+      'x-appmap-navie-appmap-count': this.appmapReferences.size,
       'x-appmap-navie-command': this.metadata.command,
+      'x-appmap-navie-token-limit': this.metadata.tokenLimit,
     })
       .filter((e): e is [string, string] => e[1] !== undefined)
       .reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {});
