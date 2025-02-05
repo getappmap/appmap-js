@@ -1,7 +1,11 @@
 import { strict as assert } from 'assert';
 import sqlite3 from 'better-sqlite3';
 
-import SnippetIndex, { SnippetId } from '../src/snippet-index';
+import SnippetIndex, {
+  fileChunkSnippetId,
+  parseFileChunkSnippetId,
+  SnippetId,
+} from '../src/snippet-index';
 import { generateSessionId, SessionId } from '../src/session-id';
 
 type SnippetBoost = {
@@ -120,6 +124,34 @@ describe('SnippetIndex', () => {
 
       boostRecords = db.prepare('SELECT * FROM snippet_boost').all() as SnippetBoost[];
       expect(boostRecords.length).toEqual(0);
+    });
+  });
+
+  describe('fileChunkSnippetId', () => {
+    it('url encodes file paths', () => {
+      const startLine = 10;
+      const filePath = 'C:\\Users\\user\\Documents\\file.txt';
+      const snippetId = fileChunkSnippetId(filePath, startLine);
+      expect(snippetId).toStrictEqual({
+        type: 'file-chunk',
+        id: `${encodeURIComponent(filePath)}:${startLine}`,
+      });
+    });
+  });
+
+  describe('parseFileChunkSnippetId', () => {
+    it('parses a file-chunk snippet identifier with a windows path', () => {
+      const filePath = 'C:\\Users\\user\\Documents\\file.txt';
+      const startLine = 24;
+      expect(
+        parseFileChunkSnippetId({
+          type: 'file-chunk',
+          id: `${encodeURIComponent('C:\\Users\\user\\Documents\\file.txt')}:${startLine}`,
+        })
+      ).toStrictEqual({
+        filePath,
+        startLine,
+      });
     });
   });
 });
