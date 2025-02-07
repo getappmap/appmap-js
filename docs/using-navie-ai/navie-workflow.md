@@ -2,15 +2,15 @@
 layout: docs
 title: Docs - AppMap Navie
 description: "Learn how to use AppMap Navie to provide personalized code analysis. Generate AppMap Data, ask Navie questions, analyze code, and iterate for optimal results."
-name: Using Navie for Solving Issues
-step: 3
+name: Navie Command Workflow
+step: 4
 navie: true
 toc: true
 redirect_from: [/docs/guides/navie-best-practices, /docs/navie/using-navie]
 ---
-# Using Navie for Solving Issues
+# Navie Command Workflow
 
-AppMap Navie is designed to help developers solve issues and add features in their codebase by leveraging runtime data and AI-driven commands. By following a structured workflow, you can maximize Navie’s capabilities to plan, generate, and verify your code changes with precision. This guide outlines the recommended workflow and provides an overview of the key command modes used throughout the process.
+AppMap Navie is designed to help you solve issues and add features in your codebase by leveraging runtime data and AI-driven commands. By following a structured workflow, you can maximize Navie’s capabilities to plan, generate, and verify your code changes with precision. This guide outlines the recommended workflow and provides an overview of the key command modes used throughout the process.
 
 ## Recommended Workflow
 
@@ -35,7 +35,6 @@ The @diagram command prompts Navie to create visual diagrams such as sequence di
 
 6. **@review**  
    Finally, the @review command allows you to compare the newly generated code with your existing codebase, ensuring that the changes are in line with the desired functionality and do not introduce regressions.
-
 
 
 #### Step-by-Step Example of Solving an Issue with Navie

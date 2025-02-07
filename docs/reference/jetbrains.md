@@ -10,6 +10,8 @@ step: 3
 
 # AppMap for JetBrains
 
+- [Settings](#settings)
+  - [LLM Key Settings](#llm-key-settings)
 - [AppMap tool window](#appmap-tool-window)
 - ["Start with AppMap" for Java](#start-with-appmap-for-java)
   - [Create AppMap Data from JUnit test runs](#create-appmap-data-from-junit-test-runs)
@@ -22,6 +24,31 @@ step: 3
   - [Enable Debug Logging](#enable-debug-logging)
   - [Downloading Plugin Logs](#downloading-plugin-logs)
 - [GitHub Repository](#github-repository)
+
+## Settings
+
+### LLM Key Settings
+
+In JetBrains, go to settings.
+
+<img class="video-screenshot" alt="a screenshot of the JetBrains menu" src="/assets/img/docs/goto-intellij-settings.webp" />
+
+Go to _Tools_ → _AppMap_.
+
+<img class="video-screenshot" alt="a screenshot of the AppMap settings in JetBrains" src="/assets/img/docs/intellij-tools-appmap-settings.webp"/>
+
+Enter the environment editor.
+<img class="video-screenshot" alt="a screenshot of the entering the AppMap environment editor in JetBrains" src="/assets/img/docs/intellij-enter-env-editor.webp"/>
+
+Use the editor to define the relevant environment variables according to the [LLM Configuration](/docs/using-navie-ai/choose-llm-provider) instructions.
+
+<img class="video-screenshot" alt="a screenshot of the environment editor in JetBrains" src="/assets/img/docs/intellij-env-editor.webp" />
+
+**Reload your IDE for the changes to take effect.**
+
+After reloading you can confirm the model is configured correctly in the Navie Chat window.
+
+<img class="video-screenshot" src="/assets/img/product/navie-confirm-ui-jetbrains.webp"/>
 
 ## AppMap tool window
 
@@ -43,7 +70,7 @@ AppMap tool window actions:
 
 Installing the AppMap JetBrains plugin adds custom buttons and menu options to the JetBrains editor interface. These can be used to run your Java application code with AppMap automatically configured, saving you from manually changing your Maven or Gradle settings. This is the recommended approach for all Java users using JetBrains editors like IntelliJ.
 
-For example, if you right click on your main class file you'll see a new menu item under "More Run/Debug" to `Start with AppMap`. Selecting this option will start your application with the AppMap libraries enabled.  From here, you can interact with your application to generate [request recordings](/docs/reference/appmap-java.html#requests-recording) or use [remote recording](#remote-recording)
+For example, if you right click on your main class file you'll see a new menu item under "More Run/Debug" to `Start with AppMap`. Selecting this option will start your application with the AppMap libraries enabled. From here, you can interact with your application to generate [request recordings](/docs/reference/appmap-java.html#requests-recording) or use [remote recording](#remote-recording)
 
 <img class="intellij-screenshot" src="/assets/img/jetbrains-run-main-with-appmap.webp"/>
 
@@ -55,18 +82,15 @@ You can also use this custom button to run a specific test or group of tests wit
 
 Use the "Start with AppMap" button to start your run configurations with AppMap enabled.
 
-For JetBrains versions ***2024.1 and earlier*** the "Start with AppMap" button is in the main toolbar. 
+For JetBrains versions **_2024.1 and earlier_** the "Start with AppMap" button is in the main toolbar.
 
 <img class="intellij-screenshot" src="/assets/img/appmap-icon-in-main-toolbar.png"/>
 
-For JetBrains versions ***2024.2 and later*** the "Start with AppMap" button is located in a dropdown menu, accessible by clicking on the vertical dots.
+For JetBrains versions **_2024.2 and later_** the "Start with AppMap" button is located in a dropdown menu, accessible by clicking on the vertical dots.
 
 <img class="intellij-screenshot" src="/assets/img/jetbrains-new-ui-dot-menu.png"/>
 
-
 ### Demo video: Recording AppMap Data from a Java application
-
-
 
 {% include vimeo.html id='916087828' %}
 
@@ -75,7 +99,7 @@ For JetBrains versions ***2024.2 and later*** the "Start with AppMap" button is 
 1. [Install the JetBrains plugin](https://plugins.jetbrains.com/plugin/16701-appmap) if you haven't already.
 2. Open your test file in the editor. Each method marked with JUnit's `@Test` annotation will produce an AppMap.
 3. Run the test(s) with AppMap by clicking the icon next to the test class and then selecting "Start with AppMap", or by clicking the AppMap run configuration button:
-<img class="intellij-screenshot" src="/assets/img/run-config-test.png"/>
+   <img class="intellij-screenshot" src="/assets/img/run-config-test.png"/>
 
 #### Disable specific JUnit tests
 
@@ -89,58 +113,58 @@ When you run a Java application with the AppMap agent, [remote recording](/docs/
 1. [Install the JetBrains plugin](https://plugins.jetbrains.com/plugin/16701-appmap) if you haven't already.
 2. Open your application file in the editor.
 3. Run your application with AppMap by clicking the icon next to the main class you wish to run and then selecting "Start with AppMap", or by clicking the AppMap run configuration button:
-<img class="intellij-screenshot" src="/assets/img/run-config-start.png"/>
-1. With the application running, follow the [remote recording](#remote-recording) instructions below to (starting at step 3) create AppMap Data.
+   <img class="intellij-screenshot" src="/assets/img/run-config-start.png"/>
+4. With the application running, follow the [remote recording](#remote-recording) instructions below to (starting at step 3) create AppMap Data.
 
 ## Remote recording
 
-You can make a [remote recording](../recording-methods#remote-recording) from within the JetBrains IDE. 
+You can make a [remote recording](../recording-methods#remote-recording) from within the JetBrains IDE.
 
 1. [Install the JetBrains plugin](https://plugins.jetbrains.com/plugin/16701-appmap) if you haven't already.
 2. Start your application with remote recording enabled. For Java, [run your Java application with AppMap](#running-a-java-application-with-appmap). For other languages, consult the [agent reference](/docs/reference) for details.
-3. To start a recording, click the remote recording button, or use the command **Start AppMap recording**. 
-<img class="intellij-screenshot" src="/assets/img/docs/intellij-remote-start.png"/>
+3. To start a recording, click the remote recording button, or use the command **Start AppMap recording**.
+   <img class="intellij-screenshot" src="/assets/img/docs/intellij-remote-start.png"/>
 4. Enter the URL where your application is running.
-<img class="intellij-screenshot" src="/assets/img/docs/intellij-remote-url.png"/>
-5. Interact with your app through its UI or API. Then click the button to stop the recording, or use the command **Stop AppMap recording**. 
-<img class="intellij-screenshot" src="/assets/img/docs/intellij-remote-stop.png"/>
+   <img class="intellij-screenshot" src="/assets/img/docs/intellij-remote-url.png"/>
+5. Interact with your app through its UI or API. Then click the button to stop the recording, or use the command **Stop AppMap recording**.
+   <img class="intellij-screenshot" src="/assets/img/docs/intellij-remote-stop.png"/>
 6. You'll be prompted to save the AppMap to a file, and it will be opened.
-<img class="intellij-screenshot" src="/assets/img/docs/intellij-remote-save.png"/>
+   <img class="intellij-screenshot" src="/assets/img/docs/intellij-remote-save.png"/>
 
 For more details about remote recording, see:
 
-* [Recording methods > Remote recording](/docs/recording-methods)
-* [Remote recording API](../reference/remote-recording-api)
+- [Recording methods > Remote recording](/docs/recording-methods)
+- [Remote recording API](../reference/remote-recording-api)
 
 ## AppMap Plugin actions
 
 To open the list of AppMap plugin actions, press `CTRL+SHIFT+A` on Windows and Linux, or `COMMAND+SHIFT+A` on macOS, and type `AppMap`. You can also find these actions at `Tools > AppMap` of the main menu.
 
-The command names should be self-explanatory. 
+The command names should be self-explanatory.
 
 ## Generate OpenAPI Definitions
 
-After [recording AppMap Data](/docs/recording-methods.html) for your project, select "Generate OpenAPI" from the AppMap instructions quick start in the lower right hand column. 
+After [recording AppMap Data](/docs/recording-methods.html) for your project, select "Generate OpenAPI" from the AppMap instructions quick start in the lower right hand column.
 
 ![Generate OpenAPI Link](/assets/img/openapi/jetbrains-1.webp)
 
 Selecting the "Generate OpenAPI Definitions" button will open a new file with your OpenAPI definition document to save locally, share with your team or use with 3rd party API management tools [like Postman](https://blog.postman.com/new-postman-integration-with-appmap-create-and-manage-always-accurate-collections/)
 
-![OpenAPI Generation Screen](/assets/img/openapi/jetbrains-2.webp)  
+![OpenAPI Generation Screen](/assets/img/openapi/jetbrains-2.webp)
 
 ## Troubleshooting
 
 ### Enable Debug Logging
 
-You can enable debug logging of the AppMap plugin in your JetBrains code editor by first opening `Help` > `Diagnostic Tools` > `Debug Log Settings`. 
+You can enable debug logging of the AppMap plugin in your JetBrains code editor by first opening `Help` > `Diagnostic Tools` > `Debug Log Settings`.
 
-![JetBrains Debug Log menu](/assets/img/jetbrains-debug-logs.webp)  
+![JetBrains Debug Log menu](/assets/img/jetbrains-debug-logs.webp)
 
-In the `Custom Debug Log Configuration` enter `appland` to enable DEBUG level logging for the AppMap plugin. 
+In the `Custom Debug Log Configuration` enter `appland` to enable DEBUG level logging for the AppMap plugin.
 
-![JetBrains Debug Log Configuration](/assets/img/jetbrains-logging-configuration.webp)  
+![JetBrains Debug Log Configuration](/assets/img/jetbrains-logging-configuration.webp)
 
-Next, open `Help` > `Show Log...` will open the IDE log file. 
+Next, open `Help` > `Show Log...` will open the IDE log file.
 
 ![JetBrains Debug Show Log](/assets/img/jetbrains-show-log.webp)
 

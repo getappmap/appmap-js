@@ -5,11 +5,11 @@ description: "Explore the AppMap CLI reference guide for analyzing runtime code 
 toc: true
 reference: true
 step: 10
-name: Command line interface (CLI)
+name: AppMap Command line interface (CLI)
 redirect_from: [docs/reference/appmap-swagger-ruby]
 ---
 
-# Command line interface (CLI)
+# AppMap Command line interface (CLI)
 
 - [Command line interface (CLI)](#command-line-interface-cli)
   - [Overview](#overview)

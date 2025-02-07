@@ -2,14 +2,14 @@
 layout: docs
 title: Docs - AppMap Navie
 description: "Learn how to open AppMap Navie in your code editor. Open Navie in your VS Code or JetBrains code editor to start working with Navie AI"
-name: Open Navie
+name: Opening Navie
 step: 1
 navie: true
 toc: true
 redirect_from: [/docs/using-navie-ai/using-navie.html#how-to-open-navie, /docs/navie/how-to-open-navie]
 ---
 
-# Open Navie <!-- omit in toc -->
+# Opening Navie <!-- omit in toc -->
 
 - [In VS Code](#in-vs-code)
 - [In JetBrains](#in-jetbrains)

@@ -10,6 +10,9 @@ step: 2
 
 # AppMap for Visual Studio Code
 
+- [Settings](#settings)
+  - [Copilot Language Model](#copilot-language-model)
+  - [LLM Key Settings](#llm-key-settings)
 - [AppMap panel](#appmap-panel)
   - [Instructions](#instructions)
   - [AppMap Diagram tree view](#appmap-diagram-tree-view)
@@ -21,6 +24,51 @@ step: 2
 - [Integration with GitHub Codespaces](#integration-with-github-codespaces)
 - [Generate OpenAPI Definitions](#generate-openapi-definitions)
 - [GitHub repository](#github-repository)
+
+## Settings
+
+### Copilot Language Model
+
+GitHub Copilot supports a variety of different language models. Use the VS Code command "AppMap: Select Copilot Model" in the command palette.
+
+To open the Command Palette.
+
+You can use a hotkey to open the VS Code Command Palette
+
+- Mac: `Cmd + Shift + P`
+- Windows/Linux: `Ctrl + Shift + P`
+
+Search for `AppMap: Select Copilot Model` in the command palette.
+
+![Select copilot model](/assets/img/product/select-copilot-model-1.webp)
+
+Then select the specific model you'd like to use with AppMap Navie
+
+![Select copilot model](/assets/img/product/select-copilot-model-2.webp)
+
+#### Video Demo <!-- omit in toc -->
+
+{% include vimeo.html id='992238965' %}
+
+### LLM Key Settings
+
+In VS Code, go to settings.
+
+<img class="video-screenshot" src="/assets/img/docs/goto-vscode-settings.webp" alt="a screenshot of the Visual Studio Code menu"/>
+
+Search for “appmap environment” to reveal “AppMap: Command Line Environment” setting.
+
+<img class="video-screenshot" alt="a screenshot of the AppMap: Command Line Environment settings section" src="/assets/img/docs/search-for-appmap-environment.webp"/>
+
+Use _Add Item_ to define the relevant environment variables according to the [LLM Configuration](/docs/using-navie-ai/choose-llm-provider) instructions.
+
+<img class="video-screenshot" alt="a screenshot showing an example of the bring your own model key value entry" src="/assets/img/docs/byom-key-value-example.webp"/>
+
+Reload your VS Code for the changes to take effect.
+
+After reloading you can confirm the model is configured correctly in the Navie Chat window.
+
+<img class="video-screenshot" src="/assets/img/product/navie-confirm-ui-vscode.webp"/>
 
 ## AppMap panel
 
@@ -38,8 +86,8 @@ AppMap Diagrams are organized by how they were created (request recording, remot
 
 Within the AppMap tree view you can
 
-* Click on any AppMap name to open the diagram
-* Right-click for a context menu
+- Click on any AppMap name to open the diagram
+- Right-click for a context menu
 
 You can also use the tree view buttons to Filter the AppMap tree by name, or search for a specific AppMap. There are also extension commands to do this.
 
@@ -57,30 +105,29 @@ All the HTTP server requests, SQL queries, packages, classes, and functions that
 
 Installing the AppMap VC Code plugin adds a default [Launch Configuration](https://code.visualstudio.com/docs/editor/debugging) which supports the integrated VS Code debugger. These can be used to run your Java application code with AppMap automatically configured, saving you from manually changing your Maven or Gradle settings. This is the recommended approach for all Java users using the VS Code editor.
 
-To run your tests with AppMap enabled, navigate to the `Testing` section of VS Code in the left hand menu icons. If your project has tests you will see them listed in the following screen. From here, click on the `Run Tests` icon, highlighted in the screenshot below. This will kick off your test cases with the AppMap libraries installed and enabled. 
+To run your tests with AppMap enabled, navigate to the `Testing` section of VS Code in the left hand menu icons. If your project has tests you will see them listed in the following screen. From here, click on the `Run Tests` icon, highlighted in the screenshot below. This will kick off your test cases with the AppMap libraries installed and enabled.
 
-<img class="video-screenshot" src="/assets/img/vscode-run-with-tests.webp"/> 
+<img class="video-screenshot" src="/assets/img/vscode-run-with-tests.webp"/>
 
-To run your application with AppMap enabled, navigate to the `Run and Debug` section of VS Code in the left hand menu icons. You will see a new launch configuration in the in the drop down which says `Run with AppMap` alongside any other launch configurations for your project.  With the `Run with AppMap` launch configuration select click on the "Play" icon, highlighted in the screenshot below. This will start your application with the AppMap libraries installed and enabled.  You can now interact with your application to generate [request recordings](/docs/reference/appmap-java.html#requests-recording) or use [remote recording](#remote-recording).
+To run your application with AppMap enabled, navigate to the `Run and Debug` section of VS Code in the left hand menu icons. You will see a new launch configuration in the in the drop down which says `Run with AppMap` alongside any other launch configurations for your project. With the `Run with AppMap` launch configuration select click on the "Play" icon, highlighted in the screenshot below. This will start your application with the AppMap libraries installed and enabled. You can now interact with your application to generate [request recordings](/docs/reference/appmap-java.html#requests-recording) or use [remote recording](#remote-recording).
 
-<img class="video-screenshot" src="/assets/img/vscode-run-with-appmap.webp"/> 
+<img class="video-screenshot" src="/assets/img/vscode-run-with-appmap.webp"/>
 
-After installing the VS Code AppMap extension for your Java project, you will notice a new launch configuration in the `.vscode` directory in your project. 
+After installing the VS Code AppMap extension for your Java project, you will notice a new launch configuration in the `.vscode` directory in your project.
 
-<img class="video-screenshot" src="/assets/img/docs/vscode-launch-configuration.webp"/> 
+<img class="video-screenshot" src="/assets/img/docs/vscode-launch-configuration.webp"/>
 
 Next, click on the "Run and Debug" menu option in the left hand column of VS Code
 
-<img class="video-screenshot" src="/assets/img/docs/vscode-run-and-debug.png"/> 
+<img class="video-screenshot" src="/assets/img/docs/vscode-run-and-debug.png"/>
 
-Clicking on the "Play" button next to the "Run with AppMap" launch configuration will start your Java application with the necessary AppMap configuration flags enabled by default. 
+Clicking on the "Play" button next to the "Run with AppMap" launch configuration will start your Java application with the necessary AppMap configuration flags enabled by default.
 
 When your application is running you can proceed to record AppMap Data using either [Requests Recording](/docs/reference/appmap-java#requests-recording) or [Remote Recording](https://appmap.io/docs/reference/vscode.html#remote-recording)
 
-
 ## Extension actions
 
-To open the list of AppMap extension actions, press `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS and type `AppMap`. 
+To open the list of AppMap extension actions, press `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS and type `AppMap`.
 
 Most of the command names should be self-explanatory. Here are a few commands which are a bit more complicated:
 
@@ -98,7 +145,7 @@ To start a recording, click the remote recording button, or use the command **Ap
 
 ![Start remote recording](/assets/img/docs/vscode-remote-start.png)
 
-Interact with your app through its UI or API. Then use the stop remote recording button again, or use the command **AppMap: Stop the Remote Recording**. 
+Interact with your app through its UI or API. Then use the stop remote recording button again, or use the command **AppMap: Stop the Remote Recording**.
 
 ![Stop remote recording](/assets/img/docs/vscode-remote-stop.png)
 
@@ -108,12 +155,12 @@ You'll be prompted to save the AppMap to a file, and it will be opened.
 
 For more details about remote recording, see:
 
-* [Recording methods > Remote recording](../recording-methods#remote-recording)
-* [Remote recording API](../reference/remote-recording-api)
+- [Recording methods > Remote recording](../recording-methods#remote-recording)
+- [Remote recording API](../reference/remote-recording-api)
 
 ## Integration with GitHub Codespaces
 
-AppMap for VS Code supports GitHub Codespaces or other remote development environments.  Currently AppMap only supports GitHub Codespaces natively in the VS Code Editor and not in the GitHub Web Based editor.
+AppMap for VS Code supports GitHub Codespaces or other remote development environments. Currently AppMap only supports GitHub Codespaces natively in the VS Code Editor and not in the GitHub Web Based editor.
 
 Learn more about AppMap in GitHub Codespaces:
 
@@ -124,7 +171,6 @@ Learn more about AppMap in GitHub Codespaces:
 After [recording AppMap Data](/docs/recording-methods.html) for your project, open the command palette using `CTRL+SHIFT+P` or `COMMAND+SHIFT+P` on macOS, type `AppMap: Generate OpenAPI`, then hit `Enter`. This will open a new file with your OpenAPI definition document. Save this file locally, share with your team, or ingest as a [new collection into API tools like Postman.](https://blog.postman.com/new-postman-integration-with-appmap-create-and-manage-always-accurate-collections/)
 
 ![alt_text](/assets/img/openapi/openapi-1.webp "OpenAPI export to file")
-
 
 ## GitHub repository
 
