@@ -1,4 +1,21 @@
 import { warn } from 'node:console';
+import { platform } from 'node:os';
+
+function normalizePath(location: string): string {
+  if (platform() !== 'win32') return location;
+
+  // This fixes up a few issues observed with Windows paths:
+  // 1. Leading slashes can be present in the path. This is likely an artifact of how the path is
+  //    constructed in the client (e.g., via a file scheme URI).
+  // 2. Drive letters are down cased. Again, likely due to file URIs.
+  // 3. Path separators are normalized to backslashes.
+  //
+  // These cases originate from both JetBrains and VSCode. It'd be better to fix them at the source,
+  // though fixing it here leaves no room for version mismatches.
+  return location
+    .replace(/\//g, '\\')
+    .replace(/^(\\+)?(\w:)/, (_, __, driveLetter: string) => driveLetter.toUpperCase());
+}
 
 export default class Location {
   constructor(public path: string, public lineRange?: string) {}
@@ -34,19 +51,21 @@ export default class Location {
   }
 
   static parse(location: string): Location {
-    const tokens = location.split(':');
-    if (tokens.length === 1) return new Location(tokens[0]);
+    const normalizedLocation = normalizePath(location);
+    const match = normalizedLocation.match(/^(.+?)(?::(\d+)(?:-(\d+)?)?)?$/);
+    if (!match) {
+      // This should never happen. `normalizedLocation` would need to be empty.
+      return new Location(normalizedLocation);
+    }
 
-    // Determine if the line range is of the form `:line` or `:start-end`.
-    const rangeTokens = tokens[tokens.length - 1].split('-');
-    // See if they are all integers, by actually parsing them.
-    const isLineRange =
-      rangeTokens.length < 3 && rangeTokens.every((token) => !Number.isNaN(Number(token)));
-    if (!isLineRange) return new Location(location);
-
-    const path = tokens.slice(0, tokens.length - 1).join(':');
-    const lineRange = tokens[tokens.length - 1];
-    return new Location(path, lineRange);
+    const [, filePath, start, end] = match;
+    const startValid = start && !Number.isNaN(parseInt(start, 10));
+    if (startValid) {
+      const endValid = end && !Number.isNaN(parseInt(end, 10));
+      const range = endValid ? `${start}-${end}` : start;
+      return new Location(filePath, range);
+    }
+    return new Location(filePath);
   }
 }
 
