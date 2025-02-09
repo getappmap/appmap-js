@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.185.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.185.0...@appland/appmap-v3.185.1) (2025-02-09)
+
+
+### Bug Fixes
+
+* Normalize Windows path locations ([d385771](https://github.com/getappmap/appmap-js/commit/d385771d3c80cfc95ea5b38b8bfd52ba1842e551))
+
 # [@appland/appmap-v3.185.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.184.0...@appland/appmap-v3.185.0) (2025-02-05)
 
 
