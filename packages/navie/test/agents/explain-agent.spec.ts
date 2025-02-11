@@ -79,7 +79,13 @@ describe('@explain agent', () => {
 
     it('looks up code context (only)', async () => {
       const context = SEARCH_CONTEXT;
-      lookupContextService.lookupContext = jest.fn().mockResolvedValue(context);
+      lookupContextService.lookupContext = jest
+        .fn()
+        .mockImplementation((_, __, opts: ContextV2.ContextFilters) =>
+          // If it's a location context, return an empty list of context items
+          // otherwise, return the expected search context
+          opts.locations ? Promise.resolve([]) : Promise.resolve(context)
+        );
       lookupContextService.lookupHelp = jest.fn();
 
       await buildAgent().perform(initialQuestionOptions, () => tokensAvailable);
@@ -126,7 +132,13 @@ describe('@explain agent', () => {
       );
 
       const context = SEARCH_CONTEXT;
-      lookupContextService.lookupContext = jest.fn().mockResolvedValue(context);
+      lookupContextService.lookupContext = jest
+        .fn()
+        .mockImplementation((_, __, opts: ContextV2.ContextFilters) =>
+          // If it's a location context, return an empty list of context items
+          // otherwise, return the expected search context
+          opts.locations ? Promise.resolve([]) : Promise.resolve(context)
+        );
       lookupContextService.lookupHelp = jest.fn();
 
       await buildAgent().perform(options, () => tokensAvailable);
@@ -138,6 +150,25 @@ describe('@explain agent', () => {
           include: ['test'],
           exclude: ['\\.md'],
         }
+      );
+    });
+
+    it('applies pinned file context to the question during vector term generation', async () => {
+      const context = SEARCH_CONTEXT;
+      lookupContextService.lookupContext = jest
+        .fn()
+        .mockImplementation((_, __, opts: ContextV2.ContextFilters) =>
+          // Return context on location lookup, otherwise return an empty list of context items on
+          // search
+          opts.locations ? Promise.resolve(context) : Promise.resolve([])
+        );
+      lookupContextService.lookupHelp = jest.fn();
+      vectorTermsService.suggestTerms = jest.fn().mockResolvedValue(['test']);
+
+      await buildAgent().perform(initialQuestionOptions, () => tokensAvailable);
+
+      expect(vectorTermsService.suggestTerms).toHaveBeenCalledWith(
+        ['How does user management work?', ...context.map(({ content }) => content)].join('\n\n')
       );
     });
 

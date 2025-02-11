@@ -31,7 +31,7 @@ export default class ContextService {
 
       this.history.stopAcceptingPinnedFileContext();
 
-      const aggregateQuestion = [...options.aggregateQuestion];
+      const aggregateQuestion = [options.aggregateQuestion];
       // Add content obtained from pinned files
       for (const event of this.history.events) {
         if (!(event instanceof ContextItemEvent)) continue;
@@ -45,7 +45,7 @@ export default class ContextService {
 
       const searchTerms = await transformSearchTerms(
         termsEnabled,
-        options.aggregateQuestion,
+        aggregateQuestion.join('\n\n'),
         this.vectorTermsService
       );
       if (additionalTerms) {
