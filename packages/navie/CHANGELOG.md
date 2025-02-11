@@ -1,3 +1,12 @@
+# [@appland/navie-v1.42.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.42.0...@appland/navie-v1.42.1) (2025-02-11)
+
+
+### Bug Fixes
+
+* Improve the local generation JSON parsing ([68ee9aa](https://github.com/getappmap/appmap-js/commit/68ee9aa8bf77f128b3c1df51c41a802c8f977bfc))
+* Pinned items are included in vector terms generation ([7f2aba3](https://github.com/getappmap/appmap-js/commit/7f2aba355b87091f5535668dfd9461e7fcd3db12))
+* Reword 'question' to 'inquiry' in vector terms system prompt ([ebbc1d9](https://github.com/getappmap/appmap-js/commit/ebbc1d9e772a8e35fcb121d17be02d1ccbf31502))
+
 # [@appland/navie-v1.42.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.41.0...@appland/navie-v1.42.0) (2025-01-24)
 
 
