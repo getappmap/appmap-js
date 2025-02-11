@@ -17,6 +17,8 @@ import CompletionService, {
 import Trajectory from '../lib/trajectory';
 import { APIError } from 'openai';
 import MessageTokenReducerService from './message-token-reducer-service';
+import { findObject, tryParseJson } from '../lib/parse-json';
+import trimFences from '../lib/trim-fences';
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -282,12 +284,10 @@ export default class OpenAICompletionService implements CompletionService {
         this.trajectory.logReceivedMessage({ role: 'assistant', content: completion.content });
 
         try {
-          // Strip code fences
-          const sanitizedContent = completion.content.replace(/^`{3,}[^\s]*?$/gm, '');
-          const parsed = JSON.parse(sanitizedContent) as unknown;
+          const parsed = tryParseJson(completion.content, trimFences, findObject);
           schema.parse(parsed);
           return parsed;
-        } catch (e) {
+        } catch {
           // fall through
         }
       }
