@@ -16,7 +16,7 @@ function findArray(text: string): string | undefined {
  * If found, return the text within the braces. This is a fallback
  * in case proper JSON cannot be found within trimmed fences.
  */
-function findObject(text: string): string | undefined {
+export function findObject(text: string): string | undefined {
   const object = text.match(/\{.*\}/s);
   return object ? object[0] : undefined;
 }
@@ -50,4 +50,37 @@ export default function parseJSON<T>(
     if (chunk) result = parse(chunk);
   }
   return result;
+}
+
+/**
+ * Tries to parse the text as JSON using the provided parsers.
+ * If the text cannot be parsed and all parsers fail, an error is thrown.
+ * @param text The text to parse
+ * @param parsers A list of parsers to try in order
+ * @returns The parsed JSON object
+ */
+export function tryParseJson<T>(
+  text: string,
+  ...parsers: Array<(text: string) => string | undefined>
+): T | undefined {
+  // First try to parse the text outright.
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    // ignore
+  }
+
+  // If that fails, try each parser in order.
+  for (const parser of parsers) {
+    const result = parser(text);
+    if (result) {
+      try {
+        return JSON.parse(result) as T;
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  throw new Error('failed to parse JSON');
 }
