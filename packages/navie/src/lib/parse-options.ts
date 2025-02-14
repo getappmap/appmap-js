@@ -1,7 +1,5 @@
-import { warn } from 'console';
 import { ContextV2 } from '../context';
 
-/* eslint-disable no-continue */
 export class UserOptions {
   constructor(private options: Map<string, string | boolean>) {}
 
@@ -102,7 +100,6 @@ export default function parseOptions(question: string): {
       }
     }
 
-    warn(`User option ${key}=${value.toString()}`);
     options.set(key.toLowerCase(), value);
   }
 
