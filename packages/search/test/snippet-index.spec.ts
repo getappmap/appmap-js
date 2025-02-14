@@ -1,5 +1,6 @@
 import { strict as assert } from 'assert';
-import sqlite3 from 'better-sqlite3';
+
+import sqlite3 from 'node-sqlite3-wasm';
 
 import SnippetIndex, {
   fileChunkSnippetId,
@@ -26,7 +27,7 @@ describe('SnippetIndex', () => {
   const snippet4: SnippetId = { type: 'code-snippet', id: 'test4.txt:31' };
 
   beforeEach(() => {
-    db = new sqlite3(':memory:');
+    db = new sqlite3.Database(':memory:');
     index = new SnippetIndex(db);
     sessionId = generateSessionId();
   });

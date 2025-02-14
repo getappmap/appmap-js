@@ -1,5 +1,5 @@
-import sqlite3 from 'better-sqlite3';
 import makeDebug from 'debug';
+import sqlite3 from 'node-sqlite3-wasm';
 
 import {
   buildFileIndex,
@@ -71,7 +71,7 @@ export async function buildProjectFileIndex(
   excludePatterns: RegExp[] | undefined
 ): Promise<CloseableIndex<FileIndex>> {
   return await buildIndexInTempDir('files', async (indexFile) => {
-    const db = new sqlite3(indexFile);
+    const db = new sqlite3.Database(indexFile);
     return await indexFiles(db, sourceDirectories, includePatterns, excludePatterns);
   });
 }
