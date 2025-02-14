@@ -1,5 +1,7 @@
 import { isAbsolute, join } from 'path';
-import sqlite3 from 'better-sqlite3';
+
+import sqlite3 from 'node-sqlite3-wasm';
+
 import { FileIndex, generateSessionId } from '@appland/search';
 import { SearchRpc } from '@appland/rpc';
 
@@ -62,7 +64,7 @@ export async function handler(
     // Search across all AppMaps, creating a map from AppMap id to AppMapSearchResult
     const maxResults = options.maxDiagrams || options.maxResults || DEFAULT_MAX_DIAGRAMS;
     const index = await buildIndexInTempDir('appmaps', async (indexFile) => {
-      const db = new sqlite3(indexFile);
+      const db = new sqlite3.Database(indexFile);
       const fileIndex = new FileIndex(db);
       await buildAppMapIndex(
         fileIndex,

@@ -1,5 +1,7 @@
 import { strict as assert } from 'assert';
-import sqlite3 from 'better-sqlite3';
+
+import sqlite3 from 'node-sqlite3-wasm';
+
 import FileIndex, { FileSearchResult } from '../src/file-index';
 import { generateSessionId, SessionId } from '../src/session-id';
 
@@ -16,7 +18,7 @@ describe('FileIndex', () => {
   const directory = 'src';
 
   beforeEach(() => {
-    db = new sqlite3(':memory:');
+    db = new sqlite3.Database(':memory:');
     index = new FileIndex(db);
     sessionId = generateSessionId();
   });

@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import sqlite3 from 'better-sqlite3';
 import makeDebug from 'debug';
+import sqlite3 from 'node-sqlite3-wasm';
 
 import { fileTokens } from './tokenize';
 import FileIndex from './file-index';
@@ -62,7 +62,7 @@ const cli = yargs(hideBin(process.argv))
         return !filterRE.test(path);
       };
 
-      const db = new sqlite3(':memory:');
+      const db = new sqlite3.Database(':memory:');
       const fileIndex = new FileIndex(db);
       const sessionId = generateSessionId();
 
