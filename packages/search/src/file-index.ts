@@ -1,4 +1,5 @@
-import sqlite3 from 'better-sqlite3';
+import type sqlite3 from 'node-sqlite3-wasm';
+
 import { SessionId } from './session-id';
 
 const CREATE_TABLE_SQL = `CREATE VIRTUAL TABLE file_content USING fts5(
@@ -74,14 +75,14 @@ export type FileSearchResult = {
 export default class FileIndex {
   #insert: sqlite3.Statement;
   #updateBoost: sqlite3.Statement;
-  #deleteSession: sqlite3.Statement<string>;
-  #search: sqlite3.Statement<[string, string, number]>;
+  #deleteSession: sqlite3.Statement;
+  #search: sqlite3.Statement;
 
   constructor(public database: sqlite3.Database) {
     this.database.exec(CREATE_TABLE_SQL);
     this.database.exec(CREATE_BOOST_TABLE_SQL);
-    this.database.pragma('journal_mode = OFF');
-    this.database.pragma('synchronous = OFF');
+    this.database.exec('PRAGMA journal_mode = OFF');
+    this.database.exec('PRAGMA synchronous = OFF');
     this.#insert = this.database.prepare(INSERT_SQL);
     this.#updateBoost = this.database.prepare(UPDATE_BOOST_SQL);
     this.#deleteSession = this.database.prepare(DELETE_SESSION_SQL);
@@ -89,7 +90,7 @@ export default class FileIndex {
   }
 
   indexFile(directory: string, filePath: string, symbols: string, words: string): void {
-    this.#insert.run(directory, filePath, symbols, words);
+    this.#insert.run([directory, filePath, symbols, words]);
   }
 
   /**
@@ -99,7 +100,7 @@ export default class FileIndex {
    * @param boostFactor - The factor by which to boost the file's relevance.
    */
   boostFile(sessionId: SessionId, filePath: string, boostFactor: number): void {
-    this.#updateBoost.run(sessionId, filePath, boostFactor);
+    this.#updateBoost.run([sessionId, filePath, boostFactor]);
   }
 
   /**
@@ -118,7 +119,7 @@ export default class FileIndex {
    * @returns An array of search results with directory, file path, and score.
    */
   search(sessionId: SessionId, query: string, limit = 10): FileSearchResult[] {
-    const rows = this.#search.all(sessionId, query, limit) as FileIndexRow[];
+    const rows = this.#search.all([sessionId, query, limit]) as FileIndexRow[];
     return rows.map((row) => ({
       directory: row.directory,
       filePath: row.file_path,
