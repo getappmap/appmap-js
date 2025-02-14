@@ -1,4 +1,4 @@
-import { log } from 'console';
+import makeDebug from 'debug';
 
 import { ContextV2, applyContext } from '@appland/navie';
 import { SearchRpc } from '@appland/rpc';
@@ -9,6 +9,8 @@ import { searchAppMapFiles } from './index/appmap-file-index';
 import { searchProjectFiles } from './index/project-file-index';
 import { buildProjectFileSnippetIndex } from './index/project-file-snippet-index';
 import { generateSessionId } from '@appland/search';
+
+const debug = makeDebug('appmap:cli:search-context');
 
 export type SearchContextRequest = {
   appmaps?: string[];
@@ -69,7 +71,7 @@ export default async function collectSearchContext(
       type: 'appmap',
     };
 
-    log(`[search-context] Matched ${selectedAppMaps.results.length} AppMaps.`);
+    debug(`Matched ${selectedAppMaps.results.length} AppMaps.`);
   }
 
   const fileSearchResults = await searchProjectFiles(
@@ -95,23 +97,23 @@ export default async function collectSearchContext(
   try {
     let charCount = 0;
     let maxEventsPerDiagram = 5;
-    log(`[search-context] Requested char limit: ${charLimit}`);
+    debug(`Requested char limit: ${charLimit}`);
     for (;;) {
-      log(`[search-context] Collecting context with ${maxEventsPerDiagram} events per diagram.`);
+      debug(`Collecting context with ${maxEventsPerDiagram} events per diagram.`);
 
       contextCandidate = await snippetIndex.search(maxEventsPerDiagram, charLimit, request);
       const appliedContext = applyContext(contextCandidate.context, charLimit);
       const appliedContextSize = appliedContext.reduce((acc, item) => acc + item.content.length, 0);
       contextCandidate.context = appliedContext;
       contextCandidate.contextSize = appliedContextSize;
-      log(`[search-context] Collected an estimated ${appliedContextSize} characters.`);
+      debug(`Collected an estimated ${appliedContextSize} characters.`);
 
       if (appliedContextSize === charCount || appliedContextSize > charLimit) {
         break;
       }
       charCount = appliedContextSize;
       maxEventsPerDiagram = Math.ceil(maxEventsPerDiagram * 1.5);
-      log(`[search-context] Increasing max events per diagram to ${maxEventsPerDiagram}.`);
+      debug(`Increasing max events per diagram to ${maxEventsPerDiagram}.`);
     }
   } finally {
     snippetIndex.close();

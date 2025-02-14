@@ -42,6 +42,8 @@ export default class ExplainCommand implements Command {
   ) {}
 
   async *execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
+    performance.mark('start');
+
     const { question: baseQuestion, codeSelection } = request;
 
     const classifyEnabled = request.userOptions.isEnabled('classify', true);
@@ -49,6 +51,7 @@ export default class ExplainCommand implements Command {
 
     let contextLabelsFn: Promise<ContextV2.ContextLabel[]> | undefined;
 
+    performance.mark('classifyStart');
     if (classifyEnabled)
       contextLabelsFn = this.classifierService
         .classifyQuestion(baseQuestion, chatHistory)
@@ -56,6 +59,7 @@ export default class ExplainCommand implements Command {
           warn(`Error classifying question: ${err}`);
           return [];
         });
+    void contextLabelsFn?.then(() => performance.measure('classify', 'classifyStart'));
 
     let projectInfo: ProjectInfo[] = [];
     if (isProjectInfoEnabled(request.userOptions)) {
@@ -134,11 +138,13 @@ export default class ExplainCommand implements Command {
 
     if (projectInfo) this.projectInfoService.promptProjectInfo(isArchitecture, projectInfo);
 
+    performance.mark('agentStart');
     const agentResponse = await mode.perform(agentOptions, tokensAvailable);
     if (agentResponse) {
       yield agentResponse.response;
       if (agentResponse.abort) return;
     }
+    performance.measure('agent preparation', 'agentStart');
 
     if (codeSelection) this.codeSelectionService.addSystemPrompt();
 
@@ -165,7 +171,9 @@ export default class ExplainCommand implements Command {
     mode.applyQuestionPrompt(question);
 
     if (isGathererEnabled(request.userOptions, agentMode, contextLabels)) {
+      performance.mark('gathererStart');
       yield* this.gatherAdditionalInformation();
+      performance.measure('gatherer', 'gathererStart');
     }
 
     const { messages } = this.interactionHistory.buildState();
@@ -177,9 +185,15 @@ export default class ExplainCommand implements Command {
       )
     );
 
+    performance.mark('completionStart');
+    console.log('completion start');
     const response = this.completionService.complete(messages, { temperature: mode.temperature });
     if (mode.filter) yield* mode.filter(response);
     else yield* response;
+    console.log('completion end');
+    performance.measure('completion', 'completionStart');
+
+    performance.measure('total', 'start');
   }
 
   private async *gatherAdditionalInformation(maxSteps = 10) {
