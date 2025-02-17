@@ -1,3 +1,6 @@
+import { join } from 'node:path';
+import InteractionHistory, { ContextItemEvent } from './interaction-history';
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace UserContext {
   export type CodeSelectionItem = {
@@ -36,17 +39,41 @@ export namespace UserContext {
     return 'location' in i && i.location !== undefined;
   }
 
-  export function renderItems(items: ContextItem[], includeContent: boolean = true) {
+  export interface ContextItemOptions {
+    includeContent?: boolean;
+
+    // TODO: I really shouldn't be coupled to the interaction history. Ideally the context
+    // items should already be in a form that can be directly rendered.
+    interactionHistory?: InteractionHistory;
+  }
+
+  export function renderItems(items: ContextItem[], opts?: ContextItemOptions): string {
+    const options = { includeContent: true, ...opts };
     const renderItem = (i: UserContext.ContextItem) => {
-      if (UserContext.isCodeSelectionItem(i) && includeContent) {
+      if (UserContext.isCodeSelectionItem(i) && options.includeContent) {
         return `<code-selection>\n${i.content}\n</code-selection>`;
       } else if (UserContext.isCodeSnippetItem(i)) {
-        const content = includeContent ? `\n<content>${i.content}</content>\n'` : '';
+        const content = options.includeContent ? `\n<content>${i.content}</content>\n'` : '';
         return `<pinned-snippet>
   <location>${i.location}</location>${content}
 </pinned-snippet>`;
       } else if (UserContext.isFileItem(i)) {
-        return `<pinned-file><location>${i.location}</location></pinned-file>`;
+        // Attempt to find the pinned item as a context item in the interaction history
+        // If it's found, use its content, otherwise only the location is rendered
+        const content =
+          options.interactionHistory && options.includeContent
+            ? options.interactionHistory.events.find((e): e is ContextItemEvent => {
+                if (e.type !== 'contextItem') return false;
+                const { location, directory } = e as ContextItemEvent;
+                return (
+                  location === i.location ||
+                  join(...([directory, location].filter(Boolean) as string[])) === i.location
+                );
+              })?.content
+            : undefined;
+        return content
+          ? `<pinned-file><location>${i.location}</location>\n<content>\n${content}\n</content></pinned-file>`
+          : `<pinned-file><location>${i.location}</location></pinned-file>`;
       }
     };
 

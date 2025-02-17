@@ -17,7 +17,9 @@ export default class CodeSelectionService {
 
   applyCodeSelection(userContext: string | UserContext.ContextItem[]) {
     const renderedContext: string =
-      typeof userContext !== 'string' ? UserContext.renderItems(userContext) : userContext;
+      typeof userContext !== 'string'
+        ? UserContext.renderItems(userContext, { interactionHistory: this.interactionHistory })
+        : userContext;
 
     this.interactionHistory.addEvent(
       new PromptInteractionEvent(

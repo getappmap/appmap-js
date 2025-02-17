@@ -137,7 +137,7 @@ ${content}
     if (clientRequest.codeSelection) {
       const codeSelection =
         typeof clientRequest.codeSelection !== 'string'
-          ? UserContext.renderItems(clientRequest.codeSelection, false)
+          ? UserContext.renderItems(clientRequest.codeSelection, { includeContent: false })
           : clientRequest.codeSelection;
 
       history.push({
