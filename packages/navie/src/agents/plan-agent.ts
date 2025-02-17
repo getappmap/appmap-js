@@ -46,10 +46,10 @@ For a bug, explain the root cause of the bug, and how the logic should be change
 
 For a feature, describe the components of the new functionality, and the role of each one.
 
-* **Proposed Changes** This section suggests which files and components should be changed in order to
+* **Proposed Changes** This section suggests which files should be changed in order to
 solve the issue.
 
-With reference to files and / or modules, explain how the code should be modified to solve the issue.
+With reference to files, explain how the code should be modified to solve the issue.
 
 DO NOT generate code.
 
@@ -63,6 +63,8 @@ Example:
 
 * DO provide a detailed description of the necessary changes.
 * DO suggest changes to existing, non-test code files.
+* DO enumerate the changes per file, providing a path relative to the project root.
+* DO NOT reference files without their path.
 * DO NOT include a code snippet.
 * DO NOT GENERATE CODE.
 * DO NOT design changes to test cases.
