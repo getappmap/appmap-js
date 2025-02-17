@@ -1,4 +1,5 @@
-import sqlite3 from 'better-sqlite3';
+import sqlite3 from 'node-sqlite3-wasm';
+
 import { FileSearchResult, SessionId, SnippetIndex } from '@appland/search';
 
 import buildIndexInTempDir, { CloseableIndex } from './build-index-in-temp-dir';
@@ -76,7 +77,7 @@ export async function buildProjectFileSnippetIndex(
   fileSearchResults: FileSearchResult[]
 ): Promise<ProjectFileSnippetIndex> {
   const snippetIndex = await buildIndexInTempDir('snippets', async (indexFile) => {
-    const db = new sqlite3(indexFile);
+    const db = new sqlite3.Database(indexFile);
     return await indexSnippets(db, fileSearchResults);
   });
 
