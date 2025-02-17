@@ -1,7 +1,7 @@
 import { warn } from 'node:console';
 import { platform } from 'node:os';
 
-function normalizePath(location: string): string {
+export function normalizePath(location: string): string {
   if (platform() !== 'win32') return location;
 
   // This fixes up a few issues observed with Windows paths:
