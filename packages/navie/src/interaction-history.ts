@@ -256,6 +256,12 @@ export class ContextItemEvent extends InteractionEvent {
   }
 
   updateState(state: InteractionState) {
+    if (this.requestor === ContextItemRequestor.PinnedFile) {
+      // There's no need to include the content of pinned files in the system prompt.
+      // It'll automatically be included in the user prompt.
+      return;
+    }
+
     const content = [
       [
         `<${this.promptPrefix}`,

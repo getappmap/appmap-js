@@ -108,7 +108,9 @@ export default class ExplainCommand implements Command {
     ];
     if (codeSelection) {
       const rendered =
-        typeof codeSelection !== 'string' ? UserContext.renderItems(codeSelection) : codeSelection;
+        typeof codeSelection !== 'string'
+          ? UserContext.renderItems(codeSelection, { interactionHistory: this.interactionHistory })
+          : codeSelection;
       aggregateQuestion.push(rendered);
     }
 
