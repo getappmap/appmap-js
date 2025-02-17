@@ -27,6 +27,7 @@ import INavie, { INavieProvider } from './navie/inavie';
 import reportFetchError from './navie/report-fetch-error';
 import Thread from './navie/thread';
 import handleReview from './review';
+import { normalizePath } from './location';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -388,7 +389,7 @@ const explainHandler: (
           userContext = options.codeSelection.map((cs) => {
             return {
               type: cs.type,
-              location: cs.location,
+              location: cs.location ? normalizePath(cs.location) : undefined,
               content: cs.content,
             } as UserContext.ContextItem;
           });
