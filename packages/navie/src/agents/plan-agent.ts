@@ -73,6 +73,10 @@ Example:
 * DO NOT output code blocks or fenced code. Output only a text description of the suggested
   changes, along with the file names.
 `;
+
+/** Default problem statement used when the user hasn't provided any (for example relying on pinned content). */
+const DEFAULT_PROBLEM_STATEMENT = 'What is the best way to solve this problem?';
+
 export class PlanAgent implements Agent {
   public readonly temperature = undefined;
 
@@ -104,7 +108,7 @@ export class PlanAgent implements Agent {
       new PromptInteractionEvent(
         PromptType.ProblemStatement,
         'user',
-        buildPromptValue(PromptType.ProblemStatement, question)
+        buildPromptValue(PromptType.ProblemStatement, question.trim() || DEFAULT_PROBLEM_STATEMENT)
       )
     );
   }
