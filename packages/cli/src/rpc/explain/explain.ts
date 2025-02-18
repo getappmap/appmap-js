@@ -328,7 +328,16 @@ export async function explain(
     explain.on('error', (err: Error) => first() && reject(err));
     explain.on('ack', (userMessageId: string, threadId: string) => {
       status.threadId = threadId;
-      const cleanupFn = () => searchStatusByUserMessageId.delete(userMessageId);
+      const cleanupFn = () => {
+        const searchStatus = searchStatusByUserMessageId.get(userMessageId);
+        if (searchStatus?.step != ExplainRpc.Step.COMPLETE) {
+          console.error(
+            `ERROR: Terminating request id ${userMessageId} before it was able to complete.`
+          );
+          console.error(JSON.stringify(searchStatus, null, 2));
+        }
+        searchStatusByUserMessageId.delete(userMessageId);
+      };
       setTimeout(cleanupFn, 1000 * 60 * 5).unref();
       if (codeSelection) codeSelections.set(threadId, codeSelection);
       searchStatusByUserMessageId.set(userMessageId, status);
@@ -350,7 +359,11 @@ export async function explain(
 
 export function explainStatus(userMessageId: string): ExplainRpc.ExplainStatusResponse {
   const searchStatus = searchStatusByUserMessageId.get(userMessageId);
-  if (!searchStatus) throw new RpcError(404, `No search request with id ${userMessageId}`);
+  if (!searchStatus)
+    throw new RpcError(
+      404,
+      `No search request with id \`${userMessageId}\`. Please check the log for details.`
+    );
   return searchStatus;
 }
 

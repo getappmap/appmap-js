@@ -19,6 +19,7 @@ import { APIError } from 'openai';
 import MessageTokenReducerService from './message-token-reducer-service';
 import { findObject, tryParseJson } from '../lib/parse-json';
 import trimFences from '../lib/trim-fences';
+import { performance } from 'node:perf_hooks';
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -255,7 +256,11 @@ export default class OpenAICompletionService implements CompletionService {
     const maxRetries = options?.maxRetries ?? 3;
     for (let i = 0; i < maxRetries; i += 1) {
       const generateJson = this.isLocalModel ? generateLocal : generateOpenAi;
+      warn(`Requesting JSON completion`);
+      const startTime = performance.now();
       const response = await generateJson(); // eslint-disable-line no-await-in-loop
+      const endTime = performance.now();
+      warn(`Received JSON response in ${(endTime.valueOf() - startTime.valueOf()) / 1000}s`);
       if (!response?.choices?.length) {
         warn(`Bad response, retrying (${i + 1}/${maxRetries})`);
         continue; // eslint-disable-line no-continue
@@ -335,7 +340,13 @@ export default class OpenAICompletionService implements CompletionService {
 
     for (let attempt = 0; attempt < CompletionRetries; attempt++) {
       try {
+        warn(`Requesting completion`);
+        const startTime = performance.now();
         const response = await fetchResponse();
+        const endTime = performance.now();
+        warn(
+          `Received completion response in ${(endTime.valueOf() - startTime.valueOf()) / 1000}s`
+        );
         if ('choices' in response) {
           const { content } = response.choices[0].message;
           if (content) {
