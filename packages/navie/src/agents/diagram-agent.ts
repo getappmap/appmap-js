@@ -1,7 +1,7 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import MermaidFilter from '../lib/mermaid-filter';
-import { PROMPTS, PromptType } from '../prompt';
+import { buildPromptValue, PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
 import MermaidFixerService from '../services/mermaid-fixer-service';
 import { DIAGRAM_FORMAT_PROMPT } from './explain-agent';
@@ -17,6 +17,8 @@ Your job is to generate software diagrams based on a description provided by the
 The user is an experienced software developer who will review the diagrams you generate, and use them
 to understand the code and design code solutions. You can expect the user to be proficient in software development.
 `;
+
+const DEFAULT_QUESTION = 'Create a diagram from the information available.';
 
 export default class DiagramAgent implements Agent {
   public temperature = undefined;
@@ -53,6 +55,8 @@ export default class DiagramAgent implements Agent {
   }
 
   applyQuestionPrompt(question: string): void {
-    this.history.addEvent(new PromptInteractionEvent(PromptType.Question, 'user', question));
+    this.history.addEvent(
+      new PromptInteractionEvent(PromptType.Question, 'user', question.trim() || DEFAULT_QUESTION)
+    );
   }
 }
