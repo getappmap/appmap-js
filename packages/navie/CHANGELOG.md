@@ -1,3 +1,15 @@
+# [@appland/navie-v1.42.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.42.1...@appland/navie-v1.42.2) (2025-02-19)
+
+
+### Bug Fixes
+
+* Add a default prompt to `[@diagram](https://github.com/diagram)` ([6d43979](https://github.com/getappmap/appmap-js/commit/6d43979820fad31473d7b626da872efecaae4dca))
+* Improve logging around edge cases ([e5b9e30](https://github.com/getappmap/appmap-js/commit/e5b9e30697b6b68ce295b7014c9f01d279caa4ab))
+* Pinned items now presented as user context ([ec5df63](https://github.com/getappmap/appmap-js/commit/ec5df63fb65d4e92f67fef9f11843fa8e060c8b5))
+* Plan is more likely to present useful file paths ([dd211bc](https://github.com/getappmap/appmap-js/commit/dd211bcd76da87296d4839cfcc58eec06a345dd1))
+* Provide default prompt for plain [@plan](https://github.com/plan) ([c941942](https://github.com/getappmap/appmap-js/commit/c9419427e6f047f3374222b6ad7dbb9cb54cfcad))
+* Strip non-xml fences on changesets ([053d350](https://github.com/getappmap/appmap-js/commit/053d350a761c45c2f89bb02c9f6836a01caea1f4)), closes [#2248](https://github.com/getappmap/appmap-js/issues/2248)
+
 # [@appland/navie-v1.42.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.42.0...@appland/navie-v1.42.1) (2025-02-11)
 
 
