@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.185.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.185.2...@appland/appmap-v3.185.3) (2025-02-19)
+
+
+### Bug Fixes
+
+* Improve logging around edge cases ([e5b9e30](https://github.com/getappmap/appmap-js/commit/e5b9e30697b6b68ce295b7014c9f01d279caa4ab))
+* Normalize paths on ingress ([e8b906b](https://github.com/getappmap/appmap-js/commit/e8b906b748efe176394367ea4b1f8bed07a1dd06))
+
 # [@appland/appmap-v3.185.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.185.1...@appland/appmap-v3.185.2) (2025-02-12)
 
 
