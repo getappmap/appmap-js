@@ -4,6 +4,7 @@ import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
 import ContextService from '../services/context-service';
 import FileChangeExtractorService from '../services/file-change-extractor-service';
 import FileContentFetcher from '../services/file-content-fetcher';
+import splitOn from '../lib/split-on';
 
 export const GENERATE_AGENT_PROMPT = `**Task: Generation of Code**
 
@@ -216,34 +217,6 @@ export default class GenerateAgent implements Agent {
   filter = filterXmlFencesAroundChangesets;
 }
 
-/**
- * Split haystack on the first occurence of needle (or partial needle at the suffix)
- * @example splitOn("abc---def", "---") // ["abc", "---", "def"]
- * @example splitOn("abc--", "---") // ["abc", "--", ""]
- * @example splitOn("abc", "---") // ["abc", "", ""]
- * @example splitOn("abc---def---ghi", "---") // ["abc", "---", "def---ghi"]
- * @example splitOn("abc---def---ghi", "--") // ["abc", "--", "-def---ghi"]
- * @example splitOn("abc-def-ghi", "---") // ["abc-def-ghi", "", ""]
- * @example splitOn("abc-def-ghi", "def") // ["abc-", "def", "-ghi"]
- * @param haystack the string to split
- * @param needle the string to split on
- * @returns an array of strings
- */
-export function splitOn(haystack: string, needle: string): [string, string, string] {
-  let needleIdx = 0;
-  let haystackIdx = 0;
-  while (needleIdx < needle.length && haystackIdx < haystack.length) {
-    if (haystack[haystackIdx] === needle[needleIdx]) needleIdx++;
-    else needleIdx = 0;
-    haystackIdx++;
-  }
-  return [
-    haystack.slice(0, haystackIdx - needleIdx),
-    haystack.slice(haystackIdx - needleIdx, haystackIdx),
-    haystack.slice(haystackIdx),
-  ];
-}
-
 // Some models (looking at you Gemini) REALLY like markdown fences.
 // Let's make sure to filter them out around the changesets.
 export async function* filterXmlFencesAroundChangesets(
@@ -251,13 +224,12 @@ export async function* filterXmlFencesAroundChangesets(
 ): AsyncIterable<string> {
   let buffer = '';
   let outside = true;
+  const fenceRegex = /```[a-z]*?\n<change>/;
+  const endFenceRegex = /<\/change>\n```/;
   for await (const chunk of stream) {
     buffer += chunk;
     while (buffer) {
-      const [before, fence, after] = splitOn(
-        buffer,
-        outside ? '```xml\n<change>' : '</change>\n```'
-      );
+      const [before, fence, after] = splitOn(buffer, outside ? fenceRegex : endFenceRegex);
       yield before;
       if (fence) {
         if (after) {

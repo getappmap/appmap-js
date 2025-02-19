@@ -4,7 +4,7 @@ import ApplyContextService from '../../src/services/apply-context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import { AgentOptions } from '../../src/agent';
-import GenerateAgent, { splitOn } from '../../src/agents/generate-agent';
+import GenerateAgent from '../../src/agents/generate-agent';
 import { suggestsVectorTerms } from '../fixture';
 import { UserOptions } from '../../src/lib/parse-options';
 import ContextService from '../../src/services/context-service';
@@ -100,49 +100,36 @@ describe('@generate agent', () => {
     });
   });
 
-  describe('splitOn', () => {
-    it('splits on exact match', () => {
-      const result = splitOn('abc---def', '---');
-      expect(result).toEqual(['abc', '---', 'def']);
-    });
-
-    it('splits on partial match at suffix', () => {
-      const result = splitOn('abc--', '---');
-      expect(result).toEqual(['abc', '--', '']);
-    });
-
-    it('splits when needle is not found', () => {
-      const result = splitOn('abc', '---');
-      expect(result).toEqual(['abc', '', '']);
-    });
-
-    it('splits on first occurrence of needle', () => {
-      const result = splitOn('abc---def---ghi', '---');
-      expect(result).toEqual(['abc', '---', 'def---ghi']);
-    });
-
-    it('splits on match within string', () => {
-      const result = splitOn('abc---def---ghi', '--');
-      expect(result).toEqual(['abc', '--', '-def---ghi']);
-    });
-
-    it('returns entire string if needle is not found', () => {
-      const result = splitOn('abc-def-ghi', '---');
-      expect(result).toEqual(['abc-def-ghi', '', '']);
-    });
-
-    it('splits on exact match within string', () => {
-      const result = splitOn('abc-def-ghi', 'def');
-      expect(result).toEqual(['abc-', 'def', '-ghi']);
-    });
-  });
-
   describe('#filter', () => {
     it('filters out markdown fences around changesets', async () => {
       const agent = buildAgent();
       const input = [
         'Some initial text\n',
         '```xml\n<change>',
+        '<file change-number-for-this-file="1">/path/to/file</file>',
+        '</change>\n```',
+        'Some final text\n',
+      ].join('\n');
+
+      const expectedOutput = [
+        'Some initial text\n',
+        '<change>',
+        '<file change-number-for-this-file="1">/path/to/file</file>',
+        '</change>',
+        'Some final text\n',
+      ].join('\n');
+
+      const result = [];
+      for await (const chunk of agent.filter(streamStringByChunk(input))) result.push(chunk);
+
+      expect(result.join('')).toEqual(expectedOutput);
+    });
+
+    it('filters out non-xml markdown fences around changesets', async () => {
+      const agent = buildAgent();
+      const input = [
+        'Some initial text\n',
+        '```java\n<change>',
         '<file change-number-for-this-file="1">/path/to/file</file>',
         '</change>\n```',
         'Some final text\n',
