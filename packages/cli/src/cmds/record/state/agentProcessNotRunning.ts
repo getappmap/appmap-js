@@ -24,7 +24,7 @@ export default async function agentProcessNotRunning(context: RecordContext): Pr
   Django:     https://appland.com/docs/reference/appmap-python.html#django
   Flask:      https://appland.com/docs/reference/appmap-python.html#flask
   Java:       https://appland.com/docs/reference/appmap-java.html#remote-recording
-  JavaScript: https://appland.com/docs/reference/appmap-agent-js.html#remote-recording
+  JavaScript: https://appmap.io/docs/reference/appmap-node.html#remote-recording
   `);
 
   await configureHostAndPort(context);
