@@ -454,6 +454,7 @@ __metadata:
     mermaid: ^9
     openai: ^4.56.0
     p-retry: 4
+    prettier: ^3.3.3
     ts-jest: ^29.2.5
     ts-node: ^10.4.0
     tsc: ^2.0.3
