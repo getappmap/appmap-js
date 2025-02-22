@@ -5,7 +5,6 @@ import OpenAICompletionService from './openai-completion-service';
 import AnthropicCompletionService from './anthropic-completion-service';
 import CompletionService from './completion-service';
 import Trajectory from '../lib/trajectory';
-import MessageTokenReducerService from './message-token-reducer-service';
 
 interface Options {
   modelName: string;
@@ -45,7 +44,6 @@ export default function createCompletionService({
   trajectory,
   backend = determineCompletionBackend(),
 }: Options): CompletionService {
-  const messageTokenReducerService = new MessageTokenReducerService();
   warn(`Using completion service ${backend}`);
-  return new BACKENDS[backend](modelName, temperature, trajectory, messageTokenReducerService);
+  return new BACKENDS[backend](modelName, temperature, trajectory);
 }

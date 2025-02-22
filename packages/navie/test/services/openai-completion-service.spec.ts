@@ -7,13 +7,14 @@ import { z } from 'zod';
 import Message from '../../src/message';
 import { PromptType } from '../../src/prompt';
 import { APIError } from 'openai';
-import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
 
+import * as truncater from '../../src/lib/truncate-messages';
+
+jest.mock('../../src/lib/truncate-messages');
 jest.mock('@langchain/openai');
 
 describe('OpenAICompletionService', () => {
   let interactionHistory: InteractionHistory;
-  let messageTokenReducerService: MessageTokenReducerService;
   let service: OpenAICompletionService;
   let trajectory: Trajectory;
   const modelName = 'the-model-name';
@@ -21,14 +22,8 @@ describe('OpenAICompletionService', () => {
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
-    messageTokenReducerService = new MessageTokenReducerService();
     trajectory = new Trajectory();
-    service = new OpenAICompletionService(
-      modelName,
-      temperature,
-      trajectory,
-      messageTokenReducerService
-    );
+    service = new OpenAICompletionService(modelName, temperature, trajectory);
   });
 
   describe('when the completion service is created', () => {
@@ -127,9 +122,7 @@ describe('OpenAICompletionService', () => {
       });
       mockCompletion('Hello');
 
-      const reduceMessageTokens = jest
-        .spyOn(messageTokenReducerService, 'reduceMessageTokens')
-        .mockResolvedValue([]);
+      const truncateMessages = jest.spyOn(truncater, 'default').mockReturnValue([]);
 
       const messages = [{ role: 'user', content: 'Hello' }] as const;
       const result = [];
@@ -139,7 +132,7 @@ describe('OpenAICompletionService', () => {
 
       expect(result).toEqual(['Hello']);
       expect(completionWithRetry).toHaveBeenCalledTimes(2);
-      expect(reduceMessageTokens).toHaveBeenCalledTimes(1);
+      expect(truncateMessages).toHaveBeenCalledTimes(1);
     });
 
     describe('with a custom temperature', () => {
