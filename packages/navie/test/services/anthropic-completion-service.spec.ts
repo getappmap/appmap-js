@@ -6,10 +6,9 @@ import { AIMessageChunk } from '@langchain/core/messages';
 import { z } from 'zod';
 import { RunnableBinding } from '@langchain/core/runnables';
 import Trajectory, { TrajectoryEvent } from '../../src/lib/trajectory';
-import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
+import { PromptTooLongError } from '../../src/services/completion-service';
 
 describe('AnthropicCompletionService', () => {
-  let messageTokenReducerService: MessageTokenReducerService;
   let trajectory: Trajectory;
   let service: AnthropicCompletionService;
   const modelName = 'anthropic-model';
@@ -19,18 +18,14 @@ describe('AnthropicCompletionService', () => {
 
   beforeEach(() => {
     process.env['ANTHROPIC_API_KEY'] = 'test-api-key';
-    messageTokenReducerService = new MessageTokenReducerService();
     trajectory = new Trajectory();
-    service = new AnthropicCompletionService(
-      modelName,
-      temperature,
-      trajectory,
-      messageTokenReducerService
-    );
+    service = new AnthropicCompletionService(modelName, temperature, trajectory);
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
     process.env = originalEnv;
+    jest.useRealTimers();
   });
 
   it('has the correct model name', () => {
@@ -119,7 +114,7 @@ describe('AnthropicCompletionService', () => {
       expect(stream).toHaveBeenCalledTimes(5);
     });
 
-    it('truncates messages if context length exceeded', async () => {
+    it('throws an error if context length exceeded and onContextOverflow is set to throw', async () => {
       const stream = jest.spyOn(ChatAnthropic.prototype, 'stream').mockImplementation(() => {
         const message = 'prompt is too long: 200000 tokens > 199999 maximum';
         const error = Object.defineProperties(new Error(message), {
@@ -138,42 +133,68 @@ describe('AnthropicCompletionService', () => {
         });
         throw error;
       });
-      const reduceMessageTokens = jest
-        .spyOn(messageTokenReducerService, 'reduceMessageTokens')
-        .mockResolvedValue([]);
-      const completion = service.complete([]);
-      const consumePromise = (async () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        try {
-          for await (const chunk of completion) {
-            // We don't expect to get any chunks
-          }
-        } catch (e) {
-          /* eslint-disable jest/no-conditional-expect */
-          // This is not conditional, it's guaranteed to throw
-          const err = e as Error;
-          expect(err).toBeInstanceOf(Error);
-          expect(err.message).toContain('prompt is too long');
-          expect(reduceMessageTokens).toHaveBeenCalledTimes(4);
-          expect(stream).toHaveBeenCalledTimes(5);
-          /* eslint-enable jest/no-conditional-expect */
-        }
-      })();
+      const completion = service.complete([], { onContextOverflow: 'throw' });
+      await expect(completion.next()).rejects.toThrow(PromptTooLongError);
+      expect(stream).toHaveBeenCalledTimes(1);
+      expect(service.maxTokens).toEqual(199999);
+    });
 
-      const delays = [1000, 2000, 4000, 8000];
+    it('truncates messages by default when token count exceeds limit', async () => {
+      const messages = [
+        { role: 'system', content: 'Short system message' },
+        { role: 'user', content: 'A'.repeat(1000) },
+        { role: 'assistant', content: 'Short response' },
+      ] as const;
 
-      for (const delay of delays) {
-        // Yield to the event loop to allow another attempt to be made
-        // eslint-disable-next-line no-await-in-loop
-        await Promise.resolve();
+      const stream = jest.spyOn(ChatAnthropic.prototype, 'stream').mockImplementationOnce(() => {
+        const message = 'prompt is too long: 200000 tokens > 199999 maximum';
+        const error = Object.defineProperties(new Error(message), {
+          status: {
+            value: 400,
+          },
+          error: {
+            value: {
+              type: 'error',
+              error: {
+                type: 'invalid_request_error',
+                message,
+              },
+            },
+          },
+        });
+        throw error;
+      });
+      mockAnthropicStream('Completion after truncation');
 
-        // Another yield because the call to `reduceMessageTokens` is async
-        await Promise.resolve();
-
-        jest.advanceTimersByTime(delay);
+      const result = [];
+      for await (const token of service.complete(messages)) {
+        result.push(token);
       }
 
-      await consumePromise;
+      expect(result).toEqual(['Completion after truncation']);
+      expect(stream).toHaveBeenCalledTimes(2);
+      expect(service.maxTokens).toEqual(199999);
+    });
+
+    it('throws if truncation is impossible', async () => {
+      const messages = [
+        { role: 'system', content: 'A'.repeat(100) },
+        { role: 'user', content: 'B'.repeat(100) },
+        { role: 'assistant', content: 'C'.repeat(100) },
+      ] as const;
+
+      const stream = jest.spyOn(ChatAnthropic.prototype, 'stream').mockImplementation(() => {
+        const message = 'prompt is too long: 200000 tokens > 19999 maximum';
+        const error = Object.defineProperties(new Error(message), {
+          status: { value: 400 },
+          error: { value: { type: 'error', error: { type: 'invalid_request_error', message } } },
+        });
+        throw error;
+      });
+
+      await expect(service.complete(messages).next()).rejects.toThrow(PromptTooLongError);
+      expect(stream).toHaveBeenCalledTimes(1);
+      expect(service.maxTokens).toEqual(19999);
     });
   });
 

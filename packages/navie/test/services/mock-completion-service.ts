@@ -5,9 +5,12 @@ import { ZodType } from 'zod';
 import type { Message } from '../../src';
 import CompletionService, { type Completion, Usage } from '../../src/services/completion-service';
 
-export default class MockCompletionService implements CompletionService {
+export default class MockCompletionService extends CompletionService {
+  constructor() {
+    super('mock-model', 0.7, {} as never);
+  }
   // eslint-disable-next-line @typescript-eslint/require-await
-  async *complete(messages: readonly Message[]): Completion {
+  async *_complete(messages: readonly Message[]): Completion {
     const completion = this.completion(messages);
     for (const c of completion) {
       yield c;

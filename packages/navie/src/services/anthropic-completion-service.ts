@@ -15,7 +15,6 @@ import CompletionService, {
   Usage,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
-import MessageTokenReducerService from './message-token-reducer-service';
 
 /*
   Generated on https://docs.anthropic.com/en/docs/about-claude/models with
@@ -105,14 +104,12 @@ function getClaudeError(e: unknown): ClaudeError | undefined {
   return undefined;
 }
 
-export default class AnthropicCompletionService implements CompletionService {
-  constructor(
-    public readonly modelName: string,
-    public readonly temperature: number,
-    private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService
-  ) {
+export default class AnthropicCompletionService extends CompletionService {
+  constructor(modelName: string, temperature: number, trajectory: Trajectory) {
+    super(modelName, temperature, trajectory);
     this.model = this.buildModel({ temperature });
+    this.maxTokens = 200_000;
+    this.countMessageTokens = this.model.getNumTokens.bind(this.model);
   }
   model: ChatAnthropic;
 
@@ -167,10 +164,10 @@ export default class AnthropicCompletionService implements CompletionService {
     return response;
   }
 
-  async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
+  async *_complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
     const usage = new Usage(COST_PER_M_TOKEN[this.modelName]);
     const model = this.buildModel(options);
-    let sentMessages: Message[] = mergeSystemMessages(messages);
+    const sentMessages: Message[] = mergeSystemMessages(messages);
     const tokens = new Array<string>();
     for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
@@ -201,20 +198,19 @@ export default class AnthropicCompletionService implements CompletionService {
           const apiError = getClaudeError(cause);
           if (apiError) {
             const nextAttempt = CompletionRetryDelay * 2 ** attempt;
-            let shouldRetry = apiError.status === undefined;
+            const shouldRetry = apiError.status === undefined;
 
             if (
               apiError.status === 400 &&
               apiError.error.type === 'invalid_request_error' &&
               apiError.error.message.includes('prompt is too long')
             ) {
-              warn('Context length exceeded. Reducing token count and retrying.');
-              sentMessages = await this.messageTokenReducerService.reduceMessageTokens(
-                sentMessages,
-                this.modelName,
-                { message: apiError.error.message }
-              );
-              shouldRetry = true;
+              const { message } = apiError.error;
+              // messages are like "prompt is too long: 200009 tokens > 200000 maximum"
+              const promptTokens = parseInt(message.match(/(\d+) tokens/)?.[1] ?? '0', 10);
+              const maxTokens = parseInt(message.match(/(\d+) maximum/)?.[1] ?? '0', 10);
+
+              throw await this.promptTooLong(messages, cause, promptTokens, maxTokens);
             }
 
             if (shouldRetry) {

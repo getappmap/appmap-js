@@ -19,7 +19,6 @@ import CompletionService, {
 import Trajectory from '../lib/trajectory';
 import Message, { CHARACTERS_PER_TOKEN } from '../message';
 import { APIError } from 'openai';
-import MessageTokenReducerService from './message-token-reducer-service';
 import { findObject, tryParseJson } from '../lib/parse-json';
 import trimFences from '../lib/trim-fences';
 import { performance } from 'node:perf_hooks';
@@ -192,15 +191,15 @@ export type OpenAICompletionServiceOptions = CompletionServiceOptions & {
   apiUrl?: string;
 };
 
-export default class OpenAICompletionService implements CompletionService {
+export default class OpenAICompletionService extends CompletionService {
   constructor(
-    public readonly modelName: string,
-    public readonly temperature: number,
-    private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService,
+    modelName: string,
+    temperature: number,
+    trajectory: Trajectory,
     private apiUrl?: string,
     private apiKey?: string
   ) {
+    super(modelName, temperature, trajectory);
     this.model = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
@@ -218,6 +217,8 @@ export default class OpenAICompletionService implements CompletionService {
       this.model.getNumTokens = (c) =>
         Promise.resolve(typeof c === 'string' ? c.length / CHARACTERS_PER_TOKEN : 0);
     }
+    this.countMessageTokens = this.model.getNumTokens.bind(this.model);
+    this.maxTokens = contextWindowSize(modelName);
   }
   model: ChatOpenAI;
 
@@ -339,12 +340,12 @@ export default class OpenAICompletionService implements CompletionService {
     return undefined;
   }
 
-  async *complete(messages: readonly Message[], options?: CompleteOptions): Completion {
+  async *_complete(messages: readonly Message[], options?: CompleteOptions): Completion {
     const tokens = new Array<string>();
     const model = options?.model ?? this.model.modelName;
     const isO1 = this.modelName.startsWith('o1-');
     const usage = new Usage(COST_PER_M_TOKEN[model]);
-    let sentMessages: Message[] = mergeSystemMessages(messages);
+    const sentMessages: Message[] = mergeSystemMessages(messages);
 
     if (isO1) {
       // O1 does not support system messages, so prepend the system message to the newest user message.
@@ -437,12 +438,14 @@ export default class OpenAICompletionService implements CompletionService {
         if (!(error instanceof APIError)) throw error; // only retry on server errors
         if (tokens.length || attempt === CompletionRetries - 1) throw error; // Rethrow if tokens were yielded or max attempts reached
         if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
-          warn('Context length exceeded. Reducing token count and retrying.');
-          sentMessages = await this.messageTokenReducerService.reduceMessageTokens(
-            sentMessages,
-            model,
-            { message: error.message }
+          const message = error.message;
+          // messages are like "This model's maximum context length is 16385 tokens. However, your messages resulted in 40007 tokens"
+          const promptLength = parseInt(message.match(/in (\d+) tokens/)?.[1] ?? '0', 10);
+          const maxTokens = parseInt(
+            message.match(/maximum context length is (\d+)/)?.[1] ?? '0',
+            10
           );
+          throw await this.promptTooLong(messages, error, promptLength, maxTokens);
         } else if (error.type !== 'server_error') throw error; // only retry on server errors
         await new Promise(
           (resolve) => setTimeout(resolve, CompletionRetryDelay * Math.pow(2, attempt)) // Exponential backoff
@@ -476,4 +479,12 @@ function schemaPrompt(jsonSchema: Record<string, unknown>): Message {
       2
     )}`,
   };
+}
+
+function contextWindowSize(modelName: string): number {
+  if (modelName.startsWith('gpt-4')) return 128_000;
+  if (modelName.startsWith('gpt-4.1')) return 1_048_576;
+  if (modelName.startsWith('gpt-3.5')) return 16_384;
+  if (modelName.startsWith('o')) return 128_000;
+  return Infinity;
 }

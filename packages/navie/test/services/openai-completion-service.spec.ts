@@ -7,13 +7,12 @@ import { z } from 'zod';
 import Message from '../../src/message';
 import { PromptType } from '../../src/prompt';
 import { APIError } from 'openai';
-import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
+import { PromptTooLongError } from '../../src/services/completion-service';
 
 jest.mock('@langchain/openai');
 
 describe('OpenAICompletionService', () => {
   let interactionHistory: InteractionHistory;
-  let messageTokenReducerService: MessageTokenReducerService;
   let service: OpenAICompletionService;
   let trajectory: Trajectory;
   const modelName = 'the-model-name';
@@ -21,14 +20,8 @@ describe('OpenAICompletionService', () => {
 
   beforeEach(() => {
     interactionHistory = new InteractionHistory();
-    messageTokenReducerService = new MessageTokenReducerService();
     trajectory = new Trajectory();
-    service = new OpenAICompletionService(
-      modelName,
-      temperature,
-      trajectory,
-      messageTokenReducerService
-    );
+    service = new OpenAICompletionService(modelName, temperature, trajectory);
   });
 
   describe('when the completion service is created', () => {
@@ -109,8 +102,7 @@ describe('OpenAICompletionService', () => {
       expect(completionWithRetry).toHaveBeenCalledTimes(2);
     });
 
-    it('retries if token count exceeds limit', async () => {
-      // eslint-disable-next-line @typescript-eslint/require-await
+    it('throws if token count exceeds limit and onContextOverflow is set to throw', async () => {
       responseMock.mockImplementationOnce(() => {
         throw new APIError(
           undefined,
@@ -125,21 +117,75 @@ describe('OpenAICompletionService', () => {
           undefined
         );
       });
-      mockCompletion('Hello');
-
-      const reduceMessageTokens = jest
-        .spyOn(messageTokenReducerService, 'reduceMessageTokens')
-        .mockResolvedValue([]);
 
       const messages = [{ role: 'user', content: 'Hello' }] as const;
+
+      await expect(
+        service.complete(messages, { onContextOverflow: 'throw' }).next()
+      ).rejects.toThrow(PromptTooLongError);
+      expect(completionWithRetry).toHaveBeenCalledTimes(1);
+      expect(service.maxTokens).toEqual(128000);
+    });
+
+    it('truncates messages by default when token count exceeds limit', async () => {
+      const messages = [
+        { role: 'system', content: 'Short system message' },
+        { role: 'user', content: 'A'.repeat(1000) },
+        { role: 'assistant', content: 'Short response' },
+      ] as const;
+
+      responseMock
+        .mockImplementationOnce(() => {
+          throw new APIError(
+            undefined,
+            {
+              message:
+                "This model's maximum context length is 128000 tokens. However, your messages resulted in 128001 tokens. Please reduce the length of the messages.",
+              type: 'invalid_request_error',
+              param: 'messages',
+              code: 'context_length_exceeded',
+            },
+            undefined,
+            undefined
+          );
+        })
+        .mockImplementation(() => 'Completion after truncation');
+
       const result = [];
       for await (const token of service.complete(messages)) {
         result.push(token);
       }
 
-      expect(result).toEqual(['Hello']);
+      expect(result).toEqual(['Completion after truncation']);
       expect(completionWithRetry).toHaveBeenCalledTimes(2);
-      expect(reduceMessageTokens).toHaveBeenCalledTimes(1);
+      expect(service.maxTokens).toEqual(128000);
+    });
+
+    it('gives up if truncation is impossible', async () => {
+      const messages = [
+        { role: 'system', content: 'A'.repeat(100) },
+        { role: 'user', content: 'B'.repeat(100) },
+        { role: 'assistant', content: 'C'.repeat(100) },
+      ] as const;
+
+      responseMock.mockImplementation(() => {
+        throw new APIError(
+          undefined,
+          {
+            message:
+              "This model's maximum context length is 1000 tokens. However, your messages resulted in 128001 tokens. Please reduce the length of the messages.",
+            type: 'invalid_request_error',
+            param: 'messages',
+            code: 'context_length_exceeded',
+          },
+          undefined,
+          undefined
+        );
+      });
+
+      await expect(service.complete(messages).next()).rejects.toThrow(PromptTooLongError);
+      expect(completionWithRetry).toHaveBeenCalledTimes(1);
+      expect(service.maxTokens).toEqual(1000);
     });
 
     describe('content restriction', () => {

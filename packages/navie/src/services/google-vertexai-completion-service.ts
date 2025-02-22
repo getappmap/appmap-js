@@ -7,7 +7,6 @@ import { zodResponseFormat } from 'openai/helpers/zod';
 import pRetry from 'p-retry';
 import { z } from 'zod';
 
-import Trajectory from '../lib/trajectory';
 import Message from '../message';
 import CompletionService, {
   CompleteOptions,
@@ -19,13 +18,7 @@ import CompletionService, {
   Usage,
 } from './completion-service';
 
-export default class GoogleVertexAICompletionService implements CompletionService {
-  constructor(
-    public readonly modelName: string,
-    public readonly temperature: number,
-    private trajectory: Trajectory
-  ) {}
-
+export default class GoogleVertexAICompletionService extends CompletionService {
   // Construct a model with non-default options. There doesn't seem to be a way to configure
   // the model parameters at invocation time like with OpenAI.
   private buildModel(options?: ChatVertexAIInput): ChatVertexAI {
@@ -102,7 +95,7 @@ export default class GoogleVertexAICompletionService implements CompletionServic
     });
   }
 
-  async *complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
+  async *_complete(messages: readonly Message[], options?: { temperature?: number }): Completion {
     const usage = new Usage();
     const model = this.buildModel(options);
     let { temperature } = model;
