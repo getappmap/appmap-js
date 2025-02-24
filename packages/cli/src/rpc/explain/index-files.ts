@@ -1,4 +1,4 @@
-import sqlite3 from 'better-sqlite3';
+import type sqlite3 from 'node-sqlite3-wasm';
 
 import {
   buildFileIndex,

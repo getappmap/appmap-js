@@ -1,11 +1,11 @@
 import { isNativeError } from 'node:util/types';
 
+import { getModelNameForTiktoken } from '@langchain/core/language_models/base';
 import { ChatOpenAI } from '@langchain/openai';
 import type { ChatCompletion, ChatCompletionChunk } from 'openai/resources/index';
 import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { warn } from 'console';
-import Message from '../message';
 import CompletionService, {
   Completion,
   CompletionRetries,
@@ -15,11 +15,20 @@ import CompletionService, {
   Usage,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
+import Message, { CHARACTERS_PER_TOKEN } from '../message';
 import { APIError } from 'openai';
-import MessageTokenReducerService from './message-token-reducer-service';
 import { findObject, tryParseJson } from '../lib/parse-json';
 import trimFences from '../lib/trim-fences';
 import { performance } from 'node:perf_hooks';
+
+import maxTokens from '../lib/max-tokens';
+import truncateMessages from '../lib/truncate-messages';
+
+// For some reason this doesn't work as import
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { getEncodingNameForModel } = require('js-tiktoken/lite') as {
+  getEncodingNameForModel: (x: string) => string;
+};
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -177,8 +186,7 @@ export default class OpenAICompletionService implements CompletionService {
   constructor(
     public readonly modelName: string,
     public readonly temperature: number,
-    private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService
+    private trajectory: Trajectory
   ) {
     this.model = new ChatOpenAI({
       modelName: this.modelName,
@@ -186,8 +194,17 @@ export default class OpenAICompletionService implements CompletionService {
       streaming: true,
       onFailedAttempt,
     });
+    try {
+      getEncodingNameForModel(getModelNameForTiktoken(modelName));
+    } catch {
+      warn(`Unknown model ${modelName}, using estimated token count`);
+      this.model.getNumTokens = (c) =>
+        Promise.resolve(typeof c === 'string' ? c.length / CHARACTERS_PER_TOKEN : 0);
+    }
+    this.tokenLimit = maxTokens(modelName);
   }
   model: ChatOpenAI;
+  tokenLimit: number;
 
   get miniModelName(): string {
     const miniModel = process.env.APPMAP_NAVIE_MINI_MODEL;
@@ -309,6 +326,12 @@ export default class OpenAICompletionService implements CompletionService {
     const isO1 = this.modelName.startsWith('o1-');
     const usage = new Usage(COST_PER_M_TOKEN[model]);
     let sentMessages: Message[] = mergeSystemMessages(messages);
+    const tokenCount = await this.countTokens(sentMessages);
+    if (tokenCount > this.tokenLimit) {
+      warn(`Token count (${tokenCount}) exceeds limit (${this.tokenLimit}), truncating messages.`);
+      sentMessages = truncateMessages(sentMessages, tokenCount, this.tokenLimit);
+      warn(`New token count: ${await this.countTokens(sentMessages)}`);
+    }
 
     if (isO1) {
       // O1 does not support system messages, so prepend the system message to the newest user message.
@@ -377,12 +400,11 @@ export default class OpenAICompletionService implements CompletionService {
         if (!(error instanceof APIError)) throw error; // only retry on server errors
         if (tokens.length || attempt === CompletionRetries - 1) throw error; // Rethrow if tokens were yielded or max attempts reached
         if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
-          warn('Context length exceeded. Reducing token count and retrying.');
-          sentMessages = await this.messageTokenReducerService.reduceMessageTokens(
-            sentMessages,
-            model,
-            { message: error.message }
-          );
+          const count = await this.countTokens(sentMessages, error);
+          const max = this.ratchetMaxTokens(count, error);
+          warn(`Reducing tokens from ${count} to ${max}`);
+          sentMessages = truncateMessages(sentMessages, count, max);
+          continue;
         } else if (error.type !== 'server_error') throw error; // only retry on server errors
         await new Promise(
           (resolve) => setTimeout(resolve, CompletionRetryDelay * Math.pow(2, attempt)) // Exponential backoff
@@ -394,6 +416,30 @@ export default class OpenAICompletionService implements CompletionService {
 
     warn(usage.toString());
     return usage;
+  }
+
+  private async countTokens(messages: Message[], error?: Error): Promise<number> {
+    if (error) {
+      const countMatch = /However, your messages resulted in (\d+) tokens./.exec(error.message);
+      if (countMatch) return parseInt(countMatch[1], 10);
+    }
+
+    const counts = await Promise.all(messages.map((m) => this.model.getNumTokens(m.content)));
+    return counts.reduce((a, b) => a + b, 0);
+  }
+
+  private ratchetMaxTokens(overflowedCount: number, error?: Error): number {
+    let maxTokens = Math.min(this.tokenLimit, overflowedCount * 0.9);
+
+    if (error) {
+      const countMatch = /This model's maximum context length is (\d+)/.exec(error.message);
+      if (countMatch) maxTokens = Math.min(parseInt(countMatch[1], 10), maxTokens);
+      if (maxTokens === this.tokenLimit)
+        // something is wrong, add a margin
+        maxTokens *= 0.9;
+    }
+
+    return (this.tokenLimit = Math.floor(maxTokens));
   }
 }
 

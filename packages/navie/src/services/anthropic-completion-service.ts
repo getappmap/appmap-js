@@ -4,6 +4,7 @@ import { isNativeError } from 'node:util/types';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { z } from 'zod';
 
+import maxTokens from '../lib/max-tokens';
 import Message from '../message';
 import CompletionService, {
   Completion,
@@ -15,7 +16,7 @@ import CompletionService, {
   Usage,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
-import MessageTokenReducerService from './message-token-reducer-service';
+import truncateMessages from '../lib/truncate-messages';
 
 /*
   Generated on https://docs.anthropic.com/en/docs/about-claude/models with
@@ -109,12 +110,13 @@ export default class AnthropicCompletionService implements CompletionService {
   constructor(
     public readonly modelName: string,
     public readonly temperature: number,
-    private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService
+    private trajectory: Trajectory
   ) {
     this.model = this.buildModel({ temperature });
+    this.tokenLimit = maxTokens(modelName);
   }
   model: ChatAnthropic;
+  tokenLimit: number;
 
   // Construct a model with non-default options. There doesn't seem to be a way to configure
   // the model parameters at invocation time like with OpenAI.
@@ -208,12 +210,11 @@ export default class AnthropicCompletionService implements CompletionService {
               apiError.error.type === 'invalid_request_error' &&
               apiError.error.message.includes('prompt is too long')
             ) {
-              warn('Context length exceeded. Reducing token count and retrying.');
-              sentMessages = await this.messageTokenReducerService.reduceMessageTokens(
-                sentMessages,
-                this.modelName,
-                { message: apiError.error.message }
-              );
+              const { message } = apiError.error;
+              const count = await this.countTokens(sentMessages, message);
+              const max = this.ratchetMaxTokens(count, message);
+              warn(`Reducing tokens from ${count} to ${max}`);
+              sentMessages = truncateMessages(sentMessages, count, max);
               shouldRetry = true;
             }
 
@@ -241,6 +242,30 @@ export default class AnthropicCompletionService implements CompletionService {
 
     warn(usage.toString());
     return usage;
+  }
+
+  async countTokens(messages: Message[], errorMessage?: string): Promise<number> {
+    if (errorMessage) {
+      const countMatch = /prompt is too long: (\d+) tokens > \d+ maximum/.exec(errorMessage);
+      if (countMatch) return parseInt(countMatch[1], 10);
+    }
+
+    const counts = await Promise.all(messages.map((m) => this.model.getNumTokens(m.content)));
+    return counts.reduce((a, b) => a + b, 0);
+  }
+
+  private ratchetMaxTokens(overflowedCount: number, errorMessage?: string): number {
+    let maxTokens = Math.min(this.tokenLimit, overflowedCount * 0.9);
+
+    if (errorMessage) {
+      const countMatch = /prompt is too long: \d+ tokens > (\d+) maximum/.exec(errorMessage);
+      if (countMatch) maxTokens = Math.min(parseInt(countMatch[1], 10), maxTokens);
+      if (maxTokens === this.tokenLimit)
+        // something is wrong, add a margin
+        maxTokens *= 0.9;
+    }
+
+    return (this.tokenLimit = Math.floor(maxTokens));
   }
 }
 

@@ -1,3 +1,5 @@
+import sqlite3 from 'node-sqlite3-wasm';
+
 import {
   buildSnippetIndex,
   FileSearchResult,
@@ -6,7 +8,6 @@ import {
   readFileSafe,
   SnippetIndex,
 } from '@appland/search';
-import sqlite3 from 'better-sqlite3';
 
 export default async function indexSnippets(
   db: sqlite3.Database,

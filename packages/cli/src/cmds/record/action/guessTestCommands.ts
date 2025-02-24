@@ -34,14 +34,14 @@ const TestCommands: TestCommandGuess[] = [
   {
     paths: ['package.json', 'node_modules/mocha'],
     command: {
-      command: 'npx @appland/appmap-agent-js --recorder=mocha -- npx mocha',
+      command: 'npx appmap-node npx mocha',
       env: {},
     },
   },
   {
     paths: ['package.json', 'node_modules/@jest'],
     command: {
-      command: 'npx @appland/appmap-agent-js --recorder=jest -- npx jest',
+      command: 'npx appmap-node npx jest',
       env: {},
     },
   },

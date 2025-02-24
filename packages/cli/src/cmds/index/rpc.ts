@@ -81,6 +81,13 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
 
 export const handler = async (argv: HandlerArguments) => {
   verbose(argv.verbose);
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      const duration = entry.duration;
+      console.log(`${entry.name}: ${duration.toFixed(0)} ms`);
+    }
+  });
+  observer.observe({ type: 'measure' });
 
   const navie = buildNavieProvider(argv);
   let codeEditor: string | undefined = argv.codeEditor;
