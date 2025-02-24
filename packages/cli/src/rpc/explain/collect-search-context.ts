@@ -29,8 +29,10 @@ export default async function collectSearchContext(
   searchResponse: SearchRpc.SearchResponse;
   context: ContextV2.ContextResponse;
 }> {
+  performance.mark('start collect search context');
   const sessionId = generateSessionId();
 
+  performance.mark('start search appmap files');
   let appmapSearchResponse: AppMapSearchResponse;
   if (request.appmaps) {
     const results = request.appmaps
@@ -73,6 +75,7 @@ export default async function collectSearchContext(
 
     debug(`Matched ${selectedAppMaps.results.length} AppMaps.`);
   }
+  performance.measure('search appmap files', 'start search appmap files');
 
   const fileSearchResults = await searchProjectFiles(
     sessionId,
@@ -82,13 +85,16 @@ export default async function collectSearchContext(
     vectorTerms
   );
 
+  performance.mark('start build project file snippet index');
   const snippetIndex = await buildProjectFileSnippetIndex(
     sessionId,
     vectorTerms,
     appmapSearchResponse,
     fileSearchResults
   );
+  performance.measure('build project file snippet index', 'start build project file snippet index');
 
+  performance.mark('start search snippets');
   let contextCandidate: {
     results: SearchRpc.SearchResult[];
     context: ContextV2.ContextResponse;
@@ -118,7 +124,9 @@ export default async function collectSearchContext(
   } finally {
     snippetIndex.close();
   }
+  performance.measure('search snippets', 'start search snippets');
 
+  performance.measure('collect search context', 'start collect search context');
   return {
     searchResponse: {
       results: contextCandidate.results,

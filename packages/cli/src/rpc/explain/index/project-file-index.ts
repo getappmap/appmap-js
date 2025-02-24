@@ -83,10 +83,14 @@ export async function searchProjectFiles(
   excludePatterns: RegExp[] | undefined,
   vectorTerms: string[]
 ): Promise<FileSearchResult[]> {
+  performance.mark('start building file index');
   const index = await buildProjectFileIndex(sourceDirectories, includePatterns, excludePatterns);
+  performance.measure('build file index', 'start building file index');
+  performance.mark('start search project files');
   try {
     return index.index.search(sessionId, vectorTerms.join(' OR '));
   } finally {
     index.close();
+    performance.measure('search project files', 'start search project files');
   }
 }
