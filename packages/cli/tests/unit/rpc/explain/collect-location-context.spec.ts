@@ -5,7 +5,9 @@ import { isBinaryFile } from '@appland/search';
 
 import Location from '../../../../src/rpc/explain/location';
 import ContentRestrictions from '../../../../src/rpc/explain/ContentRestrictions';
-import collectLocationContext from '../../../../src/rpc/explain/collect-location-context';
+import collectLocationContext, {
+  listDirectory,
+} from '../../../../src/rpc/explain/collect-location-context';
 
 jest.mock('node:fs/promises');
 jest.mock('@appland/search');
@@ -16,6 +18,39 @@ describe('collectLocationContext', () => {
   afterEach(() => {
     jest.resetAllMocks();
     ContentRestrictions.instance.reset();
+  });
+
+  describe('listDirectory', () => {
+    const mockReaddir = jest.spyOn(fs, 'readdir');
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('lists files and directories up to the specified depth', async () => {
+      mockReaddir.mockResolvedValueOnce([mockDirent('file1.js'), mockDirent('dir1', true)]);
+      mockReaddir.mockResolvedValueOnce([mockDirent('file2.js'), mockDirent('file3.js')]);
+
+      const result: string[] = [];
+      for await (const entry of listDirectory('/test', 1)) {
+        result.push(entry);
+      }
+
+      expect(result).toEqual(['file1.js', 'dir1/', '\tfile2.js', '\tfile3.js']);
+    });
+
+    it('limits the number of subentries', async () => {
+      const subentries = Array.from({ length: 101 }, (_, i) => mockDirent(`file${i}.js`));
+      mockReaddir.mockResolvedValueOnce([mockDirent('dir1', true)]);
+      mockReaddir.mockResolvedValueOnce(subentries);
+
+      const result: string[] = [];
+      for await (const entry of listDirectory('/test', 1)) {
+        result.push(entry);
+      }
+
+      expect(result).toEqual(['dir1/ (101 entries)']);
+    });
   });
 
   describe('with empty locations', () => {
@@ -151,7 +186,9 @@ describe('collectLocationContext', () => {
 
     it('handles directory listings', async () => {
       stat.mockResolvedValue({ isDirectory: () => true, isFile: () => false } as Stats);
-      jest.spyOn(fs, 'readdir').mockResolvedValue(['file1.js', 'file2.js'].map(mockDirent));
+      jest
+        .spyOn(fs, 'readdir')
+        .mockResolvedValue(['file1.js', 'file2.js'].map((p) => mockDirent(p)));
 
       const result = await collectLocationContext(sourceDirectories, [Location.parse('/src:0')]);
       expect(result).toEqual([
@@ -208,11 +245,11 @@ describe('collectLocationContext', () => {
   });
 });
 
-function mockDirent(name: string): Dirent {
+function mockDirent(name: string, isDirectory = false): Dirent {
   return {
     name,
     isFile: () => true,
-    isDirectory: () => false,
+    isDirectory: () => isDirectory,
     isBlockDevice: () => false,
     isCharacterDevice: () => false,
     isSymbolicLink: () => false,

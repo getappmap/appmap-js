@@ -140,14 +140,22 @@ async function directoryContextItem(
   };
 }
 
-async function* listDirectory(path: string, depth: number): AsyncGenerator<string> {
+const MAX_SUBENTRIES = 100;
+
+export async function* listDirectory(path: string, depth: number): AsyncGenerator<string> {
   const entries = await readdir(path, { withFileTypes: true });
   for (const entry of entries) {
     const entryPath = join(path, entry.name);
     if (entry.isDirectory()) {
       if (depth > 0) {
-        yield `${entry.name}/`;
-        for await (const subentry of listDirectory(entryPath, depth - 1)) yield `\t${subentry}`;
+        const subentries: string[] = [];
+        for await (const subentry of listDirectory(entryPath, depth - 1)) subentries.push(subentry);
+        if (subentries.length <= MAX_SUBENTRIES) {
+          yield `${entry.name}/`;
+          for (const subentry of subentries) yield `\t${subentry}`;
+        } else {
+          yield `${entry.name}/ (${subentries.length} entries)`;
+        }
       } else yield `${entry.name}/ (${(await readdir(entryPath)).length} entries)`;
     } else if (entry.isFile()) {
       yield entry.name;
