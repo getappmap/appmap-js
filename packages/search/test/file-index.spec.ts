@@ -18,16 +18,30 @@ describe('FileIndex', () => {
     if (index) index.close();
   });
 
-  it('should insert and search a file', () => {
-    index.indexFile(directory, 'test.txt', 'symbol1', 'word1');
+  it('should insert and search a file', async () => {
+    await index.index(
+      (async function* () {
+        yield { directory, filePath: 'test.txt' };
+      })(),
+      async () => ({ symbols: ['symbol1'], words: ['word1'] })
+    );
     const results = index.search('symbol1');
     assert.equal(results.length, 1);
     assert.equal(results[0].filePath, 'test.txt');
   });
 
-  it('should return results ordered by score', () => {
-    index.indexFile(directory, 'test3.txt', 'symbol1 symbol3', 'word1 word3');
-    index.indexFile(directory, 'test4.txt', 'symbol2 symbol3', 'word1 word4');
+  it('should return results ordered by score', async () => {
+    await index.index(
+      (async function* () {
+        yield { directory, filePath: 'test3.txt' };
+        yield { directory, filePath: 'test4.txt' };
+      })(),
+      async (filePath) => {
+        if (filePath === 'test3.txt') return { symbols: ['symbol1', 'symbol3'], words: ['word1'] };
+        if (filePath === 'test4.txt')
+          return { symbols: ['symbol1', 'symbol2', 'symbol3'], words: ['word1', 'word2'] };
+      }
+    );
 
     let results = index.search('word1');
     expect(results.map((r: FileSearchResult) => r.filePath)).toEqual(['test3.txt', 'test4.txt']);

@@ -3,8 +3,6 @@ import { isAbsolute, join } from 'path';
 
 import FileIndex from './file-index';
 import { ContentReader } from './ioutil';
-import { warn } from 'console';
-import { isNativeError } from 'util/types';
 
 export type ListFn = (path: string) => Promise<string[]>;
 
@@ -17,54 +15,41 @@ export type Tokenizer = (
   fileExtension: string
 ) => Promise<{ symbols: string[]; words: string[] }>;
 
-type Context = {
-  fileIndex: FileIndex;
-  baseDirectory: string;
-  listDirectory: ListFn;
-  fileFilter: FilterFn;
-  contentReader: ContentReader;
-  tokenizer: Tokenizer;
-};
+function fileReader(
+  contentReader: ContentReader,
+  tokenizer: Tokenizer
+): (filePath: string) => Promise<{ symbols: string[]; words: string[] } | undefined> {
+  return async (filePath: string) => {
+    debug('Indexing file: %s', filePath);
+    const fileContents = await contentReader(filePath);
+    if (!fileContents) return;
 
-async function indexFile(context: Context, filePath: string) {
-  debug('Indexing file: %s', filePath);
-  const fileContents = await context.contentReader(filePath);
-  if (!fileContents) return;
-
-  debug(
-    'Read file: %s, length: %d (%s...)',
-    filePath,
-    fileContents.length,
-    fileContents.slice(0, 40)
-  );
-  const fileExtension = filePath.split('.').pop() ?? '';
-  const tokens = await context.tokenizer(fileContents, fileExtension);
-  const symbols = tokens.symbols.join(' ');
-  const words = tokens.words.join(' ');
-
-  debug('Tokenized file: %s', filePath);
-  context.fileIndex.indexFile(context.baseDirectory, filePath, symbols, words);
-  debug('Wrote file to index: %s', filePath);
+    debug(
+      'Read file: %s, length: %d (%s...)',
+      filePath,
+      fileContents.length,
+      fileContents.slice(0, 40)
+    );
+    const fileExtension = filePath.split('.').pop() ?? '';
+    return await tokenizer(fileContents, fileExtension);
+  };
 }
 
-async function indexDirectory(context: Context, directory: string) {
-  const dirContents = await context.listDirectory(directory);
-  if (!dirContents) return;
+async function* listFiles(
+  directories: string[],
+  fileFilter: FilterFn,
+  listDirectory: ListFn
+): AsyncGenerator<{ directory: string; filePath: string }> {
+  for (const directory of directories) {
+    const dirContents = await listDirectory(directory);
+    if (!dirContents) continue;
 
-  for (const dirContentItem of dirContents) {
-    let filePath: string;
-    if (isAbsolute(dirContentItem)) filePath = dirContentItem;
-    else filePath = join(directory, dirContentItem);
+    for (const dirContentItem of dirContents) {
+      let filePath: string;
+      if (isAbsolute(dirContentItem)) filePath = dirContentItem;
+      else filePath = join(directory, dirContentItem);
 
-    debug('Indexing: %s', filePath);
-
-    if (await context.fileFilter(filePath)) {
-      try {
-        await indexFile(context, filePath);
-      } catch (e) {
-        const message = isNativeError(e) ? e.message : String(e);
-        warn(`Error indexing file ${filePath}: ${message}`);
-      }
+      if (await fileFilter(filePath)) yield { directory, filePath };
     }
   }
 }
@@ -77,15 +62,8 @@ export default async function buildFileIndex(
   contentReader: ContentReader,
   tokenizer: Tokenizer
 ): Promise<void> {
-  for (const directory of directories) {
-    const context: Context = {
-      fileIndex,
-      baseDirectory: directory,
-      listDirectory,
-      fileFilter,
-      contentReader,
-      tokenizer,
-    };
-    await indexDirectory(context, directory);
-  }
+  await fileIndex.index(
+    listFiles(directories, fileFilter, listDirectory),
+    fileReader(contentReader, tokenizer)
+  );
 }
