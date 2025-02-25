@@ -156,6 +156,11 @@ export function buildNavieProvider(argv: ExplainArgs) {
     projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     helpProvider: Help.HelpProvider
   ) => {
+    const observer = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) warn(`${entry.name}: ${entry.duration.toFixed(0)} ms`);
+    });
+    observer.observe({ type: 'measure' });
+
     loadConfiguration(false);
     const navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
 
