@@ -24,7 +24,7 @@ describe('project-file-index', () => {
     const excludePatterns = undefined;
 
     const index = await buildProjectFileIndex(sourceDirectories, includePatterns, excludePatterns);
-    const files = index.index.search('session', 'file');
+    const files = index.search('file');
 
     expect(files.filter((f) => f.filePath.includes('restricted-file.js')).length).toBe(0);
     expect(files.filter((f) => f.filePath.includes('allowed-file.js')).length).toBe(1);

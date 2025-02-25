@@ -24,7 +24,8 @@ const cli = yargs(hideBin(process.argv))
       return yargs
         .option('directories', {
           alias: 'd',
-          type: 'array',
+          type: 'string',
+          array: true,
           description: 'List of directories to index',
           default: ['.'],
         })
@@ -66,8 +67,7 @@ const cli = yargs(hideBin(process.argv))
         return !filterRE.test(path);
       };
 
-      const db = new sqlite3.Database(':memory:');
-      const fileIndex = new FileIndex(db);
+      const fileIndex = await FileIndex.cached('file', ...directories);
       const sessionId = generateSessionId();
 
       performance.mark('start indexing');
@@ -101,7 +101,7 @@ const cli = yargs(hideBin(process.argv))
 
       const splitter = langchainSplitter;
 
-      const snippetIndex = new SnippetIndex(db);
+      const snippetIndex = new SnippetIndex(new sqlite3.Database());
       await buildSnippetIndex(snippetIndex, fileSearchResults, readFileSafe, splitter, fileTokens);
 
       console.log('');
@@ -130,7 +130,7 @@ const cli = yargs(hideBin(process.argv))
         console.log(lines.map((l) => `    > ${l}`).join('\n'));
       }
 
-      db.close();
+      fileIndex.close();
     }
   )
   .help().argv;

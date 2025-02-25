@@ -16,8 +16,6 @@ import {
 } from '@appland/search';
 import { fileNameMatchesFilterPatterns } from './filter-patterns';
 
-import buildIndexInTempDir, { CloseableIndex } from './build-index-in-temp-dir';
-
 import ContentRestrictions from '../ContentRestrictions';
 
 const debug = makeDebug('appmap:index:project-files');
@@ -52,13 +50,11 @@ function fileFilter(
 }
 
 async function indexFiles(
-  db: sqlite3.Database,
+  fileIndex: FileIndex,
   directories: string[],
   includePatterns: RegExp[] | undefined,
   excludePatterns: RegExp[] | undefined
 ): Promise<FileIndex> {
-  const fileIndex = new FileIndex(db);
-
   const filter = fileFilter(includePatterns, excludePatterns);
   await buildFileIndex(fileIndex, directories, listProjectFiles, filter, readFileSafe, fileTokens);
 
@@ -69,11 +65,9 @@ export async function buildProjectFileIndex(
   sourceDirectories: string[],
   includePatterns: RegExp[] | undefined,
   excludePatterns: RegExp[] | undefined
-): Promise<CloseableIndex<FileIndex>> {
-  return await buildIndexInTempDir('files', async (indexFile) => {
-    const db = new sqlite3.Database(indexFile);
-    return await indexFiles(db, sourceDirectories, includePatterns, excludePatterns);
-  });
+): Promise<FileIndex> {
+  const index = await FileIndex.cached('files', ...sourceDirectories);
+  return await indexFiles(index, sourceDirectories, includePatterns, excludePatterns);
 }
 
 export async function searchProjectFiles(
@@ -88,7 +82,7 @@ export async function searchProjectFiles(
   performance.measure('build file index', 'start building file index');
   performance.mark('start search project files');
   try {
-    return index.index.search(vectorTerms.join(' OR '));
+    return index.search(vectorTerms.join(' OR '));
   } finally {
     index.close();
     performance.measure('search project files', 'start search project files');

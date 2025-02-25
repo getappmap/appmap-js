@@ -38,6 +38,7 @@
     "typescript-eslint": "^8.11.0"
   },
   "dependencies": {
+    "cachedir": "^2.4.0",
     "isbinaryfile": "^5.0.4",
     "node-sqlite3-wasm": "^0.8.34",
     "yargs": "^17.7.2"

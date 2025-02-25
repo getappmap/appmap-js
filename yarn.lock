@@ -593,6 +593,7 @@ __metadata:
   dependencies:
     "@types/jest": ^29.5.4
     "@types/node": ^16
+    cachedir: ^2.4.0
     eslint: ^9
     eslint-config-prettier: ^9
     eslint-plugin-eslint-comments: ^3.2.0
@@ -16704,6 +16705,13 @@ __metadata:
   version: 2.3.0
   resolution: "cachedir@npm:2.3.0"
   checksum: ec90cb0f2e6336e266aa748dbadf3da9e0b20e843e43f1591acab7a3f1451337dc2f26cb9dd833ae8cfefeffeeb43ef5b5ff62782a685f4e3c2305dd98482fcb
+  languageName: node
+  linkType: hard
+
+"cachedir@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "cachedir@npm:2.4.0"
+  checksum: 43198514eaa61f65b5535ed29ad651f22836fba3868ed58a6a87731f05462f317d39098fa3ac778801c25455483c9b7f32a2fcad1f690a978947431f12a0f4d0
   languageName: node
   linkType: hard
 
