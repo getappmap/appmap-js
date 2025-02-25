@@ -28,7 +28,8 @@ const DELETE_SESSION_SQL = `DELETE FROM file_boost WHERE session_id LIKE ?`;
 const SEARCH_SQL = `SELECT
     file_content.directory,
     file_content.file_path,
-    (bm25(file_content, 1)*3.0 + bm25(file_content, 2)*2.0 + bm25(file_content, 3)*1.0)
+    -- directory, file_path, file_symbols, file_words
+    -bm25(file_content, 0, 3, 2, 1)
       * COALESCE(file_boost.boost_factor, 1.0) * -1
       AS score
 FROM
