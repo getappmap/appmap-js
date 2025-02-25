@@ -26,7 +26,7 @@
           "score": 0.31041987694089435
         }
       ],
-      "score": 0.000022
+      "score": 0.0000036
     },
     {
       "appmap": "$cwd/tests/unit/fixtures/ruby/user_page_scenario",
@@ -46,7 +46,7 @@
           "score": 0.807
         }
       ],
-      "score": 0.000010
+      "score": 0.0000017
     }
   ]
 }
