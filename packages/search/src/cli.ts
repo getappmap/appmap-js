@@ -39,6 +39,9 @@ const cli = yargs(hideBin(process.argv))
         .strict();
     },
     async (argv) => {
+      new PerformanceObserver((entries) =>
+        entries.getEntries().forEach((e) => console.warn(`${e.name}: ${e.duration.toFixed(0)} ms`))
+      ).observe({ entryTypes: ['measure'] });
       const { directories, query } = argv;
 
       let filterRE: RegExp | undefined;
@@ -66,6 +69,7 @@ const cli = yargs(hideBin(process.argv))
       const fileIndex = new FileIndex(db);
       const sessionId = generateSessionId();
 
+      performance.mark('start indexing');
       await buildFileIndex(
         fileIndex,
         directories as string[],
@@ -74,6 +78,7 @@ const cli = yargs(hideBin(process.argv))
         readFileSafe,
         fileTokens
       );
+      performance.measure('indexing', 'start indexing');
 
       const filePathAtMostThreeEntries = (filePath: string) => {
         const parts = filePath.split('/');
