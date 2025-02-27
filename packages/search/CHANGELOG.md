@@ -1,3 +1,18 @@
+# [@appland/search-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.1.3...@appland/search-v1.2.0) (2025-02-27)
+
+
+### Bug Fixes
+
+* Finalize insert and search operations in FileIndex close method ([19fe2e8](https://github.com/getappmap/appmap-js/commit/19fe2e8574cf11e6619629331d7deb7fbdcb11c5))
+* Fix file index scoring priorities ([9c798bc](https://github.com/getappmap/appmap-js/commit/9c798bca5c943e9e344b838314f9e0739082c4d9))
+* Migrate from better-sqlite3 to node-sqlite3-wasm for improved compatibility ([86e0fe5](https://github.com/getappmap/appmap-js/commit/86e0fe5386286816473c0b16a91f7fa80f8706af))
+
+
+### Features
+
+* Add performance measurement to search CLI ([1fc4ef3](https://github.com/getappmap/appmap-js/commit/1fc4ef331256a861c6de3e310cbdd70b7a9aa41c))
+* Cache the file index ([fa465d2](https://github.com/getappmap/appmap-js/commit/fa465d244688da939c86444ba4652feff207f378))
+
 # [@appland/search-v1.1.3](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.1.2...@appland/search-v1.1.3) (2025-02-05)
 
 
