@@ -83,6 +83,8 @@ export default class FileIndex {
   }
 
   close() {
+    this.#insert.finalize();
+    this.#search.finalize();
     this.database.close();
   }
 }
