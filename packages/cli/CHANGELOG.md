@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.186.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.185.3...@appland/appmap-v3.186.0) (2025-02-27)
+
+
+### Bug Fixes
+
+* Fix file index scoring priorities ([9c798bc](https://github.com/getappmap/appmap-js/commit/9c798bca5c943e9e344b838314f9e0739082c4d9))
+* Migrate from better-sqlite3 to node-sqlite3-wasm for improved compatibility ([86e0fe5](https://github.com/getappmap/appmap-js/commit/86e0fe5386286816473c0b16a91f7fa80f8706af))
+
+
+### Features
+
+* Cache the file index ([fa465d2](https://github.com/getappmap/appmap-js/commit/fa465d244688da939c86444ba4652feff207f378))
+* Show performance measurements in navie CLI command ([7ede2e7](https://github.com/getappmap/appmap-js/commit/7ede2e7c0e9d07382b4dd61b06ac10f1f573bd2c))
+
 # [@appland/appmap-v3.185.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.185.2...@appland/appmap-v3.185.3) (2025-02-19)
 
 
