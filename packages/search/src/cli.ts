@@ -35,6 +35,7 @@ const cli = yargs(hideBin(process.argv))
         .positional('query', {
           describe: 'Search query',
           type: 'string',
+          demandOption: true,
         })
         .strict();
     },
@@ -92,7 +93,7 @@ const cli = yargs(hideBin(process.argv))
 
       console.log('File search results');
       console.log('-------------------');
-      const fileSearchResults = fileIndex.search(sessionId, query as string);
+      const fileSearchResults = fileIndex.search(query);
       for (const result of fileSearchResults) {
         const { filePath, score } = result;
         printResult('file', filePath, score);
