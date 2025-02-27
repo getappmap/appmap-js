@@ -155,7 +155,7 @@ export async function search(
   search: string,
   maxResults: number
 ): Promise<SearchResponse> {
-  const searchMatches = index.search(sessionId, search, maxResults);
+  const searchMatches = index.search(search, maxResults);
   let matches: Match[] = searchMatches.map((match) => {
     let appmapId = match.filePath;
     if (appmapId.endsWith('.appmap.json'))
