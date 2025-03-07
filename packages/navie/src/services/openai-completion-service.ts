@@ -178,11 +178,17 @@ export default class OpenAICompletionService implements CompletionService {
     public readonly modelName: string,
     public readonly temperature: number,
     private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService
+    private readonly messageTokenReducerService: MessageTokenReducerService,
+    private apiUrl?: string,
+    private apiKey?: string
   ) {
     this.model = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
+      configuration: {
+        baseURL: this.apiUrl ?? process.env.OPENAI_BASE_URL,
+        apiKey: this.apiKey ?? process.env.OPENAI_API_KEY,
+      },
       streaming: true,
       onFailedAttempt,
     });

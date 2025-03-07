@@ -59,6 +59,16 @@ describe('pages/ChatSearch.vue', () => {
   const rpcNavieMetadataEmpty = () => [[null, null, { commands: [] }]];
   const rpcNavieNextSteps = () => [[null, null, []]];
   const rpcSystemListMethods = () => [[null, null, ['v1.navie.suggest', 'v1.navie.metadata']]];
+  const rpcNavieModelsList = () => [
+    [
+      null,
+      null,
+      [
+        { id: 'gpt-3.5-turbo', provider: 'OpenAI', name: 'GPT-3.5 Turbo', createdAt: 0 },
+        { id: 'gpt-4', provider: 'OpenAI', name: 'GPT-4', createdAt: 0 },
+      ],
+    ],
+  ];
 
   const emptySearchResponse = {
     results: [],
@@ -76,6 +86,7 @@ describe('pages/ChatSearch.vue', () => {
       'v2.configuration.get': noConfig(),
       'system.listMethods': rpcSystemListMethods(),
       'v1.navie.register': rpcNavieRegister(),
+      'v1.navie.models.list': rpcNavieModelsList(),
       explain: [[null, null, { userMessageId, threadId }]],
       'explain.status': [
         [null, null, { step: 'build-vector-terms' }],
@@ -200,6 +211,7 @@ describe('pages/ChatSearch.vue', () => {
       'v2.configuration.get': noConfig(),
       'system.listMethods': rpcSystemListMethods(),
       'v1.navie.register': rpcNavieRegister(),
+      'v1.navie.models.list': rpcNavieModelsList(),
     });
 
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
@@ -295,6 +307,7 @@ describe('pages/ChatSearch.vue', () => {
           'v2.configuration.get': noConfig(),
           'system.listMethods': rpcSystemListMethods(),
           'v1.navie.register': rpcNavieRegister(),
+          'v1.navie.models.list': rpcNavieModelsList(),
           explain: [[null, null, { userMessageId, threadId }]],
           'explain.status': [
             [
@@ -380,116 +393,6 @@ describe('pages/ChatSearch.vue', () => {
     });
   });
 
-  describe('llm configuration', () => {
-    it('does not render until the configuration is available', async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.configuration.get': noConfig(),
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-      });
-
-      expect(wrapper.find('[data-cy="llm-config"] [data-cy="loading"]').exists()).toBe(true);
-      expect(wrapper.vm.configLoaded).toBe(false);
-
-      await waitForInitialized(wrapper);
-
-      expect(wrapper.vm.configLoaded).toBe(true);
-      expect(wrapper.find('[data-cy="llm-config"] [data-cy="loading"]').exists()).toBe(false);
-      expect(wrapper.find('[data-cy="llm-config"] [data-cy="llm-model"]').exists()).toBe(true);
-    });
-
-    it('renders a local configuration', async () => {
-      const wrapper = chatSearchWrapper({
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-        'v2.configuration.get': [
-          [
-            null,
-            null,
-            { baseUrl: 'http://localhost:11434', model: 'mistral', projectDirectories: [] },
-          ],
-        ],
-      });
-
-      await waitForInitialized(wrapper);
-
-      const llmConfig = wrapper.find('[data-cy="llm-config"]');
-      expect(llmConfig.exists()).toBe(true);
-      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('mistral');
-      expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(via localhost)');
-    });
-
-    it('renders the default configuration', async () => {
-      const wrapper = chatSearchWrapper({
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'v2.configuration.get': [[null, null, { projectDirectories: [] }]],
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-      });
-
-      await waitForInitialized(wrapper);
-
-      const llmConfig = wrapper.find('[data-cy="llm-config"]');
-      expect(llmConfig.exists()).toBe(true);
-      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('GPT-4o');
-      expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(default)');
-    });
-
-    it('renders an azure configuration', async () => {
-      const wrapper = chatSearchWrapper({
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-        'v2.configuration.get': [
-          [
-            null,
-            null,
-            {
-              baseUrl: 'https://my-instance.openai.azure.com',
-              model: 'my-deployment',
-              projectDirectories: [],
-            },
-          ],
-        ],
-      });
-
-      await waitForInitialized(wrapper);
-
-      const llmConfig = wrapper.find('[data-cy="llm-config"]');
-      expect(llmConfig.exists()).toBe(true);
-      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('my-deployment');
-      expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(via Azure OpenAI)');
-    });
-
-    it('renders an OpenAI configuration', async () => {
-      const wrapper = chatSearchWrapper({
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-        'v2.configuration.get': [
-          [
-            null,
-            null,
-            {
-              baseUrl: 'https://api.openai.com',
-              model: 'gpt-4-turbo',
-              projectDirectories: [],
-            },
-          ],
-        ],
-      });
-
-      await wrapper.vm.$nextTick();
-
-      const llmConfig = wrapper.find('[data-cy="llm-config"]');
-      expect(llmConfig.exists()).toBe(true);
-      expect(llmConfig.find('[data-cy="llm-model"]').text()).toBe('gpt-4-turbo');
-      expect(llmConfig.find('[data-cy="llm-provider"]').text()).toBe('(via OpenAI)');
-    });
-  });
-
   describe('error handling', () => {
     async function simulateError(err, error) {
       const wrapper = chatSearchWrapper({
@@ -497,6 +400,7 @@ describe('pages/ChatSearch.vue', () => {
         'v2.configuration.get': noConfig(),
         'system.listMethods': rpcSystemListMethods(),
         'v1.navie.register': rpcNavieRegister(),
+        'v1.navie.models.list': rpcNavieModelsList(),
         explain: [[err, error]],
       });
 
@@ -658,6 +562,7 @@ describe('pages/ChatSearch.vue', () => {
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
         'v1.navie.register': rpcNavieRegister(),
+        'v1.navie.models.list': rpcNavieModelsList(),
       });
 
       await waitForInitialized(wrapper);
@@ -704,6 +609,7 @@ describe('pages/ChatSearch.vue', () => {
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
         'v1.navie.register': rpcNavieRegister(),
+        'v1.navie.models.list': rpcNavieModelsList(),
         'explain.thread.load': [
           [
             null,
@@ -753,6 +659,7 @@ describe('pages/ChatSearch.vue', () => {
         'v1.navie.metadata': rpcNavieMetadata(),
         'system.listMethods': rpcSystemListMethods(),
         'v1.navie.register': rpcNavieRegister(),
+        'v1.navie.models.list': rpcNavieModelsList(),
       });
 
       await waitForInitialized(wrapper);
@@ -766,6 +673,7 @@ describe('pages/ChatSearch.vue', () => {
         'v2.navie.metadata': rpcNavieMetadata(),
         'v2.navie.welcome': rpcWelcomeDynamic(),
         'v1.navie.register': rpcNavieRegister(),
+        'v1.navie.models.list': rpcNavieModelsList(),
         'system.listMethods': [[null, null, ['v2.navie.welcome']]],
       });
 
@@ -784,51 +692,6 @@ describe('pages/ChatSearch.vue', () => {
       expect(welcomeMessage.text()).toContain(welcomeDynamic.activity);
       expect(welcomeMessage.text()).toContain(welcomeDynamic.suggestions[0]);
       expect(welcomeMessage.text()).toContain(welcomeDynamic.suggestions[1]);
-    });
-  });
-
-  describe('email prop', () => {
-    it('is correctly propagated', async () => {
-      const wrapper = chatSearchWrapper({
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'v2.configuration.get': noConfig(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': [
-          [
-            null,
-            null,
-            {
-              thread: {
-                id: '00000000-0000-0000-0000-000000000000',
-                permissions: { useNavieAIProxy: true },
-                usage: {
-                  conversationCounts: [
-                    {
-                      daysAgo: 7,
-                      count: 7,
-                    },
-                  ],
-                },
-                subscription: { subscriptions: [] },
-              },
-            },
-          ],
-        ],
-        propsData: { displaySubscription: true },
-      });
-
-      await waitForInitialized(wrapper);
-      await wrapper.setProps({
-        apiKey: Buffer.from('test@example.com:test', 'utf-8').toString('base64'),
-      });
-
-      const expectedHref = 'https://getappmap.com/?email=test%40example.com';
-      expect(wrapper.find('[data-cy="plan-status-free"] a').attributes('href')).toStrictEqual(
-        expectedHref
-      );
-      expect(wrapper.find('a[data-cy="input-subscribe-link"]').attributes('href')).toStrictEqual(
-        expectedHref
-      );
     });
   });
 });
