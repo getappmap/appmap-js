@@ -30,6 +30,7 @@
           :models="models"
           :selected-model-id="selectedModelId"
           @select="onModelSelect"
+          :model-configs="modelConfigs"
         />
 
         <template #not-chatting>
@@ -109,7 +110,6 @@
 import VAddFileButton from '@/components/AddFileButton.vue';
 import VPopper from '@/components/Popper.vue';
 import VContext from '@/components/chat-search/Context.vue';
-import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import VPinnedItems from '@/components/chat-search/PinnedItems.vue';
 import type { ITool } from '@/components/chat/Chat.vue';
 import type { CodeSelection } from '@/components/chat/CodeSelection';
@@ -132,7 +132,6 @@ export default {
     VAddFileButton,
     VChat,
     VContext,
-    VLlmConfiguration,
     VPinnedItems,
     VPopper,
     VWelcomeMessageV1,
@@ -223,7 +222,7 @@ export default {
       baseUrl: undefined,
       model: undefined,
       models: [],
-      selectedModelId: undefined,
+      selectedModelId: 'gpt-4o',
       contextItems: {},
       pinnedItems: [] as PinItem[],
       projectDirectories: [] as string[],
@@ -235,6 +234,7 @@ export default {
       suggestedQuestions: undefined,
       isWelcomeV2Available: false,
       registrationData: undefined,
+      modelConfigs: undefined,
     };
   },
   provide() {
@@ -659,6 +659,11 @@ export default {
 
       this.configLoaded = true;
     },
+    async loadModelConfig() {
+      this.modelConfigs = await this.rpcClient.getModelConfig().catch((e) => {
+        console.error(e);
+      });
+    },
     async listRpcMethods() {
       if (this.rpcMethodsAvailable !== undefined) {
         return this.rpcMethodsAvailable;
@@ -673,11 +678,15 @@ export default {
 
       this.isWelcomeV2Available = this.rpcMethodsAvailable.includes('v2.navie.welcome');
     },
-    async listModels() {
+    async initializeModels() {
       try {
         this.models = await this.rpcClient.listModels();
       } catch (e) {
         console.error(e);
+      }
+
+      if (this.selectedModelId) {
+        await this.onModelSelect(this.selectedModelId);
       }
     },
     async isRpcMethodAvailable(methodName) {
@@ -775,14 +784,17 @@ export default {
      */
     async initialize() {
       try {
+        // v1.navie.models.list
+        await this.initializeModels();
+
+        // v1.navie.models.getConfig
+        this.loadModelConfig();
+
         // v2.configuration.get
         this.loadNavieConfig();
 
         // system.listMethods
         await this.listRpcMethods();
-
-        // v1.navie.models.list
-        this.listModels();
 
         // v1.navie.register
         this.initConversationThread();
@@ -804,6 +816,7 @@ export default {
       this.selectedModelId = modelId;
       try {
         await this.rpcClient.selectModel(model);
+        this.$emit('select-model', model);
       } catch (e) {
         console.error(e);
       }

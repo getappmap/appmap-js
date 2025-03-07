@@ -37,6 +37,7 @@ import ModelRegistry from '../../rpc/navie/models/registry';
 import { navieModelsAddV1 } from '../../rpc/navie/models/handlers/add';
 import { navieModelsListV1 } from '../../rpc/navie/models/handlers/list';
 import { navieModelsSelectV1 } from '../../rpc/navie/models/handlers/select';
+import { navieModelsGetConfigV1 } from '../../rpc/navie/models/handlers/getConfig';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -83,6 +84,7 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     navieModelsAddV1(),
     navieModelsListV1(),
     navieModelsSelectV1(),
+    navieModelsGetConfigV1(),
   ];
 }
 

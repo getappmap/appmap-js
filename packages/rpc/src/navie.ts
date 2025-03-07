@@ -49,6 +49,13 @@ export namespace NavieRpc {
         createdAt: string;
       };
 
+      export type Config = {
+        provider: string;
+        apiKey?: string;
+        endpoint?: string;
+        [key: string]: string | undefined;
+      };
+
       export namespace Add {
         export const Method = 'v1.navie.models.add';
         export type Params = Model[];
@@ -57,7 +64,7 @@ export namespace NavieRpc {
 
       export namespace List {
         export const Method = 'v1.navie.models.list';
-        export type Params = {};
+        export type Params = void;
         export type Response = Model[];
       }
 
@@ -65,6 +72,12 @@ export namespace NavieRpc {
         export const Method = 'v1.navie.models.select';
         export type Params = Model;
         export type Response = void;
+      }
+
+      export namespace GetConfig {
+        export const Method: string = 'v1.navie.models.getConfig';
+        export type Params = void;
+        export type Response = Config[];
       }
     }
   }

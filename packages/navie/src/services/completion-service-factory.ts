@@ -51,7 +51,7 @@ export default function createCompletionService({
   temperature,
   trajectory,
   selectedModel,
-  backend = determineCompletionBackend(selectedModel?.provider),
+  backend = determineCompletionBackend(selectedModel?.provider?.toLowerCase()),
 }: Options): CompletionService {
   const messageTokenReducerService = new MessageTokenReducerService();
   warn(`Using completion service ${backend}`);
