@@ -155,7 +155,7 @@ async function fetchOllamaModels(): Promise<NavieRpc.V1.Models.Model[]> {
 }
 
 export default class ModelRegistry {
-  private clientModels: NavieRpc.V1.Models.Model[] = [];
+  private clientModels: NavieRpc.V1.Models.ClientModel[] = [];
   private apiModels: NavieRpc.V1.Models.Model[] = [];
   private _selectedModel?: NavieRpc.V1.Models.Model;
 
@@ -173,12 +173,14 @@ export default class ModelRegistry {
     return this._selectedModel;
   }
 
-  add(model: NavieRpc.V1.Models.Model) {
+  add(model: NavieRpc.V1.Models.ClientModel) {
     this.clientModels.push(model);
   }
 
   list(): NavieRpc.V1.Models.Model[] {
-    return this.clientModels.concat(this.apiModels);
+    return this.clientModels
+      .map((m) => ({ id: m.id, name: m.name, provider: m.provider, createdAt: m.createdAt }))
+      .concat(this.apiModels);
   }
 
   async refresh() {

@@ -63,6 +63,9 @@ export interface INavie {
 export interface NavieModel {
   id: string;
   provider: string;
+  baseUrl?: string;
+  apiKey?: string;
+  maxInputTokens?: number;
 }
 
 export const DEFAULT_MODEL_NAME = 'gpt-4o';
@@ -87,6 +90,8 @@ export default function navie(
   chatHistory?: ChatHistory,
   selectedModel?: NavieModel
 ): INavie {
+  if (selectedModel?.maxInputTokens)
+    options.tokenLimit = Math.min(selectedModel.maxInputTokens, options.tokenLimit);
   if (options.modelName !== DEFAULT_MODEL_NAME) warn(`Using model ${options.modelName}`);
   if (options.tokenLimit !== DEFAULT_TOKEN_LIMIT) warn(`Using token limit ${options.tokenLimit}`);
   if (options.temperature !== DEFAULT_TEMPERATURE) warn(`Using temperature ${options.temperature}`);

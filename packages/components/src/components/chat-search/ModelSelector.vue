@@ -20,6 +20,7 @@
                 @change="onChangeValue($event, 'OPENAI_API_KEY')"
                 @focus="selectAll($event.target)"
                 placeholder="OpenAI API Key"
+                data-secret
                 :data-clear="Boolean(configMap.openai && configMap.openai.apiKey)"
                 :value="configMap.openai && configMap.openai.apiKey"
               />
@@ -47,6 +48,7 @@
                 @change="onChangeValue($event, 'ANTHROPIC_API_KEY')"
                 @focus="selectAll($event.target)"
                 placeholder="Anthropic API Key"
+                data-secret
                 :data-clear="Boolean(configMap.anthropic && configMap.anthropic.apiKey)"
                 :value="configMap.anthropic && configMap.anthropic.apiKey"
               />
@@ -64,6 +66,7 @@
                 @focus="selectAll($event.target)"
                 @change="onChangeValue($event, 'GOOGLE_WEB_CREDENTIALS')"
                 placeholder="Google Vertex API Key"
+                data-secret
                 :data-clear="Boolean(configMap.google && configMap.google.apiKey)"
                 :value="configMap.google && configMap.google.apiKey"
               />
@@ -105,7 +108,7 @@
             class="model-selector-list__item"
             data-cy="model-selector-item"
             v-for="model in sortedModels"
-            :key="model.id"
+            :key="`${model.provider}:${model.id}`"
             @click="onSelect(model)"
           >
             <span class="model-selector-list__item--title">{{ model.name }}</span>
@@ -183,7 +186,10 @@ export default Vue.extend({
       }, {} as Record<string, NavieRpc.V1.Models.Config>);
     },
     selectedModel(): NavieRpc.V1.Models.Model | undefined {
-      return this.models.find((model) => model.id === this.selectedModelId);
+      const [provider, id] = this.selectedModelId.split(':').map((s) => s.toLowerCase());
+      return this.models.find(
+        (model) => model.id.toLowerCase() === id && model.provider.toLowerCase() === provider
+      );
     },
     sortedModels(): NavieRpc.V1.Models.Model[] {
       return [...this.models].sort((a, b) => {
@@ -196,7 +202,7 @@ export default Vue.extend({
 
   methods: {
     onSelect(model: NavieRpc.V1.Models.Model) {
-      this.$emit('select', model.id);
+      this.$emit('select', model.provider, model.id);
       if (this.$refs.popper) {
         const popper = this.$refs.popper as any;
         popper.hide();
@@ -252,9 +258,12 @@ export default Vue.extend({
         return;
       }
 
+      const isSecret = input.getAttribute('data-secret') !== null;
+
       this.$root.$emit('change-model-config', {
         key,
         value: input.value,
+        secret: isSecret,
       });
     },
   },

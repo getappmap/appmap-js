@@ -49,6 +49,14 @@ export namespace NavieRpc {
         createdAt: string;
       };
 
+      export type CustomEndpoint = {
+        baseUrl?: string;
+        apiKey?: string;
+        maxInputTokens?: number;
+      };
+
+      export type ClientModel = Model & CustomEndpoint;
+
       export type Config = {
         provider: string;
         apiKey?: string;
@@ -58,7 +66,7 @@ export namespace NavieRpc {
 
       export namespace Add {
         export const Method = 'v1.navie.models.add';
-        export type Params = Model[];
+        export type Params = ClientModel[];
         export type Response = void;
       }
 

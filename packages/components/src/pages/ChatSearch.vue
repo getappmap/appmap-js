@@ -181,6 +181,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    preselectedModelId: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -222,7 +226,7 @@ export default {
       baseUrl: undefined,
       model: undefined,
       models: [],
-      selectedModelId: 'gpt-4o',
+      selectedModelId: this.preselectedModelId,
       contextItems: {},
       pinnedItems: [] as PinItem[],
       projectDirectories: [] as string[],
@@ -809,14 +813,14 @@ export default {
         console.error(e);
       }
     },
-    async onModelSelect(modelId: string) {
-      const model = this.models.find((m) => m.id === modelId);
+    async onModelSelect(provider: string, id: string) {
+      const model = this.models.find((m) => m.id === id && m.provider === provider);
       if (!model) return;
 
-      this.selectedModelId = modelId;
+      this.selectedModelId = `${provider}:${id}`;
       try {
         await this.rpcClient.selectModel(model);
-        this.$emit('select-model', model);
+        this.$root.$emit('select-model', model);
       } catch (e) {
         console.error(e);
       }

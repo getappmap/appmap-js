@@ -26,9 +26,11 @@ const BACKENDS = {
 
 type Backend = keyof typeof BACKENDS;
 
-function determineCompletionBackend(
-  provider = process.env.APPMAP_NAVIE_COMPLETION_BACKEND
-): Backend {
+function determineCompletionBackend(selectedModel?: NavieModel): Backend {
+  // If a custom endpoint is provided, we expect it to be OpenAI-compatible
+  if (selectedModel?.baseUrl) return 'openai';
+
+  const provider = selectedModel?.provider ?? process.env.APPMAP_NAVIE_COMPLETION_BACKEND;
   switch (provider) {
     case 'anthropic':
     case 'openai':
@@ -51,7 +53,7 @@ export default function createCompletionService({
   temperature,
   trajectory,
   selectedModel,
-  backend = determineCompletionBackend(selectedModel?.provider?.toLowerCase()),
+  backend = determineCompletionBackend(selectedModel),
 }: Options): CompletionService {
   const messageTokenReducerService = new MessageTokenReducerService();
   warn(`Using completion service ${backend}`);
@@ -59,6 +61,8 @@ export default function createCompletionService({
     selectedModel?.id ?? modelName,
     temperature,
     trajectory,
-    messageTokenReducerService
+    messageTokenReducerService,
+    selectedModel?.baseUrl,
+    selectedModel?.apiKey
   );
 }
