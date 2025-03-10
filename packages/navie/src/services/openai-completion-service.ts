@@ -187,8 +187,8 @@ export default class OpenAICompletionService implements CompletionService {
       temperature: this.temperature,
       configuration: {
         baseURL: this.apiUrl ?? process.env.OPENAI_BASE_URL,
-        apiKey: this.apiKey ?? process.env.OPENAI_API_KEY,
       },
+      apiKey: this.apiKey ?? process.env.OPENAI_API_KEY,
       streaming: true,
       onFailedAttempt,
     });
@@ -205,7 +205,8 @@ export default class OpenAICompletionService implements CompletionService {
 
   // eslint-disable-next-line class-methods-use-this
   private get isLocalModel(): boolean {
-    const baseUrl = process.env.OPENAI_BASE_URL ?? process.env.AZURE_OPENAI_BASE_PATH;
+    const baseUrl =
+      this.apiUrl ?? process.env.OPENAI_BASE_URL ?? process.env.AZURE_OPENAI_BASE_PATH;
     if (!baseUrl) return false;
 
     try {

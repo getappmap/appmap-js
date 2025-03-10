@@ -28,6 +28,13 @@ export default class OllamaCompletionService extends OpenAICompletionService {
     trajectory: Trajectory,
     messageTokenReducerService: MessageTokenReducerService
   ) {
-    super(modelName, temperature, trajectory, messageTokenReducerService, `${OLLAMA_URL}/v1`);
+    super(
+      modelName,
+      temperature,
+      trajectory,
+      messageTokenReducerService,
+      `${OLLAMA_URL}/v1`,
+      'dummy'
+    );
   }
 }

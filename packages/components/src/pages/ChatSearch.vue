@@ -23,6 +23,7 @@
         :usage="usage"
         :subscription="subscription"
         :email="email"
+        :selected-model-id="selectedModelId"
         @isChatting="setIsChatting"
         @stop="onStop"
       >
@@ -818,11 +819,17 @@ export default {
       if (!model) return;
 
       this.selectedModelId = `${provider}:${id}`;
+      console.log(this.selectedModelId);
       try {
         await this.rpcClient.selectModel(model);
         this.$root.$emit('select-model', model);
       } catch (e) {
         console.error(e);
+      }
+
+      if (!this.welcomeMessage) {
+        this.loadStaticMessages();
+        this.loadDynamicWelcomeMessages();
       }
     },
   },

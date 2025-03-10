@@ -55,24 +55,6 @@
             </div>
           </div>
           <div class="model-selector-config__group">
-            <h3>Google Vertex</h3>
-            <div class="model-selector-config__item">
-              <span class="model-selector-config__item--title">API Key</span>
-              <input
-                class="model-selector-config__text-input"
-                type="password"
-                @input="onInput"
-                @click.prevent.stop
-                @focus="selectAll($event.target)"
-                @change="onChangeValue($event, 'GOOGLE_WEB_CREDENTIALS')"
-                placeholder="Google Vertex API Key"
-                data-secret
-                :data-clear="Boolean(configMap.google && configMap.google.apiKey)"
-                :value="configMap.google && configMap.google.apiKey"
-              />
-            </div>
-          </div>
-          <div class="model-selector-config__group">
             <h3>Ollama</h3>
             <div class="model-selector-config__item">
               <span class="model-selector-config__item--title">Ollama Host URL</span>
@@ -125,15 +107,14 @@
             <ul>
               <li>OpenAI</li>
               <li>Anthropic</li>
-              <li>Google Vertex</li>
             </ul>
             <p>
               If you're using Ollama, make sure it is running. If your Ollama service runs on a
-              non-default port, change the Ollama Host URL in the configuration.
+              non-default port, change the Ollama Host URL in the configuration menu.
             </p>
             <p>
               <strong>Alternatively</strong>, install and sign in to GitHub Copilot. Models provided
-              by GitHub Copilot will be available here.
+              by GitHub Copilot will be automatically become available.
             </p>
           </div>
         </div>
@@ -186,9 +167,22 @@ export default Vue.extend({
       }, {} as Record<string, NavieRpc.V1.Models.Config>);
     },
     selectedModel(): NavieRpc.V1.Models.Model | undefined {
-      const [provider, id] = this.selectedModelId.split(':').map((s) => s.toLowerCase());
+      const lowerModel = this.selectedModelId.toLowerCase();
+
+      // We don't use split, because the model name may be something like deepseek-r1:8b
+      const delimiterIndex = lowerModel.indexOf(':');
+      const selectedModel: { id: string; provider?: string } =
+        delimiterIndex === -1
+          ? { id: lowerModel }
+          : {
+              provider: lowerModel.slice(0, delimiterIndex),
+              id: lowerModel.slice(delimiterIndex + 1),
+            };
+
       return this.models.find(
-        (model) => model.id.toLowerCase() === id && model.provider.toLowerCase() === provider
+        (model) =>
+          model.id.toLowerCase() === selectedModel.id &&
+          (!selectedModel.provider || model.provider === selectedModel.provider)
       );
     },
     sortedModels(): NavieRpc.V1.Models.Model[] {
@@ -311,7 +305,7 @@ export default Vue.extend({
     path {
       fill: $color-foreground;
       transform-origin: center;
-      transition: all 0.1s ease-in-out;
+      transition: all 0.1s ease-in;
     }
 
     &:hover {
@@ -323,7 +317,7 @@ export default Vue.extend({
     &:active {
       path {
         fill: $color-highlight;
-        transform: rotate(45deg);
+        transform: rotate(60deg);
       }
     }
   }

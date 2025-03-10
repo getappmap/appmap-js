@@ -30,7 +30,8 @@ function determineCompletionBackend(selectedModel?: NavieModel): Backend {
   // If a custom endpoint is provided, we expect it to be OpenAI-compatible
   if (selectedModel?.baseUrl) return 'openai';
 
-  const provider = selectedModel?.provider ?? process.env.APPMAP_NAVIE_COMPLETION_BACKEND;
+  const provider =
+    selectedModel?.provider.toLowerCase() ?? process.env.APPMAP_NAVIE_COMPLETION_BACKEND;
   switch (provider) {
     case 'anthropic':
     case 'openai':
