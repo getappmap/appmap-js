@@ -112,31 +112,6 @@ export function buildNavieProvider(argv: ExplainArgs) {
   let agentMode: Agents | undefined;
   if (agentModeStr) agentMode = agentModeStr as Agents;
 
-  const useLocalNavie = () => {
-    if (argv.navieProvider === 'local') {
-      warn(`Using local Navie provider due to explicit --navie-provider=local option`);
-      return true;
-    }
-
-    if (argv.navieProvider === 'remote') {
-      warn(`Using remote Navie provider due to explicit --navie-provider=remote option`);
-      return false;
-    }
-
-    const aiEnvVar = detectAIEnvVar();
-    if (aiEnvVar) {
-      warn(`Using local Navie provider due to presence of environment variable ${aiEnvVar}`);
-      return true;
-    }
-
-    warn(
-      `--navie-provider option not provided, and none of ${AI_KEY_ENV_VARS.join(
-        ' '
-      )} are available. Using remote Navie provider.`
-    );
-    return false;
-  };
-
   const applyAIOptions = (navie: LocalNavie | RemoteNavie | NopNavie) => {
     if (aiOptions) {
       for (const option of aiOptions) {
@@ -189,19 +164,7 @@ export function buildNavieProvider(argv: ExplainArgs) {
     return navie;
   };
 
-  const buildRemoteNavie = () => {
-    loadConfiguration(true);
-    const navie = new NopNavie();
-    applyAIOptions(navie);
-
-    if (argv.threadId) {
-      warn(`Ignoring --thread-id option for remote Navie provider`);
-    }
-
-    return navie;
-  };
-
-  return useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
+  return buildLocalNavie;
 }
 
 export const command = 'navie [question..]';
