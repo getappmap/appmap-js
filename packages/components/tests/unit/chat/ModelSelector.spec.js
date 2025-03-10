@@ -12,7 +12,7 @@ describe('ModelSelector.vue', () => {
     wrapper = mount(VModelSelector, {
       propsData: {
         models,
-        selectedModelId: 'gpt-3.5-turbo',
+        selectedModelId: 'openai:gpt-3.5-turbo',
       },
     });
   });
@@ -29,7 +29,7 @@ describe('ModelSelector.vue', () => {
 
     // Models are sorted by provider, then by createdAt
     wrapper.find('[data-cy="model-selector-item"]:nth-child(1)').trigger('click');
-    expect(wrapper.emitted().select).toStrictEqual([['deekseek-r1:8b']]);
+    expect(wrapper.emitted().select).toStrictEqual([['Ollama', 'deekseek-r1:8b']]);
   });
 
   it('displays the selected model', () => {

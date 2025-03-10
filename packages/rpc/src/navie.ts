@@ -47,12 +47,12 @@ export namespace NavieRpc {
         name: string;
         provider: string;
         createdAt: string;
+        maxInputTokens?: number;
       };
 
       export type CustomEndpoint = {
         baseUrl?: string;
         apiKey?: string;
-        maxInputTokens?: number;
       };
 
       export type ClientModel = Model & CustomEndpoint;

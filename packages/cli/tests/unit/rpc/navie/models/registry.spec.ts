@@ -39,6 +39,22 @@ describe(ModelRegistry, () => {
       ModelRegistry.instance['apiModels'] = [apiModel]; // eslint-disable-line @typescript-eslint/dot-notation
       expect(ModelRegistry.instance.list()).toEqual([clientModel, apiModel]);
     });
+    it('does not include endpoint information', () => {
+      const endpoint = {
+        baseUrl: 'http://example.com',
+        apiKey: 'example',
+      };
+      const clientModel = {
+        id: 'example',
+        name: 'example',
+        provider: 'example',
+        createdAt: '2023-01-01',
+        maxInputTokens: 1000,
+      };
+      ModelRegistry.instance.add({ ...clientModel, ...endpoint });
+      const models = ModelRegistry.instance.list();
+      expect(models).toStrictEqual([clientModel]);
+    });
   });
 
   describe('refresh', () => {

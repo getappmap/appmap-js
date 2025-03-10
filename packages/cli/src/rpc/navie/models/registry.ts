@@ -179,7 +179,16 @@ export default class ModelRegistry {
 
   list(): NavieRpc.V1.Models.Model[] {
     return this.clientModels
-      .map((m) => ({ id: m.id, name: m.name, provider: m.provider, createdAt: m.createdAt }))
+      .map(
+        (m) =>
+          ({
+            id: m.id,
+            name: m.name,
+            provider: m.provider,
+            createdAt: m.createdAt,
+            maxInputTokens: m.maxInputTokens,
+          } as NavieRpc.V1.Models.Model)
+      )
       .concat(this.apiModels);
   }
 
