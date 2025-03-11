@@ -1,3 +1,10 @@
+# [@appland/search-v1.2.1](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.0...@appland/search-v1.2.1) (2025-03-11)
+
+
+### Bug Fixes
+
+* Add PerformanceObserver import ([#2258](https://github.com/getappmap/appmap-js/issues/2258)) ([595b542](https://github.com/getappmap/appmap-js/commit/595b542c33529b7fb5e8ed07126f44bc5a545137))
+
 # [@appland/search-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.1.3...@appland/search-v1.2.0) (2025-02-27)
 
 
