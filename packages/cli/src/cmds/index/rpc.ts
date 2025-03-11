@@ -1,4 +1,5 @@
 import { warn } from 'node:console';
+import { PerformanceObserver } from 'node:perf_hooks';
 
 import yargs from 'yargs';
 
