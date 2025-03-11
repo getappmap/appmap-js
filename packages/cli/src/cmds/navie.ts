@@ -1,6 +1,7 @@
 import { warn } from 'node:console';
 import { createWriteStream } from 'node:fs';
 import { readFile } from 'node:fs/promises';
+import { PerformanceObserver } from 'node:perf_hooks';
 import type { Writable } from 'node:stream';
 import { text } from 'node:stream/consumers';
 
