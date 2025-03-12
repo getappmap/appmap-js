@@ -16,6 +16,7 @@ import CompletionService, {
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
 import MessageTokenReducerService from './message-token-reducer-service';
+import RequestHeaders from '../lib/request-headers';
 
 /*
   Generated on https://docs.anthropic.com/en/docs/about-claude/models with
@@ -127,6 +128,9 @@ export default class AnthropicCompletionService implements CompletionService {
       modelName: options?.model ?? this.modelName,
       temperature: options?.temperature ?? this.temperature,
       streaming: options?.streaming ?? true,
+      clientOptions: {
+        defaultHeaders: RequestHeaders.instance.buildHeaders(),
+      },
     });
   }
 

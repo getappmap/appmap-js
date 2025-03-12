@@ -20,6 +20,7 @@ import MessageTokenReducerService from './message-token-reducer-service';
 import { findObject, tryParseJson } from '../lib/parse-json';
 import trimFences from '../lib/trim-fences';
 import { performance } from 'node:perf_hooks';
+import RequestHeaders from '../lib/request-headers';
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -227,12 +228,15 @@ export default class OpenAICompletionService implements CompletionService {
       const sentMessages = mergeSystemMessages([...messages, schemaPrompt(jsonSchema)]);
       for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
-      return this.model.completionWithRetry({
-        messages: sentMessages,
-        model: options?.model ?? this.modelName,
-        stream: false,
-        temperature: options?.temperature,
-      });
+      return this.model.completionWithRetry(
+        {
+          messages: sentMessages,
+          model: options?.model ?? this.modelName,
+          stream: false,
+          temperature: options?.temperature,
+        },
+        { headers: RequestHeaders.instance.buildHeaders() }
+      );
     };
     // If using the OpenAI API, use the structured output response format.
     // This method unlikely to generate failure cases.
@@ -242,15 +246,18 @@ export default class OpenAICompletionService implements CompletionService {
       if (!schemaSupported) sentMessages.push(schemaPrompt(jsonSchema));
       for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
-      return this.model.completionWithRetry({
-        messages: sentMessages,
-        model: options?.model ?? this.miniModelName,
-        stream: false,
-        temperature: options?.temperature,
-        response_format: schemaSupported
-          ? zodResponseFormat(schema, 'requestedObject')
-          : { type: jsonSchema.type === 'object' ? 'json_object' : 'text' },
-      });
+      return this.model.completionWithRetry(
+        {
+          messages: sentMessages,
+          model: options?.model ?? this.miniModelName,
+          stream: false,
+          temperature: options?.temperature,
+          response_format: schemaSupported
+            ? zodResponseFormat(schema, 'requestedObject')
+            : { type: jsonSchema.type === 'object' ? 'json_object' : 'text' },
+        },
+        { headers: RequestHeaders.instance.buildHeaders() }
+      );
     };
 
     const maxRetries = options?.maxRetries ?? 3;
@@ -323,19 +330,25 @@ export default class OpenAICompletionService implements CompletionService {
     const fetchResponse = async () => {
       return isO1
         ? // o1 currently doesn't support streaming or temperatures != 1
-          this.model.completionWithRetry({
-            messages: sentMessages,
-            model,
-            stream: false,
-            temperature: 1,
-          })
-        : this.model.completionWithRetry({
-            messages: sentMessages,
-            model,
-            stream: true,
-            temperature: options?.temperature,
-            stream_options: { include_usage: true },
-          });
+          this.model.completionWithRetry(
+            {
+              messages: sentMessages,
+              model,
+              stream: false,
+              temperature: 1,
+            },
+            { headers: RequestHeaders.instance.buildHeaders() }
+          )
+        : this.model.completionWithRetry(
+            {
+              messages: sentMessages,
+              model,
+              stream: true,
+              temperature: options?.temperature,
+              stream_options: { include_usage: true },
+            },
+            { headers: RequestHeaders.instance.buildHeaders() }
+          );
     };
 
     for (let attempt = 0; attempt < CompletionRetries; attempt++) {

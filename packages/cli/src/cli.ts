@@ -39,8 +39,16 @@ import * as RpcClientCommand from './cmds/rpcClient';
 import * as NavieCommand from './cmds/navie';
 import * as ApplyCommand from './cmds/apply';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
+import { RequestHeaders } from '@appland/navie';
+import { PACKAGE_VERSION } from './lib/packageVersion';
+import detectCodeEditor from './lib/detectCodeEditor';
 
 setSQLErrorHandler(sqlErrorLog);
+
+RequestHeaders.instance.update({
+  version: PACKAGE_VERSION,
+  codeEditor: detectCodeEditor(),
+});
 
 // eslint-disable-next-line no-unused-expressions
 yargs(process.argv.slice(2))

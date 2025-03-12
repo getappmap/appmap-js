@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export { default as applyContext } from './lib/apply-context';
 export { default as extractFileChanges } from './lib/extract-file-changes';
 export { default as Message } from './message';
@@ -16,3 +15,4 @@ export * as InteractionHistory from './interaction-history';
 export { SELECTED_BACKEND } from './services/completion-service-factory';
 export { UserOptions, default as parseOptions } from './lib/parse-options';
 export { REVIEW_DIFF_LOCATION } from './commands/review-command';
+export { default as RequestHeaders } from './lib/request-headers';

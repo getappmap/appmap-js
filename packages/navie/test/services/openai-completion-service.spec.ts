@@ -146,7 +146,14 @@ describe('OpenAICompletionService', () => {
       it('completes the question', async () => {
         await complete({ temperature: 0.5 });
         expect(completionWithRetry).toHaveBeenCalledWith(
-          expect.objectContaining({ temperature: 0.5 })
+          expect.objectContaining({ temperature: 0.5 }),
+          {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            headers: expect.objectContaining({
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              'User-Agent': expect.stringContaining('AppMap Navie'),
+            }),
+          }
         );
       });
     });
@@ -194,7 +201,14 @@ describe('OpenAICompletionService', () => {
           ],
           temperature: options.temperature,
           model: service.miniModelName,
-        })
+        }),
+        {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          headers: expect.objectContaining({
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            'User-Agent': expect.stringContaining('AppMap Navie'),
+          }),
+        }
       );
     });
 
@@ -277,7 +291,14 @@ describe('OpenAICompletionService', () => {
                 ),
               },
             ],
-          })
+          }),
+          {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            headers: expect.objectContaining({
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              'User-Agent': expect.stringContaining('AppMap Navie'),
+            }),
+          }
         );
       });
 
