@@ -1,3 +1,10 @@
+# [@appland/navie-v1.42.3](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.42.2...@appland/navie-v1.42.3) (2025-03-14)
+
+
+### Bug Fixes
+
+* Notify users of termination due to content restrictions ([#2262](https://github.com/getappmap/appmap-js/issues/2262)) ([535296c](https://github.com/getappmap/appmap-js/commit/535296c0dd75a5b22b865a44a03b8e8a85275332))
+
 # [@appland/navie-v1.42.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.42.1...@appland/navie-v1.42.2) (2025-02-19)
 
 
