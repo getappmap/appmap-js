@@ -1,7 +1,6 @@
 import { warn } from 'node:console';
 import { createWriteStream } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { PerformanceObserver } from 'node:perf_hooks';
 import type { Writable } from 'node:stream';
 import { text } from 'node:stream/consumers';
 
@@ -13,6 +12,7 @@ import { Agents, ContextV2, Help, ProjectInfo } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
 import { configureRpcDirectories } from '../lib/handleWorkingDirectory';
+import observePerformance from '../lib/observePerformance';
 import { explainHandler } from '../rpc/explain/explain';
 import INavie, { INavieProvider } from '../rpc/explain/navie/inavie';
 import LocalNavie from '../rpc/explain/navie/navie-local';
@@ -157,11 +157,6 @@ export function buildNavieProvider(argv: ExplainArgs) {
     projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     helpProvider: Help.HelpProvider
   ) => {
-    const observer = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) warn(`${entry.name}: ${entry.duration.toFixed(0)} ms`);
-    });
-    observer.observe({ type: 'measure' });
-
     loadConfiguration(false);
     const navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
 
@@ -237,6 +232,7 @@ type HandlerArguments = yargs.ArgumentsCamelCase<
 >;
 
 export async function handler(argv: HandlerArguments) {
+  observePerformance();
   verbose(argv.verbose);
   await configureRpcDirectories(argv.directory);
 
