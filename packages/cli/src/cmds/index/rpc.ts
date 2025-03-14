@@ -1,5 +1,4 @@
 import { warn } from 'node:console';
-import { PerformanceObserver } from 'node:perf_hooks';
 
 import yargs from 'yargs';
 
@@ -17,6 +16,7 @@ import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
 import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import { configureRpcDirectories } from '../../lib/handleWorkingDirectory';
+import observePerformance from '../../lib/observePerformance';
 import {
   getConfigurationV1,
   getConfigurationV2,
@@ -81,14 +81,8 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
 }
 
 export const handler = async (argv: HandlerArguments) => {
+  observePerformance();
   verbose(argv.verbose);
-  const observer = new PerformanceObserver((list) => {
-    for (const entry of list.getEntries()) {
-      const duration = entry.duration;
-      console.log(`${entry.name}: ${duration.toFixed(0)} ms`);
-    }
-  });
-  observer.observe({ type: 'measure' });
 
   const navie = buildNavieProvider(argv);
   let codeEditor: string | undefined = argv.codeEditor;
