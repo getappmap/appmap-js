@@ -173,6 +173,9 @@ function onFailedAttempt(error: unknown) {
   }
 }
 
+const countCodeFences = (text: string): number =>
+  Array.from(text.matchAll(/^\s*?`{3,}\w*?$/gm)).length;
+
 export default class OpenAICompletionService implements CompletionService {
   constructor(
     public readonly modelName: string,
@@ -360,7 +363,31 @@ export default class OpenAICompletionService implements CompletionService {
         } else {
           for await (const token of response) {
             if (token.choices.length > 0) {
-              const { content } = token.choices[0].delta;
+              const choice = token.choices[0];
+              const { finish_reason: finishReason } = choice;
+              if (finishReason === 'content_filter') {
+                // The LLM provider has immediately terminated the response. This happens, for
+                // instance, when Copilot matches public code.
+                //
+                // All we can do is notify the user what happened. This is irreparable due to the
+                // fact that we've already yielded some tokens.
+                //
+                // To present the message cleanly, we'll first detect whether the message is
+                // currently writing out code within code fences. If so, we'll first close the open
+                // fence.
+                const numCodeFences = countCodeFences(tokens.join(''));
+                if (numCodeFences % 2 > 0) {
+                  // Note that this doesn't properly balance code fences of varying lengths, but
+                  // at the time of writing this, our prompts don't encourage that and I've not
+                  // observed it in the wild. -DB
+                  yield '\n```\n';
+                }
+
+                yield '---\n';
+                yield 'Sorry, the LLM provider has terminated the response due to content filtering restrictions.\n';
+                break;
+              }
+              const { content } = choice.delta;
               if (content) {
                 tokens.push(content);
                 yield content;

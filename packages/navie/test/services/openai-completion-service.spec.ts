@@ -142,6 +142,43 @@ describe('OpenAICompletionService', () => {
       expect(reduceMessageTokens).toHaveBeenCalledTimes(1);
     });
 
+    describe('content restriction', () => {
+      it('notifies the user if a content restriction is encountered', async () => {
+        completionWithRetry.mockResolvedValue([
+          { choices: [{ finish_reason: 'content_filter' }] },
+        ] as never);
+
+        const result = [];
+        for await (const token of service.complete([])) {
+          result.push(token);
+        }
+
+        expect(result).toEqual([
+          '---\n',
+          expect.stringContaining('Sorry, the LLM provider has terminated the response'),
+        ]);
+      });
+
+      it('closes an open code block if a content restriction is encountered', async () => {
+        completionWithRetry.mockResolvedValue([
+          { choices: [{ delta: { content: '```java\n' } }] },
+          { choices: [{ finish_reason: 'content_filter' }] },
+        ] as never);
+
+        const result = [];
+        for await (const token of service.complete([])) {
+          result.push(token);
+        }
+
+        expect(result).toEqual([
+          '```java\n',
+          '\n```\n',
+          '---\n',
+          expect.stringContaining('Sorry, the LLM provider has terminated the response'),
+        ]);
+      });
+    });
+
     describe('with a custom temperature', () => {
       it('completes the question', async () => {
         await complete({ temperature: 0.5 });
