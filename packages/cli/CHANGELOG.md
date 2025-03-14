@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.186.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.186.1...@appland/appmap-v3.186.2) (2025-03-14)
+
+
+### Bug Fixes
+
+* Make sure there's only a single PerformanceObserver ([0c84e42](https://github.com/getappmap/appmap-js/commit/0c84e42c98c09baad85e67d7920ae686e3812973))
+
 # [@appland/appmap-v3.186.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.186.0...@appland/appmap-v3.186.1) (2025-03-11)
 
 
