@@ -23,21 +23,16 @@
         :usage="usage"
         :subscription="subscription"
         :email="email"
+        :selected-model="selectedModel"
         @isChatting="setIsChatting"
         @stop="onStop"
       >
-        <div class="configuration-container" v-if="!isChatting">
-          <v-llm-configuration
-            data-cy="llm-config"
-            v-if="!disableLlmConfig"
-            :is-loading="isNavieLoading"
-            :base-url="baseUrl"
-            :model="model"
-            :subscription="subscription"
-            :usage="usage"
-            :email="email"
-          />
-        </div>
+        <v-model-selector
+          :models="models"
+          :selected-model="selectedModel"
+          @select="onModelSelect"
+          :model-configs="modelConfigs"
+        />
 
         <template #not-chatting>
           <div class="message-box__footer">
@@ -116,7 +111,6 @@
 import VAddFileButton from '@/components/AddFileButton.vue';
 import VPopper from '@/components/Popper.vue';
 import VContext from '@/components/chat-search/Context.vue';
-import VLlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
 import VPinnedItems from '@/components/chat-search/PinnedItems.vue';
 import type { ITool } from '@/components/chat/Chat.vue';
 import type { CodeSelection } from '@/components/chat/CodeSelection';
@@ -130,6 +124,8 @@ import AppMapRPC from '@/lib/AppMapRPC';
 import { PinFileRequest } from '@/lib/PinFileRequest';
 import debounce from '@/lib/debounce';
 import InfoIcon from '../assets/info.svg';
+import VModelSelector from '@/components/chat-search/ModelSelector.vue';
+import { NavieRpc } from '@appland/rpc';
 
 export default {
   name: 'v-chat-search',
@@ -138,11 +134,11 @@ export default {
     VAddFileButton,
     VChat,
     VContext,
-    VLlmConfiguration,
     VPinnedItems,
     VPopper,
     VWelcomeMessageV1,
     VWelcomeMessageV2,
+    VModelSelector,
   },
   mixins: [authenticatedClient],
   props: {
@@ -187,6 +183,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    // See `initializeModels` for details
+    preselectedModelId: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -227,6 +228,7 @@ export default {
       configLoaded: false,
       baseUrl: undefined,
       model: undefined,
+      models: [] as NavieRpc.V1.Models.ListModel[],
       contextItems: {},
       pinnedItems: [] as PinItem[],
       projectDirectories: [] as string[],
@@ -238,6 +240,8 @@ export default {
       suggestedQuestions: undefined,
       isWelcomeV2Available: false,
       registrationData: undefined,
+      modelConfigs: undefined,
+      selectedModel: undefined as undefined | NavieRpc.V1.Models.ListModel,
     };
   },
   provide() {
@@ -662,6 +666,11 @@ export default {
 
       this.configLoaded = true;
     },
+    async loadModelConfig() {
+      this.modelConfigs = await this.rpcClient.getModelConfig().catch((e) => {
+        console.error(e);
+      });
+    },
     async listRpcMethods() {
       if (this.rpcMethodsAvailable !== undefined) {
         return this.rpcMethodsAvailable;
@@ -675,6 +684,45 @@ export default {
       }
 
       this.isWelcomeV2Available = this.rpcMethodsAvailable.includes('v2.navie.welcome');
+    },
+    async initializeModels() {
+      try {
+        this.models = await this.rpcClient.listModels();
+      } catch (e) {
+        console.error(e);
+      }
+
+      // This function may be called again if Navie restarts. If we already have a selected model,
+      // do nothing.
+      if (this.selectedModel) {
+        return;
+      }
+
+      let modelId;
+      let provider;
+      // If we're provided a "preselected" model identifier, select it.
+      if (this.preselectedModelId) {
+        // The model ID should be formatted as `${provider}:${modelId}` or `${modelId}`. Each
+        // individual component may be URI encoded, because some model identifiers may contain a
+        // colon (e.g., deepseek-r1:8b)
+        const delimiterIndex = this.preselectedModelId.indexOf(':');
+        if (delimiterIndex === -1) {
+          modelId = decodeURIComponent(this.preselectedModelId);
+        } else {
+          modelId = decodeURIComponent(this.preselectedModelId.slice(delimiterIndex + 1));
+          provider = decodeURIComponent(this.preselectedModelId.slice(0, delimiterIndex));
+        }
+      } else {
+        // Find the model tagged 'primary'. This is really only used in development, where the
+        // model is set in the RPC service, but the frontend reloads.
+        const primaryModel = this.models.find((model) => model.tags?.includes('primary'));
+        if (primaryModel) {
+          modelId = primaryModel.id;
+          provider = primaryModel.provider;
+        }
+      }
+
+      if (modelId) this.selectModel(provider, modelId);
     },
     async isRpcMethodAvailable(methodName) {
       return this.rpcMethodsAvailable.includes(methodName);
@@ -771,6 +819,12 @@ export default {
      */
     async initialize() {
       try {
+        // v1.navie.models.list
+        await this.initializeModels();
+
+        // v1.navie.models.getConfig
+        this.loadModelConfig();
+
         // v2.configuration.get
         this.loadNavieConfig();
 
@@ -786,6 +840,29 @@ export default {
 
         // v2.navie.welcome
         this.loadDynamicWelcomeMessages();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    selectModel(provider: string | undefined, id: string) {
+      const lowerProvider = provider?.toLowerCase();
+      const lowerId = id.toLowerCase();
+
+      // if provider is `undefined`, only match the first result on id.
+      // otherwise, match both.
+      this.selectedModel = this.models.find(
+        (model) =>
+          model.id.toLowerCase() === lowerId &&
+          (!provider || model.provider.toLowerCase() === lowerProvider)
+      );
+
+      this.$root.$emit('select-model', this.selectedModel);
+    },
+    async onModelSelect(provider: string | undefined, id: string) {
+      this.selectModel(provider, id);
+
+      try {
+        await this.rpcClient.selectModel(this.selectedModel);
       } catch (e) {
         console.error(e);
       }

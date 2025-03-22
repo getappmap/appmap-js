@@ -318,4 +318,50 @@ export default class AppMapRPC {
       );
     });
   }
+
+  listModels(): Promise<NavieRpc.V1.Models.Model[]> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V1.Models.List.Method,
+        {},
+        (err: any, error: any, result: NavieRpc.V1.Models.Model[]) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
+
+  selectModel(model: { provider?: string | undefined; id: string }): Promise<void> {
+    let serializedId: string | undefined;
+    if (model) {
+      serializedId = [model.provider, model.id]
+        .filter((part): part is string => Boolean(part))
+        .map((part) => encodeURIComponent(part))
+        .join(':');
+    }
+
+    return new Promise((resolve, reject) => {
+      this.client.request(NavieRpc.V1.Models.Select.Method, { id: serializedId }, (err: any) => {
+        if (err) return reportError(reject, err, err);
+
+        resolve();
+      });
+    });
+  }
+
+  getModelConfig(): Promise<NavieRpc.V1.Models.Config[]> {
+    return new Promise((resolve, reject) => {
+      this.client.request(
+        NavieRpc.V1.Models.GetConfig.Method,
+        {},
+        (err: any, error: any, result: NavieRpc.V1.Models.Config[]) => {
+          if (err || error) return reportError(reject, err, error);
+
+          resolve(result);
+        }
+      );
+    });
+  }
 }
