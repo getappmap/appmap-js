@@ -40,6 +40,55 @@ export namespace NavieRpc {
         thread: ConversationThread;
       };
     }
+
+    export namespace Models {
+      export type Model = {
+        id: string;
+        name: string;
+        provider: string;
+        createdAt: string;
+        maxInputTokens?: number;
+      };
+
+      export type CustomEndpoint = {
+        baseUrl?: string;
+        apiKey?: string;
+      };
+
+      export type ClientModel = Model & CustomEndpoint;
+      export type ListModel = Model & { tags?: string[] };
+
+      export type Config = {
+        provider: string;
+        apiKey?: string;
+        endpoint?: string;
+        [key: string]: string | undefined;
+      };
+
+      export namespace Add {
+        export const Method = 'v1.navie.models.add';
+        export type Params = ClientModel[];
+        export type Response = void;
+      }
+
+      export namespace List {
+        export const Method = 'v1.navie.models.list';
+        export type Params = void;
+        export type Response = Model[];
+      }
+
+      export namespace Select {
+        export const Method = 'v1.navie.models.select';
+        export type Params = { id: string | undefined };
+        export type Response = void;
+      }
+
+      export namespace GetConfig {
+        export const Method: string = 'v1.navie.models.getConfig';
+        export type Params = void;
+        export type Response = Config[];
+      }
+    }
   }
 
   export namespace V2 {
