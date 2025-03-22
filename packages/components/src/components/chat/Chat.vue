@@ -66,7 +66,7 @@
       :input-placeholder="inputPlaceholder"
       :commands="commands"
       :use-animation="useAnimation"
-      :is-disabled="isInputDisabled"
+      :is-disabled="isInputDisabled || selectedModel === undefined"
       :usage="usage"
       :subscription="subscription"
       :email="email"
@@ -77,7 +77,7 @@
 
 <script lang="ts">
 //@ts-nocheck
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
@@ -188,6 +188,9 @@ export default {
     },
     email: {
       type: String,
+    },
+    selectedModel: {
+      type: Object as PropType<NavieRpc.V1.Models.ListModel>,
     },
   },
   data() {
