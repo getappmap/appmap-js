@@ -1,33 +1,43 @@
 import { warn } from 'node:console';
 
-import GoogleVertexAICompletionService from './google-vertexai-completion-service';
-import OpenAICompletionService from './openai-completion-service';
-import AnthropicCompletionService from './anthropic-completion-service';
 import CompletionService from './completion-service';
+import AnthropicCompletionService from './anthropic-completion-service';
+import GoogleVertexAICompletionService from './google-vertexai-completion-service';
+import OllamaCompletionService from './ollama-completion-service';
+import OpenAICompletionService from './openai-completion-service';
 import Trajectory from '../lib/trajectory';
 import MessageTokenReducerService from './message-token-reducer-service';
+import type { NavieModel } from '../navie';
 
 interface Options {
   modelName: string;
   temperature: number;
   trajectory: Trajectory;
   backend?: Backend;
+  selectedModel?: NavieModel;
 }
 
 const BACKENDS = {
   anthropic: AnthropicCompletionService,
   openai: OpenAICompletionService,
+  ollama: OllamaCompletionService,
   'vertex-ai': GoogleVertexAICompletionService,
 } as const;
 
 type Backend = keyof typeof BACKENDS;
 
-function determineCompletionBackend(): Backend {
-  switch (process.env.APPMAP_NAVIE_COMPLETION_BACKEND) {
+function determineCompletionBackend(selectedModel?: NavieModel): Backend {
+  // If a custom endpoint is provided, we expect it to be OpenAI-compatible
+  if (selectedModel?.baseUrl) return 'openai';
+
+  const provider =
+    selectedModel?.provider.toLowerCase() ?? process.env.APPMAP_NAVIE_COMPLETION_BACKEND;
+  switch (provider) {
     case 'anthropic':
     case 'openai':
     case 'vertex-ai':
-      return process.env.APPMAP_NAVIE_COMPLETION_BACKEND;
+    case 'ollama':
+      return provider;
     default:
     // pass
   }
@@ -43,9 +53,17 @@ export default function createCompletionService({
   modelName,
   temperature,
   trajectory,
-  backend = determineCompletionBackend(),
+  selectedModel,
+  backend = determineCompletionBackend(selectedModel),
 }: Options): CompletionService {
   const messageTokenReducerService = new MessageTokenReducerService();
   warn(`Using completion service ${backend}`);
-  return new BACKENDS[backend](modelName, temperature, trajectory, messageTokenReducerService);
+  return new BACKENDS[backend](
+    selectedModel?.id ?? modelName,
+    temperature,
+    trajectory,
+    messageTokenReducerService,
+    selectedModel?.baseUrl,
+    selectedModel?.apiKey
+  );
 }

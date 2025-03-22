@@ -13,6 +13,7 @@ import CompletionService, {
   CompleteOptions,
   mergeSystemMessages,
   Usage,
+  CompletionServiceOptions,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
 import { APIError } from 'openai';
@@ -176,18 +177,29 @@ function onFailedAttempt(error: unknown) {
 const countCodeFences = (text: string): number =>
   Array.from(text.matchAll(/^\s*?`{3,}\w*?$/gm)).length;
 
+export type OpenAICompletionServiceOptions = CompletionServiceOptions & {
+  apiKey?: string;
+  apiUrl?: string;
+};
+
 export default class OpenAICompletionService implements CompletionService {
   constructor(
     public readonly modelName: string,
     public readonly temperature: number,
     private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService
+    private readonly messageTokenReducerService: MessageTokenReducerService,
+    private apiUrl?: string,
+    private apiKey?: string
   ) {
     this.model = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
       streaming: true,
       onFailedAttempt,
+      // If the `apiKey` or `apiUrl` are `undefined`, LangChain will fall back to use the default
+      // environment variables for OpenAI.
+      configuration: { baseURL: this.apiUrl },
+      apiKey: this.apiKey,
     });
   }
   model: ChatOpenAI;
@@ -202,7 +214,8 @@ export default class OpenAICompletionService implements CompletionService {
 
   // eslint-disable-next-line class-methods-use-this
   private get isLocalModel(): boolean {
-    const baseUrl = process.env.OPENAI_BASE_URL ?? process.env.AZURE_OPENAI_BASE_PATH;
+    const baseUrl =
+      this.apiUrl ?? process.env.OPENAI_BASE_URL ?? process.env.AZURE_OPENAI_BASE_PATH;
     if (!baseUrl) return false;
 
     try {
