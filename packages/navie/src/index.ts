@@ -16,3 +16,4 @@ export * as InteractionHistory from './interaction-history';
 export { SELECTED_BACKEND } from './services/completion-service-factory';
 export { UserOptions, default as parseOptions } from './lib/parse-options';
 export { REVIEW_DIFF_LOCATION } from './commands/review-command';
+export { OLLAMA_URL } from './services/ollama-completion-service';

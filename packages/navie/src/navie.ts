@@ -60,6 +60,14 @@ export interface INavie {
   execute(): AsyncIterable<string>;
 }
 
+export interface NavieModel {
+  id: string;
+  provider: string;
+  baseUrl?: string;
+  apiKey?: string;
+  maxInputTokens?: number;
+}
+
 export const DEFAULT_MODEL_NAME = 'gpt-4o';
 export const DEFAULT_TOKEN_LIMIT = 8000;
 export const DEFAULT_TEMPERATURE = 0.2;
@@ -70,6 +78,7 @@ export class NavieOptions {
   tokenLimit = Number(process.env.APPMAP_NAVIE_TOKEN_LIMIT ?? DEFAULT_TOKEN_LIMIT);
   temperature = Number(process.env.APPMAP_NAVIE_TEMPERATURE ?? DEFAULT_TEMPERATURE);
   responseTokens = Number(process.env.APPMAP_NAVIE_RESPONSE_TOKENS ?? DEFAULT_RESPONSE_TOKENS);
+  selectedModel?: NavieModel;
 }
 
 export default function navie(
@@ -78,8 +87,11 @@ export default function navie(
   projectInfoProvider: ProjectInfoProvider,
   helpProvider: HelpProvider,
   options: NavieOptions,
-  chatHistory?: ChatHistory
+  chatHistory?: ChatHistory,
+  selectedModel?: NavieModel
 ): INavie {
+  if (selectedModel?.maxInputTokens)
+    options.tokenLimit = Math.min(selectedModel.maxInputTokens, options.tokenLimit);
   if (options.modelName !== DEFAULT_MODEL_NAME) warn(`Using model ${options.modelName}`);
   if (options.tokenLimit !== DEFAULT_TOKEN_LIMIT) warn(`Using token limit ${options.tokenLimit}`);
   if (options.temperature !== DEFAULT_TEMPERATURE) warn(`Using temperature ${options.temperature}`);
@@ -90,7 +102,7 @@ export default function navie(
 
   const interactionHistory = new InteractionHistory();
 
-  const completionService = createCompletionService({ ...options, trajectory });
+  const completionService = createCompletionService({ ...options, trajectory, selectedModel });
 
   const classificationService = new ClassificationService(interactionHistory, completionService);
 
