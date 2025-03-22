@@ -2,11 +2,20 @@ import type { BaseLanguageModelInterface, TokenUsage } from '@langchain/core/lan
 import { AIMessage, BaseMessage, HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { z } from 'zod';
 import Message from '../message';
+import type Trajectory from '../lib/trajectory';
+import type MessageTokenReducerService from './message-token-reducer-service';
 
 export type CompleteOptions = {
   model?: string;
   temperature?: number;
   maxRetries?: number;
+};
+
+export type CompletionServiceOptions = {
+  modelName: string;
+  temperature: number;
+  trajectory: Trajectory;
+  messageTokenReducerService: MessageTokenReducerService;
 };
 
 export default interface CompletionService {
