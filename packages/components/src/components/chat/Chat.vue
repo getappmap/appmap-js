@@ -66,7 +66,7 @@
       :input-placeholder="inputPlaceholder"
       :commands="commands"
       :use-animation="useAnimation"
-      :is-disabled="isInputDisabled"
+      :is-disabled="isInputDisabled || !selectedModelId"
       :usage="usage"
       :subscription="subscription"
       :email="email"
@@ -187,6 +187,9 @@ export default {
       type: Object,
     },
     email: {
+      type: String,
+    },
+    selectedModelId: {
       type: String,
     },
   },
