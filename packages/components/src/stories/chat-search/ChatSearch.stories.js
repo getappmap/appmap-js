@@ -322,6 +322,8 @@ function buildMockRpc(
   baseUrl = 'http://localhost:3000/',
   supportsStreaming = true
 ) {
+  const explanationWords =
+    typeof explanation === 'string' ? explanation.split(/(?=\W)/) : explanation;
   let explainStatus = { step: 'build-vector-terms', searchResponse };
   const run = async function () {
     explainStatus = { step: 'build-vector-terms', searchResponse };
@@ -330,13 +332,13 @@ function buildMockRpc(
     explainStatus.contextResponse = navieContext;
     if (supportsStreaming) {
       explainStatus.explanation = [];
-      for (const line of explanation.split(/(?=\W)/)) {
+      for (const line of explanationWords) {
         await wait(10);
         explainStatus.explanation.push(`${line}`);
       }
     } else {
       await wait(10000);
-      explainStatus.explanation = explanation.map((line) => `${line}\n`);
+      explainStatus.explanation = explanationWords;
     }
     explainStatus.step = 'complete';
   };
