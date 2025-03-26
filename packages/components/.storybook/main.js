@@ -1,5 +1,5 @@
-import { dirname, join } from 'path';
 const path = require('path');
+const { dirname, join } = path;
 
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
