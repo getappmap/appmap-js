@@ -263,6 +263,47 @@ classDiagram
 </example>
 `;
 
+const APPMAP_HINT_PROMPT = `
+## Recommending AppMap Recordings
+
+As you provide your response, consider whether your statements could be improved if the user had provided
+additional context in the form of an AppMap recording - essentially, runtime traces. If so, add an
+\`appmap\` XML tag following the statement that could be improved. This will prompt the user to provide such information; the tags 
+will be used to provide specialized UI to help the user accomplish this task. You can use many of these tags spread throughout your 
+response text as you need, each associated with a specific statement that could be made more accurate with this data.
+
+Provide a \`prompt\` attribute to the \`appmap\` tag, which will be used to initiate a conversation with an assistant to help
+the user create AppMaps. You should use \`@observe\` prefix in the prompt which will choose the correct assistant.
+
+You can additionally provide a \`reasoning\` attribute to the \`appmap\` tag, which will be used to explain
+how an AppMap recording would provide additional context.
+
+Make sure that all recommendations for AppMap recordings are kept only to these tags ONLY. Do not mention AppMap in the
+running text of your response unless the user has specifically asked for it.
+
+Note recording AppMaps is currently only supported in Ruby, Python, Java and JavaScript (server-side only, ie. Node.js) applications.
+Do not recommend AppMap recordings for other languages or environments.
+
+Examples:
+
+\`\`\`markdown
+If you suspect redundant calls to the \`foo\` method, you should investigate further. Check to see if the \`foo\` method is being 
+called more than once <appmap prompt="@observe record and analyze tests that involve the foo method to identify redundant calls" />. 
+This will help you identify and eliminate inefficiencies in your code.
+\`\`\`
+
+\`\`\`markdown
+The JWT token might not be properly stored or transmitted in subsequent requests. This could lead to issues with authentication 
+or session management. <appmap reasoning="An AppMap trace would show if the JWT token is being properly included in request headers after login"
+prompt="@observe record a session including the authentication flow, focusing on login and subsequent API requests to verify token usage" />. Ensuring proper token handling is critical for secure communication.
+\`\`\`
+
+\`\`\`markdown
+Authentication filters can sometimes cause unexpected behavior. Check that your authentication filter isn't accidentally catching the login endpoints themselves <appmap reasoning="An AppMap trace would reveal if the auth filter is intercepting login requests, causing a loop"
+prompt="@observe record both authenticated and unauthenticated HTTP requests, including login attempts, to identify potential filter misconfigurations" />. This will help you avoid potential infinite loops or access issues.
+\`\`\`
+`;
+
 export default class ExplainAgent implements Agent {
   public temperature = undefined;
 
@@ -283,6 +324,16 @@ export default class ExplainAgent implements Agent {
     // Check for presence of "generate-diagram" classifier and its confidence level.
     if (hasLabel(options.contextLabels, ContextV2.ContextLabelName.GenerateDiagram))
       this.history.addEvent(new PromptInteractionEvent('agent', 'system', DIAGRAM_FORMAT_PROMPT));
+
+    if (
+      // Do not prompt for AppMap recordings if the user is greeting or chatting.
+      !options.contextLabels?.find((label) =>
+        [ContextV2.ContextLabelName.Greeting, ContextV2.ContextLabelName.Chatting].includes(
+          label.name
+        )
+      )
+    )
+      this.history.addEvent(new PromptInteractionEvent('agent', 'system', APPMAP_HINT_PROMPT));
 
     this.history.addEvent(
       new PromptInteractionEvent(
