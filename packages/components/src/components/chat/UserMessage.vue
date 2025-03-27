@@ -25,7 +25,7 @@
       <span>{{ message }}</span>
     </div>
     <div class="message-body" data-cy="message-text" v-else>
-      <div class="tools" v-if="tools">
+      <div class="tools" v-if="tools && !tokens.length">
         <v-tool-status
           v-for="(tool, i) in tools"
           :key="i"
@@ -34,23 +34,29 @@
           :status="tool.status"
         />
       </div>
-      <v-streaming-message-content :content="renderedMarkdown" :active="!complete" />
+      <v-streaming-message-content
+        ref="streamingContent"
+        class="streaming-content"
+        :data-active="!complete && !toolsPending"
+        :content="renderedMarkdown"
+        :active="!complete"
+      />
       <div
         v-if="complete"
         class="next-step-suggestions"
         data-cy="next-step-suggestions"
-        :data-fetched="nextStepSuggestions !== undefined"
+        :data-fetched="promptSuggestions !== undefined"
       >
-        <div class="next-step-suggestions__buttons" v-if="nextStepSuggestions">
+        <div class="next-step-suggestions__buttons" v-if="promptSuggestions">
           <v-popper
-            v-for="(i, index) in nextStepSuggestions"
+            v-for="(i, index) in promptSuggestions"
             :key="index"
             placement="top"
             align="left"
             :time-to-display="500"
           >
             <template #content>
-              <div class="key-binds" v-if="nextStepSuggestions">
+              <div class="key-binds" v-if="promptSuggestions">
                 <div class="key-binds__option">
                   <span class="keyboard">Click</span>
                   <span class="keyboard-plus">To add prompt to input</span>
@@ -87,32 +93,6 @@
       <span class="button" v-if="!isUser" data-cy="save-message" @click="saveMessage">
         <v-save-icon class="copy-icon small" />
       </span>
-      <span
-        v-if="!isUser && id"
-        data-cy="feedback-good"
-        :class="{
-          button: 1,
-          sentiment: 1,
-          'sentiment--good': 1,
-          'sentiment--selected': sentiment > 0,
-        }"
-        @click="setSentiment(1)"
-      >
-        <v-thumb-icon />
-      </span>
-      <span
-        v-if="!isUser && id"
-        data-cy="feedback-bad"
-        :class="{
-          button: 1,
-          sentiment: 1,
-          'sentiment--bad': 1,
-          'sentiment--selected': sentiment < 0,
-        }"
-        @click="setSentiment(-1)"
-      >
-        <v-thumb-icon />
-      </span>
     </div>
   </div>
 </template>
@@ -122,7 +102,6 @@
 import { PropType } from 'vue';
 import VNavieCompass from '@/assets/compass-icon.svg';
 import VUserAvatar from '@/assets/user-avatar.svg';
-import VThumbIcon from '@/assets/thumb.svg';
 import VClipboardIcon from '@/assets/copy-icon.svg';
 import VCheckIcon from '@/assets/success-checkmark.svg';
 import VSaveIcon from '@/assets/download.svg';
@@ -138,26 +117,7 @@ import markedChangeExtension from '@/components/chat/markedChangeExtension.ts';
 import { Marked, Renderer } from 'marked';
 import DOMPurify from 'dompurify';
 
-// Add a custom renderer to wrap code blocks in a container.
-// We can add a copy button and other things here.
-// TODO: Can we do this in a more elegant way? E.g. with a Vue component?
 const customRenderer = new Renderer();
-customRenderer.code = (code: string, language: string, escaped: boolean, sourcePath: string) => {
-  if (language === 'mermaid') {
-    return `<v-mermaid-diagram>${code}</v-mermaid-diagram>`;
-  }
-
-  // The location is URI encoded to avoid issues with special characters.
-  return [
-    '<v-markdown-code-snippet',
-    language && ` language="${language.trim()}"`,
-    sourcePath && ` location="${encodeURIComponent(sourcePath.trim())}"`,
-    '>',
-    new Option(code).innerHTML,
-    '</v-markdown-code-snippet>',
-  ].join('');
-};
-
 const linkRenderer = customRenderer.link;
 customRenderer.link = (href: string, title: string, text: string) => {
   const linkHtml = linkRenderer(href, title, text);
@@ -172,71 +132,8 @@ customRenderer.link = (href: string, title: string, text: string) => {
 
 const marked = new Marked({
   renderer: customRenderer,
-  extensions: [
-    markedChangeExtension,
-    {
-      // Matches an HTML comment that contains a file path
-      // Example: <!-- file: /path/to/file.py -->
-      name: 'file-annotation',
-      level: 'block',
-      start(src: string) {
-        const index = src.search(/^\s*?(?:`{3,}[^\s]*?\s+)?<!--\s*?/);
-        return index > -1 ? index : false;
-      },
-      tokenizer(src: string) {
-        // First, consider cases where the file directive is the first line of the code block
-        let codeBlockMatch = /^\s*?`{3,}(.*?)\n([\s\S]+?)`{3,}/.exec(src);
-        if (codeBlockMatch) {
-          let [, language, content] = codeBlockMatch;
-          const fileCommentMatch = /^\s*?<!--\s*?file:\s*?(.+)\s*?-->.*?\n/.exec(content);
-          if (!fileCommentMatch) return false;
-
-          const [, sourcePath] = fileCommentMatch;
-          content =
-            content.slice(0, fileCommentMatch.index) +
-            content.slice(fileCommentMatch.index + fileCommentMatch[0].length);
-          return {
-            type: 'file-annotation',
-            raw: codeBlockMatch[0],
-            text: src,
-            sourcePath,
-            language: language.trim(),
-            content,
-          };
-        }
-
-        // Otherwise, the file directive should immediately precede the code block
-        const fileCommentMatch = /^\s*?<!--\s*?file:\s*?(.+)\s*?-->/.exec(src);
-        if (!fileCommentMatch) return false;
-
-        codeBlockMatch = /\s*?```(.*?)\n([\s\S]+?)```/.exec(
-          src.slice(fileCommentMatch.index + fileCommentMatch[0].length)
-        );
-        if (!codeBlockMatch) return false;
-
-        const [, sourcePath] = fileCommentMatch;
-        const [, language, content] = codeBlockMatch;
-
-        return {
-          type: 'file-annotation',
-          raw: fileCommentMatch[0] + codeBlockMatch[0],
-          text: src,
-          sourcePath,
-          language: language.trim(),
-          content,
-        };
-      },
-      renderer({ sourcePath, language, content }) {
-        return this.parser.renderer.code(content, language, true, sourcePath);
-      },
-    },
-  ],
+  extensions: [markedChangeExtension],
 });
-
-interface Injected {
-  rpcClient: AppMapRPC;
-  threadId: string | undefined;
-}
 
 export default {
   name: 'v-user-message',
@@ -244,7 +141,6 @@ export default {
   components: {
     VNavieCompass,
     VUserAvatar,
-    VThumbIcon,
     VButton,
     VToolStatus,
     VCodeSelection,
@@ -266,8 +162,8 @@ export default {
     isError: {
       default: false,
     },
-    message: {
-      default: '',
+    tokens: {
+      default: () => [],
     },
     sentiment: {
       default: 0,
@@ -285,13 +181,16 @@ export default {
       type: String as PropType<string | undefined>,
       default: undefined,
     },
+    promptSuggestions: {
+      type: Array as PropType<NavieRpc.V1.Suggest.NextStep[] | undefined>,
+      default: undefined,
+    },
   },
 
   data() {
     return {
       sentimentTimeout: undefined,
       copiedMessageTimeout: undefined,
-      nextStepSuggestions: undefined as NavieRpc.V1.Suggest.NextStep[] | undefined,
     };
   },
 
@@ -299,21 +198,22 @@ export default {
     rpcClient: { default: () => ({ suggest: () => Promise.resolve([]) }) },
   },
 
-  watch: {
-    async complete(isComplete) {
-      if (!isComplete || !this.threadId || this.isUser || this.nextStepSuggestions) return;
-
-      const { rpcClient, threadId } = this as Injected;
-      try {
-        this.nextStepSuggestions = await rpcClient.suggest(threadId);
-      } catch (e) {
-        console.error('Failed to fetch next step suggestions:', e);
-        this.nextStepSuggestions = [];
-      }
-    },
-  },
-
   computed: {
+    toolsPending(): boolean {
+      // If we've began emitting tokens, ignore any tool status
+      if (this.tokens.length > 0) return false;
+
+      return this.tools.length > 0 && this.tools.some((t) => !t.complete);
+    },
+    message(): string {
+      return this.tokens
+        .map((t) => {
+          if (typeof t === 'string') return t;
+          if (typeof t === 'object' && 'id' in t)
+            return `<v-code-fenced-content handle="${t.id}"></v-code-fenced-content>`;
+        })
+        .join('');
+    },
     avatar() {
       return this.isUser ? VUserAvatar : VNavieCompass;
     },
@@ -321,18 +221,17 @@ export default {
       return this.isUser ? 'You' : 'Navie';
     },
     renderedMarkdown() {
-      const markdown = marked.parse(this.message.toString());
+      const markdown = marked.parse(this.message);
       return DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
         ADD_TAGS: [
-          'v-markdown-code-snippet',
-          'v-mermaid-diagram',
           'v-next-prompt-button',
+          'v-code-fenced-content',
           'change',
           'modified',
           'original',
         ],
-        ADD_ATTR: ['language', 'location', 'command', 'prompt', 'target', 'emit-event'],
+        ADD_ATTR: ['handle', 'command', 'prompt', 'target', 'emit-event'],
         ALLOWED_URI_REGEXP:
           /^(?:(?:(?:f|ht)tps?|mailto|event|file):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
       });
@@ -345,20 +244,6 @@ export default {
   },
 
   methods: {
-    setSentiment(sentiment: number) {
-      // Throttle sentiment changes to avoid spamming the server
-      if (this.sentimentTimeout) return;
-      this.sentimentTimeout = setTimeout(() => {
-        this.sentimentTimeout = undefined;
-      }, 250);
-
-      // This shouldn't ever happen, but just in case
-      if (!this.id) return;
-
-      // If the sentiment is already set to this value, unset it
-      const newSentiment = this.sentiment === sentiment ? 0 : sentiment;
-      this.$emit('change-sentiment', this.id, newSentiment);
-    },
     async writeToClipboard(text) {
       if (text && typeof text === 'string' && this.hasClipboardAPI)
         await navigator.clipboard.writeText(text.replace(/\n/g, '\n'));
@@ -376,10 +261,21 @@ export default {
         });
       });
     },
+    renderRawMessage() {
+      let buffer = '';
+      for (const token of this.tokens) {
+        if (typeof token === 'string') {
+          buffer += token;
+        } else if (typeof token === 'object' && 'type' in token && token.type === 'hidden') {
+          buffer += token.content;
+        }
+      }
+      return buffer.trim();
+    },
     async copyToClipboard() {
       if (this.copiedMessageTimeout) return;
 
-      const text = this.message.trim();
+      const text = this.renderRawMessage();
       if (text && this.hasClipboardAPI) {
         this.copiedMessageTimeout = setTimeout(() => {
           this.copiedMessageTimeout = undefined;
@@ -392,7 +288,7 @@ export default {
       this.$root.$emit('save-message', {
         messageId: this.id,
         threadId: this.threadId,
-        content: this.message,
+        content: this.renderRawMessage(),
       });
     },
     nextStepSuggestionText(suggestion) {
@@ -401,15 +297,32 @@ export default {
         : suggestion.label;
     },
   },
-
-  updated() {
-    // Bind the copy button to the clipboard API if it's available
-    // This is sort of a hack as it'll re-run on every new token,
-    // but this works for now.
-    this.bindCopyButtons();
-  },
 };
 </script>
+
+<style lang="scss">
+.streaming-content[data-active] {
+  @keyframes cursor-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    height: 1rem;
+    width: 1rem;
+    background-color: $color-foreground;
+    animation: cursor-blink 1s infinite ease;
+    display: inline-block;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 @keyframes skeleton {
@@ -690,7 +603,9 @@ export default {
   line-height: 1.6;
 
   .tools {
-    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
     line-height: normal;
 
     &:empty {

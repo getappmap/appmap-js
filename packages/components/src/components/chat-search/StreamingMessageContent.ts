@@ -1,18 +1,6 @@
 import Vue from 'vue';
-import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
-import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
+import VCodeFencedContent from '@/components/chat/CodeFencedContent.vue';
 import VNextPromptButton from '@/components/chat/NextPromptButton.vue';
-
-function findCursorNode(node: Node): Node | undefined {
-  const children = Array.from(node.childNodes);
-  while (children.length) {
-    const child = children.pop() as Node;
-    const textNode = findCursorNode(child);
-    if (textNode) return textNode;
-  }
-
-  if (node.textContent && node.textContent.trim() !== '') return node;
-}
 
 function getAttributeRecord(attrs: NamedNodeMap): Record<string, string> {
   return Array.from(attrs).reduce((memo, attr) => {
@@ -50,18 +38,7 @@ function buildNode(h: Vue.CreateElement, src: Element, $root: Vue): Vue.VNode | 
     // HACK: Attributes are converted to props
     // This isn't a big deal now, but worth keeping in mind as a potential issue
     // in the future.
-    return h(
-      tag,
-      { props },
-      children.map((c) => {
-        // HACK: Cursor is a special case given the way we're rendering code snippets.
-        // We write the source code directly into a slot to avoid the need to escape or
-        // encode the source text as a prop when rendering markdown. Thus, the cursor is
-        // rendered into it's own special slot.
-        const isCursor = typeof c === 'object' && c.data && c.data.class === 'cursor';
-        return isCursor ? h('span', { slot: 'cursor', class: 'cursor' }) : c;
-      })
-    );
+    return h(tag, { props }, children);
   }
   return h(
     tag,
@@ -85,6 +62,9 @@ function buildNode(h: Vue.CreateElement, src: Element, $root: Vue): Vue.VNode | 
   );
 }
 
+/**
+ * This component is responsible for dynamically rendering HTML content containing Vue components.
+ */
 export default Vue.extend({
   name: 'v-streaming-message-content',
   props: {
@@ -92,8 +72,7 @@ export default Vue.extend({
     active: Boolean,
   },
   components: {
-    VMarkdownCodeSnippet,
-    VMermaidDiagram,
+    VCodeFencedContent,
     VNextPromptButton,
   },
   data() {
@@ -104,14 +83,6 @@ export default Vue.extend({
   },
   render(h): Vue.VNode {
     const dom = this.parser.parseFromString(this.content.trim(), 'text/html');
-
-    if (this.active) {
-      const textNode = findCursorNode(dom.body);
-      const cursor = dom.createElement('span');
-      cursor.classList.add('cursor');
-      const targetElement = textNode?.parentElement ?? dom.body;
-      targetElement.appendChild(cursor);
-    }
 
     const children = [];
     for (let i = 0; i < dom.body.childNodes.length; i++) {

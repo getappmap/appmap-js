@@ -12,13 +12,14 @@
         <div class="pinned-items__body__table">
           <component
             v-for="pin in pinnedItems"
-            :is="getPinnedComponent(pin)"
+            :is="getPinnedComponent(pin.handle)"
             :is-reference="true"
             :key="pin.handle"
-            v-bind="pin"
+            :handle="pin.handle"
+            v-bind="getMetadata(pin)"
             class="pinned-items__pinned-item"
             @pin="unpin(pin.handle)"
-            >{{ pin.content }}</component
+            >{{ getPinnedContent(pin.handle).content }}</component
           >
         </div>
       </div>
@@ -33,16 +34,11 @@ import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
 import VVSCodeNotice from '@/components/chat-search/VSCodeNotice.vue';
 import VIntelliJNotice from '@/components/chat-search/IntelliJNotice.vue';
+import { pinnedItemRegistry } from '@/lib/pinnedItems';
 
 const EditorNoticeComponents = {
   vscode: VVSCodeNotice,
   intellij: VIntelliJNotice,
-};
-
-const PinnedContextComponents = {
-  'code-snippet': VMarkdownCodeSnippet,
-  mermaid: VMermaidDiagram,
-  file: VFile,
 };
 
 export default {
@@ -77,8 +73,22 @@ export default {
     getNoticeComponent(): Vue.Component {
       return EditorNoticeComponents[this.editorType];
     },
-    getPinnedComponent({ type }: any): Vue.Component | undefined {
-      return PinnedContextComponents[type];
+    getPinnedComponent(handle: number): Vue.Component | undefined {
+      const pinnedItem = pinnedItemRegistry.get(handle);
+
+      // If it's not registered, it's an external file.
+      if (!pinnedItem) return VFile;
+
+      const language = pinnedItem.metadata?.language;
+      if (language === 'mermaid') return VMermaidDiagram;
+      return VMarkdownCodeSnippet;
+    },
+    getPinnedContent(handle: number): ObservableContent {
+      return pinnedItemRegistry.get(handle) ?? {};
+    },
+    getMetadata(pinnedItem: PinnedItem): Record<string, unknown> {
+      const registryItem = pinnedItemRegistry.get(pinnedItem.handle);
+      return registryItem?.metadata ?? pinnedItem;
     },
     unpin(handle: number) {
       this.$emit('pin', { handle, pinned: false });
