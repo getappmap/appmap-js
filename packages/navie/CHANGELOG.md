@@ -1,3 +1,10 @@
+# [@appland/navie-v1.43.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.42.3...@appland/navie-v1.43.0) (2025-03-27)
+
+
+### Features
+
+* Allow a per-message model override ([7691f2d](https://github.com/getappmap/appmap-js/commit/7691f2db5312e74ae276bd3f6bc8f82bc24d79c8))
+
 # [@appland/navie-v1.42.3](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.42.2...@appland/navie-v1.42.3) (2025-03-14)
 
 
