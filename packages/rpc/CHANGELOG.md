@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.18.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.17.0...@appland/rpc-v1.18.0) (2025-03-27)
+
+
+### Features
+
+* Add v1.navie.models RPC method definitions ([2da1b72](https://github.com/getappmap/appmap-js/commit/2da1b72d1bb89c4c6b65d28d005331a2c20b47b1))
+
 # [@appland/rpc-v1.17.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.16.0...@appland/rpc-v1.17.0) (2025-01-07)
 
 
