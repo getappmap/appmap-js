@@ -8,4 +8,5 @@ module.exports = {
   // There are test cases that change the process working directory, and that does
   // not work with multiple workers.
   maxWorkers: 1,
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
 };
