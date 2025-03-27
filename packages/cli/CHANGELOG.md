@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.187.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.186.3...@appland/appmap-v3.187.0) (2025-03-27)
+
+
+### Features
+
+* Implement v1.navie.models RPC methods ([ab5a263](https://github.com/getappmap/appmap-js/commit/ab5a263816a5f37c9fb61e63ce74c1ac6ea799c0))
+
 # [@appland/appmap-v3.186.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.186.2...@appland/appmap-v3.186.3) (2025-03-14)
 
 
