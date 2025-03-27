@@ -1,3 +1,10 @@
+# [@appland/components-v4.45.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.44.0...@appland/components-v4.45.0) (2025-03-27)
+
+
+### Features
+
+* Implement the model selector front end ([dca5743](https://github.com/getappmap/appmap-js/commit/dca57436efe3ce5fa2b19b866dd5cd34e51c6122))
+
 # [@appland/components-v4.44.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.43.2...@appland/components-v4.44.0) (2025-01-23)
 
 
