@@ -130,7 +130,14 @@ interface HiddenToken {
   content: string;
 }
 
-type Token = string | CodeBlockReference | HiddenToken;
+interface XMLToken {
+  type: 'tag';
+  tag: string;
+  raw: string;
+  attributes: [string, string][];
+}
+
+type Token = string | CodeBlockReference | HiddenToken | XMLToken;
 
 class AssistantMessage implements IMessage {
   public tokens: Token[] = [];

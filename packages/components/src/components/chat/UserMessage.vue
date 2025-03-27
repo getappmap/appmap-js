@@ -209,8 +209,23 @@ export default {
       return this.tokens
         .map((t) => {
           if (typeof t === 'string') return t;
-          if (typeof t === 'object' && 'id' in t)
-            return `<v-code-fenced-content handle="${t.id}"></v-code-fenced-content>`;
+          if (typeof t === 'object' && 'type' in t) {
+            if (t.type === 'tag') {
+              switch (t.tag) {
+                case 'appmap': {
+                  let prompt, reasoning;
+                  for (const [key, value] of t.attributes) {
+                    if (key === 'prompt') prompt = value;
+                    else if (key === 'reasoning') reasoning = value;
+                  }
+                  return `<v-inline-recommendation prompt="${prompt}" reasoning="${reasoning}"></v-inline-recommendation>`;
+                }
+                default:
+                  return t.raw;
+              }
+            } else if (t.type === 'code-block')
+              return `<v-code-fenced-content handle="${t.id}"></v-code-fenced-content>`;
+          }
         })
         .join('');
     },
@@ -227,11 +242,12 @@ export default {
         ADD_TAGS: [
           'v-next-prompt-button',
           'v-code-fenced-content',
+          'v-inline-recommendation',
           'change',
           'modified',
           'original',
         ],
-        ADD_ATTR: ['handle', 'command', 'prompt', 'target', 'emit-event'],
+        ADD_ATTR: ['handle', 'command', 'prompt', 'target', 'emit-event', 'reasoning'],
         ALLOWED_URI_REGEXP:
           /^(?:(?:(?:f|ht)tps?|mailto|event|file):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
       });

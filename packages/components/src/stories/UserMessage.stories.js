@@ -205,3 +205,24 @@ Links.args = {
   ),
   complete: true,
 };
+
+export const InlineRecommendations = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VUserMessage },
+  template: `<v-user-message v-bind="$props"></v-user-message>`,
+  mounted() {
+    this.$nextTick(() => {
+      this.$root.$on('click-link', (href) => {
+        console.log('click-link', href);
+      });
+    });
+  },
+});
+InlineRecommendations.args = {
+  id: 'system-message-id',
+  tokens: tokenize(
+    'inline-recommendations',
+    `Check that your authentication filter isn't accidentally catching the login endpoints themselves<appmap reasoning="An AppMap trace would reveal if the auth filter is intercepting login requests, causing a loop" prompt="@observe valid login flow" />.`
+  ),
+  complete: true,
+};

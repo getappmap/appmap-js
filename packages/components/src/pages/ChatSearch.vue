@@ -196,6 +196,10 @@ export default {
       type: String,
       default: undefined,
     },
+    presubmittedPrompt: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
