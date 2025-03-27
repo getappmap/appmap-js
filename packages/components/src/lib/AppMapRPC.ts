@@ -1,5 +1,6 @@
 import { AppMapRpc, ConfigurationRpc, ExplainRpc, NavieRpc } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
+import type ClientBrowser from 'jayson/lib/client/browser';
 
 import { EventEmitter } from 'events';
 
@@ -129,10 +130,51 @@ export class ExplainRequest extends EventEmitter {
   }
 }
 
-export default class AppMapRPC {
-  client: any;
+function validateEvent(event: any): asserts event is { type: string; [key: string]: unknown } {
+  if (event.type === undefined) throw new Error('Missing event type');
+}
 
-  constructor(portOrClient: number | any) {
+class SubscribeListener {
+  private readonly emitter = new EventEmitter();
+  private _connectionClosed = false;
+  private reader?: ReadableStreamDefaultReader;
+
+  get connectionClosed(): boolean {
+    return this._connectionClosed;
+  }
+
+  emit(event: 'connected', data?: never): void;
+  emit(event: 'event', data: any): void;
+  emit(event: string, data: any) {
+    this.emitter.emit(event, data);
+  }
+
+  on(event: 'connected', listener: () => void): this;
+  on(event: 'event', listener: (event: any) => void): this;
+  on(event: string, listener: (event: any) => void): this {
+    this.emitter.on(event, listener);
+    return this;
+  }
+
+  updateReader(reader: ReadableStreamDefaultReader) {
+    this.reader = reader;
+  }
+
+  close() {
+    this.reader?.cancel().catch(console.error);
+    this._connectionClosed = true;
+    this.emitter.removeAllListeners('event');
+  }
+}
+
+export default class AppMapRPC {
+  private readonly client: ClientBrowser;
+  private readonly port?: number;
+
+  constructor(portOrClient: number | ClientBrowser) {
+    if (typeof portOrClient === 'number') {
+      this.port = portOrClient;
+    }
     this.client = typeof portOrClient === 'number' ? browserClient(portOrClient) : portOrClient;
   }
 
@@ -364,4 +406,156 @@ export default class AppMapRPC {
       );
     });
   }
+
+  public readonly thread = {
+    subscribe: async (threadId?: string, replay?: boolean, nonce?: number) => {
+      if (!this.port) throw new Error('RPC client is not connected');
+
+      let lastAckedNonce = nonce ?? 0;
+      const listener = new SubscribeListener();
+      const connect = async (nonce?: number): Promise<void> => {
+        const payload = {
+          jsonrpc: '2.0',
+          method: NavieRpc.V1.Thread.Subscribe.Method,
+          params: { threadId, nonce, replay },
+          id: 1,
+        };
+
+        let response;
+        try {
+          response = await fetch(`http://localhost:${this.port}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+        } catch (e) {
+          console.error('Failed to connect to RPC server', e);
+          return reconnect();
+        }
+
+        if (!response.ok) {
+          return reconnect();
+        }
+
+        const reader = response.body?.getReader();
+        if (!reader) {
+          return listener.connectionClosed ? reconnect() : undefined;
+        }
+
+        listener.updateReader(reader);
+        listener.emit('connected');
+
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        setTimeout(async () => {
+          try {
+            for (;;) {
+              if (listener.connectionClosed) {
+                return;
+              }
+
+              const { value, done } = await reader.read();
+              if (done) break;
+
+              buffer += decoder.decode(value);
+              for (;;) {
+                const newLineIndex = buffer.indexOf('\n');
+                if (newLineIndex === -1) break;
+
+                const line = buffer.slice(0, newLineIndex);
+                buffer = buffer.slice(newLineIndex + 1);
+                if (line.length === 0) continue;
+
+                try {
+                  const event = JSON.parse(line.replace(/^data: /, ''));
+                  if (event.type === 'client-error') {
+                    console.error('Client error', event.error);
+                    if (event.shouldRetry) {
+                      console.error('Attempting to reconnect...');
+                      return reconnect();
+                    } else {
+                      return;
+                    }
+                  }
+                  lastAckedNonce += 1;
+                  validateEvent(event);
+                  listener.emit('event', event);
+                } catch (e) {
+                  console.error('Failed to parse event', line);
+                  console.error(e);
+                }
+              }
+            }
+          } catch (e) {
+            console.error('A network error occurred:', e);
+            console.error('Attempting to reconnect...');
+            return reconnect();
+          }
+        });
+      };
+
+      const reconnect = async (reconnectTimeoutMs = 1000) => {
+        // No need for an exponential backoff here, since the connection is
+        // local and the chances of a network error are low unless the server
+        // is restarting.
+        await new Promise((resolve) => setTimeout(resolve, reconnectTimeoutMs));
+        return connect(lastAckedNonce);
+      };
+
+      connect();
+
+      return listener;
+    },
+    pinItem: (threadId: string, pinnedItem: any) =>
+      this.client.request(
+        NavieRpc.V1.Thread.PinItem.Method,
+        { threadId, pinnedItem },
+        (err: any, error: any, result: NavieRpc.V1.Thread.PinItem.Response) => {
+          if (err || error) return reportError(Promise.reject, err, error);
+
+          return result;
+        }
+      ),
+    unpinItem: (threadId: string, pinnedItem: any) =>
+      this.client.request(
+        NavieRpc.V1.Thread.UnpinItem.Method,
+        { threadId, pinnedItem },
+        (err: any, error: any, result: NavieRpc.V1.Thread.UnpinItem.Response) => {
+          if (err || error) return reportError(Promise.reject, err, error);
+
+          return result;
+        }
+      ),
+    addMessageAttachment: (threadId: string, uri?: string, content?: string) =>
+      this.client.request(
+        NavieRpc.V1.Thread.AddMessageAttachment.Method,
+        { threadId, uri, content },
+        (err: any, error: any, result: NavieRpc.V1.Thread.AddMessageAttachment.Response) => {
+          if (err || error) return reportError(Promise.reject, err, error);
+
+          return result;
+        }
+      ),
+    removeMessageAttachment: (threadId: string, attachmentId: string) =>
+      this.client.request(
+        NavieRpc.V1.Thread.RemoveMessageAttachment.Method,
+        { threadId, attachmentId },
+        (err: any, error: any, result: NavieRpc.V1.Thread.RemoveMessageAttachment.Response) => {
+          if (err || error) return reportError(Promise.reject, err, error);
+
+          return result;
+        }
+      ),
+    sendMessage: (threadId: string, content: string, userContext?: any[]) =>
+      this.client.request(
+        NavieRpc.V1.Thread.SendMessage.Method,
+        { threadId, content, userContext },
+        (err: any, error: any, result: NavieRpc.V1.Thread.SendMessage.Response) => {
+          if (err || error) return reportError(Promise.reject, err, error);
+
+          return result;
+        }
+      ),
+  };
 }

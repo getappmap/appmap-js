@@ -7,6 +7,7 @@
     data-cy="context-container"
     :data-handle="valueHandle"
     :data-reference="isReference"
+    :data-collapsed="collapsed"
   >
     <div
       :class="{
@@ -150,7 +151,7 @@ import { getNextHandle } from '@/components/chat/Handle';
 import VLoader from '@/components/chat/Loader.vue';
 import VPopper from '@/components/Popper.vue';
 import VPopperMenu from '@/components/PopperMenu.vue';
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
 import type { PinEvent } from './PinEvent';
 
@@ -180,7 +181,7 @@ export default Vue.extend({
       default: () => [],
     },
     handle: {
-      type: Number as () => number | undefined,
+      type: String as PropType<string | undefined>,
       required: false,
     },
     location: {
@@ -199,6 +200,10 @@ export default Vue.extend({
       type: Boolean,
       default: true,
     },
+    isReference: {
+      type: Boolean,
+      default: false,
+    },
   },
   inject: {
     pinnedItems: {
@@ -206,18 +211,16 @@ export default Vue.extend({
     },
   },
   data() {
-    const isReference = typeof this.handle === 'number' && this.isAppliable;
     return {
-      isReference,
-      collapsed: isReference || !this.isPinnable,
-      valueHandle: this.handle ?? getNextHandle(),
+      collapsed: this.isReference || !this.isPinnable,
+      valueHandle: this.handle,
       pendingState: undefined as undefined | 'pending' | 'success' | 'failure',
     };
   },
   computed: {
     pinned(): boolean {
-      const { pinnedItems }: { pinnedItems: PinEvent[] } = this as any;
-      return pinnedItems ? pinnedItems.some(({ handle }) => handle === this.valueHandle) : false;
+      const { pinnedItems }: { pinnedItems: { handle: string }[] } = this as any;
+      return pinnedItems ? pinnedItems.some(({ handle }) => handle === this.handle) : false;
     },
     isFile(): boolean {
       return !!this.location || !!this.directory;
@@ -282,9 +285,15 @@ export default Vue.extend({
   line-height: 1 !important;
   position: relative;
 
-  &[is-reference] {
-    .context-container__button:last-of-type {
+  &[data-collapsed] {
+    .popper:last-child .context-container__button {
       border-radius: 0 $border-radius $border-radius 0;
+    }
+  }
+
+  &[data-reference]:not([data-collapsed]) {
+    .popper:last-child .context-container__button {
+      border-radius: 0 $border-radius 0 0;
     }
   }
 
@@ -314,7 +323,7 @@ export default Vue.extend({
         background-color: rgba(white, 0.1);
       }
 
-      .context-container__button:last-child {
+      .popper:last-child .context-container__button {
         border-radius: 0 $border-radius $border-radius 0;
       }
     }

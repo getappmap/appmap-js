@@ -1,4 +1,5 @@
 import { default as VUserMessage } from '@/components/chat/UserMessage.vue';
+import { tokenize } from '@/lib/tokenize';
 import './scss/vscode.scss';
 
 export default {
@@ -20,7 +21,9 @@ export const CodeSnippet = (args, { argTypes }) => ({
 
 CodeSnippet.args = {
   id: 'system-message-id',
-  message: `
+  tokens: tokenize(
+    'code-snippts',
+    `
 Here's an update to the \`index\` action that includes pagination:
 
 <!-- file: app/controllers/users_controller.rb -->
@@ -53,16 +56,10 @@ comment!
 -->
 \`\`\`
 
-\`\`\`ruby
-<!-- file: app/controllers/users_controller.rb -->
-def hello_world
-  puts "I'm different!"
-end
-\`\`\`
-
 \`\`\`plaintext
 <!-- file: app/controllers/users_controller.rb -->
-This is a partial snippet!`,
+This is a partial snippet!`
+  ),
   complete: true,
 };
 
@@ -74,8 +71,9 @@ export const MermaidDiagram = (args, { argTypes }) => ({
 
 MermaidDiagram.args = {
   id: 'system-message-id',
-  message: `
-Here are some diagrams:
+  tokens: tokenize(
+    'mermaid-diagrams',
+    `Here are some diagrams:
 
 \`\`\`mermaid
 sequenceDiagram
@@ -149,7 +147,8 @@ erDiagram
     AUTH_SERVER ||--o{ USER: \"issues tokens to\"
     AUTH_SERVER ||--o{ MFA_SERVER: \"initiates MFA\"
     MFA_SERVER ||--o{ USER: \"verifies MFA code with\"
-\`\`\``,
+\`\`\``
+  ),
   complete: true,
 };
 
@@ -160,7 +159,9 @@ export const Buttons = (args, { argTypes }) => ({
 });
 Buttons.args = {
   id: 'system-message-id',
-  message: `To implement a login page, we need to ensure the following considerations:
+  tokens: tokenize(
+    'buttons',
+    `To implement a login page, we need to ensure the following considerations:
 
 ### Proposed Changes
 
@@ -176,7 +177,8 @@ Buttons.args = {
    - Create styles specific to the login page to ensure a user-friendly and responsive design.
 
 [Generate code](event:generate-code) [Create a diagram](event:create-diagram)
-`,
+`
+  ),
   complete: true,
 };
 
@@ -194,9 +196,12 @@ export const Links = (args, { argTypes }) => ({
 });
 Links.args = {
   id: 'system-message-id',
-  message: `Here is some relevant information:
+  tokens: tokenize(
+    'links',
+    `Here is some relevant information:
 - [AppMap Documentation](https://appmap.io/docs)
 - [packages/client/src/components/LoginPage.jsx](packages/client/src/components/LoginPage.jsx)
-`,
+`
+  ),
   complete: true,
 };

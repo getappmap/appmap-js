@@ -56,7 +56,11 @@ const appmapStats = [
 export default {
   title: 'Pages/ChatSearch',
   component: VChatSearch,
-  argTypes: {},
+  argTypes: {
+    threadId: {
+      control: { type: 'text' },
+    },
+  },
 };
 
 export const ChatSearch = (args, { argTypes }) => ({
@@ -65,12 +69,17 @@ export const ChatSearch = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
     this.$refs.chatSearch.setAppMapStats(appmapStats);
+    this.$root.$on('on-thread-subscription', () => {
+      this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    });
   },
 });
 ChatSearch.args = {
   mostRecentAppMaps,
   appmapYmlPresent: true,
   appmapRpcPort: 3002,
+  // threadId: 'cefe75d4-e2ea-4ad1-866a-1c8cd54fc108',
+  // replay: true,
   openNewChat() {
     alert('open new chat');
   },
@@ -83,7 +92,9 @@ export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
-    this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    this.$root.$on('on-thread-subscription', () => {
+      this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    });
   },
 });
 ChatSearchWithCodeSelection.args = {

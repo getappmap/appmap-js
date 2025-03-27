@@ -23,13 +23,9 @@
       data-cy="input-attachments"
     >
       <v-code-selection
-        v-for="(selection, i) in codeSelections"
-        :key="i"
-        :path="selection.path"
-        :line-start="selection.lineStart"
-        :line-end="selection.lineEnd"
-        :language="selection.language"
-        :code="selection.code"
+        v-for="selection in codeSelections"
+        :key="selection.uri"
+        v-bind="selection"
         class="attachment"
       />
     </div>
@@ -284,7 +280,7 @@ $border-color: rgba(white, 0.333);
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
   border-top: 1px solid $color-background-dark;
   box-shadow: 0 0 1rem 0rem $color-tile-shadow;
   border-radius: $border-radius $border-radius 0 0;

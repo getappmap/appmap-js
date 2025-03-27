@@ -29,7 +29,7 @@
       <v-user-message
         v-for="(message, i) in messages"
         :key="i"
-        :message="message.content"
+        :tokens="message.tokens"
         :is-user="message.isUser"
         :is-error="message.isError"
         :id="message.messageId"
@@ -38,6 +38,7 @@
         :complete="message.complete"
         :code-selections="message.codeSelections"
         :thread-id="threadId"
+        :prompt-suggestions="message.promptSuggestions"
         @change-sentiment="onSentimentChange"
       />
     </div>
@@ -87,13 +88,14 @@ import { ExplainRpc, NavieRpc } from '@appland/rpc';
 import { CodeSelection } from './CodeSelection';
 
 export interface ITool {
+  id?: string;
   title: string;
   status?: string;
   complete?: boolean;
 }
 
 interface IMessage {
-  message: string;
+  tokens: (string | CodeBlockReference)[];
   isUser: boolean;
   isError: boolean;
   complete?: boolean;
@@ -104,6 +106,7 @@ interface IMessage {
 }
 
 class UserMessage implements IMessage {
+  public tokens: string[] = [];
   public readonly messageId = undefined;
   public readonly sentiment = undefined;
   public readonly isUser = true;
@@ -112,22 +115,51 @@ class UserMessage implements IMessage {
   public readonly complete = true;
   public readonly codeSelections = [];
 
-  constructor(public content: string) {}
+  constructor(content: string) {
+    this.tokens.push(content);
+  }
 }
 
+interface CodeBlockReference {
+  type: 'code-block';
+  id: string;
+}
+
+interface HiddenToken {
+  type: 'hidden';
+  content: string;
+}
+
+type Token = string | CodeBlockReference | HiddenToken;
+
 class AssistantMessage implements IMessage {
-  public content = '';
+  public tokens: Token[] = [];
   public sentiment = undefined;
   public complete = false;
   public readonly isUser = false;
   public readonly isError = false;
   public readonly tools = [];
   public readonly codeSelections = undefined;
+  public readonly promptSuggestions: undefined | NavieRpc.V1.Suggest.NextStep[] = undefined;
+  private readonly codeBlocks: CodeBlockReference[] = [];
 
   constructor(public messageId?: string) {}
 
-  append(token: string) {
-    Vue.set(this, 'content', [this.content, token].join(''));
+  append(token: Token) {
+    if (typeof token === 'object' && 'type' in token) {
+      if (token.type === 'code-block') {
+        if (this.codeBlocks.some((b) => b.id === token.id)) {
+          return;
+        }
+        this.codeBlocks.push(token);
+      }
+    }
+
+    this.tokens.push(token);
+  }
+
+  setPromptSuggestions(suggestions: NavieRpc.V1.Suggest.NextStep[]) {
+    Vue.set(this, 'promptSuggestions', suggestions);
   }
 }
 
@@ -192,11 +224,13 @@ export default {
     selectedModel: {
       type: Object as PropType<NavieRpc.V1.Models.ListModel>,
     },
+    threadId: {
+      type: String,
+    },
   },
   data() {
     return {
       messages: [] as IMessage[],
-      threadId: undefined as string | undefined,
       authorized: true,
       autoScrollTop: 0,
       enableScrollLog: false, // Auto-scroll can be tricky, so there is special logging to help debug it.
@@ -222,70 +256,18 @@ export default {
     },
   },
   methods: {
-    restoreThread(threadId: string, thread: ExplainRpc.Thread) {
-      // In hindsight, the thread should have an id property.
-      this.threadId = threadId;
-      let populatedCodeSelection = false;
-      for (const exchange of thread.exchanges) {
-        if (exchange.question) {
-          // TODO: User message provides prompt, but the UI does not have a place for it.
-          const { content, codeSelection } = exchange.question;
-          const userMessage = this.addUserMessage(content);
-          if (codeSelection && !populatedCodeSelection) {
-            populatedCodeSelection = true;
-
-            let parsedCodeSelections: CodeSelection[];
-            try {
-              // Code selections are stored natively as a CodeSelection object, but restored from
-              // serialization as a string.
-              parsedCodeSelections = JSON.parse(codeSelection);
-            } catch {
-              // Issue a warning
-              console.warn('Code selection is not valid JSON');
-
-              // If the codeSelection is not valid JSON, it's likely a string.
-              // This is a temporary fix to handle the string case.
-              parsedCodeSelections = [
-                {
-                  content: codeSelection,
-                },
-              ];
-            }
-            userMessage.codeSelections = parsedCodeSelections;
-
-            if (typeof codeSelection === 'string') {
-              const codeSelectionObj: CodeSelection = {
-                content: codeSelection,
-              };
-              userMessage.codeSelections = [codeSelectionObj];
-            } else {
-              userMessage.codeSelections = [codeSelection];
-            }
-          }
-        }
-        if (exchange.answer) {
-          const { content } = exchange.answer;
-          const systemMessage = this.addSystemMessage();
-          systemMessage.content = content;
-          systemMessage.complete = true;
-        }
-      }
-    },
     getMessage(query: Partial<IMessage>): IMessage | undefined {
       return this.messages.find((m) => {
         return Object.keys(query).every((key) => m[key] === query[key]);
       });
     },
     // Creates-or-appends a message.
-    addToken(token: string, threadId: string, messageId: string) {
-      if (threadId !== this.threadId) return;
-
+    addToken(token: string, messageId: string) {
       if (!messageId) console.warn('messageId is undefined');
-      if (!threadId) console.warn('threadId is undefined');
 
       let assistantMessage = this.getMessage({ messageId });
       if (!assistantMessage) {
-        assistantMessage = new AssistantMessage(messageId);
+        assistantMessage = Vue.observable(new AssistantMessage(messageId));
         this.messages.push(assistantMessage);
       }
 
@@ -308,7 +290,7 @@ export default {
       return userMessage;
     },
     addSystemMessage() {
-      const message = new AssistantMessage();
+      const message = Vue.observable(new AssistantMessage());
       this.messages.push(message);
       return message;
     },
@@ -329,22 +311,14 @@ export default {
       }
     },
     async onSend(message: string) {
-      const userMessage = this.addUserMessage(message);
-      userMessage.codeSelections = this.codeSelections;
-
-      this.sendMessage(message, this.codeSelections, this.appmaps);
-
-      this.codeSelections = [];
+      this.sendMessage(message, [], this.appmaps);
+      this.$set(this, 'codeSelections', []);
     },
     onStop() {
       this.$emit('stop');
     },
     onAck(_messageId: string, threadId: string) {
       this.setAuthorized(true);
-      if (threadId !== this.threadId) {
-        this.threadId = threadId;
-        this.$root.$emit('thread-id', threadId);
-      }
     },
     scrollToBottom() {
       // Allow one tick to progress to allow any DOM changes to be applied
@@ -400,6 +374,13 @@ export default {
     includeCodeSelection(codeSelection: CodeSelection) {
       this.codeSelections.push(codeSelection);
     },
+    removeCodeSelection(attachmentId: string) {
+      this.$set(
+        this,
+        'codeSelections',
+        this.codeSelections.filter((c) => c.attachmentId !== attachmentId)
+      );
+    },
     includeAppMap(appmap: string) {
       this.appmaps.push(appmap);
     },
@@ -409,6 +390,9 @@ export default {
     setInput(input: string) {
       this.$refs.input.setInput(input);
       this.$refs.input.moveCursorToEnd();
+    },
+    clear() {
+      this.$set(this, 'messages', []);
     },
   },
   watch: {
