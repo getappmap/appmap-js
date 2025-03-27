@@ -5,7 +5,7 @@ import { INavieProvider } from '../explain/navie/inavie';
 // We don't want to support context lookups
 const NOP = () => Promise.resolve([]);
 
-function getSuggestions(
+export function getSuggestions(
   navieProvider: INavieProvider,
   threadId: string
 ): Promise<NavieRpc.V1.Suggest.Response> {

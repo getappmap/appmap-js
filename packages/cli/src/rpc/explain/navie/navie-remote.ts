@@ -6,52 +6,16 @@ import { ContextV1, ContextV2, Help, ProjectInfo } from '@appland/navie';
 import { verbose } from '../../../utils';
 import { default as INavie } from './inavie';
 import assert from 'assert';
-import { initializeHistory, loadThread } from './historyHelper';
-import Thread from './thread';
-import IHistory from './ihistory';
 
-export class RemtoteCallbackHandler {
-  thread: Thread | undefined;
+export class RemoteCallbackHandler {
   userMessageId: string | undefined;
   assistantMessageId: string | undefined;
-  tokens: string[] = [];
 
   constructor(
-    private readonly history: IHistory,
     private readonly contextProvider: ContextV2.ContextProvider,
     private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider,
     private readonly helpProvider: Help.HelpProvider
   ) {}
-
-  async onAck(
-    assignedUserMessageId: string,
-    threadId: string,
-    question: string,
-    codeSelection?: string,
-    prompt?: string
-  ): Promise<void> {
-    if (verbose())
-      warn(`Explain received ack (userMessageId=${assignedUserMessageId}, threadId=${threadId})`);
-
-    this.thread = await loadThread(this.history, threadId);
-    this.userMessageId = assignedUserMessageId;
-    await this.history.question(threadId, this.userMessageId, question, codeSelection, prompt);
-  }
-
-  async onToken(token: string, messageId: string): Promise<void> {
-    if (!this.assistantMessageId) this.assistantMessageId = messageId;
-
-    this.tokens.push(token);
-
-    if (this.thread && this.userMessageId)
-      await this.history.token(
-        this.thread.threadId,
-        this.userMessageId,
-        this.assistantMessageId,
-        token
-      );
-    else warn(`[remote-navie] Received token but no thread is available to store it`);
-  }
 
   async onRequestContext(
     data: Record<string, unknown>
@@ -124,8 +88,6 @@ export class RemtoteCallbackHandler {
 }
 
 export default class RemoteNavie extends EventEmitter implements INavie {
-  private history = initializeHistory();
-
   constructor(
     private contextProvider: ContextV2.ContextProvider,
     private projectInfoProvider: ProjectInfo.ProjectInfoProvider,
@@ -143,22 +105,18 @@ export default class RemoteNavie extends EventEmitter implements INavie {
   }
 
   async ask(threadId: string, question: string, codeSelection?: string, prompt?: string) {
-    const callbackHandler = new RemtoteCallbackHandler(
-      this.history,
+    const callbackHandler = new RemoteCallbackHandler(
       this.contextProvider,
       this.projectInfoProvider,
       this.helpProvider
     );
 
     const onAck = async (userMessageId: string, threadId: string) => {
-      await callbackHandler.onAck(userMessageId, threadId, question, codeSelection, prompt);
-
       this.emit('ack', userMessageId, threadId);
     };
 
     const onToken = async (token: string, messageId: string): Promise<void> => {
       this.emit('token', token, messageId);
-      await callbackHandler.onToken(token, messageId);
     };
 
     const onRequestContext = async (
@@ -169,13 +127,11 @@ export default class RemoteNavie extends EventEmitter implements INavie {
 
     const onComplete = () => {
       callbackHandler.onComplete();
-
       this.emit('complete');
     };
 
     const onError = (err: Error) => {
       callbackHandler.onError(err);
-
       this.emit('error', err);
     };
 

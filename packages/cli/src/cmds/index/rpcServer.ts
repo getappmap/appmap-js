@@ -11,6 +11,7 @@ import { Server } from 'http';
 
 import shadowLocalhost from '../../lib/shadowLocalhost';
 import { RpcCallback, RpcHandler, toJaysonRpcError } from '../../rpc/rpc';
+import { sseMiddleware } from '../../rpc/navie/thread/middleware';
 
 const debug = makeDebug('appmap:rpcServer');
 
@@ -63,6 +64,7 @@ export default class RPCServer {
     const app = connect();
     app.use(cors({ methods: ['POST'] }));
     app.use(jsonParser());
+    app.use(sseMiddleware());
     app.use(server.middleware());
     const listener = app.listen(this.bindPort, 'localhost');
 

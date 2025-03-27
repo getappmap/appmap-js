@@ -140,9 +140,11 @@
     "pretty-bytes": "^5.6.0",
     "ps-node": "^0.1.6",
     "read-pkg-up": "^7.0.1",
+    "reflect-metadata": "^0.2.2",
     "semver": "^7.3.5",
     "sql-formatter": "^4.0.2",
     "strip-ansi": "^6.0.0",
+    "tsyringe": "^4.8.0",
     "validator": "^13.7.0",
     "w3c-xmlserializer": "^2.0.0",
     "yargs": "^17.1.1"
