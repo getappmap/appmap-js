@@ -1,0 +1,416 @@
+import { Navie, UserContext } from '@appland/navie';
+import { dirname, join } from 'path';
+import { EventEmitter } from 'stream';
+import { randomUUID } from 'crypto';
+import { ConversationThread } from '@appland/client';
+import { getSuggestions } from '../suggest';
+import { homedir } from 'os';
+import { mkdir, writeFile } from 'fs/promises';
+
+import NavieService from '../services/navieService';
+import {
+  NavieAddMessageAttachmentEvent,
+  NavieEvent,
+  NavieMessageEvent,
+  TimestampNavieEvent,
+} from './events';
+import { ThreadIndexService } from '../services/threadIndexService';
+import { container } from 'tsyringe';
+import { NavieRpc } from '@appland/rpc';
+import handleReview from '../../explain/review';
+import { getTokenizedString } from './util';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type EventListener = (...args: any[]) => void;
+
+/**
+ * Converts the simplified context format back into the format expected by Navie.
+ * Why two formats? Because the difference between a `code-snippet` and a `code-selection` is too
+ * ambiguous, and `file` too specific. Ideally I'd like to migrate to use this static/dynamic format
+ * everywhere, but it works for now. - DB
+ */
+function convertContext(context?: NavieRpc.V1.Thread.ContextItem[]): UserContext.ContextItem[] {
+  if (!context) return [];
+  return context.map((item) => {
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
+    if (item.content) {
+      return { type: 'code-snippet', content: item.content, location: item.uri };
+    }
+    return { type: 'file', location: item.uri };
+    /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
+  });
+}
+
+function convertMessageAttachmentToContextItem(
+  attachment: NavieAddMessageAttachmentEvent
+): UserContext.ContextItem {
+  return {
+    type: 'code-snippet',
+    content: attachment.content ?? '',
+    location: attachment.uri,
+  };
+}
+
+export class Thread {
+  private eventEmitter = new EventEmitter();
+  private listeners = new Map<string, EventListener[]>();
+  private log: TimestampNavieEvent[] = [];
+  private codeBlockId: string | undefined;
+  private codeBlockLength: number | undefined;
+  private lastEventWritten = 0;
+  private lastTokenBeganCodeBlock = false;
+  private static readonly HISTORY_DIRECTORY = join(homedir(), '.appmap', 'navie', 'history');
+
+  constructor(
+    public readonly conversationThread: ConversationThread,
+    private readonly navieService: NavieService,
+    eventLog?: TimestampNavieEvent[]
+  ) {
+    if (eventLog?.length) {
+      this.log = eventLog;
+      this.lastEventWritten = this.log.length;
+    }
+  }
+
+  initialize() {
+    this.logEvent({ type: 'thread-init', conversationThread: this.conversationThread });
+  }
+
+  private logEvent(event: NavieEvent) {
+    const timeStamped = { ...event, time: Date.now() };
+    this.log.push(timeStamped);
+    this.eventEmitter.emit('event', timeStamped);
+  }
+
+  private async emitSuggestions(messageId: string) {
+    const suggestions = await getSuggestions(
+      this.navieService.navieProvider,
+      this.conversationThread.id
+    );
+    this.logEvent({ type: 'prompt-suggestions', suggestions, messageId });
+  }
+
+  static getHistoryFilePath(threadId: string) {
+    return join(Thread.HISTORY_DIRECTORY, `${threadId}.navie.jsonl`);
+  }
+
+  on(event: 'event', clientId: string, listener: (event: NavieEvent) => void): this;
+
+  /**
+   * Bind to the given event. A client identifier is used to associate a client with bound
+   * listeners. The listening client must call `removeAllListeners` when it disconnects.
+   *
+   * @param event the event to listen for
+   * @param clientId a unique identifier for the client
+   * @param listener the listener to call when the event is emitted
+   * @returns this
+   */
+  on(event: string, clientId: string, listener: EventListener): this {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    this.eventEmitter.on(event, listener);
+
+    // Keep track of listeners for each client
+    // When the client disconnects, we can remove all listeners for that client
+    let listeners = this.listeners.get(clientId);
+    if (!listeners) {
+      listeners = [listener];
+      this.listeners.set(clientId, listeners);
+    }
+    listeners.push(listener);
+
+    return this;
+  }
+
+  /**
+   * Remove all listeners bound to the given client identifier.
+   *
+   * @param clientId the client identifier to remove
+   */
+  removeAllListeners(clientId: string) {
+    const listeners = this.listeners.get(clientId);
+    if (!listeners) return;
+
+    for (const listener of listeners) {
+      this.eventEmitter.removeListener('event', listener);
+    }
+
+    this.listeners.delete(clientId);
+  }
+
+  /**
+   * Flush the event log to disk. This is called automatically when a new message is finalized.
+   */
+  private async flush() {
+    if (this.log.length === this.lastEventWritten) return;
+
+    const historyFilePath = Thread.getHistoryFilePath(this.conversationThread.id);
+    const serialized = this.log.slice(this.lastEventWritten ?? 0).map((e) => JSON.stringify(e));
+
+    try {
+      await mkdir(dirname(historyFilePath), { recursive: true });
+      await writeFile(historyFilePath, serialized.join('\n') + '\n', { flag: 'a' });
+      this.lastEventWritten = this.log.length;
+    } catch (e) {
+      console.error('failed to write to history file', e);
+    }
+
+    try {
+      let lastUserMessage: NavieMessageEvent | undefined;
+      for (let i = this.log.length - 1; i >= 0; i--) {
+        const e = this.log[i];
+        if (e.type === 'message' && e.role === 'user') {
+          lastUserMessage = e;
+          break;
+        }
+      }
+      const title = lastUserMessage?.content.slice(0, 100);
+      const threadIndexService = container.resolve(ThreadIndexService);
+      threadIndexService.index(this.conversationThread.id, historyFilePath, title);
+    } catch (e) {
+      console.error('failed to update thread index', e);
+    }
+  }
+
+  /**
+   * Pin an item in the thread. This will emit a `pin-item` event. This item won't actually be
+   * propagated to the backend unless sent by the client via `sendMessage`. This can change in the
+   * future.
+   *
+   * @param item the item to pin
+   */
+  pinItem(uri: string, content?: string) {
+    this.logEvent({ type: 'pin-item', uri, content });
+  }
+
+  /**
+   * Unpin an item in the thread. This will emit a `unpin-item` event.
+   *
+   * @param item the item to unpin
+   */
+  unpinItem(uri: string) {
+    this.logEvent({ type: 'unpin-item', uri });
+  }
+
+  /**
+   * This function is responsible for pre-processing and token emission. It keeps track of active
+   * code blocks and strips out <!-- file: ... --> comments, instead emitting them as metadata.
+   *
+   * @param token The token to be processed and emitted
+   * @param messageId The message id associated with the token
+   */
+  private onToken(token: string, messageId: string) {
+    const subTokens = token.split(/^(`{3,})\n?/gm);
+    for (let subToken of subTokens) {
+      if (subToken.length === 0) continue;
+
+      const fileMatch = subToken.match(/^<!-- file: (.*) -->\s*?\n?/m);
+      if (fileMatch) {
+        this.codeBlockId = this.codeBlockId ?? randomUUID();
+        this.logEvent({
+          type: 'token-metadata',
+          codeBlockId: this.codeBlockId,
+          metadata: {
+            location: fileMatch[1],
+          },
+        });
+
+        // Remove the file directive from the token
+        const index = fileMatch.index ?? 0;
+        subToken = subToken.slice(0, index) + subToken.slice(index + fileMatch[0].length);
+        if (subToken.length === 0) continue;
+      }
+
+      const language = this.lastTokenBeganCodeBlock ? subToken.match(/^[^\s]+\n/) : null;
+      if (language && this.codeBlockId) {
+        this.logEvent({
+          type: 'token-metadata',
+          codeBlockId: this.codeBlockId,
+          metadata: {
+            language: language[0].trim(),
+          },
+        });
+      }
+
+      this.lastTokenBeganCodeBlock = false;
+
+      let clearCodeBlock = false;
+      if (subToken.match(/^`{3,}/)) {
+        // Code block fences
+        if (this.codeBlockLength === undefined) {
+          this.codeBlockId = this.codeBlockId ?? randomUUID();
+          this.codeBlockLength = subToken.length;
+          this.lastTokenBeganCodeBlock = true;
+        } else if (subToken.length === this.codeBlockLength) {
+          clearCodeBlock = true;
+        }
+      }
+
+      // If we're not in a code block, allow parsing of XML tags and conversion into object tokens
+      if (!this.codeBlockId) {
+        getTokenizedString(subToken).forEach((part) =>
+          this.logEvent({
+            type: 'token',
+            token: part,
+            messageId,
+          })
+        );
+      } else {
+        this.logEvent({
+          type: 'token',
+          token: subToken,
+          messageId,
+          codeBlockId: this.codeBlockId,
+        });
+      }
+
+      if (clearCodeBlock) {
+        this.codeBlockId = undefined;
+        this.codeBlockLength = undefined;
+      }
+    }
+  }
+
+  /**
+   * Send a user message to the thread. This will emit a `message` event. This promise will resolve
+   * once the message has been acknowledged by the backend, before the message is completed. Message
+   * attachments need NOT be included in the `userContext` parameter.
+   *
+   * @param message the message to send
+   * @param codeSelection (optional) additional context to use, i.e., pinned items
+   */
+  async sendMessage(
+    message: string,
+    userContext?: NavieRpc.V1.Thread.ContextItem[]
+  ): Promise<void> {
+    const [navie, contextEvents] = this.navieService.getNavie();
+
+    let context = convertContext(userContext);
+    context.push(...this.getMessageAttachments().map(convertMessageAttachmentToContextItem));
+
+    const { applied, userContext: newUserContext } = await handleReview(message, context);
+    if (applied && newUserContext) {
+      context = newUserContext;
+    }
+
+    let responseId: string | undefined;
+    contextEvents.on('context', (event) => {
+      event.complete
+        ? this.logEvent({ type: 'complete-context-search', id: event.id, result: event.response })
+        : this.logEvent({
+            type: 'begin-context-search',
+            id: event.id,
+            request: event.request,
+            contextType: event.type,
+          });
+    });
+    return new Promise<void>((resolve, reject) => {
+      navie
+        .on('ack', (userMessageId: string) => {
+          this.logEvent({
+            type: 'message',
+            role: 'user',
+            messageId: userMessageId,
+            content: message,
+          });
+          resolve();
+        })
+        .on('token', (token: string, messageId: string) => {
+          if (!responseId) responseId = messageId;
+          this.onToken(token, messageId);
+        })
+        .on('error', (err: Error) => {
+          this.logEvent({ type: 'error', error: err });
+          reject(err);
+        })
+        .on('complete', () => {
+          if (!responseId) throw new Error('recieved complete without messageId');
+          this.logEvent({ type: 'message-complete', messageId: responseId });
+          this.flush()
+            .then(() => this.emitSuggestions(responseId!))
+            .then(() => this.flush())
+            .catch(console.error);
+        })
+        .ask(this.conversationThread.id, message, context, undefined)
+        .catch(reject);
+    });
+  }
+
+  addMessageAttachment(uri: string, content?: string) {
+    this.logEvent({
+      type: 'add-message-attachment',
+      uri,
+      content,
+    });
+  }
+
+  removeMessageAttachment(uri: string) {
+    // There's no validation that the attachmentId is valid.
+    // This will be up to the client to figure out.
+    this.logEvent({ type: 'remove-message-attachment', uri });
+  }
+
+  getMessageAttachments(): NavieAddMessageAttachmentEvent[] {
+    // Array.lastIndexOf is not supported until es2023.
+    let lastUserMessageIndex = -1;
+    for (let i = 0; i < this.log.length; ++i) {
+      const e = this.log[i];
+      if (e.type === 'message' && e.role === 'user') {
+        lastUserMessageIndex = i;
+      }
+    }
+
+    const attachments = new Map<string, NavieAddMessageAttachmentEvent>();
+    for (let i = lastUserMessageIndex + 1; i < this.log.length; ++i) {
+      const e = this.log[i];
+      if (e.type === 'add-message-attachment') {
+        attachments.set(e.uri, e);
+      } else if (e.type === 'remove-message-attachment') {
+        attachments.delete(e.uri);
+      }
+    }
+
+    return Array.from(attachments.values());
+  }
+
+  /**
+   * Gets the events since the given nonce. If no nonce is given, it will return all events.
+   *
+   * @param sinceNonce The nonce to start from
+   * @returns The events since the given nonce
+   */
+  getEvents(sinceNonce?: number): readonly TimestampNavieEvent[] {
+    return this.log.slice(sinceNonce ?? 0);
+  }
+
+  /**
+   * Converts the event log into a chat history. Keep in mind that this processes every event in the
+   * log, so the return value should be cached when possible.
+   *
+   * @returns The chat history
+   */
+  getChatHistory(): Navie.ChatHistory {
+    const chatHistory: Navie.ChatHistory = [];
+    const streamingMessages = new Map<string, Navie.Message>();
+    for (const event of this.log) {
+      if (event.type === 'message') {
+        chatHistory.push({ role: event.role, content: event.content });
+      }
+      if (event.type === 'token') {
+        let message = streamingMessages.get(event.messageId);
+        if (!message) {
+          message = {
+            role: 'assistant',
+            content: '',
+          };
+          streamingMessages.set(event.messageId, message);
+          chatHistory.push(message);
+        }
+        message.content += event.token;
+      }
+      if (event.type === 'message-complete') {
+        streamingMessages.delete(event.messageId);
+      }
+    }
+    return chatHistory;
+  }
+}

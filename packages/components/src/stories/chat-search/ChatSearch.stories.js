@@ -56,7 +56,11 @@ const appmapStats = [
 export default {
   title: 'Pages/ChatSearch',
   component: VChatSearch,
-  argTypes: {},
+  argTypes: {
+    threadId: {
+      control: { type: 'text' },
+    },
+  },
 };
 
 export const ChatSearch = (args, { argTypes }) => ({
@@ -65,12 +69,17 @@ export const ChatSearch = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
     this.$refs.chatSearch.setAppMapStats(appmapStats);
+    this.$root.$on('on-thread-subscription', () => {
+      this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    });
   },
 });
 ChatSearch.args = {
   mostRecentAppMaps,
   appmapYmlPresent: true,
   appmapRpcPort: 3002,
+  // threadId: 'cefe75d4-e2ea-4ad1-866a-1c8cd54fc108',
+  // replay: true,
   openNewChat() {
     alert('open new chat');
   },
@@ -83,7 +92,9 @@ export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
-    this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    this.$root.$on('on-thread-subscription', () => {
+      this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    });
   },
 });
 ChatSearchWithCodeSelection.args = {
@@ -322,6 +333,8 @@ function buildMockRpc(
   baseUrl = 'http://localhost:3000/',
   supportsStreaming = true
 ) {
+  const explanationWords =
+    typeof explanation === 'string' ? explanation.split(/(?=\W)/) : explanation;
   let explainStatus = { step: 'build-vector-terms', searchResponse };
   const run = async function () {
     explainStatus = { step: 'build-vector-terms', searchResponse };
@@ -330,13 +343,13 @@ function buildMockRpc(
     explainStatus.contextResponse = navieContext;
     if (supportsStreaming) {
       explainStatus.explanation = [];
-      for (const line of explanation.split(/(?=\W)/)) {
+      for (const line of explanationWords) {
         await wait(10);
         explainStatus.explanation.push(`${line}`);
       }
     } else {
       await wait(10000);
-      explainStatus.explanation = explanation.map((line) => `${line}\n`);
+      explainStatus.explanation = explanationWords;
     }
     explainStatus.step = 'complete';
   };

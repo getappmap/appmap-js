@@ -3,8 +3,12 @@ import Vue from 'vue';
 export default Vue.extend({
   props: {
     handle: {
-      type: Number,
+      type: String,
       required: false,
+    },
+    isReference: {
+      type: Boolean,
+      default: false,
     },
   },
 });

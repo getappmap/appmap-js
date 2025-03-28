@@ -10,7 +10,7 @@ import appmapFilter from '../../rpc/appmap/filter';
 import { RpcHandler } from '../../rpc/rpc';
 import metadata from '../../rpc/appmap/metadata';
 import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
-import { explainHandler, explainStatusHandler, loadThreadHandler } from '../../rpc/explain/explain';
+import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain';
 import { buildNavieProvider, commonNavieArgsBuilder as navieBuilder } from '../navie';
 import RPCServer from './rpcServer';
 import appmapData from '../../rpc/appmap/data';
@@ -28,10 +28,6 @@ import { update } from '../../rpc/file/update';
 import { INavieProvider } from '../../rpc/explain/navie/inavie';
 import { navieMetadataV1, navieMetadataV2 } from '../../rpc/navie/metadata';
 import { navieSuggestHandlerV1 } from '../../rpc/navie/suggest';
-import { initializeHistory } from '../../rpc/explain/navie/historyHelper';
-import History from '../../rpc/explain/navie/history';
-import { join } from 'path';
-import { homedir } from 'os';
 import { navieWelcomeV2 } from '../../rpc/navie/welcome';
 import { navieRegisterV1 } from '../../rpc/navie/register';
 import ModelRegistry from '../../rpc/navie/models/registry';
@@ -39,6 +35,20 @@ import { navieModelsAddV1 } from '../../rpc/navie/models/handlers/add';
 import { navieModelsListV1 } from '../../rpc/navie/models/handlers/list';
 import { navieModelsSelectV1 } from '../../rpc/navie/models/handlers/select';
 import { navieModelsGetConfigV1 } from '../../rpc/navie/models/handlers/getConfig';
+import { navieThreadSendMessageHandler } from '../../rpc/navie/thread/handlers/sendMessage';
+import {
+  navieThreadPinItemHandler,
+  navieThreadUnpinItemHandler,
+} from '../../rpc/navie/thread/handlers/pinItem';
+import { navieThreadQueryHandler } from '../../rpc/navie/thread/handlers/query';
+import NavieService from '../../rpc/navie/services/navieService';
+import { ThreadIndexService } from '../../rpc/navie/services/threadIndexService';
+import { container } from 'tsyringe';
+import ThreadService from '../../rpc/navie/services/threadService';
+import {
+  navieThreadAddMessageAttachmentHandler,
+  navieThreadRemoveMessageAttachmentHandler,
+} from '../../rpc/navie/thread/handlers/messageAttachment';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -61,6 +71,8 @@ type HandlerArguments = yargs.ArgumentsCamelCase<
 >;
 
 export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandler<any, any>[] {
+  const threadService = container.resolve(ThreadService);
+  const threadIndexService = container.resolve(ThreadIndexService);
   return [
     search(),
     appmapStatsV1(),
@@ -71,7 +83,6 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     sequenceDiagram(),
     explainHandler(navie, codeEditor),
     explainStatusHandler(),
-    loadThreadHandler(),
     update(navie),
     setConfigurationV1(),
     getConfigurationV1(),
@@ -81,11 +92,17 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     navieMetadataV2(),
     navieSuggestHandlerV1(navie),
     navieWelcomeV2(navie),
-    navieRegisterV1(codeEditor),
     navieModelsAddV1(),
     navieModelsListV1(),
     navieModelsSelectV1(),
     navieModelsGetConfigV1(),
+    navieRegisterV1(threadService, codeEditor),
+    navieThreadSendMessageHandler(threadService),
+    navieThreadPinItemHandler(threadService),
+    navieThreadUnpinItemHandler(threadService),
+    navieThreadQueryHandler(threadIndexService),
+    navieThreadAddMessageAttachmentHandler(threadService),
+    navieThreadRemoveMessageAttachmentHandler(threadService),
   ];
 }
 
@@ -98,6 +115,10 @@ export const handler = async (argv: HandlerArguments) => {
   });
 
   const navie = buildNavieProvider(argv);
+
+  ThreadIndexService.useDefault();
+  NavieService.bindNavieProvider(navie);
+
   let codeEditor: string | undefined = argv.codeEditor;
   if (!codeEditor) {
     codeEditor = detectCodeEditor();
@@ -106,12 +127,6 @@ export const handler = async (argv: HandlerArguments) => {
 
   loadConfiguration(false);
   await configureRpcDirectories(argv.directory);
-
-  {
-    const history = initializeHistory();
-    const oldHistoryDir = join(homedir(), '.appmap', 'navie', 'history');
-    await History.migrate(oldHistoryDir, history);
-  }
 
   const rpcServer = new RPCServer(argv.port, rpcMethods(navie, codeEditor));
   rpcServer.start();

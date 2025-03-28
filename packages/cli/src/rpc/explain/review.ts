@@ -11,7 +11,7 @@ import processPatchset from '../../lib/processPatchset';
 export default async function handleReview(
   question: string,
   userContext?: UserContext.Context
-): Promise<{ applied: boolean; userContext?: UserContext.Context }> {
+): Promise<{ applied: boolean; userContext?: UserContext.ContextItem[] }> {
   const [mode] = question.split(/\s+/g);
   if (mode !== '@review') return { applied: false };
 

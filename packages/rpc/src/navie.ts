@@ -89,6 +89,118 @@ export namespace NavieRpc {
         export type Response = Config[];
       }
     }
+    export namespace Thread {
+      /**
+       * This interface is used to represent data, either as static content or as a resolvable
+       * URI, that can be used within a message as context.
+       *
+       * ### Examples
+       * Static content represented with a handle URI:
+       * ```json
+       * { "uri": "handle://71881faa-c013-4362-8549-6d3706554190", "content": "My static content" }
+       * ```
+       *
+       * Partial code snippet represented via a URI
+       * ```json
+       * { "uri": "file://app/controllers/user_controller.rb:3-40" }
+       * ```
+       *
+       * A web page
+       * ```json
+       * { "uri": "https://bevy-cheatbook.github.io/programming/plugins.html" }
+       * ```
+       *
+       * A code snippet, already statically resolved
+       * ```json
+       * { "uri": "file://user_controller.rb:1", "content": "# frozen_string_literal: true" }
+       * ```
+       */
+      export interface ContextItem {
+        /**
+         * The URI of the context item. This property is required as a unique identifier.
+         * If a context item has no physical location, it should use a URI where the protocol
+         * is `handle: and the path is a unique identifier.
+         */
+        uri: string;
+
+        /**
+         * Static content representing the context item. If this property is present, it may
+         * not be resolved by the `uri` property.
+         */
+        content?: string;
+      }
+      export namespace Subscribe {
+        export const Method = 'v1.navie.thread.subscribe';
+        export type Params = {
+          threadId: string;
+          nonce?: number;
+          replay?: boolean;
+        };
+        export type Response = {
+          /*
+            This is a non-standard JSON RPC method.
+            Invoking this method will open an event stream.
+          */
+        };
+      }
+      export namespace SendMessage {
+        export const Method = 'v1.navie.thread.sendMessage';
+        export type Params = {
+          threadId: string;
+          content: string;
+          userContext?: ContextItem[];
+        };
+        export type Response = void;
+      }
+      export namespace PinItem {
+        export const Method = 'v1.navie.thread.pinItem';
+        export type Params = ContextItem & {
+          threadId: string;
+        };
+        export type Response = void;
+      }
+      export namespace UnpinItem {
+        export const Method = 'v1.navie.thread.unpinItem';
+        export type Params = {
+          threadId: string;
+          uri: string;
+        };
+        export type Response = void;
+      }
+      export namespace AddMessageAttachment {
+        export const Method = 'v1.navie.thread.addMessageAttachment';
+        export type Params = ContextItem & {
+          threadId: string;
+        };
+        export type Response = void;
+      }
+      export namespace RemoveMessageAttachment {
+        export const Method = 'v1.navie.thread.removeMessageAttachment';
+        export type Params = {
+          threadId: string;
+          uri: string;
+        };
+        export type Response = void;
+      }
+      export namespace Query {
+        export const Method = 'v1.navie.thread.query';
+        export type Params = {
+          threadId?: string;
+          maxCreatedAt?: string; // ISO 8601 date
+          orderBy?: 'created_at' | 'updated_at';
+          limit?: number;
+          offset?: number;
+          projectDirectories?: string[];
+        };
+        export type Response = {
+          id: string;
+          path: string;
+          title: string;
+          created_at: string;
+          updated_at: string;
+        }[];
+      }
+    }
   }
 
   export namespace V2 {

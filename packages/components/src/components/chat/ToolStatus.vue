@@ -59,12 +59,17 @@ export default Vue.extend({
   display: grid;
   grid-template-columns: 1.5rem 1fr;
   flex-direction: column;
-  border: 1px solid $color-highlight;
-  border-radius: $border-radius;
-  padding: 0.75rem;
   width: fit-content;
   color: $color-foreground;
   align-items: stretch;
+
+  &--complete {
+    .tool-status__loader {
+      path {
+        fill: $color-highlight;
+      }
+    }
+  }
 
   &__info {
     grid-column: 2;
@@ -82,7 +87,7 @@ export default Vue.extend({
 
   &__loader {
     justify-self: center;
-    width: 75%;
+    width: 50%;
 
     path {
       fill: $color-foreground;
