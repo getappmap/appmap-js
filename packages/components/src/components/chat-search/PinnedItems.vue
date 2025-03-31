@@ -12,14 +12,14 @@
         <div class="pinned-items__body__table">
           <component
             v-for="pin in pinnedItems"
-            :is="getPinnedComponent(pin.handle)"
+            :is="getPinnedComponent(pin.uri)"
             :is-reference="true"
-            :key="pin.handle"
-            :handle="pin.handle"
+            :key="pin.uri"
+            :uri="pin.uri"
             v-bind="getMetadata(pin)"
             class="pinned-items__pinned-item"
-            @pin="unpin(pin.handle)"
-            >{{ getPinnedContent(pin.handle).content }}</component
+            @pin="unpin(pin.uri)"
+            >{{ getPinnedContent(pin.uri).content }}</component
           >
         </div>
       </div>
@@ -73,8 +73,8 @@ export default {
     getNoticeComponent(): Vue.Component {
       return EditorNoticeComponents[this.editorType];
     },
-    getPinnedComponent(handle: number): Vue.Component | undefined {
-      const pinnedItem = pinnedItemRegistry.get(handle);
+    getPinnedComponent(uri: string): Vue.Component | undefined {
+      const pinnedItem = pinnedItemRegistry.get(uri);
 
       // If it's not registered, it's an external file.
       if (!pinnedItem) return VFile;
@@ -83,15 +83,15 @@ export default {
       if (language === 'mermaid') return VMermaidDiagram;
       return VMarkdownCodeSnippet;
     },
-    getPinnedContent(handle: number): ObservableContent {
-      return pinnedItemRegistry.get(handle) ?? {};
+    getPinnedContent(uri: string): ObservableContent {
+      return pinnedItemRegistry.get(uri) ?? {};
     },
     getMetadata(pinnedItem: PinnedItem): Record<string, unknown> {
-      const registryItem = pinnedItemRegistry.get(pinnedItem.handle);
+      const registryItem = pinnedItemRegistry.get(pinnedItem.uri);
       return registryItem?.metadata ?? pinnedItem;
     },
-    unpin(handle: number) {
-      this.$emit('pin', { handle, pinned: false });
+    unpin(uri: string) {
+      this.$emit('pin', { uri, pinned: false });
     },
   },
 };

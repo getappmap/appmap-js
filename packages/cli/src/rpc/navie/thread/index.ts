@@ -1,7 +1,6 @@
-import { Navie, UserContext } from '@appland/navie';
+import { Message, Navie, UserContext } from '@appland/navie';
 import { dirname, join } from 'path';
 import { EventEmitter } from 'stream';
-import { randomUUID } from 'crypto';
 import { ConversationThread } from '@appland/client';
 import { getSuggestions } from '../suggest';
 import { homedir } from 'os';
@@ -16,7 +15,7 @@ import {
 } from './events';
 import { ThreadIndexService } from '../services/threadIndexService';
 import { container } from 'tsyringe';
-import { NavieRpc } from '@appland/rpc';
+import { NavieRpc, URI } from '@appland/rpc';
 import handleReview from '../../explain/review';
 import { getTokenizedString } from './util';
 
@@ -32,12 +31,10 @@ export type EventListener = (...args: any[]) => void;
 function convertContext(context?: NavieRpc.V1.Thread.ContextItem[]): UserContext.ContextItem[] {
   if (!context) return [];
   return context.map((item) => {
-    /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
     if (item.content) {
       return { type: 'code-snippet', content: item.content, location: item.uri };
     }
-    return { type: 'file', location: item.uri };
-    /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
+    return { type: 'file', location: item.uri, content: item.content };
   });
 }
 
@@ -55,7 +52,7 @@ export class Thread {
   private eventEmitter = new EventEmitter();
   private listeners = new Map<string, EventListener[]>();
   private log: TimestampNavieEvent[] = [];
-  private codeBlockId: string | undefined;
+  private codeBlockUri: string | undefined;
   private codeBlockLength: number | undefined;
   private lastEventWritten = 0;
   private lastTokenBeganCodeBlock = false;
@@ -205,10 +202,11 @@ export class Thread {
 
       const fileMatch = subToken.match(/^<!-- file: (.*) -->\s*?\n?/m);
       if (fileMatch) {
-        this.codeBlockId = this.codeBlockId ?? randomUUID();
+        // TODO: Should this be a file URI? We don't currently include line ranges.
+        this.codeBlockUri = this.codeBlockUri ?? URI.random().toString();
         this.logEvent({
           type: 'token-metadata',
-          codeBlockId: this.codeBlockId,
+          codeBlockUri: this.codeBlockUri,
           metadata: {
             location: fileMatch[1],
           },
@@ -221,10 +219,10 @@ export class Thread {
       }
 
       const language = this.lastTokenBeganCodeBlock ? subToken.match(/^[^\s]+\n/) : null;
-      if (language && this.codeBlockId) {
+      if (language && this.codeBlockUri) {
         this.logEvent({
           type: 'token-metadata',
-          codeBlockId: this.codeBlockId,
+          codeBlockUri: this.codeBlockUri,
           metadata: {
             language: language[0].trim(),
           },
@@ -237,7 +235,7 @@ export class Thread {
       if (subToken.match(/^`{3,}/)) {
         // Code block fences
         if (this.codeBlockLength === undefined) {
-          this.codeBlockId = this.codeBlockId ?? randomUUID();
+          this.codeBlockUri = this.codeBlockUri ?? URI.random().toString();
           this.codeBlockLength = subToken.length;
           this.lastTokenBeganCodeBlock = true;
         } else if (subToken.length === this.codeBlockLength) {
@@ -246,7 +244,7 @@ export class Thread {
       }
 
       // If we're not in a code block, allow parsing of XML tags and conversion into object tokens
-      if (!this.codeBlockId) {
+      if (!this.codeBlockUri) {
         getTokenizedString(subToken).forEach((part) =>
           this.logEvent({
             type: 'token',
@@ -259,12 +257,12 @@ export class Thread {
           type: 'token',
           token: subToken,
           messageId,
-          codeBlockId: this.codeBlockId,
+          codeBlockUri: this.codeBlockUri,
         });
       }
 
       if (clearCodeBlock) {
-        this.codeBlockId = undefined;
+        this.codeBlockUri = undefined;
         this.codeBlockLength = undefined;
       }
     }
@@ -390,7 +388,7 @@ export class Thread {
    */
   getChatHistory(): Navie.ChatHistory {
     const chatHistory: Navie.ChatHistory = [];
-    const streamingMessages = new Map<string, Navie.Message>();
+    const streamingMessages = new Map<string, Message>();
     for (const event of this.log) {
       if (event.type === 'message') {
         chatHistory.push({ role: event.role, content: event.content });
@@ -405,7 +403,7 @@ export class Thread {
           streamingMessages.set(event.messageId, message);
           chatHistory.push(message);
         }
-        message.content += event.token;
+        message.content += typeof event.token === 'string' ? event.token : event.token.raw;
       }
       if (event.type === 'message-complete') {
         streamingMessages.delete(event.messageId);

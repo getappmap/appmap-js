@@ -1,4 +1,4 @@
-import { AppMapRpc, ConfigurationRpc, ExplainRpc, NavieRpc } from '@appland/rpc';
+import { AppMapRpc, ConfigurationRpc, ExplainRpc, NavieRpc, URI } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
 import type ClientBrowser from 'jayson/lib/client/browser';
 
@@ -507,27 +507,27 @@ export default class AppMapRPC {
 
       return listener;
     },
-    pinItem: (threadId: string, pinnedItem: any) =>
+    pinItem: (threadId: string, uri: string, content?: string) =>
       this.client.request(
         NavieRpc.V1.Thread.PinItem.Method,
-        { threadId, pinnedItem },
+        { threadId, uri, content },
         (err: any, error: any, result: NavieRpc.V1.Thread.PinItem.Response) => {
           if (err || error) return reportError(Promise.reject, err, error);
 
           return result;
         }
       ),
-    unpinItem: (threadId: string, pinnedItem: any) =>
+    unpinItem: (threadId: string, uri: string) =>
       this.client.request(
         NavieRpc.V1.Thread.UnpinItem.Method,
-        { threadId, pinnedItem },
+        { threadId, uri },
         (err: any, error: any, result: NavieRpc.V1.Thread.UnpinItem.Response) => {
           if (err || error) return reportError(Promise.reject, err, error);
 
           return result;
         }
       ),
-    addMessageAttachment: (threadId: string, uri?: string, content?: string) =>
+    addMessageAttachment: (threadId: string, uri: string, content?: string) =>
       this.client.request(
         NavieRpc.V1.Thread.AddMessageAttachment.Method,
         { threadId, uri, content },
@@ -537,17 +537,21 @@ export default class AppMapRPC {
           return result;
         }
       ),
-    removeMessageAttachment: (threadId: string, attachmentId: string) =>
+    removeMessageAttachment: (threadId: string, uri: string) =>
       this.client.request(
         NavieRpc.V1.Thread.RemoveMessageAttachment.Method,
-        { threadId, attachmentId },
+        { threadId, uri },
         (err: any, error: any, result: NavieRpc.V1.Thread.RemoveMessageAttachment.Response) => {
           if (err || error) return reportError(Promise.reject, err, error);
 
           return result;
         }
       ),
-    sendMessage: (threadId: string, content: string, userContext?: any[]) =>
+    sendMessage: (
+      threadId: string,
+      content: string,
+      userContext?: NavieRpc.V1.Thread.ContextItem[]
+    ) =>
       this.client.request(
         NavieRpc.V1.Thread.SendMessage.Method,
         { threadId, content, userContext },

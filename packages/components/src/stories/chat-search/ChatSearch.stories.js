@@ -70,7 +70,7 @@ export const ChatSearch = (args, { argTypes }) => ({
   mounted() {
     this.$refs.chatSearch.setAppMapStats(appmapStats);
     this.$root.$on('on-thread-subscription', () => {
-      this.$refs.chatSearch.includeCodeSelection(codeSelection);
+      // this.$refs.chatSearch.includeCodeSelection(codeSelection);
     });
   },
 });
@@ -78,7 +78,7 @@ ChatSearch.args = {
   mostRecentAppMaps,
   appmapYmlPresent: true,
   appmapRpcPort: 3002,
-  // threadId: 'cefe75d4-e2ea-4ad1-866a-1c8cd54fc108',
+  threadId: '08a97730-b59d-4d98-b158-1cfc4293d2c1',
   // replay: true,
   openNewChat() {
     alert('open new chat');

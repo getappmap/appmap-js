@@ -345,7 +345,7 @@ describe('Thread', () => {
       thread.onToken(`<!-- file: test-file.md -->`, 'test-message-id');
       expect(listener).toHaveBeenCalledWith({
         type: 'token-metadata',
-        codeBlockId: expect.any(String),
+        codeBlockUri: expect.any(String),
         metadata: {
           location: 'test-file.md',
         },
@@ -359,7 +359,7 @@ describe('Thread', () => {
       thread.onToken(`\`\`\`ruby\n# test\n\`\`\``, 'test-message-id');
       expect(listener).toHaveBeenCalledWith({
         type: 'token-metadata',
-        codeBlockId: expect.any(String),
+        codeBlockUri: expect.any(String),
         metadata: {
           language: 'ruby',
         },
@@ -376,7 +376,7 @@ describe('Thread', () => {
       );
       expect(listener).toHaveBeenCalledWith({
         type: 'token-metadata',
-        codeBlockId: expect.any(String),
+        codeBlockUri: expect.any(String),
         metadata: {
           language: 'ruby',
         },
@@ -384,7 +384,7 @@ describe('Thread', () => {
       });
       expect(listener).not.toHaveBeenCalledWith({
         type: 'token-metadata',
-        codeBlockId: expect.any(String),
+        codeBlockUri: expect.any(String),
         metadata: {
           language: 'python',
         },
@@ -402,11 +402,11 @@ describe('Thread', () => {
           token: '```',
           messageId: 'test-message-id',
           time: expect.any(Number),
-          codeBlockId: expect.any(String),
+          codeBlockUri: expect.any(String),
         },
         {
           type: 'token-metadata',
-          codeBlockId: expect.any(String),
+          codeBlockUri: expect.any(String),
           metadata: {
             language: 'ruby',
           },
@@ -417,14 +417,14 @@ describe('Thread', () => {
           token: 'ruby\n# test\n',
           messageId: 'test-message-id',
           time: expect.any(Number),
-          codeBlockId: expect.any(String),
+          codeBlockUri: expect.any(String),
         },
         {
           type: 'token',
           token: '```',
           messageId: 'test-message-id',
           time: expect.any(Number),
-          codeBlockId: expect.any(String),
+          codeBlockUri: expect.any(String),
         },
       ]);
     });
@@ -436,7 +436,7 @@ describe('Thread', () => {
       expect(listener.mock.calls.flat()).toStrictEqual([
         {
           type: 'token-metadata',
-          codeBlockId: expect.any(String),
+          codeBlockUri: expect.any(String),
           metadata: {
             location: 'test-file.md',
           },
@@ -447,7 +447,7 @@ describe('Thread', () => {
           token: '# test\n',
           messageId: 'test-message-id',
           time: expect.any(Number),
-          codeBlockId: expect.any(String),
+          codeBlockUri: expect.any(String),
         },
       ]);
     });
@@ -462,18 +462,18 @@ describe('Thread', () => {
 
       const calls = listener.mock.calls.flat();
       // There should only be a single code block
-      const codeBlockId = (calls as NavieEvent[])
+      const codeBlockUri = (calls as NavieEvent[])
         .filter((e): e is NavieTokenMetadataEvent => e.type === 'token-metadata')
-        .find((e) => e.codeBlockId)?.codeBlockId;
+        .find((e) => e.codeBlockUri)?.codeBlockUri;
 
-      expect(codeBlockId).toBeDefined();
+      expect(codeBlockUri).toBeDefined();
       expect(calls).toStrictEqual([
         {
           type: 'token',
           token: '```',
           messageId: 'test-message-id',
           time: expect.any(Number),
-          codeBlockId,
+          codeBlockUri,
         },
         {
           type: 'token-metadata',
@@ -481,7 +481,7 @@ describe('Thread', () => {
             location: 'app/models/user.rb',
           },
           time: expect.any(Number),
-          codeBlockId,
+          codeBlockUri,
         },
         {
           type: 'token-metadata',
@@ -489,21 +489,21 @@ describe('Thread', () => {
             language: 'ruby',
           },
           time: expect.any(Number),
-          codeBlockId,
+          codeBlockUri,
         },
         {
           type: 'token',
           token: 'ruby\n# test\n',
           messageId: 'test-message-id',
           time: expect.any(Number),
-          codeBlockId,
+          codeBlockUri,
         },
         {
           type: 'token',
           token: '```',
           messageId: 'test-message-id',
           time: expect.any(Number),
-          codeBlockId,
+          codeBlockUri,
         },
       ]);
     });
