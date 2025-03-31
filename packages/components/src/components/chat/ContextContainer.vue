@@ -5,7 +5,7 @@
       'context-container--collapsed': collapsed || !isAppliable,
     }"
     data-cy="context-container"
-    :data-handle="valueHandle"
+    :data-uri="valueUri"
     :data-reference="isReference"
     :data-collapsed="collapsed"
   >
@@ -147,13 +147,11 @@ import VJumpToIcon from '@/assets/open.svg';
 import VPinIcon from '@/assets/pin.svg';
 import VCheckIcon from '@/assets/success-checkmark.svg';
 import VCloseIcon from '@/assets/x-icon.svg';
-import { getNextHandle } from '@/components/chat/Handle';
 import VLoader from '@/components/chat/Loader.vue';
 import VPopper from '@/components/Popper.vue';
 import VPopperMenu from '@/components/PopperMenu.vue';
 import Vue, { PropType } from 'vue';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
-import type { PinEvent } from './PinEvent';
 
 export default Vue.extend({
   components: {
@@ -180,7 +178,7 @@ export default Vue.extend({
       type: Array as () => ContextContainerMenuItem[],
       default: () => [],
     },
-    handle: {
+    uri: {
       type: String as PropType<string | undefined>,
       required: false,
     },
@@ -213,14 +211,14 @@ export default Vue.extend({
   data() {
     return {
       collapsed: this.isReference || !this.isPinnable,
-      valueHandle: this.handle,
+      valueUri: this.uri,
       pendingState: undefined as undefined | 'pending' | 'success' | 'failure',
     };
   },
   computed: {
     pinned(): boolean {
-      const { pinnedItems }: { pinnedItems: { handle: string }[] } = this as any;
-      return pinnedItems ? pinnedItems.some(({ handle }) => handle === this.handle) : false;
+      const { pinnedItems }: { pinnedItems: { uri: string }[] } = this as any;
+      return pinnedItems ? pinnedItems.some(({ uri }) => uri === this.uri) : false;
     },
     isFile(): boolean {
       return !!this.location || !!this.directory;
@@ -233,7 +231,7 @@ export default Vue.extend({
     onPin() {
       this.$emit('pin', {
         pinned: !this.pinned,
-        handle: this.valueHandle,
+        uri: this.valueUri,
       });
     },
     closeMenu() {
@@ -256,7 +254,7 @@ export default Vue.extend({
     },
     onJumpTo() {
       if (!this.isReference) return;
-      this.$root.$emit('jump-to', this.valueHandle);
+      this.$root.$emit('jump-to', this.valueUri);
     },
     onOpen() {
       if (!this.isFile) return;

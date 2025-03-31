@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 export default Vue.extend({
   props: {
-    handle: {
+    uri: {
       type: String,
       required: false,
     },

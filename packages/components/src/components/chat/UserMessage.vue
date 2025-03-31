@@ -224,7 +224,7 @@ export default {
                   return t.raw;
               }
             } else if (t.type === 'code-block')
-              return `<v-code-fenced-content handle="${t.id}"></v-code-fenced-content>`;
+              return `<v-code-fenced-content uri="${t.uri}"></v-code-fenced-content>`;
           }
         })
         .join('');
@@ -237,7 +237,7 @@ export default {
     },
     renderedMarkdown() {
       const markdown = marked.parse(this.message);
-      return DOMPurify.sanitize(markdown, {
+      const result = DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
         ADD_TAGS: [
           'v-next-prompt-button',
@@ -247,10 +247,12 @@ export default {
           'modified',
           'original',
         ],
-        ADD_ATTR: ['handle', 'command', 'prompt', 'target', 'emit-event', 'reasoning'],
+        ADD_ATTR: ['uri', 'command', 'prompt', 'target', 'emit-event', 'reasoning'],
         ALLOWED_URI_REGEXP:
-          /^(?:(?:(?:f|ht)tps?|mailto|event|file):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+          /^(?:(?:(?:f|ht)tps?|mailto|event|file|urn):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
       });
+      console.log(result);
+      return result;
     },
     hasClipboardAPI() {
       return (

@@ -122,7 +122,7 @@ class UserMessage implements IMessage {
 
 interface CodeBlockReference {
   type: 'code-block';
-  id: string;
+  uri: string;
 }
 
 interface HiddenToken {
@@ -155,7 +155,7 @@ class AssistantMessage implements IMessage {
   append(token: Token) {
     if (typeof token === 'object' && 'type' in token) {
       if (token.type === 'code-block') {
-        if (this.codeBlocks.some((b) => b.id === token.id)) {
+        if (this.codeBlocks.some((b) => b.uri === token.uri)) {
           return;
         }
         this.codeBlocks.push(token);
