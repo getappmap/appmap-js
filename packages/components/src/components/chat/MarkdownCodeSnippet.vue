@@ -1,7 +1,7 @@
 <template>
   <v-context-container
     :title="header"
-    :handle="handle"
+    :uri="uri"
     :location="decodedLocation"
     :directory="directory"
     :is-pinnable="isPinnable"
@@ -118,8 +118,8 @@ export default Vue.extend({
 
       navigator.clipboard.writeText(code);
     },
-    onPin({ pinned, handle }: { pinned: boolean; handle: number }): void {
-      this.$root.$emit('pin', { pinned, handle });
+    onPin({ pinned, uri }: { pinned: boolean; uri: string }): void {
+      this.$root.$emit('pin', { pinned, uri });
     },
     async onApply(resultCallback: (result: 'success' | 'failure') => void): Promise<void> {
       if (this.pendingApply) return;

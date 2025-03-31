@@ -486,9 +486,7 @@ __metadata:
     ts-node: ^10.4.0
     tsc: ^2.0.3
     typescript: ^5.3.2
-    uri-js: ^4.4.1
     uuid: ^11.0.5
-    vscode-uri: ^3.1.0
     zod: ^3.23.8
   languageName: unknown
   linkType: soft
@@ -41667,7 +41665,7 @@ typescript@~4.4.3:
   languageName: node
   linkType: hard
 
-"uri-js@npm:^4.2.2, uri-js@npm:^4.4.1":
+"uri-js@npm:^4.2.2":
   version: 4.4.1
   resolution: "uri-js@npm:4.4.1"
   dependencies:
@@ -42082,13 +42080,6 @@ typescript@~4.4.3:
   version: 3.1.0
   resolution: "void-elements@npm:3.1.0"
   checksum: 0390f818107fa8fce55bb0a5c3f661056001c1d5a2a48c28d582d4d847347c2ab5b7f8272314cac58acf62345126b6b09bea623a185935f6b1c3bbce0dfd7f7f
-  languageName: node
-  linkType: hard
-
-"vscode-uri@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "vscode-uri@npm:3.1.0"
-  checksum: d0f76a22f3d205dd2754d1c2820f55c1c9941c59b3baf1f4ed330fcdc006f2fc8b3c1338dafd6b30448f153173892651afe738a94b2c218ca4072d0e604c8d5e
   languageName: node
   linkType: hard
 

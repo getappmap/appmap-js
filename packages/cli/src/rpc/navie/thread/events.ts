@@ -21,7 +21,7 @@ export type NavieThreadInitEvent = {
 };
 export type NavieTokenMetadataEvent = {
   type: 'token-metadata';
-  codeBlockId: string;
+  codeBlockUri: string;
   metadata: Record<string, unknown>;
 };
 
@@ -29,7 +29,7 @@ export type NavieTokenEvent = {
   type: 'token';
   messageId: string;
   token: Token;
-  codeBlockId?: string;
+  codeBlockUri?: string;
 };
 
 export type NavieMessageEvent = {

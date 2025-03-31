@@ -1,3 +1,4 @@
+import { URI } from '@appland/rpc';
 import { pinnedItemRegistry } from './pinnedItems';
 
 interface TagObject {
@@ -84,7 +85,8 @@ export function tokenize(identifier: string, str: string): unknown[] {
     /(?:<!-- file: (.*) -->\r?\n)?(^`{3,}(\w*)?$(?:(?!^`{3,})(?:.|\r?\n))*(?:^`{3,})?)|(.*)/gm
   );
   const result: unknown[] = [];
-  const getCodeBlockId = () => `${identifier}-${codeBlockId++}`;
+  const getCodeBlockUri = () =>
+    URI.from({ scheme: 'urn', path: `${identifier}:${codeBlockId++}` }).toString();
   let codeBlockId = 0;
   for (let match = iter.next(); !match.done; match = iter.next()) {
     const isCodeBlock = Boolean(match.value[2]);
@@ -94,17 +96,17 @@ export function tokenize(identifier: string, str: string): unknown[] {
       // First, clear out any existing content for this code block.
       // This is necessary because this function may be called on hot reloads, and we don't want to
       // continuously append to the same code block.
-      const id = getCodeBlockId();
-      const existingItem = pinnedItemRegistry.get(id);
+      const uri = getCodeBlockUri();
+      const existingItem = pinnedItemRegistry.get(uri);
       if (existingItem) {
         existingItem.content = '';
       }
 
-      pinnedItemRegistry.appendContent(id, content);
-      pinnedItemRegistry.setMetadata(id, 'language', language);
-      pinnedItemRegistry.setMetadata(id, 'location', location);
+      pinnedItemRegistry.appendContent(uri, content);
+      pinnedItemRegistry.setMetadata(uri, 'language', language);
+      pinnedItemRegistry.setMetadata(uri, 'location', location);
 
-      result.push({ type: 'code-block', id });
+      result.push({ type: 'code-block', uri });
       result.push({ type: 'hidden', content });
     } else {
       const [content] = match.value;

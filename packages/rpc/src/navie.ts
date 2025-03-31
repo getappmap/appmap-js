@@ -97,12 +97,12 @@ export namespace NavieRpc {
        * ### Examples
        * Static content represented with a handle URI:
        * ```json
-       * { "uri": "handle://71881faa-c013-4362-8549-6d3706554190", "content": "My static content" }
+       * { "uri": "urn:uuid:71881faa-c013-4362-8549-6d3706554190", "content": "My static content" }
        * ```
        *
-       * Partial code snippet represented via a URI
+       * Relative path to a partial code snippet represented via a URI
        * ```json
-       * { "uri": "file://app/controllers/user_controller.rb:3-40" }
+       * { "uri": "file:app/controllers/user_controller.rb:3-40" }
        * ```
        *
        * A web page
@@ -112,14 +112,13 @@ export namespace NavieRpc {
        *
        * A code snippet, already statically resolved
        * ```json
-       * { "uri": "file://user_controller.rb:1", "content": "# frozen_string_literal: true" }
+       * { "uri": "file:user_controller.rb:1", "content": "# frozen_string_literal: true" }
        * ```
        */
       export interface ContextItem {
         /**
          * The URI of the context item. This property is required as a unique identifier.
-         * If a context item has no physical location, it should use a URI where the protocol
-         * is `handle: and the path is a unique identifier.
+         * If a context item has no physical location, use a `urn:uuid` URI.
          */
         uri: string;
 
