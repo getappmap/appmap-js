@@ -242,7 +242,7 @@ export default {
       model: undefined,
       models: [] as NavieRpc.V1.Models.ListModel[],
       contextItems: {},
-      pinnedItems: [] as PinItem[],
+      pinnedItems: [] as NavieRpc.V1.UserContext.ContextItem[],
       projectDirectories: [] as string[],
       rpcMethodsAvailable: undefined,
       inputPlaceholder: undefined,
@@ -515,20 +515,6 @@ export default {
       // and emit a stop event.
       this.ask?.stop();
     },
-    buildUserContext(codeSelections: string[]): NavieRpc.V1.UserContext.ContextItem[] {
-      const userContext = this.pinnedItems.map((p) => {
-        if (p.uri ?? p.location) {
-          return { type: 'dynamic', uri: p.uri ?? p.location };
-        }
-        if (p.handle) {
-          return { type: 'static', content: p.content };
-        }
-        throw new Error('invalid pinned item, must provide either handle or uri');
-      });
-      userContext.push(...codeSelections.map((c) => ({ type: 'static', content: c })));
-      console.log(userContext);
-      return userContext;
-    },
     async sendMessage(message: string, codeSelections: string[] = [], _appmaps: string[] = []) {
       try {
         await this.rpcClient.thread.sendMessage(
@@ -536,7 +522,7 @@ export default {
           message
             .replace(/^@generate/, '@generate /format=xml')
             .replace(/^@test/, '@test /format=xml'),
-          this.buildUserContext(codeSelections)
+          this.pinnedItems
         );
       } catch (e) {
         console.error('Failed to send message', e);
@@ -806,29 +792,6 @@ export default {
         console.error(e);
       }
     },
-    getPinnedItem(event: { handle?: string; uri?: string }) {
-      if (event.handle) return { handle: event.handle };
-
-      if (event.uri) {
-        const uri = new URL(event.uri);
-        const pathname = decodeURIComponent(uri.pathname);
-        // TODO: This abstraction really isn't needed, we should just put the { uri: string } or
-        // { handle: string } in the pinnedItems array.
-        //
-        // We know it's a file because of the URI.
-        // We know it's pinned because it's in the pinnedItems array.
-        // We know the location because it's in the URI.
-        // We don't need a handle because we can use the URI.
-        return {
-          handle: event.uri,
-          pinned: true,
-          type: 'file',
-          location: pathname,
-        };
-      }
-
-      throw new Error('invalid pinned item, must provide either handle or uri');
-    },
     onReceiveEvent(event) {
       const chatApi = this.$refs.vchat;
       switch (event.type) {
@@ -902,18 +865,18 @@ export default {
           if (!metadata) return;
 
           Object.entries(metadata).forEach(([key, value]) => {
-            pinnedItemRegistry.setMetadata(event.codeBlockId, key, value);
+            pinnedItemRegistry.setMetadata(event.codeBlockUri, key, value);
           });
 
           break;
         }
 
         case 'token': {
-          const codeBlockId = event.codeBlockId;
+          const { codeBlockUri } = event;
           let newToken = event.token;
-          if (codeBlockId) {
-            pinnedItemRegistry.appendContent(codeBlockId, event.token);
-            chatApi.addToken({ type: 'code-block', id: codeBlockId }, event.messageId);
+          if (codeBlockUri) {
+            pinnedItemRegistry.appendContent(codeBlockUri, event.token);
+            chatApi.addToken({ type: 'code-block', uri: codeBlockUri }, event.messageId);
             newToken = { type: 'hidden', content: event.token };
           }
 
@@ -944,17 +907,15 @@ export default {
         }
 
         case 'pin-item': {
-          const pinnedItem = this.getPinnedItem(event);
-          const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pinnedItem.handle);
+          const pinIndex = this.pinnedItems.findIndex((p) => p.uri === event.uri);
           if (pinIndex === -1) {
-            this.pinnedItems.push(pinnedItem);
+            this.pinnedItems.push({ uri: event.uri, content: event.content });
           }
           break;
         }
 
         case 'unpin-item': {
-          const pinnedItem = this.getPinnedItem(event);
-          const pinIndex = this.pinnedItems.findIndex((p) => p.handle === pinnedItem.handle);
+          const pinIndex = this.pinnedItems.findIndex((p) => p.uri === event.uri);
           if (pinIndex !== -1) {
             this.pinnedItems.splice(pinIndex, 1);
           }
@@ -1007,8 +968,12 @@ export default {
     this.$root
       .$on('pin', (pin: PinEvent) => {
         pin.pinned
-          ? this.rpcClient.thread.pinItem(this.activeThreadId, { handle: pin.handle })
-          : this.rpcClient.thread.unpinItem(this.activeThreadId, { handle: pin.handle });
+          ? this.rpcClient.thread.pinItem(
+              this.activeThreadId,
+              pin.uri,
+              pinnedItemRegistry.get(pin.uri)?.content
+            )
+          : this.rpcClient.thread.unpinItem(this.activeThreadId, pin.uri);
       })
       .$on('jump-to', (handle: number) => {
         document

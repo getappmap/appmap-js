@@ -2,7 +2,7 @@
   <v-context-container
     :title="title"
     :menu-items="menuItems"
-    :handle="handle"
+    :uri="uri"
     :is-reference="isReference"
     content-type="image"
     @expand="showModal"
@@ -163,8 +163,8 @@ export default Vue.extend({
 
       navigator.clipboard.writeText(this.definition);
     },
-    onPin({ pinned, handle }: PinEvent) {
-      this.$root.$emit('pin', { pinned, handle });
+    onPin({ pinned, uri }: PinEvent) {
+      this.$root.$emit('pin', { pinned, uri });
     },
   },
   updated() {

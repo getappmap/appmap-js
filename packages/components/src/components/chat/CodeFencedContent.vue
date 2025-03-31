@@ -1,5 +1,5 @@
 <template>
-  <component :is="component" :handle="handle" v-bind="metadata">{{ content }}</component>
+  <component :is="component" :uri="uri" v-bind="metadata">{{ content }}</component>
 </template>
 
 <script lang="ts">
@@ -15,11 +15,11 @@ export default Vue.extend({
     MermaidDiagram,
   },
   props: {
-    handle: String,
+    uri: String,
   },
   computed: {
     generatedContent(): { content: string; metadata: Record<string, string> } | undefined {
-      return pinnedItemRegistry.get(this.handle);
+      return pinnedItemRegistry.get(this.uri);
     },
     component(): Vue.Component {
       return this.generatedContent?.metadata?.language === 'mermaid'

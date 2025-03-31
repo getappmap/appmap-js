@@ -1,6 +1,6 @@
 export type PinEvent = {
   pinned: boolean;
-  handle: number;
+  uri: string;
 };
 
 export type PinItem = {

@@ -39,6 +39,9 @@ export namespace UserContext {
     return 'location' in i && i.location !== undefined;
   }
 
+  export function hasContent(i: ContextItem): i is ContextItem & { content: string } {
+    return 'content' in i && i.content !== undefined;
+  }
   export interface ContextItemOptions {
     includeContent?: boolean;
 
@@ -50,54 +53,39 @@ export namespace UserContext {
   export function renderItems(items: ContextItem[], opts?: ContextItemOptions): string {
     const options = { includeContent: true, ...opts };
     const renderItem = (i: UserContext.ContextItem) => {
-      if (UserContext.isCodeSelectionItem(i) && options.includeContent) {
-        return `<code-selection>\n${i.content}\n</code-selection>`;
-      } else if (UserContext.isCodeSnippetItem(i)) {
-        const content = options.includeContent ? `\n<content>${i.content}</content>\n'` : '';
-        return `<pinned-snippet>
-  <location>${i.location}</location>${content}
-</pinned-snippet>`;
-      } else if (UserContext.isFileItem(i)) {
-        // Attempt to find the pinned item as a context item in the interaction history
-        // If it's found, use its content, otherwise only the location is rendered
-        const content =
-          options.interactionHistory && options.includeContent
-            ? options.interactionHistory.events.find((e): e is ContextItemEvent => {
-                if (e.type !== 'contextItem') return false;
-                const { location, directory } = e as ContextItemEvent;
-                return (
-                  location === i.location ||
-                  join(...([directory, location].filter(Boolean) as string[])) === i.location
-                );
-              })?.content
-            : undefined;
-        return content
-          ? `<pinned-file><location>${i.location}</location>\n<content>\n${content}\n</content></pinned-file>`
-          : `<pinned-file><location>${i.location}</location></pinned-file>`;
+      let content: string | undefined;
+      if (UserContext.hasContent(i)) {
+        content = i.content;
+      } else if (options.interactionHistory && options.includeContent) {
+        const contextEvent = options.interactionHistory.events.find((e): e is ContextItemEvent => {
+          if (e.type !== 'contextItem') return false;
+          const { location, directory } = e as ContextItemEvent;
+          return (
+            location === i.location ||
+            join(...([directory, location].filter(Boolean) as string[])) === i.location
+          );
+        });
+        content = contextEvent?.content;
       }
+
+      let renderedContext = `<context-item>`;
+      if (UserContext.hasLocation(i)) renderedContext += `<uri>${i.location}</uri>`;
+      if (content) renderedContext += `<content>${content}</content>`;
+      renderedContext += '</context-item>';
+      return renderedContext;
     };
 
     const renderedItems = [];
-    const pinnedItems = items.filter(
-      (i) => UserContext.isCodeSelectionItem(i) || UserContext.isFileItem(i)
-    );
-    const snippets = items.filter((i) => UserContext.isCodeSnippetItem(i));
-    if (pinnedItems.length > 0 || snippets.length > 0) {
-      renderedItems.push('<user-provided-context>');
-      if (pinnedItems.length > 0) {
-        renderedItems.push(
-          `<!-- Pinned items are snippets and files that I want included in the conversation -->`,
-          ...pinnedItems.map((i) => renderItem(i))
-        );
-        if (snippets.length > 0) {
-          renderedItems.push(
-            `<!-- Code selections are snippets that I have selected from the code editor -->`,
-            ...snippets.map((i) => renderItem(i))
-          );
-        }
-      }
-      renderedItems.push('</user-provided-context>');
+    if (items.length > 0) {
+      renderedItems.push(
+        '<user-provided-context>',
+        '  <!-- Below is a list of relevant context that I have added to the conversation -->',
+        '  <!-- I may refer to these as "pinned items" or similar. You can directly see my pinned items below. -->',
+        ...items.map((i) => renderItem(i)),
+        '</user-provided-context>'
+      );
     }
+
     return renderedItems.join('\n');
   }
 }
