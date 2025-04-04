@@ -4,7 +4,8 @@ import { ThreadIndexService } from '../../../../../src/rpc/navie/services/thread
 import ThreadService from '../../../../../src/rpc/navie/services/threadService';
 import { Thread } from '../../../../../src/rpc/navie/thread';
 import { ConversationThread } from '@appland/client';
-import { rm, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 
 describe('ThreadService', () => {
   let threadService: ThreadService;
@@ -37,6 +38,7 @@ describe('ThreadService', () => {
 
     it('loads a thread from disk', async () => {
       const threadPath = Thread.getHistoryFilePath(threadId);
+      await mkdir(dirname(threadPath), { recursive: true });
       await writeFile(
         threadPath,
         JSON.stringify({ type: 'thread-init', conversationThread: { id: threadId } })
