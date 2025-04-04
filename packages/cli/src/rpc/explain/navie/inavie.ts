@@ -16,6 +16,8 @@ export default interface INavie {
   on(event: 'token', listener: (token: string, messageId: string) => void): this;
   on(event: 'complete', listener: () => void): this;
   on(event: 'error', listener: (err: Error) => void): this;
+
+  terminate(): boolean;
 }
 
 export type INavieProvider = (
