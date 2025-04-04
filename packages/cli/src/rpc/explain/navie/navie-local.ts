@@ -40,6 +40,7 @@ const OPTION_SETTERS: Record<
 };
 
 export default class LocalNavie extends EventEmitter implements INavie {
+  private activeNavie?: Navie.INavie;
   public navieOptions = new Navie.NavieOptions();
   public trajectory: Trajectory | undefined;
 
@@ -82,6 +83,10 @@ export default class LocalNavie extends EventEmitter implements INavie {
     codeSelection?: UserContext.Context,
     prompt?: string
   ): Promise<void> {
+    if (this.activeNavie) {
+      throw new Error('Multiple completions are not supported');
+    }
+
     if (!threadId) {
       if (this.assignedThreadId) {
         warn(`[local-navie] No threadId provided for question. Using client-specified threadId.`);
@@ -148,7 +153,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
         // This is typically expected if the thread is new.
       }
 
-      const navieFn = navie(
+      this.activeNavie = navie(
         clientRequest,
         this.contextProvider,
         this.projectInfoProvider,
@@ -161,14 +166,14 @@ export default class LocalNavie extends EventEmitter implements INavie {
       let agentName: string | undefined;
       let classification: ContextV2.ContextLabel[] | undefined;
 
-      navieFn.on('event', (event) => this.emit('event', event));
-      navieFn.on('agent', (agent) => (agentName = agent));
-      navieFn.on('classification', (labels) => (classification = labels));
+      this.activeNavie.on('event', (event) => this.emit('event', event));
+      this.activeNavie.on('agent', (agent) => (agentName = agent));
+      this.activeNavie.on('classification', (labels) => (classification = labels));
       if (this.trajectory)
-        navieFn.on('trajectory', this.trajectory.logMessage.bind(this.trajectory));
+        this.activeNavie.on('trajectory', this.trajectory.logMessage.bind(this.trajectory));
 
       const response = new Array<string>();
-      for await (const token of navieFn.execute()) {
+      for await (const token of this.activeNavie.execute()) {
         response.push(token);
         this.emit('token', token, agentMessageId);
       }
@@ -200,6 +205,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
     } catch (e) {
       this.emit('error', e);
       throw e;
+    } finally {
+      this.activeNavie = undefined;
     }
   }
 
@@ -215,5 +222,11 @@ export default class LocalNavie extends EventEmitter implements INavie {
       },
     });
     this.#skipTelemetry = true;
+  }
+
+  terminate() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    this.activeNavie?.terminate();
+    return this.activeNavie !== undefined;
   }
 }

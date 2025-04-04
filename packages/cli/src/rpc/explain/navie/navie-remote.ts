@@ -148,4 +148,9 @@ export default class RemoteNavie extends EventEmitter implements INavie {
       { threadId, tool: 'explain' }
     );
   }
+
+  terminate(): boolean {
+    // Not implemented
+    return false;
+  }
 }

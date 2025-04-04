@@ -18,6 +18,7 @@ import { container } from 'tsyringe';
 import { NavieRpc, URI } from '@appland/rpc';
 import handleReview from '../../explain/review';
 import { getTokenizedString } from './util';
+import INavie from '../../explain/navie/inavie';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EventListener = (...args: any[]) => void;
@@ -49,6 +50,7 @@ function convertMessageAttachmentToContextItem(
 }
 
 export class Thread {
+  private activeNavie?: INavie;
   private eventEmitter = new EventEmitter();
   private listeners = new Map<string, EventListener[]>();
   private log: TimestampNavieEvent[] = [];
@@ -310,6 +312,7 @@ export class Thread {
             messageId: userMessageId,
             content: message,
           });
+          this.activeNavie = navie;
           resolve();
         })
         .on('token', (token: string, messageId: string) => {
@@ -318,9 +321,11 @@ export class Thread {
         })
         .on('error', (err: Error) => {
           this.logEvent({ type: 'error', error: err });
+          this.activeNavie = undefined;
           reject(err);
         })
         .on('complete', () => {
+          this.activeNavie = undefined;
           if (!responseId) throw new Error('recieved complete without messageId');
           this.logEvent({ type: 'message-complete', messageId: responseId });
           this.flush()
@@ -329,7 +334,10 @@ export class Thread {
             .catch(console.error);
         })
         .ask(this.conversationThread.id, message, context, undefined)
-        .catch(reject);
+        .catch((e) => {
+          this.activeNavie = undefined;
+          reject(e);
+        });
     });
   }
 
@@ -410,5 +418,14 @@ export class Thread {
       }
     }
     return chatHistory;
+  }
+
+  /**
+   * Terminates the active Navie instance. This will stop any active completions.
+   * @returns Whether an active Navie instance was terminated.
+   */
+  stopCompletion(): boolean {
+    this.activeNavie?.terminate();
+    return this.activeNavie !== undefined;
   }
 }
