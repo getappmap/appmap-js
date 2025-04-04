@@ -24,29 +24,24 @@ describe('message attachment handlers', () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
   describe(NavieRpc.V1.Thread.AddMessageAttachment.Method, () => {
-    it('adds a message attachment', () => {
+    it('adds a message attachment', async () => {
       const threadId = 'example-thread-id';
       const uri = 'file://test.md';
+      const content = 'test content';
       const { handler } = navieThreadAddMessageAttachmentHandler(threadService);
-      handler({
-        threadId,
-        uri,
-      });
+      await handler({ threadId, uri, content });
       expect(threadService.getThread).toHaveBeenCalledWith(threadId);
-      expect(mockThread.addMessageAttachment).toHaveBeenCalledWith(uri);
+      expect(mockThread.addMessageAttachment).toHaveBeenCalledWith(uri, content);
     });
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
   describe(NavieRpc.V1.Thread.RemoveMessageAttachment.Method, () => {
-    it('removes a message attachment', () => {
+    it('removes a message attachment', async () => {
       const threadId = 'example-thread-id';
       const uri = 'file://test.md';
       const { handler } = navieThreadRemoveMessageAttachmentHandler(threadService);
-      handler({
-        threadId,
-        uri,
-      });
+      await handler({ threadId, uri });
       expect(threadService.getThread).toHaveBeenCalledWith(threadId);
       expect(mockThread.removeMessageAttachment).toHaveBeenCalledWith(uri);
     });

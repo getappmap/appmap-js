@@ -33,13 +33,18 @@ export function waitForStdout(
   return new Promise((resolve, reject) => {
     if (!childProcess.stdout) return reject(new Error('No stdout'));
 
+    let buffer = '';
     const timeoutId = setTimeout(() => {
       childProcess.kill();
-      reject(new Error('Timeout waiting for stdout'));
+      reject(new Error('Timeout waiting for stdout:\n' + buffer));
     }, timeout);
 
+    childProcess.stderr?.on('data', (data) => {
+      buffer += data.toString();
+    });
     childProcess.stdout.on('data', (data) => {
       const str = data.toString();
+      buffer += str;
       const match = str.match(regex);
       if (match) {
         clearTimeout(timeoutId);

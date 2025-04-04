@@ -25,6 +25,8 @@ import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { update } from '../../rpc/file/update';
 import { AI_KEY_ENV_VARS } from './aiEnvVar';
 import NopNavie from '../../rpc/explain/navie/navie-nop';
+import NavieService from '../../rpc/navie/services/navieService';
+import { ThreadIndexService } from '../../rpc/navie/services/threadIndexService';
 
 export const command = 'index';
 export const describe =
@@ -134,6 +136,8 @@ export const handler = async (argv) => {
       const buildRemoteNavie = () => new NopNavie();
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
+      ThreadIndexService.useDefault();
+      NavieService.bindNavieProvider(navieProvider);
 
       await configureRpcDirectories([process.cwd()]);
 

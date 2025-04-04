@@ -24,16 +24,12 @@ describe('pin item handlers', () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
   describe(NavieRpc.V1.Thread.PinItem.Method, () => {
-    it('pins an item', () => {
+    it('pins an item', async () => {
       const threadId = 'example-thread-id';
       const uri = 'handle://00000000-0000-0000-0000-000000000000';
       const content = 'hello world';
       const { handler } = navieThreadPinItemHandler(threadService);
-      handler({
-        threadId,
-        uri,
-        content,
-      });
+      await handler({ threadId, uri, content });
       expect(threadService.getThread).toHaveBeenCalledWith(threadId);
       expect(mockThread.pinItem).toHaveBeenCalledWith(uri, content);
     });
@@ -41,14 +37,11 @@ describe('pin item handlers', () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
   describe(NavieRpc.V1.Thread.UnpinItem.Method, () => {
-    it('unpins an item', () => {
+    it('unpins an item', async () => {
       const threadId = 'example-thread-id';
       const uri = 'file://test';
       const { handler } = navieThreadUnpinItemHandler(threadService);
-      handler({
-        threadId,
-        uri,
-      });
+      await handler({ threadId, uri });
       expect(threadService.getThread).toHaveBeenCalledWith(threadId);
       expect(mockThread.unpinItem).toHaveBeenCalledWith(uri);
     });
