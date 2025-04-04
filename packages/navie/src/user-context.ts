@@ -53,26 +53,30 @@ export namespace UserContext {
   export function renderItems(items: ContextItem[], opts?: ContextItemOptions): string {
     const options = { includeContent: true, ...opts };
     const renderItem = (i: UserContext.ContextItem) => {
-      let content: string | undefined;
-      if (UserContext.hasContent(i)) {
-        content = i.content;
-      } else if (options.interactionHistory && options.includeContent) {
-        const contextEvent = options.interactionHistory.events.find((e): e is ContextItemEvent => {
-          if (e.type !== 'contextItem') return false;
-          const { location, directory } = e as ContextItemEvent;
-          return (
-            location === i.location ||
-            join(...([directory, location].filter(Boolean) as string[])) === i.location
+      let result = '<context-item>';
+      if (UserContext.hasLocation(i)) result += `<uri>${i.location}</uri>`;
+      if (options.includeContent) {
+        let content: string | undefined;
+        if (UserContext.hasContent(i)) {
+          content = i.content;
+        } else if (options.interactionHistory) {
+          const contextEvent = options.interactionHistory.events.find(
+            (e): e is ContextItemEvent => {
+              if (e.type !== 'contextItem') return false;
+              const { location, directory } = e as ContextItemEvent;
+              return (
+                location === i.location ||
+                join(...([directory, location].filter(Boolean) as string[])) === i.location
+              );
+            }
           );
-        });
-        content = contextEvent?.content;
+          content = contextEvent?.content;
+        }
+        if (content) result += `<content>${content}</content>`;
       }
 
-      let renderedContext = `<context-item>`;
-      if (UserContext.hasLocation(i)) renderedContext += `<uri>${i.location}</uri>`;
-      if (content) renderedContext += `<content>${content}</content>`;
-      renderedContext += '</context-item>';
-      return renderedContext;
+      result += '</context-item>';
+      return result;
     };
 
     const renderedItems = [];
