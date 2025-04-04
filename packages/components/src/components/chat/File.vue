@@ -21,7 +21,7 @@ export default Vue.extend({
 
   props: {
     title: String,
-    location: String,
+    uri: String,
     isPinnable: {
       type: Boolean,
       default: true,
@@ -36,7 +36,6 @@ export default Vue.extend({
       return this.decodedLocation.split(/[\\/]/).at(-1);
     },
     decodedLocation(): string {
-      // The location may be URI encoded to avoid issues with special characters.
       const uri = URI.parse(this.uri);
       return decodeURIComponent(uri.fsPath);
     },
