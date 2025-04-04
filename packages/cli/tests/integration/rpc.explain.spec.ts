@@ -67,6 +67,7 @@ describe('RPC', () => {
               yield answer;
             })();
           },
+          terminate: () => false,
         };
 
         jest.mocked(navie).mockReturnValue(navieImpl);

@@ -13,6 +13,7 @@ describe('NavieService', () => {
       setOption: jest.fn(),
       ask: jest.fn(),
       on: jest.fn(),
+      terminate: jest.fn(),
     });
     NavieService.bindNavieProvider(provider);
     navieService = container.resolve(NavieService);
@@ -32,6 +33,7 @@ describe('NavieService', () => {
         setOption: jest.fn(),
         ask: jest.fn(),
         on: jest.fn(),
+        terminate: jest.fn(),
       });
       const [navie] = navieService.getNavie(customProvider);
       expect(navie.providerName).toBe(providerName);

@@ -18,7 +18,11 @@ describe('appmap', () => {
 
       beforeEach(async () => {
         indexProcess = runInBackground(['index', '-p', '0', '-d', projectPath]);
-        const portStr = await waitForStdout(indexProcess, /Running JSON-RPC server on port: (\d+)/);
+        const portStr = await waitForStdout(
+          indexProcess,
+          /Running JSON-RPC server on port: (\d+)/,
+          20_000
+        );
         rpcClient = Client.http({ port: parseInt(portStr, 10) });
       });
 

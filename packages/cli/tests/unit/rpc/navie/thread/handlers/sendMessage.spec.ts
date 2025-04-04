@@ -18,7 +18,7 @@ describe(NavieRpc.V1.Thread.SendMessage.Method, () => {
     } as unknown as ThreadService;
   });
 
-  it('propagates parameters as expected', () => {
+  it('propagates parameters as expected', async () => {
     const threadId = 'example-thread-id';
     const content = 'test content';
     const userContext: NavieRpc.V1.Thread.ContextItem[] = [
@@ -26,11 +26,7 @@ describe(NavieRpc.V1.Thread.SendMessage.Method, () => {
       { uri: 'file://test' },
     ];
     const { handler } = navieThreadSendMessageHandler(threadService);
-    handler({
-      threadId,
-      content,
-      userContext,
-    });
+    await handler({ threadId, content, userContext });
     expect(threadService.getThread).toHaveBeenCalledWith(threadId);
     expect(mockThread.sendMessage).toHaveBeenCalledWith(content, userContext);
   });

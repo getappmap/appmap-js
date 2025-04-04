@@ -19,7 +19,7 @@ import {
 import { ThreadIndexService } from '../../../../../src/rpc/navie/services/threadIndexService';
 import { randomUUID } from 'crypto';
 import handleReview from '../../../../../src/rpc/explain/review';
-import { NavieRpc } from '@appland/rpc';
+import { NavieRpc, URI } from '@appland/rpc';
 
 const exampleSuggestion = {
   command: '@test',
@@ -68,6 +68,7 @@ describe('Thread', () => {
         navieEventEmitter.on(event, listener);
         return mockNavie;
       }),
+      terminate: jest.fn(),
     };
     mockNavieProvider = () => mockNavie;
     NavieService.bindNavieProvider(mockNavieProvider);
@@ -299,7 +300,7 @@ describe('Thread', () => {
   describe('pinItem', () => {
     it('emits a `pin-item` event', () => {
       const listener = jest.fn();
-      const uri = 'handle://00000000-0000-0000-0000-000000000000';
+      const uri = URI.random().toString();
       const content = 'test-content';
       thread.on('event', 'test-client', listener);
       thread.pinItem(uri, content);
@@ -315,7 +316,7 @@ describe('Thread', () => {
   describe('unpinItem', () => {
     it('emits an `unpin-item` event', () => {
       const listener = jest.fn();
-      const uri = 'handle://00000000-0000-0000-0000-000000000000';
+      const uri = URI.random().toString();
       thread.on('event', 'test-client', listener);
       thread.unpinItem(uri);
       expect(listener).toHaveBeenCalledWith({
@@ -512,7 +513,8 @@ describe('Thread', () => {
   describe('sendMessage', () => {
     it('has context mutated by `@review`', async () => {
       const message = '@review my code';
-      const context: NavieRpc.V1.Thread.ContextItem[] = [{ uri: 'handle://test', content: 'test' }];
+      const uri = URI.random().toString();
+      const context: NavieRpc.V1.Thread.ContextItem[] = [{ uri, content: 'test' }];
       const result = thread.sendMessage(message, context);
 
       await new Promise((resolve) => setImmediate(resolve));
@@ -520,13 +522,13 @@ describe('Thread', () => {
 
       await expect(result).resolves.toBeUndefined();
       expect(mockHandleReview).toHaveBeenCalledWith(message, [
-        { content: 'test', type: 'code-snippet', location: undefined },
+        { content: 'test', type: 'code-snippet', location: uri },
       ]);
     });
 
     it('includes message attachments added since the last user message', async () => {
       const content = 'test-content';
-      const uri = 'test-uri';
+      const uri = URI.file('README.md').toString();
 
       thread.addMessageAttachment(uri, content);
       const result = thread.sendMessage('test message');
@@ -547,12 +549,12 @@ describe('Thread', () => {
     it('emits an `add-message-attachment` event', () => {
       const listener = jest.fn();
       thread.on('event', 'test-client', listener);
-      const uri = 'handle://00000000-0000-0000-0000-000000000000';
+      const uri = URI.random().toString();
       const content = 'test-content';
       thread.addMessageAttachment(uri, content);
       expect(listener).toHaveBeenCalledWith({
         type: 'add-message-attachment',
-        uri: 'handle://test-uri',
+        uri,
         content: 'test-content',
         time: expect.any(Number),
       });
@@ -562,12 +564,12 @@ describe('Thread', () => {
   describe('removeMessageAttachment', () => {
     it('emits an `remove-message-attachment` event', () => {
       const listener = jest.fn();
-      const attachmentId = 'might-not-exist';
+      const uri = URI.random().toString();
       thread.on('event', 'test-client', listener);
-      thread.removeMessageAttachment(attachmentId);
+      thread.removeMessageAttachment(uri);
       expect(listener).toHaveBeenCalledWith({
         type: 'remove-message-attachment',
-        attachmentId,
+        uri,
         time: expect.any(Number),
       });
     });
@@ -576,7 +578,7 @@ describe('Thread', () => {
   describe('getMessageAttachments', () => {
     it('returns an attachment that was added since the last user message', () => {
       const content = 'test-content';
-      const uri = 'test-uri';
+      const uri = 'urn:uuid:0';
       thread.addMessageAttachment(uri, content);
       expect(thread.getMessageAttachments()).toStrictEqual([
         { uri, content, time: expect.any(Number), type: 'add-message-attachment' },
@@ -590,7 +592,7 @@ describe('Thread', () => {
     });
 
     it('ignores attachments that were removed', () => {
-      const uri = 'file://test-uri.md';
+      const uri = 'file:test-uri.md';
       thread.addMessageAttachment(uri);
       thread.removeMessageAttachment(uri);
       expect(thread.getMessageAttachments()).toStrictEqual([]);
