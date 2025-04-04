@@ -126,7 +126,7 @@ import { PinFileRequest } from '@/lib/PinFileRequest';
 import debounce from '@/lib/debounce';
 import InfoIcon from '../assets/info.svg';
 import VModelSelector from '@/components/chat-search/ModelSelector.vue';
-import { NavieRpc } from '@appland/rpc';
+import { NavieRpc, URI } from '@appland/rpc';
 import { pinnedItemRegistry } from '@/lib/pinnedItems';
 
 export default {
@@ -200,6 +200,10 @@ export default {
       type: String,
       default: undefined,
     },
+    displaySubscription: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -221,7 +225,6 @@ export default {
         'build-prompt': 'Building prompt',
         explain: 'Explaining with AI',
       },
-      ask: undefined,
       isChatting: false,
       loadAppMapStats: debounce(
         async () => {
@@ -256,6 +259,7 @@ export default {
       selectedModel: undefined as undefined | NavieRpc.V1.Models.ListModel,
       activeThreadId: undefined,
       threadListener: undefined,
+      rpcClient: new AppMapRPC(this.appmapRpcPort ?? 30101),
     };
   },
   provide() {
@@ -358,11 +362,6 @@ export default {
     },
     hasAppMaps() {
       return this.appmapStats?.some(({ numAppMaps }) => numAppMaps > 0) ?? false;
-    },
-    rpcClient(): AppMapRPC {
-      return new AppMapRPC(
-        this.appmapRpcFn ? { request: this.appmapRpcFn } : this.appmapRpcPort || 30101
-      );
     },
     hasPinnedItems() {
       return this.pinnedItemCount > 0;
@@ -511,18 +510,21 @@ export default {
       this.$refs.vappmap?.setState(state);
     },
     onStop() {
-      // This will stop token emission from this.ask immediately
-      // and emit a stop event.
-      this.ask?.stop();
+      this.rpcClient.thread.stopCompletion(this.activeThreadId);
     },
-    async sendMessage(message: string, codeSelections: string[] = [], _appmaps: string[] = []) {
+    async sendMessage(
+      message: string,
+      messageAttachments: { uri: string; content?: string }[] = [],
+      _appmaps: string[] = [] // eslint-disable-line @typescript-eslint/no-unused-vars
+    ) {
+      const userContext = this.pinnedItems.concat(messageAttachments);
       try {
         await this.rpcClient.thread.sendMessage(
           this.activeThreadId,
           message
             .replace(/^@generate/, '@generate /format=xml')
             .replace(/^@test/, '@test /format=xml'),
-          this.pinnedItems
+          userContext
         );
       } catch (e) {
         console.error('Failed to send message', e);
@@ -557,13 +559,19 @@ export default {
       if (!this.activeThreadId)
         throw new Error('Failed to include code selection, no active thread ID');
 
-      let range = '';
-      if ([codeSelection.lineStart, codeSelection.lineEnd].every(Number.isInteger)) {
-        range = `:${codeSelection.lineStart}-${codeSelection.lineEnd}`;
+      let range: { start: number; end?: number } | undefined;
+      if (codeSelection.lineStart) {
+        range = { start: codeSelection.lineStart };
+        if (codeSelection.lineEnd) {
+          range.end = codeSelection.lineEnd;
+        }
       }
+
+      const uri = codeSelection.path ? URI.file(codeSelection.path, range) : URI.random();
+
       this.rpcClient.thread.addMessageAttachment(
         this.activeThreadId,
-        `file://${codeSelection.path}${range}`,
+        uri.toString(),
         codeSelection.code
       );
     },
@@ -799,7 +807,10 @@ export default {
           if (event.role === 'assistant') {
             chatApi.addSystemMessage(event.content);
           } else if (event.role === 'user') {
-            chatApi.addUserMessage(event.content);
+            chatApi.addUserMessage(event.content, event.userContext);
+
+            // Clear the context after a new user message is sent
+            this.$set(this, 'contextItems', []);
           }
           break;
         }
@@ -839,7 +850,14 @@ export default {
           }
 
           if (event.result.length) {
-            this.contextItems.push(...event.result);
+            const deduplicatedResults = new Map<string, Record<string, unknown>>();
+            event.result.forEach((result) => {
+              const key = `${result.type}:${result.directory}/${result.location}`;
+              if (!deduplicatedResults.has(key)) {
+                deduplicatedResults.set(key, result);
+              }
+            });
+            this.contextItems.push(...Array.from(deduplicatedResults.values()));
           }
 
           const message = chatApi.getMessage({ isUser: false, complete: false });
@@ -953,7 +971,12 @@ export default {
             return;
           }
 
-          chatApi.onError(error, systemMessage);
+          const assistantMessage = chatApi.getMessage({
+            isUser: false,
+            complete: false,
+          });
+
+          chatApi.onError(event.error, assistantMessage);
           break;
         }
       }

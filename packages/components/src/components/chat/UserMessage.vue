@@ -194,10 +194,6 @@ export default {
     };
   },
 
-  inject: {
-    rpcClient: { default: () => ({ suggest: () => Promise.resolve([]) }) },
-  },
-
   computed: {
     toolsPending(): boolean {
       // If we've began emitting tokens, ignore any tool status
@@ -237,7 +233,7 @@ export default {
     },
     renderedMarkdown() {
       const markdown = marked.parse(this.message);
-      const result = DOMPurify.sanitize(markdown, {
+      return DOMPurify.sanitize(markdown, {
         USE_PROFILES: { html: true },
         ADD_TAGS: [
           'v-next-prompt-button',
@@ -251,8 +247,6 @@ export default {
         ALLOWED_URI_REGEXP:
           /^(?:(?:(?:f|ht)tps?|mailto|event|file|urn):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
       });
-      console.log(result);
-      return result;
     },
     hasClipboardAPI() {
       return (

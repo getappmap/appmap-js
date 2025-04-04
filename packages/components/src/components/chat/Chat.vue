@@ -177,11 +177,20 @@ class ErrorMessage implements IMessage {
   public readonly complete = true;
   public readonly isUser = false;
   public readonly isError = true;
+  private readonly message: string;
 
-  constructor(private error: Error) {}
+  constructor(private error: unknown) {
+    if (error instanceof Error || (typeof error === 'object' && 'message' in error)) {
+      this.message = error.message;
+    } else if (typeof error === 'string') {
+      this.message = error;
+    } else {
+      this.message = String(error);
+    }
+  }
 
-  get content() {
-    return this.error.message;
+  get tokens() {
+    return [this.message];
   }
 }
 
@@ -235,6 +244,11 @@ export default {
       type: String,
     },
   },
+  inject: {
+    pinnedItems: {
+      default: () => [],
+    },
+  },
   data() {
     return {
       messages: [] as IMessage[],
@@ -284,8 +298,13 @@ export default {
     setAuthorized(v: boolean) {
       this.authorized = v;
     },
-    addUserMessage(content: string) {
+    addUserMessage(content: string, userContext?: NavieRpc.V1.Thread.ContextItem[]) {
       const userMessage = new UserMessage(content);
+      if (userContext) {
+        const pinnedItems = new Set(this.pinnedItems.map(({ uri }) => uri));
+        const nonPinnedItems = userContext.filter(({ uri }) => !pinnedItems.has(uri));
+        userMessage.codeSelections.push(...nonPinnedItems);
+      }
       this.messages.push(userMessage);
       // Ensure that for the first user message, the auto-scroll position is reset to the top.
       // This is to account for the fact that there may be an auto-scroll applied when the
@@ -318,13 +337,13 @@ export default {
       }
     },
     async onSend(message: string) {
-      this.sendMessage(message, [], this.appmaps);
+      this.sendMessage(message, this.codeSelections, this.appmaps);
       this.$set(this, 'codeSelections', []);
     },
     onStop() {
       this.$emit('stop');
     },
-    onAck(_messageId: string, threadId: string) {
+    onAck() {
       this.setAuthorized(true);
     },
     scrollToBottom() {

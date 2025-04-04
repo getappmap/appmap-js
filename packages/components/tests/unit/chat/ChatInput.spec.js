@@ -24,6 +24,13 @@ describe('ChatInput', () => {
     jest.resetAllMocks();
   });
 
+  it('does not emit a send event if stop is active', async () => {
+    await wrapper.setProps({ isStopActive: true });
+    wrapper.vm.send();
+
+    expect(wrapper.emitted('send')).toBeUndefined();
+  });
+
   it('opens an autocomplete when "@" is typed', async () => {
     expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(false);
 
