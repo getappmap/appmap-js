@@ -134,7 +134,7 @@ function validateEvent(event: any): asserts event is { type: string; [key: strin
   if (event.type === undefined) throw new Error('Missing event type');
 }
 
-class SubscribeListener {
+export class SubscribeListener {
   private readonly emitter = new EventEmitter();
   private _connectionClosed = false;
   private reader?: ReadableStreamDefaultReader;
@@ -558,6 +558,16 @@ export default class AppMapRPC {
         (err: any, error: any, result: NavieRpc.V1.Thread.SendMessage.Response) => {
           if (err || error) return reportError(Promise.reject, err, error);
 
+          return result;
+        }
+      ),
+
+    stopCompletion: (threadId: string) =>
+      this.client.request(
+        NavieRpc.V1.Thread.StopCompletion.Method,
+        { threadId },
+        (err: any, error: any, result: NavieRpc.V1.Thread.StopCompletion.Response) => {
+          if (err || error) return reportError(Promise.reject, err, error);
           return result;
         }
       ),

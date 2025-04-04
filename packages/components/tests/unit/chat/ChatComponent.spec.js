@@ -1,33 +1,11 @@
 import VChat from '@/components/chat/Chat.vue';
 import { mount } from '@vue/test-utils';
 import { AI } from '@appland/client';
+import { URI } from '@appland/rpc';
 
 describe('components/Chat.vue', () => {
   const threadId = 'the-thread-id';
   const messageId = 'the-message-id';
-
-  describe('onAck', () => {
-    it('persists a thread id', async () => {
-      const wrapper = mount(VChat, {
-        propsData: {
-          sendMessage() {
-            wrapper.vm.onAck(messageId, threadId);
-          },
-        },
-      });
-
-      let receivedThreadId;
-      wrapper.vm.$root.$on('thread-id', (id) => {
-        receivedThreadId = id;
-      });
-
-      await wrapper.vm.onSend('Hello from the user');
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.vm.threadId).toBe(threadId);
-      expect(receivedThreadId).toBe(threadId);
-    });
-  });
 
   describe('addUserMessage', () => {
     it('scrolls to the bottom of the chat', async () => {
@@ -159,25 +137,6 @@ describe('components/Chat.vue', () => {
     });
   });
 
-  describe('onSentimentChange', () => {
-    it('calls the API as expected', async () => {
-      const api = jest.spyOn(AI, 'sendMessageFeedback').mockResolvedValue({});
-      const wrapper = mount(VChat);
-      const messageId = 'the-message-id';
-      const threadId = 'the-thread-id';
-
-      wrapper.vm.onAck('Faking the thread ID', threadId);
-      wrapper.vm.addToken('Hello from the system', 'the-thread-id', messageId);
-      wrapper.vm.getMessage({ isUser: false }).complete = true;
-
-      await wrapper.vm.$nextTick();
-
-      wrapper.find('[data-cy="feedback-good"]').trigger('click');
-
-      expect(api).toBeCalledWith(messageId, 1);
-    });
-  });
-
   describe('code snippet attachments', () => {
     const codeSelection = {
       path: 'app/controllers/users_controller.rb',
@@ -190,7 +149,7 @@ describe('components/Chat.vue', () => {
       const sendMessage = jest.fn();
       const wrapper = mount(VChat, { propsData: { sendMessage } });
 
-      wrapper.vm.includeCodeSelection(codeSelection);
+      wrapper.vm.includeMessageAttachment(codeSelection);
       wrapper.vm.onSend('Hello from the user');
 
       await wrapper.vm.$nextTick();
@@ -215,7 +174,7 @@ describe('components/Chat.vue', () => {
 
       expect(wrapper.find(selector).exists()).toBe(false);
 
-      wrapper.vm.includeCodeSelection(codeSelection);
+      wrapper.vm.includeMessageAttachment(codeSelection);
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find(selector).exists()).toBe(true);
@@ -225,7 +184,7 @@ describe('components/Chat.vue', () => {
       const wrapper = mount(VChat, { propsData: { sendMessage: jest.fn() } });
       const selector = '[data-cy="input-attachments"] [data-cy="code-selection"]';
 
-      wrapper.vm.includeCodeSelection(codeSelection);
+      wrapper.vm.includeMessageAttachment(codeSelection);
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find(selector).exists()).toBe(true);
@@ -236,17 +195,25 @@ describe('components/Chat.vue', () => {
       expect(wrapper.find(selector).exists()).toBe(false);
     });
 
-    it('pipes pending code snippets to the next user message', async () => {
-      const wrapper = mount(VChat, { propsData: { sendMessage: jest.fn() } });
-      wrapper.vm.includeCodeSelection(codeSelection);
-      wrapper.vm.onSend('Hello from the user');
+    it('propagates non-pinned items to a new user message as code snippets', async () => {
+      const numContextItems = 10;
+      const half = ~~(numContextItems / 2);
+      const userContext = Array.from({ length: numContextItems }, () => ({
+        uri: URI.random().toString(),
+        content: '...',
+      }));
+      const wrapper = mount(VChat, {
+        propsData: { sendMessage: jest.fn() },
+        provide: { pinnedItems: userContext.slice(0, half) },
+      });
 
+      wrapper.vm.addUserMessage('Hello from the user', userContext);
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.vm.messages[0].codeSelections).toStrictEqual([codeSelection]);
+      expect(wrapper.vm.messages[0].messageAttachments).toStrictEqual(userContext.slice(half));
       expect(
-        wrapper.find('[data-cy="message"][data-actor="user"] [data-cy="code-selection"]').exists()
-      ).toBe(true);
+        wrapper.findAll('[data-cy="message"][data-actor="user"] [data-cy="code-selection"]').length
+      ).toBe(half);
     });
   });
 

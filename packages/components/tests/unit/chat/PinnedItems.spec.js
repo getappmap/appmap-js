@@ -11,7 +11,7 @@ describe('components/chat-search/PinnedItems.vue', () => {
   it("doesn't show pinning help with pinned items", () => {
     const wrapper = mount(VPinnedItems, {
       propsData: {
-        pinnedItems: [{ type: 'file' }],
+        pinnedItems: [{ uri: 'urn:uuid:0', content: '...' }],
       },
     });
 
