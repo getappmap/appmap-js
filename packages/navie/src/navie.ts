@@ -58,6 +58,9 @@ export interface INavie {
   on(event: 'trajectory', listener: (event: TrajectoryEvent) => void): void;
 
   execute(): AsyncIterable<string>;
+
+  // Kill an active token stream
+  terminate(): void;
 }
 
 export interface NavieModel {
@@ -227,6 +230,8 @@ export default function navie(
   clientRequest.question = stringOrDefault(questionText, commandName);
 
   class Navie extends EventEmitter implements INavie {
+    private terminated = false;
+
     constructor() {
       super();
 
@@ -254,8 +259,14 @@ export default function navie(
       for await (const chunk of command.execute(
         { ...clientRequest, userOptions },
         cleanHistory(chatHistory)
-      ))
+      )) {
+        if (this.terminated) return;
         yield chunk;
+      }
+    }
+
+    terminate() {
+      this.terminated = true;
     }
   }
 
