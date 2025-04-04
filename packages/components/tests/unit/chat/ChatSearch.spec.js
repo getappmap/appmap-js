@@ -1,224 +1,183 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
-import VChatInput from '@/components/chat/ChatInput.vue';
 import { mount } from '@vue/test-utils';
-import navieContext from '../../../src/stories/data/navie_context.json';
+import { randomUUID } from 'crypto';
+import EventEmitter from 'events';
+import { threadId } from 'worker_threads';
 
 describe('pages/ChatSearch.vue', () => {
-  const chatSearchWrapper = (messagesCalled) => {
-    const extraPropsData = messagesCalled.propsData || {};
-    delete messagesCalled.propsData;
+  let rpcClient;
+  let wrapper;
+  let threadListener;
+  const activeThreadId = '00000000-0000-0000-0000-000000000000';
 
-    return mount(VChatSearch, {
-      propsData: {
-        ...extraPropsData,
-        appmapRpcFn: rpcFunction(messagesCalled),
-      },
-    });
-  };
-
-  const rpcFunction = (messages) => {
-    const availableMethods = Object.keys(messages);
-    return (method, _, callback) => {
-      if (!availableMethods.includes(method)) throw new Error(`Unknown method ${method}`);
-      const response = messages[method].shift();
-      if (!response) throw new Error(`No responses are left for ${method}`);
-      callback(...response);
-    };
-  };
-
-  const threadId = 'the-thread-id';
-  const userMessageId = 'the-user-message-id';
-
-  const noConfig = () => [[null, null, { projectDirectories: [] }]];
-
-  const navieMetadata = {
-    welcomeMessage: `Welcome to Navie!`,
-    inputPlaceholder: 'Type something',
-    commands: [
-      {
-        name: '@example',
-        description: 'An example command',
-      },
-    ],
-  };
-  const rpcNavieRegister = () => [
-    [
-      null,
-      null,
-      {
+  beforeEach(async () => {
+    threadListener = new EventEmitter();
+    rpcClient = {
+      listMethods: jest.fn().mockResolvedValue(['v1.navie.suggest', 'v1.navie.metadata']),
+      appmapStats: jest.fn().mockResolvedValue(),
+      appmapData: jest.fn().mockResolvedValue(),
+      appmapMetadata: jest.fn().mockResolvedValue(),
+      configuration: jest.fn().mockResolvedValue({ projectDirectories: [] }),
+      register: jest.fn().mockResolvedValue({
         thread: {
-          id: '00000000-0000-0000-0000-000000000000',
+          id: activeThreadId,
           permissions: { useNavieAIProxy: true },
           usage: { conversationCounts: [] },
           subscription: { subscriptions: [] },
         },
-      },
-    ],
-  ];
-  const rpcNavieMetadata = () => [[null, null, navieMetadata]];
-  const rpcNavieMetadataEmpty = () => [[null, null, { commands: [] }]];
-  const rpcNavieNextSteps = () => [[null, null, []]];
-  const rpcSystemListMethods = () => [[null, null, ['v1.navie.suggest', 'v1.navie.metadata']]];
-  const rpcNavieModelsList = () => [
-    [
-      null,
-      null,
-      [
+      }),
+      explain: jest.fn().mockResolvedValue(),
+      update: jest.fn().mockResolvedValue(),
+      metadataV1: jest.fn().mockResolvedValue({
+        welcomeMessage: `Welcome to Navie!`,
+        inputPlaceholder: 'Type something',
+        commands: [
+          {
+            name: '@example',
+            description: 'An example command',
+          },
+        ],
+      }),
+      metadataV2: jest.fn().mockResolvedValue(),
+      welcome: jest.fn().mockResolvedValue(),
+      suggest: jest.fn().mockResolvedValue(),
+      loadThread: jest.fn().mockResolvedValue(),
+      listModels: jest.fn().mockResolvedValue([
         { id: 'gpt-3.5-turbo', provider: 'OpenAI', name: 'GPT-3.5 Turbo', createdAt: 0 },
         { id: 'gpt-4', provider: 'OpenAI', name: 'GPT-4', createdAt: 0 },
-      ],
-    ],
-  ];
-  const rpcNavieModelsGetConfig = () => [
-    [null, null, [{ provider: 'openai', apiKey: '********' }]],
-  ];
-
-  const emptySearchResponse = {
-    results: [],
-  };
+      ]),
+      selectModel: jest.fn().mockResolvedValue(),
+      getModelConfig: jest.fn().mockResolvedValue([{ provider: 'openai', apiKey: '********' }]),
+      thread: {
+        subscribe: jest.fn().mockResolvedValue(threadListener),
+        pinItem: jest.fn().mockResolvedValue(),
+        unpinItem: jest.fn().mockResolvedValue(),
+        addMessageAttachment: jest.fn().mockResolvedValue(),
+        removeMessageAttachment: jest.fn().mockResolvedValue(),
+        sendMessage: jest.fn().mockResolvedValue(),
+        stopCompletion: jest.fn().mockResolvedValue(true),
+      },
+    };
+    wrapper = mount(VChatSearch, { data: () => ({ rpcClient }) });
+    await wrapper.setData({ rpcClient, activeThreadId });
+  });
 
   // It now takes a couple of event loops to get into a finalized state. This event will be
   // most reliable.
   const waitForInitialized = (wrapper) =>
     new Promise((resolve) => wrapper.vm.$root.$on('chat-search-loaded', resolve));
 
-  const buildComponent = (searchResponse, contextResponse, hasMetadata) => {
-    const messagesCalled = {
-      'v1.navie.suggest': rpcNavieNextSteps(),
-      'v1.navie.metadata': rpcNavieMetadata(),
-      'v2.configuration.get': noConfig(),
-      'system.listMethods': rpcSystemListMethods(),
-      'v1.navie.register': rpcNavieRegister(),
-      'v1.navie.models.list': rpcNavieModelsList(),
-      'v1.navie.models.getConfig': rpcNavieModelsGetConfig(),
-      explain: [[null, null, { userMessageId, threadId }]],
-      'explain.status': [
-        [null, null, { step: 'build-vector-terms' }],
-        [
-          null,
-          null,
-          {
-            step: 'explain',
-            searchResponse,
-          },
-        ],
-        [
-          null,
-          null,
-          {
-            step: 'complete',
-            searchResponse,
-            explanation: ['Contact IT'],
-            contextResponse,
-          },
-        ],
-      ],
-    };
-
-    if (hasMetadata) messagesCalled['appmap.metadata'] = [[null, null, {}]];
-    const wrapper = chatSearchWrapper(messagesCalled);
-    return { messagesCalled, wrapper };
-  };
-
   afterEach(jest.clearAllMocks);
 
-  it('can append context items', async () => {
-    const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
-    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
+  const contextItems = [
+    {
+      directory: '/home/db/dev/applandinc/appmap-js',
+      location: 'application_trace.appmap.json',
+      type: 'sequence-diagram',
+      content: "here's a sequence diagram",
+      score: 2.8273219036392425,
+    },
+    {
+      directory: '/home/db/dev/applandinc/appmap-js',
+      type: 'code-snippet',
+      location:
+        'packages/navie/src/services/message-token-reducer-service/token-count-strategies/estimate-token-count.ts:1-10',
+      content: "here's a code snippet",
+      score: 0.563,
+    },
+  ];
+  const searchEvents = [
+    {
+      type: 'begin-context-search',
+      id: '64d0662f-7862-457f-8c15-4c2865e0c111',
+      contextType: 'context', // TODO: This isn't actually included in real data for search results
+      request: {
+        version: 2,
+        type: 'search',
+        vectorTerms: ['count', 'ten', 'ruby'],
+        tokenCount: 5361,
+        labels: [{ name: 'chatting', weight: 'high' }],
+        exclude: ['urn:uuid:2bec941a-ea8e-4b71-920f-4aa44af9aa12'],
+      },
+      time: 1743624802673,
+    },
+    {
+      type: 'complete-context-search',
+      id: '64d0662f-7862-457f-8c15-4c2865e0c111',
+      result: contextItems,
+      time: 1743624802674,
+    },
+  ];
 
-    wrapper.vm.sendMessage('Hello world');
-    const ask = wrapper.vm.ask;
+  // Sends events directly to the event handler. Returns a promise to the next tick
+  // if the UI is expected to be updated as a result.
+  const emitEvents = (events) => {
+    events.forEach((event) => wrapper.vm.onReceiveEvent(event));
+    return wrapper.vm.$nextTick();
+  };
 
-    ask.emit('status', { contextResponse: [] });
+  const performContextSearch = ({ type = 'context', result = contextItems } = {}) => {
+    const id = randomUUID();
+    const time = new Date().valueOf();
+    return emitEvents([
+      { ...searchEvents[0], id, time, contextType: type },
+      { ...searchEvents[1], id, time: time + 1, result },
+    ]);
+  };
+
+  const sendUserMessage = (message = 'hello world') =>
+    emitEvents([
+      {
+        type: 'message',
+        role: 'user',
+        messageId: randomUUID(),
+        content: message,
+        time: new Date().valueOf(),
+      },
+    ]);
+
+  const emitAssistantTokens = ({ tokens = ['hello world'], messageId = randomUUID() } = {}) =>
+    emitEvents(
+      tokens.map((token) => ({
+        type: 'token',
+        role: 'assistant',
+        messageId,
+        tokens,
+        time: new Date().valueOf(),
+      }))
+    );
+
+  const emitError = (error) => emitEvents([{ type: 'error', error, time: new Date().valueOf() }]);
+
+  it('renders context items', async () => {
+    performContextSearch();
     await wrapper.vm.$nextTick();
-    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
 
-    ask.emit('status', {
-      contextResponse: [
-        {
-          directory: '/home/user/land-of-apps/sample_app_6th_ed',
-          type: 'code-snippet',
-          location: 'app/helpers/sessions_helper.rb:54',
-          content: '',
-        },
-      ],
-    });
-    await wrapper.vm.$nextTick();
-    expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(1);
-
-    ask.emit('status', {
-      contextResponse: [
-        {
-          directory: '/home/user/land-of-apps/sample_app_6th_ed',
-          type: 'code-snippet',
-          location: 'app/controllers/sessions_controller.rb',
-          content: '',
-        },
-      ],
-    });
-    await wrapper.vm.$nextTick();
     const contextItems = wrapper.findAll('[data-cy="context-item"]');
     expect(contextItems.length).toBe(2);
-    expect(contextItems.at(0).text()).toContain('app/helpers/sessions_helper.rb:54');
-    expect(contextItems.at(1).text()).toContain('app/controllers/sessions_controller.rb');
+    expect(contextItems.at(0).text()).toContain('application trace');
+    expect(contextItems.at(1).text()).toContain('estimate-token-count.ts:1-10');
   });
 
   it('clears context items when a new message is sent', async () => {
-    const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
-    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
+    await performContextSearch();
 
-    wrapper.vm.sendMessage('Hello world');
-    const ask = wrapper.vm.ask;
-
-    ask.emit('status', {
-      contextResponse: [
-        {
-          directory: '/home/user/land-of-apps/sample_app_6th_ed',
-          type: 'code-snippet',
-          location: 'app/helpers/sessions_helper.rb:54',
-          content: '',
-        },
-      ],
-    });
-    await wrapper.vm.$nextTick();
-    expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(1);
+    expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(2);
     expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(false);
 
-    wrapper.vm.sendMessage('Hello world');
-    await wrapper.vm.$nextTick();
+    await sendUserMessage();
 
     expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(0);
     expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(true);
   });
 
   it('de-duplicates context items by location and type', async () => {
-    const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
-    wrapper.vm.sendMessage('Hello world');
-    const ask = wrapper.vm.ask;
-    const contextItem = {
-      directory: '/home/user/land-of-apps/sample_app_6th_ed',
-      type: 'code-snippet',
-      location: 'app/helpers/sessions_helper.rb:54',
-      content: '',
-    };
-    ask.emit('status', {
-      contextResponse: [contextItem, contextItem, { ...contextItem, type: 'data-request' }],
-    });
-    await wrapper.vm.$nextTick();
+    await performContextSearch({ result: [...contextItems, ...contextItems] });
+
     expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(2);
-    expect(wrapper.find('[data-cy="context-notice"]').exists()).toBe(false);
   });
 
   it('can be resized', async () => {
-    const wrapper = chatSearchWrapper({
-      'v1.navie.metadata': rpcNavieMetadata(),
-      'v2.configuration.get': noConfig(),
-      'system.listMethods': rpcSystemListMethods(),
-      'v1.navie.register': rpcNavieRegister(),
-      'v1.navie.models.list': rpcNavieModelsList(),
-      'v1.navie.models.getConfig': rpcNavieModelsGetConfig(),
-    });
-
     const lhsPanel = wrapper.find('[data-cy="resize-left"]');
     Object.defineProperty(lhsPanel.element, 'offsetWidth', { value: 300 });
 
@@ -238,188 +197,159 @@ describe('pages/ChatSearch.vue', () => {
   });
 
   it('provides a displaySubscription feature flag via prop', async () => {
-    [true, false].forEach((displaySubscription) => {
+    for (const displaySubscription of [true, false]) {
+      // `provide` is not reactive unless the value provided is observed.
+      // Just remount the component to test the prop.
       const wrapper = mount(VChatSearch, {
-        propsData: { appmapRpcFn: jest.fn(), displaySubscription },
+        propsData: { displaySubscription },
+        data: () => ({ rpcClient }),
       });
       // eslint-disable-next-line no-underscore-dangle
       expect(wrapper.vm._provided.displaySubscription).toBe(displaySubscription);
+    }
+  });
+
+  it('renders search status', async () => {
+    expect(wrapper.find('[data-cy="tool-status"]').exists()).toBe(false);
+
+    await performContextSearch({ type: 'project-info' });
+
+    expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
+
+    await performContextSearch({ type: 'context' });
+
+    expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(2);
+  });
+
+  it('renders pending search status', async () => {
+    expect(wrapper.find('[data-cy="tool-status"]').exists()).toBe(false);
+
+    await emitEvents([searchEvents[0]]);
+
+    expect(wrapper.find('[data-cy="tool-status"]').exists()).toBe(true);
+    expect(wrapper.find('[data-cy="tool-status"]').text()).toContain(
+      'Searching for relevant content'
+    );
+
+    await emitEvents([searchEvents[1]]);
+
+    expect(wrapper.find('[data-cy="tool-status"]').exists()).toBe(true);
+    expect(wrapper.find('[data-cy="tool-status"]').text()).toContain('Complete');
+  });
+
+  it('calls expected RPC methods upon initialization', async () => {
+    await waitForInitialized(wrapper);
+
+    const collectNumberOfCalls = (mockObject) => {
+      return Object.entries(mockObject).reduce((acc, [method, fn]) => {
+        if (typeof fn === 'object' && fn !== null) {
+          acc[method] = collectNumberOfCalls(fn);
+        } else if (typeof fn === 'function' && fn.mock) {
+          acc[method] = fn.mock.calls.length;
+        }
+        return acc;
+      }, {});
+    };
+
+    expect(collectNumberOfCalls(rpcClient)).toStrictEqual({
+      client: expect.anything(),
+      listMethods: 1,
+      configuration: 1,
+      register: 1,
+      metadataV1: 1,
+      listModels: 1,
+      getModelConfig: 1,
+      appmapStats: 0,
+      appmapData: 0,
+      appmapMetadata: 0,
+      metadataV2: 0,
+      explain: 0,
+      welcome: 0,
+      suggest: 0,
+      loadThread: 0,
+      selectModel: 0,
+      update: 0,
+      thread: {
+        subscribe: 1,
+        pinItem: 0,
+        unpinItem: 0,
+        addMessageAttachment: 0,
+        removeMessageAttachment: 0,
+        sendMessage: 0,
+        stopCompletion: 0,
+      },
     });
   });
 
-  describe('when AppMaps are available', () => {
-    describe('and there are matching AppMaps', () => {
-      const searchResponse = {
-        results: [
-          {
-            appmap: 'example.appmap.json',
-            events: [],
-            score: 1.0,
-          },
-        ],
-      };
+  it('loads a parameterized thread on initialization', async () => {
+    const threadId = '00000000-0000-0000-0000-000000000001';
+    await wrapper.setProps({ threadId });
+    expect(rpcClient.thread.subscribe).toHaveBeenCalledWith(threadId, undefined);
+  });
 
-      const performSearch = async () => {
-        const { messagesCalled, wrapper } = buildComponent(searchResponse, navieContext, true);
-
-        await waitForInitialized(wrapper);
-        await wrapper.vm.sendMessage('How do I reset my password?');
-        await wrapper.vm.$nextTick();
-
-        return { messagesCalled, wrapper };
-      };
-
-      it('makes expected RPC calls', async () => {
-        const { messagesCalled } = await performSearch();
-
-        Object.values(messagesCalled).forEach((calls) => {
-          // Callbacks are consumed on use, so we expect the array to be empty
-          expect(calls).toBeArrayOfSize(0);
-        });
-      });
-
-      it('retains the thread id', async () => {
-        const { wrapper } = await performSearch();
-
-        expect(wrapper.vm.$refs.vchat.threadId).toBe('the-thread-id');
-      });
-
-      it('only renders the search status once', async () => {
-        const { wrapper } = await performSearch();
-        console.error = jest.fn();
-
-        expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
-
-        wrapper.vm.sendMessage('How do I reset my password?');
-        await wrapper.vm.$nextTick();
-
-        expect(wrapper.findAll('[data-cy="tool-status"]').length).toBe(1);
-      });
-
-      it('renders the context in the RHS', async () => {
-        const { wrapper } = await performSearch();
-
-        expect(wrapper.findAll('[data-cy="context-notice"]').length).toBe(0);
-        expect(wrapper.findAll('[data-cy="context-item"]').length).toBe(navieContext.length);
-      });
-
-      it('renders the search status', async () => {
-        const title = '[data-cy="tool-status"] [data-cy="title"]';
-        const status = '[data-cy="tool-status"] [data-cy="status"]';
-        const wrapper = chatSearchWrapper({
-          'appmap.metadata': [[null, null, {}]],
-          'v1.navie.metadata': rpcNavieMetadata(),
-          'v2.configuration.get': noConfig(),
-          'system.listMethods': rpcSystemListMethods(),
-          'v1.navie.register': rpcNavieRegister(),
-          'v1.navie.models.list': rpcNavieModelsList(),
-          'v1.navie.models.getConfig': rpcNavieModelsGetConfig(),
-          explain: [[null, null, { userMessageId, threadId }]],
-          'explain.status': [
-            [
-              null,
-              null,
-              {
-                step: 'complete',
-                searchResponse: { results: [{ events: [] }] },
-                contextResponse: navieContext,
-              },
-              ,
-            ],
-          ],
-        });
-
-        await waitForInitialized(wrapper);
-
-        const messageSent = wrapper.vm.sendMessage('How do I reset my password?');
-
-        await wrapper.vm.$nextTick();
-        expect(wrapper.find(title).text()).toBe('Analyzing your project');
-        expect(wrapper.find(status).text()).toBe('');
-
-        await messageSent;
-        expect(wrapper.find(title).text()).toBe('Project analysis complete');
-        expect(wrapper.find(status).text()).toBe(
-          'Found 2 sequence diagrams, 3 data requests, and 22 code snippets'
-        );
-      });
-    });
-
-    describe('but no context is found', () => {
-      const performSearch = async () => {
-        const { messagesCalled, wrapper } = buildComponent(emptySearchResponse);
-
-        await wrapper.vm.sendMessage('How do I reset my password?');
-        await wrapper.vm.$nextTick();
-
-        return { messagesCalled, wrapper };
-      };
-
-      it('does not mention context', async () => {
-        const { wrapper } = await performSearch();
-
-        expect(wrapper.find('[data-cy="tool-status"]').text()).toBe('Project analysis complete');
-      });
-
-      it('shows the context notice', async () => {
-        const { wrapper } = await performSearch();
-
-        expect(wrapper.find('[data-cy="context-notice"]').text()).toContain(
-          'When you ask Navie a question, this area will reflect the information'
-        );
-      });
-
-      it('makes expected RPC calls', async () => {
-        const { messagesCalled } = await performSearch();
-
-        Object.values(messagesCalled).forEach((calls) => {
-          // Callbacks are consumed on use, so we expect the array to be empty
-          expect(calls).toBeArrayOfSize(0);
-        });
-      });
-
-      it('retains the thread id', async () => {
-        const { wrapper } = await performSearch();
-
-        expect(wrapper.vm.$refs.vchat.threadId).toEqual(threadId);
-      });
-    });
+  it('replays a thread if the replay prop is true', async () => {
+    const threadId = '00000000-0000-0000-0000-000000000001';
+    await wrapper.setProps({ threadId, replay: true });
+    expect(rpcClient.thread.subscribe).toHaveBeenCalledWith(threadId, true);
   });
 
   describe('code selections', () => {
-    it('passes code selections to the chat', () => {
-      const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+    beforeEach(() => {
+      rpcClient.thread.addMessageAttachment.mockImplementation((threadId, uri, content) =>
+        emitEvents([{ type: 'add-message-attachment', uri, content, time: new Date().valueOf() }])
+      );
+    });
+    it('passes code selections with no path to the chat', () => {
       const codeSelection = { code: 'Hello world' };
 
-      expect(wrapper.vm.$refs.vchat.codeSelections).toBeArrayOfSize(0);
+      expect(wrapper.vm.$refs.vchat.messageAttachments).toBeArrayOfSize(0);
 
       wrapper.vm.includeCodeSelection(codeSelection);
+      expect(rpcClient.thread.addMessageAttachment).toHaveBeenCalledWith(
+        activeThreadId,
+        expect.stringMatching(/urn:uuid:[\d-]*/),
+        codeSelection.code
+      );
 
-      expect(wrapper.vm.$refs.vchat.codeSelections).toBeArrayOfSize(1);
+      expect(wrapper.vm.$refs.vchat.messageAttachments).toBeArrayOfSize(1);
+    });
+
+    it('passes code selections with a path to the chat', () => {
+      const codeSelection = { path: 'foo/bar.js', code: 'Hello world' };
+      expect(wrapper.vm.$refs.vchat.messageAttachments).toBeArrayOfSize(0);
+
+      wrapper.vm.includeCodeSelection(codeSelection);
+      expect(rpcClient.thread.addMessageAttachment).toHaveBeenCalledWith(
+        activeThreadId,
+        'file:foo/bar.js',
+        codeSelection.code
+      );
+    });
+
+    it('passes code selections with a path and range to the chat', () => {
+      const codeSelection = {
+        path: 'C:\\Users\\user\\Documents\\foo\\bar.js',
+        code: 'Hello world',
+        lineStart: 1,
+        lineEnd: 24,
+      };
+
+      expect(wrapper.vm.$refs.vchat.messageAttachments).toBeArrayOfSize(0);
+      wrapper.vm.includeCodeSelection(codeSelection);
+      expect(rpcClient.thread.addMessageAttachment).toHaveBeenCalledWith(
+        activeThreadId,
+        'file://C:\\Users\\user\\Documents\\foo\\bar.js#L1-L24',
+        codeSelection.code
+      );
+      expect(wrapper.vm.$refs.vchat.messageAttachments).toBeArrayOfSize(1);
     });
   });
 
   describe('error handling', () => {
-    async function simulateError(err, error) {
-      const wrapper = chatSearchWrapper({
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'v2.configuration.get': noConfig(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-        'v1.navie.models.list': rpcNavieModelsList(),
-        'v1.navie.models.getConfig': rpcNavieModelsGetConfig(),
-        explain: [[err, error]],
-      });
-
-      await wrapper.vm.sendMessage('How do I reset my password?');
-      await wrapper.vm.$nextTick();
-
-      return wrapper;
-    }
-
     describe('401 code', () => {
       it('activates the login instructions', async () => {
-        const wrapper = await simulateError(undefined, { code: 401, message: 'Unauthorized' });
+        await emitError({ code: 401 });
+
         expect(wrapper.find('.status-unauthorized').exists()).toBe(true);
         expect(wrapper.find('.messages .message').exists()).toBe(false);
         expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(false);
@@ -428,55 +358,52 @@ describe('pages/ChatSearch.vue', () => {
     describe('500 code', () => {
       it('prints the error message', async () => {
         const message = 'An unexpected error occurred';
-        const wrapper = await simulateError(undefined, {
-          code: 500,
-          message,
-        });
+        await emitError({ code: 500, message });
+
         expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
         expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
         expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
       });
       it('does not display a search status', async () => {
-        const wrapper = await simulateError(undefined, {
-          code: 500,
-          message: 'An unexpected error occurred',
-        });
+        await emitEvents([searchEvents[0]]);
+
+        expect(wrapper.find('[data-cy="tool-status"]').exists()).toBe(true);
+
+        await emitError({ code: 500, message: 'An unexpected error occurred' });
 
         expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
         expect(wrapper.find('[data-cy="tool-status"]').exists()).toBe(false);
       });
       it('only contains a single error message', async () => {
-        const wrapper = await simulateError(undefined, {
-          code: 500,
-          message: 'An unexpected error occurred',
-        });
+        await emitError({ code: 500, message: 'An unexpected error occurred' });
         expect(wrapper.findAll('.messages [data-cy="message"]').length).toBe(1);
       });
     });
     describe('uncoded error', () => {
       it('prints the error message', async () => {
         const message = 'An unexpected error occurred';
-        const wrapper = await simulateError(undefined, {
-          message,
-        });
+        await emitError({ message });
+
         expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
         expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
         expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
       });
     });
-    describe('malformed coded error', () => {
+    describe('string as error', () => {
       it('prints the error message', async () => {
         const message = 'An unexpected error occurred';
-        const wrapper = await simulateError(undefined, message);
+        await emitError(message);
+
         expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
         expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
         expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
       });
     });
-    describe('unstructured error', () => {
+    describe('error as error', () => {
       it('prints the error message', async () => {
         const message = 'An unexpected error occurred';
-        const wrapper = await simulateError(message);
+        await emitError(new Error(message));
+
         expect(wrapper.find('.status-unauthorized').exists()).toBe(false);
         expect(wrapper.find(`.messages [data-cy="message-text"]`).text()).toContain(message);
         expect(wrapper.find('.messages [data-error="true"]').exists()).toBe(true);
@@ -486,79 +413,46 @@ describe('pages/ChatSearch.vue', () => {
 
   describe('stop behavior', () => {
     it('should not be applicable after error event', async () => {
-      const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+      expect(wrapper.find('button[data-cy="stop-response"]').exists()).toBe(false);
 
-      wrapper.vm.sendMessage('Hello');
-
-      wrapper.vm.ask.emit('ack', 'the-message-id', 'the-thread-id');
-      wrapper.vm.ask.emit('status', { contextResponse: [] });
-
-      await wrapper.vm.$nextTick();
-
+      await emitAssistantTokens();
       expect(wrapper.find('button[data-cy="stop-response"]').exists()).toBe(true);
 
-      wrapper.vm.ask.emit('error', new Error('Test Error'));
-
-      await wrapper.vm.$nextTick();
+      await emitError('oops');
       expect(wrapper.find('button[data-cy="stop-response"]').exists()).toBe(false);
     });
 
-    it('should call this.ask.stop when ChatInput emits stop event', async () => {
-      const wrapper = mount(VChatSearch, { propsData: { appmapRpcFn: jest.fn() } });
+    it('should call stopCompletion when ChatInput emits stop event', async () => {
+      await emitAssistantTokens();
 
-      wrapper.setData({
-        ask: {
-          stop: jest.fn(),
-        },
-      });
+      wrapper.find('button[data-cy="stop-response"]').trigger('click');
 
-      wrapper.findComponent({ name: 'v-chat-input' }).vm.$emit('stop');
-
-      expect(wrapper.vm.ask.stop).toHaveBeenCalled();
-    });
-
-    it('should not allow another input while the stop button is active', async () => {
-      const wrapper = mount(VChatSearch, {
-        propsData: { appmapRpcFn: jest.fn() },
-      });
-
-      await wrapper.setData({
-        configLoaded: true,
-        selectedModel: { id: 'gpt-4o', provider: 'openai' },
-      });
-
-      const chatInput = wrapper.findComponent(VChatInput);
-      chatInput.setData({ input: 'Hello world' });
-      chatInput.vm.send();
-
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('[data-cy="stop-response"]').exists()).toBe(true);
-      expect(chatInput.vm.input).toBe('');
-
-      chatInput.setData({ input: 'Hello world again' });
-      chatInput.vm.send();
-
-      await wrapper.vm.$nextTick();
-
-      expect(chatInput.find('[data-cy="stop-response"]').exists()).toBe(true);
-      expect(chatInput.vm.input).toBe('Hello world again');
+      expect(rpcClient.thread.stopCompletion).toHaveBeenCalled();
     });
   });
 
   it('correctly handles pinned items', async () => {
-    const wrapper = mount(VChatSearch, {
-      propsData: { appmapRpcFn: jest.fn() },
-    });
-    const systemMessage = wrapper.vm.$refs.vchat.addSystemMessage();
-    systemMessage.content = `\`\`\`ruby\nputs "Hello world!"\n\`\`\``;
-    await wrapper.vm.$nextTick();
+    const codeBlockUri = 'urn:uuid:2bec941a-ea8e-4b71-920f-4aa44af9aa12';
+    const time = new Date().valueOf();
+    const content = '```ruby\n(1..10).each do |number|\n  puts number\nend\n```';
+    await emitEvents([
+      {
+        type: 'token',
+        token: content,
+        messageId: 'c9c6ac67-7669-4156-b9e8-0a91bae886c6',
+        codeBlockUri,
+        time,
+      },
+    ]);
 
-    await wrapper.find('[data-cy="pin"]').trigger('click');
-    await wrapper.setData({ contextResponse: [] });
-    await wrapper.vm.$nextTick();
+    await wrapper
+      .find('[data-uri="urn:uuid:2bec941a-ea8e-4b71-920f-4aa44af9aa12"] [data-cy="pin"]')
+      .trigger('click');
 
-    expect(wrapper.find('[data-handle][data-reference]').exists()).toBe(true);
+    expect(rpcClient.thread.pinItem).toHaveBeenCalledWith(activeThreadId, codeBlockUri, content);
+
+    await emitEvents([{ type: 'pin-item', uri: codeBlockUri, time: time + 1 }]);
+    expect(wrapper.find('[data-uri][data-reference]').exists()).toBe(true);
   });
 
   describe('metadata', () => {
@@ -567,23 +461,13 @@ describe('pages/ChatSearch.vue', () => {
     });
 
     it('renders the metadata', async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.configuration.get': noConfig(),
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-        'v1.navie.models.list': rpcNavieModelsList(),
-        'v1.navie.models.getConfig': rpcNavieModelsGetConfig(),
-      });
+      await wrapper.vm.loadStaticMessages();
+      await wrapper.vm.$nextTick();
 
-      await waitForInitialized(wrapper);
-
-      expect(wrapper.find('[data-cy="welcome-message"]').text()).toBe(navieMetadata.welcomeMessage);
-      expect(
-        wrapper
-          .find(`[data-cy="chat-input"][placeholder="${navieMetadata.inputPlaceholder}"]`)
-          .exists()
-      ).toBe(true);
+      expect(wrapper.find('[data-cy="welcome-message"]').text()).toBe('Welcome to Navie!');
+      expect(wrapper.find(`[data-cy="chat-input"][placeholder="Type something"]`).exists()).toBe(
+        true
+      );
 
       const input = wrapper.findComponent(`.chat-input`);
       await input.setData({ input: '@' });
@@ -594,15 +478,7 @@ describe('pages/ChatSearch.vue', () => {
   });
 
   it('renders default metadata when no metadata is available', async () => {
-    const wrapper = chatSearchWrapper({
-      'v2.configuration.get': noConfig(),
-      'system.listMethods': rpcSystemListMethods(),
-      'v1.navie.metadata': rpcNavieMetadataEmpty(),
-      'v1.navie.register': rpcNavieRegister(),
-    });
-
-    await waitForInitialized(wrapper);
-
+    await wrapper.setData({ commands: undefined, inputPlaceholder: undefined });
     expect(wrapper.find('[data-cy="chat-input"]').attributes('placeholder')).toBe(
       'What are you working on today?'
     );
@@ -613,99 +489,28 @@ describe('pages/ChatSearch.vue', () => {
     expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(false);
   });
 
-  describe('loadThred', () => {
-    it('loads the thread', async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.configuration.get': noConfig(),
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-        'v1.navie.models.list': rpcNavieModelsList(),
-        'v1.navie.models.getConfig': rpcNavieModelsGetConfig(),
-        'explain.thread.load': [
-          [
-            null,
-            null,
-            {
-              timestamp: Date.now(),
-              exchanges: [
-                {
-                  question: {
-                    role: 'user',
-                    messageId: 'user-message-id-1',
-                    content: 'How does password reset work?',
-                  },
-                  answer: {
-                    role: 'assistant',
-                    messageId: 'assistant-message-id-1',
-                    content:
-                      'Password reset works by sending an email to the user with a link to reset their password.',
-                  },
-                },
-              ],
-              projectDirectories: [],
-            },
-          ],
-        ],
-      });
-
-      await wrapper.vm.loadThread('the-thread-id');
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.vm.$refs.vchat.threadId).toBe('the-thread-id');
-      expect(wrapper.vm.$refs.vchat.messages).toBeArrayOfSize(2);
-    });
-  });
-
   describe('welcome message versioning', () => {
-    const welcomeDynamic = {
-      activity: 'something interesting',
-      suggestions: ['read this', 'write that'],
-    };
-
-    const rpcWelcomeDynamic = () => [[null, null, welcomeDynamic]];
-
     it('falls back to v1 if v2 is not available', async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.configuration.get': noConfig(),
-        'v1.navie.metadata': rpcNavieMetadata(),
-        'system.listMethods': rpcSystemListMethods(),
-        'v1.navie.register': rpcNavieRegister(),
-        'v1.navie.models.list': rpcNavieModelsList(),
-        'v1.navie.models.getConfig': rpcNavieModelsGetConfig(),
-      });
-
       await waitForInitialized(wrapper);
 
+      expect(rpcClient.metadataV1).toHaveBeenCalled();
+      expect(rpcClient.metadataV2).not.toHaveBeenCalled();
       expect(wrapper.find('[data-cy="welcome-message"]').attributes('data-version')).toBe('1');
     });
 
     it('renders v2 if v2 is available', async () => {
-      const wrapper = chatSearchWrapper({
-        'v2.configuration.get': noConfig(),
-        'v2.navie.metadata': rpcNavieMetadata(),
-        'v2.navie.welcome': rpcWelcomeDynamic(),
-        'v1.navie.register': rpcNavieRegister(),
-        'v1.navie.models.list': rpcNavieModelsList(),
-        'v1.navie.models.getConfig': rpcNavieModelsGetConfig(),
-        'system.listMethods': [[null, null, ['v2.navie.welcome']]],
-      });
-
-      await waitForInitialized(wrapper);
-
-      // We have to consider that we now have async methods waiting for other async methods.
-      // A single frame artificial delay is additionally added to allow the owner of the frontend to
-      // initialize as well (see `loadDynamicWelcomeMessages` in ChatSearch.vue).
-      //
-      // The delay is at least deterministic (I believe it's two event loops and a render frame),
-      // so this test will not be flaky.
-      await new Promise((resolve) => setTimeout(resolve, 16));
+      const activity = 'working on a new feature';
+      const suggestions = ['Suggestion 1', 'Suggestion 2'];
+      rpcClient.metadataV2.mockResolvedValue({ inputPlaceholder: 'Type something', commands: [] });
+      rpcClient.welcome.mockResolvedValue({ activity, suggestions });
+      await wrapper.setData({ isWelcomeV2Available: true });
+      await wrapper.vm.loadDynamicWelcomeMessages();
 
       const welcomeMessage = wrapper.find('[data-cy="welcome-message"]');
       expect(welcomeMessage.attributes('data-version')).toBe('2');
-      expect(welcomeMessage.text()).toContain(welcomeDynamic.activity);
-      expect(welcomeMessage.text()).toContain(welcomeDynamic.suggestions[0]);
-      expect(welcomeMessage.text()).toContain(welcomeDynamic.suggestions[1]);
+      expect(welcomeMessage.text()).toContain(activity);
+      expect(welcomeMessage.text()).toContain(suggestions[0]);
+      expect(welcomeMessage.text()).toContain(suggestions[1]);
     });
   });
 });

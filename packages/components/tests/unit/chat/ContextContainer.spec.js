@@ -3,10 +3,14 @@ import { createWrapper, mount } from '@vue/test-utils';
 
 describe('components/chat/ContextContainer.vue', () => {
   it('renders pinned state', async () => {
-    let wrapper = mount(VContextContainer, { provide: { pinnedItems: [{ handle: 0 }] } });
+    const uri = 'urn:uuid:0';
+    let wrapper = mount(VContextContainer, {
+      propsData: { uri },
+      provide: { pinnedItems: [{ uri }] },
+    });
     expect(wrapper.find('[data-cy="pin"][data-pinned]').exists()).toBe(true);
 
-    wrapper = mount(VContextContainer);
+    await wrapper.setProps({ uri: 'urn:uuid:1' });
     expect(wrapper.find('[data-cy="pin"]:not([data-pinned])').exists()).toBe(true);
   });
 
@@ -15,7 +19,7 @@ describe('components/chat/ContextContainer.vue', () => {
     await wrapper.find('[data-cy="pin"]').trigger('click');
 
     const events = wrapper.emitted().pin;
-    expect(events).toStrictEqual([[{ pinned: true, handle: wrapper.vm.valueHandle }]]);
+    expect(events).toStrictEqual([[{ pinned: true, uri: wrapper.vm.valueUri }]]);
   });
 
   it('opens a non-collapsible file item', async () => {

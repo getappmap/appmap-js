@@ -23,10 +23,11 @@
 import VContextContainer from '@/components/chat/ContextContainer.vue';
 import ContextItemMixin from '@/components/mixins/contextItem';
 import AppMapRPC from '@/lib/AppMapRPC';
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 
 import hljs from 'highlight.js';
 import stripCodeFences from '@/lib/stripCodeFences';
+import { URI } from '@appland/rpc';
 
 hljs.registerAliases(['rake', 'Gemfile'], { languageName: 'ruby' });
 hljs.registerAliases(['vue'], { languageName: 'xml' });
@@ -39,8 +40,8 @@ interface Injected {
 export default Vue.extend({
   props: {
     language: String,
-    title: String,
-    location: String,
+    location: String as PropType<string | undefined>,
+    uri: String,
     directory: String,
     isPinnable: {
       type: Boolean,
@@ -96,7 +97,25 @@ export default Vue.extend({
     },
     decodedLocation(): string | undefined {
       // The location may be URI encoded to avoid issues with special characters.
-      return this.location ? decodeURIComponent(this.location) : undefined;
+      if (this.location) {
+        // TODO: is location still in use? Ideally everything is a URI now.
+        try {
+          return decodeURIComponent(this.location);
+        } catch (e) {
+          console.error('Invalid location:', this.location, e);
+        }
+      }
+
+      if (this.uri) {
+        try {
+          const uri = URI.parse(this.uri);
+          return uri.fsPath;
+        } catch (e) {
+          console.error('Invalid URI:', this.uri, e);
+        }
+      }
+
+      return undefined;
     },
     change: function (): Vue.VNode | undefined {
       return this.$slots.default?.find(({ tag }) => tag === 'change');

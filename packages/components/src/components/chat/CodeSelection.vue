@@ -7,11 +7,12 @@
   >
     <template #header>
       <div
+        data-cy="code-selection-header"
         :class="{ 'code-selection__header': 1, 'code-selection__header--no-content': !content }"
         @click="onClick"
       >
         <v-document />
-        <div class="code-selection__title">{{ title }}</div>
+        <div class="code-selection__title" data-cy="title">{{ title }}</div>
       </div>
     </template>
     <pre v-html="highlightedCode" data-cy="code-selection-content" class="hljs" />
@@ -23,6 +24,7 @@ import Vue, { PropType } from 'vue';
 import hljs from 'highlight.js';
 import VAccordion from '@/components/Accordion.vue';
 import VDocument from '@/assets/document.svg';
+import { URI } from '@appland/rpc';
 
 export default Vue.extend({
   name: 'v-code-selection',
@@ -34,6 +36,7 @@ export default Vue.extend({
     uri: String as PropType<string | undefined>,
     content: String as PropType<string | undefined>,
     attachmentId: String as PropType<string | undefined>,
+    language: String as PropType<string | undefined>,
   },
   inject: {
     theme: {
@@ -46,11 +49,22 @@ export default Vue.extend({
     };
   },
   computed: {
+    uriComponents(): URI | undefined {
+      if (this.uri) {
+        try {
+          return URI.parse(this.uri);
+        } catch (e) {
+          console.error('Invalid URI:', this.uri, e);
+        }
+      }
+      return undefined;
+    },
     path(): string | undefined {
-      return this.uri?.replace(/(^file:\/\/)|(:\d+-\d+)$/g, '');
+      return this.uriComponents?.fsPath;
     },
     range(): string | undefined {
-      return this.uri?.match(/:(\d+-?\d+?)$/)?.[1];
+      const range = this.uriComponents?.range;
+      return range ? [range.start, range.end].filter(Boolean).join('-') : undefined;
     },
     fileExtension(): string | undefined {
       if (!this.path) return;
@@ -58,7 +72,7 @@ export default Vue.extend({
       return this.path.match(/\.(\w+)$/)?.[1];
     },
     highlightedCode(): string {
-      let language = this.fileExtension;
+      let language = this.language ?? this.fileExtension;
       if (!language || !hljs.getLanguage(language)) {
         language = 'plaintext';
       }

@@ -1,9 +1,12 @@
+// @ts-nocheck
+
 import VUserMessage from '@/components/chat/UserMessage.vue';
+import { URI } from '@appland/rpc';
 import { createWrapper, mount } from '@vue/test-utils';
+import { pinnedItemRegistry } from '../../../src/lib/pinnedItems';
 
 const snippets = {
-  tsCode: `Here's some code:
-\`\`\`ts
+  tsCode: `\`\`\`ts
 const marked = new Marked(
   markedHighlight({
     langPrefix: 'hljs language-',
@@ -21,6 +24,8 @@ const marked = new Marked(
 };
 
 describe('components/UserMessage.vue', () => {
+  afterEach(() => pinnedItemRegistry.clear());
+
   describe('Copy Button for Code Snippets', () => {
     let wrapper;
     let clipboardText;
@@ -36,9 +41,12 @@ describe('components/UserMessage.vue', () => {
           },
         },
       });
+      const uri = URI.random().toString();
+      pinnedItemRegistry.appendContent(uri, snippets.tsCode);
+      pinnedItemRegistry.setMetadata(uri, 'language', 'typescript');
       wrapper = mount(VUserMessage, {
         propsData: {
-          message: snippets.tsCode,
+          tokens: [{ type: 'code-block', uri }],
         },
       });
       wrapper.vm.bindCopyButtons();
@@ -49,8 +57,6 @@ describe('components/UserMessage.vue', () => {
     });
 
     it('should copy text correctly from code snippets', () => {
-      const codeSnippetElement = wrapper.get('[data-cy="code-snippet"]');
-
       wrapper.get('[data-cy="copy"]').trigger('click');
       return expect(navigator.clipboard.readText()).resolves.toBe(`const marked = new Marked(
   markedHighlight({
@@ -70,7 +76,7 @@ describe('components/UserMessage.vue', () => {
     it('allows html-like elements in preformatted blocks', () => {
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: snippets.htmlTag,
+          tokens: [snippets.htmlTag],
         },
       });
       expect(wrapper.get('[data-cy="message-text"]').text()).toBe(
@@ -81,7 +87,7 @@ describe('components/UserMessage.vue', () => {
     it('does not allow script injection', () => {
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: snippets.xss,
+          tokens: [snippets.xss],
         },
       });
       expect(wrapper.get('[data-cy="message-text"]').text()).not.toContain(snippets.xss);
@@ -90,100 +96,11 @@ describe('components/UserMessage.vue', () => {
     it('renders the user message as plain text', () => {
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: snippets.xss,
+          tokens: [snippets.xss],
           isUser: true,
         },
       });
       expect(wrapper.get('[data-cy="message-text"]').text()).toBe(snippets.xss);
-    });
-  });
-
-  describe('Message Feedback Buttons', () => {
-    it('should not display feedback buttons if the message is unidentified', () => {
-      const wrapper = mount(VUserMessage);
-      expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(false);
-      expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(false);
-    });
-
-    it('should display feedback buttons after an identified system message', () => {
-      const wrapper = mount(VUserMessage, { propsData: { id: 'id', complete: true } });
-      expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(true);
-      expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(true);
-    });
-
-    it('does not display feedback buttons until the message is complete', () => {
-      const wrapper = mount(VUserMessage, { propsData: { id: 'id', isUser: 'false' } });
-      expect(wrapper.find('[data-cy="feedback-good"]').exists()).toBe(false);
-      expect(wrapper.find('[data-cy="feedback-bad"]').exists()).toBe(false);
-    });
-
-    it('does not display feedback buttons after a user message', () => {
-      const wrapper = mount(VUserMessage, {
-        propsData: {
-          isUser: true,
-        },
-      });
-      expect(wrapper.find('[data-cy="feedback-good"]').exists()).not.toBe(true);
-      expect(wrapper.find('[data-cy="feedback-bad"]').exists()).not.toBe(true);
-    });
-
-    it('emits an event when clicking the feedback buttons', () => {
-      const messageId = '123';
-      const wrapper = mount(VUserMessage, {
-        propsData: {
-          id: messageId,
-          complete: true,
-        },
-      });
-      wrapper.find('[data-cy="feedback-good"]').trigger('click');
-
-      // Clear the timer that represents the timeout for sending feedback again
-      wrapper.vm.sentimentTimeout = undefined;
-
-      wrapper.find('[data-cy="feedback-bad"]').trigger('click');
-
-      const events = wrapper.emitted()['change-sentiment'];
-      expect(events).toBeArrayOfSize(2);
-      expect(events[0]).toEqual([messageId, 1]);
-      expect(events[1]).toEqual([messageId, -1]);
-    });
-
-    it('throttles feedback button clicks', () => {
-      const wrapper = mount(VUserMessage, { propsData: { id: '123', complete: true } });
-      for (let i = 0; i < 3; i++) {
-        wrapper.find('[data-cy="feedback-good"]').trigger('click');
-      }
-      expect(wrapper.emitted()['change-sentiment']).toBeArrayOfSize(1);
-    });
-
-    it('sends the correct sentiment value if the button is clicked again', () => {
-      const wrapper = mount(VUserMessage, {
-        propsData: { id: '123', sentiment: 1, complete: true },
-      });
-      wrapper.find('[data-cy="feedback-good"]').trigger('click');
-      const [, sentiment] = wrapper.emitted()['change-sentiment'][0];
-      expect(sentiment).toEqual(0);
-    });
-
-    it('should change button state', async () => {
-      const wrapper = mount(VUserMessage, { propsData: { id: '123', complete: true } });
-      expect(wrapper.find('.sentiment--selected[data-cy="feedback-good"]').exists()).toBe(false);
-      expect(wrapper.find('.sentiment--selected[data-cy="feedback-bad"]').exists()).toBe(false);
-
-      wrapper.setProps({ sentiment: 1 });
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('.sentiment--selected[data-cy="feedback-good"]').exists()).toBe(true);
-      expect(wrapper.find('.sentiment--selected[data-cy="feedback-bad"]').exists()).toBe(false);
-
-      wrapper.setProps({ sentiment: 0 });
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('.sentiment--selected[data-cy="feedback-good"]').exists()).toBe(false);
-      expect(wrapper.find('.sentiment--selected[data-cy="feedback-bad"]').exists()).toBe(false);
-
-      wrapper.setProps({ sentiment: -1 });
-      await wrapper.vm.$nextTick();
-      expect(wrapper.find('.sentiment--selected[data-cy="feedback-good"]').exists()).toBe(false);
-      expect(wrapper.find('.sentiment--selected[data-cy="feedback-bad"]').exists()).toBe(true);
     });
   });
 
@@ -193,7 +110,7 @@ describe('components/UserMessage.vue', () => {
         id: 'id',
         isUser: false,
         threadId: 'threadId',
-        message: 'Hello world!',
+        tokens: ['Hello world!'],
         complete: true,
       };
 
@@ -207,7 +124,7 @@ describe('components/UserMessage.vue', () => {
         {
           messageId: props.id,
           threadId: props.threadId,
-          content: props.message,
+          content: props.tokens[0],
         },
       ]);
     });
@@ -231,7 +148,7 @@ describe('components/UserMessage.vue', () => {
       });
       wrapper = mount(VUserMessage, {
         propsData: {
-          message: snippets.tsCode,
+          tokens: [snippets.tsCode],
           id: 'id',
           complete: true,
         },
@@ -264,9 +181,15 @@ describe('components/UserMessage.vue', () => {
 
   describe('mermaid', () => {
     it('renders a diagram', async () => {
+      const uri = URI.random().toString();
+      pinnedItemRegistry.appendContent(
+        uri,
+        '```mermaid\ngraph TD\nA[Birthday] -->|Get money| B(Go shopping)\n```'
+      );
+      pinnedItemRegistry.setMetadata(uri, 'language', 'mermaid');
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: '```mermaid\ngraph TD\nA[Birthday] -->|Get money| B(Go shopping)\n```',
+          tokens: [{ type: 'code-block', uri }],
         },
       });
 
@@ -276,71 +199,27 @@ describe('components/UserMessage.vue', () => {
 
   describe('code snippets', () => {
     it('renders code snippets with Windows paths', async () => {
-      const path = 'C:\\Users\\me\\My Documents\\other-project\\src\\main.cpp';
+      const uri = URI.file('C:\\Users\\me\\My Documents\\other-project\\src\\main.cpp');
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: `\n<!-- file: ${path} -->\n\`\`\`cpp\n\n\`\`\``,
+          tokens: [{ type: 'code-block', uri: uri.toString() }],
         },
       });
 
       const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
-      expect(title.text()).toContain(path);
+      expect(title.text()).toContain(uri.fsPath);
     });
 
     it('renders code snippets with Unix paths', async () => {
-      const path = '/home/user/dev/blog/src/index.js';
+      const uri = URI.file('/home/user/dev/blog/src/index.js');
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: `<!-- file: ${path} -->\n\`\`\`js\n\n\`\`\``,
+          tokens: [{ type: 'code-block', uri: uri.toString() }],
         },
       });
 
       const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
-      expect(title.text()).toContain(path);
-    });
-
-    it('renders code snippet paths with a preceding file directive', async () => {
-      const path = '/home/user/dev/blog/src/index.js';
-      const sourceText = '{\n}';
-      const wrapper = mount(VUserMessage, {
-        propsData: {
-          message: `<!-- file: ${path} -->\n\`\`\`js\n${sourceText}\n\`\`\``,
-        },
-      });
-
-      const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
-      const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
-      expect(title.text()).toContain(path);
-      expect(codeSnippet.text()).toEqual(sourceText);
-    });
-
-    it('renders code snippet paths with an inner file directive', async () => {
-      const path = '/home/user/dev/blog/src/index.js';
-      const sourceText = '{\n}';
-      const wrapper = mount(VUserMessage, {
-        propsData: {
-          message: `\`\`\`js\n<!-- file: ${path} -->\n${sourceText}\n\`\`\``,
-        },
-      });
-
-      const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
-      const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
-      expect(title.text()).toContain(path);
-      expect(codeSnippet.text()).toEqual(sourceText);
-    });
-
-    it('removes the file directive from the code snippet while streaming', async () => {
-      const sourceText = '{\n}';
-      const wrapper = mount(VUserMessage, {
-        propsData: {
-          message: `\`\`\`js\n<!-- file: /home/user/dev/blog/src/index.js -->\n${sourceText}`,
-        },
-      });
-
-      const title = wrapper.find('[data-cy="code-snippet"] [data-cy="context-title"]');
-      const codeSnippet = wrapper.find('[data-cy="code-snippet"] [data-cy="content"]');
-      expect(title.text()).toContain('js');
-      expect(codeSnippet.text()).toEqual(sourceText);
+      expect(title.text()).toContain(uri.fsPath);
     });
   });
 
@@ -348,7 +227,7 @@ describe('components/UserMessage.vue', () => {
     it('shows a skeleton loader if next steps are pending', () => {
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: 'Hello world!',
+          tokens: ['Hello world!'],
           complete: true,
         },
       });
@@ -361,15 +240,13 @@ describe('components/UserMessage.vue', () => {
     it('displays next steps once they are fetched', async () => {
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: 'Hello world!',
+          tokens: ['Hello world!'],
           complete: true,
-        },
-        data: () => ({
-          nextStepSuggestions: [
+          promptSuggestions: [
             { label: 'Do this', prompt: 'I will do this', command: 'do' },
             { label: 'Do that', prompt: 'I will do that', command: 'that' },
           ],
-        }),
+        },
       });
       expect(
         wrapper.findAll('[data-cy="next-step-button"]').wrappers.map((w) => w.text())
@@ -377,25 +254,19 @@ describe('components/UserMessage.vue', () => {
     });
 
     it('automatically fetches next steps once the message is complete', async () => {
-      const suggest = jest.fn();
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: 'Hello world!',
+          tokens: ['Hello world!'],
           threadId: '00000000-0000-0000-0000-000000000000',
           isUser: false,
           complete: false,
         },
-        provide: {
-          rpcClient: { suggest },
-        },
       });
 
       expect(wrapper.find('[data-cy="next-step-suggestions"]').exists()).toBe(false);
-      expect(suggest).not.toHaveBeenCalled();
 
       await wrapper.setProps({ complete: true });
 
-      expect(suggest).toHaveBeenCalled();
       expect(wrapper.find('[data-cy="next-step-suggestions"]').exists()).toBe(true);
     });
   });
@@ -404,7 +275,7 @@ describe('components/UserMessage.vue', () => {
     it('should open links to websites in a new tab', () => {
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: '[AppMap](https://appmap.io)',
+          tokens: ['[AppMap](https://appmap.io)'],
           complete: true,
           isUser: false,
         },
@@ -416,7 +287,7 @@ describe('components/UserMessage.vue', () => {
     it('emits a click-link event when a non-http(s) link is clicked', async () => {
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: '[my-file.md](my-file.md)',
+          tokens: ['[my-file.md](my-file.md)'],
           complete: true,
           isUser: false,
         },
@@ -434,8 +305,10 @@ describe('components/UserMessage.vue', () => {
       const uri = 'file:///home/user/my-file.md';
       const wrapper = mount(VUserMessage, {
         propsData: {
-          message: `- [\`my-file.md\`](${uri})
+          tokens: [
+            `- [\`my-file.md\`](${uri})
                     - [my-file.md](${uri})`,
+          ],
           complete: true,
           isUser: false,
         },
