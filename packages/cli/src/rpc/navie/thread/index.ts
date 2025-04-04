@@ -35,7 +35,7 @@ function convertContext(context?: NavieRpc.V1.Thread.ContextItem[]): UserContext
     if (item.content) {
       return { type: 'code-snippet', content: item.content, location: item.uri };
     }
-    return { type: 'file', location: item.uri, content: item.content };
+    return { type: 'file', location: item.uri };
   });
 }
 

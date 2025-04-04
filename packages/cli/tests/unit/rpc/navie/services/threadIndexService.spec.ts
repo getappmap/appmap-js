@@ -9,7 +9,7 @@ import {
   ThreadIndexItem,
   ThreadIndexService,
 } from '../../../../../src/rpc/navie/services/threadIndexService';
-import sqlite3 from 'better-sqlite3';
+import sqlite3 from 'node-sqlite3-wasm';
 import configuration from '../../../../../src/rpc/configuration';
 
 describe('ThreadIndexService', () => {
@@ -19,7 +19,7 @@ describe('ThreadIndexService', () => {
 
   beforeEach(() => {
     container.reset();
-    db = new sqlite3(':memory:');
+    db = new sqlite3.Database(':memory:');
     container.registerInstance(ThreadIndexService.DATABASE, db);
     threadIndexService = container.resolve(ThreadIndexService);
   });
@@ -129,20 +129,28 @@ describe('ThreadIndexService', () => {
       const insertProjectDirectory = db.prepare(
         'INSERT INTO project_directories (thread_id, path) VALUES (?, ?)'
       );
-      db.transaction(() => {
+
+      try {
+        db.exec('BEGIN TRANSACTION');
+
         threads.forEach((thread) => {
-          insertThread.run(
+          insertThread.run([
             thread.id,
             thread.path,
             thread.title,
             thread.createdAt.toISOString(),
-            thread.updatedAt.toISOString()
-          );
+            thread.updatedAt.toISOString(),
+          ]);
           thread.projectDirectories.forEach((projectDirectory) =>
-            insertProjectDirectory.run(thread.id, projectDirectory)
+            insertProjectDirectory.run([thread.id, projectDirectory])
           );
         });
-      })();
+
+        db.exec('COMMIT');
+      } catch (e) {
+        db.exec('ROLLBACK');
+        throw e;
+      }
     });
 
     it('returns everything if no options are provided', () => {

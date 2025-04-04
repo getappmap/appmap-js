@@ -1,8 +1,9 @@
 import sqlite3 from 'node-sqlite3-wasm';
 import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import configuration from '../../configuration';
 import { container, inject, injectable, singleton } from 'tsyringe';
+import { mkdirSync } from 'node:fs';
 
 const INITIALIZE_SQL = `
 PRAGMA foreign_keys = ON;
@@ -80,6 +81,7 @@ export class ThreadIndexService {
    * Binds the database to a sqlite3 instance on disk at the default database path
    */
   static useDefault() {
+    mkdirSync(dirname(this.DEFAULT_DATABASE_PATH), { recursive: true });
     const db = new sqlite3.Database(this.DEFAULT_DATABASE_PATH);
     container.registerInstance(this.DATABASE, db);
   }
