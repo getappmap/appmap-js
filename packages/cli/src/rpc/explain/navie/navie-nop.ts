@@ -21,4 +21,8 @@ For guidance on using other LLM providers such as OpenAI and Copilot, [check out
     );
     return Promise.resolve();
   }
+
+  terminate(): boolean {
+    return false;
+  }
 }
