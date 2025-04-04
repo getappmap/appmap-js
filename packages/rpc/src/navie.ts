@@ -142,6 +142,13 @@ export namespace NavieRpc {
           */
         };
       }
+      export namespace StopCompletion {
+        export const Method = 'v1.navie.thread.stopCompletion';
+        export type Params = {
+          threadId: string;
+        };
+        export type Response = boolean;
+      }
       export namespace SendMessage {
         export const Method = 'v1.navie.thread.sendMessage';
         export type Params = {
