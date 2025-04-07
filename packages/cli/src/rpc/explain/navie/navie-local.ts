@@ -20,6 +20,7 @@ import ModelRegistry from '../../navie/models/registry';
 import { verbose } from '../../../utils';
 import { container } from 'tsyringe';
 import ThreadService from '../../navie/services/threadService';
+import LegacyHistory from '../../navie/legacy/history';
 
 const OPTION_SETTERS: Record<
   string,
@@ -139,20 +140,32 @@ export default class LocalNavie extends EventEmitter implements INavie {
         prompt,
       };
 
-      const startTime = Date.now();
       let chatHistory: Navie.ChatHistory = [];
-      try {
-        const threadService = container.resolve(ThreadService);
-        const thread = await threadService.getThread(threadId);
-        chatHistory = thread.getChatHistory();
-      } catch (e) {
-        if (verbose()) {
-          console.warn(`Failed to load thread ${threadId}: ${e}`);
+      let history: LegacyHistory | undefined;
+      if (process.env.APPMAP_NAVIE_THREAD_LOG) {
+        try {
+          const threadService = container.resolve(ThreadService);
+          const thread = await threadService.getThread(threadId);
+          chatHistory = thread.getChatHistory();
+        } catch (e) {
+          if (verbose()) {
+            console.warn(`Failed to load thread ${threadId}: ${e}`);
+          }
+          // If the thread failed to load, history will be empty.
+          // This is typically expected if the thread is new.
         }
-        // If the thread failed to load, history will be empty.
-        // This is typically expected if the thread is new.
+      } else {
+        try {
+          history = LegacyHistory.initialize();
+          const thread = await history.load(threadId);
+          chatHistory = thread.messages;
+        } catch (e) {
+          if (verbose()) console.warn(`Failed to load legacy thread ${threadId}: ${e}`);
+        }
+        history?.question(threadId, userMessageId, question, codeSelection, prompt);
       }
 
+      const startTime = Date.now();
       this.activeNavie = navie(
         clientRequest,
         this.contextProvider,
@@ -175,6 +188,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
       const response = new Array<string>();
       for await (const token of this.activeNavie.execute()) {
         response.push(token);
+        history?.token(threadId, userMessageId, agentMessageId, token);
         this.emit('token', token, agentMessageId);
       }
       const endTime = Date.now();
