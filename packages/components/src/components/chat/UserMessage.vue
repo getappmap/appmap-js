@@ -11,15 +11,12 @@
     </div>
     <div class="name">{{ name }}</div>
     <div class="message-body" data-cy="message-text" v-if="isUser">
-      <div class="tools" v-if="codeSelections">
+      <div class="tools" v-if="messageAttachments">
         <v-code-selection
-          v-for="(snippet, i) in codeSelections"
-          :key="i"
-          :path="snippet.path"
-          :lineStart="snippet.lineStart"
-          :lineEnd="snippet.lineEnd"
-          :language="snippet.language"
-          :code="snippet.code"
+          v-for="attachment in messageAttachments"
+          :key="attachment.uri"
+          :uri="attachment.uri"
+          :content="attachment.content"
         />
       </div>
       <span>{{ message }}</span>
@@ -174,7 +171,7 @@ export default {
     tools: {
       default: () => [],
     },
-    codeSelections: {
+    messageAttachments: {
       default: () => [],
     },
     threadId: {

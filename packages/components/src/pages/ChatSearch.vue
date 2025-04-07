@@ -941,12 +941,12 @@ export default {
         }
 
         case 'add-message-attachment': {
-          this.$refs.vchat.includeCodeSelection(event);
+          this.$refs.vchat.includeMessageAttachment(event);
           break;
         }
 
         case 'remove-message-attachment': {
-          this.$refs.vchat.removeCodeSelection(event.attachmentId);
+          this.$refs.vchat.removeMessageAttachment(event.uri);
           break;
         }
 
