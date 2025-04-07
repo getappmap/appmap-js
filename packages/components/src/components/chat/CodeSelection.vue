@@ -2,7 +2,7 @@
   <v-accordion
     :open="open"
     :class="{ 'code-selection': 1, 'code-selection--open': open }"
-    :data-attachment-id="attachmentId"
+    :data-uri="uri"
     data-cy="code-selection"
   >
     <template #header>
@@ -35,7 +35,6 @@ export default Vue.extend({
   props: {
     uri: String as PropType<string | undefined>,
     content: String as PropType<string | undefined>,
-    attachmentId: String as PropType<string | undefined>,
     language: String as PropType<string | undefined>,
   },
   inject: {

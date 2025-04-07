@@ -36,7 +36,7 @@
         :sentiment="message.sentiment"
         :tools="message.tools"
         :complete="message.complete"
-        :code-selections="message.codeSelections"
+        :message-attachments="message.messageAttachments"
         :thread-id="threadId"
         :prompt-suggestions="message.promptSuggestions"
         @change-sentiment="onSentimentChange"
@@ -62,7 +62,7 @@
       :placeholder="inputPlaceholder"
       :class="inputClasses"
       :question="question"
-      :code-selections="codeSelections"
+      :code-selections="messageAttachments"
       :is-stop-active="isResponseStreaming"
       :input-placeholder="inputPlaceholder"
       :commands="commands"
@@ -87,6 +87,11 @@ import { AI } from '@appland/client';
 import { ExplainRpc, NavieRpc } from '@appland/rpc';
 import { CodeSelection } from './CodeSelection';
 
+interface MessageAttachment {
+  uri: string;
+  content?: string;
+}
+
 export interface ITool {
   id?: string;
   title: string;
@@ -102,7 +107,7 @@ interface IMessage {
   messageId?: string;
   sentiment?: number;
   tools?: ITool[];
-  codeSelections?: CodeSelection[];
+  messageAttachments?: MessageAttachment[];
 }
 
 class UserMessage implements IMessage {
@@ -113,7 +118,7 @@ class UserMessage implements IMessage {
   public readonly isError = false;
   public readonly tools = undefined;
   public readonly complete = true;
-  public readonly codeSelections = [];
+  public readonly messageAttachments = [];
 
   constructor(content: string) {
     this.tokens.push(content);
@@ -146,7 +151,7 @@ class AssistantMessage implements IMessage {
   public readonly isUser = false;
   public readonly isError = false;
   public readonly tools = [];
-  public readonly codeSelections = undefined;
+  public readonly messageAttachments = undefined;
   public readonly promptSuggestions: undefined | NavieRpc.V1.Suggest.NextStep[] = undefined;
   private readonly codeBlocks: CodeBlockReference[] = [];
 
@@ -173,7 +178,7 @@ class AssistantMessage implements IMessage {
 class ErrorMessage implements IMessage {
   public readonly messageId = undefined;
   public readonly sentiment = undefined;
-  public readonly codeSelections = undefined;
+  public readonly messageAttachments = undefined;
   public readonly complete = true;
   public readonly isUser = false;
   public readonly isError = true;
@@ -211,7 +216,7 @@ export default {
       type: String,
     },
     sendMessage: {
-      type: Function, // (message: string, codeSelections?: string[]) => void
+      type: Function, // (message: string, messageAttachments?: string[]) => void
     },
     inputPlaceholder: {
       type: String,
@@ -255,7 +260,7 @@ export default {
       authorized: true,
       autoScrollTop: 0,
       enableScrollLog: false, // Auto-scroll can be tricky, so there is special logging to help debug it.
-      codeSelections: [] as CodeSelection[],
+      messageAttachments: [] as MessageAttachment[],
       appmaps: [] as string[],
       scrollLog: (message: string) => (this.enableScrollLog ? console.log(message) : undefined),
     };
@@ -303,7 +308,7 @@ export default {
       if (userContext) {
         const pinnedItems = new Set(this.pinnedItems.map(({ uri }) => uri));
         const nonPinnedItems = userContext.filter(({ uri }) => !pinnedItems.has(uri));
-        userMessage.codeSelections.push(...nonPinnedItems);
+        userMessage.messageAttachments.push(...nonPinnedItems);
       }
       this.messages.push(userMessage);
       // Ensure that for the first user message, the auto-scroll position is reset to the top.
@@ -337,8 +342,8 @@ export default {
       }
     },
     async onSend(message: string) {
-      this.sendMessage(message, this.codeSelections, this.appmaps);
-      this.$set(this, 'codeSelections', []);
+      this.sendMessage(message, this.messageAttachments, this.appmaps);
+      this.$set(this, 'messageAttachments', []);
     },
     onStop() {
       this.$emit('stop');
@@ -397,14 +402,14 @@ export default {
       const fullyScrolledDelta = Math.abs(messages.scrollTop - fullyScrolled);
       return fullyScrolledDelta < 40;
     },
-    includeCodeSelection(codeSelection: CodeSelection) {
-      this.codeSelections.push(codeSelection);
+    includeMessageAttachment(attachment: MessageAttachment) {
+      this.messageAttachments.push(attachment);
     },
-    removeCodeSelection(attachmentId: string) {
+    removeMessageAttachment(uri: string) {
       this.$set(
         this,
-        'codeSelections',
-        this.codeSelections.filter((c) => c.attachmentId !== attachmentId)
+        'messageAttachments',
+        this.messageAttachments.filter((c) => c.uri !== uri)
       );
     },
     includeAppMap(appmap: string) {
