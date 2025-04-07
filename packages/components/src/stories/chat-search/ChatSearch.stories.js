@@ -144,7 +144,11 @@ export const ChatSearchMockWithCodeSelection = (args, { argTypes }) => ({
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
-    this.$refs.chatSearch.includeCodeSelection(codeSelection);
+    this.$refs.chatSearch.onReceiveEvent({
+      type: 'add-message-attachment',
+      content: codeSelection.code,
+      uri: `file:${codeSelection.path}`,
+    });
   },
 });
 
@@ -177,6 +181,9 @@ export const ChatSearchMockSearchPrepopulatedEmptyResults = (args, { argTypes })
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
+    this.$refs.chatSearch.rpcClient = {
+      ...this.$refs.chatSearch.rpcClient,
+    };
     this.$refs.chatSearch.setAppMapStats([{ numAppMaps: 0 }]);
   },
 });
