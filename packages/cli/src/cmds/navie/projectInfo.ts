@@ -18,7 +18,8 @@ export default async function collectProjectInfos(
     return result;
   };
 
-  const appmapDirectories = await configuration().appmapDirectories();
+  const config = configuration();
+  const appmapDirectories = await config.appmapDirectories();
 
   const appmapStats = await collectStats(appmapDirectories);
   appmapStats.forEach((stats) => {
@@ -42,6 +43,14 @@ export default async function collectProjectInfos(
 
   if (params.includeDiff) {
     const { baseBranch } = params;
+    const { projectDirectories } = config;
+
+    // If we've requested a diff, it shouldn't matter whether or not AppMap is configured.
+    // Include all the project directory paths as well.
+    projectDirectories.forEach((directory) => {
+      if (projectInfoByPath.has(directory)) return;
+      projectInfoByPath.set(directory, { directory });
+    });
 
     for (const [directory, info] of projectInfoByPath) {
       const diffContent = (
