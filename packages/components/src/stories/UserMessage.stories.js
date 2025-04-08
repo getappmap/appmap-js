@@ -152,34 +152,25 @@ erDiagram
   complete: true,
 };
 
-export const Buttons = (args, { argTypes }) => ({
+export const MessageAttachments = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VUserMessage },
   template: `<v-user-message v-bind="$props"></v-user-message>`,
 });
-Buttons.args = {
-  id: 'system-message-id',
-  tokens: tokenize(
-    'buttons',
-    `To implement a login page, we need to ensure the following considerations:
-
-### Proposed Changes
-
-#### Frontend (UI Changes):
-1. **packages/client/src/components/LoginPage.jsx**
-   - Create a new component for the login page.
-   - Use input elements for the username and password fields.
-   - Implement a form submission function that validates inputs and communicates with the backend.
-   - Add state management for form inputs and potential error messages.
-   - Apply styles to the login form for proper layout and visual appeal.
-
-2. **packages/client/src/styles/LoginPage.css**
-   - Create styles specific to the login page to ensure a user-friendly and responsive design.
-
-[Generate code](event:generate-code) [Create a diagram](event:create-diagram)
-`
-  ),
+MessageAttachments.args = {
+  id: 'user-message-id',
+  tokens: tokenize('buttons', 'please summarize this'),
+  isUser: true,
   complete: true,
+  messageAttachments: [
+    {
+      uri: 'file:README.md',
+      content: '# README\nThis is a readme file',
+    },
+    {
+      uri: 'https://bevy-cheatbook.github.io/assets/hot-reload.html',
+    },
+  ],
 };
 
 export const Links = (args, { argTypes }) => ({
