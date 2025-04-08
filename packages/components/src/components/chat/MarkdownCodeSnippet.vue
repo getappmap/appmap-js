@@ -73,6 +73,16 @@ export default Vue.extend({
     };
   },
   computed: {
+    uriComponents(): URI | undefined {
+      if (this.uri) {
+        try {
+          return URI.parse(this.uri);
+        } catch (e) {
+          console.error('Invalid URI:', this.uri, e);
+        }
+      }
+      return undefined;
+    },
     highlightedCode(): string {
       let language = hljs.getLanguage(this.language) ? this.language : 'plaintext';
       return hljs.highlight(language, this.code).value;
@@ -83,6 +93,9 @@ export default Vue.extend({
     // `shortPath` is the relative path... or not. If we can't find a matching
     // project directory, we'll just return the full path, what ever it may be.
     shortPath(): string | undefined {
+      // If we're using a URI and it's not a file, skip this.
+      if (this.uriComponents && this.uriComponents?.scheme !== 'file') return undefined;
+
       const { projectDirectories } = this as unknown as Injected;
       const projectDirectory = projectDirectories.find((dir) =>
         this.decodedLocation?.startsWith(dir)
@@ -97,8 +110,9 @@ export default Vue.extend({
     },
     decodedLocation(): string | undefined {
       // The location may be URI encoded to avoid issues with special characters.
+      // This field is only used for context search results and should be switched
+      // to a URI.
       if (this.location) {
-        // TODO: is location still in use? Ideally everything is a URI now.
         try {
           return decodeURIComponent(this.location);
         } catch (e) {
@@ -106,13 +120,8 @@ export default Vue.extend({
         }
       }
 
-      if (this.uri) {
-        try {
-          const uri = URI.parse(this.uri);
-          return uri.fsPath;
-        } catch (e) {
-          console.error('Invalid URI:', this.uri, e);
-        }
+      if (this.uriComponents?.scheme === 'file') {
+        return this.uriComponents.fsPath;
       }
 
       return undefined;

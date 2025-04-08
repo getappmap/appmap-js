@@ -3,7 +3,6 @@
     <template v-if="isCodeSnippet">
       <v-markdown-code-snippet
         :language="language"
-        :title="contextItem.location"
         :location="contextItem.location"
         :directory="contextItem.directory"
         :is-pinnable="false"
