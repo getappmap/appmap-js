@@ -120,8 +120,11 @@ class UserMessage implements IMessage {
   public readonly complete = true;
   public readonly messageAttachments = [];
 
-  constructor(content: string) {
+  constructor(content: string, messageAttachments?: MessageAttachment[]) {
     this.tokens.push(content);
+    if (messageAttachments) {
+      this.messageAttachments.push(...messageAttachments);
+    }
   }
 }
 
@@ -303,14 +306,10 @@ export default {
     setAuthorized(v: boolean) {
       this.authorized = v;
     },
-    addUserMessage(content: string, userContext?: NavieRpc.V1.Thread.ContextItem[]) {
-      const userMessage = new UserMessage(content);
-      if (userContext) {
-        const pinnedItems = new Set(this.pinnedItems.map(({ uri }) => uri));
-        const nonPinnedItems = userContext.filter(({ uri }) => !pinnedItems.has(uri));
-        userMessage.messageAttachments.push(...nonPinnedItems);
-      }
+    addUserMessage(content: string) {
+      const userMessage = new UserMessage(content, this.messageAttachments);
       this.messages.push(userMessage);
+      this.$set(this, 'messageAttachments', []);
       // Ensure that for the first user message, the auto-scroll position is reset to the top.
       // This is to account for the fact that there may be an auto-scroll applied when the
       // placeholder content is show during the chat initialization or when the user clears the chat.
@@ -342,8 +341,7 @@ export default {
       }
     },
     async onSend(message: string) {
-      this.sendMessage(message, this.messageAttachments, this.appmaps);
-      this.$set(this, 'messageAttachments', []);
+      this.sendMessage(message);
     },
     onStop() {
       this.$emit('stop');

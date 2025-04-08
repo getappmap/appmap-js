@@ -145,29 +145,6 @@ describe('components/Chat.vue', () => {
       code: '...',
     };
 
-    it('are emitted in sendMessage', async () => {
-      const sendMessage = jest.fn();
-      const wrapper = mount(VChat, { propsData: { sendMessage } });
-
-      wrapper.vm.includeMessageAttachment(codeSelection);
-      wrapper.vm.onSend('Hello from the user');
-
-      await wrapper.vm.$nextTick();
-
-      expect(sendMessage).toBeCalledWith(
-        'Hello from the user',
-        [
-          {
-            code: '...',
-            lineEnd: 17,
-            lineStart: 6,
-            path: 'app/controllers/users_controller.rb',
-          },
-        ],
-        []
-      );
-    });
-
     it('includes pending code snippets in the input area', async () => {
       const wrapper = mount(VChat);
       const selector = '[data-cy="input-attachments"] [data-cy="code-selection"]';
@@ -189,31 +166,30 @@ describe('components/Chat.vue', () => {
 
       expect(wrapper.find(selector).exists()).toBe(true);
 
-      wrapper.vm.onSend('Hello from the user');
+      wrapper.vm.addUserMessage('Hello from the user');
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find(selector).exists()).toBe(false);
     });
 
     it('propagates non-pinned items to a new user message as code snippets', async () => {
-      const numContextItems = 10;
-      const half = ~~(numContextItems / 2);
-      const userContext = Array.from({ length: numContextItems }, () => ({
+      const numAttachments = 10;
+      const messageAttachments = Array.from({ length: numAttachments }, () => ({
         uri: URI.random().toString(),
         content: '...',
       }));
       const wrapper = mount(VChat, {
         propsData: { sendMessage: jest.fn() },
-        provide: { pinnedItems: userContext.slice(0, half) },
+        data: () => ({ messageAttachments }),
       });
 
-      wrapper.vm.addUserMessage('Hello from the user', userContext);
+      wrapper.vm.addUserMessage('Hello from the user');
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.vm.messages[0].messageAttachments).toStrictEqual(userContext.slice(half));
+      expect(wrapper.vm.messages[0].messageAttachments).toStrictEqual(messageAttachments);
       expect(
         wrapper.findAll('[data-cy="message"][data-actor="user"] [data-cy="code-selection"]').length
-      ).toBe(half);
+      ).toBe(numAttachments);
     });
   });
 

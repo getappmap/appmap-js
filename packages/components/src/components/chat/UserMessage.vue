@@ -11,7 +11,8 @@
     </div>
     <div class="name">{{ name }}</div>
     <div class="message-body" data-cy="message-text" v-if="isUser">
-      <div class="tools" v-if="messageAttachments">
+      <span>{{ message }}</span>
+      <div class="message-attachments" v-if="messageAttachments">
         <v-code-selection
           v-for="attachment in messageAttachments"
           :key="attachment.uri"
@@ -19,7 +20,6 @@
           :content="attachment.content"
         />
       </div>
-      <span>{{ message }}</span>
     </div>
     <div class="message-body" data-cy="message-text" v-else>
       <div class="tools" v-if="tools && !tokens.length">
@@ -610,6 +610,13 @@ export default {
 
 .message .message-body {
   line-height: 1.6;
+
+  .message-attachments {
+    margin-top: 0.25em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+  }
 
   .tools {
     display: flex;

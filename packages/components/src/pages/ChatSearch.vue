@@ -512,19 +512,14 @@ export default {
     onStop() {
       this.rpcClient.thread.stopCompletion(this.activeThreadId);
     },
-    async sendMessage(
-      message: string,
-      messageAttachments: { uri: string; content?: string }[] = [],
-      _appmaps: string[] = [] // eslint-disable-line @typescript-eslint/no-unused-vars
-    ) {
-      const userContext = this.pinnedItems.concat(messageAttachments);
+    async sendMessage(message: string) {
       try {
         await this.rpcClient.thread.sendMessage(
           this.activeThreadId,
           message
             .replace(/^@generate/, '@generate /format=xml')
             .replace(/^@test/, '@test /format=xml'),
-          userContext
+          this.pinnedItems
         );
       } catch (e) {
         console.error('Failed to send message', e);
@@ -807,7 +802,7 @@ export default {
           if (event.role === 'assistant') {
             chatApi.addSystemMessage(event.content);
           } else if (event.role === 'user') {
-            chatApi.addUserMessage(event.content, event.userContext);
+            chatApi.addUserMessage(event.content);
 
             // Clear the context after a new user message is sent
             this.$set(this, 'contextItems', []);
