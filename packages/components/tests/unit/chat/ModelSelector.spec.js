@@ -33,6 +33,16 @@ describe('ModelSelector.vue', () => {
   });
 
   it('displays the selected model', () => {
-    expect(wrapper.find('[data-cy="selected-model"]').text()).toBe('GPT-3.5 Turbo');
+    expect(wrapper.find('[data-cy="selected-model"]').text()).toMatch(
+      /GPT-3\.5 Turbo\s+via OpenAI/
+    );
+  });
+
+  it('highlights the selected model in the list', async () => {
+    // Click to view models
+    await wrapper.find('[data-cy="model-selector"]').trigger('click');
+
+    const selectedModel = wrapper.find('.model-selector-list__item--selected');
+    expect(selectedModel.text()).toMatch(/GPT-3\.5 Turbo\s+OpenAI/);
   });
 });
