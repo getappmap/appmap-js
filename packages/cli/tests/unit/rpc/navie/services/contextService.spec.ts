@@ -45,7 +45,7 @@ import collectContext, {
 } from '../../../../../src/rpc/explain/collect-context';
 import collectProjectInfos from '../../../../../src/cmds/navie/projectInfo';
 import collectHelp from '../../../../../src/cmds/navie/help';
-import { Help } from '@appland/navie';
+import { Help, ProjectInfo } from '@appland/navie';
 
 const mockedBuildContextRequest = jest.mocked(buildContextRequest);
 const mockedCollectContext = jest.mocked(collectContext);
@@ -80,8 +80,9 @@ describe('ContextService', () => {
 
   describe('projectInfoContext', () => {
     it('calls collectProjectInfos', async () => {
-      await contextService.projectInfoContext();
-      expect(mockedCollectProjectInfos).toHaveBeenCalledWith('test-editor');
+      const req: ProjectInfo.ProjectInfoRequest = { type: 'projectInfo', includeDiff: false };
+      await contextService.projectInfoContext(req);
+      expect(mockedCollectProjectInfos).toHaveBeenCalledWith('test-editor', req);
     });
   });
 

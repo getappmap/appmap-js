@@ -59,8 +59,10 @@ export class ContextService {
     return searchResult.context;
   }
 
-  async projectInfoContext(): Promise<ProjectInfo.ProjectInfoResponse> {
-    return collectProjectInfos(this.codeEditor);
+  async projectInfoContext(
+    data: ProjectInfo.ProjectInfoRequest
+  ): Promise<ProjectInfo.ProjectInfoResponse> {
+    return collectProjectInfos(this.codeEditor, data);
   }
 
   helpContext(data: Help.HelpRequest): Promise<Help.HelpResponse> {
