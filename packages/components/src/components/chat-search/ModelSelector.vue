@@ -79,6 +79,7 @@
         <span class="model-selector__title" data-cy="selected-model">
           <template v-if="selectedModel">
             {{ selectedModel.name }}
+            <span class="model-selector__title--provider">via {{ selectedModel.provider }}</span>
           </template>
           <template v-else> Select a model </template>
           <v-chevron-down class="model-selector__chevron" />
@@ -87,7 +88,7 @@
       <template #content>
         <div class="model-selector-list" v-if="sortedModels.length">
           <div
-            class="model-selector-list__item"
+            :class="getListModelClasses(model)"
             data-cy="model-selector-item"
             v-for="model in sortedModels"
             :key="`${model.provider}:${model.id}`"
@@ -182,6 +183,19 @@ export default Vue.extend({
   },
 
   methods: {
+    getModelId(model?: NavieRpc.V1.Models.ListModel) {
+      if (model) {
+        return `${model.provider.toLowerCase()}:${model.id.toLowerCase()}`;
+      }
+    },
+    getListModelClasses(model: NavieRpc.V1.Models.ListModel) {
+      const selectedModelId = this.getModelId(this.selectedModel);
+      return {
+        'model-selector-list__item': true,
+        'model-selector-list__item--selected':
+          selectedModelId && selectedModelId === this.getModelId(model),
+      };
+    },
     filterTags(model: NavieRpc.V1.Models.ListModel) {
       return model.tags?.filter((tag) => !['primary', 'secondary'].includes(tag)) ?? [];
     },
@@ -335,12 +349,18 @@ export default Vue.extend({
 
   &__title {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.25rem;
     align-items: center;
     font-weight: 600;
     font-size: 1rem;
     color: $color-foreground;
     cursor: pointer;
+
+    &--provider {
+      padding-top: 2px;
+      font-weight: 400;
+      font-size: 0.8em;
+    }
 
     svg path {
       fill: $color-foreground;
@@ -416,16 +436,16 @@ export default Vue.extend({
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+
+    &--title {
+      padding-left: 0.65em;
+      font-weight: 400;
+      font-size: 0.9em;
+      color: $color-foreground-light;
+    }
   }
 
-  &__item--title {
-    padding-left: 0.65em;
-    font-weight: 400;
-    font-size: 0.9em;
-    color: $color-foreground-light;
-  }
-
-  &__text-input {
+  &__item &__text-input {
     border-radius: $border-radius;
     font-size: 1.2em;
     height: 2em;
@@ -467,6 +487,10 @@ export default Vue.extend({
     cursor: pointer;
 
     &:hover {
+      background-color: $color-highlight;
+    }
+
+    &--selected {
       background-color: $color-button-bg-hover;
     }
 
