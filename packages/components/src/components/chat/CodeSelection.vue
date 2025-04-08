@@ -100,12 +100,17 @@ export default Vue.extend({
   color: $color-foreground;
   width: 100%;
 
+  &__title {
+    padding-top: 2px;
+  }
+
   &__header {
     display: flex;
     align-items: center;
     flex-direction: row;
     gap: 0.25em;
     font-size: 0.9em;
+    padding: 0.2em;
 
     &--no-content {
       cursor: initial;
@@ -124,6 +129,7 @@ export default Vue.extend({
       width: 1em;
       height: 1em;
       fill: $color-foreground;
+      overflow: visible;
     }
 
     &:hover {
