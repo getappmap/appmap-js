@@ -85,9 +85,9 @@ export function tokenize(identifier: string, str: string): unknown[] {
     /(?:<!-- file: (.*) -->\r?\n)?(^`{3,}(\w*)?$(?:(?!^`{3,})(?:.|\r?\n))*(?:^`{3,})?)|(.*)/gm
   );
   const result: unknown[] = [];
+  let codeBlockId = 0;
   const getCodeBlockUri = () =>
     URI.from({ scheme: 'urn', path: `${identifier}:${codeBlockId++}` }).toString();
-  let codeBlockId = 0;
   for (let match = iter.next(); !match.done; match = iter.next()) {
     const isCodeBlock = Boolean(match.value[2]);
     if (isCodeBlock) {
@@ -96,7 +96,7 @@ export function tokenize(identifier: string, str: string): unknown[] {
       // First, clear out any existing content for this code block.
       // This is necessary because this function may be called on hot reloads, and we don't want to
       // continuously append to the same code block.
-      const uri = getCodeBlockUri();
+      const uri = location ? URI.file(location).toString() : getCodeBlockUri();
       const existingItem = pinnedItemRegistry.get(uri);
       if (existingItem) {
         existingItem.content = '';
