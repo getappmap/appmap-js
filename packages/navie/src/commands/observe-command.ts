@@ -38,10 +38,15 @@ const RelevantTest = z.object({
     .describe('An ordered list of terminal command(s) necessary to execute to install AppMap'),
   testCommands: z
     .array(
-      z.object({
-        command: z.string().describe('The command to execute'),
-        description: z.string().optional().describe('A description of the command'),
-      })
+      z
+        .union([
+          z.object({
+            command: z.string().describe('The command to execute'),
+            description: z.string().optional().describe('A description of the command'),
+          }),
+          z.string().describe('A command to execute'),
+        ])
+        .describe('The command to execute')
     )
     .optional()
     .describe('The ordered list of terminal command(s) that can be executed to run the test'),
@@ -205,7 +210,7 @@ ${
   testCommands?.length
     ? `I've identified the following commands that you may need to run to execute the test:
 <commands>
-${testCommands?.map((command) => `- \`${command.command}\`: ${command.description}`).join('\n')}
+${testCommands?.map((command) => `- ${commandDescription(command)}`).join('\n')}
 </commands>
 `
     : ''
@@ -249,4 +254,11 @@ Do not include:
       yield token;
     }
   }
+}
+
+function commandDescription(command: string | { command: string; description?: string }): string {
+  if (typeof command === 'string') {
+    return `\`${command}\``;
+  }
+  return `\`${command.command}\`: ${command.description ?? ''}`;
 }
