@@ -72,9 +72,14 @@ export default class RPCServer {
 
     const listener = app.listen(this.bindPort, 'localhost');
     listener.on('upgrade', (req, socket, head) => {
-      wss.handleUpgrade(req, socket, head, (ws) => {
-        wss.emit('connection', ws, req);
-      });
+      try {
+        wss.handleUpgrade(req, socket, head, (ws) => {
+          wss.emit('connection', ws, req);
+        });
+      } catch (error) {
+        debug(`[RPCServer] WebSocket upgrade error: ${error}`);
+        socket.destroy();
+      }
     });
 
     // In some environments the client and server can resolve localhost to
