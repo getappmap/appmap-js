@@ -413,88 +413,53 @@ export default class AppMapRPC {
 
       let lastAckedNonce = nonce ?? 0;
       const listener = new SubscribeListener();
+
       const connect = async (nonce?: number): Promise<void> => {
-        const payload = {
-          jsonrpc: '2.0',
-          method: NavieRpc.V1.Thread.Subscribe.Method,
-          params: { threadId, nonce, replay },
-          id: 1,
-        };
+        const params = new URLSearchParams();
+        if (threadId) params.append('threadId', threadId);
+        if (replay) params.append('replay', 'true');
+        if (nonce) params.append('nonce', nonce.toString());
 
-        let response;
-        try {
-          response = await fetch(`http://localhost:${this.port}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          });
-        } catch (e) {
-          console.error('Failed to connect to RPC server', e);
-          return reconnect();
-        }
-
-        if (!response.ok) {
-          return reconnect();
-        }
-
-        const reader = response.body?.getReader();
-        if (!reader) {
-          return listener.connectionClosed ? reconnect() : undefined;
-        }
-
-        listener.updateReader(reader);
-        listener.emit('connected');
-
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        setTimeout(async () => {
-          try {
-            for (;;) {
-              if (listener.connectionClosed) {
-                return;
-              }
-
-              const { value, done } = await reader.read();
-              if (done) break;
-
-              buffer += decoder.decode(value);
-              for (;;) {
-                const newLineIndex = buffer.indexOf('\n');
-                if (newLineIndex === -1) break;
-
-                const line = buffer.slice(0, newLineIndex);
-                buffer = buffer.slice(newLineIndex + 1);
-                if (line.length === 0) continue;
-
-                try {
-                  const event = JSON.parse(line.replace(/^data: /, ''));
-                  if (event.type === 'client-error') {
-                    console.error('Client error', event.error);
-                    if (event.shouldRetry) {
-                      console.error('Attempting to reconnect...');
-                      return reconnect();
-                    } else {
-                      return;
-                    }
-                  }
-                  lastAckedNonce += 1;
-                  validateEvent(event);
-                  listener.emit('event', event);
-                } catch (e) {
-                  console.error('Failed to parse event', line);
-                  console.error(e);
-                }
-              }
+        const ws = new WebSocket(`ws://localhost:${this.port}/?${params.toString()}`);
+        const historicalEvents: Record<string, unknown>[] = [];
+        let streaming = false;
+        ws.addEventListener('message', ({ data }) => {
+          const event = JSON.parse(data.toString());
+          if (event.type === 'client-error') {
+            console.error('Client error', event.error);
+            if (event.shouldRetry) {
+              console.error('Attempting to reconnect...');
+              return listener.close();
+            } else {
+              return;
             }
-          } catch (e) {
-            console.error('A network error occurred:', e);
-            console.error('Attempting to reconnect...');
-            return reconnect();
+          }
+          // The `stream-start` event signals that the client no longer needs to buffer events.
+          if (event.type === 'stream-start') {
+            historicalEvents.forEach((event) => {
+              listener.emit('event', event);
+            });
+            historicalEvents.length = 0;
+            streaming = true;
+            listener.emit('connected');
+            return;
+          }
+          lastAckedNonce += 1;
+          validateEvent(event);
+          if (streaming) {
+            listener.emit('event', event);
+          } else {
+            historicalEvents.push(event);
           }
         });
-      };
+        ws.addEventListener('close', () => {
+          if (listener.connectionClosed) {
+            return;
+          }
 
+          reconnect();
+        });
+      };
       const reconnect = async (reconnectTimeoutMs = 1000) => {
         // No need for an exponential backoff here, since the connection is
         // local and the chances of a network error are low unless the server
@@ -502,9 +467,7 @@ export default class AppMapRPC {
         await new Promise((resolve) => setTimeout(resolve, reconnectTimeoutMs));
         return connect(lastAckedNonce);
       };
-
-      connect();
-
+      connect(nonce);
       return listener;
     },
     pinItem: (threadId: string, uri: string, content?: string) =>
