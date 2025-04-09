@@ -1,3 +1,20 @@
+# [@appland/components-v4.46.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.45.0...@appland/components-v4.46.0) (2025-04-09)
+
+
+### Bug Fixes
+
+* Don't leak URIs into code snippet titles ([e65cee7](https://github.com/getappmap/appmap-js/commit/e65cee7de4ce32843c27e0d78f0d075c84999621))
+* Message attachments are now visually propagated within the user ([d387187](https://github.com/getappmap/appmap-js/commit/d387187313512b6dcfa49254100f10994933696a))
+* Post-round-trip code selections now use the proper type ([5ec5034](https://github.com/getappmap/appmap-js/commit/5ec5034af4fd087301639a718f434b75fc542d24))
+* Show the selected models provider and highlight it in the list ([b487d1a](https://github.com/getappmap/appmap-js/commit/b487d1af15e2759ccc0b91b8d4defc334e5a9aa6))
+
+
+### Features
+
+* Add inline AppMap recommendation frontend ([bac7d57](https://github.com/getappmap/appmap-js/commit/bac7d571a863dc7eea90c1a0452debf43b95dedf))
+* Add URI ([32039e8](https://github.com/getappmap/appmap-js/commit/32039e84e2668d9efd7520f9f7183b2809044d6e))
+* Integrate streaming threads into frontend ([e907b38](https://github.com/getappmap/appmap-js/commit/e907b384145ba5a524ff2be81120c215d2fabf5a))
+
 # [@appland/components-v4.45.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.44.0...@appland/components-v4.45.0) (2025-03-27)
 
 
