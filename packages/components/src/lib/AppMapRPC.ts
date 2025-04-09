@@ -437,7 +437,11 @@ export default class AppMapRPC {
           // The `stream-start` event signals that the client no longer needs to buffer events.
           if (event.type === 'stream-start') {
             historicalEvents.forEach((event) => {
-              listener.emit('event', event);
+              try {
+                listener.emit('event', event);
+              } catch (e) {
+                console.error('Invalid event', e);
+              }
             });
             historicalEvents.length = 0;
             streaming = true;
@@ -447,7 +451,11 @@ export default class AppMapRPC {
           lastAckedNonce += 1;
           validateEvent(event);
           if (streaming) {
-            listener.emit('event', event);
+            try {
+              listener.emit('event', event);
+            } catch (e) {
+              console.error('Invalid event', e);
+            }
           } else {
             historicalEvents.push(event);
           }
