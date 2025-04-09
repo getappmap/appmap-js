@@ -1,3 +1,11 @@
+# [@appland/navie-v1.44.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.43.0...@appland/navie-v1.44.0) (2025-04-09)
+
+
+### Features
+
+* Add URI ([32039e8](https://github.com/getappmap/appmap-js/commit/32039e84e2668d9efd7520f9f7183b2809044d6e))
+* Implement completion termination ([41e285c](https://github.com/getappmap/appmap-js/commit/41e285c0c56a56664340fe2db0a9fffb82206f57))
+
 # [@appland/navie-v1.43.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.42.3...@appland/navie-v1.43.0) (2025-03-27)
 
 
