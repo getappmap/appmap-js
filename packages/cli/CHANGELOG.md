@@ -1,3 +1,19 @@
+# [@appland/appmap-v3.188.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.187.0...@appland/appmap-v3.188.0) (2025-04-09)
+
+
+### Bug Fixes
+
+* Address cases where /diff was ignored ([0d205a2](https://github.com/getappmap/appmap-js/commit/0d205a2ae485db3d233d85e665934960661accd7))
+* Post-round-trip code selections now use the proper type ([5ec5034](https://github.com/getappmap/appmap-js/commit/5ec5034af4fd087301639a718f434b75fc542d24))
+
+
+### Features
+
+* Add backwards compatibility for unsupported thread log front ends ([85084c0](https://github.com/getappmap/appmap-js/commit/85084c0e3f35f23a0700d4e9721c7386f7d3b206))
+* Add URI ([32039e8](https://github.com/getappmap/appmap-js/commit/32039e84e2668d9efd7520f9f7183b2809044d6e))
+* Implement v1.navie.thread RPC methods ([e575874](https://github.com/getappmap/appmap-js/commit/e57587494bbeb391fc7eb86a088e8f5ea690ef95))
+* Implement v1.navie.thread.stopCompletion method ([41b6c81](https://github.com/getappmap/appmap-js/commit/41b6c810d3eda4d134a68681d6550833919fd83e))
+
 # [@appland/appmap-v3.187.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.186.3...@appland/appmap-v3.187.0) (2025-03-27)
 
 
