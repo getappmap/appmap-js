@@ -1,9 +1,9 @@
-import connect from 'connect';
 import { json as jsonParser } from 'body-parser';
 import makeDebug from 'debug';
 import jayson, { MethodLike } from 'jayson';
 import { log, warn } from 'console';
 import assert from 'assert';
+import express from 'express';
 
 import cors from 'cors';
 
@@ -11,7 +11,8 @@ import { Server } from 'http';
 
 import shadowLocalhost from '../../lib/shadowLocalhost';
 import { RpcCallback, RpcHandler, toJaysonRpcError } from '../../rpc/rpc';
-import { sseMiddleware } from '../../rpc/navie/thread/middleware';
+import { WebSocketServer } from 'ws';
+import { bindConnectionHandler } from '../../rpc/navie/thread/handlers/subscribe';
 
 const debug = makeDebug('appmap:rpcServer');
 
@@ -60,13 +61,21 @@ export default class RPCServer {
     log(`Available JSON-RPC methods: ${Object.keys(rpcMethods).sort().join(', ')}`);
     warn(`Consult @appland/rpc for request and response data types.`);
 
-    const server = new jayson.Server(rpcMethods);
-    const app = connect();
+    const app = express();
+    const wss = new WebSocketServer({ noServer: true });
+    bindConnectionHandler(wss);
+
+    const server = new jayson.Server(rpcMethods, {});
     app.use(cors({ methods: ['POST'] }));
     app.use(jsonParser());
-    app.use(sseMiddleware());
     app.use(server.middleware());
+
     const listener = app.listen(this.bindPort, 'localhost');
+    listener.on('upgrade', (req, socket, head) => {
+      wss.handleUpgrade(req, socket, head, (ws) => {
+        wss.emit('connection', ws, req);
+      });
+    });
 
     // In some environments the client and server can resolve localhost to
     // different address families leading them to be unable to communicate.

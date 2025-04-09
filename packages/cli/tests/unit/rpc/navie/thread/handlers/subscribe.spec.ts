@@ -1,11 +1,11 @@
 import { NavieRpc } from '@appland/rpc';
 import { handler } from '../../../../../../src/rpc/navie/thread/handlers/subscribe';
 import ThreadService from '../../../../../../src/rpc/navie/services/threadService';
-import { EventStream } from '../../../../../../src/rpc/navie/thread/middleware';
+import type { WebSocket } from 'ws';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
 describe(NavieRpc.V1.Thread.Subscribe.Method, () => {
-  let mockEventStream: {
+  let mockSocket: {
     on: jest.Mock;
     send: jest.Mock;
     end: jest.Mock;
@@ -20,7 +20,7 @@ describe(NavieRpc.V1.Thread.Subscribe.Method, () => {
   };
 
   beforeEach(() => {
-    mockEventStream = {
+    mockSocket = {
       on: jest.fn(),
       send: jest.fn(),
       end: jest.fn(),
@@ -46,7 +46,7 @@ describe(NavieRpc.V1.Thread.Subscribe.Method, () => {
     const threadId = 'example-thread-id';
     await handler(
       threadService as unknown as ThreadService,
-      mockEventStream as unknown as EventStream,
+      mockSocket as unknown as WebSocket,
       threadId,
       undefined,
       true
@@ -55,13 +55,15 @@ describe(NavieRpc.V1.Thread.Subscribe.Method, () => {
     expect(threadService.getThread).toHaveBeenCalledWith(threadId);
     expect(mockThread.on).toHaveBeenCalledWith('event', expect.any(String), expect.any(Function));
     expect(mockThread.getEvents).toHaveBeenCalledWith(undefined);
-    expect(mockEventStream.send.mock.calls.flat()).toStrictEqual(events);
+    expect(mockSocket.send.mock.calls.flat()).toStrictEqual(
+      ['{"type":"stream-start"}'].concat(events.map((event) => JSON.stringify(event)))
+    );
   });
 
   it('streams new events to the client', async () => {
     await handler(
       threadService as unknown as ThreadService,
-      mockEventStream as unknown as EventStream,
+      mockSocket as unknown as WebSocket,
       'example-thread-id',
       undefined,
       true
@@ -76,21 +78,22 @@ describe(NavieRpc.V1.Thread.Subscribe.Method, () => {
     const listener = bindListenerCalls[0][2] as (event: Record<string, unknown>) => void;
     const event = { type: 'message', role: 'assistant', content: 'test' };
 
-    expect(mockEventStream.send).not.toHaveBeenCalled();
+    expect(mockSocket.send).toHaveBeenCalledTimes(1);
+    expect(mockSocket.send).toHaveBeenCalledWith(JSON.stringify({ type: 'stream-start' }));
     listener(event);
-    expect(mockEventStream.send).toHaveBeenCalledWith(event);
+    expect(mockSocket.send).toHaveBeenCalledWith(JSON.stringify(event));
   });
 
   it('unbinds listeners when the stream is closed', async () => {
     await handler(
       threadService as unknown as ThreadService,
-      mockEventStream as unknown as EventStream,
+      mockSocket as unknown as WebSocket,
       'example-thread-id',
       undefined,
       true
     );
 
-    const onCloseCalls = mockEventStream.on.mock.calls;
+    const onCloseCalls = mockSocket.on.mock.calls;
     expect(onCloseCalls.length).toBe(1);
     expect(onCloseCalls[0]).toStrictEqual(['close', expect.any(Function)]);
 
@@ -107,16 +110,18 @@ describe(NavieRpc.V1.Thread.Subscribe.Method, () => {
 
     await handler(
       threadService as unknown as ThreadService,
-      mockEventStream as unknown as EventStream,
+      mockSocket as unknown as WebSocket,
       'example-thread-id',
       undefined,
       true
     );
 
-    expect(mockEventStream.send).toHaveBeenCalledWith({
-      type: 'error',
-      error: new Error('test error'),
-      code: 'missing-thread',
-    });
+    expect(mockSocket.send).toHaveBeenCalledWith(
+      JSON.stringify({
+        type: 'error',
+        error: new Error('test error'),
+        code: 'missing-thread',
+      })
+    );
   });
 });
