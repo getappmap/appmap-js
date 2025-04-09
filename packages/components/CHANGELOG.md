@@ -1,3 +1,10 @@
+# [@appland/components-v4.46.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.0...@appland/components-v4.46.1) (2025-04-09)
+
+
+### Bug Fixes
+
+* Don't panic on event replay exceptions ([97801e0](https://github.com/getappmap/appmap-js/commit/97801e0db726b140f7236ecb86ea661ac12f40e8))
+
 # [@appland/components-v4.46.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.45.0...@appland/components-v4.46.0) (2025-04-09)
 
 
