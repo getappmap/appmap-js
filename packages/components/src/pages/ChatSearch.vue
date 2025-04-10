@@ -1005,9 +1005,9 @@ export default {
       .$on('change-input', (prompt: string) => {
         this.$refs.vchat.setInput(prompt);
       })
-      .$on('pin-files', (requests: { uri: string }[]) => {
-        requests.forEach((r) => {
-          this.rpcClient.thread.pinItem(this.activeThreadId, r);
+      .$on('pin-files', (uris: string[]) => {
+        uris.forEach((uri) => {
+          this.rpcClient.thread.pinItem(this.activeThreadId, uri);
         });
       });
 
