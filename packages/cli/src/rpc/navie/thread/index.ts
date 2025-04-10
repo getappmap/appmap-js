@@ -32,10 +32,22 @@ export type EventListener = (...args: any[]) => void;
 function convertContext(context?: NavieRpc.V1.Thread.ContextItem[]): UserContext.ContextItem[] {
   if (!context) return [];
   return context.map((item) => {
-    if (item.content) {
-      return { type: 'code-snippet', content: item.content, location: item.uri };
+    let location = item.uri;
+    try {
+      const uri = URI.parse(item.uri);
+      if (uri.scheme === 'file') {
+        location = uri.fsPath;
+        if (uri.range) {
+          location += [uri.range.start, uri.range.end].filter(Boolean).join('-');
+        }
+      }
+    } catch (e) {
+      console.warn('[convertContext]', e);
     }
-    return { type: 'file', location: item.uri };
+    if (item.content) {
+      return { type: 'code-snippet', content: item.content, location };
+    }
+    return { type: 'file', location };
   });
 }
 
