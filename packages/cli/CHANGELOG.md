@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.188.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.1...@appland/appmap-v3.188.2) (2025-04-10)
+
+
+### Bug Fixes
+
+* Normalize Windows paths on ingress ([80740ae](https://github.com/getappmap/appmap-js/commit/80740aeeb2c75f787814c7c5e00414a2224346bb))
+
 # [@appland/appmap-v3.188.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.0...@appland/appmap-v3.188.1) (2025-04-10)
 
 
