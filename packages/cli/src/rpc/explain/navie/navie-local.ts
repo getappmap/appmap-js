@@ -131,7 +131,6 @@ export default class LocalNavie extends EventEmitter implements INavie {
 
     this.#reportConfigTelemetry();
     log(`[local-navie] Processing question ${userMessageId} in thread ${threadId}`);
-    this.emit('ack', userMessageId, threadId);
 
     try {
       const clientRequest: Navie.ClientRequest = {
@@ -164,6 +163,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
         }
         history?.question(threadId, userMessageId, question, codeSelection, prompt);
       }
+
+      this.emit('ack', userMessageId, threadId);
 
       const startTime = Date.now();
       this.activeNavie = navie(
