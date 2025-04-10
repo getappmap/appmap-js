@@ -65,7 +65,7 @@ export async function register(
     };
   }
 
-  threadService.registerThread(thread);
+  await threadService.registerThread(thread);
 
   return { thread };
 }

@@ -15,7 +15,6 @@ describe('ThreadService', () => {
 
   beforeEach(() => {
     container.reset();
-    container;
 
     threadIndexService = {
       delete: jest.fn(),
@@ -32,7 +31,7 @@ describe('ThreadService', () => {
 
   describe('getThread', () => {
     it('retrieves a thread from memory', async () => {
-      threadService.registerThread({ id: threadId } as unknown as ConversationThread);
+      await threadService.registerThread({ id: threadId } as unknown as ConversationThread);
       await expect(threadService.getThread(threadId)).resolves.toBeInstanceOf(Thread);
     });
 
@@ -65,10 +64,10 @@ describe('ThreadService', () => {
   });
 
   describe('registerThread', () => {
-    it('fails if the thread is already registered', () => {
+    it('fails if the thread is already registered', async () => {
       const conversationThread = { id: threadId } as unknown as ConversationThread;
-      threadService.registerThread(conversationThread);
-      expect(() => threadService.registerThread(conversationThread)).toThrow(
+      await threadService.registerThread(conversationThread);
+      await expect(() => threadService.registerThread(conversationThread)).rejects.toThrow(
         `Thread ${conversationThread.id} is already registered`
       );
     });

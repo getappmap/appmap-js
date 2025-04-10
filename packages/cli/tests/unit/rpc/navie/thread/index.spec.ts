@@ -255,7 +255,7 @@ describe('Thread', () => {
     });
 
     it('does not raise an error if the thread index fails to update', async () => {
-      thread.initialize();
+      await thread.initialize();
       threadIndexService.index = jest.fn().mockImplementation(() => {
         throw new Error('test error');
       });
@@ -263,16 +263,15 @@ describe('Thread', () => {
     });
 
     it('does not raise an error if the history file fails to write', async () => {
-      thread.initialize();
       await writeFile(expectedPath, '');
       await chmod(expectedPath, 0o400);
+      await thread.initialize();
       await expect(thread.flush()).resolves.toBeUndefined();
       await expect(readFile(expectedPath, { encoding: 'utf-8' })).resolves.toBe('');
     });
 
     it('appends to an existing history file as expected', async () => {
-      thread.initialize();
-      await thread.flush();
+      await thread.initialize();
 
       thread.logEvent({ type: 'message', role: 'assistant', content: 'test', messageId: '1' });
       await thread.flush();

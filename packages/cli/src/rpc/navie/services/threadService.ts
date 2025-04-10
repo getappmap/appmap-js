@@ -78,13 +78,13 @@ export default class ThreadService {
    *
    * @param conversationThread The thread to register
    */
-  registerThread(conversationThread: ConversationThread) {
+  async registerThread(conversationThread: ConversationThread) {
     if (this.memoryThreads.has(conversationThread.id)) {
       throw new Error(`Thread ${conversationThread.id} is already registered`);
     }
 
     const thread = new Thread(conversationThread, this.navieService);
-    thread.initialize();
+    await thread.initialize();
 
     this.memoryThreads.set(conversationThread.id, thread);
   }
