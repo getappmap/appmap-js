@@ -19,6 +19,7 @@ import { NavieRpc, URI } from '@appland/rpc';
 import handleReview from '../../explain/review';
 import { getTokenizedString } from './util';
 import INavie from '../../explain/navie/inavie';
+import { normalizePath } from '../../explain/location';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EventListener = (...args: any[]) => void;
@@ -40,6 +41,7 @@ function convertContext(context?: NavieRpc.V1.Thread.ContextItem[]): UserContext
         if (uri.range) {
           location += [uri.range.start, uri.range.end].filter(Boolean).join('-');
         }
+        location = normalizePath(location);
       }
     } catch (e) {
       console.warn('[convertContext]', e);

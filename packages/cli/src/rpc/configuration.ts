@@ -4,6 +4,7 @@ import { dirname } from 'path';
 import loadAppMapConfig, { AppMapConfig } from '../lib/loadAppMapConfig';
 import { getLLMConfiguration } from './llmConfiguration';
 import { warn } from 'console';
+import { normalizePath } from './explain/location';
 
 export type AppMapDirectory = {
   directory: string;
@@ -24,7 +25,10 @@ export class Configuration {
   }
 
   static async buildFromRpcParams(params: ConfigurationRpc.V2.Set.Params): Promise<Configuration> {
-    return new Configuration(params.projectDirectories || [], params.appmapConfigFiles || []);
+    return new Configuration(
+      (params.projectDirectories || []).map(normalizePath),
+      (params.appmapConfigFiles || []).map(normalizePath)
+    );
   }
 }
 
