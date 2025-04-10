@@ -71,8 +71,9 @@ export class Thread {
     }
   }
 
-  initialize() {
+  async initialize() {
     this.logEvent({ type: 'thread-init', conversationThread: this.conversationThread });
+    await this.flush();
   }
 
   private logEvent(event: NavieEvent) {
