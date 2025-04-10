@@ -1,16 +1,24 @@
-import Location from '../../../../src/rpc/explain/location';
+import type LocationType from '../../../../src/rpc/explain/location';
 
-let platform = 'linux';
-jest.mock('node:os', () => ({ platform: () => platform }));
+let currentPlatform = 'linux';
+jest.mock('node:os', () => ({ platform: () => currentPlatform }));
 
 describe('Location', () => {
-  afterAll(() => {
+  let Location: typeof LocationType;
+
+  beforeEach(async () => {
     jest.resetModules();
+
+    // Dynamically import the module *after* resetting modules and setting state.
+    // Now, when Location.ts imports 'node:os', it will get the mock configured
+    // by the jest.mock call above, reading the *current* value of currentPlatform.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    Location = (await require('../../../../src/rpc/explain/location')).default;
   });
 
   describe('posix', () => {
     beforeEach(() => {
-      platform = 'linux';
+      currentPlatform = 'linux';
     });
 
     it('parses a location without line numbers', () => {
@@ -78,7 +86,7 @@ describe('Location', () => {
 
   describe('windows', () => {
     beforeEach(() => {
-      platform = 'win32';
+      currentPlatform = 'win32';
     });
 
     it('parses a location with a drive letter', () => {
