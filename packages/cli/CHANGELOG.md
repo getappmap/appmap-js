@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.188.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.0...@appland/appmap-v3.188.1) (2025-04-10)
+
+
+### Bug Fixes
+
+* Only ack a message after chat history is read ([5ec6084](https://github.com/getappmap/appmap-js/commit/5ec6084f2c57e4f65b2a0efd0835b0dc5a731678))
+* Registering a thread flushes it to disk ([4e2c7ca](https://github.com/getappmap/appmap-js/commit/4e2c7ca4ca507a5022d0f05c44960b5d2788bca1))
+* Use file system paths over URIs when pinning items ([7e23bcf](https://github.com/getappmap/appmap-js/commit/7e23bcf4dce5003cf4c8784b1c3dd8b759dd6c83))
+
 # [@appland/appmap-v3.188.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.187.0...@appland/appmap-v3.188.0) (2025-04-09)
 
 
