@@ -236,11 +236,21 @@ export default {
           'v-next-prompt-button',
           'v-code-fenced-content',
           'v-inline-recommendation',
+          'v-markdown-code-snippet',
           'change',
           'modified',
           'original',
         ],
-        ADD_ATTR: ['uri', 'command', 'prompt', 'target', 'emit-event', 'reasoning'],
+        ADD_ATTR: [
+          'uri',
+          'command',
+          'prompt',
+          'target',
+          'emit-event',
+          'reasoning',
+          'language',
+          'location',
+        ],
         ALLOWED_URI_REGEXP:
           /^(?:(?:(?:f|ht)tps?|mailto|event|file|urn):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
       });

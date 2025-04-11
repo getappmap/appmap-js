@@ -102,6 +102,44 @@ describe('components/UserMessage.vue', () => {
       });
       expect(wrapper.get('[data-cy="message-text"]').text()).toBe(snippets.xss);
     });
+
+    it('renders change blocks', () => {
+      const wrapper = mount(VUserMessage, {
+        propsData: {
+          tokens: [
+            `<change>
+<file change-number-for-this-file="1">/home/db/dev/applandinc/vscode-appland/package.json</file>
+<original line-count="7" no-ellipsis="true">
+<![CDATA[
+  "dependencies": {
+    "@appland/appmap": "^3.129.0",
+    "@appland/client": "^1.23.0",
+    "@appland/components": "^4.46.1",
+    "@appland/diagrams": "^1.8.0",
+    "@appland/models": "^2.10.2",
+    "@appland/rpc": "^1.19.0",]]></original>
+<modified line-count="8" no-ellipsis="true">
+<![CDATA[
+  "dependencies": {
+    "@appland/appmap": "^3.129.0",
+    "@appland/client": "^1.23.0",
+    "@appland/components": "^4.46.1",
+    "@appland/diagrams": "^1.8.0",
+    "@appland/models": "^2.10.2",
+    "@appland/rpc": "^1.19.0",
+    "new-dependency": "^0.1.0",]]></modified>
+</change>
+`,
+          ],
+        },
+      });
+      expect(wrapper.get('[data-cy="context-header"]').text()).toContain('package.json');
+      expect(wrapper.get('.hljs-addition').text()).toContain('new-dependency');
+      expect(wrapper.get('[data-cy="apply"]').exists()).toBe(true);
+
+      // Pinned diffs are not supported as they're not identified by the thread backend.
+      expect(() => wrapper.get('[data-cy="pin"]')).toThrow();
+    });
   });
 
   describe('Save Button', () => {
