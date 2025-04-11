@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VCodeFencedContent from '@/components/chat/CodeFencedContent.vue';
 import VNextPromptButton from '@/components/chat/NextPromptButton.vue';
 import VInlineRecommendation from '@/components/chat/InlineRecommendation.vue';
+import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 
 function getAttributeRecord(attrs: NamedNodeMap): Record<string, string> {
   return Array.from(attrs).reduce((memo, attr) => {
@@ -76,6 +77,7 @@ export default Vue.extend({
     VCodeFencedContent,
     VNextPromptButton,
     VInlineRecommendation,
+    VMarkdownCodeSnippet,
   },
   data() {
     return {

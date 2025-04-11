@@ -15,7 +15,7 @@ describe('components/chat/ContextContainer.vue', () => {
   });
 
   it('emits pin event', async () => {
-    const wrapper = mount(VContextContainer);
+    const wrapper = mount(VContextContainer, { propsData: { uri: 'urn:uuid:0' } });
     await wrapper.find('[data-cy="pin"]').trigger('click');
 
     const events = wrapper.emitted().pin;

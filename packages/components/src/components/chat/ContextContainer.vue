@@ -89,7 +89,7 @@
             @click.stop="onPin"
             data-cy="pin"
             :data-pinned="pinned"
-            v-if="isPinnable"
+            v-if="isPinnable && valueUri"
           >
             <v-pin-icon />
           </span>
