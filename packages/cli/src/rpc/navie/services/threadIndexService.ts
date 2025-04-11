@@ -7,6 +7,7 @@ import { mkdirSync } from 'node:fs';
 
 const INITIALIZE_SQL = `
 PRAGMA foreign_keys = ON;
+PRAGMA journal_mode = WAL;
 
 CREATE TABLE IF NOT EXISTS threads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -62,19 +63,11 @@ export interface ThreadIndexItem {
 @singleton()
 @injectable()
 export class ThreadIndexService {
-  private queryInsert: sqlite3.Statement;
-  private queryDelete: sqlite3.Statement;
-  private queryInsertProjectDirectory: sqlite3.Statement;
-
   static readonly DEFAULT_DATABASE_PATH = join(homedir(), '.appmap', 'navie', 'thread-index.db');
   static readonly DATABASE = 'ThreadIndexDatabase';
 
   constructor(@inject(ThreadIndexService.DATABASE) private readonly db: sqlite3.Database) {
     this.db.exec(INITIALIZE_SQL);
-
-    this.queryInsert = this.db.prepare(QUERY_INSERT_THREAD_SQL);
-    this.queryDelete = this.db.prepare(QUERY_DELETE_THREAD_SQL);
-    this.queryInsertProjectDirectory = this.db.prepare(QUERY_INSERT_PROJECT_DIRECTORY_SQL);
   }
 
   /**
@@ -98,14 +91,17 @@ export class ThreadIndexService {
     const { projectDirectories } = configuration();
     try {
       this.db.exec('BEGIN TRANSACTION');
-      this.queryInsert.run([threadId, path, title ?? null, title ?? null]);
+      this.db.run(QUERY_INSERT_THREAD_SQL, [threadId, path, title ?? null, title ?? null]);
+
       // Project directories are written on every index update.
       //
       // This is likely not necessary but it'll handle the edge case where an additional project
       // directory is added mid-way through a conversation.
+      const queryInsertProjectDirectory = this.db.prepare(QUERY_INSERT_PROJECT_DIRECTORY_SQL);
       projectDirectories.forEach((projectDirectory) => {
-        this.queryInsertProjectDirectory.run([threadId, projectDirectory]);
+        queryInsertProjectDirectory.run([threadId, projectDirectory]);
       });
+      queryInsertProjectDirectory.finalize();
       this.db.exec('COMMIT');
     } catch (e) {
       this.db.exec('ROLLBACK');
@@ -120,7 +116,7 @@ export class ThreadIndexService {
    * @param threadId The thread ID
    */
   delete(threadId: string) {
-    return this.queryDelete.run(threadId);
+    return this.db.run(QUERY_DELETE_THREAD_SQL, threadId);
   }
 
   /**
@@ -175,7 +171,6 @@ export class ThreadIndexService {
         params.push(...options.projectDirectories);
       }
     }
-    const query = this.db.prepare(queryString);
-    return query.all(params) as unknown as ThreadIndexItem[];
+    return this.db.all(queryString, params) as unknown as ThreadIndexItem[];
   }
 }
