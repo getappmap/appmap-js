@@ -202,6 +202,16 @@ describe('Thread', () => {
       await expect(exists(expectedPath)).resolves.toBe(false);
     });
 
+    it('only updates the thread index when `updateIndex` is true', async () => {
+      thread.logEvent({ type: 'message', role: 'assistant', content: 'test', messageId: '1' });
+      await thread.flush();
+      expect(threadIndexService.index).not.toHaveBeenCalled();
+
+      thread.logEvent({ type: 'message', role: 'assistant', content: 'test', messageId: '2' });
+      await thread.flush({ updateIndex: true });
+      expect(threadIndexService.index).toHaveBeenCalled();
+    });
+
     it('writes the event log to disk', async () => {
       const messages: NavieEvent[] = Array.from({ length: 5 }, (i) => ({
         type: 'message',
@@ -223,18 +233,15 @@ describe('Thread', () => {
       staticThread.HISTORY_DIRECTORY = join(tmpDir, 'does-not-exist', 'this-does-not-either');
       expectedPath = Thread.getHistoryFilePath(thread.conversationThread.id);
 
-      // Write an event to the thread
-      thread.initialize();
-
-      await thread.flush();
+      await thread.initialize();
       await expect(exists(expectedPath)).resolves.toBe(true);
     });
 
     it('updates the thread index with the last user message as the title', async () => {
       const content = 'example title';
-      thread.initialize();
+      await thread.initialize();
       thread.logEvent({ type: 'message', role: 'user', content, messageId: '1' });
-      await thread.flush();
+      await thread.flush({ updateIndex: true });
       expect(threadIndexService.index).toHaveBeenCalledWith(
         thread.conversationThread.id,
         expectedPath,
@@ -244,9 +251,9 @@ describe('Thread', () => {
 
     it('truncates the last user message if it is too long', async () => {
       const content = 'a'.repeat(1000);
-      thread.initialize();
+      await thread.initialize();
       thread.logEvent({ type: 'message', role: 'user', content, messageId: '1' });
-      await thread.flush();
+      await thread.flush({ updateIndex: true });
       expect(threadIndexService.index).toHaveBeenCalledWith(
         thread.conversationThread.id,
         expectedPath,
@@ -259,7 +266,7 @@ describe('Thread', () => {
       threadIndexService.index = jest.fn().mockImplementation(() => {
         throw new Error('test error');
       });
-      await expect(thread.flush()).resolves.toBeUndefined();
+      await expect(thread.flush({ updateIndex: true })).resolves.toBeUndefined();
     });
 
     it('does not raise an error if the history file fails to write', async () => {
