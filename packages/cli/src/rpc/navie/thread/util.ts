@@ -40,7 +40,6 @@ export function getTokenizedString(input: string): Token[] {
       attributes: attributes,
     });
 
-    console.log(tokens);
     lastIndex = tagRegex.lastIndex;
   }
 

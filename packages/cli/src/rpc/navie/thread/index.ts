@@ -20,6 +20,7 @@ import handleReview from '../../explain/review';
 import { getTokenizedString } from './util';
 import INavie from '../../explain/navie/inavie';
 import { normalizePath } from '../../explain/location';
+import { ParseContext, processBuffer, TOKEN_PARSERS } from './token-parsers';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EventListener = (...args: any[]) => void;
@@ -64,6 +65,8 @@ function convertMessageAttachmentToContextItem(
 }
 
 export class Thread {
+  private tokenBuffer = '';
+  private parseContext?: ParseContext;
   private activeNavie?: INavie;
   private eventEmitter = new EventEmitter();
   private listeners = new Map<string, EventListener[]>();
@@ -213,76 +216,18 @@ export class Thread {
    * @param messageId The message id associated with the token
    */
   private onToken(token: string, messageId: string) {
-    const subTokens = token.split(/^(`{3,})\n?/gm);
-    for (let subToken of subTokens) {
-      if (subToken.length === 0) continue;
-
-      const fileMatch = subToken.match(/^<!-- file: (.*) -->\s*?\n?/m);
-      if (fileMatch) {
-        // TODO: Should this be a file URI? We don't currently include line ranges.
-        this.codeBlockUri = this.codeBlockUri ?? URI.random().toString();
-        this.logEvent({
-          type: 'token-metadata',
-          codeBlockUri: this.codeBlockUri,
-          metadata: {
-            location: fileMatch[1],
-          },
-        });
-
-        // Remove the file directive from the token
-        const index = fileMatch.index ?? 0;
-        subToken = subToken.slice(0, index) + subToken.slice(index + fileMatch[0].length);
-        if (subToken.length === 0) continue;
-      }
-
-      const language = this.lastTokenBeganCodeBlock ? subToken.match(/^[^\s]+\n/) : null;
-      if (language && this.codeBlockUri) {
-        this.logEvent({
-          type: 'token-metadata',
-          codeBlockUri: this.codeBlockUri,
-          metadata: {
-            language: language[0].trim(),
-          },
-        });
-      }
-
-      this.lastTokenBeganCodeBlock = false;
-
-      let clearCodeBlock = false;
-      if (subToken.match(/^`{3,}/)) {
-        // Code block fences
-        if (this.codeBlockLength === undefined) {
-          this.codeBlockUri = this.codeBlockUri ?? URI.random().toString();
-          this.codeBlockLength = subToken.length;
-          this.lastTokenBeganCodeBlock = true;
-        } else if (subToken.length === this.codeBlockLength) {
-          clearCodeBlock = true;
-        }
-      }
-
-      // If we're not in a code block, allow parsing of XML tags and conversion into object tokens
-      if (!this.codeBlockUri) {
-        getTokenizedString(subToken).forEach((part) =>
-          this.logEvent({
-            type: 'token',
-            token: part,
-            messageId,
-          })
-        );
-      } else {
-        this.logEvent({
-          type: 'token',
-          token: subToken,
-          messageId,
-          codeBlockUri: this.codeBlockUri,
-        });
-      }
-
-      if (clearCodeBlock) {
-        this.codeBlockUri = undefined;
-        this.codeBlockLength = undefined;
-      }
+    if (!this.parseContext) {
+      this.parseContext = {
+        messageId,
+      };
     }
+
+    this.tokenBuffer = processBuffer(
+      this.tokenBuffer + token,
+      TOKEN_PARSERS,
+      this.parseContext,
+      this.logEvent.bind(this)
+    );
   }
 
   /**
@@ -342,6 +287,15 @@ export class Thread {
         .on('complete', () => {
           this.activeNavie = undefined;
           if (!responseId) throw new Error('recieved complete without messageId');
+          if (this.tokenBuffer.length) {
+            // Flush any remaining tokens
+            this.logEvent({
+              type: 'token',
+              token: this.tokenBuffer,
+              messageId: responseId,
+              codeBlockUri: this.parseContext?.currentCodeBlockUri,
+            });
+          }
           this.logEvent({ type: 'message-complete', messageId: responseId });
           this.flush()
             .then(() => this.emitSuggestions(responseId!))
