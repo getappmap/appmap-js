@@ -1,3 +1,10 @@
+# [@appland/components-v4.46.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.1...@appland/components-v4.46.2) (2025-04-11)
+
+
+### Bug Fixes
+
+* Restore frontend rendering of diff blocks ([d2ddbf6](https://github.com/getappmap/appmap-js/commit/d2ddbf65ca409fe40dfd18af12d991e443bab049))
+
 # [@appland/components-v4.46.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.0...@appland/components-v4.46.1) (2025-04-09)
 
 
