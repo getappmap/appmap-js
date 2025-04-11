@@ -63,6 +63,10 @@ function convertMessageAttachmentToContextItem(
   };
 }
 
+interface FlushOptions {
+  updateIndex?: boolean;
+}
+
 export class Thread {
   private activeNavie?: INavie;
   private eventEmitter = new EventEmitter();
@@ -87,7 +91,7 @@ export class Thread {
 
   async initialize() {
     this.logEvent({ type: 'thread-init', conversationThread: this.conversationThread });
-    await this.flush();
+    await this.flush().catch(console.error);
   }
 
   private logEvent(event: NavieEvent) {
@@ -102,6 +106,7 @@ export class Thread {
       this.conversationThread.id
     );
     this.logEvent({ type: 'prompt-suggestions', suggestions, messageId });
+    this.flush().catch(console.error);
   }
 
   static getHistoryFilePath(threadId: string) {
@@ -154,7 +159,7 @@ export class Thread {
   /**
    * Flush the event log to disk. This is called automatically when a new message is finalized.
    */
-  private async flush() {
+  private async flush({ updateIndex = false }: FlushOptions = {}) {
     if (this.log.length === this.lastEventWritten) return;
 
     const historyFilePath = Thread.getHistoryFilePath(this.conversationThread.id);
@@ -168,20 +173,22 @@ export class Thread {
       console.error('failed to write to history file', e);
     }
 
-    try {
-      let lastUserMessage: NavieMessageEvent | undefined;
-      for (let i = this.log.length - 1; i >= 0; i--) {
-        const e = this.log[i];
-        if (e.type === 'message' && e.role === 'user') {
-          lastUserMessage = e;
-          break;
+    if (updateIndex) {
+      try {
+        let lastUserMessage: NavieMessageEvent | undefined;
+        for (let i = this.log.length - 1; i >= 0; i--) {
+          const e = this.log[i];
+          if (e.type === 'message' && e.role === 'user') {
+            lastUserMessage = e;
+            break;
+          }
         }
+        const title = lastUserMessage?.content.slice(0, 100);
+        const threadIndexService = container.resolve(ThreadIndexService);
+        threadIndexService.index(this.conversationThread.id, historyFilePath, title);
+      } catch (e) {
+        console.error('failed to update thread index', e);
       }
-      const title = lastUserMessage?.content.slice(0, 100);
-      const threadIndexService = container.resolve(ThreadIndexService);
-      threadIndexService.index(this.conversationThread.id, historyFilePath, title);
-    } catch (e) {
-      console.error('failed to update thread index', e);
     }
   }
 
@@ -194,6 +201,7 @@ export class Thread {
    */
   pinItem(uri: string, content?: string) {
     this.logEvent({ type: 'pin-item', uri, content });
+    this.flush().catch(console.error);
   }
 
   /**
@@ -203,6 +211,7 @@ export class Thread {
    */
   unpinItem(uri: string) {
     this.logEvent({ type: 'unpin-item', uri });
+    this.flush().catch(console.error);
   }
 
   /**
@@ -327,6 +336,7 @@ export class Thread {
             messageId: userMessageId,
             content: message,
           });
+          this.flush({ updateIndex: true }).catch(console.error);
           this.activeNavie = navie;
           resolve();
         })
@@ -362,12 +372,14 @@ export class Thread {
       uri,
       content,
     });
+    this.flush().catch(console.error);
   }
 
   removeMessageAttachment(uri: string) {
     // There's no validation that the attachmentId is valid.
     // This will be up to the client to figure out.
     this.logEvent({ type: 'remove-message-attachment', uri });
+    this.flush().catch(console.error);
   }
 
   getMessageAttachments(): NavieAddMessageAttachmentEvent[] {
