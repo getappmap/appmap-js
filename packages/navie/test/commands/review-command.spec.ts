@@ -125,6 +125,55 @@ lgtm
     expect(lookupContext).not.toHaveBeenCalled();
   });
 
+  it('handles token limit exceeded errors with guidance', async () => {
+    const tokenLimit = 4000;
+    completionService.complete = jest.fn().mockImplementation(function* () {
+      throw new Error(`This model's maximum context length is ${tokenLimit} tokens`);
+    });
+
+    const result = await read(
+      command.execute({
+        question: 'review',
+        userOptions: new UserOptions(new Map()),
+        codeSelection: [
+          {
+            type: 'code-snippet',
+            location: 'git diff',
+            content: 'large diff content',
+          },
+        ],
+      })
+    );
+
+    expect(result).toContain(`${tokenLimit.toLocaleString()} tokens`);
+    expect(result).toContain('Breaking the review into smaller chunks');
+    expect(result).toContain('Removing unnecessary context');
+    expect(result).toContain('Using a model with a larger context window');
+  });
+
+  it('rethrows non-token-limit errors', async () => {
+    const errorMessage = 'Some other API error';
+    completionService.complete = jest.fn().mockImplementation(function* () {
+      throw new Error(errorMessage);
+    });
+
+    await expect(
+      read(
+        command.execute({
+          question: 'review',
+          userOptions: new UserOptions(new Map()),
+          codeSelection: [
+            {
+              type: 'code-snippet',
+              location: 'git diff',
+              content: 'diff content',
+            },
+          ],
+        })
+      )
+    ).rejects.toThrow(errorMessage);
+  });
+
   it('fails in an expected manner if the diff is empty', async () => {
     const result = await read(
       command.execute({

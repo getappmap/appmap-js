@@ -1,3 +1,5 @@
+import { isNativeError } from 'node:util/types';
+
 import Command, { CommandRequest, hasCodeSelectionArray } from '../command';
 import Message from '../message';
 import CompletionService from '../services/completion-service';
@@ -342,7 +344,41 @@ ${userPrompt}
       yield gitDiff.content;
       yield '\n```\n';
     }
-    const reviewAnalysis = this.performReviewAnalysis(req, gitDiff);
-    yield* this.performReviewSummary(reviewAnalysis, verbose);
+    try {
+      const reviewAnalysis = this.performReviewAnalysis(req, gitDiff);
+      yield* this.performReviewSummary(reviewAnalysis, verbose);
+    } catch (e) {
+      // Handle token limit exceeded errors
+      // TODO note this is a hotfix for copilot context length messages.
+      // A proper fix is needed, likely involving:
+      // - decoupling token reducer service from the completion service
+      // - making completion services throw appropriate errors on token limit exceeded
+      // - making the review command handle those errors
+      if (isNativeError(e)) {
+        const tokenLimitMatch = e.message.match(/maximum context length is (\d+)/i);
+        if (tokenLimitMatch) {
+          const tokenLimit = parseInt(tokenLimitMatch[1], 10);
+          if (!isNaN(tokenLimit)) {
+            yield formatTokenLimitMessage(tokenLimit);
+            return;
+          }
+        }
+      }
+      throw e;
+    }
   }
+}
+
+/**
+ * Format the token limit message to be displayed to the user.
+ * @param tokenLimit The token limit to be displayed.
+ * @returns The formatted token limit message.
+ */
+function formatTokenLimitMessage(tokenLimit: number): string {
+  return `The review is too large for the model's capacity (${tokenLimit.toLocaleString()} tokens). To proceed with the review, try:
+
+1. Breaking the review into smaller chunks by reviewing fewer files at a time
+   (you can use /base=&lt;treeish&gt; to set the base commit)
+2. Removing unnecessary context by unpinning files that aren't directly related
+3. Using a model with a larger context window, if available`;
 }
