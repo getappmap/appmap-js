@@ -1,3 +1,10 @@
+# [@appland/navie-v1.44.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.44.0...@appland/navie-v1.44.1) (2025-04-14)
+
+
+### Bug Fixes
+
+* Handle copilot token limit exceeded errors in review command ([8444e8c](https://github.com/getappmap/appmap-js/commit/8444e8c32d6fedeb64357d7aad059160f9efe65f))
+
 # [@appland/navie-v1.44.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.43.0...@appland/navie-v1.44.0) (2025-04-09)
 
 
