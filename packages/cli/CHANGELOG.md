@@ -1,3 +1,13 @@
+# [@appland/appmap-v3.188.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.2...@appland/appmap-v3.188.3) (2025-04-15)
+
+
+### Bug Fixes
+
+* Add strict types for event errors ([8d9578d](https://github.com/getappmap/appmap-js/commit/8d9578d15c944576eb178ab430da167ddabbcb55))
+* Enable WAL mode for thread index db ([ffc573d](https://github.com/getappmap/appmap-js/commit/ffc573d76290755b0d9d544d008a95fceeda517e))
+* Only (re-)index threads upon sending a user message ([5b915a8](https://github.com/getappmap/appmap-js/commit/5b915a88314f9edb1e1dce971e6caf598b5de9cb))
+* Upgrade requests over IPv4 are now properly forwarded ([9cd9095](https://github.com/getappmap/appmap-js/commit/9cd9095bfb6c8683fbe3889e39d796f8f5634ecf))
+
 # [@appland/appmap-v3.188.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.1...@appland/appmap-v3.188.2) (2025-04-10)
 
 
