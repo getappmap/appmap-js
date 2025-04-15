@@ -63,7 +63,10 @@ export type NavieUnpinItemEvent = {
 
 export type NavieErrorEvent = {
   type: 'error';
-  error: unknown;
+  error: {
+    message: string;
+    code?: number;
+  };
 };
 
 export type NavieBeginContextSearchEvent = {

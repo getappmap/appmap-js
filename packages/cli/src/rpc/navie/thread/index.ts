@@ -8,6 +8,7 @@ import { mkdir, writeFile } from 'fs/promises';
 
 import NavieService from '../services/navieService';
 import {
+  NavieErrorEvent,
   NavieAddMessageAttachmentEvent,
   NavieEvent,
   NavieMessageEvent,
@@ -17,9 +18,10 @@ import { ThreadIndexService } from '../services/threadIndexService';
 import { container } from 'tsyringe';
 import { NavieRpc, URI } from '@appland/rpc';
 import handleReview from '../../explain/review';
-import { getTokenizedString } from './util';
+import { getTokenizedString, hasCode, hasMessage, hasNestedError, hasStatus } from './util';
 import INavie from '../../explain/navie/inavie';
 import { normalizePath } from '../../explain/location';
+import { isNativeError } from 'util/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EventListener = (...args: any[]) => void;
@@ -344,10 +346,35 @@ export class Thread {
           if (!responseId) responseId = messageId;
           this.onToken(token, messageId);
         })
-        .on('error', (err: Error) => {
-          this.logEvent({ type: 'error', error: err });
+        .on('error', (err: unknown) => {
+          const error: NavieErrorEvent['error'] = { message: 'unknown error' };
+          if (hasNestedError(err)) {
+            error.message = err.error.message;
+          } else if (isNativeError(err) || hasMessage(err)) {
+            error.message = err.message;
+          } else if (typeof err === 'object' && err !== null) {
+            error.message = JSON.stringify(err);
+          } else if (typeof err === 'string') {
+            error.message = err;
+          }
+
+          let code: string | number | undefined;
+          if (hasCode(err)) {
+            code = err.code;
+          } else if (hasStatus(err)) {
+            code = err.status;
+          }
+
+          if (typeof code === 'string') {
+            code = parseInt(code, 10);
+            if (!isNaN(code)) error.code = code;
+          } else if (typeof code === 'number') {
+            error.code = code;
+          }
+
+          this.logEvent({ type: 'error', error });
           this.activeNavie = undefined;
-          reject(err);
+          reject(error);
         })
         .on('complete', () => {
           this.activeNavie = undefined;

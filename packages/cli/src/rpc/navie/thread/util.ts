@@ -51,3 +51,27 @@ export function getTokenizedString(input: string): Token[] {
 
   return tokens;
 }
+
+function hasKey<Key extends string>(obj: unknown, key: Key): obj is Record<Key, unknown> {
+  return typeof obj === 'object' && obj !== null && key in obj;
+}
+
+export function hasCode(err: unknown): err is { code: string | number } {
+  return hasKey(err, 'code') && (typeof err.code === 'string' || typeof err.code === 'number');
+}
+
+export function hasStatus(err: unknown): err is { status: string | number } {
+  return (
+    hasKey(err, 'status') && (typeof err.status === 'string' || typeof err.status === 'number')
+  );
+}
+
+export function hasMessage(err: unknown): err is { message: string } {
+  return hasKey(err, 'message') && typeof err.message === 'string';
+}
+
+export function hasNestedError(err: unknown): err is { error: { message: string } } {
+  return (
+    hasKey(err, 'error') && hasKey(err.error, 'message') && typeof err.error.message === 'string'
+  );
+}
