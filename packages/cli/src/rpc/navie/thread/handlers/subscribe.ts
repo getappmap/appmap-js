@@ -44,7 +44,7 @@ export async function handler(
   socket.on('close', () => thread.removeAllListeners(clientId));
 }
 
-export async function bindConnectionHandler(wss: WebSocketServer) {
+export function bindConnectionHandler(wss: WebSocketServer) {
   const threadService = container.resolve(ThreadService);
   wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     const url = parse(req.url ?? '', true);
