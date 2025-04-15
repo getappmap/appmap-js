@@ -93,8 +93,7 @@ export default Vue.extend({
     // `shortPath` is the relative path... or not. If we can't find a matching
     // project directory, we'll just return the full path, what ever it may be.
     shortPath(): string | undefined {
-      // If we're using a URI and it's not a file, skip this.
-      if (this.uriComponents && this.uriComponents?.scheme !== 'file') return undefined;
+      if (!this.decodedLocation) return undefined;
 
       const { projectDirectories } = this as unknown as Injected;
       const projectDirectory = projectDirectories.find((dir) =>
