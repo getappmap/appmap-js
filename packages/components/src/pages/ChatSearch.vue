@@ -674,13 +674,22 @@ export default {
       const codeSelection = codeSelections.length
         ? codeSelections.map((c) => c.code).join('\n')
         : undefined;
-      const welcome = await this.rpcClient.welcome(codeSelection);
-      // The welcome message is provided as a fallback, in case there is not discernable activity.
-      this.welcomeMessage = welcome.message;
-      // If the activity is available, the welcome message should be undefined and the activity
-      // name should be used to construct the greeting.
-      this.activityName = welcome.activity;
-      this.suggestedQuestions = welcome.suggestions;
+
+      try {
+        const welcome = await this.rpcClient.welcome(codeSelection);
+        // The welcome message is provided as a fallback, in case there is not discernable activity.
+        this.welcomeMessage = welcome.message;
+        // If the activity is available, the welcome message should be undefined and the activity
+        // name should be used to construct the greeting.
+        this.activityName = welcome.activity;
+        this.suggestedQuestions = welcome.suggestions;
+      } catch (e) {
+        // It's likely the LLM completion failed. Maybe the model is bad. We shouldn't retry this
+        // method.
+        this.isWelcomeV2Available = false;
+        console.warn('Failed to load dynamic welcome messages. Falling back to static.', e);
+        this.loadStaticMessages().catch(console.error);
+      }
     },
     async onDrop(evt: any) {
       const items = evt.dataTransfer.items;

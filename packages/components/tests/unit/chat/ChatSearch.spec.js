@@ -512,5 +512,20 @@ describe('pages/ChatSearch.vue', () => {
       expect(welcomeMessage.text()).toContain(suggestions[0]);
       expect(welcomeMessage.text()).toContain(suggestions[1]);
     });
+
+    it('falls back to v1 if v2 fails', async () => {
+      jest.spyOn(console, 'warn').mockImplementation(() => {});
+      rpcClient.metadataV2.mockResolvedValue({ inputPlaceholder: 'Type something', commands: [] });
+      rpcClient.welcome.mockRejectedValue(new Error('something went wrong'));
+
+      await wrapper.setData({ isWelcomeV2Available: true });
+      await wrapper.vm.loadDynamicWelcomeMessages();
+
+      expect(rpcClient.welcome).toHaveBeenCalled();
+      expect(rpcClient.metadataV1).toHaveBeenCalled();
+      expect(rpcClient.metadataV2).toHaveBeenCalled();
+      expect(wrapper.find('[data-cy="welcome-message"]').attributes('data-version')).toBe('1');
+      expect(wrapper.vm.isWelcomeV2Available).toBe(false);
+    });
   });
 });
