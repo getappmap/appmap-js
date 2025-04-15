@@ -29,6 +29,7 @@ function createShadow(server: Server): Promise<Server> {
           server.on('close', () => shadow.close());
           resolve(shadow);
         })
+        .on('upgrade', (...args) => server.emit('upgrade', ...args))
         .on('error', reject)
     );
   }
