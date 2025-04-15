@@ -91,6 +91,24 @@ describe('components/MarkdownCodeSnippet.vue', () => {
     expect(wrapper.find('[data-cy="context-title"]').text()).toContain('app/models/user.rb');
   });
 
+  it('displays file names with urn uri', () => {
+    const wrapper = mount(VMarkdownCodeSnippet, {
+      propsData: {
+        language: 'javascript',
+        location: '/home/user/my-project/app/models/user.rb',
+        uri: 'urn:uuid:12345678-1234-5678-1234-123456789012',
+      },
+      slots: {
+        default: [code],
+      },
+      provide: { projectDirectories: ['/home/user/my-project'] },
+    });
+
+    expect(wrapper.vm.decodedLocation).toStrictEqual('/home/user/my-project/app/models/user.rb');
+    expect(wrapper.vm.shortPath).toStrictEqual('app/models/user.rb');
+    expect(wrapper.find('[data-cy="context-title"]').text()).toContain('app/models/user.rb');
+  });
+
   it('does not leak URIs', () => {
     const wrapper = mount(VMarkdownCodeSnippet, {
       propsData: {
