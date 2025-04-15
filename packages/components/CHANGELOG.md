@@ -1,3 +1,11 @@
+# [@appland/components-v4.46.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.2...@appland/components-v4.46.3) (2025-04-15)
+
+
+### Bug Fixes
+
+* Display file names in generated code snippets when available ([a1ddb26](https://github.com/getappmap/appmap-js/commit/a1ddb269ae68d0c98a7ae73bfb66d5e3d5cc519a))
+* Fall back to static welcome message if dynamic fails ([670e2e8](https://github.com/getappmap/appmap-js/commit/670e2e8ff042f6f475a639eee09ede9f6d278d39))
+
 # [@appland/components-v4.46.2](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.1...@appland/components-v4.46.2) (2025-04-11)
 
 
