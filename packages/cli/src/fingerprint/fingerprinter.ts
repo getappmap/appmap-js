@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import { join as joinPath, basename, resolve } from 'path';
-import gracefulFs from 'graceful-fs';
-import { promisify } from 'util';
+import { resolve } from 'path';
 import { buildAppMap, Metadata } from '@appland/models';
 import assert from 'assert';
 import FileTooLargeError from './fileTooLargeError';
 
-import { verbose, mtime } from '../utils';
+import { verbose } from '../utils';
 import { algorithms, canonicalize } from './canonicalize';
 import AppMapIndex from './appmapIndex';
 import EventEmitter from 'events';
 import quotePath from '../lib/quotePath';
-
-const renameFile = promisify(gracefulFs.rename);
 
 /**
  * CHANGELOG
@@ -84,6 +80,9 @@ class Fingerprinter extends EventEmitter {
       return;
     }
 
+    const mtime = index.appmapCreatedAt;
+    assert(mtime);
+
     if (
       (!this.checkVersion || (await index.versionUpToDate(VERSION))) &&
       (await index.indexUpToDate())
@@ -99,11 +98,6 @@ class Fingerprinter extends EventEmitter {
 
     const appmapData = await index.loadAppMapData();
     if (!appmapData) return;
-
-    const appmapDataWithoutMetadata = await index.loadAppMapData();
-    if (!appmapDataWithoutMetadata) return;
-
-    delete appmapDataWithoutMetadata.metadata;
 
     const appmap = buildAppMap(appmapData).normalize().build();
     const numEvents = appmap.events.length;
@@ -126,23 +120,12 @@ class Fingerprinter extends EventEmitter {
       })
     );
 
-    const tempAppMapFileName = joinPath(index.indexDir, 'appmap.tmp');
-    await index.writeFileAtomic(basename(tempAppMapFileName), JSON.stringify(appmap, null, 2));
-    const appMapIndexedAt = await mtime(tempAppMapFileName);
-
-    assert(appMapIndexedAt, `${tempAppMapFileName} should always exist and be a readable file`);
-
     await Promise.all([
       index.writeFileAtomic('version', VERSION),
       index.writeFileAtomic('classMap.json', JSON.stringify(appmap.classMap, null, 2)),
       index.writeFileAtomic('metadata.json', JSON.stringify(appmap.metadata, null, 2)),
-      index.writeFileAtomic('mtime', `${appMapIndexedAt}`),
+      index.writeFileAtomic('mtime', mtime.toString()),
     ]);
-
-    // At this point, moving the AppMap file into place will trigger re-indexing.
-    // But the mtime will match the file modification time, so the algorithm will
-    // determine that the index is up-to-date.
-    await renameFile(tempAppMapFileName, appMapFileName);
 
     // Note: don't remove or modify the output below,
     // it's machine-readable (see doc/index-verbose.md)

@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { isCodedError, mtime, verbose } from '../utils';
 import { isAbsolute, join } from 'node:path';
 import assert from 'node:assert';
@@ -21,15 +21,13 @@ export interface AppMapIndex {
 
 class FileAppMapIndex implements AppMapIndex {
   async updatedAt(appmapName: string): Promise<number | undefined> {
-    let appmapUpdatedAtStr: string;
     try {
-      appmapUpdatedAtStr = await readFile(join(appmapName, 'mtime'), 'utf-8');
+      return (await stat(join(appmapName, 'mtime'))).mtimeMs;
     } catch (err) {
       if (!isCodedError(err)) console.warn(err);
       if (isCodedError(err) && err.code !== 'ENOENT') console.warn(err);
       return;
     }
-    return parseFloat(appmapUpdatedAtStr);
   }
 
   async classMap(appmapName: string): Promise<ClassEntry[]> {
