@@ -53,7 +53,7 @@ type ThreadPrivate = Omit<Thread, 'log' | 'listeners' | 'logEvent'> & {
 describe('Thread', () => {
   let thread: ThreadPrivate;
   let conversationThread: ConversationThread;
-  let mockNavie: INavie;
+  let mockNavie: jest.Mocked<INavie>;
   let mockNavieProvider: INavieProvider;
   let navieEventEmitter: EventEmitter;
 
@@ -79,8 +79,8 @@ describe('Thread', () => {
   });
 
   describe('initialize', () => {
-    it('writes a thread-init event containing the conversation thread', () => {
-      thread.initialize();
+    it('writes a thread-init event containing the conversation thread', async () => {
+      await thread.initialize();
 
       expect(thread.conversationThread).toBe(conversationThread);
       expect(thread.log).toEqual([
@@ -548,6 +548,33 @@ describe('Thread', () => {
         [{ content, location: uri, type: 'code-snippet' }],
         undefined
       );
+    });
+
+    describe('error handling', () => {
+      const testCases = [
+        { input: 'test', output: { message: 'test' } },
+        { input: new Error('test'), output: { message: 'test' } },
+        { input: { unknown: 'error' }, output: { message: '{"unknown":"error"}' } },
+        {
+          input: { status: '400', error: { message: 'failed' } },
+          output: { message: 'failed', code: 400 },
+        },
+        { input: { code: 500, message: 'failed' }, output: { message: 'failed', code: 500 } },
+        {
+          input: { code: 500, message: 'outer', error: { message: 'inner' } },
+          output: { message: 'inner', code: 500 },
+        },
+      ];
+
+      for (const { input, output } of testCases) {
+        it(`logs error: ${JSON.stringify(input)}`, async () => {
+          const result = thread.sendMessage('oops');
+          setImmediate(() => navieEventEmitter.emit('error', input));
+
+          await expect(result).rejects.toStrictEqual(output);
+          expect(thread.log[0]).toEqual({ error: output, time: expect.any(Number), type: 'error' });
+        });
+      }
     });
   });
 
