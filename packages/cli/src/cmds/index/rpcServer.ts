@@ -77,7 +77,7 @@ export default class RPCServer {
           wss.emit('connection', ws, req);
         });
       } catch (error) {
-        debug(`[RPCServer] WebSocket upgrade error: ${error}`);
+        debug(`[RPCServer] WebSocket upgrade error: ${String(error)}`);
         socket.destroy();
       }
     });
