@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.188.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.3...@appland/appmap-v3.188.4) (2025-04-16)
+
+
+### Bug Fixes
+
+* Index AppMaps in parallel ([9d42d51](https://github.com/getappmap/appmap-js/commit/9d42d51707b55a2f66956a86fc427f10d78e4a7d))
+
 # [@appland/appmap-v3.188.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.2...@appland/appmap-v3.188.3) (2025-04-15)
 
 
