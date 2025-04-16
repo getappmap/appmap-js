@@ -1,4 +1,8 @@
-import { ChildProcess } from 'child_process';
+import { ChildProcess } from 'node:child_process';
+import { rm } from 'node:fs/promises';
+
+import { retry } from 'async';
+
 import { buildRubyProject, runInBackground, waitForStdout } from './helpers';
 import { Client } from 'jayson/promise';
 import { AppMapRpc } from '@appland/rpc';
@@ -28,9 +32,11 @@ describe('appmap', () => {
 
       afterEach(() => {
         indexProcess.kill();
+        // remove the temporary project directory
+        void rm(projectPath, { recursive: true });
       });
 
-      it('picks up the correct configuration', async () => {
+      const checkStats = async () => {
         const { error, result } = await rpcClient.request(AppMapRpc.Stats.V1.Method, {});
         expect(error).toBeUndefined();
         expect(result).toStrictEqual({
@@ -44,7 +50,15 @@ describe('appmap', () => {
           tables: ['api_keys', 'pg_attribute', 'pg_type', 'users'],
           numAppMaps: 1,
         });
-      });
+      };
+
+      // it might take a moment for the maps to be indexed
+      it('picks up the correct configuration', backoffRetry(checkStats));
     });
   });
 });
+
+function backoffRetry<T>(fn: () => Promise<T>, times = 10, initialDelay = 10): () => Promise<T> {
+  const interval = (retryCount: number) => Math.pow(2, retryCount) * initialDelay;
+  return () => retry({ times, interval }, fn);
+}
