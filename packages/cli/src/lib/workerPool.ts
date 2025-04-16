@@ -11,7 +11,8 @@ import { verbose } from '../utils';
 const kTaskInfo = Symbol('kTaskInfo');
 const kWorkerFreedEvent = Symbol('kWorkerFreedEvent');
 
-type CallbackFn = (err: Error | null, result: any) => void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CallbackFn<R = any> = (err: Error | null, result: R) => void;
 
 type Task = {
   task: any;
@@ -79,7 +80,7 @@ export default class WorkerPool extends EventEmitter {
     });
   }
 
-  runTask(task: any, callback: CallbackFn) {
+  runTask<T = unknown, R = unknown>(task: T, callback: CallbackFn<R>) {
     if (this.freeWorkers.length === 0) {
       // No free threads, wait until a worker thread becomes free.
       this.tasks.push({ task, callback });
@@ -90,7 +91,19 @@ export default class WorkerPool extends EventEmitter {
     assert(worker);
     worker[kTaskInfo] = new WorkerPoolTaskInfo(callback);
     if (verbose()) warn(`Assigning ${JSON.stringify(task)} to worker thread ${worker.threadId}`);
+    worker.ref();
     worker.postMessage(task);
+  }
+
+  /**
+   * Wait until all tasks are done.
+   */
+  async drain() {
+    while (this.tasks.length > 0 || this.workers.length != this.freeWorkers.length) {
+      await new Promise((resolve) => {
+        this.once(kWorkerFreedEvent, resolve);
+      });
+    }
   }
 
   async close() {
@@ -132,6 +145,7 @@ export default class WorkerPool extends EventEmitter {
       this.workerTask(worker);
       worker[kTaskInfo].done(null, result);
       worker[kTaskInfo] = null;
+      worker.unref();
       this.freeWorkers.push(worker);
       this.emit(kWorkerFreedEvent);
     });
@@ -150,6 +164,7 @@ export default class WorkerPool extends EventEmitter {
       worker.unref();
       this.addNewWorker();
     });
+    worker.unref();
     this.workers.push(worker);
     this.freeWorkers.push(worker);
     this.emit(kWorkerFreedEvent);
