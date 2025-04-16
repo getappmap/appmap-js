@@ -5,7 +5,7 @@ describe(FingerprintQueue, () => {
   beforeEach(() => verbose(process.env.DEBUG === 'true'));
 
   it('gracefully handles files which cannot be read', async () => {
-    const logSpy = jest.spyOn(console, 'log');
+    const logSpy = jest.spyOn(console, 'warn');
 
     const queue = new FingerprintQueue();
     queue.push('missing-file.appmap.json');

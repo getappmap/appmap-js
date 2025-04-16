@@ -16,7 +16,7 @@ class FingerprintDirectoryCommand {
     }
 
     const fpQueue = new FingerprintQueue();
-    fpQueue.handler.on('index', ({ numEvents, metadata }) => {
+    fpQueue.on('index', ({ numEvents, metadata }) => {
       this.appmaps += 1;
       this.events += numEvents;
       this.metadata = metadata;

@@ -7,6 +7,7 @@ import { Worker } from 'worker_threads';
 import assert from 'assert';
 import { warn } from 'console';
 import { verbose } from '../utils';
+import { isNativeError } from 'util/types';
 
 const kTaskInfo = Symbol('kTaskInfo');
 const kWorkerFreedEvent = Symbol('kWorkerFreedEvent');
@@ -168,5 +169,27 @@ export default class WorkerPool extends EventEmitter {
     this.workers.push(worker);
     this.freeWorkers.push(worker);
     this.emit(kWorkerFreedEvent);
+  }
+
+  /**
+   * Errors passed over IPC lose all properties.
+   * This function restores the properties of the original error.
+   */
+  static recoverError(e: unknown): Error {
+    if (typeof e !== 'object') return new Error(String(e));
+    if (e === null) return new Error('null');
+    if (isNativeError(e)) return e;
+
+    // If the error is not a native error, we need to create a new one
+    // and copy the properties over.
+    // This is a workaround for the fact that the error object is not
+    // serialized correctly over IPC.
+    const error = new Error('message' in e ? String(e.message) : undefined);
+    for (const key of Object.keys(e)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      error[key] = e[key];
+    }
+
+    return error;
   }
 }
