@@ -35,15 +35,11 @@ export default class AppMapIndex {
    * abort.
    */
   async initialize(): Promise<boolean> {
-    try {
-      const stats = await fStat(this.appmapFileName);
-      if (!stats.isFile()) return false;
-      this.appmapCreatedAt = stats.mtimeMs;
-      this.size = stats.size;
-    } catch (error) {
-      console.log(`File ${this.appmapFileName} does not exist or is not a file.`);
-      return false;
-    }
+    const stats = await fStat(this.appmapFileName);
+    // note ENOENT and similar errors should be handled upstream
+    if (!stats.isFile()) return false;
+    this.appmapCreatedAt = stats.mtimeMs;
+    this.size = stats.size;
 
     return true;
   }

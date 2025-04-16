@@ -5,6 +5,8 @@ export default class FileTooLargeError extends Error {
     super();
   }
 
+  name = 'FileTooLargeError';
+
   get message(): string {
     const size = prettyBytes(this.bytes);
     const maxSize = prettyBytes(this.maxBytes);

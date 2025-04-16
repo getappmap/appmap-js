@@ -38,7 +38,7 @@ export default class FingerprintWatchCommand {
       await this.reportUsage(events);
       this.numProcessed += events.length;
     });
-    this.eventAggregator.attach(this.fpQueue.handler, 'index');
+    this.eventAggregator.attach(this.fpQueue, 'index');
   }
 
   removePidfile() {
