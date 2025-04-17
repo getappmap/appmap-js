@@ -171,6 +171,7 @@ __metadata:
     "@types/lunr": ^2.3.7
     "@types/moo": ^0.5.5
     "@types/node": ^16
+    "@types/proper-lockfile": ^4.1.4
     "@types/semver": ^7.3.10
     "@types/sinon": ^10.0.2
     "@types/tmp": ^0.2.3
@@ -232,6 +233,7 @@ __metadata:
     port-pid: ^0.0.7
     prettier: ^2.7.1
     pretty-bytes: ^5.6.0
+    proper-lockfile: ^4.1.2
     ps-node: ^0.1.6
     puppeteer: ^19.7.5
     read-pkg-up: ^7.0.1
@@ -11407,6 +11409,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/proper-lockfile@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "@types/proper-lockfile@npm:4.1.4"
+  dependencies:
+    "@types/retry": "*"
+  checksum: b0d1b8e84a563b2c5f869f7ff7542b1d83dec03d1c9d980847cbb189865f44b4a854673cdde59767e41bcb8c31932e613ac43822d358a6f8eede6b79ccfceb1d
+  languageName: node
+  linkType: hard
+
 "@types/q@npm:^1.5.1":
   version: 1.5.5
   resolution: "@types/q@npm:1.5.5"
@@ -11445,6 +11456,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: dc6a6df507656004e242dcb02c784479deca516d5f4b58a1707e708022b269ae147e1da0521f3e8ad0d63638869d87e0adc023f0bd5454aa6f72ac66c7525cf5
+  languageName: node
+  linkType: hard
+
+"@types/retry@npm:*":
+  version: 0.12.5
+  resolution: "@types/retry@npm:0.12.5"
+  checksum: 3fb6bf91835ca0eb2987567d6977585235a7567f8aeb38b34a8bb7bbee57ac050ed6f04b9998cda29701b8c893f5dfe315869bc54ac17e536c9235637fe351a2
   languageName: node
   linkType: hard
 
@@ -36010,6 +36028,17 @@ __metadata:
   version: 2.0.1
   resolution: "propagate@npm:2.0.1"
   checksum: c4febaee2be0979e82fb6b3727878fd122a98d64a7fa3c9d09b0576751b88514a9e9275b1b92e76b364d488f508e223bd7e1dcdc616be4cdda876072fbc2a96c
+  languageName: node
+  linkType: hard
+
+"proper-lockfile@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "proper-lockfile@npm:4.1.2"
+  dependencies:
+    graceful-fs: ^4.2.4
+    retry: ^0.12.0
+    signal-exit: ^3.0.2
+  checksum: 00078ee6a61c216a56a6140c7d2a98c6c733b3678503002dc073ab8beca5d50ca271de4c85fca13b9b8ee2ff546c36674d1850509b84a04a5d0363bcb8638939
   languageName: node
   linkType: hard
 
