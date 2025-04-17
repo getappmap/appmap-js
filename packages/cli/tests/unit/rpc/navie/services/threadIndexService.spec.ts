@@ -11,18 +11,30 @@ import {
 } from '../../../../../src/rpc/navie/services/threadIndexService';
 import sqlite3 from 'node-sqlite3-wasm';
 import configuration from '../../../../../src/rpc/configuration';
+import { mkdtemp, rm, writeFile } from 'fs/promises';
+import { join } from 'path';
 
 describe('ThreadIndexService', () => {
+  let tmpDir: string;
   let threadIndexService: ThreadIndexService;
   let db: sqlite3.Database;
   const threadId = '00000000-0000-0000-0000-000000000000';
 
-  beforeEach(() => {
+  beforeEach(async () => {
     container.reset();
     db = new sqlite3.Database(':memory:');
     container.registerInstance(ThreadIndexService.DATABASE, db);
     threadIndexService = container.resolve(ThreadIndexService);
+
+    // Create a fake database file on disk for file locking
+    tmpDir = await mkdtemp('thread-index-test-');
+    const mockDbFile = join(tmpDir, 'mock.db');
+    await writeFile(mockDbFile, '');
+
+    await threadIndexService.migrate(mockDbFile);
   });
+
+  afterEach(() => rm(tmpDir, { recursive: true, force: true }));
 
   describe('indexThread', () => {
     it('indexes a thread', () => {
