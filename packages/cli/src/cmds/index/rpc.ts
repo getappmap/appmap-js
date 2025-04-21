@@ -116,7 +116,7 @@ export const handler = async (argv: HandlerArguments) => {
 
   const navie = buildNavieProvider(argv);
 
-  ThreadIndexService.useDefault();
+  await ThreadIndexService.useDefault();
   NavieService.bindNavieProvider(navie);
 
   let codeEditor: string | undefined = argv.codeEditor;

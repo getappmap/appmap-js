@@ -3,12 +3,18 @@ import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import configuration from '../../configuration';
 import { container, inject, injectable, singleton } from 'tsyringe';
-import { mkdirSync } from 'node:fs';
+import { mkdir } from 'node:fs/promises';
+import { lock } from 'proper-lockfile';
+import { isNativeError } from 'node:util/types';
 
-const INITIALIZE_SQL = `
+const SCHEMA_VERSION = 1;
+
+const INITIALIZE_SESSION_SQL = `
+PRAGMA busy_timeout = 3000;
 PRAGMA foreign_keys = ON;
-PRAGMA journal_mode = WAL;
+`;
 
+const INITIALIZE_DB_SQL = `
 CREATE TABLE IF NOT EXISTS threads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   uuid TEXT NOT NULL UNIQUE,
@@ -31,6 +37,8 @@ CREATE TABLE IF NOT EXISTS project_directories (
 );
 
 CREATE INDEX IF NOT EXISTS idx_thread_id ON project_directories (thread_id);
+
+PRAGMA user_version = ${SCHEMA_VERSION};
 `;
 
 const QUERY_INSERT_THREAD_SQL = `INSERT INTO threads (uuid, path, title) VALUES (?, ?, ?)
@@ -63,20 +71,70 @@ export interface ThreadIndexItem {
 @singleton()
 @injectable()
 export class ThreadIndexService {
+  static readonly MIGRATION_RETRIES = 5;
   static readonly DEFAULT_DATABASE_PATH = join(homedir(), '.appmap', 'navie', 'thread-index.db');
   static readonly DATABASE = 'ThreadIndexDatabase';
 
   constructor(@inject(ThreadIndexService.DATABASE) private readonly db: sqlite3.Database) {
-    this.db.exec(INITIALIZE_SQL);
+    this.db.exec(INITIALIZE_SESSION_SQL);
+  }
+
+  private shouldMigrate(): boolean {
+    const currentVersion = this.db.get('PRAGMA user_version')?.user_version;
+    return currentVersion !== SCHEMA_VERSION;
+  }
+
+  /**
+   * Migrates the database schema to the latest version. This should be called upon application
+   * initialization to ensure that the database is up to date.
+   */
+  public async migrate(databaseFilePath = ThreadIndexService.DEFAULT_DATABASE_PATH) {
+    if (!this.shouldMigrate()) return;
+
+    let lockRelease: (() => Promise<void>) | undefined;
+    try {
+      await mkdir(dirname(databaseFilePath), { recursive: true });
+
+      lockRelease = await lock(databaseFilePath, {
+        retries: ThreadIndexService.MIGRATION_RETRIES,
+        stale: 10000,
+        lockfilePath: `${databaseFilePath}.migration.lock`,
+      });
+
+      if (!this.shouldMigrate()) {
+        console.info('ThreadIndexService: migration completed by another process');
+        return;
+      }
+
+      console.info(`ThreadIndexService: migrating schema to v${SCHEMA_VERSION}`);
+      try {
+        this.db.exec('PRAGMA journal_mode = WAL');
+        this.db.exec('BEGIN TRANSACTION');
+        this.db.exec(INITIALIZE_DB_SQL);
+        this.db.exec('COMMIT');
+        console.info(`ThreadIndexService: successfully migrated schema to v${SCHEMA_VERSION}`);
+        return;
+      } catch (e) {
+        this.db.exec('ROLLBACK');
+        throw e;
+      }
+    } finally {
+      if (lockRelease) {
+        await lockRelease();
+      }
+    }
   }
 
   /**
    * Binds the database to a sqlite3 instance on disk at the default database path
    */
-  static useDefault() {
-    mkdirSync(dirname(this.DEFAULT_DATABASE_PATH), { recursive: true });
+  static async useDefault() {
+    await mkdir(dirname(this.DEFAULT_DATABASE_PATH), { recursive: true });
+
     const db = new sqlite3.Database(this.DEFAULT_DATABASE_PATH);
     container.registerInstance(this.DATABASE, db);
+
+    await container.resolve(ThreadIndexService).migrate();
   }
 
   /**

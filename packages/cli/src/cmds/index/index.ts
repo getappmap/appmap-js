@@ -136,7 +136,7 @@ export const handler = async (argv) => {
       const buildRemoteNavie = () => new NopNavie();
 
       const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
-      ThreadIndexService.useDefault();
+      await ThreadIndexService.useDefault();
       NavieService.bindNavieProvider(navieProvider);
 
       await configureRpcDirectories([process.cwd()]);
