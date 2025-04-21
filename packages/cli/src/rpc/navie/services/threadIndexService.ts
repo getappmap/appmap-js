@@ -118,14 +118,6 @@ export class ThreadIndexService {
         this.db.exec('ROLLBACK');
         throw e;
       }
-    } catch (e) {
-      if (isNativeError(e) && 'code' in e && e.code === 'ELOCKED') {
-        console.warn(
-          `ThreadIndexService: unable to acquire lock for migration, another process is using the database`
-        );
-        return;
-      }
-      throw e;
     } finally {
       if (lockRelease) {
         await lockRelease();
