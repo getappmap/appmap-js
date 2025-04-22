@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.188.5](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.4...@appland/appmap-v3.188.5) (2025-04-22)
+
+
+### Bug Fixes
+
+* Thread index database migrations are now atomic ([#2280](https://github.com/getappmap/appmap-js/issues/2280)) ([0e114d9](https://github.com/getappmap/appmap-js/commit/0e114d9b6469405cbd97e1c809122990cdc63c3e))
+
 # [@appland/appmap-v3.188.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.3...@appland/appmap-v3.188.4) (2025-04-16)
 
 
