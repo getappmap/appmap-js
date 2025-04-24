@@ -1,32 +1,63 @@
 import { z } from 'zod';
 
+import { AgentMode } from '../agent';
+import TestAgent from '../agents/test-agent';
 import type Command from '../command';
 import type { CommandRequest } from '../command';
-import CompletionService from '../services/completion-service';
-import LookupContextService from '../services/lookup-context-service';
-import VectorTermsService from '../services/vector-terms-service';
 import { ContextV2 } from '../context';
-import { ExplainOptions } from './explain-command';
-import Message from '../message';
 import InteractionHistory, {
   CompletionEvent,
   PromptInteractionEvent,
 } from '../interaction-history';
+import closingTags from '../lib/closing-tags';
 import { UserOptions } from '../lib/parse-options';
+import replaceStream from '../lib/replace-stream';
+import Message from '../message';
+import ApplyContextService from '../services/apply-context-service';
+import CodeSelectionService from '../services/code-selection-service';
+import CompletionService from '../services/completion-service';
+import ContextService from '../services/context-service';
+import FileChangeExtractorService from '../services/file-change-extractor-service';
+import LookupContextService from '../services/lookup-context-service';
+import { NaiveMemoryService } from '../services/memory-service';
 import ProjectInfoService from '../services/project-info-service';
+import VectorTermsService from '../services/vector-terms-service';
+
+import ExplainCommand, { ExplainOptions } from './explain-command';
 
 const RelevantTest = z.object({
   relevantTest: z
     .object({
-      name: z.string().optional().describe('The name of the test case, if known'),
-      path: z.string().describe('The file path of the test file'),
+      name: z
+        .string()
+        .optional()
+        .describe('The name of the test case, if known')
+        .nullable()
+        .transform((value) => (value === null ? undefined : value)),
+      path: z
+        .string()
+        .describe('The file path of the test file')
+        .nullable()
+        .transform((value) => (value === null ? undefined : value)),
       language: z
         .enum(['ruby', 'python', 'java', 'javascript', 'other'])
         .describe('The programming language of the test file'),
-      framework: z.string().optional().describe('The test framework used'),
+      framework: z
+        .string()
+        .optional()
+        .describe('The test framework used')
+        .nullable()
+        .transform((value) => (value === null ? undefined : value)),
     })
     .optional()
+    .nullable()
     .describe('A descriptor of the most relevant test to the requested behavior'),
+  suggestedTest: z
+    .string()
+    .optional()
+    .nullable()
+    .transform((value) => (value === null ? undefined : value))
+    .describe('A suggested test case to write, if no relevant test is found'),
   installCommands: z
     .array(
       z.object({
@@ -126,6 +157,9 @@ export default class ObserveCommand implements Command {
       {
         role: 'system',
         content: `Given the following code snippets, identify the single most relevant test to the user request.
+          If no test seems relevant, suggest a test case to write instead. Do not provide test case code, just describe it in detail.
+          The test case should be relevant to the user request, and ideally, it should be written in the same language as the code snippets provided.
+          Do suggest a name and path for the test case and take it into account when generating the test run instructions.
 
 ${projectLanguageDirective}
 
@@ -156,24 +190,83 @@ ${context.join('\n')}
     return result;
   }
 
+  private async *suggestTestCase(
+    suggestedTest: string,
+    userOptions: UserOptions,
+    history: InteractionHistory
+  ): AsyncIterable<string> {
+    const applyContextService = new ApplyContextService(history);
+    const contextService = new ContextService(
+      history,
+      this.vectorTermsService,
+      this.lookupContextService,
+      applyContextService
+    );
+    const testAgent = new TestAgent(
+      history,
+      contextService,
+      new FileChangeExtractorService(history, this.completionService)
+    );
+    // create an ExplainCommand
+    const explainCommand = new ExplainCommand(
+      this.options,
+      history,
+      this.completionService,
+      undefined,
+      {
+        selectAgent: () => ({
+          agentMode: AgentMode.Test,
+          agent: testAgent,
+          question: suggestedTest,
+        }),
+        contextService,
+      },
+      new CodeSelectionService(history),
+      this.projectInfoService,
+      NaiveMemoryService
+    );
+
+    // call the explainCommand with the suggested test
+    const commandRequest: CommandRequest = {
+      question: suggestedTest + '\n\nOnly include code, no explanations.',
+      userOptions: new UserOptions({
+        ...userOptions,
+        format: 'xml',
+        classify: false,
+        tokenlimit: String(userOptions.numberValue('tokenlimit') || this.options.tokenLimit),
+      }),
+    };
+
+    const explainCommandResponse: string[] = [];
+    yield '\n';
+    for await (const token of explainCommand.execute(commandRequest)) {
+      yield token;
+      explainCommandResponse.push(token);
+    }
+
+    yield closingTags(explainCommandResponse.join('').trim());
+
+    yield '\n';
+  }
+
   async *execute({ question: userRequest, userOptions }: CommandRequest): AsyncIterable<string> {
     const vectorTerms = await this.vectorTermsService.suggestTerms(userRequest);
     const tokenLimit = userOptions.numberValue('tokenlimit') || this.options.tokenLimit;
     const testSnippets = await this.getTestSnippets(vectorTerms, tokenLimit);
     const result = await this.getMostRelevantTest(userRequest, userOptions, testSnippets);
-    const { relevantTest, installCommands, testCommands } = result || {};
-    if (!relevantTest) {
-      yield 'Sorry, I could not find any relevant tests to record.';
-      return;
-    }
+    const { relevantTest, installCommands, testCommands, suggestedTest } = result || {};
 
-    if (relevantTest.language === 'other') {
+    const history = this.interactionHistory.clone();
+
+    if (relevantTest?.language === 'other') {
       yield `I found a relevant test at \`${relevantTest.path}\`, but I'm unable to help you record it at this time. This language does not appear to be supported.`;
       return;
     }
 
     const helpDocs = await this.lookupContextService.lookupHelp(
-      ['record', 'agent', 'tests', relevantTest.framework].filter(Boolean) as string[],
+      ['record', 'agent', 'tests', relevantTest?.language, relevantTest?.framework].filter(
+        Boolean
+      ) as string[],
       tokenLimit
     );
 
@@ -191,11 +284,15 @@ ${userRequest}
       },
       {
         role: 'assistant',
-        content: `Based on the request, the most relevant test case is:
+        content:
+          (relevantTest?.path
+            ? `Based on the request, the most relevant test case is:
 ${relevantTest.name ? `**Name:** \`${relevantTest.name}\`` : ''}
 ${relevantTest.framework ? `**Framework:** \`${relevantTest.framework}\`` : ''}
 ${relevantTest.language ? `**Language:** \`${relevantTest.language}\`` : ''}
-**Path:** \`${relevantTest.path}\`
+**Path:** \`${relevantTest.path}\``
+            : `Based on the request, a ${relevantTest?.language} ${relevantTest?.framework} test case needs to be created first:\n${suggestedTest}\n\n`) +
+          `
 
 ${
   installCommands?.length
@@ -227,11 +324,11 @@ ${helpDocs
       },
       {
         role: 'user',
-        content: `Restate the information you've provided to me, in standalone format, as a step by step guide outlining the steps required to record the single test case that you've identified.
+        content: `Restate the information you've provided to me, in standalone format, as a step by step guide outlining the steps required to record the single test case that you've identified or suggested creating.
 If possible, include the terminal command needed to run the test. Only specify test patterns that are guaranteed to match based on previous context. For example, do not include file ranges not supported by the test runner.
 In your response, please include the following:
-- The name of the test case (if known)
-- The path to the test file
+- If an existing test was found, indicate the test case name and path
+- Otherwise, steps and suggested location to create it (don't generate code itself, instead use <generated-test-case /> placeholder — DO NOT surround it with code fences)
 - Any steps and terminal commands required to install the AppMap recording agent
 - Any steps and terminal commands required to run the specific test case
 
@@ -250,9 +347,9 @@ Do not include:
     );
     const completion = this.completionService.complete(messages, { temperature });
 
-    for await (const token of completion) {
-      yield token;
-    }
+    yield* replaceStream(completion, '<generated-test-case />', () =>
+      this.suggestTestCase(suggestedTest ?? '', userOptions, history)
+    );
   }
 }
 
