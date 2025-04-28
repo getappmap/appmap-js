@@ -89,7 +89,11 @@ export class ThreadIndexService {
    * initialization to ensure that the database is up to date.
    */
   public async migrate(databaseFilePath = ThreadIndexService.DEFAULT_DATABASE_PATH) {
-    if (!this.shouldMigrate()) return;
+    try {
+      if (!this.shouldMigrate()) return;
+    } catch (e) {
+      console.error('Failed to check migration status, migration will be attempted:', e);
+    }
 
     let lockRelease: (() => Promise<void>) | undefined;
     try {
