@@ -72,7 +72,7 @@ export interface ThreadIndexItem {
 @injectable()
 export class ThreadIndexService {
   static readonly MIGRATION_RETRIES = 5;
-  static readonly DEFAULT_DATABASE_PATH = join(homedir(), '.appmap', 'navie', 'thread-index.db');
+  static readonly DEFAULT_DATABASE_PATH = join(homedir(), '.appmap', 'navie', 'chat-history.db');
   static readonly DATABASE = 'ThreadIndexDatabase';
 
   constructor(@inject(ThreadIndexService.DATABASE) private readonly db: sqlite3.Database) {
