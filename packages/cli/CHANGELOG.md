@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.188.6](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.5...@appland/appmap-v3.188.6) (2025-04-28)
+
+
+### Bug Fixes
+
+* Attempt to migrate if fetching user_version fails ([1a40590](https://github.com/getappmap/appmap-js/commit/1a4059053e8b9dfb3a50dc2827fa0a314829da30))
+* Update the chat history database name ([eddcc24](https://github.com/getappmap/appmap-js/commit/eddcc2480b77f571735bfe5529e6ec34489cd462))
+
 # [@appland/appmap-v3.188.5](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.4...@appland/appmap-v3.188.5) (2025-04-22)
 
 
