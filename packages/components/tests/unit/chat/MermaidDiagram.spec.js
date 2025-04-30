@@ -5,12 +5,11 @@
 import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
 import { mount } from '@vue/test-utils';
 import * as downloadSvg from '@/lib/downloadSvg';
-import exp from 'constants';
 
 jest.mock('@/lib/downloadSvg');
 
 describe('components/MermaidDiagram.vue', () => {
-  const graphDefinition = 'graph TD\n    A[Birthday] -->|Get money| B(Go shopping)\n';
+  const graphDefinition = 'graph TD\n    A[Birthday] -->|Get money| B(Go shopping)';
   let wrapper;
   let clipboardText;
 
@@ -76,7 +75,7 @@ describe('components/MermaidDiagram.vue', () => {
     await wrapper.find('[data-cy="context-menu"]').trigger('click');
     const externalLink = wrapper.find('[data-cy="context-menu-items"] a');
     expect(externalLink.attributes('href')).toEqual(
-      'https://mermaid.live/edit#pako:eNqrVkrOT0lVslJKL0osyFAIcYnJUwACx2inzKKSjJTEylgFXV27GvfUEoXc_LzUyhoFJw33fIXijPyCgsy8dM2YPCUdpdzUotzEzBQlq-raWgAvVBru'
+      'https://mermaid.live/edit#pako:eNqrVkrOT0lVslJKL0osyFAIcYnJUwACx2inzKKSjJTEylgFXV27GvfUEoXc_LzUyhoFJw33fIXijPyCgsy8dE0lHaXc1KLcxMwUJavq2loA-EEaJA'
     );
   });
 });
