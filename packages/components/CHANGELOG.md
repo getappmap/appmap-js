@@ -1,3 +1,10 @@
+# [@appland/components-v4.46.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.3...@appland/components-v4.46.4) (2025-04-30)
+
+
+### Bug Fixes
+
+* Navie now properly renders indented code blocks ([4c295e9](https://github.com/getappmap/appmap-js/commit/4c295e9e83e1a63b75cba2acb79894e5a20268e3))
+
 # [@appland/components-v4.46.3](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.2...@appland/components-v4.46.3) (2025-04-15)
 
 

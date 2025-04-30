@@ -1,6 +1,6 @@
 {
   "name": "@appland/components",
-  "version": "4.46.3",
+  "version": "4.46.4",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
