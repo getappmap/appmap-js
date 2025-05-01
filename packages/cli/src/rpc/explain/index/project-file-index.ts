@@ -1,5 +1,4 @@
 import makeDebug from 'debug';
-import sqlite3 from 'node-sqlite3-wasm';
 
 import {
   buildFileIndex,

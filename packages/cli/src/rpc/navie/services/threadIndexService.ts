@@ -1,11 +1,11 @@
-import sqlite3 from 'node-sqlite3-wasm';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import configuration from '../../configuration';
 import { container, inject, injectable, singleton } from 'tsyringe';
 import { mkdir } from 'node:fs/promises';
+
+import sqlite3 from 'better-sqlite3';
 import { lock } from 'proper-lockfile';
-import { isNativeError } from 'node:util/types';
 
 const SCHEMA_VERSION = 1;
 
@@ -41,12 +41,6 @@ CREATE INDEX IF NOT EXISTS idx_thread_id ON project_directories (thread_id);
 PRAGMA user_version = ${SCHEMA_VERSION};
 `;
 
-const QUERY_INSERT_THREAD_SQL = `INSERT INTO threads (uuid, path, title) VALUES (?, ?, ?)
-ON CONFLICT (uuid) DO UPDATE SET updated_at = CURRENT_TIMESTAMP, title = ?`;
-const QUERY_DELETE_THREAD_SQL = `DELETE FROM threads WHERE uuid = ?`;
-const QUERY_INSERT_PROJECT_DIRECTORY_SQL = `INSERT INTO project_directories (thread_id, path) VALUES (?, ?)
-ON CONFLICT (thread_id, path) DO NOTHING`;
-
 interface QueryOptions {
   uuid?: string;
   maxCreatedAt?: Date;
@@ -80,7 +74,9 @@ export class ThreadIndexService {
   }
 
   private shouldMigrate(): boolean {
-    const currentVersion = this.db.get('PRAGMA user_version')?.user_version;
+    const result = this.db.pragma('user_version');
+    const currentVersion =
+      result && typeof result === 'object' && 'user_version' in result && result?.user_version;
     return currentVersion !== SCHEMA_VERSION;
   }
 
@@ -135,7 +131,7 @@ export class ThreadIndexService {
   static async useDefault() {
     await mkdir(dirname(this.DEFAULT_DATABASE_PATH), { recursive: true });
 
-    const db = new sqlite3.Database(this.DEFAULT_DATABASE_PATH);
+    const db = new sqlite3(this.DEFAULT_DATABASE_PATH);
     container.registerInstance(this.DATABASE, db);
 
     await container.resolve(ThreadIndexService).migrate();
@@ -153,17 +149,24 @@ export class ThreadIndexService {
     const { projectDirectories } = configuration();
     try {
       this.db.exec('BEGIN TRANSACTION');
-      this.db.run(QUERY_INSERT_THREAD_SQL, [threadId, path, title ?? null, title ?? null]);
+      this.db
+        .prepare<[string, string, string | null, string | null]>(
+          `INSERT INTO threads (uuid, path, title) VALUES (?, ?, ?)
+          ON CONFLICT (uuid) DO UPDATE SET updated_at = CURRENT_TIMESTAMP, title = ?`
+        )
+        .run(threadId, path, title ?? null, title ?? null);
 
       // Project directories are written on every index update.
       //
       // This is likely not necessary but it'll handle the edge case where an additional project
       // directory is added mid-way through a conversation.
-      const queryInsertProjectDirectory = this.db.prepare(QUERY_INSERT_PROJECT_DIRECTORY_SQL);
+      const queryInsertProjectDirectory = this.db.prepare<
+        [string, string]
+      >(`INSERT INTO project_directories (thread_id, path) VALUES (?, ?)
+          ON CONFLICT (thread_id, path) DO NOTHING`);
       projectDirectories.forEach((projectDirectory) => {
-        queryInsertProjectDirectory.run([threadId, projectDirectory]);
+        queryInsertProjectDirectory.run(threadId, projectDirectory);
       });
-      queryInsertProjectDirectory.finalize();
       this.db.exec('COMMIT');
     } catch (e) {
       this.db.exec('ROLLBACK');
@@ -178,7 +181,7 @@ export class ThreadIndexService {
    * @param threadId The thread ID
    */
   delete(threadId: string) {
-    return this.db.run(QUERY_DELETE_THREAD_SQL, threadId);
+    return this.db.prepare<[string]>(`DELETE FROM threads WHERE uuid = ?`).run(threadId);
   }
 
   /**
@@ -189,7 +192,7 @@ export class ThreadIndexService {
    */
   query(options: QueryOptions): ThreadIndexItem[] {
     let queryString = `SELECT uuid as id, threads.path, title, created_at, updated_at FROM threads`;
-    const params: sqlite3.JSValue[] = [];
+    const params: (string | number)[] = [];
     if (options.uuid) {
       queryString += ` WHERE uuid = ?`;
       params.push(options.uuid);
@@ -233,6 +236,6 @@ export class ThreadIndexService {
         params.push(...options.projectDirectories);
       }
     }
-    return this.db.all(queryString, params) as unknown as ThreadIndexItem[];
+    return this.db.prepare<(string | number)[], ThreadIndexItem>(queryString).all(...params);
   }
 }

@@ -1,9 +1,9 @@
 import { PerformanceObserver } from 'node:perf_hooks';
 
+import sqlite3 from 'better-sqlite3';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import makeDebug from 'debug';
-import sqlite3 from 'node-sqlite3-wasm';
 
 import { fileTokens } from './tokenize';
 import FileIndex from './file-index';
@@ -103,7 +103,7 @@ const cli = yargs(hideBin(process.argv))
 
       const splitter = langchainSplitter;
 
-      const snippetIndex = new SnippetIndex(new sqlite3.Database());
+      const snippetIndex = new SnippetIndex(new sqlite3());
       await buildSnippetIndex(snippetIndex, fileSearchResults, readFileSafe, splitter, fileTokens);
 
       console.log('');

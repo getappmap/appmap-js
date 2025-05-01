@@ -1,5 +1,5 @@
-import sqlite3 from 'node-sqlite3-wasm';
 import yargs from 'yargs';
+import sqlite3 from 'better-sqlite3';
 import assert from 'assert';
 import { readFileSync } from 'fs';
 import { writeFile } from 'fs/promises';
@@ -186,7 +186,7 @@ export const handler = async (argv: ArgumentTypes) => {
     };
 
     const index = await buildIndexInTempDir('appmaps', async (indexFile) => {
-      const db = new sqlite3.Database(indexFile);
+      const db = new sqlite3(indexFile);
       const fileIndex = new FileIndex(db);
       await buildAppMapIndex(fileIndex, [process.cwd()]);
       return fileIndex;

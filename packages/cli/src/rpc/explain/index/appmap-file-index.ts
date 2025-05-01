@@ -1,4 +1,4 @@
-import sqlite3 from 'node-sqlite3-wasm';
+import sqlite3 from 'better-sqlite3';
 
 import { FileIndex, SessionId } from '@appland/search';
 
@@ -10,7 +10,7 @@ export async function buildAppMapFileIndex(
   appmapDirectories: string[]
 ): Promise<CloseableIndex<FileIndex>> {
   return await buildIndexInTempDir<FileIndex>('appmaps', async (indexFile) => {
-    const db = new sqlite3.Database(indexFile);
+    const db = new sqlite3(indexFile);
     const fileIndex = new FileIndex(db);
     await buildAppMapIndex(fileIndex, appmapDirectories);
     return fileIndex;

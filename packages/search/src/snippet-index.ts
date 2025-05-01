@@ -1,7 +1,5 @@
 import assert from 'assert';
-
-import type sqlite3 from 'node-sqlite3-wasm';
-
+import sqlite3 from 'better-sqlite3';
 import { SessionId } from './session-id';
 
 const CREATE_SNIPPET_CONTENT_TABLE_SQL = `CREATE VIRTUAL TABLE snippet_content USING fts5(
@@ -117,14 +115,14 @@ type SnippetSearchRow = {
 export default class SnippetIndex {
   #insertSnippet: sqlite3.Statement;
   #updateSnippetBoost: sqlite3.Statement;
-  #deleteSession: sqlite3.Statement;
-  #searchSnippet: sqlite3.Statement;
+  #deleteSession: sqlite3.Statement<[string]>;
+  #searchSnippet: sqlite3.Statement<[string, string, number]>;
 
   constructor(public database: sqlite3.Database) {
     this.database.exec(CREATE_SNIPPET_CONTENT_TABLE_SQL);
     this.database.exec(CREATE_SNIPPET_BOOST_TABLE_SQL);
-    this.database.exec('PRAGMA journal_mode = OFF');
-    this.database.exec('PRAGMA synchronous = OFF');
+    this.database.pragma('journal_mode = OFF');
+    this.database.pragma('synchronous = OFF');
     this.#insertSnippet = this.database.prepare(INSERT_SNIPPET_SQL);
     this.#deleteSession = this.database.prepare(DELETE_SESSION_SQL);
     this.#updateSnippetBoost = this.database.prepare(UPDATE_SNIPPET_BOOST_SQL);
@@ -154,7 +152,7 @@ export default class SnippetIndex {
     words: string,
     content: string
   ): void {
-    this.#insertSnippet.run([encodeSnippetId(snippetId), directory, symbols, words, content]);
+    this.#insertSnippet.run(encodeSnippetId(snippetId), directory, symbols, words, content);
   }
 
   /**
@@ -164,11 +162,11 @@ export default class SnippetIndex {
    * @param boostFactor - The factor by which to boost the snippet's relevance.
    */
   boostSnippet(sessionId: SessionId, snippetId: SnippetId, boostFactor: number): void {
-    this.#updateSnippetBoost.run([sessionId, encodeSnippetId(snippetId), boostFactor]);
+    this.#updateSnippetBoost.run(sessionId, encodeSnippetId(snippetId), boostFactor);
   }
 
   searchSnippets(sessionId: SessionId, query: string, limit = 10): SnippetSearchResult[] {
-    const rows = this.#searchSnippet.all([sessionId, query, limit]) as SnippetSearchRow[];
+    const rows = this.#searchSnippet.all(sessionId, query, limit) as SnippetSearchRow[];
     return rows.map((row) => ({
       directory: row.directory,
       snippetId: parseSnippetId(row.snippet_id),

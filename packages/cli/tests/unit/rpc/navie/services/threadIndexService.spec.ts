@@ -4,12 +4,12 @@
                   @typescript-eslint/no-unsafe-member-access
 */
 
+import sqlite3 from 'better-sqlite3';
 import { container } from 'tsyringe';
 import {
   ThreadIndexItem,
   ThreadIndexService,
 } from '../../../../../src/rpc/navie/services/threadIndexService';
-import sqlite3 from 'node-sqlite3-wasm';
 import configuration from '../../../../../src/rpc/configuration';
 import { mkdtemp, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
@@ -22,7 +22,7 @@ describe('ThreadIndexService', () => {
 
   beforeEach(async () => {
     container.reset();
-    db = new sqlite3.Database(':memory:');
+    db = new sqlite3(':memory:');
     container.registerInstance(ThreadIndexService.DATABASE, db);
     threadIndexService = container.resolve(ThreadIndexService);
 
