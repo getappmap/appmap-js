@@ -1,6 +1,6 @@
 {
   "name": "@appland/search",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "",
   "bin": "built/cli.js",
   "publishConfig": {

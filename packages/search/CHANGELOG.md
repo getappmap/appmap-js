@@ -1,3 +1,10 @@
+# [@appland/search-v1.2.2](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.1...@appland/search-v1.2.2) (2025-05-01)
+
+
+### Bug Fixes
+
+* Migrate from node-sqlite3-wasm to better-sqlite3 ([47b7698](https://github.com/getappmap/appmap-js/commit/47b769860ce7a55dc3806981da2a78a408bc0648))
+
 # [@appland/search-v1.2.1](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.0...@appland/search-v1.2.1) (2025-03-11)
 
 
