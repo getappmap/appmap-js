@@ -21,6 +21,7 @@
   "author": "AppLand, Inc",
   "license": "Commons Clause + MIT",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/jest": "^29.5.4",
     "@types/node": "^16",
     "eslint": "^9",
@@ -38,9 +39,9 @@
     "typescript-eslint": "^8.11.0"
   },
   "dependencies": {
+    "better-sqlite3": "^11.9.1",
     "cachedir": "^2.4.0",
     "isbinaryfile": "^5.0.4",
-    "node-sqlite3-wasm": "^0.8.34",
     "yargs": "^17.7.2"
   }
 }
