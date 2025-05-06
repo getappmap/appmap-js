@@ -50,21 +50,6 @@ The JSON object should look like this:
 }
 """`;
 
-const POTENTIAL_WEAKNESSES_PROMPT = `Examine the diff and determine which CWE weaknesses are most likely to be present within the source code diff.
-
-Respond with a list of the most likely weaknesses.
-
-Weaknesses should be indicated as their CWE number, and should be in the format of "CWE-XXXX", where XXXX is the CWE number.
-
-The list should be sorted in order of most likely to least likely.
-`;
-
-const ANALYZE_WEAKNESSES_PROMPT = `Analyze the code changes for proposed CWE weaknesses.
-
-Do not analyze test cases or other test-related code.
-
-If no evidence can be found for one of the proposed weaknesses, do not include it in the response.`;
-
 const SUGGESTION_PROMPT = `You are a helpful programming assistant. Analyze this git diff and suggest specific, actionable changes
 that would make the code better.
 
@@ -147,58 +132,6 @@ const FeatureTestItemList = z
     ),
   })
   .describe('A collection of feature tests for review purposes.');
-
-const PotentialWeakness = z.object({
-  cwe: z
-    .string()
-    .describe(
-      `The name of the weakness that has been identified. This should be a short, descriptive name.`
-    ),
-});
-
-const PotentialWeaknessList = z
-  .object({
-    weaknesses: PotentialWeakness.array().describe(
-      'A list of potential weaknesses that have been identified. Each weakness should be a short, descriptive name.'
-    ),
-  })
-  .describe('A collection of potential weaknesses for review purposes.');
-
-// Example:
-// {
-//     "weakness_id": "CWE-XXXX",
-//     "weakness_description": "Description of the weakness identified by weakness_id",
-//     "priority": "high, medium, or low",
-//     "code": "Code snippet, should include the line in question along with context lines",
-//     "description": "Description of the weakness and how it applies to the identified code",
-//     "location": "File name and line number",
-// },
-const AnalyzedWeakness = z.object({
-  weakness_id: z
-    .string()
-    .describe(
-      `The name of the weakness that has been identified. This should be a short, descriptive name.`
-    ),
-  weakness_description: z
-    .string()
-    .describe(
-      `The name of the weakness that has been identified. This should be a short, descriptive name.`
-    ),
-  priority: z.enum(['high', 'medium', 'low']).describe('The priority of the weakness.'),
-  code: z
-    .string()
-    .describe('Code snippet, should include the line in question along with context lines'),
-  description: z
-    .string()
-    .describe('Description of the weakness and how it applies to the identified code'),
-  location: z.string().describe('File name and line number'),
-});
-
-const AnalyzedWeaknessList = z.object({
-  weaknesses: AnalyzedWeakness.array().describe(
-    'A list of potential weaknesses that have been identified. Each weakness should be a short, descriptive name.'
-  ),
-});
 
 const SuggestionItem = z.object({
   file: z.string().describe('The path to the file from the project root.'),
@@ -292,33 +225,6 @@ export default class Review2Command implements Command {
       }
     }
     yield '\n\n';
-
-    const potentialWeaknesses = await this.listPotentialWeaknesses(vectorTerms, request, gitDiff);
-    if (outputText) {
-      yield '## Potential Weaknesses\n\n';
-      for (const weakness of potentialWeaknesses) {
-        yield ` * ${weakness}\n`;
-      }
-    }
-    yield '\n\n';
-
-    const analyzedWeaknesses = await this.analyzeWeaknesses(
-      potentialWeaknesses,
-      vectorTerms,
-      gitDiff
-    );
-
-    if (outputText) {
-      yield '## Analyzed Weaknesses\n\n';
-      for (const weakness of analyzedWeaknesses.weaknesses) {
-        yield ` * ${weakness.weakness_id}\n`;
-        yield `   - ${weakness.weakness_description}\n`;
-        yield `   - ${weakness.priority}\n`;
-        yield `   - ${weakness.code}\n`;
-        yield `   - ${weakness.description}\n`;
-        yield `   - ${weakness.location}\n`;
-      }
-    }
 
     const suggestions = await this.listSuggestions(gitDiff);
     if (outputText) {
@@ -480,93 +386,6 @@ export default class Review2Command implements Command {
     return (
       featureMatrix ?? {
         featureTests: [],
-      }
-    );
-  }
-
-  private async listPotentialWeaknesses(gitDiff: UserContext.CodeSnippetItem): Promise<string[]> {
-    const messages: Message[] = [
-      {
-        role: 'system',
-        content: POTENTIAL_WEAKNESSES_PROMPT,
-      },
-      {
-        role: 'user',
-        content: `Here is the diff:
-  <diff>
-  ${gitDiff.content}
-  </diff>`,
-      },
-    ];
-    //     {
-    //       role: 'user',
-    //       content: `Here is some related context from the project, which you can use to help you understand the changes:
-    // <context>
-    // ${contextMessage}
-    // </context>`,
-    //     },
-    //   ];
-
-    //   if (pinnedItems.length > 0) {
-    //     const pinnedItemsMessage = pinnedItems
-    //       .map((cs) =>
-    //         ContextV2.isFileContextItem(cs)
-    //           ? `<${cs.type} location="${cs.location}">\n${cs.content}\n</${cs.type}>`
-    //           : `<${cs.type}>\n${cs.content}\n</${cs.type}>`
-    //       )
-    //       .filter(Boolean)
-    //       .join('\n\n');
-
-    //     messages.push({
-    //       role: 'user',
-    //       content: `Here are some additional code snippets that may be relevant to the review:
-    // <pinnedItems>
-    // ${pinnedItemsMessage}
-    // </pinnedItems>`,
-    //     });
-    //}
-
-    const potentialWeaknesses = await this.completionService.json(messages, PotentialWeaknessList, {
-      temperature: 0.0,
-    });
-
-    return potentialWeaknesses?.weaknesses.map((weakness) => weakness.cwe) ?? [];
-  }
-
-  private async analyzeWeaknesses(
-    potentialWeaknesses: string[],
-    gitDiff: UserContext.CodeSnippetItem
-  ): Promise<z.infer<typeof AnalyzedWeaknessList>> {
-    const messages: Message[] = [
-      {
-        role: 'system',
-        content: ANALYZE_WEAKNESSES_PROMPT,
-      },
-      {
-        role: 'user',
-        content: `Here are the potential weaknesses that have been identified:
-  <weaknesses>
-  ${potentialWeaknesses.map((weakness) => `* ${weakness}`).join('\n')}
-  </weaknesses>`,
-      },
-      {
-        role: 'user',
-        content: `Here is the diff:
-  <diff>
-  ${gitDiff.content}
-  </diff>`,
-      },
-    ];
-
-    const analyzedWeaknesses = await this.completionService.json(messages, AnalyzedWeaknessList, {
-      temperature: 0.0,
-    });
-    if (!analyzedWeaknesses) {
-      console.warn('No analyzed weaknesses found');
-    }
-    return (
-      analyzedWeaknesses ?? {
-        weaknesses: [],
       }
     );
   }
