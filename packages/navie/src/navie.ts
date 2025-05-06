@@ -39,6 +39,8 @@ import SuggestCommand from './commands/suggest-command';
 import ObserveCommand from './commands/observe-command';
 import ReviewCommand from './commands/review-command';
 import WelcomeCommand from './commands/welcome-command';
+import InvokeTestsService from './services/invoke-tests-service';
+import { TestInvocationRequest, TestInvocationResponse } from './test-invocation';
 
 export type ChatHistory = Message[];
 
@@ -127,6 +129,17 @@ export default function navie(
     completionService
   );
 
+  // TODO: Replace with a real implementation
+  const testFn: (data: TestInvocationRequest) => Promise<TestInvocationResponse> = (
+    _data: TestInvocationRequest
+  ): Promise<TestInvocationResponse> => {
+    warn('Test invocation not implemented');
+    return Promise.resolve({
+      testResults: [],
+    });
+  };
+  const invokeTestsService = new InvokeTestsService(testFn);
+
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
 
@@ -192,7 +205,13 @@ export default function navie(
   };
 
   const buildReviewCommand = () =>
-    new ReviewCommand(options, completionService, lookupContextService, vectorTermsService);
+    new ReviewCommand(
+      options,
+      completionService,
+      lookupContextService,
+      vectorTermsService,
+      invokeTestsService
+    );
 
   const buildWelcomeCommand = () => new WelcomeCommand(completionService);
 

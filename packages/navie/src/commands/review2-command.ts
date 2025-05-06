@@ -9,6 +9,9 @@ import { UserContext } from '../user-context';
 import { getGitDiff, getPinnedItemsExceptGitDiff, GitDiffError } from '../lib/git-diff';
 import { ContextV2 } from '../context';
 import Message from '../message';
+import { TestInvocationItem, TestInvocationRequest } from '../test-invocation';
+import { randomUUID } from 'crypto';
+import InvokeTestsService from '../services/invoke-tests-service';
 
 const ENUMERATE_FEATURES_PROMPT = `Inspect the diff, enumerate the features and functional changes that have been made, and assign a name to each one.
 
@@ -20,6 +23,10 @@ indicator.
 Be specific and complete with the name of each feature or functional change. Each line that you emit should be enough
 for a reader to get a complete understanding of the feature or functional change, without having to refer to the code or 
 to other background information or to the diff itself.
+
+The feature or change should be a declarative statement that describes what the feature is or what the change is.
+It should not be phrased like a TODO item or a question, it should be a statement of of what the feature is or what the change is.
+For example, instead of saying "Add a new feature to the application", you should say "Added a new feature to the application that allows users to do X".
 `;
 
 const TEST_MATRIX_PROMPT = `Search the codebase to determine which, if any, tests exist for each of
@@ -163,7 +170,8 @@ export default class Review2Command implements Command {
     private readonly options: ExplainOptions,
     private readonly completionService: CompletionService,
     private readonly lookupContextService: LookupContextService,
-    private readonly vectorTermsService: VectorTermsService
+    private readonly vectorTermsService: VectorTermsService,
+    private readonly invokeTestsService: InvokeTestsService
   ) {}
 
   async *execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
@@ -171,6 +179,10 @@ export default class Review2Command implements Command {
       request.userOptions.numberValue('diff-terms-threshold') ?? DEFAULT_DIFF_TERMS_THRESHOLD;
     const outputJson = request.userOptions.stringValue('format', 'text') === 'json';
     const outputText = !outputJson;
+    const runTests = request.userOptions.stringValue('runtests');
+    const runTestsImmediately = runTests === 'immediate';
+    const baseBranch = request.userOptions.stringValue('base');
+    const testGenGather = request.userOptions.booleanValue('testgengather', true);
 
     if (!hasCodeSelectionArray(request)) {
       if (outputText) yield 'No code selection was provided.';
@@ -233,16 +245,50 @@ export default class Review2Command implements Command {
       yield 'Copy and paste these commands to Navie AI to generate new test cases:\n\n';
       for (const feature of testMatrix.featureTests) {
         if (feature.tests.length === 0) {
+          const commandArguments = ['@test', '/diff'];
+          if (baseBranch) commandArguments.push(`/base=${baseBranch}`);
+          if (!testGenGather) commandArguments.push('/nogather');
+          commandArguments.push(feature.feature);
+
           yield '\n';
           yield '```';
           yield '\n';
-          yield `@test ${feature.feature}\n`;
+          yield commandArguments.join(' ');
+          yield '\n';
           yield '```';
           yield '\n\n';
         }
       }
     }
     yield '\n\n';
+
+    if (runTests) {
+      // Invoke tests that exist in the test matrix
+      const testItems: TestInvocationItem[] = [];
+      for (const feature of testMatrix.featureTests) {
+        if (feature.tests.length > 0) {
+          for (const test of feature.tests) {
+            const testId = randomUUID();
+            testItems.push({
+              id: testId,
+              filePath: test.file,
+              startLine: test.startLine,
+              endLine: test.endLine,
+              testName: test.testName,
+            });
+          }
+        }
+      }
+
+      const testInvocationRequest: TestInvocationRequest = {
+        testItems: testItems,
+        invocation: runTestsImmediately ? 'immediate' : 'async',
+      };
+      const invocationPromise = this.invokeTestsService.invokeTests(testInvocationRequest);
+      if (runTestsImmediately) {
+        await invocationPromise;
+      }
+    }
 
     const suggestions = await this.listSuggestions(gitDiff);
     if (outputText) {
@@ -270,7 +316,7 @@ export default class Review2Command implements Command {
         yield suggestion.context;
         yield '\n';
         yield '```';
-        yield '\n';
+        yield '\n\n';
       }
     }
 
