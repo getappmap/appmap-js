@@ -22,7 +22,7 @@ for a reader to get a complete understanding of the feature or functional change
 to other background information or to the diff itself.
 `;
 
-const FEATURE_MATRIX_PROMPT = `Search the codebase to determine which, if any, tests exist for each of
+const TEST_MATRIX_PROMPT = `Search the codebase to determine which, if any, tests exist for each of
 the following listed features. For each feature, return a list of the test cases that pertain to the feature.
 
 <features>
@@ -213,14 +213,32 @@ export default class Review2Command implements Command {
     }
     yield '\n\n';
 
-    const featureMatrix = await this.buildFeatureMatrix(vectorTerms, featureList);
-
+    const testMatrix = await this.buildTestMatrix(vectorTerms, featureList);
     if (outputText) {
-      yield '## Feature Matrix\n\n';
-      for (const feature of featureMatrix.featureTests) {
-        yield ` * ${feature.feature}\n`;
-        for (const test of feature.tests) {
-          yield `   - ${test.file}:${test.startLine}-${test.endLine} (${test.testName})\n`;
+      yield '## Test Analysis\n\n';
+      yield '| Feature | Test Coverage |\n';
+      yield '|---------|---------------|\n';
+      for (const feature of testMatrix.featureTests) {
+        const testList =
+          feature.tests.length > 0
+            ? feature.tests
+                .map((test) => `${test.file}:${test.startLine}-${test.endLine} (${test.testName})`)
+                .join('<br>')
+            : 'No tests';
+        yield `| ${feature.feature} | ${testList} |\n`;
+      }
+
+      // Add test suggestions for features without tests
+      yield '\n### Suggested Test Commands\n\n';
+      yield 'Copy and paste these commands to Navie AI to generate new test cases:\n\n';
+      for (const feature of testMatrix.featureTests) {
+        if (feature.tests.length === 0) {
+          yield '\n';
+          yield '```';
+          yield '\n';
+          yield `@test ${feature.feature}\n`;
+          yield '```';
+          yield '\n\n';
         }
       }
     }
@@ -247,11 +265,21 @@ export default class Review2Command implements Command {
         yield `| Severity | ${suggestion.severity} |\n`;
         yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}:${suggestion.line}) |\n`;
         yield '\n';
-        yield `\`\`\`\n`;
+        yield '```';
+        yield '\n';
         yield suggestion.context;
-        yield `\`\`\`\n`;
+        yield '\n';
+        yield '```';
         yield '\n';
       }
+    }
+
+    if (outputJson) {
+      yield JSON.stringify({
+        features: featureList,
+        testMatrix: testMatrix,
+        suggestions: suggestions,
+      });
     }
   }
 
@@ -335,7 +363,7 @@ export default class Review2Command implements Command {
     return features?.features.map((feature) => feature.feature) ?? [];
   }
 
-  private async buildFeatureMatrix(
+  private async buildTestMatrix(
     vectorTerms: string[],
     featureList: string[]
   ): Promise<z.infer<typeof FeatureTestItemList>> {
@@ -358,7 +386,7 @@ export default class Review2Command implements Command {
     const messages: Message[] = [
       {
         role: 'system',
-        content: FEATURE_MATRIX_PROMPT,
+        content: TEST_MATRIX_PROMPT,
       },
       {
         role: 'user',
