@@ -11,6 +11,7 @@ import { Message } from '../../src';
 import ReviewCommand from '../../src/commands/review-command';
 import InteractionHistory from '../../src/interaction-history';
 import { UserOptions } from '../../src/lib/parse-options';
+import InvokeTestsService from '../../src/services/invoke-tests-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import MockCompletionService from '../services/mock-completion-service';
@@ -21,6 +22,8 @@ describe('ReviewCommand', () => {
   let lookupContextService: LookupContextService;
   let interactionHistory: InteractionHistory;
   let vectorTermsService: VectorTermsService;
+  let invokeTestsService: InvokeTestsService;
+
   let lookupContext: jest.Mock;
   const vectorTerms = ['test', 'terms'];
   const tokenLimit = 1000;
@@ -82,11 +85,15 @@ lgtm
     vectorTermsService = {
       suggestTerms: jest.fn().mockResolvedValue(vectorTerms),
     } as any;
+    invokeTestsService = {
+      invokeTests: jest.fn(),
+    } as any;
     command = new ReviewCommand(
       { tokenLimit, responseTokens },
       completionService,
       lookupContextService,
-      vectorTermsService
+      vectorTermsService,
+      invokeTestsService
     );
   });
 
