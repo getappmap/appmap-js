@@ -9,6 +9,7 @@ import z from 'zod';
 import VectorTermsService from '../services/vector-terms-service';
 import { getGitDiff, getPinnedItemsExceptGitDiff, GitDiffError } from '../lib/git-diff';
 import Review2Command from './review2-command';
+import InvokeTestsService from '../services/invoke-tests-service';
 
 // These are the default review domains that will be used in the absence of any user input.
 const GENERIC_REVIEW_DOMAINS = `- **Correctness**: Identify bugs, flaws, defects, logical errors, or edge cases that will cause the code to fail. This includes checking for copy-paste errors, incorrect variable usage, and any inconsistencies in the code.
@@ -79,7 +80,8 @@ export default class ReviewCommand implements Command {
     private readonly options: ExplainOptions,
     private readonly completionService: CompletionService,
     private readonly lookupContextService: LookupContextService,
-    private readonly vectorTermsService: VectorTermsService
+    private readonly vectorTermsService: VectorTermsService,
+    private readonly invokeTestsService: InvokeTestsService
   ) {}
 
   /**
@@ -278,7 +280,8 @@ ${userPrompt}
         this.options,
         this.completionService,
         this.lookupContextService,
-        this.vectorTermsService
+        this.vectorTermsService,
+        this.invokeTestsService
       );
       yield* review2Command.execute(req);
       return;
