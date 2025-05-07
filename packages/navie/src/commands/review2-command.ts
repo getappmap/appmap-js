@@ -225,7 +225,7 @@ export default class Review2Command implements Command {
     }
     yield '\n\n';
 
-    const testMatrix = await this.buildTestMatrix(vectorTerms, featureList);
+    const testMatrix = await this.buildTestMatrix(vectorTerms, featureList, gitDiff);
     if (outputText) {
       yield '## Test Analysis\n\n';
       yield '| Feature | Test Coverage |\n';
@@ -411,7 +411,8 @@ export default class Review2Command implements Command {
 
   private async buildTestMatrix(
     vectorTerms: string[],
-    featureList: string[]
+    featureList: string[],
+    gitDiff: UserContext.CodeSnippetItem
   ): Promise<z.infer<typeof FeatureTestItemList>> {
     const context = await this.lookupContextService.lookupContext(
       vectorTerms,
@@ -433,6 +434,14 @@ export default class Review2Command implements Command {
       {
         role: 'system',
         content: TEST_MATRIX_PROMPT,
+      },
+      {
+        role: 'user',
+        content: `Here is the diff:
+  <diff>
+  ${gitDiff.content}
+  </diff>
+  `,
       },
       {
         role: 'user',
