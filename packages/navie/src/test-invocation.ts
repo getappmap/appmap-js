@@ -8,7 +8,7 @@ export type TestInvocationItem = {
 
 export type TestInvocationRequest = {
   testItems: TestInvocationItem[];
-  invocation: 'immediate' | 'async';
+  invocation: 'sync' | 'async';
 };
 
 export type TestScheduledItem = {
