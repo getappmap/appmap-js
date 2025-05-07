@@ -7,7 +7,7 @@ import {
   ProjectDirectory,
   ProjectParameters,
 } from '@appland/client';
-import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
+import { ContextV2, Help, ProjectInfo, TestInvocation, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
 import { warn } from 'console';
 import EventEmitter from 'events';
@@ -25,6 +25,7 @@ import INavie, { INavieProvider } from './navie/inavie';
 import reportFetchError from './navie/report-fetch-error';
 import handleReview from './review';
 import { normalizePath } from './location';
+import invokeTests from '../../cmds/navie/invokeTests';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -189,6 +190,12 @@ export class Explain extends EventEmitter {
 
   helpContext(data: Help.HelpRequest): Promise<Help.HelpResponse> {
     return collectHelp(data);
+  }
+
+  runTestContext(
+    data: TestInvocation.TestInvocationRequest
+  ): Promise<TestInvocation.TestInvocationResponse> {
+    return invokeTests(data);
   }
 
   async enrollConversationThread(navie: INavie): Promise<ConversationThread | undefined> {
