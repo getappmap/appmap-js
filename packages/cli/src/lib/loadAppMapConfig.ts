@@ -33,6 +33,15 @@ export type ConfiguredPackage = {
   path?: string;
 };
 
+export type LanguageName = string;
+
+export type CommandString = string;
+
+export type TestCommand = {
+  language: LanguageName;
+  command: CommandString;
+};
+
 export interface AppMapConfig {
   name: string;
   language?: string;
@@ -40,6 +49,7 @@ export interface AppMapConfig {
   packages: ConfiguredPackage[];
   compare?: CompareConfig;
   update?: UpdateConfig;
+  test_commands?: TestCommand[];
 }
 
 export default async function loadAppMapConfig(

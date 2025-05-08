@@ -22,7 +22,7 @@ describe('InvokeTestsService', () => {
             testName: 'should do something',
           },
         ],
-        invocation: 'immediate',
+        invocation: 'sync',
       };
 
       const expectedResponse: TestInvocationResponse = {
