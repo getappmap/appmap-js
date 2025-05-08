@@ -1,5 +1,5 @@
 import { TestInvocationRpc } from '@appland/rpc';
-import { submitInvocationResults } from '../../../src/rpc/test-invocation/results';
+import { submitInvocationResults } from '../../../../src/rpc/test-invocation/results';
 
 describe('test invocation results', () => {
   it('processes test results submission', async () => {
@@ -10,16 +10,16 @@ describe('test invocation results', () => {
           testStatus: 'passed',
           testDuration: 100,
           testOutput: 'Test passed successfully',
-          testError: null
+          testError: null,
         },
         {
           id: 'test2',
           testStatus: 'failed',
           testDuration: 50,
           testOutput: 'Test failed',
-          testError: 'Expected true to be false'
-        }
-      ]
+          testError: 'Expected true to be false',
+        },
+      ],
     };
 
     const response = await submitInvocationResults(results);

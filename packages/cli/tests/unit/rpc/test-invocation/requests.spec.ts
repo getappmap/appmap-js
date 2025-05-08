@@ -1,5 +1,8 @@
 import { TestInvocation } from '@appland/navie';
-import { enqueueTestInvocationItem, getInvocationRequests } from '../../../src/rpc/test-invocation/requests';
+import {
+  enqueueTestInvocationItem,
+  getInvocationRequests,
+} from '../../../../src/rpc/test-invocation/requests';
 
 describe('test invocation requests', () => {
   beforeEach(() => {
@@ -13,12 +16,12 @@ describe('test invocation requests', () => {
       filePath: '/path/to/test1.spec.ts',
       startLine: 10,
       endLine: 20,
-      testName: 'should do something'
+      testName: 'should do something',
     };
 
     const testItem2: TestInvocation.TestInvocationItem = {
       id: 'test2',
-      filePath: '/path/to/test2.spec.ts'
+      filePath: '/path/to/test2.spec.ts',
     };
 
     enqueueTestInvocationItem(testItem1);
@@ -27,7 +30,7 @@ describe('test invocation requests', () => {
     const requests = getInvocationRequests({});
     expect(requests).toEqual([
       { id: 'test1', filePath: '/path/to/test1.spec.ts' },
-      { id: 'test2', filePath: '/path/to/test2.spec.ts' }
+      { id: 'test2', filePath: '/path/to/test2.spec.ts' },
     ]);
 
     // Subsequent call should return empty array as queue is cleared
