@@ -309,7 +309,7 @@ export default class Review2Command implements Command {
         yield `| CWE | [${suggestion.cwe}](https://cwe.mitre.org/data/definitions/${cwe}.html) |\n`;
         yield `| Type | ${suggestion.type} |\n`;
         yield `| Severity | ${suggestion.severity} |\n`;
-        yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}:${suggestion.line}) |\n`;
+        yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
         yield '\n';
         yield '```';
         yield '\n';
