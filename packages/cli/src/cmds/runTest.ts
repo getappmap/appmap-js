@@ -2,7 +2,7 @@ import yargs from 'yargs';
 import { configureRpcDirectories, handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { TestInvocation } from '@appland/navie';
 import { randomUUID } from 'crypto';
-import invokeTests from './navie/invokeTests';
+import invokeTests, { InvocationStrategy } from './navie/invokeTests';
 import { resolve } from 'path';
 
 export const command = 'run-test <filename...>';
@@ -57,6 +57,6 @@ export async function handler(argv: HandlerArguments) {
     testItems,
   };
 
-  const invocationResult = await invokeTests(invocationRequest);
+  const invocationResult = await invokeTests(InvocationStrategy.SHELL, invocationRequest);
   console.log('Invocation result:', JSON.stringify(invocationResult, null, 2));
 }

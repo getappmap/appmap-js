@@ -25,7 +25,7 @@ import INavie, { INavieProvider } from './navie/inavie';
 import reportFetchError from './navie/report-fetch-error';
 import handleReview from './review';
 import { normalizePath } from './location';
-import invokeTests from '../../cmds/navie/invokeTests';
+import invokeTests, { InvocationStrategy } from '../../cmds/navie/invokeTests';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -48,8 +48,11 @@ export type SearchContextResponse = {
 
 export const DEFAULT_TOKEN_LIMIT = 12000;
 
+export const DEFAULT_INVOCATION_STRATEGY = InvocationStrategy.SHELL;
+
 export class Explain extends EventEmitter {
   conversationThread: ConversationThread | undefined;
+  invocationStrategy = DEFAULT_INVOCATION_STRATEGY;
 
   constructor(
     public appmapDirectories: AppMapDirectory[],
@@ -195,7 +198,7 @@ export class Explain extends EventEmitter {
   runTestContext(
     data: TestInvocation.TestInvocationRequest
   ): Promise<TestInvocation.TestInvocationResponse> {
-    return invokeTests(data);
+    return invokeTests(this.invocationStrategy, data);
   }
 
   async enrollConversationThread(navie: INavie): Promise<ConversationThread | undefined> {

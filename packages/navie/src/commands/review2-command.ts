@@ -282,7 +282,7 @@ export default class Review2Command implements Command {
 
       const testInvocationRequest: TestInvocationRequest = {
         testItems: testItems,
-        invocation: runTestsImmediately ? 'immediate' : 'async',
+        invocation: runTestsImmediately ? 'sync' : 'async',
       };
       const invocationPromise = this.invokeTestsService.invokeTests(testInvocationRequest);
       if (runTestsImmediately) {
