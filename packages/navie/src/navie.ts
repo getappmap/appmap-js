@@ -40,7 +40,7 @@ import ObserveCommand from './commands/observe-command';
 import ReviewCommand from './commands/review-command';
 import WelcomeCommand from './commands/welcome-command';
 import InvokeTestsService from './services/invoke-tests-service';
-import { TestInvocationRequest, TestInvocationResponse } from './test-invocation';
+import { TestInvocationProvider } from './test-invocation';
 
 export type ChatHistory = Message[];
 
@@ -91,6 +91,7 @@ export default function navie(
   contextProvider: ContextV2.ContextProvider,
   projectInfoProvider: ProjectInfoProvider,
   helpProvider: HelpProvider,
+  testInvocationProvider: TestInvocationProvider,
   options: NavieOptions,
   chatHistory?: ChatHistory,
   selectedModel?: NavieModel
