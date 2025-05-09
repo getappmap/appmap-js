@@ -130,16 +130,9 @@ export default function navie(
     completionService
   );
 
-  // TODO: Replace with a real implementation
-  const testFn: (data: TestInvocationRequest) => Promise<TestInvocationResponse> = (
-    _data: TestInvocationRequest
-  ): Promise<TestInvocationResponse> => {
-    warn('Test invocation not implemented');
-    return Promise.resolve({
-      testResults: [],
-    });
-  };
-  const invokeTestsService = new InvokeTestsService(testFn);
+  const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
+
+  const invokeTestsService = new InvokeTestsService(testInvocationProvider);
 
   const buildExplainCommand = () => {
     const codeSelectionService = new CodeSelectionService(interactionHistory);
@@ -156,7 +149,6 @@ export default function navie(
       applyContextService,
       mermaidFixerService
     );
-    const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
     const memoryService = completionService.model
       ? new LangchainMemoryService(completionService.model)
       : NaiveMemoryService;
@@ -193,9 +185,8 @@ export default function navie(
     return new SuggestCommand(nextStepService);
   };
 
-  const buildObserveCommand = () => {
-    const projectInfoService = new ProjectInfoService(interactionHistory, projectInfoProvider);
-    return new ObserveCommand(
+  const buildObserveCommand = () =>
+    new ObserveCommand(
       options,
       completionService,
       lookupContextService,
@@ -203,11 +194,11 @@ export default function navie(
       interactionHistory,
       projectInfoService
     );
-  };
 
   const buildReviewCommand = () =>
     new ReviewCommand(
       options,
+      projectInfoService,
       completionService,
       lookupContextService,
       vectorTermsService,

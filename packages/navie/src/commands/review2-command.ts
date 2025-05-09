@@ -1,3 +1,4 @@
+import { warn } from 'console';
 import z from 'zod';
 import Command, { CommandRequest, hasCodeSelectionArray } from '../command';
 import { ExplainOptions } from './explain-command';
@@ -12,6 +13,8 @@ import Message from '../message';
 import { TestInvocationItem, TestInvocationRequest } from '../test-invocation';
 import { randomUUID } from 'crypto';
 import InvokeTestsService from '../services/invoke-tests-service';
+import resolveTestItems from '../lib/resolve-test-items';
+import ProjectInfoService from '../services/project-info-service';
 
 const ENUMERATE_FEATURES_PROMPT = `Inspect the diff, enumerate the features and functional changes that have been made, and assign a name to each one.
 
@@ -101,7 +104,7 @@ const FeatureList = z.object({
   ),
 });
 
-const TestItem = z.object({
+export const TestItem = z.object({
   file: z
     .string()
 
@@ -112,12 +115,14 @@ const TestItem = z.object({
     .number()
     .describe(
       `The line number in the file where the test case starts. This should be a positive integer.`
-    ),
+    )
+    .optional(),
   endLine: z
     .number()
     .describe(
       `The line number in the file where the test case ends. This should be a positive integer.`
-    ),
+    )
+    .optional(),
   testName: z.string().describe(`The name of the test case within the test file.`),
 });
 
@@ -168,6 +173,7 @@ const DEFAULT_DIFF_TERMS_THRESHOLD = 1000;
 export default class Review2Command implements Command {
   constructor(
     private readonly options: ExplainOptions,
+    private readonly projectInfoService: ProjectInfoService,
     private readonly completionService: CompletionService,
     private readonly lookupContextService: LookupContextService,
     private readonly vectorTermsService: VectorTermsService,
@@ -188,6 +194,8 @@ export default class Review2Command implements Command {
       if (outputText) yield 'No code selection was provided.';
       return;
     }
+
+    const projectInfo = await this.projectInfoService.lookupProjectInfo();
 
     let gitDiff: UserContext.CodeSnippetItem;
     try {
@@ -226,16 +234,48 @@ export default class Review2Command implements Command {
     yield '\n\n';
 
     const testMatrix = await this.buildTestMatrix(vectorTerms, featureList, gitDiff);
+
+    // Filter test matrix suggested tests to include only those that exist in the file system
+    for (const featureTest of testMatrix.featureTests) {
+      if (featureTest.tests.length === 0) continue;
+
+      const suggestedTestItems = featureTest.tests;
+      // NOTE A single, global selectExistingTestItems call could be used instead of calling
+      // within this loop, but the logic would be complicated somewhat.
+      const existingTestItems = await resolveTestItems(
+        this.lookupContextService,
+        projectInfo,
+        suggestedTestItems
+      );
+
+      if (existingTestItems.length !== suggestedTestItems.length) {
+        warn(
+          `Some suggested test items do not exist in the file system. ${existingTestItems.length} of ${suggestedTestItems.length} test items exist.`
+        );
+      }
+
+      featureTest.tests = existingTestItems;
+    }
+
     if (outputText) {
       yield '## Test Analysis\n\n';
       yield '| Feature | Test Coverage |\n';
       yield '|---------|---------------|\n';
       for (const feature of testMatrix.featureTests) {
+        const featureTestDescription = (testItem: z.infer<typeof TestItem>): string => {
+          const { file, startLine, endLine, testName } = testItem;
+          const locationTokens = [];
+          if (startLine) locationTokens.push(startLine);
+          if (endLine) locationTokens.push(endLine);
+
+          return [[file, locationTokens.join('-')].filter(Boolean).join(':'), `(${testName})`].join(
+            ' '
+          );
+        };
+
         const testList =
           feature.tests.length > 0
-            ? feature.tests
-                .map((test) => `${test.file}:${test.startLine}-${test.endLine} (${test.testName})`)
-                .join('<br>')
+            ? feature.tests.map(featureTestDescription).join('<br>')
             : 'No tests';
         yield `| ${feature.feature} | ${testList} |\n`;
       }

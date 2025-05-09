@@ -5,15 +5,41 @@ import LookupContextService from '../../src/services/lookup-context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import { UserOptions } from '../../src/lib/parse-options';
 import InvokeTestsService from '../../src/services/invoke-tests-service';
+import ProjectInfoService from '../../src/services/project-info-service';
+import { ProjectInfo } from '../../src/project-info';
+import resolveTestItems from '../../src/lib/resolve-test-items';
+
+jest.mock('../../src/lib/resolve-test-items', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
 describe('Review2Command', () => {
   let command: Review2Command;
+  let projectInfoService: jest.Mocked<ProjectInfoService>;
   let completionService: jest.Mocked<CompletionService>;
   let lookupContextService: jest.Mocked<LookupContextService>;
   let vectorTermsService: jest.Mocked<VectorTermsService>;
   let testInvocationService: jest.Mocked<InvokeTestsService>;
+  let resolveTestItemsMock: jest.Mock;
+  const projectInfos: ProjectInfo[] = [
+    {
+      directory: '/test/project-1',
+    },
+  ];
 
   beforeEach(() => {
+    jest.clearAllMocks();
+
+    resolveTestItemsMock = resolveTestItems as jest.Mock;
+    resolveTestItemsMock.mockImplementation((lookupContextService, projectInfo, testItems) => {
+      return Promise.resolve(testItems);
+    });
+
+    projectInfoService = {
+      lookupProjectInfo: jest.fn().mockResolvedValue(projectInfos),
+    } as unknown as jest.Mocked<ProjectInfoService>;
+
     completionService = {
       complete: jest.fn(),
       json: jest.fn(),
@@ -37,6 +63,7 @@ describe('Review2Command', () => {
 
     command = new Review2Command(
       { tokenLimit: 1000 } as ExplainOptions,
+      projectInfoService,
       completionService,
       lookupContextService,
       vectorTermsService,
