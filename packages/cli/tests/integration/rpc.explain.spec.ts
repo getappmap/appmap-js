@@ -1,6 +1,14 @@
 import assert from 'assert';
 import { ExplainRpc } from '@appland/rpc';
-import { ContextV2, ProjectInfo, Help, navie, applyContext, Navie } from '@appland/navie';
+import {
+  ContextV2,
+  ProjectInfo,
+  Help,
+  navie,
+  applyContext,
+  Navie,
+  TestInvocation,
+} from '@appland/navie';
 import { AI, AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
 
 import { waitFor } from './waitFor';
@@ -48,8 +56,15 @@ describe('RPC', () => {
         navieProvider = (
           contextProvider: ContextV2.ContextProvider,
           projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-          helpProvider: Help.HelpProvider
-        ) => new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
+          helpProvider: Help.HelpProvider,
+          testInvocationProvider: TestInvocation.TestInvocationProvider
+        ) =>
+          new LocalNavie(
+            contextProvider,
+            projectInfoProvider,
+            helpProvider,
+            testInvocationProvider
+          );
         rpcTest = new SingleDirectoryRPCTest(DEFAULT_WORKING_DIR, navieProvider);
       });
 

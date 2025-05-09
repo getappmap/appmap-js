@@ -2,7 +2,7 @@ import readline from 'readline';
 import yargs from 'yargs';
 import chalk from 'chalk';
 import { loadConfiguration } from '@appland/client';
-import { ContextV2, Help, ProjectInfo } from '@appland/navie';
+import { ContextV2, Help, ProjectInfo, TestInvocation } from '@appland/navie';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
@@ -113,9 +113,15 @@ export const handler = async (argv) => {
       const buildLocalNavie = (
         contextProvider: ContextV2.ContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-        helpProvider: Help.HelpProvider
+        helpProvider: Help.HelpProvider,
+        testInvocationProvider: TestInvocation.TestInvocationProvider
       ) => {
-        const navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider);
+        const navie = new LocalNavie(
+          contextProvider,
+          projectInfoProvider,
+          helpProvider,
+          testInvocationProvider
+        );
 
         let START: number | undefined;
 

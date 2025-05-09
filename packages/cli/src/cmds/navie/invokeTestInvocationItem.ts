@@ -1,10 +1,10 @@
 import { TestInvocation } from '@appland/navie';
-import { existsSync } from 'fs';
 import configuration from '../../rpc/configuration';
-import path, { dirname, isAbsolute, join } from 'path';
+import { isAbsolute, join } from 'path';
 import { exec } from 'child_process';
 import { AppMapConfig, LanguageName } from '../../lib/loadAppMapConfig';
 import collectAppMapConfigByPath from '../../lib/collectAppMapConfigByPath';
+import rebaseTestFileToProjectFile from './rebaseTestFileToProjectFile';
 
 export const TEST_NAME_SYMBOL = '$(test_name)';
 
@@ -85,43 +85,34 @@ export default async function invokeTestInvocationItem(
     return;
   }
 
-  let bestFilePath = filePath;
-  let bestDirectory = '.';
-  if (languageName === 'javascript') {
-    let searchDirectory = dirname(filePath);
-    while (searchDirectory !== path.parse(searchDirectory).root && searchDirectory !== '') {
-      const packageJSONFile = join(searchDirectory, 'package.json');
-      if (existsSync(packageJSONFile)) {
-        bestFilePath = filePath.slice(searchDirectory.length + 1);
-        bestDirectory = searchDirectory;
-        break;
-      }
-      searchDirectory = dirname(searchDirectory);
-    }
+  const { rebasedFilePath, projectDirectory } = rebaseTestFileToProjectFile(languageName, filePath);
 
-    console.log(
-      `Closest ancestor directory for JavaScript test containing package.json: ${bestDirectory}`
-    );
+  const command = commandTemplate.replace(TEST_NAME_SYMBOL, rebasedFilePath);
+
+  const commandOptions: { cwd?: string } = {};
+  if (projectDirectory) {
+    commandOptions.cwd = projectDirectory;
+  } else {
+    console.warn(`No project directory found for file path: ${filePath}`);
+    console.warn(`Invoking test command in current directory: ${process.cwd()}`);
   }
-
-  const command = commandTemplate.replace(TEST_NAME_SYMBOL, bestFilePath);
 
   console.log(`Invoking test command: ${command}`);
 
   // NOTE reject is not used here, because command errors are reported as succeeded: false
   const testPromise = new Promise<ProcessResult>((resolve) => {
-    exec(command, { cwd: bestDirectory }, (error, stdout, stderr) => {
+    exec(command, commandOptions, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing command: ${error.message}`);
         resolve({
           succeeded: false,
           error: error.message,
         });
+        return;
       }
-      if (stderr) {
-        console.warn(`Error output: ${stderr}`);
-      }
-      console.log(`Command output: ${stdout}`);
+
+      if (stderr) console.log(`Command stderr: ${stderr}`);
+      if (stdout) console.log(`Command stdout: ${stdout}`);
 
       resolve({
         succeeded: true,

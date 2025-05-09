@@ -25,7 +25,8 @@ import INavie, { INavieProvider } from './navie/inavie';
 import reportFetchError from './navie/report-fetch-error';
 import handleReview from './review';
 import { normalizePath } from './location';
-import invokeTests, { InvocationStrategy } from '../../cmds/navie/invokeTests';
+import invokeTests from '../../cmds/navie/invokeTests';
+import getInvocationStrategy from './invocation-strategy';
 
 const searchStatusByUserMessageId = new Map<string, ExplainRpc.ExplainStatusResponse>();
 
@@ -48,11 +49,8 @@ export type SearchContextResponse = {
 
 export const DEFAULT_TOKEN_LIMIT = 12000;
 
-export const DEFAULT_INVOCATION_STRATEGY = InvocationStrategy.SHELL;
-
 export class Explain extends EventEmitter {
   conversationThread: ConversationThread | undefined;
-  invocationStrategy = DEFAULT_INVOCATION_STRATEGY;
 
   constructor(
     public appmapDirectories: AppMapDirectory[],
@@ -198,7 +196,7 @@ export class Explain extends EventEmitter {
   runTestContext(
     data: TestInvocation.TestInvocationRequest
   ): Promise<TestInvocation.TestInvocationResponse> {
-    return invokeTests(this.invocationStrategy, data);
+    return invokeTests(getInvocationStrategy(), data);
   }
 
   async enrollConversationThread(navie: INavie): Promise<ConversationThread | undefined> {
@@ -294,19 +292,28 @@ export async function explain(
   );
 
   const invokeContextFunction = async (data: any) => {
-    const type = data.type;
-    const fnName = [type, 'Context'].join('');
+    const type = data.type as string;
     warn(`Explain received context request: ${type}`);
-    const fn: (args: any) => any = explain[fnName];
+    const typeTokens = type.split('-');
+    const firstTypeToken = typeTokens[0];
+    const remainingTypeTokens = typeTokens
+      .slice(1)
+      .map((token) => token.charAt(0).toUpperCase() + token.slice(1));
+    const camelCaseType = [firstTypeToken, ...remainingTypeTokens].join('');
+    const contextFunctionName = [camelCaseType, 'Context'].join('');
+    warn(`Invoking context function : ${contextFunctionName}`);
+
+    const fn: (args: any) => any = explain[contextFunctionName];
     if (!fn) {
-      warn(`Explain context function ${fnName} not found`);
+      warn(`Explain context function ${contextFunctionName} not found`);
       return {};
     }
 
     try {
       return await fn.call(explain, data);
     } catch (e) {
-      warn(`Explain context function ${fnName} threw an error:`);
+      ``;
+      warn(`Explain context function ${contextFunctionName} threw an error:`);
       warn(e);
       return {};
     }
@@ -317,8 +324,15 @@ export async function explain(
   const projectInfoProvider: ProjectInfo.ProjectInfoProvider = async (data: any) =>
     invokeContextFunction(data);
   const helpProvider: Help.HelpProvider = async (data: any) => invokeContextFunction(data);
+  const testInvocationProvider: TestInvocation.TestInvocationProvider = async (data: any) =>
+    invokeContextFunction(data);
 
-  const navie = navieProvider(contextProvider, projectInfoProvider, helpProvider);
+  const navie = navieProvider(
+    contextProvider,
+    projectInfoProvider,
+    helpProvider,
+    testInvocationProvider
+  );
   return new Promise<ExplainRpc.ExplainResponse>((resolve, reject) => {
     let isFirst = true;
 

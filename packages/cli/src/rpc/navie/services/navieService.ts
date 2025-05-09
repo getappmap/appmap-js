@@ -1,4 +1,4 @@
-import { ContextV2, Help, ProjectInfo } from '@appland/navie';
+import { ContextV2, Help, ProjectInfo, TestInvocation } from '@appland/navie';
 import INavie, { INavieProvider } from '../../explain/navie/inavie';
 import { ContextService } from './contextService';
 import { randomUUID } from 'node:crypto';
@@ -16,15 +16,28 @@ interface ContextEvent<Type, Req, Res> {
 type ContextEvents =
   | ContextEvent<'context', ContextV2.ContextRequest, ContextV2.ContextResponse>
   | ContextEvent<'help', Help.HelpRequest, Help.HelpResponse>
-  | ContextEvent<'project-info', undefined, ProjectInfo.ProjectInfoResponse>;
+  | ContextEvent<'project-info', undefined, ProjectInfo.ProjectInfoResponse>
+  | ContextEvent<
+      'run-test',
+      TestInvocation.TestInvocationRequest,
+      TestInvocation.TestInvocationResponse
+    >;
 
 export interface ContextEmitter {
   on(event: 'context', listener: (event: ContextEvents) => void): this;
 }
 
 function contextEvent<
-  Req extends ContextV2.ContextRequest | Help.HelpRequest | ProjectInfo.ProjectInfoRequest,
-  Res extends ContextV2.ContextResponse | Help.HelpResponse | ProjectInfo.ProjectInfoResponse
+  Req extends
+    | ContextV2.ContextRequest
+    | Help.HelpRequest
+    | ProjectInfo.ProjectInfoRequest
+    | TestInvocation.TestInvocationRequest,
+  Res extends
+    | ContextV2.ContextResponse
+    | Help.HelpResponse
+    | ProjectInfo.ProjectInfoResponse
+    | TestInvocation.TestInvocationResponse
 >(
   emitter: EventEmitter,
   type: ContextEvents['type'],
@@ -68,7 +81,8 @@ export default class NavieService {
         'project-info',
         this.contextService.projectInfoContext.bind(this)
       ),
-      contextEvent(contextEmitter, 'help', this.contextService.helpContext.bind(this))
+      contextEvent(contextEmitter, 'help', this.contextService.helpContext.bind(this)),
+      contextEvent(contextEmitter, 'run-test', this.contextService.runTestContext.bind(this))
     );
     return [navie, contextEmitter as unknown as ContextEmitter];
   }
