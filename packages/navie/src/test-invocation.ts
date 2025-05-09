@@ -27,3 +27,7 @@ export type TestResultItem = {
 export type TestInvocationResponse = {
   testResults: (TestResultItem | TestScheduledItem)[];
 };
+
+export type TestInvocationProvider = (
+  request: TestInvocationRequest
+) => Promise<TestInvocationResponse>;

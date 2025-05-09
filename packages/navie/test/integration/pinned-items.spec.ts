@@ -20,6 +20,7 @@ describe('Pinned items', () => {
   let contextProvider: jest.Mock;
   let projectInfoProvider: jest.Mock;
   let helpProvider: jest.Mock;
+  let testInvocationProvider: jest.Mock;
   let completionService: { model: string; json: jest.Mock; complete: jest.Mock };
   let tmpDir: string;
   let pinnedFilePath: string;
@@ -57,6 +58,7 @@ describe('Pinned items', () => {
     });
     projectInfoProvider = jest.fn();
     helpProvider = jest.fn();
+    testInvocationProvider = jest.fn();
     tmpDir = await mkdtemp(join(tmpdir(), 'pinned-items-spec-'));
     pinnedFilePath = join(tmpDir, 'pinned-file.ts');
     await writeFile(pinnedFilePath, pinnedFileContent);
@@ -80,6 +82,7 @@ describe('Pinned items', () => {
       contextProvider,
       projectInfoProvider,
       helpProvider,
+      testInvocationProvider,
       new NavieOptions(),
       chatHistory
     ).execute();
