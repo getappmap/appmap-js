@@ -1,5 +1,5 @@
 import AnthropicCompletionService from '../../src/services/anthropic-completion-service';
-import InteractionHistory from '../../src/interaction-history';
+
 import { ChatAnthropic } from '@langchain/anthropic';
 import { IterableReadableStream } from '@langchain/core/utils/stream';
 import { AIMessageChunk } from '@langchain/core/messages';
@@ -9,7 +9,6 @@ import Trajectory, { TrajectoryEvent } from '../../src/lib/trajectory';
 import MessageTokenReducerService from '../../src/services/message-token-reducer-service';
 
 describe('AnthropicCompletionService', () => {
-  let interactionHistory: InteractionHistory;
   let messageTokenReducerService: MessageTokenReducerService;
   let trajectory: Trajectory;
   let service: AnthropicCompletionService;
@@ -20,7 +19,6 @@ describe('AnthropicCompletionService', () => {
 
   beforeEach(() => {
     process.env['ANTHROPIC_API_KEY'] = 'test-api-key';
-    interactionHistory = new InteractionHistory();
     messageTokenReducerService = new MessageTokenReducerService();
     trajectory = new Trajectory();
     service = new AnthropicCompletionService(
@@ -105,23 +103,7 @@ describe('AnthropicCompletionService', () => {
         return Promise.resolve(IterableReadableStream.fromAsyncGenerator(gen()));
       });
 
-      const completion = service.complete([]);
-      const consumePromise = (async () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        try {
-          for await (const chunk of completion) {
-            // We don't expect to get any chunks
-          }
-        } catch (e) {
-          /* eslint-disable jest/no-conditional-expect */
-          // This is not conditional, it's guaranteed to throw
-          expect(stream).toHaveBeenCalledTimes(5);
-          const err = e as Error;
-          expect(err).toBeInstanceOf(Error);
-          expect(err.message).toContain('Failed to complete');
-          /* eslint-enable jest/no-conditional-expect */
-        }
-      })();
+      const completion = service.complete([]).next();
 
       const delays = [1000, 2000, 4000, 8000];
 
@@ -133,7 +115,8 @@ describe('AnthropicCompletionService', () => {
         await Promise.resolve();
       }
 
-      await consumePromise;
+      await expect(completion).rejects.toThrow('Failed to complete');
+      expect(stream).toHaveBeenCalledTimes(5);
     });
 
     it('truncates messages if context length exceeded', async () => {
@@ -198,7 +181,7 @@ describe('AnthropicCompletionService', () => {
     const schema = z.object({ answer: z.string() });
 
     beforeEach(() =>
-      jest.spyOn(RunnableBinding.prototype, 'invoke').mockResolvedValue({ answer: '42' } as any)
+      jest.spyOn(RunnableBinding.prototype, 'invoke').mockResolvedValue({ answer: '42' })
     );
 
     it('returns the parsed JSON', async () => {
@@ -227,7 +210,9 @@ describe('AnthropicCompletionService', () => {
 });
 
 function mockAnthropicStream(...chunks: string[]) {
+  // eslint-disable-next-line @typescript-eslint/require-await
   jest.spyOn(ChatAnthropic.prototype, 'stream').mockImplementation(async () => {
+    // eslint-disable-next-line @typescript-eslint/require-await
     async function* gen(): AsyncGenerator<AIMessageChunk> {
       for (const chunk of chunks) {
         yield new AIMessageChunk({
