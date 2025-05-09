@@ -108,7 +108,7 @@ export default async function invokeTestInvocationItem(
 
   console.log(`Invoking test command: ${command}`);
 
-  const testPromise = new Promise<ProcessResult>((resolve, reject) => {
+  const testPromise = new Promise<ProcessResult>((resolve) => {
     exec(command, { cwd: bestDirectory }, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing command: ${error.message}`);
