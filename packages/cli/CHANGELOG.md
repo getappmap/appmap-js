@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.189.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.7...@appland/appmap-v3.189.0) (2025-05-10)
+
+
+### Features
+
+* Ignore some files in the diff and remove diff size limit ([1faa73a](https://github.com/getappmap/appmap-js/commit/1faa73a23a159fad659b2fcf52731563335c5a73))
+
 # [@appland/appmap-v3.188.7](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.6...@appland/appmap-v3.188.7) (2025-05-01)
 
 
