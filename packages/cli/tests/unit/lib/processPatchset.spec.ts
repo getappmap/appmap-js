@@ -1,6 +1,97 @@
 import processPatchset from '../../../src/lib/processPatchset';
 
 describe('processPatchset', () => {
+  describe('ignore list filtering', () => {
+    it('should filter out diffs for ignored paths', () => {
+      const patchset = `diff --git a/node_modules/pkg/file.js b/node_modules/pkg/file.js
+index 83db48f..f735c4e 100644
+--- a/node_modules/pkg/file.js
++++ b/node_modules/pkg/file.js
+@@ -1,3 +1,3 @@
+-old content
++new content
+diff --git a/yarn.lock b/yarn.lock
+index 83db48f..f735c4e 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -1,3 +1,3 @@
+-old content
++new content`;
+
+      const result = processPatchset(patchset);
+      expect(result).toBe('');
+    });
+
+    it('should keep diffs for non-ignored paths', () => {
+      const patchset = `diff --git a/src/file1.js b/src/file1.js
+index 83db48f..f735c4e 100644
+--- a/src/file1.js
++++ b/src/file1.js
+@@ -1,3 +1,3 @@
+-old content
++new content`;
+
+      const result = processPatchset(patchset);
+      expect(result).toBe(patchset);
+    });
+
+    it('should respect custom ignore list', () => {
+      const patchset = `diff --git a/src/file1.js b/src/file1.js
+index 83db48f..f735c4e 100644
+--- a/src/file1.js
++++ b/src/file1.js
+@@ -1,3 +1,3 @@
+-old content
++new content`;
+
+      const result = processPatchset(patchset, undefined, ['src']);
+      expect(result).toBe('');
+    });
+
+    it('should keep diffs for paths that only start with ignored paths', () => {
+      const patchset = `diff --git a/srcfile1.js b/srcfile1.js
+index 83db48f..f735c4e 100644
+--- a/srcfile1.js
++++ b/srcfile1.js
+@@ -1,3 +1,3 @@
+-old content
++new content`;
+
+      const result = processPatchset(patchset, undefined, ['src']);
+      expect(result).toBe(patchset);
+    });
+
+    it('should filter out only ignored paths when patchset contains both ignored and non-ignored files', () => {
+      const patchset = `diff --git a/node_modules/pkg/file.js b/node_modules/pkg/file.js
+index 83db48f..f735c4e 100644
+--- a/node_modules/pkg/file.js
++++ b/node_modules/pkg/file.js
+@@ -1,3 +1,3 @@
+-old content
++new content
+diff --git a/src/file1.js b/src/file1.js
+index 83db48f..f735c4e 100644
+--- a/src/file1.js
++++ b/src/file1.js
+@@ -1,3 +1,3 @@
+-old content
++new content`;
+
+      const result = processPatchset(patchset);
+
+      // Should keep only the non-ignored file diff
+      const expected = `diff --git a/src/file1.js b/src/file1.js
+index 83db48f..f735c4e 100644
+--- a/src/file1.js
++++ b/src/file1.js
+@@ -1,3 +1,3 @@
+-old content
++new content`;
+
+      expect(result).toBe(expected);
+    });
+  });
+  
   it('should handle patchset with small diffs correctly', () => {
     const patchset = `diff --git a/file1.txt b/file1.txt
 index 83db48f..f735c4e 100644
