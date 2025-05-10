@@ -1,3 +1,4 @@
+import { debug as makeDebug } from 'node:util';
 import { isNativeError } from 'node:util/types';
 
 import { ChatOpenAI } from '@langchain/openai';
@@ -21,6 +22,8 @@ import MessageTokenReducerService from './message-token-reducer-service';
 import { findObject, tryParseJson } from '../lib/parse-json';
 import trimFences from '../lib/trim-fences';
 import { performance } from 'node:perf_hooks';
+
+const debug = makeDebug('appmap:navie:openai-completion-service');
 
 /*
   Generated on https://openai.com/api/pricing/ with
@@ -243,6 +246,8 @@ export default class OpenAICompletionService implements CompletionService {
       const sentMessages = mergeSystemMessages([...messages, schemaPrompt(jsonSchema)]);
       for (const message of sentMessages) this.trajectory.logSentMessage(message);
 
+      debug('Sending messages to local model:', sentMessages);
+
       return this.model.completionWithRetry({
         messages: sentMessages,
         model: options?.model ?? this.modelName,
@@ -303,6 +308,7 @@ export default class OpenAICompletionService implements CompletionService {
 
       if (completion && completion.content !== null && completion.content !== undefined) {
         this.trajectory.logReceivedMessage({ role: 'assistant', content: completion.content });
+        debug('Received JSON response:', completion.content);
 
         try {
           const parsed = tryParseJson(completion.content, trimFences, findObject);
