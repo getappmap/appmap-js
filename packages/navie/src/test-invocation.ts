@@ -8,7 +8,7 @@ export type TestInvocationItem = {
 
 export type TestInvocationRequest = {
   testItems: TestInvocationItem[];
-  invocation: 'immediate' | 'async';
+  invocation: 'sync' | 'async';
 };
 
 export type TestScheduledItem = {
@@ -27,3 +27,7 @@ export type TestResultItem = {
 export type TestInvocationResponse = {
   testResults: (TestResultItem | TestScheduledItem)[];
 };
+
+export type TestInvocationProvider = (
+  request: TestInvocationRequest
+) => Promise<TestInvocationResponse>;

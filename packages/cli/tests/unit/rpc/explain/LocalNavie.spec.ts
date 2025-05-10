@@ -5,12 +5,10 @@ import ThreadService from '../../../../src/rpc/navie/services/threadService';
 
 jest.mock('@appland/navie', () => ({
   ...jest.requireActual('@appland/navie'),
-  navie: jest
-    .fn()
-    .mockReturnValue({
-      on: jest.fn().mockReturnThis(),
-      execute: jest.fn().mockImplementation(function* () {}),
-    }),
+  navie: jest.fn().mockReturnValue({
+    on: jest.fn().mockReturnThis(),
+    execute: jest.fn().mockImplementation(function* () {}),
+  }),
 }));
 jest.mock('@appland/client', () => ({
   AI: {
@@ -24,8 +22,17 @@ describe('LocalNavie', () => {
   let contextProvider = jest.fn();
   let projectInfoProvider = jest.fn();
   let helpProvider = jest.fn();
+  let testInvocationProvider = jest.fn();
 
-  beforeEach(() => (navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider)));
+  beforeEach(
+    () =>
+      (navie = new LocalNavie(
+        contextProvider,
+        projectInfoProvider,
+        helpProvider,
+        testInvocationProvider
+      ))
+  );
 
   describe('setOptions', () => {
     it("should set 'temperature'", () => {
@@ -56,7 +63,7 @@ describe('LocalNavie', () => {
     let navie: LocalNavie;
 
     beforeEach(() => {
-      navie = new LocalNavie(jest.fn(), jest.fn(), jest.fn());
+      navie = new LocalNavie(jest.fn(), jest.fn(), jest.fn(), jest.fn());
       originalEnv = { ...process.env };
       process.env.APPMAP_TELEMETRY_DISABLED = '1';
       LegacyHistory.initialize = jest.fn();

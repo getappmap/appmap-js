@@ -14,9 +14,7 @@ import InteractionHistory, {
   ContextItemRequestor,
   PromptInteractionEvent,
 } from '../interaction-history';
-import { PromptType, buildPromptDescriptor, buildPromptValue } from '../prompt';
-
-type Test = () => boolean;
+import { PromptType, buildPromptDescriptor } from '../prompt';
 
 type MinimumStats = Omit<AppMapStats, 'routes' | 'tables' | 'packages'> & {
   routes?: string[];
