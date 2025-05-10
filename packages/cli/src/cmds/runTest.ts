@@ -22,9 +22,10 @@ export function builder<T>(args: yargs.Argv<T>) {
       alias: 'd',
     })
     .option('invocation', {
-      describe: 'invocation option (async or immediate)',
+      describe: 'invocation option (sync or async)',
       type: 'string',
-      choices: ['async', 'immediate'],
+      choices: ['sync', 'async'],
+      default: 'sync',
     });
 }
 
