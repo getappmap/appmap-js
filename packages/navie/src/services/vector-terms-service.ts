@@ -47,7 +47,7 @@ export default class VectorTermsService {
         role: 'system',
       },
       {
-        content: question,
+        content: 'Suggest search terms for the following:\n\n' + question,
         role: 'user',
       },
     ];
