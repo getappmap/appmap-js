@@ -5,8 +5,10 @@ import { exec } from 'child_process';
 import { AppMapConfig, LanguageName } from '../../lib/loadAppMapConfig';
 import collectAppMapConfigByPath from '../../lib/collectAppMapConfigByPath';
 import rebaseTestFileToProjectFile from './rebaseTestFileToProjectFile';
+import { log } from 'console';
 
 export const TEST_NAME_SYMBOL = '$(test_name)';
+export const TEST_CLASS_SYMBOL = '$(test_class)';
 
 export type ProcessResult = {
   succeeded: boolean;
@@ -80,30 +82,64 @@ export default async function invokeTestInvocationItem(
   }
 
   const { command: commandTemplate } = testCommand;
-  if (!commandTemplate.includes(TEST_NAME_SYMBOL)) {
-    console.warn(`Test name symbol ${TEST_NAME_SYMBOL} not found in command: ${commandTemplate}`);
-    return;
-  }
 
   const { rebasedFilePath, projectDirectory } = rebaseTestFileToProjectFile(languageName, filePath);
 
-  const command = commandTemplate.replace(TEST_NAME_SYMBOL, rebasedFilePath);
+  let command: string;
+  if (commandTemplate.includes(TEST_NAME_SYMBOL)) {
+    command = commandTemplate.replace(TEST_NAME_SYMBOL, rebasedFilePath);
+  } else if (commandTemplate.includes(TEST_CLASS_SYMBOL)) {
+    const testFileNameToTestClassName = (filePath: string) => {
+      // TODO: Getting this working for now; needs a more robust refactor.
+      let normalizedFilePath = filePath;
+      if (filePath.startsWith('src/test/java'))
+        normalizedFilePath = filePath.slice('src/test/java'.length + 1);
+      if (normalizedFilePath.endsWith('.java'))
+        normalizedFilePath = normalizedFilePath.slice(0, -5);
+      const parts = normalizedFilePath.split('/');
+      return parts.join('.');
+    };
+    command = commandTemplate.replace(
+      TEST_CLASS_SYMBOL,
+      testFileNameToTestClassName(rebasedFilePath)
+    );
+  } else {
+    throw new Error(
+      `Test command template does not contain ${TEST_NAME_SYMBOL} or ${TEST_CLASS_SYMBOL}`
+    );
+  }
 
-  const commandOptions: { cwd?: string } = {};
+  console.log(`Invoking test command: ${command}`);
+
+  const commandOptions: { cwd?: string; shell?: string; timeout?: number } = {};
   if (projectDirectory) {
+    console.log(`Setting working directory to: ${projectDirectory}`);
     commandOptions.cwd = projectDirectory;
   } else {
     console.warn(`No project directory found for file path: ${filePath}`);
     console.warn(`Invoking test command in current directory: ${process.cwd()}`);
   }
 
-  console.log(`Invoking test command: ${command}`);
+  if (testCommand.shell) {
+    console.log(`Using shell: ${testCommand.shell}`);
+    commandOptions.shell = testCommand.shell;
+  }
+  if (testCommand.timeout) {
+    console.log(`Setting timeout to: ${testCommand.timeout}`);
+    commandOptions.timeout = parseInt(testCommand.timeout.toString(), 10);
+  }
 
   // NOTE reject is not used here, because command errors are reported as succeeded: false
   const testPromise = new Promise<ProcessResult>((resolve) => {
     exec(command, commandOptions, (error, stdout, stderr) => {
+      const logStderrAndStdout = () => {
+        if (stderr) console.log(`Command stderr: ${stderr}`);
+        if (stdout) console.log(`Command stdout: ${stdout}`);
+      };
+
       if (error) {
         console.error(`Error executing command: ${error.message}`);
+        logStderrAndStdout();
         resolve({
           succeeded: false,
           error: error.message,
@@ -111,8 +147,7 @@ export default async function invokeTestInvocationItem(
         return;
       }
 
-      if (stderr) console.log(`Command stderr: ${stderr}`);
-      if (stdout) console.log(`Command stdout: ${stdout}`);
+      logStderrAndStdout();
 
       resolve({
         succeeded: true,

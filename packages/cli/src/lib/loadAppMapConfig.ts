@@ -40,6 +40,8 @@ export type CommandString = string;
 export type TestCommand = {
   language: LanguageName;
   command: CommandString;
+  shell?: string;
+  timeout?: number;
 };
 
 export interface AppMapConfig {
