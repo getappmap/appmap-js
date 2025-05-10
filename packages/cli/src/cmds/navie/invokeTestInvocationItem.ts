@@ -1,12 +1,14 @@
 import { TestInvocation } from '@appland/navie';
-import { existsSync } from 'fs';
 import configuration from '../../rpc/configuration';
-import path, { dirname, isAbsolute, join } from 'path';
+import { isAbsolute, join } from 'path';
 import { exec } from 'child_process';
 import { AppMapConfig, LanguageName } from '../../lib/loadAppMapConfig';
 import collectAppMapConfigByPath from '../../lib/collectAppMapConfigByPath';
+import rebaseTestFileToProjectFile from './rebaseTestFileToProjectFile';
+import { log } from 'console';
 
 export const TEST_NAME_SYMBOL = '$(test_name)';
+export const TEST_CLASS_SYMBOL = '$(test_class)';
 
 export type ProcessResult = {
   succeeded: boolean;
@@ -80,47 +82,72 @@ export default async function invokeTestInvocationItem(
   }
 
   const { command: commandTemplate } = testCommand;
-  if (!commandTemplate.includes(TEST_NAME_SYMBOL)) {
-    console.warn(`Test name symbol ${TEST_NAME_SYMBOL} not found in command: ${commandTemplate}`);
-    return;
-  }
 
-  let bestFilePath = filePath;
-  let bestDirectory = '.';
-  if (languageName === 'javascript') {
-    let searchDirectory = dirname(filePath);
-    while (searchDirectory !== path.parse(searchDirectory).root && searchDirectory !== '') {
-      const packageJSONFile = join(searchDirectory, 'package.json');
-      if (existsSync(packageJSONFile)) {
-        bestFilePath = filePath.slice(searchDirectory.length + 1);
-        bestDirectory = searchDirectory;
-        break;
-      }
-      searchDirectory = dirname(searchDirectory);
-    }
+  const { rebasedFilePath, projectDirectory } = rebaseTestFileToProjectFile(languageName, filePath);
 
-    console.log(
-      `Closest ancestor directory for JavaScript test containing package.json: ${bestDirectory}`
+  let command: string;
+  if (commandTemplate.includes(TEST_NAME_SYMBOL)) {
+    command = commandTemplate.replace(TEST_NAME_SYMBOL, rebasedFilePath);
+  } else if (commandTemplate.includes(TEST_CLASS_SYMBOL)) {
+    const testFileNameToTestClassName = (filePath: string) => {
+      // TODO: Getting this working for now; needs a more robust refactor.
+      let normalizedFilePath = filePath;
+      if (filePath.startsWith('src/test/java'))
+        normalizedFilePath = filePath.slice('src/test/java'.length + 1);
+      if (normalizedFilePath.endsWith('.java'))
+        normalizedFilePath = normalizedFilePath.slice(0, -5);
+      const parts = normalizedFilePath.split('/');
+      return parts.join('.');
+    };
+    command = commandTemplate.replace(
+      TEST_CLASS_SYMBOL,
+      testFileNameToTestClassName(rebasedFilePath)
+    );
+  } else {
+    throw new Error(
+      `Test command template does not contain ${TEST_NAME_SYMBOL} or ${TEST_CLASS_SYMBOL}`
     );
   }
 
-  const command = commandTemplate.replace(TEST_NAME_SYMBOL, bestFilePath);
-
   console.log(`Invoking test command: ${command}`);
 
-  const testPromise = new Promise<ProcessResult>((resolve, reject) => {
-    exec(command, { cwd: bestDirectory }, (error, stdout, stderr) => {
+  const commandOptions: { cwd?: string; shell?: string; timeout?: number } = {};
+  if (projectDirectory) {
+    console.log(`Setting working directory to: ${projectDirectory}`);
+    commandOptions.cwd = projectDirectory;
+  } else {
+    console.warn(`No project directory found for file path: ${filePath}`);
+    console.warn(`Invoking test command in current directory: ${process.cwd()}`);
+  }
+
+  if (testCommand.shell) {
+    console.log(`Using shell: ${testCommand.shell}`);
+    commandOptions.shell = testCommand.shell;
+  }
+  if (testCommand.timeout) {
+    console.log(`Setting timeout to: ${testCommand.timeout}`);
+    commandOptions.timeout = parseInt(testCommand.timeout.toString(), 10);
+  }
+
+  // NOTE reject is not used here, because command errors are reported as succeeded: false
+  const testPromise = new Promise<ProcessResult>((resolve) => {
+    exec(command, commandOptions, (error, stdout, stderr) => {
+      const logStderrAndStdout = () => {
+        if (stderr) console.log(`Command stderr: ${stderr}`);
+        if (stdout) console.log(`Command stdout: ${stdout}`);
+      };
+
       if (error) {
         console.error(`Error executing command: ${error.message}`);
+        logStderrAndStdout();
         resolve({
           succeeded: false,
           error: error.message,
         });
+        return;
       }
-      if (stderr) {
-        console.warn(`Error output: ${stderr}`);
-      }
-      console.log(`Command output: ${stdout}`);
+
+      logStderrAndStdout();
 
       resolve({
         succeeded: true,

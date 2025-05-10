@@ -13,10 +13,12 @@ import { UserOptions } from '../../src/lib/parse-options';
 import CompletionService from '../../src/services/completion-service';
 import InvokeTestsService from '../../src/services/invoke-tests-service';
 import LookupContextService from '../../src/services/lookup-context-service';
+import ProjectInfoService from '../../src/services/project-info-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 
 describe('ReviewCommand', () => {
   let command: ReviewCommand;
+  let projectInfoService: ProjectInfoService;
   let completionService: CompletionService;
   let lookupContextService: LookupContextService;
   let interactionHistory: InteractionHistory;
@@ -81,6 +83,9 @@ lgtm
       modelName: modelName,
       miniModelName: miniModelName,
     } as any;
+    projectInfoService = {
+      lookupProjectInfo: jest.fn().mockResolvedValue([]),
+    } as any;
     interactionHistory = new InteractionHistory();
     lookupContext = jest.fn().mockResolvedValue(exampleContext);
     lookupContextService = new LookupContextService(
@@ -96,6 +101,7 @@ lgtm
     } as any;
     command = new ReviewCommand(
       { tokenLimit, responseTokens },
+      projectInfoService,
       completionService,
       lookupContextService,
       vectorTermsService,
