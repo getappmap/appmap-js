@@ -1,3 +1,10 @@
+# [@appland/navie-v1.44.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.44.1...@appland/navie-v1.44.2) (2025-05-11)
+
+
+### Bug Fixes
+
+* Update user prompt format in suggestTerms method ([7781be2](https://github.com/getappmap/appmap-js/commit/7781be2c28d453cd0c94a211c12883656aad6ddb))
+
 # [@appland/navie-v1.44.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.44.0...@appland/navie-v1.44.1) (2025-04-14)
 
 
