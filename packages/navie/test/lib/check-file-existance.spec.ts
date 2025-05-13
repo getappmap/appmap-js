@@ -12,11 +12,7 @@ describe('checkFileExistence', () => {
   });
 
   it('returns files that exist in the context', async () => {
-    const filePaths = [
-      '/project/src/file1.ts',
-      '/project/src/file2.ts',
-      '/project/src/file3.ts',
-    ];
+    const filePaths = ['/project/src/file1.ts', '/project/src/file2.ts', '/project/src/file3.ts'];
 
     lookupContextService.lookupContext.mockResolvedValue([
       {

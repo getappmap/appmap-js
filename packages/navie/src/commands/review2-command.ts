@@ -153,9 +153,8 @@ const SuggestionItem = z.object({
     .describe(
       'The type of code improvement that the suggestion suggests. Primary suggestion types are: bug, security, performance.'
     ),
-  cwe: z.string().describe('The Common Weakness Enumeration identifier related to the suggestion.'),
   context: z.string().describe('A snippet of code that provides the context for the suggestion.'),
-  severity: z.enum(['low', 'medium', 'high']).describe('Severity of the suggestion.'),
+  priority: z.enum(['low', 'medium', 'high']).describe('Priority of the suggestion.'),
   label: z.string().describe('A few words that concisely describe the suggestion.'),
   description: z
     .string()
@@ -334,21 +333,14 @@ export default class Review2Command implements Command {
     if (outputText) {
       yield '## Suggestions\n\n';
       for (const suggestion of suggestions.suggestions) {
-        const { cwe: cweWithPossibleCWEPrefix } = suggestion;
-        let cwe = cweWithPossibleCWEPrefix;
-        if (cweWithPossibleCWEPrefix.startsWith('CWE-')) {
-          cwe = cweWithPossibleCWEPrefix.substring('CWE-'.length);
-        }
-
         yield `**${suggestion.label} (${suggestion.type})**\n`;
         yield '\n';
         yield `${suggestion.description}\n`;
         yield '\n';
         yield `| Field | Value |\n`;
         yield `|-------|-------|\n`;
-        yield `| CWE | [${suggestion.cwe}](https://cwe.mitre.org/data/definitions/${cwe}.html) |\n`;
         yield `| Type | ${suggestion.type} |\n`;
-        yield `| Severity | ${suggestion.severity} |\n`;
+        yield `| Priority | ${suggestion.priority} |\n`;
         yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
         yield '\n';
         yield '```';
