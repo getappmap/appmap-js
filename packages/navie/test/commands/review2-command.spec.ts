@@ -75,6 +75,7 @@ describe('Review2Command', () => {
     command: Review2Command,
     mockFeatures: any,
     mockTestMatrix: any,
+    mockLabels: any,
     userOptions: UserOptions = new UserOptions(new Map())
   ): Promise<string> {
     const mockSuggestions = {
@@ -84,6 +85,7 @@ describe('Review2Command', () => {
     completionService.json
       .mockResolvedValueOnce(mockFeatures)
       .mockResolvedValueOnce(mockTestMatrix)
+      .mockResolvedValueOnce(mockLabels)
       .mockResolvedValueOnce(mockSuggestions);
 
     const output = command.execute({
@@ -111,6 +113,10 @@ describe('Review2Command', () => {
         features: [{ feature: 'Feature 1' }, { feature: 'Feature 2' }, { feature: 'Feature 3' }],
       };
 
+      const mockLabels = {
+        labels: [],
+      };
+
       const mockTestMatrix = {
         featureTests: [
           {
@@ -135,7 +141,12 @@ describe('Review2Command', () => {
         ],
       };
 
-      const result = await executeReviewCommandWithMocks(command, mockFeatures, mockTestMatrix);
+      const result = await executeReviewCommandWithMocks(
+        command,
+        mockFeatures,
+        mockTestMatrix,
+        mockLabels
+      );
 
       expect(result).toContain('### Suggested Test Commands');
       expect(result).toContain('@test /diff Feature 2');
@@ -146,6 +157,10 @@ describe('Review2Command', () => {
     it('should include base branch in @test commands when specified', async () => {
       const mockFeatures = {
         features: [{ feature: 'Feature 1' }, { feature: 'Feature 2' }],
+      };
+
+      const mockLabels = {
+        labels: [],
       };
 
       const mockTestMatrix = {
@@ -166,6 +181,7 @@ describe('Review2Command', () => {
         command,
         mockFeatures,
         mockTestMatrix,
+        mockLabels,
         userOptions
       );
 
@@ -177,6 +193,10 @@ describe('Review2Command', () => {
     it('should include /nogather flag when testgengather is disabled', async () => {
       const mockFeatures = {
         features: [{ feature: 'Feature 1' }],
+      };
+
+      const mockLabels = {
+        labels: [],
       };
 
       const mockTestMatrix = {
@@ -193,6 +213,7 @@ describe('Review2Command', () => {
         command,
         mockFeatures,
         mockTestMatrix,
+        mockLabels,
         userOptions
       );
 
@@ -205,6 +226,10 @@ describe('Review2Command', () => {
         features: [{ feature: 'Feature 1' }],
       };
 
+      const mockLabels = {
+        labels: [],
+      };
+
       const mockTestMatrix = {
         featureTests: [
           {
@@ -214,11 +239,59 @@ describe('Review2Command', () => {
         ],
       };
 
-      const result = await executeReviewCommandWithMocks(command, mockFeatures, mockTestMatrix);
+      const result = await executeReviewCommandWithMocks(
+        command,
+        mockFeatures,
+        mockTestMatrix,
+        mockLabels
+      );
 
       expect(result).toContain('### Suggested Test Commands');
       expect(result).toContain('@test /diff Feature 1');
       expect(result).not.toContain('/nogather');
+    });
+
+    it('includes label suggestions in the output', async () => {
+      const mockFeatures = {
+        features: [{ feature: 'Feature 1' }],
+      };
+
+      const mockLabels = {
+        labels: [
+          {
+            label: 'label1',
+            description: 'Description for label1',
+            file: 'file1.ts',
+            line: 10,
+          },
+          {
+            label: 'label2',
+            description: 'Description for label2',
+            file: 'file2.ts',
+            line: 20,
+          },
+        ],
+      };
+
+      const mockTestMatrix = {
+        featureTests: [
+          {
+            feature: 'Feature 1',
+            tests: [], // No tests for Feature 1
+          },
+        ],
+      };
+
+      const result = await executeReviewCommandWithMocks(
+        command,
+        mockFeatures,
+        mockTestMatrix,
+        mockLabels
+      );
+
+      expect(result).toContain('## Suggested Code Labels');
+      expect(result).toContain('* label1 - Description for label1 (file1.ts:10)');
+      expect(result).toContain('* label2 - Description for label2 (file2.ts:20)');
     });
   });
 });
