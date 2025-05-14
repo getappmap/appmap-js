@@ -60,6 +60,50 @@ The JSON object should look like this:
 }
 """`;
 
+const LABELS_PROMPT = `You are a helpful programming assistant. Analyze this git diff and suggest 
+was in which the code can be labeled to facilitate analysis.
+
+Only label code files written in the primary languages of the project. Do not label configuration
+files, test files, or other supporting files such as setup and configuration scripts.
+
+The list of labels, along with their effect on the code, is as follows:
+
+* access.public - Indicates that a request allows public access, and does not require authentication or authorization.
+  This label is intended for web request methods, e.g. controller functions, not for ordinary functions.
+* audit - Writes an audit record, i.e. a permanent record of some application activity.
+* command.perform - Indicates that an event represents the invocation of command-line command, such as a shell command or a script.
+* crypto.decrypt - A function that performs decryption.
+* crypto.digest - A function that computes a cryptographic digest (or 'hash') of some data.
+* crypto.encrypt - A function that performs encryption.
+* crypto.set_auth_data - A function that sets authenticated data for an encryption operation.
+* dao.materialize - Loads data access objects from the database into memory. This function is intended
+  applied to framework or library code, not to every instance of application code that loads data.
+* deserialize.safe - Indicates that a function performs deserialization safely.
+* deserialize.sanitize - Ensures that data is safe and trusted for deserialization, transforming it if
+  necessary, and returning falsey or raising an exception if it's impossible to make the data safe.
+* deserialize.unsafe - Indicates that a function does not guarantee safe deserialization.
+* http.session.clear - Clears the HTTP session. Any previously issued session id becomes invalid.
+* job.cancel - Cancels execution of a background job.
+* job.create - Schedules a background job for execution.
+* job.perform - Indicates that an event represents the invocation of a background job.
+* log - Writes a message to the application log. This method is intended for framework or library code,
+  not for every instance of application code that writes to the log.
+* rpc.circuit_breaker - Indicates that a function provides circuit breaker functionality.
+  When present, a circuit breaker function is expected to be invoked as a descendant of an RPC client request.
+* secret - Indicates that a function returns a secret value. A secret is a user password, cryptographic key, authentication
+  token, etc that is used for authentication or other verification.
+  Personally-identifiable information (PII) does not fall under the scope of the secret label.
+* security.authentication - A function that verifies the identity of an application user.
+* security.authorization - A function that tests whether a user is authorized to perform an action.
+* security.logout - A function that logs out a user.
+* string.equals - Compares two strings for equality.
+  The function receiver should be a string, and the function should take one argument that is the other string.
+* system.exec - Indicates that a function performs an OS system command.
+* system.exec.safe - Indicates that a function performs an OS system command in a manner which is known to be safe.
+* system.exec.sanitize - Ensures that data is safe and trusted for use as a system command, transforming it if necessary, and returning falsey or raising an exception if it’s impossible to make the data safe.
+  A function with this label can be used to convert untrusted data such as direct user input or HTTP request parameters into trusted data.
+`;
+
 const SUGGESTION_PROMPT = `You are a helpful programming assistant. Analyze this git diff and suggest specific, actionable changes
 that would make the code better.
 
@@ -104,13 +148,36 @@ const FeatureList = z.object({
   ),
 });
 
+export const LabelItem = z.object({
+  label: z
+    .string()
+    .describe(
+      'The name of the label to be applied to the code. The label should be chosen from the list of labels.'
+    ),
+  description: z
+    .string()
+    .describe(
+      'A description of why the label should be applied to the code. This should be a short, concise explanation.'
+    ),
+  file: z.string().describe('The name of the file that contains the function to be labeled.'),
+  line: z
+    .number()
+    .describe(
+      'The line number in the file where the function to be labeled is located. This should be a positive integer.'
+    ),
+});
+
+export const LabelItemList = z.object({
+  labels: LabelItem.array().describe(
+    'A list of labels to be applied to the code. Each label should be a short, descriptive name.'
+  ),
+});
+
 export const TestItem = z.object({
   file: z
     .string()
 
-    .describe(
-      `The name of the file that contains the test case. This should be a short, descriptive name.`
-    ),
+    .describe(`The name of the file that contains the test case.`),
   startLine: z
     .number()
     .describe(
@@ -182,12 +249,20 @@ export default class Review2Command implements Command {
   async *execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
     const diffTermsThreshold =
       request.userOptions.numberValue('diff-terms-threshold') ?? DEFAULT_DIFF_TERMS_THRESHOLD;
+    const analyzeFeatures = request.userOptions.booleanValue('features', true);
+    const analyzeLabels = request.userOptions.booleanValue('labels', true);
+    const analyzeSuggestions = request.userOptions.booleanValue('suggestions', true);
     const outputJson = request.userOptions.stringValue('format', 'text') === 'json';
     const outputText = !outputJson;
     const runTests = request.userOptions.stringValue('runtests');
     const runTestsImmediately = runTests === 'immediate';
     const baseBranch = request.userOptions.stringValue('base');
     const testGenGather = request.userOptions.booleanValue('testgengather', true);
+
+    let featureList: string[] | undefined;
+    let testMatrix: z.infer<typeof FeatureTestItemList> | undefined;
+    let suggestionList: z.infer<typeof SuggestionList> | undefined;
+    let labelItemList: z.infer<typeof LabelItemList> | undefined;
 
     if (!hasCodeSelectionArray(request)) {
       if (outputText) yield 'No code selection was provided.';
@@ -222,86 +297,111 @@ export default class Review2Command implements Command {
       );
     }
 
-    const featureList = await this.listFeatures(vectorTerms, request, gitDiff);
+    if (analyzeFeatures) {
+      featureList = await this.listFeatures(vectorTerms, request, gitDiff);
 
-    if (outputText) {
-      yield '## Feature List\n\n';
-      for (const feature of featureList) {
-        yield ` * ${feature}\n`;
+      if (outputText) {
+        yield '## Feature List\n\n';
+        for (const feature of featureList) {
+          yield ` * ${feature}\n`;
+        }
       }
-    }
-    yield '\n\n';
+      yield '\n\n';
 
-    const testMatrix = await this.buildTestMatrix(vectorTerms, featureList, gitDiff);
+      testMatrix = await this.buildTestMatrix(vectorTerms, featureList, gitDiff);
 
-    // Filter test matrix suggested tests to include only those that exist in the file system
-    for (const featureTest of testMatrix.featureTests) {
-      if (featureTest.tests.length === 0) continue;
+      // Filter test matrix suggested tests to include only those that exist in the file system
+      for (const featureTest of testMatrix.featureTests) {
+        if (featureTest.tests.length === 0) continue;
 
-      const suggestedTestItems = featureTest.tests;
-      // NOTE A single, global selectExistingTestItems call could be used instead of calling
-      // within this loop, but the logic would be complicated somewhat.
-      const existingTestItems = await resolveTestItems(
-        this.lookupContextService,
-        projectInfo,
-        suggestedTestItems
-      );
-
-      if (existingTestItems.length !== suggestedTestItems.length) {
-        warn(
-          `Some suggested test items do not exist in the file system. ${existingTestItems.length} of ${suggestedTestItems.length} test items exist.`
+        const suggestedTestItems = featureTest.tests;
+        // NOTE A single, global selectExistingTestItems call could be used instead of calling
+        // within this loop, but the logic would be complicated somewhat.
+        const existingTestItems = await resolveTestItems(
+          this.lookupContextService,
+          projectInfo,
+          suggestedTestItems
         );
+
+        if (existingTestItems.length !== suggestedTestItems.length) {
+          warn(
+            `Some suggested test items do not exist in the file system. ${existingTestItems.length} of ${suggestedTestItems.length} test items exist.`
+          );
+        }
+
+        featureTest.tests = existingTestItems;
       }
 
-      featureTest.tests = existingTestItems;
+      if (outputText) {
+        yield '## Test Analysis\n\n';
+        yield '| Feature | Test Coverage |\n';
+        yield '|---------|---------------|\n';
+        for (const feature of testMatrix.featureTests) {
+          const featureTestDescription = (testItem: z.infer<typeof TestItem>): string => {
+            const { file, startLine, endLine, testName } = testItem;
+            const locationTokens = [];
+            if (startLine) locationTokens.push(startLine);
+            if (endLine) locationTokens.push(endLine);
+
+            return [
+              [file, locationTokens.join('-')].filter(Boolean).join(':'),
+              `(${testName})`,
+            ].join(' ');
+          };
+
+          const testList =
+            feature.tests.length > 0
+              ? feature.tests.map(featureTestDescription).join('<br>')
+              : 'No tests';
+          yield `| ${feature.feature} | ${testList} |\n`;
+        }
+
+        // Add test suggestions for features without tests
+        yield '\n### Suggested Test Commands\n\n';
+        if (testMatrix.featureTests.length === 0) {
+          yield 'No test suggestions were made.';
+        } else {
+          yield 'Copy and paste these commands to Navie AI to generate new test cases:\n\n';
+          for (const feature of testMatrix.featureTests) {
+            if (feature.tests.length === 0) {
+              const commandArguments = ['@test', '/diff'];
+              if (baseBranch) commandArguments.push(`/base=${baseBranch}`);
+              if (!testGenGather) commandArguments.push('/nogather');
+              commandArguments.push(feature.feature);
+
+              yield '\n';
+              yield '```';
+              yield '\n';
+              yield commandArguments.join(' ');
+              yield '\n';
+              yield '```';
+              yield '\n\n';
+            }
+          }
+        }
+      }
+      yield '\n\n';
     }
 
-    if (outputText) {
-      yield '## Test Analysis\n\n';
-      yield '| Feature | Test Coverage |\n';
-      yield '|---------|---------------|\n';
-      for (const feature of testMatrix.featureTests) {
-        const featureTestDescription = (testItem: z.infer<typeof TestItem>): string => {
-          const { file, startLine, endLine, testName } = testItem;
-          const locationTokens = [];
-          if (startLine) locationTokens.push(startLine);
-          if (endLine) locationTokens.push(endLine);
+    if (analyzeLabels) {
+      labelItemList = await this.listLabels(vectorTerms, request, gitDiff);
 
-          return [[file, locationTokens.join('-')].filter(Boolean).join(':'), `(${testName})`].join(
-            ' '
-          );
-        };
-
-        const testList =
-          feature.tests.length > 0
-            ? feature.tests.map(featureTestDescription).join('<br>')
-            : 'No tests';
-        yield `| ${feature.feature} | ${testList} |\n`;
-      }
-
-      // Add test suggestions for features without tests
-      yield '\n### Suggested Test Commands\n\n';
-      yield 'Copy and paste these commands to Navie AI to generate new test cases:\n\n';
-      for (const feature of testMatrix.featureTests) {
-        if (feature.tests.length === 0) {
-          const commandArguments = ['@test', '/diff'];
-          if (baseBranch) commandArguments.push(`/base=${baseBranch}`);
-          if (!testGenGather) commandArguments.push('/nogather');
-          commandArguments.push(feature.feature);
-
-          yield '\n';
-          yield '```';
-          yield '\n';
-          yield commandArguments.join(' ');
-          yield '\n';
-          yield '```';
+      if (labelItemList && outputText) {
+        if (outputText) {
+          yield '## Suggested Code Labels\n\n';
+          if (labelItemList.labels.length === 0) {
+            yield 'No labels were suggested.';
+          } else {
+            for (const labelItem of labelItemList.labels) {
+              yield ` * ${labelItem.label} - ${labelItem.description} (${labelItem.file}:${labelItem.line})\n`;
+            }
+          }
           yield '\n\n';
         }
       }
     }
-    yield '\n\n';
 
-    if (runTests) {
+    if (runTests && testMatrix && featureList) {
       // Invoke tests that exist in the test matrix
       const testItems: TestInvocationItem[] = [];
       for (const feature of testMatrix.featureTests) {
@@ -329,36 +429,85 @@ export default class Review2Command implements Command {
       }
     }
 
-    const suggestions = await this.listSuggestions(gitDiff);
-    if (outputText) {
-      yield '## Suggestions\n\n';
-      for (const suggestion of suggestions.suggestions) {
-        yield `**${suggestion.label} (${suggestion.type})**\n`;
-        yield '\n';
-        yield `${suggestion.description}\n`;
-        yield '\n';
-        yield `| Field | Value |\n`;
-        yield `|-------|-------|\n`;
-        yield `| Type | ${suggestion.type} |\n`;
-        yield `| Priority | ${suggestion.priority} |\n`;
-        yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
-        yield '\n';
-        yield '```';
-        yield '\n';
-        yield suggestion.context;
-        yield '\n';
-        yield '```';
-        yield '\n\n';
+    if (analyzeSuggestions) {
+      suggestionList = await this.listSuggestions(gitDiff);
+      if (outputText) {
+        yield '## Suggestions\n\n';
+        for (const suggestion of suggestionList.suggestions) {
+          yield `**${suggestion.label} (${suggestion.type})**\n`;
+          yield '\n';
+          yield `${suggestion.description}\n`;
+          yield '\n';
+          yield `| Field | Value |\n`;
+          yield `|-------|-------|\n`;
+          yield `| Type | ${suggestion.type} |\n`;
+          yield `| Priority | ${suggestion.priority} |\n`;
+          yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
+          yield '\n';
+          yield '```';
+          yield '\n';
+          yield suggestion.context;
+          yield '\n';
+          yield '```';
+          yield '\n\n';
+        }
       }
     }
 
     if (outputJson) {
       yield JSON.stringify({
+        labels: labelItemList,
         features: featureList,
         testMatrix: testMatrix,
-        suggestions: suggestions,
+        suggestions: suggestionList,
       });
     }
+  }
+
+  private async listLabels(
+    vectorTerms: string[],
+    req: CommandRequest & { codeSelection: UserContext.ContextItem[] },
+    gitDiff: UserContext.CodeSnippetItem
+  ): Promise<z.infer<typeof LabelItemList> | undefined> {
+    const context = await this.lookupContextService.lookupContext(
+      vectorTerms,
+      this.options.tokenLimit
+    );
+
+    const contextMessage = context
+      .map((item) =>
+        ContextV2.isFileContextItem(item)
+          ? `<${item.type} location="${item.location}">\n${item.content}\n</${item.type}>`
+          : `<${item.type}>\n${item.content}\n</${item.type}>`
+      )
+      .join('\n');
+
+    const messages: Message[] = [
+      {
+        role: 'system',
+        content: LABELS_PROMPT,
+      },
+      {
+        role: 'user',
+        content: `Here is the diff:
+  <diff>
+  ${gitDiff.content}
+  </diff>`,
+      },
+      {
+        role: 'user',
+        content: `Here is some related context from the project, which you can use to help you understand the changes:
+  <context>
+  ${contextMessage}
+  </context>`,
+      },
+    ];
+
+    const labelItemList = await this.completionService.json(messages, LabelItemList, {
+      temperature: 0.0,
+    });
+
+    return labelItemList;
   }
 
   /**
