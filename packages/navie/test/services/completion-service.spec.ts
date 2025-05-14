@@ -12,8 +12,8 @@ class TestCompletionService extends CompletionService {
   }
 
   miniModelName = 'test-model';
-  json<Schema extends ZodType>(): Promise<TypeOf<Schema> | undefined> {
-      throw new Error('Method not implemented.');
+  _json<Schema extends ZodType>(): Promise<TypeOf<Schema> | undefined> {
+    throw new Error('Method not implemented.');
   }
 }
 

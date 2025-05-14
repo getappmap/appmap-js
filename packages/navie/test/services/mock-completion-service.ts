@@ -47,7 +47,7 @@ export default class MockCompletionService extends CompletionService {
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  async json<T>(messages: Message[], schema: ZodType<T>): Promise<T | undefined> {
+  async _json<T>(messages: Message[], schema: ZodType<T>): Promise<T | undefined> {
     const completion = this.completion(messages).join('');
     return schema.parse(JSON.parse(completion));
   }

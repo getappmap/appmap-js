@@ -246,7 +246,7 @@ export default class OpenAICompletionService extends CompletionService {
   }
 
   // Request a JSON object with a given JSON schema.
-  async json<Schema extends z.ZodType>(
+  async _json<Schema extends z.ZodType>(
     messages: readonly Message[],
     schema: Schema,
     options?: CompleteOptions
@@ -294,9 +294,15 @@ export default class OpenAICompletionService extends CompletionService {
       const generateJson = this.isLocalModel ? generateLocal : generateOpenAi;
       warn(`Requesting JSON completion`);
       const startTime = performance.now();
-      const response = await generateJson(); // eslint-disable-line no-await-in-loop
-      const endTime = performance.now();
-      warn(`Received JSON response in ${(endTime.valueOf() - startTime.valueOf()) / 1000}s`);
+      let response;
+      try {
+        response = await generateJson(); // eslint-disable-line no-await-in-loop
+      } catch (error) {
+        await this.checkError(messages, error);
+      } finally {
+        const endTime = performance.now();
+        warn(`Received JSON response in ${(endTime.valueOf() - startTime.valueOf()) / 1000}s`);
+      }
       if (!response?.choices?.length) {
         warn(`Bad response, retrying (${i + 1}/${maxRetries})`);
         continue; // eslint-disable-line no-continue
@@ -435,18 +441,8 @@ export default class OpenAICompletionService extends CompletionService {
         }
         break; // Exit loop if successful
       } catch (error) {
-        if (!(error instanceof APIError)) throw error; // only retry on server errors
+        await this.checkError(messages, error);
         if (tokens.length || attempt === CompletionRetries - 1) throw error; // Rethrow if tokens were yielded or max attempts reached
-        if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
-          const message = error.message;
-          // messages are like "This model's maximum context length is 16385 tokens. However, your messages resulted in 40007 tokens"
-          const promptLength = parseInt(message.match(/in (\d+) tokens/)?.[1] ?? '0', 10);
-          const maxTokens = parseInt(
-            message.match(/maximum context length is (\d+)/)?.[1] ?? '0',
-            10
-          );
-          throw await this.promptTooLong(messages, error, promptLength, maxTokens);
-        } else if (error.type !== 'server_error') throw error; // only retry on server errors
         await new Promise(
           (resolve) => setTimeout(resolve, CompletionRetryDelay * Math.pow(2, attempt)) // Exponential backoff
         );
@@ -457,6 +453,17 @@ export default class OpenAICompletionService extends CompletionService {
 
     warn(usage.toString());
     return usage;
+  }
+
+  private async checkError(messages: readonly Message[], error: unknown) {
+    if (!(error instanceof APIError)) throw error; // only retry on server errors
+    if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
+      const message = error.message;
+      // messages are like "This model's maximum context length is 16385 tokens. However, your messages resulted in 40007 tokens"
+      const promptLength = parseInt(message.match(/in (\d+) tokens/)?.[1] ?? '0', 10);
+      const maxTokens = parseInt(message.match(/maximum context length is (\d+)/)?.[1] ?? '0', 10);
+      throw await this.promptTooLong(messages, error, promptLength, maxTokens);
+    } else if (error.type !== 'server_error') throw error; // only retry on server errors
   }
 }
 

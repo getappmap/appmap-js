@@ -85,11 +85,33 @@ export default abstract class CompletionService {
     return usage ?? new Usage();
   }
 
-  abstract json<Schema extends z.ZodType>(
-    messages: Message[],
+  protected abstract _json<Schema extends z.ZodType>(
+    messages: readonly Message[],
     schema: Schema,
     options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined>;
+  async json<Schema extends z.ZodType>(
+    messages: readonly Message[],
+    schema: Schema,
+    options?: CompleteOptions
+  ): Promise<z.infer<Schema> | undefined> {
+    const onContextOverflow = options?.onContextOverflow ?? 'truncate';
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return await this._json(messages, schema, options);
+    } catch (error) {
+      if (error instanceof PromptTooLongError) {
+        if (onContextOverflow === 'truncate') {
+          console.warn(
+            `Prompt too long: ${error.promptTokens} tokens, max: ${error.maxTokens} tokens. Truncating...`
+          );
+          const truncated = truncateMessages(messages, error.promptTokens, this.maxTokens);
+          if (truncated) return this.json(truncated, schema, options);
+        }
+        throw error;
+      }
+    }
+  }
   abstract readonly miniModelName: string;
   readonly model?: BaseLanguageModelInterface;
   maxTokens: number = Infinity;

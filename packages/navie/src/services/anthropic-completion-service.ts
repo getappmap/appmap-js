@@ -133,8 +133,8 @@ export default class AnthropicCompletionService extends CompletionService {
   }
 
   // Request a JSON object with a given JSON schema.
-  async json<Schema extends z.ZodType>(
-    messages: Message[],
+  async _json<Schema extends z.ZodType>(
+    messages: readonly Message[],
     schema: Schema,
     options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined> {

@@ -37,7 +37,7 @@ export default class GoogleVertexAICompletionService extends CompletionService {
   }
 
   // Request a JSON object with a given JSON schema.
-  async json<Schema extends z.ZodType>(
+  async _json<Schema extends z.ZodType>(
     messages: Message[],
     schema: Schema,
     options?: CompleteOptions
