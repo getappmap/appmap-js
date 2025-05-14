@@ -8,7 +8,7 @@ for a fee or other consideration (including without limitation fees for hosting 
 a product or service whose value derives, entirely or substantially, from the functionality of the Software.
 Any license notice or attribution required by the License must also include this Commons Clause License Condition notice.
 
-Software: @appland/components
+Software: @appland/search
 
 License: MIT License
 
