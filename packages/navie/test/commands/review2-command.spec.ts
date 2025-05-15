@@ -1,4 +1,9 @@
-import Review2Command from '../../src/commands/review2-command';
+import Review2Command, {
+  FeatureList,
+  FeatureTestItemList,
+  LabelItemList,
+  SuggestionList,
+} from '../../src/commands/review2-command';
 import { ExplainOptions } from '../../src/commands/explain-command';
 import CompletionService from '../../src/services/completion-service';
 import LookupContextService from '../../src/services/lookup-context-service';
@@ -8,6 +13,7 @@ import InvokeTestsService from '../../src/services/invoke-tests-service';
 import ProjectInfoService from '../../src/services/project-info-service';
 import { ProjectInfo } from '../../src/project-info';
 import resolveTestItems from '../../src/lib/resolve-test-items';
+import z from 'zod';
 
 jest.mock('../../src/lib/resolve-test-items', () => ({
   __esModule: true,
@@ -71,26 +77,45 @@ describe('Review2Command', () => {
     );
   });
 
-  async function executeReviewCommandWithMocks(
-    command: Review2Command,
-    mockFeatures: any,
-    mockTestMatrix: any,
-    mockLabels: any,
-    userOptions: UserOptions = new UserOptions(new Map())
-  ): Promise<string> {
-    const mockSuggestions = {
+  class ReviewCommandOptions {
+    userOptions: UserOptions = new UserOptions(new Map());
+
+    mockFeatures: z.infer<typeof FeatureList> = {
+      features: [],
+    };
+
+    mockTestMatrix: z.infer<typeof FeatureTestItemList> = {
+      featureTests: [],
+    };
+
+    mockLabels: z.infer<typeof LabelItemList> = {
+      labels: [],
+    };
+
+    mockSuggestions: z.infer<typeof SuggestionList> = {
       suggestions: [],
     };
 
+    mockSQLSuggestions: z.infer<typeof SuggestionList> = {
+      suggestions: [],
+    };
+  }
+
+  async function executeReviewCommandWithMocks(
+    command: Review2Command,
+    options: ReviewCommandOptions
+  ): Promise<string> {
+    // TODO: Use a better strategy to mock the completion service that doesn't depend on the order of calls
     completionService.json
-      .mockResolvedValueOnce(mockFeatures)
-      .mockResolvedValueOnce(mockTestMatrix)
-      .mockResolvedValueOnce(mockLabels)
-      .mockResolvedValueOnce(mockSuggestions);
+      .mockResolvedValueOnce(options.mockFeatures)
+      .mockResolvedValueOnce(options.mockTestMatrix)
+      .mockResolvedValueOnce(options.mockLabels)
+      .mockResolvedValueOnce(options.mockSuggestions)
+      .mockResolvedValueOnce(options.mockSQLSuggestions);
 
     const output = command.execute({
       question: 'review',
-      userOptions,
+      userOptions: options.userOptions,
       codeSelection: [
         {
           type: 'code-snippet',
@@ -109,15 +134,11 @@ describe('Review2Command', () => {
 
   describe('test suggestions', () => {
     it('should generate @test commands for features without tests', async () => {
-      const mockFeatures = {
-        features: [{ feature: 'Feature 1' }, { feature: 'Feature 2' }, { feature: 'Feature 3' }],
+      const reviewCommandOptions = new ReviewCommandOptions();
+      reviewCommandOptions.mockFeatures = {
+        features: [{ feature: 'Feature 1' }, { feature: 'Feature 2' }],
       };
-
-      const mockLabels = {
-        labels: [],
-      };
-
-      const mockTestMatrix = {
+      reviewCommandOptions.mockTestMatrix = {
         featureTests: [
           {
             feature: 'Feature 1',
@@ -141,12 +162,7 @@ describe('Review2Command', () => {
         ],
       };
 
-      const result = await executeReviewCommandWithMocks(
-        command,
-        mockFeatures,
-        mockTestMatrix,
-        mockLabels
-      );
+      const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
 
       expect(result).toContain('### Suggested Test Commands');
       expect(result).toContain('@test /diff Feature 2');
@@ -155,15 +171,11 @@ describe('Review2Command', () => {
     });
 
     it('should include base branch in @test commands when specified', async () => {
-      const mockFeatures = {
+      const reviewCommandOptions = new ReviewCommandOptions();
+      reviewCommandOptions.mockFeatures = {
         features: [{ feature: 'Feature 1' }, { feature: 'Feature 2' }],
       };
-
-      const mockLabels = {
-        labels: [],
-      };
-
-      const mockTestMatrix = {
+      reviewCommandOptions.mockTestMatrix = {
         featureTests: [
           {
             feature: 'Feature 1',
@@ -176,14 +188,9 @@ describe('Review2Command', () => {
         ],
       };
 
-      const userOptions = new UserOptions(new Map([['base', 'main']]));
-      const result = await executeReviewCommandWithMocks(
-        command,
-        mockFeatures,
-        mockTestMatrix,
-        mockLabels,
-        userOptions
-      );
+      reviewCommandOptions.userOptions = new UserOptions(new Map([['base', 'main']]));
+
+      const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
 
       expect(result).toContain('### Suggested Test Commands');
       expect(result).toContain('@test /diff /base=main Feature 1');
@@ -191,15 +198,11 @@ describe('Review2Command', () => {
     });
 
     it('should include /nogather flag when testgengather is disabled', async () => {
-      const mockFeatures = {
+      const reviewCommandOptions = new ReviewCommandOptions();
+      reviewCommandOptions.mockFeatures = {
         features: [{ feature: 'Feature 1' }],
       };
-
-      const mockLabels = {
-        labels: [],
-      };
-
-      const mockTestMatrix = {
+      reviewCommandOptions.mockTestMatrix = {
         featureTests: [
           {
             feature: 'Feature 1',
@@ -207,30 +210,20 @@ describe('Review2Command', () => {
           },
         ],
       };
+      reviewCommandOptions.userOptions = new UserOptions(new Map([['testgengather', false]]));
 
-      const userOptions = new UserOptions(new Map([['testgengather', false]]));
-      const result = await executeReviewCommandWithMocks(
-        command,
-        mockFeatures,
-        mockTestMatrix,
-        mockLabels,
-        userOptions
-      );
+      const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
 
       expect(result).toContain('### Suggested Test Commands');
       expect(result).toContain('@test /diff /nogather Feature 1');
     });
 
     it('should not include /nogather flag by default', async () => {
-      const mockFeatures = {
+      const reviewCommandOptions = new ReviewCommandOptions();
+      reviewCommandOptions.mockFeatures = {
         features: [{ feature: 'Feature 1' }],
       };
-
-      const mockLabels = {
-        labels: [],
-      };
-
-      const mockTestMatrix = {
+      reviewCommandOptions.mockTestMatrix = {
         featureTests: [
           {
             feature: 'Feature 1',
@@ -239,24 +232,21 @@ describe('Review2Command', () => {
         ],
       };
 
-      const result = await executeReviewCommandWithMocks(
-        command,
-        mockFeatures,
-        mockTestMatrix,
-        mockLabels
-      );
+      const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
 
       expect(result).toContain('### Suggested Test Commands');
       expect(result).toContain('@test /diff Feature 1');
       expect(result).not.toContain('/nogather');
     });
+  });
 
+  describe('areas of review', () => {
     it('includes label suggestions in the output', async () => {
-      const mockFeatures = {
+      const reviewCommandOptions = new ReviewCommandOptions();
+      reviewCommandOptions.mockFeatures = {
         features: [{ feature: 'Feature 1' }],
       };
-
-      const mockLabels = {
+      reviewCommandOptions.mockLabels = {
         labels: [
           {
             label: 'label1',
@@ -273,7 +263,7 @@ describe('Review2Command', () => {
         ],
       };
 
-      const mockTestMatrix = {
+      reviewCommandOptions.mockTestMatrix = {
         featureTests: [
           {
             feature: 'Feature 1',
@@ -282,16 +272,34 @@ describe('Review2Command', () => {
         ],
       };
 
-      const result = await executeReviewCommandWithMocks(
-        command,
-        mockFeatures,
-        mockTestMatrix,
-        mockLabels
-      );
+      const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
 
       expect(result).toContain('## Suggested Code Labels');
       expect(result).toContain('* label1 - Description for label1 (file1.ts:10)');
       expect(result).toContain('* label2 - Description for label2 (file2.ts:20)');
+    });
+
+    it('includes SQL suggestions in the output', async () => {
+      const reviewCommandOptions = new ReviewCommandOptions();
+      reviewCommandOptions.mockSQLSuggestions = {
+        suggestions: [
+          {
+            type: 'n+1 query',
+            context: 'users.all',
+            description:
+              'This query is inefficient because it retrieves all users without pagination.',
+            file: 'users.ts',
+            line: 5,
+            label: 'n+1 query',
+            priority: 'medium',
+          },
+        ],
+      };
+
+      const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
+
+      expect(result).toContain('## SQL Suggestions');
+      expect(result).toContain('| Type | n+1 query |');
     });
   });
 });
