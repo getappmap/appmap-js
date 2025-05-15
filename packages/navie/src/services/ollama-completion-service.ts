@@ -1,5 +1,4 @@
 import Trajectory from '../lib/trajectory';
-import MessageTokenReducerService from './message-token-reducer-service';
 import OpenAICompletionService from './openai-completion-service';
 
 function getOllamaUrl(): string {
@@ -22,19 +21,7 @@ function getOllamaUrl(): string {
 export const OLLAMA_URL = getOllamaUrl();
 
 export default class OllamaCompletionService extends OpenAICompletionService {
-  constructor(
-    modelName: string,
-    temperature: number,
-    trajectory: Trajectory,
-    messageTokenReducerService: MessageTokenReducerService
-  ) {
-    super(
-      modelName,
-      temperature,
-      trajectory,
-      messageTokenReducerService,
-      `${OLLAMA_URL}/v1`,
-      'dummy'
-    );
+  constructor(modelName: string, temperature: number, trajectory: Trajectory) {
+    super(modelName, temperature, trajectory, `${OLLAMA_URL}/v1`, 'dummy');
   }
 }

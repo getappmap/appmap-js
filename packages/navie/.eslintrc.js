@@ -29,7 +29,6 @@ module.exports = {
     '@typescript-eslint/lines-between-class-members': 'off',
     'no-restricted-syntax': 'off',
     'import/no-cycle': 'off',
-    'prettier/prettier': ['error'],
     'max-classes-per-file': 'off',
   },
   overrides: [
@@ -39,7 +38,6 @@ module.exports = {
       parserOptions: {
         project: path.join(__dirname, 'jsconfig.json'),
       },
-      plugins: ['prettier'],
       rules: {
         'unicorn/prefer-module': 'off',
       },

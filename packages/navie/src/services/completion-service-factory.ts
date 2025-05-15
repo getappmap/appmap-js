@@ -6,7 +6,6 @@ import GoogleVertexAICompletionService from './google-vertexai-completion-servic
 import OllamaCompletionService from './ollama-completion-service';
 import OpenAICompletionService from './openai-completion-service';
 import Trajectory from '../lib/trajectory';
-import MessageTokenReducerService from './message-token-reducer-service';
 import type { NavieModel } from '../navie';
 
 interface Options {
@@ -56,13 +55,11 @@ export default function createCompletionService({
   selectedModel,
   backend = determineCompletionBackend(selectedModel),
 }: Options): CompletionService {
-  const messageTokenReducerService = new MessageTokenReducerService();
   warn(`Using completion service ${backend}`);
   return new BACKENDS[backend](
     selectedModel?.id ?? modelName,
     temperature,
     trajectory,
-    messageTokenReducerService,
     selectedModel?.baseUrl,
     selectedModel?.apiKey
   );

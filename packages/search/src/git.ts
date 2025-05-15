@@ -1,4 +1,4 @@
-import { exec as execCallback, spawn } from 'child_process';
+import { exec as execCallback, spawn } from 'node:child_process';
 import { PathLike } from 'fs';
 import { promisify } from 'util';
 

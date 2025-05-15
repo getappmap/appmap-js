@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 /*
   eslint
   @typescript-eslint/unbound-method: 0,
@@ -10,13 +11,13 @@ import { Message } from '../../src';
 import ReviewCommand from '../../src/commands/review-command';
 import InteractionHistory from '../../src/interaction-history';
 import { UserOptions } from '../../src/lib/parse-options';
-import CompletionService from '../../src/services/completion-service';
 import LookupContextService from '../../src/services/lookup-context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
+import MockCompletionService from '../services/mock-completion-service';
 
 describe('ReviewCommand', () => {
   let command: ReviewCommand;
-  let completionService: CompletionService;
+  let completionService: MockCompletionService;
   let lookupContextService: LookupContextService;
   let interactionHistory: InteractionHistory;
   let vectorTermsService: VectorTermsService;
@@ -24,8 +25,6 @@ describe('ReviewCommand', () => {
   const vectorTerms = ['test', 'terms'];
   const tokenLimit = 1000;
   const responseTokens = 1000;
-  const modelName = 'exampleModel';
-  const miniModelName = 'exampleMiniModel';
   const exampleGeneration = 'example generation';
   const exampleContext = [
     {
@@ -70,14 +69,9 @@ lgtm
   };
 
   beforeEach(() => {
-    completionService = {
-      complete: jest.fn().mockImplementation(function* () {
-        yield exampleGeneration;
-      }),
-      json: jest.fn().mockResolvedValue(exampleSummaryObject),
-      modelName: modelName,
-      miniModelName: miniModelName,
-    } as any;
+    completionService = new MockCompletionService();
+    completionService.mock(exampleGeneration);
+    jest.spyOn(completionService, '_json').mockResolvedValue(exampleSummaryObject);
     interactionHistory = new InteractionHistory();
     lookupContext = jest.fn().mockResolvedValue(exampleContext);
     lookupContextService = new LookupContextService(
@@ -126,11 +120,7 @@ lgtm
   });
 
   it('handles token limit exceeded errors with guidance', async () => {
-    const tokenLimit = 4000;
-    completionService.complete = jest.fn().mockImplementation(function* () {
-      throw new Error(`This model's maximum context length is ${tokenLimit} tokens`);
-    });
-
+    completionService.maxTokens = tokenLimit;
     const result = await read(
       command.execute({
         question: 'review',
@@ -139,13 +129,13 @@ lgtm
           {
             type: 'code-snippet',
             location: 'git diff',
-            content: 'large diff content',
+            content: 'large diff content'.repeat(100),
           },
         ],
       })
     );
 
-    expect(result).toContain(`${tokenLimit.toLocaleString()} tokens`);
+    expect(result).toContain(`${tokenLimit.toLocaleString()} max`);
     expect(result).toContain('Breaking the review into smaller chunks');
     expect(result).toContain('Removing unnecessary context');
     expect(result).toContain('Using a model with a larger context window');

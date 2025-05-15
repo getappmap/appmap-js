@@ -121,7 +121,7 @@ describe('ExplainCommand', () => {
       modelName: 'mock',
       miniModelName: 'mock-mini',
       temperature: 0.5,
-    };
+    } as unknown as CompletionService;
     classificationService = {
       classifyQuestion: jest.fn().mockResolvedValue([]),
     } as unknown as ClassificationService;

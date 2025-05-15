@@ -31,7 +31,10 @@ export default class Gatherer {
   async step(): Promise<boolean> {
     assert(!this.done);
     let result = '';
-    for await (const token of this.completion.complete(this.conversation)) result += token;
+    for await (const token of this.completion.complete(this.conversation, {
+      onContextOverflow: 'throw',
+    }))
+      result += token;
     debug(`Received completion:\n${result}`);
     this.conversation.push({ role: 'assistant', content: result });
     const commands = extractCommands(result);

@@ -14,7 +14,7 @@ projects.
 - [@appland/validate](https://github.com/getappmap/appmap-js/tree/main/packages/validate)
 
 Looking for the AppMap client for JavaScript? Find it here:
-https://github.com/getappmap/appmap-agent-js
+https://github.com/getappmap/appmap-node
 
 ## Development
 
