@@ -1,5 +1,3 @@
-import { isNativeError } from 'node:util/types';
-
 import Command, { CommandRequest, hasCodeSelectionArray } from '../command';
 import Message from '../message';
 import CompletionService from '../services/completion-service';
@@ -222,6 +220,8 @@ ${userPrompt}
     return pinnedItemLookup;
   }
 
+  private note: string | undefined;
+
   /**
    * This function is responsible for context lookups and providing generation of the initial
    * review analysis.
@@ -246,6 +246,10 @@ ${userPrompt}
     const messages: Message[] = ReviewCommand.buildMessages(userPrompt, gitDiff, context);
     const completion = this.completionService.complete(messages, {
       temperature: 0.0,
+      onContextOverflow: (prompt, max) => {
+        console.log(`Prompt too long when reviewing: (${prompt} tokens, max ${max} tokens)`);
+        this.note = formatTokenLimitMessage(prompt, max);
+      },
     });
 
     for await (const token of completion) yield token;
@@ -273,6 +277,11 @@ ${userPrompt}
         reviewBuffer += value;
         if (verbose) yield value;
       }
+    }
+
+    if (this.note) {
+      yield this.note;
+      this.note = undefined;
     }
 
     const summary = await this.completionService.json(
@@ -344,41 +353,26 @@ ${userPrompt}
       yield gitDiff.content;
       yield '\n```\n';
     }
-    try {
-      const reviewAnalysis = this.performReviewAnalysis(req, gitDiff);
-      yield* this.performReviewSummary(reviewAnalysis, verbose);
-    } catch (e) {
-      // Handle token limit exceeded errors
-      // TODO note this is a hotfix for copilot context length messages.
-      // A proper fix is needed, likely involving:
-      // - decoupling token reducer service from the completion service
-      // - making completion services throw appropriate errors on token limit exceeded
-      // - making the review command handle those errors
-      if (isNativeError(e)) {
-        const tokenLimitMatch = e.message.match(/maximum context length is (\d+)/i);
-        if (tokenLimitMatch) {
-          const tokenLimit = parseInt(tokenLimitMatch[1], 10);
-          if (!isNaN(tokenLimit)) {
-            yield formatTokenLimitMessage(tokenLimit);
-            return;
-          }
-        }
-      }
-      throw e;
-    }
+    const reviewAnalysis = this.performReviewAnalysis(req, gitDiff);
+    yield* this.performReviewSummary(reviewAnalysis, verbose);
   }
 }
 
 /**
  * Format the token limit message to be displayed to the user.
+ * @param promptTokens The number of tokens in the prompt.
  * @param tokenLimit The token limit to be displayed.
  * @returns The formatted token limit message.
  */
-function formatTokenLimitMessage(tokenLimit: number): string {
-  return `The review is too large for the model's capacity (${tokenLimit.toLocaleString()} tokens). To proceed with the review, try:
+function formatTokenLimitMessage(promptTokens: number, tokenLimit: number): string {
+  return `**NOTE**: The review is too large for the model's capacity (${Math.round(promptTokens).toLocaleString()} tokens > ${tokenLimit.toLocaleString()} max).
+Proceeding with the review, but the results may be incomplete or inaccurate.
+To improve the review, consider:
 
 1. Breaking the review into smaller chunks by reviewing fewer files at a time
    (you can use /base=&lt;treeish&gt; to set the base commit)
 2. Removing unnecessary context by unpinning files that aren't directly related
-3. Using a model with a larger context window, if available`;
+3. Using a model with a larger context window, if available
+
+`;
 }

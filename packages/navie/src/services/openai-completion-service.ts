@@ -335,7 +335,8 @@ export default class OpenAICompletionService extends CompletionService {
           const parsed = tryParseJson(completion.content, trimFences, findObject);
           schema.parse(parsed);
           return parsed;
-        } catch {
+        } catch (e) {
+          warn(`Failed to parse JSON: ${String(e)}`);
           // fall through
         }
       }

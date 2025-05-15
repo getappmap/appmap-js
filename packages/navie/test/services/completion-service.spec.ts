@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 import CompletionService, { Usage, type Completion } from '../../src/services/completion-service';
 import Message from '../../src/message';
 import { PromptTooLongError } from '../../src/services/completion-service';
@@ -5,8 +6,7 @@ import Trajectory from '../../src/lib/trajectory';
 import type { ZodType, TypeOf } from 'zod';
 
 class TestCompletionService extends CompletionService {
-  // eslint-disable-next-line @typescript-eslint/require-await
-  protected async *_complete(): Completion {
+  async *_complete(): Completion {
     yield 'test';
     return new Usage();
   }
@@ -27,11 +27,69 @@ describe('CompletionService', () => {
     service = new TestCompletionService(modelName, temperature, trajectory);
   });
 
+  describe('prompt too long handling', () => {
+    it('can throw on prompt too long', async () => {
+      const complete = jest.spyOn(service, '_complete').mockImplementationOnce(async function* () {
+        throw new PromptTooLongError('Prompt too long', 100, 50);
+      });
+
+      const messages: Message[] = [{ role: 'user', content: 'test' }];
+
+      const generator = service.complete(messages, { onContextOverflow: 'throw' });
+      await expect(generator.next()).rejects.toThrow(PromptTooLongError);
+      expect(complete).toHaveBeenCalledTimes(1);
+    });
+
+    it('can truncate on prompt too long', async () => {
+      service.maxTokens = 50;
+      const complete = jest
+        .spyOn(service, '_complete')
+        .mockImplementationOnce(async function* () {
+          throw new PromptTooLongError('Prompt too long', 51, 50);
+        })
+        .mockImplementation(async function* () {
+          yield 'truncated';
+          return new Usage();
+        });
+
+      const messages: Message[] = [{ role: 'user', content: 'test'.repeat(100) }];
+
+      const generator = service.complete(messages, { onContextOverflow: 'truncate' });
+      await expect(consume(generator)).resolves.toBe('truncated');
+      expect(complete).toHaveBeenCalledTimes(2);
+    });
+
+    it('can call back on prompt too long', async () => {
+      service.maxTokens = 50;
+      const complete = jest
+        .spyOn(service, '_complete')
+        .mockImplementationOnce(async function* () {
+          throw new PromptTooLongError('Prompt too long', 51, 50);
+        })
+        .mockImplementation(async function* () {
+          yield 'truncated';
+          return new Usage();
+        });
+
+      const messages: Message[] = [{ role: 'user', content: 'test'.repeat(100) }];
+
+      let called = false;
+      const onContextOverflow = () => {
+        called = true;
+        return 'truncate' as const;
+      };
+      const generator = service.complete(messages, { onContextOverflow });
+      await expect(consume(generator)).resolves.toBe('truncated');
+      expect(called).toBe(true);
+      expect(complete).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('token counting', () => {
     it('counts tokens accurately with role overhead', async () => {
       const messages: Message[] = [
         { role: 'user', content: 'hello' },
-        { role: 'assistant', content: 'world' }
+        { role: 'assistant', content: 'world' },
       ];
 
       const tokenCount = await service.countTokens(messages);
@@ -55,9 +113,7 @@ describe('CompletionService', () => {
     });
 
     it('creates PromptTooLongError with correct parameters', async () => {
-      const messages: Message[] = [
-        { role: 'user', content: 'test' }
-      ];
+      const messages: Message[] = [{ role: 'user', content: 'test' }];
       const cause = new Error('too long');
       const promptTokens = 100;
       const maxTokens = 50;
@@ -65,7 +121,7 @@ describe('CompletionService', () => {
       service.maxTokens = maxTokens;
 
       const error = await service.promptTooLong(messages, cause, promptTokens);
-      
+
       expect(error).toBeInstanceOf(PromptTooLongError);
       expect(error.promptTokens).toBe(promptTokens);
       expect(error.maxTokens).toBe(maxTokens);
@@ -73,19 +129,25 @@ describe('CompletionService', () => {
     });
 
     it('uses minimum value for maxTokens in PromptTooLongError', async () => {
-      const messages: Message[] = [
-        { role: 'user', content: 'test' }
-      ];
+      const messages: Message[] = [{ role: 'user', content: 'test' }];
       const cause = new Error('too long');
       const promptTokens = 100;
-      
+
       service.maxTokens = 80;
       const providedMaxTokens = 60;
 
       const error = await service.promptTooLong(messages, cause, promptTokens, providedMaxTokens);
-      
+
       // Should use min(providedMaxTokens, service.maxTokens, promptTokens - 1)
       expect(error.maxTokens).toBe(60);
     });
   });
 });
+
+async function consume(generator: AsyncIterable<string>): Promise<string> {
+  let result = '';
+  for await (const chunk of generator) {
+    result += chunk;
+  }
+  return result;
+}
