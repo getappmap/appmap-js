@@ -373,6 +373,8 @@ export default class Review2Command implements Command {
 
       if (outputText) {
         yield '## Test Analysis\n\n';
+        yield 'When test coverage is available for code change, AppMap can use the runtime data generated from ';
+        yield 'running the tests to help improve the accuracy and completeness of the analysis.\n\n';
         yield '| Feature | Test Coverage |\n';
         yield '|---------|---------------|\n';
         for (const feature of testMatrix.featureTests) {
