@@ -435,7 +435,11 @@ export default class Review2Command implements Command {
 
         // Add test suggestions for features without tests
         yield '\n### Suggested Test Commands\n\n';
-        if (testMatrix.featureTests.length === 0) {
+        const testCount = testMatrix.featureTests.reduce(
+          (acc, feature) => acc + feature.tests.length,
+          0
+        );
+        if (testCount === 0) {
           yield 'No test suggestions were made.';
         } else {
           yield 'Copy and paste these commands to Navie AI to generate new test cases:\n\n';
