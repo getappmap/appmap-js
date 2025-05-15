@@ -133,7 +133,44 @@ Respect implementation decisions that are explained in comments, including both 
 
 Don't suggest switching the implementation of some code back to the way that it previously was.`;
 
-const FeatureListItem = z.object({
+const SQL_PROMPT = `Analyze this git diff, related code context, and the SQL queries provided, and suggest specific, actionable changes that would
+make the code better.
+
+You should focus on the following areas:
+
+* SQL vulnerabilities
+* SQL performance improvements
+* SQL style improvements
+
+All suggestions that you make must be related to SQL queries or related use of the database.
+
+Concentrate your analysis on the following potential weaknesses:
+
+* N+1 queries / inefficient query patterns
+* Unsanitized input used in SQL queries (SQL injection)
+* Use of dynamic SQL without parameterization
+* Improper input escaping in SQL queries
+* Construction of queries using string concatenation
+* Lack of least-privilege on database access
+* Exposure of database error messages to users
+* Hardcoded SQL credentials in source code
+* Missing or improper handling of query timeouts
+* Use of unbounded or unsanitized LIMIT/OFFSET values
+* Blind trust in user-supplied table or column names
+* Use of SELECT \* instead of explicit column selection
+* Lack of auditing or logging on sensitive SQL operations
+* Failure to use stored procedures or prepared statements
+* Missing input validation on filter and sort parameters
+* Improper handling of NULLs and unexpected data types
+* Inadequate protection against second-order SQL injection
+* Allowing multiple SQL statements in a single query
+* Use of outdated or unsupported SQL drivers
+* Uncontrolled access to database metadata (e.g., information\_schema)
+* Poor error handling in batch SQL operations
+`;
+`;
+
+export const FeatureListItem = z.object({
   feature: z
 
     .string()
@@ -142,7 +179,7 @@ const FeatureListItem = z.object({
     ),
 });
 
-const FeatureList = z.object({
+export const FeatureList = z.object({
   features: FeatureListItem.array().describe(
     'A list of features or functional changes that have been made. Each feature should be a short, descriptive name.'
   ),
@@ -193,7 +230,7 @@ export const TestItem = z.object({
   testName: z.string().describe(`The name of the test case within the test file.`),
 });
 
-const FeatureTestItem = z.object({
+export const FeatureTestItem = z.object({
   feature: z
     .string()
     .describe(
@@ -204,7 +241,7 @@ const FeatureTestItem = z.object({
     .describe('An array of test cases that pertain to the feature.'),
 });
 
-const FeatureTestItemList = z
+export const FeatureTestItemList = z
   .object({
     featureTests: FeatureTestItem.array().describe(
       'Each domain being reviewed should contain its own review domain object.'
@@ -212,7 +249,7 @@ const FeatureTestItemList = z
   })
   .describe('A collection of feature tests for review purposes.');
 
-const SuggestionItem = z.object({
+export const SuggestionItem = z.object({
   file: z.string().describe('The path to the file from the project root.'),
   line: z.number().describe('Line number in the file where the suggestion applies.'),
   type: z
@@ -228,7 +265,7 @@ const SuggestionItem = z.object({
     .describe('A sentence that explains the suggestion and how it would improve the code.'),
 });
 
-const SuggestionList = z
+export const SuggestionList = z
   .object({
     suggestions: SuggestionItem.array().describe('A list of suggestions for code improvements.'),
   })
@@ -252,6 +289,7 @@ export default class Review2Command implements Command {
     const analyzeFeatures = request.userOptions.booleanValue('features', true);
     const analyzeLabels = request.userOptions.booleanValue('labels', true);
     const analyzeSuggestions = request.userOptions.booleanValue('suggestions', true);
+    const sqlSuggestions = request.userOptions.booleanValue('sql', true);
     const outputJson = request.userOptions.stringValue('format', 'text') === 'json';
     const outputText = !outputJson;
     const runTests = request.userOptions.stringValue('runtests');
@@ -263,6 +301,7 @@ export default class Review2Command implements Command {
     let testMatrix: z.infer<typeof FeatureTestItemList> | undefined;
     let suggestionList: z.infer<typeof SuggestionList> | undefined;
     let labelItemList: z.infer<typeof LabelItemList> | undefined;
+    let sqlSuggestionList: z.infer<typeof SuggestionList> | undefined;
 
     if (!hasCodeSelectionArray(request)) {
       if (outputText) yield 'No code selection was provided.';
@@ -384,7 +423,7 @@ export default class Review2Command implements Command {
     }
 
     if (analyzeLabels) {
-      labelItemList = await this.listLabels(vectorTerms, request, gitDiff);
+      labelItemList = await this.listLabels(vectorTerms, gitDiff);
 
       if (labelItemList && outputText) {
         if (outputText) {
@@ -454,19 +493,48 @@ export default class Review2Command implements Command {
       }
     }
 
+    if (sqlSuggestions) {
+      const sqlSuggestionList = await this.listSQLSuggestions(vectorTerms, gitDiff);
+      if (outputText) {
+        yield '## SQL Suggestions\n\n';
+        if (sqlSuggestionList.suggestions.length === 0) {
+          yield 'No SQL suggestions were made.';
+        } else {
+          for (const suggestion of sqlSuggestionList.suggestions) {
+            yield `**${suggestion.label} (${suggestion.type})**\n`;
+            yield '\n';
+            yield `${suggestion.description}\n`;
+            yield '\n';
+            yield `| Field | Value |\n`;
+            yield `|-------|-------|\n`;
+            yield `| Type | ${suggestion.type} |\n`;
+            yield `| Priority | ${suggestion.priority} |\n`;
+            yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
+            yield '\n';
+            yield '```';
+            yield '\n';
+            yield suggestion.context;
+            yield '\n';
+            yield '```';
+            yield '\n\n';
+          }
+        }
+      }
+    }
+
     if (outputJson) {
       yield JSON.stringify({
         labels: labelItemList,
         features: featureList,
         testMatrix: testMatrix,
         suggestions: suggestionList,
+        sqlSuggestions: sqlSuggestionList,
       });
     }
   }
 
   private async listLabels(
     vectorTerms: string[],
-    req: CommandRequest & { codeSelection: UserContext.ContextItem[] },
     gitDiff: UserContext.CodeSnippetItem
   ): Promise<z.infer<typeof LabelItemList> | undefined> {
     const context = await this.lookupContextService.lookupContext(
@@ -660,14 +728,104 @@ export default class Review2Command implements Command {
     const messages: Message[] = [
       {
         role: 'system',
+        content: 'You are a helpful programming assistant that is an expert on code review.',
+      },
+      {
+        role: 'user',
+        content: `Here is a diff of the current code work in progress:
+  <diff>
+  ${gitDiff.content}
+  </diff>`,
+      },
+      {
+        role: 'user',
         content: SUGGESTION_PROMPT,
       },
+    ];
+
+    const suggestions = await this.completionService.json(messages, SuggestionList, {
+      temperature: 0.0,
+    });
+    if (!suggestions) {
+      console.warn('No suggestions found');
+    }
+    return (
+      suggestions ?? {
+        suggestions: [],
+      }
+    );
+  }
+
+  private async listSQLSuggestions(
+    vectorTerms: string[],
+    gitDiff: UserContext.CodeSnippetItem
+  ): Promise<z.infer<typeof SuggestionList>> {
+    vectorTerms.push('sql');
+
+    const context = await this.lookupContextService.lookupContext(
+      vectorTerms,
+      this.options.tokenLimit
+    );
+
+    const contextMessage = context
+      .map((item) =>
+        ContextV2.isFileContextItem(item)
+          ? `<${item.type} location="${item.location}">\n${item.content}\n</${item.type}>`
+          : `<${item.type}>\n${item.content}\n</${item.type}>`
+      )
+      .join('\n');
+
+    const messages: Message[] = [
+      {
+        role: 'system',
+        content:
+          'You are a helpful programming assistant that is an expert on SQL security, performance, and style considerations.',
+      },
+      {
+        role: 'user',
+        content: `Here is a diff of the current code work in progress:
+  <diff>
+  ${gitDiff.content}
+  </diff>`,
+      },
+      {
+        role: 'user',
+        content: `Here is some related context from the project, which you can use to help you understand the changes:
+  <context>
+  ${contextMessage}
+  </context>`,
+      },
+      {
+        role: 'user',
+        content: SQL_PROMPT,
+      },
+    ];
+
+    const suggestions = await this.completionService.json(messages, SuggestionList, {
+      temperature: 0.0,
+    });
+    if (!suggestions) {
+      console.warn('No suggestions found');
+    }
+    return (
+      suggestions ?? {
+        suggestions: [],
+      }
+    );
+  }
       {
         role: 'user',
         content: `Here is the diff:
   <diff>
   ${gitDiff.content}
   </diff>`,
+      },
+      {
+        role: 'user',
+        content: `Here is some related context from the project, which you can use to help you understand the changes:
+  <context>
+  ${contextMessage}
+  </context>`,
       },
     ];
 
