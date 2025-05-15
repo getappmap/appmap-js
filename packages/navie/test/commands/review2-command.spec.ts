@@ -99,6 +99,10 @@ describe('Review2Command', () => {
     mockSQLSuggestions: z.infer<typeof SuggestionList> = {
       suggestions: [],
     };
+
+    mockHTTPSuggestions: z.infer<typeof SuggestionList> = {
+      suggestions: [],
+    };
   }
 
   async function executeReviewCommandWithMocks(
@@ -111,7 +115,8 @@ describe('Review2Command', () => {
       .mockResolvedValueOnce(options.mockTestMatrix)
       .mockResolvedValueOnce(options.mockLabels)
       .mockResolvedValueOnce(options.mockSuggestions)
-      .mockResolvedValueOnce(options.mockSQLSuggestions);
+      .mockResolvedValueOnce(options.mockSQLSuggestions)
+      .mockResolvedValueOnce(options.mockHTTPSuggestions);
 
     const output = command.execute({
       question: 'review',
@@ -300,6 +305,29 @@ describe('Review2Command', () => {
 
       expect(result).toContain('## SQL Suggestions');
       expect(result).toContain('| Type | n+1 query |');
+    });
+
+    it('includes HTTP suggestions in the output', async () => {
+      const reviewCommandOptions = new ReviewCommandOptions();
+      reviewCommandOptions.mockHTTPSuggestions = {
+        suggestions: [
+          {
+            type: 'http 500 error',
+            context: 'GET /users',
+            description:
+              'This request resulted in a server error, indicating an issue with the server handling the request.',
+            file: 'users.ts',
+            line: 5,
+            label: 'http 500 error',
+            priority: 'medium',
+          },
+        ],
+      };
+
+      const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
+
+      expect(result).toContain('## HTTP Suggestions');
+      expect(result).toContain('| Type | http 500 error |');
     });
   });
 });

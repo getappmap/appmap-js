@@ -104,7 +104,7 @@ The list of labels, along with their effect on the code, is as follows:
   A function with this label can be used to convert untrusted data such as direct user input or HTTP request parameters into trusted data.
 `;
 
-const SUGGESTION_PROMPT = `You are a helpful programming assistant. Analyze this git diff and suggest specific, actionable changes
+const SUGGESTION_PROMPT = `Analyze this git diff and suggest specific, actionable changes
 that would make the code better.
 
 Your suggestions should focus on the following areas:
@@ -168,6 +168,40 @@ Concentrate your analysis on the following potential weaknesses:
 * Uncontrolled access to database metadata (e.g., information\_schema)
 * Poor error handling in batch SQL operations
 `;
+
+const HTTP_REQUEST_PROMPT = `Analyze this git diff, related code context, and the HTTP requests provided, and suggest specific, actionable changes that would
+make the code better.
+
+You should focus on the following areas:
+
+* HTTP request vulnerabilities
+* HTTP request performance improvements
+* HTTP request style improvements
+
+All suggestions that you make must be related to the application handling of HTTP requests, or related configuration.
+
+Concentrate your analysis on the following potential weaknesses:
+
+* Missing or improper input validation on HTTP parameters
+* Lack of authentication or weak authentication mechanisms
+* Insecure transport (e.g., HTTP used instead of HTTPS)
+* Inadequate session management via cookies or headers
+* Missing or incorrect content-type verification
+* Insufficient CSRF protection
+* Open redirects due to unchecked URL parameters
+* Trusting user-supplied headers like Host or X-Forwarded-For
+* Failure to sanitize user input used in query strings or path
+* Verb tampering (e.g., improper handling of unexpected HTTP methods)
+* Caching sensitive data in HTTP responses
+* Information leakage via verbose error messages in HTTP responses
+* Lack of rate limiting or throttling on endpoints
+* Allowing overly permissive CORS configurations
+* Improper parsing of multipart/form-data requests
+* Missing security headers (e.g., Content-Security-Policy, X-Frame-Options)
+* Improper use of HTTP status codes for error handling
+* Deserialization of untrusted data from HTTP body
+* Overly long or malformed headers not properly handled
+* Insecure handling of file uploads via HTTP requests
 `;
 
 export const FeatureListItem = z.object({
@@ -290,6 +324,7 @@ export default class Review2Command implements Command {
     const analyzeLabels = request.userOptions.booleanValue('labels', true);
     const analyzeSuggestions = request.userOptions.booleanValue('suggestions', true);
     const sqlSuggestions = request.userOptions.booleanValue('sql', true);
+    const httpSuggestions = request.userOptions.booleanValue('http', true);
     const outputJson = request.userOptions.stringValue('format', 'text') === 'json';
     const outputText = !outputJson;
     const runTests = request.userOptions.stringValue('runtests');
@@ -302,6 +337,7 @@ export default class Review2Command implements Command {
     let suggestionList: z.infer<typeof SuggestionList> | undefined;
     let labelItemList: z.infer<typeof LabelItemList> | undefined;
     let sqlSuggestionList: z.infer<typeof SuggestionList> | undefined;
+    let httpSuggestionList: z.infer<typeof SuggestionList> | undefined;
 
     if (!hasCodeSelectionArray(request)) {
       if (outputText) yield 'No code selection was provided.';
@@ -524,6 +560,35 @@ export default class Review2Command implements Command {
       }
     }
 
+    if (httpSuggestions) {
+      const httpSuggestionList = await this.listHTTPSuggestions(vectorTerms, gitDiff);
+      if (outputText) {
+        yield '## HTTP Suggestions\n\n';
+        if (httpSuggestionList.suggestions.length === 0) {
+          yield 'No HTTP suggestions were made.';
+        } else {
+          for (const suggestion of httpSuggestionList.suggestions) {
+            yield `**${suggestion.label} (${suggestion.type})**\n`;
+            yield '\n';
+            yield `${suggestion.description}\n`;
+            yield '\n';
+            yield `| Field | Value |\n`;
+            yield `|-------|-------|\n`;
+            yield `| Type | ${suggestion.type} |\n`;
+            yield `| Priority | ${suggestion.priority} |\n`;
+            yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
+            yield '\n';
+            yield '```';
+            yield '\n';
+            yield suggestion.context;
+            yield '\n';
+            yield '```';
+            yield '\n\n';
+          }
+        }
+      }
+    }
+
     if (outputJson) {
       yield JSON.stringify({
         labels: labelItemList,
@@ -531,6 +596,7 @@ export default class Review2Command implements Command {
         testMatrix: testMatrix,
         suggestions: suggestionList,
         sqlSuggestions: sqlSuggestionList,
+        httpSuggestions: httpSuggestionList,
       });
     }
   }
@@ -815,9 +881,35 @@ export default class Review2Command implements Command {
       }
     );
   }
+
+  private async listHTTPSuggestions(
+    vectorTerms: string[],
+    gitDiff: UserContext.CodeSnippetItem
+  ): Promise<z.infer<typeof SuggestionList>> {
+    vectorTerms.push('http');
+
+    const context = await this.lookupContextService.lookupContext(
+      vectorTerms,
+      this.options.tokenLimit
+    );
+
+    const contextMessage = context
+      .map((item) =>
+        ContextV2.isFileContextItem(item)
+          ? `<${item.type} location="${item.location}">\n${item.content}\n</${item.type}>`
+          : `<${item.type}>\n${item.content}\n</${item.type}>`
+      )
+      .join('\n');
+
+    const messages: Message[] = [
+      {
+        role: 'system',
+        content:
+          'You are a helpful programming assistant that is an expert on HTTP request security, performance, and style considerations.',
+      },
       {
         role: 'user',
-        content: `Here is the diff:
+        content: `Here is a diff of the current code work in progress:
   <diff>
   ${gitDiff.content}
   </diff>`,
@@ -828,6 +920,10 @@ export default class Review2Command implements Command {
   <context>
   ${contextMessage}
   </context>`,
+      },
+      {
+        role: 'user',
+        content: HTTP_REQUEST_PROMPT,
       },
     ];
 
