@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expectResult"]}] */
+/* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expectResult", "expect"]}] */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
@@ -13,9 +13,10 @@ import InteractionHistory, {
 } from '../../src/interaction-history';
 import { PromptType } from '../../src/prompt';
 import { Message } from '../../src';
-import CompletionService from '../../src/services/completion-service';
+import { PromptTooLongError } from '../../src/services/completion-service';
 import ContextService from '../../src/services/context-service';
 import ProjectInfoService from '../../src/services/project-info-service';
+import MockCompletionService from '../services/mock-completion-service';
 
 describe('Gatherer', () => {
   describe('buildConversation', () => {
@@ -249,17 +250,6 @@ describe('Gatherer', () => {
     }
   });
   describe('executeCommands', () => {
-    const events: InteractionEvent[] = [];
-    const interactionHistory: InteractionHistory = new InteractionHistory();
-    const completion: CompletionService = {} as any;
-    const context: ContextService = {
-      searchContextWithLocations: jest.fn(),
-    } as any;
-    const projectInfoService: ProjectInfoService = {
-      lookupProjectInfo: jest.fn(),
-      promptProjectInfo: jest.fn(),
-    } as any;
-
     const gatherer = () =>
       new Gatherer(events, interactionHistory, completion, context, projectInfoService);
 
@@ -355,4 +345,31 @@ diff --git a b
       });
     });
   });
+
+  describe('step', () => {
+    it('throws an error if context length is exceeded', async () => {
+      completion.maxTokens = 1000;
+      completion.completion.mockImplementationOnce(() => {
+        throw new PromptTooLongError(undefined, 1100, 1000);
+      });
+
+      await expect(gatherer.step()).rejects.toThrow(PromptTooLongError);
+    });
+
+    let gatherer: Gatherer;
+    beforeEach(() => {
+      gatherer = new Gatherer(events, interactionHistory, completion, context, projectInfoService);
+    });
+  });
 });
+
+const events: InteractionEvent[] = [];
+const interactionHistory: InteractionHistory = new InteractionHistory();
+const completion = new MockCompletionService();
+const context: ContextService = {
+  searchContextWithLocations: jest.fn(),
+} as any;
+const projectInfoService: ProjectInfoService = {
+  lookupProjectInfo: jest.fn(),
+  promptProjectInfo: jest.fn(),
+} as any;

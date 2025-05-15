@@ -5,7 +5,7 @@ import Gatherer from '../agents/gatherer';
 import AgentSelectionService from '../services/agent-selection-service';
 import ClassificationService from '../services/classification-service';
 import CodeSelectionService from '../services/code-selection-service';
-import CompletionService from '../services/completion-service';
+import CompletionService, { PromptTooLongError } from '../services/completion-service';
 import MemoryService from '../services/memory-service';
 import ProjectInfoService from '../services/project-info-service';
 import InteractionHistory, {
@@ -209,10 +209,13 @@ export default class ExplainCommand implements Command {
       for (steps = 0; steps < maxSteps && !(await gatherer.step()); steps++)
         yield steps > 0 ? '.' : 'Gathering additional information, please wait...';
     } catch (err) {
+      if (steps > 0 && err instanceof PromptTooLongError) {
+        yield ` reached the model context limit (${err.maxTokens} tokens).\n\n`;
+        return;
+      }
       console.warn('Error while gathering: ', err);
-    } finally {
-      if (steps > 0) yield ' done!\n\n';
     }
+    if (steps > 0) yield ' done!\n\n';
   }
 }
 
