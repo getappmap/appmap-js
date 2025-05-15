@@ -114,6 +114,35 @@ describe('OpenAICompletionService', () => {
       expect(service.maxTokens).toEqual(128000);
     });
 
+    it('truncates messages proactively when token count exceeds limit', async () => {
+      const messages = [
+        { role: 'system', content: 'Short system message' },
+        { role: 'user', content: 'A'.repeat(1000) },
+        { role: 'assistant', content: 'Short response' },
+      ] as const;
+
+      const maxLength = 600;
+      service.maxTokens = 200;
+
+      completionWithRetry.mockImplementation(({ messages }) => {
+        const totalLength = messages.reduce(
+          (acc, message) => acc + (message.content?.length ?? 0),
+          0
+        );
+        expect(totalLength).toBeLessThan(maxLength);
+        return Promise.resolve(completion('Completion after truncation'));
+      });
+
+      const result = [];
+      for await (const token of service.complete(messages)) {
+        result.push(token);
+      }
+
+      expect(result).toEqual(['Completion after truncation']);
+      expect(completionWithRetry).toHaveBeenCalledTimes(1);
+      expect(service.maxTokens).toEqual(200);
+    });
+
     it('truncates messages by default when token count exceeds limit', async () => {
       const messages = [
         { role: 'system', content: 'Short system message' },

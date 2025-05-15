@@ -99,18 +99,9 @@ describe('AnthropicCompletionService', () => {
       });
 
       const completion = service.complete([]).next();
+      void jest.runAllTimersAsync();
 
-      const delays = [1000, 2000, 4000, 8000];
-
-      for (const delay of delays) {
-        jest.advanceTimersByTime(delay);
-
-        // Yield to the event loop to allow another attempt to be made
-        // eslint-disable-next-line no-await-in-loop
-        await Promise.resolve();
-      }
-
-      await expect(completion).rejects.toThrow('Failed to complete');
+      await expect(completion).rejects.toThrow('Overloaded');
       expect(stream).toHaveBeenCalledTimes(5);
     });
 

@@ -56,7 +56,7 @@ export default abstract class CompletionService {
    */
   async *complete(messages: readonly Message[], options?: CompleteOptions): Completion {
     const onContextOverflow = options?.onContextOverflow ?? 'truncate';
-    let conversation = messages;
+    let conversation = await this.checkLength(messages, onContextOverflow);
     let started = false;
     let usage: Usage | undefined;
 
@@ -85,6 +85,23 @@ export default abstract class CompletionService {
     return usage ?? new Usage();
   }
 
+  private async checkLength(messages: readonly Message[], onContextOverflow: string) {
+    // Only count tokens if the conversation is likely to be too long
+    // This is a heuristic to avoid counting tokens for every message
+    // and to avoid unnecessary API calls
+    if (totalConversationCharacters(messages) > this.maxTokens) {
+      const promptTokens = await this.countTokens(messages);
+      if (promptTokens > this.maxTokens) {
+        if (onContextOverflow === 'truncate') {
+          const truncated = truncateMessages(messages, promptTokens, this.maxTokens);
+          if (truncated) return truncated;
+        }
+        throw await this.promptTooLong(messages, 'Prompt too long', promptTokens, this.maxTokens);
+      }
+    }
+    return messages;
+  }
+
   protected abstract _json<Schema extends z.ZodType>(
     messages: readonly Message[],
     schema: Schema,
@@ -96,16 +113,14 @@ export default abstract class CompletionService {
     options?: CompleteOptions
   ): Promise<z.infer<Schema> | undefined> {
     const onContextOverflow = options?.onContextOverflow ?? 'truncate';
+    const conversation = await this.checkLength(messages, onContextOverflow);
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return await this._json(messages, schema, options);
+      return await this._json(conversation, schema, options);
     } catch (error) {
       if (error instanceof PromptTooLongError) {
         if (onContextOverflow === 'truncate') {
-          console.warn(
-            `Prompt too long: ${error.promptTokens} tokens, max: ${error.maxTokens} tokens. Truncating...`
-          );
-          const truncated = truncateMessages(messages, error.promptTokens, this.maxTokens);
+          const truncated = truncateMessages(conversation, error.promptTokens, this.maxTokens);
           if (truncated) return this.json(truncated, schema, options);
         }
         throw error;
@@ -169,6 +184,10 @@ function estimateTokens(message: string): number {
   // Estimate the number of tokens in a message based on its length
   // This is a rough estimate and may not be accurate for all models
   return Math.ceil(message.length / CHARACTERS_PER_TOKEN);
+}
+
+function totalConversationCharacters(messages: readonly Message[]): number {
+  return messages.reduce((acc, message) => acc + message.content.length, 0);
 }
 
 export class Usage implements Required<TokenUsage> {
@@ -277,6 +296,7 @@ export function truncateMessages(
 ): Message[] | undefined {
   assert(promptTokens > maxTokens, 'promptTokens must be greater than maxTokens');
 
+  console.warn(`Prompt too long: ${promptTokens} tokens, max: ${maxTokens} tokens. Truncating...`);
   /*
    * Here's the idea: we want to shorten the conversation by truncating the longest message,
    * but we don't want to call token counting because it might be slow and expensive.
