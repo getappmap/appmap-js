@@ -1,4 +1,4 @@
-import { ContextV2, Help, ProjectInfo, UserContext } from '@appland/navie';
+import { ContextV2, Help, ProjectInfo, TestInvocation, UserContext } from '@appland/navie';
 
 export default interface INavie {
   get providerName(): string;
@@ -23,5 +23,6 @@ export default interface INavie {
 export type INavieProvider = (
   contextProvider: ContextV2.ContextProvider,
   projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-  helpProvider: Help.HelpProvider
+  helpProvider: Help.HelpProvider,
+  testInvocationProvider: TestInvocation.TestInvocationProvider
 ) => INavie;

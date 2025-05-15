@@ -1,5 +1,5 @@
 import { ConversationThread } from '@appland/client';
-import { ContextV2, Help, ProjectInfo } from '@appland/navie';
+import { ContextV2, Help, ProjectInfo, TestInvocation } from '@appland/navie';
 import { NavieRpc } from '@appland/rpc';
 
 export type XMLToken = {
@@ -69,17 +69,27 @@ export type NavieErrorEvent = {
   };
 };
 
+export type NavieContextType = 'context' | 'help' | 'project-info' | 'run-test';
+
 export type NavieBeginContextSearchEvent = {
   type: 'begin-context-search';
-  contextType: 'help' | 'project-info' | 'context';
+  contextType: NavieContextType;
   id: string;
-  request?: Help.HelpRequest | ProjectInfo.ProjectInfoRequest | ContextV2.ContextRequest;
+  request?:
+    | Help.HelpRequest
+    | ProjectInfo.ProjectInfoRequest
+    | ContextV2.ContextRequest
+    | TestInvocation.TestInvocationRequest;
 };
 
 export type NavieCompleteContextSearchEvent = {
   type: 'complete-context-search';
   id: string;
-  result?: Help.HelpResponse | ProjectInfo.ProjectInfoResponse | ContextV2.ContextResponse;
+  result?:
+    | Help.HelpResponse
+    | ProjectInfo.ProjectInfoResponse
+    | ContextV2.ContextResponse
+    | TestInvocation.TestInvocationResponse;
 };
 
 export type NavieAddMessageAttachmentEvent = {

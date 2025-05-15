@@ -15,6 +15,7 @@ export type WelcomeMessage = NavieRpc.V2.Welcome.Response;
 
 // We don't want to support context lookups
 const NOP = () => Promise.resolve([]);
+const NOP_OBJECT = () => Promise.resolve(undefined);
 
 const DEFAULT_MESSAGE = [
   'I can help you answer questions about your codebase, create diagrams, plan solutions, generate code and tests, and review code changes.',
@@ -82,7 +83,7 @@ export async function getWelcomeMessage(
   navieProvider: INavieProvider,
   codeSelection?: string
 ): Promise<WelcomeMessage> {
-  const navie = navieProvider(NOP, NOP, NOP);
+  const navie = navieProvider(NOP, NOP, NOP, NOP_OBJECT as any);
 
   // Case 1: Custom welcome message may not be enabled at all
   if (!isCustomWelcomeMessageEnabled()) {

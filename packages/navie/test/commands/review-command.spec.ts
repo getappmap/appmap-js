@@ -11,15 +11,20 @@ import ReviewCommand from '../../src/commands/review-command';
 import InteractionHistory from '../../src/interaction-history';
 import { UserOptions } from '../../src/lib/parse-options';
 import CompletionService from '../../src/services/completion-service';
+import InvokeTestsService from '../../src/services/invoke-tests-service';
 import LookupContextService from '../../src/services/lookup-context-service';
+import ProjectInfoService from '../../src/services/project-info-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 
 describe('ReviewCommand', () => {
   let command: ReviewCommand;
+  let projectInfoService: ProjectInfoService;
   let completionService: CompletionService;
   let lookupContextService: LookupContextService;
   let interactionHistory: InteractionHistory;
   let vectorTermsService: VectorTermsService;
+  let invokeTestsService: InvokeTestsService;
+
   let lookupContext: jest.Mock;
   const vectorTerms = ['test', 'terms'];
   const tokenLimit = 1000;
@@ -78,6 +83,9 @@ lgtm
       modelName: modelName,
       miniModelName: miniModelName,
     } as any;
+    projectInfoService = {
+      lookupProjectInfo: jest.fn().mockResolvedValue([]),
+    } as any;
     interactionHistory = new InteractionHistory();
     lookupContext = jest.fn().mockResolvedValue(exampleContext);
     lookupContextService = new LookupContextService(
@@ -88,11 +96,16 @@ lgtm
     vectorTermsService = {
       suggestTerms: jest.fn().mockResolvedValue(vectorTerms),
     } as any;
+    invokeTestsService = {
+      invokeTests: jest.fn(),
+    } as any;
     command = new ReviewCommand(
       { tokenLimit, responseTokens },
+      projectInfoService,
       completionService,
       lookupContextService,
-      vectorTermsService
+      vectorTermsService,
+      invokeTestsService
     );
   });
 

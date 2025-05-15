@@ -31,7 +31,6 @@ export default async function handleReview(
         location: REVIEW_DIFF_LOCATION, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
         content: diffContent
           .filter(Boolean)
-          .map((diff) => processPatchset(diff))
           .join('\n\n'),
       },
     ],
