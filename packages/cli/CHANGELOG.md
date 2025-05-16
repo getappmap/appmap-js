@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.189.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.0...@appland/appmap-v3.189.1) (2025-05-16)
+
+
+### Bug Fixes
+
+* Update parseLocation to handle negative line numbers correctly ([871139a](https://github.com/getappmap/appmap-js/commit/871139a659115725ffb06276f8f2941456b9ed25)), closes [#2304](https://github.com/getappmap/appmap-js/issues/2304)
+
 # [@appland/appmap-v3.189.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.188.7...@appland/appmap-v3.189.0) (2025-05-10)
 
 
