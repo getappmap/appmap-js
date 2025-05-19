@@ -376,9 +376,9 @@ export default class Review2Command implements Command {
       featureList = await this.listFeatures(vectorTerms, request, gitDiff);
 
       if (outputText) {
-        yield '## Feature List\n\n';
+        yield '## Feature List\n';
         for (const feature of featureList) {
-          yield ` * ${feature}\n`;
+          yield `* ${feature}\n`;
         }
       }
       yield '\n\n';
@@ -408,10 +408,10 @@ export default class Review2Command implements Command {
       }
 
       if (outputText) {
-        yield '## Test Analysis\n\n';
+        yield '## Behavioral Analysis\n';
         yield 'When test coverage is available for code change, AppMap can use the runtime data generated from ';
         yield 'running the tests to help improve the accuracy and completeness of the analysis.\n\n';
-        yield '| Feature | Test Coverage |\n';
+        yield '| Feature | Related Tests |\n';
         yield '|---------|---------------|\n';
         for (const feature of testMatrix.featureTests) {
           const featureTestDescription = (testItem: z.infer<typeof TestItem>): string => {
@@ -435,13 +435,7 @@ export default class Review2Command implements Command {
 
         // Add test suggestions for features without tests
         yield '\n### Suggested Test Commands\n\n';
-        const testCount = testMatrix.featureTests.reduce(
-          (acc, feature) => acc + feature.tests.length,
-          0
-        );
-        if (testCount === 0) {
-          yield 'No test suggestions were made.';
-        } else {
+        if (testMatrix.featureTests.find((feature) => feature.tests.length === 0)) {
           yield 'Copy and paste these commands to Navie AI to generate new test cases:\n\n';
           for (const feature of testMatrix.featureTests) {
             if (feature.tests.length === 0) {
@@ -449,17 +443,10 @@ export default class Review2Command implements Command {
               if (baseBranch) commandArguments.push(`/base=${baseBranch}`);
               if (!testGenGather) commandArguments.push('/nogather');
               commandArguments.push(feature.feature);
-
-              yield '\n';
-              yield '```';
-              yield '\n';
-              yield commandArguments.join(' ');
-              yield '\n';
-              yield '```';
-              yield '\n\n';
+              yield `\n* \`${commandArguments.join(' ')}\`\n`;
             }
           }
-        }
+        } else yield 'No new test cases are needed for the features that were identified.\n';
       }
       yield '\n\n';
     }
@@ -467,18 +454,11 @@ export default class Review2Command implements Command {
     if (analyzeLabels) {
       labelItemList = await this.listLabels(vectorTerms, gitDiff);
 
-      if (labelItemList && outputText) {
-        if (outputText) {
-          yield '## Suggested Code Labels\n\n';
-          if (labelItemList.labels.length === 0) {
-            yield 'No labels were suggested.';
-          } else {
-            for (const labelItem of labelItemList.labels) {
-              yield ` * ${labelItem.label} - ${labelItem.description} (${labelItem.file}:${labelItem.line})\n`;
-            }
-          }
-          yield '\n\n';
-        }
+      if (labelItemList && outputText && labelItemList.labels.length > 0) {
+        yield '## Suggested Labels\n\n';
+        yield 'Copy and paste these labels into the code to help with analysis:\n\n';
+        for (const labelItem of labelItemList.labels)
+          yield `* **${labelItem.label}** (${labelItem.file}:${labelItem.line}) — ${labelItem.description}\n`;
       }
     }
 
@@ -512,84 +492,28 @@ export default class Review2Command implements Command {
 
     if (analyzeSuggestions) {
       suggestionList = await this.listSuggestions(gitDiff);
-      if (outputText) {
+      if (outputText && suggestionList.suggestions.length > 0) {
         yield '## Suggestions\n\n';
-        for (const suggestion of suggestionList.suggestions) {
-          yield `**${suggestion.label} (${suggestion.type})**\n`;
-          yield '\n';
-          yield `${suggestion.description}\n`;
-          yield '\n';
-          yield `| Field | Value |\n`;
-          yield `|-------|-------|\n`;
-          yield `| Type | ${suggestion.type} |\n`;
-          yield `| Priority | ${suggestion.priority} |\n`;
-          yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
-          yield '\n';
-          yield '```';
-          yield '\n';
-          yield suggestion.context;
-          yield '\n';
-          yield '```';
-          yield '\n\n';
-        }
+        yield generateSuggestionsMarkdown(suggestionList.suggestions);
+        yield '\n\n';
       }
     }
 
     if (sqlSuggestions) {
       const sqlSuggestionList = await this.listSQLSuggestions(vectorTerms, gitDiff);
-      if (outputText) {
+      if (outputText && sqlSuggestionList.suggestions.length > 0) {
         yield '## SQL Suggestions\n\n';
-        if (sqlSuggestionList.suggestions.length === 0) {
-          yield 'No SQL suggestions were made.';
-        } else {
-          for (const suggestion of sqlSuggestionList.suggestions) {
-            yield `**${suggestion.label} (${suggestion.type})**\n`;
-            yield '\n';
-            yield `${suggestion.description}\n`;
-            yield '\n';
-            yield `| Field | Value |\n`;
-            yield `|-------|-------|\n`;
-            yield `| Type | ${suggestion.type} |\n`;
-            yield `| Priority | ${suggestion.priority} |\n`;
-            yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
-            yield '\n';
-            yield '```';
-            yield '\n';
-            yield suggestion.context;
-            yield '\n';
-            yield '```';
-            yield '\n\n';
-          }
-        }
+        yield generateSuggestionsMarkdown(sqlSuggestionList.suggestions);
+        yield '\n\n';
       }
     }
 
     if (httpSuggestions) {
       const httpSuggestionList = await this.listHTTPSuggestions(vectorTerms, gitDiff);
-      if (outputText) {
+      if (outputText && httpSuggestionList.suggestions.length > 0) {
         yield '## HTTP Suggestions\n\n';
-        if (httpSuggestionList.suggestions.length === 0) {
-          yield 'No HTTP suggestions were made.';
-        } else {
-          for (const suggestion of httpSuggestionList.suggestions) {
-            yield `**${suggestion.label} (${suggestion.type})**\n`;
-            yield '\n';
-            yield `${suggestion.description}\n`;
-            yield '\n';
-            yield `| Field | Value |\n`;
-            yield `|-------|-------|\n`;
-            yield `| Type | ${suggestion.type} |\n`;
-            yield `| Priority | ${suggestion.priority} |\n`;
-            yield `| Location | [${suggestion.file}:${suggestion.line}](${suggestion.file}#${suggestion.line}) |\n`;
-            yield '\n';
-            yield '```';
-            yield '\n';
-            yield suggestion.context;
-            yield '\n';
-            yield '```';
-            yield '\n\n';
-          }
-        }
+        yield generateSuggestionsMarkdown(httpSuggestionList.suggestions);
+        yield '\n\n';
       }
     }
 
@@ -832,12 +756,9 @@ export default class Review2Command implements Command {
     vectorTerms: string[],
     gitDiff: UserContext.CodeSnippetItem
   ): Promise<z.infer<typeof SuggestionList>> {
-    vectorTerms.push('sql');
+    const terms = [...vectorTerms, 'sql', 'database', 'query'];
 
-    const context = await this.lookupContextService.lookupContext(
-      vectorTerms,
-      this.options.tokenLimit
-    );
+    const context = await this.lookupContextService.lookupContext(terms, this.options.tokenLimit);
 
     const contextMessage = context
       .map((item) =>
@@ -890,12 +811,9 @@ export default class Review2Command implements Command {
     vectorTerms: string[],
     gitDiff: UserContext.CodeSnippetItem
   ): Promise<z.infer<typeof SuggestionList>> {
-    vectorTerms.push('http');
+    const terms = [...vectorTerms, 'http', 'request', 'response', 'api', 'web'];
 
-    const context = await this.lookupContextService.lookupContext(
-      vectorTerms,
-      this.options.tokenLimit
-    );
+    const context = await this.lookupContextService.lookupContext(terms, this.options.tokenLimit);
 
     const contextMessage = context
       .map((item) =>
@@ -942,5 +860,45 @@ export default class Review2Command implements Command {
         suggestions: [],
       }
     );
+  }
+}
+
+function generateSuggestionsMarkdown(suggestions: z.infer<typeof SuggestionItem>[]): string {
+  return suggestions
+    .sort(comparePriorities)
+    .map((suggestion) => {
+      const emoji = priorityEmoji(suggestion.priority);
+      const location = [suggestion.file, suggestion.line].filter(Boolean).join(':');
+      return [
+        `### ${emoji} ${suggestion.label} (${suggestion.type}, ${suggestion.priority} priority)`,
+        '',
+        `${suggestion.description}`,
+        '```\n',
+        `<!-- file: ${location} -->`,
+        suggestion.context,
+        '```',
+      ].join('\n');
+    })
+    .join('\n\n');
+}
+
+function comparePriorities(
+  a: z.infer<typeof SuggestionItem>,
+  b: z.infer<typeof SuggestionItem>
+): number {
+  const priorityOrder = ['low', 'medium', 'high'];
+  return priorityOrder.indexOf(b.priority) - priorityOrder.indexOf(a.priority);
+}
+
+function priorityEmoji(priority: z.infer<typeof SuggestionItem>['priority']): string {
+  switch (priority) {
+    case 'high':
+      return '🔴';
+    case 'medium':
+      return '🟡';
+    case 'low':
+      return '🔵';
+    default:
+      return '';
   }
 }

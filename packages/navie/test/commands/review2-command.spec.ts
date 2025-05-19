@@ -279,9 +279,12 @@ describe('Review2Command', () => {
 
       const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
 
-      expect(result).toContain('## Suggested Code Labels');
-      expect(result).toContain('* label1 - Description for label1 (file1.ts:10)');
-      expect(result).toContain('* label2 - Description for label2 (file2.ts:20)');
+      expect(result).toContain('## Suggested Labels');
+      for (const label of reviewCommandOptions.mockLabels.labels) {
+        expect(result).toContain(label.label);
+        expect(result).toContain(label.description);
+        expect(result).toContain(`${label.file}:${label.line}`);
+      }
     });
 
     it('includes SQL suggestions in the output', async () => {
@@ -304,7 +307,7 @@ describe('Review2Command', () => {
       const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
 
       expect(result).toContain('## SQL Suggestions');
-      expect(result).toContain('| Type | n+1 query |');
+      expect(result).toContain('n+1 query');
     });
 
     it('includes HTTP suggestions in the output', async () => {
@@ -327,7 +330,7 @@ describe('Review2Command', () => {
       const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
 
       expect(result).toContain('## HTTP Suggestions');
-      expect(result).toContain('| Type | http 500 error |');
+      expect(result).toContain('http 500 error');
     });
   });
 });
