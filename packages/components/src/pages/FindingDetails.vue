@@ -23,6 +23,15 @@
         </div>
 
         <main>
+          <div class="col" v-if="rpcClient">
+            <v-button kind="primary" @click.native="fix()">
+              <component :is="fixIcon" class="fix-icon" />
+              <div class="fix-text">
+                <span>{{ fixLabel }}</span>
+                <div class="fix-text--sub-text" v-if="fixState">Click to view results</div>
+              </div>
+            </v-button>
+          </div>
           <div class="finding-details-wrap row">
             <div class="findings-overview">
               <h3>Finding Overview</h3>
@@ -84,11 +93,19 @@
   </v-quickstart-layout>
 </template>
 
-<script>
+<script lang="ts">
+// @ts-nocheck
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import Navigation from '@/components/mixins/navigation';
 import VAppmapPin from '@/assets/appmap-pin.svg';
 import VPopper from '@/components/Popper.vue';
+import VButton from '@/components/Button.vue';
+import AppMapRPC from '@/lib/AppMapRPC';
+import VLoader from '@/components/chat/Loader.vue';
+import VWrench from '@/assets/wrench.svg';
+import VCheck from '@/assets/check.svg';
+import { PropType } from 'vue';
+import { method } from 'jayson';
 
 export default {
   name: 'FindingDetails',
@@ -97,6 +114,10 @@ export default {
     VQuickstartLayout,
     VAppmapPin,
     VPopper,
+    VButton,
+    VLoader,
+    VWrench,
+    VCheck,
   },
 
   mixins: [Navigation],
@@ -104,12 +125,24 @@ export default {
   props: {
     findings: {
       default: () => [],
-      type: Array,
+      type: Array as PropType<any[]>,
+    },
+    appmapRpcPort: {
+      type: Number as PropType<number | undefined>,
+      default: undefined,
     },
   },
 
+  data() {
+    return {
+      fixState: undefined as undefined | 'in-progress' | 'complete',
+      threadId: undefined as undefined | string,
+      rpcClient: this.appmapRpcPort ? new AppMapRPC(this.appmapRpcPort) : undefined,
+    };
+  },
+
   methods: {
-    displayLocation(location) {
+    displayLocation(location: any) {
       const lineNumber = location.range[0] && location.range[0].line + 1;
       const { truncatedPath } = location;
       if (lineNumber && lineNumber > 1) {
@@ -118,20 +151,107 @@ export default {
       return `${truncatedPath}`;
     },
 
-    openInSourceCode(location) {
+    openInSourceCode(location: any) {
       this.$root.$emit('open-in-source-code', location);
     },
 
-    openMap(mapFile, uri) {
+    openMap(mapFile: any, uri: any) {
       this.$root.$emit('open-map', mapFile, uri);
     },
 
     backToOverview() {
       this.$root.$emit('open-findings-overview');
     },
+
+    async fix() {
+      console.log(this.threadId, this.fixState, JSON.stringify(this.findings));
+      if (this.threadId) {
+        this.$root.$emit('open-navie-thread', this.threadId);
+        return;
+      }
+
+      if (this.fixState) return;
+      this.fixState = 'in-progress';
+
+      const { rpcClient } = this;
+      const registration = await rpcClient.register();
+      this.threadId = registration.thread.id;
+
+      const listener = await rpcClient.thread.subscribe(registration.thread.id);
+      const { finding } = this.representativeFinding;
+      const req = finding?.event?.['http_server_request'];
+      const query = finding?.event?.['sql_query'];
+      const relatedClasses = new Set<string>(
+        (finding.relatedEvents ?? []).map(({ defined_class, method }) => {
+          if (method === undefined) {
+            return defined_class;
+          }
+          return `${defined_class}#${method}`;
+        })
+      );
+
+      const messageQueue = [
+        [
+          '@explain /gather identify and explain the root cause of the following issue.',
+          `The issue is described as "${this.title}"`,
+          this.description,
+          '\nDetails are as follows:',
+          this.message,
+          finding?.locationLabel,
+          finding?.event?.path,
+          req && `${req.method} ${req.path}`,
+          query && `SQL: ${query.sql}`,
+          ...[...relatedClasses],
+          ...this.representativeFinding.stackLocations.map((l: any) => this.displayLocation(l)),
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        '@plan a concise resolution to the issue, keeping changes to the minimum necessary - be specific and precise in your response, and always follow best practices.',
+        '@generate /format=xml',
+      ];
+      let currentMessageComplete: Promise<void>;
+      let resolver: () => void;
+      listener.on('event', (e) => {
+        if (e.type === 'message-complete') {
+          if (resolver) resolver();
+        }
+      });
+      for (const message of messageQueue) {
+        currentMessageComplete = new Promise((resolve) => {
+          resolver = resolve;
+        });
+
+        await rpcClient.thread.sendMessage(registration.thread.id, message);
+        await currentMessageComplete;
+      }
+
+      this.fixState = 'complete';
+    },
   },
 
   computed: {
+    fixIcon() {
+      switch (this.fixState) {
+        case 'in-progress':
+          return VLoader;
+        case 'complete':
+          return VCheck;
+        default:
+          return VWrench;
+      }
+    },
+
+    fixLabel() {
+      switch (this.fixState) {
+        case 'in-progress':
+          return 'Generating Fix...';
+        case 'complete':
+          return 'Fix Generated';
+        default:
+          return 'Fix with Navie';
+      }
+    },
+
     hasNoData() {
       return this.findings.length === 0;
     },
@@ -386,6 +506,25 @@ h6 {
   }
 }
 
+.fix-icon {
+  width: 16px !important;
+  margin-right: 0.5rem;
+  &::v-deep {
+    .dot {
+      background-color: $white;
+    }
+  }
+  path {
+    fill: $white;
+  }
+}
+.fix-text {
+  &--sub-text {
+    font-size: 0.8rem;
+    opacity: 0.65;
+    font-weight: 200;
+  }
+}
 .b-0 {
   border: none;
 }
