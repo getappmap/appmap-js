@@ -1,0 +1,12 @@
+{
+  "main": "release/cli.js",
+  "output": "release/cli.blob",
+  "disableExperimentalSEAWarning": true,
+  "useSnapshot": false,
+  "useCodeCache": true,
+  "assets": {
+    "package.json": "package.json",
+    "appmap.html": "built/html/appmap.html",
+    "sequenceDiagram.html": "built/html/sequenceDiagram.html"
+  }
+}

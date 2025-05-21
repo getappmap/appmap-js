@@ -1,17 +1,17 @@
-import { join } from 'path';
 import assert from 'assert';
 import { Finding, ScanResults } from '@appland/scanner';
 
 import { Report } from '../inventory/Report';
-import { Reporter, TemplateDirectory } from './Reporter';
+import { Reporter } from './Reporter';
 import { ReportTemplate } from '../../report/ReportTemplate';
-import { AppMap, FindingChange, FindingDiff } from '../compare-report/ChangeReport';
+import { AppMap, FindingChange } from '../compare-report/ChangeReport';
 import readIndexFile from '../inventory/readIndexFile';
-import loadReportTemplate from '../../report/loadReportTemplate';
+import compileTemplate from '../../report/compileTemplate';
 import urlHelpers from '../../report/urlHelpers';
 import helpers from '../../report/helpers';
 import { Rule, SummaryReport } from './SummaryReport';
 import { SafeString } from 'handlebars';
+import summaryTemplate from '../../../resources/inventory-report/summary/summary.hbs';
 
 async function buildReportData(
   inventoryReport: Report,
@@ -77,10 +77,7 @@ export default class SummaryReporter implements Reporter {
   constructor(public appmapURL?: string, public sourceURL?: string) {}
 
   async generateReport(reportData: Report): Promise<string> {
-    assert(TemplateDirectory);
-    const templateText = await loadReportTemplate(
-      join(TemplateDirectory, 'summary', 'summary.hbs')
-    );
+    const templateText = compileTemplate(summaryTemplate);
     const template = new ReportTemplate(templateText, {
       ...SummaryReporter.helpers(),
       ...helpers,

@@ -1,23 +1,20 @@
-import { join } from 'path';
 import assert from 'assert';
 import { Report } from '../inventory/Report';
 import { AppMapConfig, ConfiguredPackage } from '../../lib/loadAppMapConfig';
-import { Reporter, TemplateDirectory } from './Reporter';
+import { Reporter } from './Reporter';
 import { AppMapInfo, WelcomeReport } from './WelcomeReport';
 import { ReportTemplate } from '../../report/ReportTemplate';
-import loadReportTemplate from '../../report/loadReportTemplate';
+import compileTemplate from '../../report/compileTemplate';
 import urlHelpers from '../../report/urlHelpers';
 import helpers from '../../report/helpers';
 import readIndexFile from '../inventory/readIndexFile';
+import welcomeTemplate from '../../../resources/inventory-report/welcome/welcome.hbs';
 
 export default class WelcomeReporter implements Reporter {
   constructor(public appmapURL: string, public sourceURL?: string) {}
 
   async generateReport(reportData: Report, appmapConfig: AppMapConfig): Promise<string> {
-    assert(TemplateDirectory);
-    const templateText = await loadReportTemplate(
-      join(TemplateDirectory, 'welcome', 'welcome.hbs')
-    );
+    const templateText = compileTemplate(welcomeTemplate);
     const template = new ReportTemplate(templateText, {
       ...helpers,
       ...urlHelpers({ appmapURL: this.appmapURL, sourceURL: this.sourceURL }),

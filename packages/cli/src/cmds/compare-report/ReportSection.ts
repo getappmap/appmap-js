@@ -2,20 +2,11 @@ import { SafeString } from 'handlebars';
 import { join } from 'path';
 
 import ChangeReport, { AppMap } from './ChangeReport';
-import { existsSync } from 'fs';
 import assert from 'assert';
 import buildPreprocessor, { filterFindings } from './Preprocessor';
 import helpers from '../../report/helpers';
 import urlHelpers from '../../report/urlHelpers';
-import loadReportTemplate from '../../report/loadReportTemplate';
-
-export const TemplateDirectory = [
-  '../../../resources/change-report', // As packaged
-  '../../../../resources/change-report', // In development
-]
-  .map((dirName) => join(__dirname, dirName))
-  .find((dirName) => existsSync(dirName));
-assert(TemplateDirectory, "Report template directory 'change-report' not found");
+import compileTemplate from '../../report/compileTemplate';
 
 export const DEFAULT_MAX_ELEMENTS = 10;
 
@@ -177,17 +168,28 @@ export default class ReportSection {
 
   static async build(
     section: Section | ExperimentalSection,
-    templateDir = TemplateDirectory
+    templateDir = '../../resources/compare-report'
   ): Promise<ReportSection> {
     assert(templateDir);
 
     const sectionDir = SECTION_DIRECTORY[section] || section;
 
-    const headingTemplateFile = join(templateDir, sectionDir, 'heading.hbs');
-    const headingTemplate = await loadReportTemplate(headingTemplateFile);
+    const headingTemplateFile = (await import(
+      join(templateDir, sectionDir, 'heading.hbs')
+    )) as string;
+    if (!headingTemplateFile) {
+      throw new Error(`Heading template not found for section: ${section}`);
+    }
 
-    const detailsTemplateFile = join(templateDir, sectionDir, 'details.hbs');
-    const detailsTemplate = await loadReportTemplate(detailsTemplateFile);
+    const detailsTemplateFile = (await import(
+      join(templateDir, sectionDir, 'details.hbs')
+    )) as string;
+    if (!detailsTemplateFile) {
+      throw new Error(`Details template not found for section: ${section}`);
+    }
+
+    const headingTemplate = compileTemplate(headingTemplateFile);
+    const detailsTemplate = compileTemplate(detailsTemplateFile);
 
     return new ReportSection(section, headingTemplate, detailsTemplate);
   }

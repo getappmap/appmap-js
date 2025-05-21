@@ -15,7 +15,7 @@
     "target": "es2017",
     "types": ["node", "jest"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "types/*"],
   "exclude": ["**/node_modules", "src/html"],
   "ts-node": {
     "swc": true

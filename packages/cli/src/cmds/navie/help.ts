@@ -1,18 +1,23 @@
 import lunr from 'lunr';
 import { Help } from '@appland/navie';
-import { processFiles, verbose } from '../../utils';
+import { verbose } from '../../utils';
 import { log, warn } from 'console';
-import { readFile } from 'fs/promises';
 import { MarkdownTextSplitter } from 'langchain/text_splitter';
 import { join } from 'path';
-import { existsSync } from 'fs';
-import assert from 'assert';
 import { load } from 'js-yaml';
 import { queryKeywords } from '@appland/search';
+import { glob } from 'glob';
 
-const DOCS_DIR = ['../../docs', '../../../built/docs']
-  .map((dir) => join(__dirname, dir))
-  .find((dir) => existsSync(dir));
+const DOC_DIR = join(__dirname, '../../../../../docs');
+
+const DOCS = glob.sync('**/*.md', { cwd: DOC_DIR }).reduce((memo, filePath) => {
+  // How we structure the dynamic require makes a difference. Here we pull out the .md file extension
+  // so that we can specify it as a static literal within the require statement below. ESBuild can
+  // then optimize the bundling to only include the files we need.
+  const fileName = filePath.replace(/\.md$/, '');
+  memo[filePath] = require(`../../../../../docs/${fileName}.md`);
+  return memo;
+}, {} as Record<string, string>);
 
 export const DEFAULT_MAX_RESULTS = 10;
 
@@ -69,21 +74,19 @@ export class HelpIndex {
     ).slice(0, maxResults);
   }
 
-  static async buildIndex(directory: string): Promise<HelpIndex> {
-    const documents = new Array<any>();
+  static async buildIndex(documents: Record<string, string>): Promise<HelpIndex> {
+    const processedDocuments = new Array<any>();
 
     if (verbose()) log(`[HelpIndex] Adding help documents to full-text index`);
     const startTime = Date.now();
 
     const frontMatterByFile = new Map<string, FrontMatter>();
     const contentByRef = new Map<string, string>();
-    const buildDocument = async (filePath: string) => {
-      const document = await readFile(filePath, 'utf8');
-
-      let [_, frontMatterStr, text] = document.split('---');
+    const buildDocument = async (filePath: string, content: string) => {
+      let [_, frontMatterStr, text] = content.split('---');
       if (!frontMatterStr) {
         frontMatterStr = '';
-        text = document;
+        text = content;
       }
       let frontMatter: FrontMatter | undefined;
       if (frontMatterStr) {
@@ -104,11 +107,13 @@ export class HelpIndex {
         const id = packRef(filePath, from, to);
         contentByRef.set(id, chunk.pageContent);
         const pageName = frontMatter?.name || frontMatter?.title;
-        documents.push({ id, pageName, content: chunk.pageContent });
+        processedDocuments.push({ id, pageName, content: chunk.pageContent });
       }
     };
 
-    await processFiles(directory, (filePath: string) => filePath.endsWith('.md'), buildDocument);
+    for (const [filePath, content] of Object.entries(DOCS)) {
+      buildDocument(filePath, content);
+    }
 
     const idx = lunr(function () {
       this.ref('id');
@@ -117,7 +122,7 @@ export class HelpIndex {
 
       this.tokenizer.separator = /[\s/-_:#.]+/;
 
-      for (const doc of documents) this.add(doc);
+      for (const doc of processedDocuments) this.add(doc);
     });
 
     const endTime = Date.now();
@@ -133,8 +138,8 @@ export class HelpIndex {
 
 let helpIndex: HelpIndex | undefined;
 
-export function buildHelpIndex(directory: string): Promise<HelpIndex> {
-  return HelpIndex.buildIndex(directory);
+export function buildHelpIndex(documents: Record<string, string>): Promise<HelpIndex> {
+  return HelpIndex.buildIndex(documents);
 }
 
 export default async function collectHelp(
@@ -144,8 +149,7 @@ export default async function collectHelp(
   if (vectorTerms.length === 0 || vectorTerms.every((v) => v.trim() === '')) return [];
 
   if (!helpIndex) {
-    assert(DOCS_DIR, 'Could not find AppMap docs directory');
-    helpIndex = await buildHelpIndex(DOCS_DIR);
+    helpIndex = await buildHelpIndex(DOCS);
   }
 
   return await helpIndex.search(vectorTerms);
