@@ -230,7 +230,7 @@ __metadata:
     openapi-types: ^12.1.3
     ora: ^5.4.1
     parse-diff: ^0.11.1
-    pkg: ^5.8.1
+    pkg: 5.8.1-patched
     port-pid: ^0.0.7
     prettier: ^2.7.1
     pretty-bytes: ^5.6.0
@@ -578,7 +578,7 @@ __metadata:
     openapi-diff: ^0.23.6
     openapi-types: ^9.3.0
     ora: ~5
-    pkg: ^5.8.0
+    pkg: 5.8.1-patched
     prettier: ^2.7.1
     pretty-format: ^27.4.6
     read-pkg-up: ^7.0.1
@@ -34790,7 +34790,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pkg@npm:^5.8.0, pkg@npm:^5.8.1":
+"pkg@npm:5.8.1":
   version: 5.8.1
   resolution: "pkg@npm:5.8.1"
   dependencies:
@@ -34816,6 +34816,35 @@ __metadata:
   bin:
     pkg: lib-es5/bin.js
   checksum: 5e750e716c3426706ea1fbd26832faf6a3ab8376b99f20aeb9c40fd48ad48e7b51375cd077b77669f3bfbefee69cc8111f49e0ca39e353fd0fc2dff95a57f822
+  languageName: node
+  linkType: hard
+
+"pkg@patch:pkg@npm:5.8.1#.yarn/patches/pkg-npm-5.8.1-db9700609f.patch::locator=root%40workspace%3A.":
+  version: 5.8.1
+  resolution: "pkg@patch:pkg@npm%3A5.8.1#.yarn/patches/pkg-npm-5.8.1-db9700609f.patch::version=5.8.1&hash=7dca8e&locator=root%40workspace%3A."
+  dependencies:
+    "@babel/generator": 7.18.2
+    "@babel/parser": 7.18.4
+    "@babel/types": 7.19.0
+    chalk: ^4.1.2
+    fs-extra: ^9.1.0
+    globby: ^11.1.0
+    into-stream: ^6.0.0
+    is-core-module: 2.9.0
+    minimist: ^1.2.6
+    multistream: ^4.1.0
+    pkg-fetch: 3.4.2
+    prebuild-install: 7.1.1
+    resolve: ^1.22.0
+    stream-meter: ^1.0.4
+  peerDependencies:
+    node-notifier: ">=9.0.1"
+  peerDependenciesMeta:
+    node-notifier:
+      optional: true
+  bin:
+    pkg: lib-es5/bin.js
+  checksum: 9864832ed7169d618b6e69f4e6cd48fd2e9b5c6cd3803bfb2f883a27b063097cd353c3db8d4bb37174832c306e82b60863e7e507b9ffbee9258363e4ea60ce0e
   languageName: node
   linkType: hard
 
