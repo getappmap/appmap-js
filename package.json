@@ -47,6 +47,6 @@
   "resolutions": {
     "web-auth-library": "getappmap/web-auth-library#v1.0.3-cjs",
     "whatwg-url": "14.0.0",
-    "pkg@5.8.1": "patch:pkg@npm:5.8.1#.yarn/patches/pkg-npm-5.8.1-db9700609f.patch"
+    "pkg@5.8.1-patched": "patch:pkg@npm:5.8.1#.yarn/patches/pkg-npm-5.8.1-db9700609f.patch"
   }
 }
