@@ -1,0 +1,38 @@
+diff --git a/prelude/bootstrap.js b/prelude/bootstrap.js
+index 034bd153d92d9db9e7a37b9dc63ddf4277f1a9ee..9e8df8032243feffdd5c362d3232ae34af1d9264 100644
+--- a/prelude/bootstrap.js
++++ b/prelude/bootstrap.js
+@@ -185,9 +185,7 @@ function copyFolderRecursiveSync(source, target) {
+   const targetFolder = path.join(target, path.basename(source));
+ 
+   // Check if target folder needs to be created or integrated
+-  if (!fs.existsSync(targetFolder)) {
+-    fs.mkdirSync(targetFolder);
+-  }
++  fs.mkdirSync(targetFolder, { recursive: true });
+ 
+   // Copy
+   if (fs.lstatSync(source).isDirectory()) {
+@@ -249,13 +247,6 @@ function copyFolderRecursiveSync(source, target) {
+   }
+ }
+ 
+-function createDirRecursively(dir) {
+-  if (!fs.existsSync(dir)) {
+-    createDirRecursively(path.join(dir, '..'));
+-    fs.mkdirSync(dir);
+-  }
+-}
+-
+ /*
+ 
+ // TODO move to some test
+@@ -2209,7 +2200,7 @@ function payloadFileSync(pointer) {
+       // Example: /tmp/pkg/<hash>
+       const tmpFolder = path.join(tmpdir(), 'pkg', hash);
+ 
+-      createDirRecursively(tmpFolder);
++      fs.mkdirSync(tmpFolder, { recursive: true });
+ 
+       // Example: moduleFolder = /snapshot/appname/node_modules/sharp/build/Release
+       const parts = moduleFolder.split(path.sep);
