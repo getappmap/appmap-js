@@ -1,6 +1,6 @@
 {
   "name": "@appland/appmap",
-  "version": "3.189.1",
+  "version": "3.189.2",
   "description": "",
   "bin": "built/cli.js",
   "engines": {
@@ -184,4 +184,4 @@
   "optionalDependencies": {
     "puppeteer": "^19.7.5"
   }
-} 
+}

@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.189.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.1...@appland/appmap-v3.189.2) (2025-05-22)
+
+
+### Bug Fixes
+
+* Address a race condition in binary bootstrapping ([1d3de7e](https://github.com/getappmap/appmap-js/commit/1d3de7e2339e1e8e98f1f36dbb0cd83b70afe3cf))
+
 # [@appland/appmap-v3.189.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.0...@appland/appmap-v3.189.1) (2025-05-16)
 
 
