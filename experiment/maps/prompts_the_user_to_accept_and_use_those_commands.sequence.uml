@@ -1,0 +1,42 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant record as "record"
+participant test as "test"
+participant cmds as "cmds"
+  [->record: setConfigOption <color:gray> 0.153 ms</color>
+  activate record
+    record->record: <u>mergeConfigData</u> <color:gray> 0.0226 ms</color>
+    activate record
+    record<--record: void
+    deactivate record
+  [<--record: void
+  deactivate record
+  [->test: <u>areTestCasesConfigured</u> <color:gray> 0.786 ms</color>
+  activate test
+    test->record: configOption <color:gray> 0.0976 ms</color>
+    activate record
+      record->record: <u>findOption</u> <color:gray> 0.00563 ms</color>
+      activate record
+      record<--record: array
+      deactivate record
+    test<--record: array
+    deactivate record
+    Loop 2 times <color:gray> 0.00481 ms</color>
+      test->cmds: progress <color:gray> 0.00481 ms</color>
+      activate cmds
+      test<--cmds: void
+      deactivate cmds
+    End
+    test->record: <u>envString</u> <color:gray> 0.00199 ms</color>
+    activate record
+    test<--record: string
+    deactivate record
+    Loop 2 times <color:gray> 0.000833 ms</color>
+      test->cmds: progress <color:gray> 0.000833 ms</color>
+      activate cmds
+      test<--cmds: void
+      deactivate cmds
+    End
+  [<--test: Promise<Boolean>
+  deactivate test
+@enduml

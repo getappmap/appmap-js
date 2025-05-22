@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant compare_report as "compare-report"
+participant report as "report"
+  [->compare_report: generateHeading <color:gray> 1.81 ms</color>
+  activate compare_report
+    compare_report->compare_report: buildContext <color:gray> 0.0247 ms</color>
+    activate compare_report
+    compare_report<--compare_report: Object
+    deactivate compare_report
+    compare_report->compare_report: <u>helpers</u> <color:gray> 0.00846 ms</color>
+    activate compare_report
+    compare_report<--compare_report: Object
+    deactivate compare_report
+    compare_report->report: <u>length</u> <color:gray> 0.00839 ms</color>
+    activate report
+    compare_report<--report: Number
+    deactivate report
+    compare_report->compare_report: <u>section_link</u> <color:gray> 0.00515 ms</color>
+    activate compare_report
+    compare_report<--compare_report: SafeString
+    deactivate compare_report
+  [<--compare_report: string
+  deactivate compare_report
+@enduml

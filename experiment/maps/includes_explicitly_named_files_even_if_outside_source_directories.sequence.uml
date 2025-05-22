@@ -1,0 +1,160 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant explain as "explain"
+participant explain as "explain"
+participant src as "src"
+  [->explain: <u>collect</u> <color:gray> 11.2 ms</color>
+  activate explain
+    Loop 3 times <color:gray> 1.35 ms</color>
+      explain->explain: <u>parse</u> <color:gray> 1.35 ms</color>
+      activate explain
+        explain->explain: <u>normalizePath</u> <color:gray> 0.0731 ms</color>
+        activate explain
+        explain<--explain: string
+        deactivate explain
+        explain->explain: constructor <color:gray> 0.0372 ms</color>
+        activate explain
+        explain<--explain: void
+        deactivate explain
+      explain<--explain: Location
+      deactivate explain
+    End
+    explain->explain: <u>collectLocationContext</u> <color:gray> 7.15 ms</color>
+    activate explain
+      explain->src: <u>verbose</u> <color:gray> 0.0016 ms</color>
+      activate src
+      explain<--src: Boolean
+      deactivate src
+      explain->explain: <u>instance</u> <color:gray> 0.00248 ms</color>
+      activate explain
+      explain<--explain: ContentRestrictions
+      deactivate explain
+      explain->explain: safeRestricted <color:gray> 0.653 ms</color>
+      activate explain
+        explain->explain: isRestricted <color:gray> 0.296 ms</color>
+        activate explain
+          explain->explain: <u>normalizeAbsolute</u> <color:gray> 0.00761 ms</color>
+          activate explain
+          explain<--explain: string
+          deactivate explain
+          explain->explain: isRestrictedImpl <color:gray> 0.0145 ms</color>
+          activate explain
+          explain<--explain: Boolean
+          deactivate explain
+        explain<--explain: Boolean
+        deactivate explain
+      explain<--explain: Boolean
+      deactivate explain
+    explain<--explain: Promise<Array>
+    deactivate explain
+  [<--explain: Promise<Array>
+  deactivate explain
+  [->src: <u>verbose</u> <color:gray> 0.0007 ms</color>
+  activate src
+  [<--src: Boolean
+  deactivate src
+  [->explain: snippet <color:gray> 0.0745 ms</color>
+  activate explain
+  [<--explain: string
+  deactivate explain
+  [->explain: toString <color:gray> 0.0134 ms</color>
+  activate explain
+  [<--explain: string
+  deactivate explain
+  [->explain: <u>instance</u> <color:gray> 0.00154 ms</color>
+  activate explain
+  [<--explain: ContentRestrictions
+  deactivate explain
+  [->explain: safeRestricted <color:gray> 0.443 ms</color>
+  activate explain
+    explain->explain: isRestricted <color:gray> 0.268 ms</color>
+    activate explain
+      explain->explain: <u>normalizeAbsolute</u> <color:gray> 0.00403 ms</color>
+      activate explain
+      explain<--explain: string
+      deactivate explain
+      explain->explain: isRestrictedImpl <color:gray> 0.00557 ms</color>
+      activate explain
+      explain<--explain: Boolean
+      deactivate explain
+    explain<--explain: Boolean
+    deactivate explain
+  [<--explain: Boolean
+  deactivate explain
+  [->src: <u>verbose</u> <color:gray> 0.000683 ms</color>
+  activate src
+  [<--src: Boolean
+  deactivate src
+  [->explain: snippet <color:gray> 0.0141 ms</color>
+  activate explain
+  [<--explain: string
+  deactivate explain
+  [->explain: toString <color:gray> 0.00152 ms</color>
+  activate explain
+  [<--explain: string
+  deactivate explain
+  [->explain: <u>instance</u> <color:gray> 0.00214 ms</color>
+  activate explain
+  [<--explain: ContentRestrictions
+  deactivate explain
+  [->explain: safeRestricted <color:gray> 0.483 ms</color>
+  activate explain
+    explain->explain: isRestricted <color:gray> 0.312 ms</color>
+    activate explain
+      explain->explain: <u>normalizeAbsolute</u> <color:gray> 0.0045 ms</color>
+      activate explain
+      explain<--explain: string
+      deactivate explain
+      explain->explain: isRestrictedImpl <color:gray> 0.00496 ms</color>
+      activate explain
+      explain<--explain: Boolean
+      deactivate explain
+    explain<--explain: Boolean
+    deactivate explain
+  [<--explain: Boolean
+  deactivate explain
+  [->src: <u>verbose</u> <color:gray> 0.000805 ms</color>
+  activate src
+  [<--src: Boolean
+  deactivate src
+  [->explain: snippet <color:gray> 0.0025 ms</color>
+  activate explain
+  [<--explain: string
+  deactivate explain
+  [->explain: toString <color:gray> 0.00186 ms</color>
+  activate explain
+  [<--explain: string
+  deactivate explain
+  [->explain: <u>instance</u> <color:gray> 0.00285 ms</color>
+  activate explain
+  [<--explain: ContentRestrictions
+  deactivate explain
+  [->explain: safeRestricted <color:gray> 0.436 ms</color>
+  activate explain
+    explain->explain: isRestricted <color:gray> 0.276 ms</color>
+    activate explain
+      explain->explain: <u>normalizeAbsolute</u> <color:gray> 0.0183 ms</color>
+      activate explain
+      explain<--explain: string
+      deactivate explain
+      explain->explain: isRestrictedImpl <color:gray> 0.00603 ms</color>
+      activate explain
+      explain<--explain: Boolean
+      deactivate explain
+    explain<--explain: Boolean
+    deactivate explain
+  [<--explain: Boolean
+  deactivate explain
+  [->src: <u>verbose</u> <color:gray> 0.000551 ms</color>
+  activate src
+  [<--src: Boolean
+  deactivate src
+  [->explain: snippet <color:gray> 0.00252 ms</color>
+  activate explain
+  [<--explain: string
+  deactivate explain
+  [->explain: toString <color:gray> 0.000709 ms</color>
+  activate explain
+  [<--explain: string
+  deactivate explain
+@enduml

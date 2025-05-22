@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant explain as "explain"
+  [->explain: <u>parse</u> <color:gray> 0.604 ms</color>
+  activate explain
+    explain->explain: <u>normalizePath</u> <color:gray> 0.0329 ms</color>
+    activate explain
+    explain<--explain: string
+    deactivate explain
+    explain->explain: constructor <color:gray> 0.0149 ms</color>
+    activate explain
+    explain<--explain: void
+    deactivate explain
+  [<--explain: Location
+  deactivate explain
+  [->explain: constructor <color:gray> 0.00126 ms</color>
+  activate explain
+  [<--explain: void
+  deactivate explain
+@enduml

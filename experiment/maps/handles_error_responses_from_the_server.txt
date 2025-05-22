@@ -1,0 +1,33 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.9.0"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: Zendesk handles error responses from the server
+META source_location: packages/cli/tests/unit/lib/zendesk.spec.ts
+META test_status: succeeded
+
+CLASS package: cmds
+  CLASS HttpError
+    FUNC constructor (packages/cli/src/cmds/errors.ts:24)
+CLASS package: lib
+  CLASS package: ticket
+    CLASS zendesk
+      FUNC createRequest (packages/cli/src/lib/ticket/zendesk.ts:35) static
+
+EVENT CALL id:1 thread:0 zendesk.createRequest(errors: 'Error message', name: 'Error Test', email: 'error@example.com', baseURL: 'http://localhost:41443')
+EVENT RETURN id:2 parent:1 elapsed:0.00397501396946609 return: Promise { <rejected> } EXCEPTION HttpError: Failed to create a Zendesk Request
+EVENT CALL id:3 thread:0 POST /api/v2/requests.json headers: {"Host":"localhost:41443","Connection":"keep-alive","Accept":"application/json","Content-Type":"application/json","Accept-Language":"*","Sec-Fetch-Mode":"cors","User-Agent":"node","Accept-Encoding":"gzip, deflate","Content-Length":"163"} normalized: undefined params: undefined
+EVENT RETURN id:4 parent:3 elapsed:0.0004071430303156376
+EVENT CALL id:5 thread:0 HttpError.constructor(message: 'Failed to create a Zendesk Request', response: {
+  status: 400,
+  headers: {
+    connection: 'keep-alive',
+    'content-type': 'application/json',
+    date: 'Wed, 16 Apr 2025 14:57:09 GMT',
+    'keep-alive': 'timeout=5',
+    'transfer-encoding': 'chunked'
+  },
+  body: '{"error":"Bad request"}',
+  toString: [Function: toString]
+})
+EVENT RETURN id:6 parent:5 elapsed:0.000055813929066061974

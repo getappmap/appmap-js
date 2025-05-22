@@ -1,0 +1,23 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.9.0"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: Location windows parses a Windows path with a line range
+META source_location: packages/cli/tests/unit/rpc/explain/location.spec.ts
+META test_status: succeeded
+
+CLASS package: explain
+  CLASS Location
+    FUNC constructor (packages/cli/src/rpc/explain/location.ts:21)
+    FUNC parse (packages/cli/src/rpc/explain/location.ts:53) static
+  CLASS location
+    FUNC normalizePath (packages/cli/src/rpc/explain/location.ts:4) static
+
+EVENT CALL id:1 thread:0 Location.parse(location: 'C:\\path\\to\\file.rb:1-2') receiver: [class Location]
+EVENT CALL id:2 thread:0 location.normalizePath(location: 'C:\\path\\to\\file.rb:1-2')
+EVENT RETURN id:3 parent:2 elapsed:0.00003292900510132313 return: 'C:\\path\\to\\file.rb:1-2'
+EVENT CALL id:4 thread:0 Location.constructor(path: 'C:\\path\\to\\file.rb', lineRange: '1-2')
+EVENT RETURN id:5 parent:4 elapsed:0.000014850986190140247
+EVENT RETURN id:6 parent:1 elapsed:0.0006037630373612046 return: Location { path: 'C:\\path\\to\\file.rb', lineRange: '1-2' }
+EVENT CALL id:7 thread:0 Location.constructor(path: 'C:\\path\\to\\file.rb', lineRange: '1-2')
+EVENT RETURN id:8 parent:7 elapsed:0.0000012620585039258003

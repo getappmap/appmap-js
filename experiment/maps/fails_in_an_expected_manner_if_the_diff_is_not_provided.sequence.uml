@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant lib as "lib"
+participant commands as "commands"
+participant src as "src"
+  [->lib: constructor <color:gray> 0.0103 ms</color>
+  activate lib
+  [<--lib: void
+  deactivate lib
+  [->commands: <u>read</u> <color:gray> 0.483 ms</color>
+  activate commands
+    commands->lib: booleanValue <color:gray> 0.00271 ms</color>
+    activate lib
+    commands<--lib: Boolean
+    deactivate lib
+    commands->src: <u>hasCodeSelectionArray</u> <color:gray> 0.00555 ms</color>
+    activate src
+    commands<--src: Boolean
+    deactivate src
+    commands->lib: <u>getGitDiff</u> <color:gray> 0.0982 ms</color>
+    activate lib
+      lib->lib: constructor <color:gray> 0.049 ms</color>
+      activate lib
+      lib<--lib: void
+      deactivate lib
+    commands<--lib: <i>exception!</i>
+    deactivate lib
+  [<--commands: Promise<String>
+  deactivate commands
+@enduml

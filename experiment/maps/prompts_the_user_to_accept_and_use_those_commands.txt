@@ -1,0 +1,149 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.9.0"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: record.test.areTestCommandsConfigured when config contains test commands prompts the user to accept and use those commands
+META source_location: packages/cli/tests/unit/record/test/areTestCommandsConfigured.spec.ts
+META test_status: succeeded
+
+CLASS package: cmds
+  CLASS package: record
+    CLASS package: test
+      CLASS areTestCommandsConfigured
+        FUNC areTestCasesConfigured (packages/cli/src/cmds/record/test/areTestCommandsConfigured.ts:6) static
+    CLASS configuration
+      FUNC findOption (packages/cli/src/cmds/record/configuration.ts:148) static
+      FUNC mergeConfigData (packages/cli/src/cmds/record/configuration.ts:165) static
+    CLASS Configuration
+      FUNC configOption (packages/cli/src/cmds/record/configuration.ts:66)
+      FUNC setConfigOption (packages/cli/src/cmds/record/configuration.ts:73)
+    CLASS TestCaseRecording
+      FUNC envString (packages/cli/src/cmds/record/testCaseRecording.ts:136) static
+  CLASS UserInteraction
+    FUNC progress (packages/cli/src/cmds/userInteraction.ts:45)
+
+EVENT CALL id:1 thread:0 Configuration.setConfigOption(path: 'test_recording.test_commands', value: [ { command: 'bundle exec rails test' } ]) receiver: TempConfig {
+  configDirty: false,
+  settingsDirty: false,
+  appMapFile: '/tmp/tmp-1386793-JRtt6l35pZVv',
+  settingsFile: '/tmp/tmp-1386793-yJ6AnPD76liX',
+  config: {},
+  settings: {}
+}
+EVENT CALL id:2 thread:0 configuration.mergeConfigData(data: {}, path: 'test_recording.test_commands', value: [ { command: 'bundle exec rails test' } ])
+EVENT RETURN id:3 parent:2 elapsed:0.000022638007067143917
+EVENT RETURN id:4 parent:1 elapsed:0.00015315308701246977
+EVENT CALL id:5 thread:0 areTestCommandsConfigured.areTestCasesConfigured(undefined: RecordContext {
+  configuration: TempConfig {
+    configDirty: true,
+    settingsDirty: false,
+    appMapFile: '/tmp/tmp-1386793-JRtt6l35pZVv',
+    settingsFile: '/tmp/tmp-1386793-yJ6AnPD76liX',
+    config: [Object],
+    settings: {}
+  },
+  appMapDir: '.',
+  initialAppMapCount: 37
+})
+EVENT CALL id:6 thread:0 Configuration.configOption(path: 'test_recording.test_commands', defaultValue: []) receiver: TempConfig {
+  configDirty: true,
+  settingsDirty: false,
+  appMapFile: '/tmp/tmp-1386793-JRtt6l35pZVv',
+  settingsFile: '/tmp/tmp-1386793-yJ6AnPD76liX',
+  config: { test_recording: [Object] },
+  settings: {}
+}
+EVENT CALL id:7 thread:0 configuration.findOption(data: { test_recording: { test_commands: [Array] } }, path: 'test_recording.test_commands', defaultValue: [])
+EVENT RETURN id:8 parent:7 elapsed:0.000005631009116768837 return: [ { command: 'bundle exec rails test' } ]
+EVENT RETURN id:9 parent:6 elapsed:0.00009764195419847965 return: [ { command: 'bundle exec rails test' } ]
+EVENT CALL id:10 thread:0 UserInteraction.progress(msg: 'The following test commands were provided by your AppMap configuration (appmap.yml):') receiver: UserInteraction {
+  spinner: Ora {
+    options: [Object],
+    frameIndex: 0,
+    _spinner: [Object],
+    interval: 80,
+    color: 'cyan',
+    hideCursor: true,
+    stream: [WriteStream],
+    id: undefined,
+    _isEnabled: true,
+    _isSilent: false,
+    lineCount: 1,
+    linesToClear: 0,
+    _indent: 0,
+    discardStdin: true,
+    isDiscardingStdin: false,
+    [Symbol(text)]: '',
+    [Symbol(prefixText)]: undefined
+  }
+}
+EVENT RETURN id:11 parent:10 elapsed:0.00000432704109698534
+EVENT CALL id:12 thread:0 UserInteraction.progress(msg: '') receiver: UserInteraction {
+  spinner: Ora {
+    options: [Object],
+    frameIndex: 0,
+    _spinner: [Object],
+    interval: 80,
+    color: 'cyan',
+    hideCursor: true,
+    stream: [WriteStream],
+    id: undefined,
+    _isEnabled: true,
+    _isSilent: false,
+    lineCount: 1,
+    linesToClear: 0,
+    _indent: 0,
+    discardStdin: true,
+    isDiscardingStdin: false,
+    [Symbol(text)]: '',
+    [Symbol(prefixText)]: undefined
+  }
+}
+EVENT RETURN id:13 parent:12 elapsed:4.851026460528374e-7
+EVENT CALL id:14 thread:0 TestCaseRecording.envString(env: {}) receiver: [class TestCaseRecording]
+EVENT RETURN id:15 parent:14 elapsed:0.000001986045390367508 return: ''
+EVENT CALL id:16 thread:0 UserInteraction.progress(msg: 'bundle exec rails test') receiver: UserInteraction {
+  spinner: Ora {
+    options: [Object],
+    frameIndex: 0,
+    _spinner: [Object],
+    interval: 80,
+    color: 'cyan',
+    hideCursor: true,
+    stream: [WriteStream],
+    id: undefined,
+    _isEnabled: true,
+    _isSilent: false,
+    lineCount: 1,
+    linesToClear: 0,
+    _indent: 0,
+    discardStdin: true,
+    isDiscardingStdin: false,
+    [Symbol(text)]: '',
+    [Symbol(prefixText)]: undefined
+  }
+}
+EVENT RETURN id:17 parent:16 elapsed:5.400506779551506e-7
+EVENT CALL id:18 thread:0 UserInteraction.progress(msg: '') receiver: UserInteraction {
+  spinner: Ora {
+    options: [Object],
+    frameIndex: 0,
+    _spinner: [Object],
+    interval: 80,
+    color: 'cyan',
+    hideCursor: true,
+    stream: [WriteStream],
+    id: undefined,
+    _isEnabled: true,
+    _isSilent: false,
+    lineCount: 1,
+    linesToClear: 0,
+    _indent: 0,
+    discardStdin: true,
+    isDiscardingStdin: false,
+    [Symbol(text)]: '',
+    [Symbol(prefixText)]: undefined
+  }
+}
+EVENT RETURN id:19 parent:18 elapsed:2.92900949716568e-7
+EVENT RETURN id:20 parent:5 elapsed:0.0007860609330236912 return: Promise { true }

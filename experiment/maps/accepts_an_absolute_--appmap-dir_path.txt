@@ -1,0 +1,2169 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.9.0"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: OpenAPI accepts an absolute --appmap-dir path
+META source_location: packages/cli/tests/unit/openapi.spec.ts
+META test_status: succeeded
+
+CLASS package: cli
+  CLASS package: src
+    CLASS package: cmds
+      CLASS package: openapi
+        CLASS DataStore
+          FUNC cleanup (packages/cli/src/cmds/openapi/DataStore.ts:102)
+          FUNC constructor (packages/cli/src/cmds/openapi/DataStore.ts:49)
+          FUNC initialize (packages/cli/src/cmds/openapi/DataStore.ts:53)
+          FUNC requestFileNames (packages/cli/src/cmds/openapi/DataStore.ts:59)
+          FUNC storeAppMap (packages/cli/src/cmds/openapi/DataStore.ts:63)
+          FUNC openRequestFile (packages/cli/src/cmds/openapi/DataStore.ts:71) static
+          FUNC closeAll (packages/cli/src/cmds/openapi/DataStore.ts:96)
+        CLASS RequestDataFile
+          FUNC constructor (packages/cli/src/cmds/openapi/DataStore.ts:16)
+          FUNC writeRequest (packages/cli/src/cmds/openapi/DataStore.ts:22)
+          FUNC close (packages/cli/src/cmds/openapi/DataStore.ts:42)
+        CLASS DefinitionGenerator
+          FUNC generate (packages/cli/src/cmds/openapi/DefinitionGenerator.ts:11)
+          FUNC constructor (packages/cli/src/cmds/openapi/DefinitionGenerator.ts:9)
+        CLASS OpenAPICommand
+          FUNC constructor (packages/cli/src/cmds/openapi/openapi.ts:25)
+          FUNC execute (packages/cli/src/cmds/openapi/openapi.ts:27)
+        CLASS openapi
+          FUNC collectAppMap (packages/cli/src/cmds/openapi/openapi.ts:45) static
+    CLASS utils
+      FUNC verbose (packages/cli/src/utils.ts:18) static
+      FUNC findFiles (packages/cli/src/utils.ts:186) static
+      FUNC traverseDirectory (packages/cli/src/utils.ts:204) static
+CLASS package: openapi
+  CLASS package: src
+    CLASS Method
+      FUNC addRpcRequest (packages/openapi/src/method.ts:148)
+      FUNC constructor (packages/openapi/src/method.ts:22)
+      FUNC containedWarningProviders (packages/openapi/src/method.ts:27)
+      FUNC summaries (packages/openapi/src/method.ts:31)
+      FUNC openapi (packages/openapi/src/method.ts:37)
+    CLASS method
+      FUNC statusError (packages/openapi/src/method.ts:151) static
+    CLASS Model
+      FUNC collectWarnings (packages/openapi/src/model.ts:10)
+      FUNC openapi (packages/openapi/src/model.ts:16)
+      FUNC addRpcRequest (packages/openapi/src/model.ts:30)
+      FUNC basePath (packages/openapi/src/model.ts:44) static
+      FUNC constructor (packages/openapi/src/model.ts:6)
+    CLASS parseHTTPServerRequests
+      FUNC parseHTTPServerRequests (packages/openapi/src/parseHTTPServerRequests.ts:3) static
+    CLASS Path
+      FUNC containedWarningProviders (packages/openapi/src/path.ts:10)
+      FUNC openapi (packages/openapi/src/path.ts:14)
+      FUNC addRpcRequest (packages/openapi/src/path.ts:29)
+      FUNC constructor (packages/openapi/src/path.ts:6)
+    CLASS Response
+      FUNC constructor (packages/openapi/src/response.ts:11)
+      FUNC containedWarningProviders (packages/openapi/src/response.ts:13)
+      FUNC openapi (packages/openapi/src/response.ts:17)
+      FUNC addRpcRequest (packages/openapi/src/response.ts:55)
+    CLASS response
+      FUNC contentTypes (packages/openapi/src/response.ts:19) static
+    CLASS rpcRequest
+      FUNC isServerEvent (packages/openapi/src/rpcRequest.ts:104) static
+      FUNC headerValue (packages/openapi/src/rpcRequest.ts:120) static
+      FUNC rpcRequestForEvent (packages/openapi/src/rpcRequest.ts:126) static
+    CLASS ServerRPCRequest
+      FUNC constructor (packages/openapi/src/rpcRequest.ts:22)
+      FUNC status (packages/openapi/src/rpcRequest.ts:24)
+      FUNC parameters (packages/openapi/src/rpcRequest.ts:28)
+      FUNC returnValue (packages/openapi/src/rpcRequest.ts:32)
+      FUNC requestHeaders (packages/openapi/src/rpcRequest.ts:36)
+      FUNC responseHeaders (packages/openapi/src/rpcRequest.ts:40)
+      FUNC requestContentType (packages/openapi/src/rpcRequest.ts:44)
+      FUNC responseContentType (packages/openapi/src/rpcRequest.ts:48)
+      FUNC requestMethod (packages/openapi/src/rpcRequest.ts:52)
+      FUNC requestPath (packages/openapi/src/rpcRequest.ts:56)
+    CLASS SecuritySchemes
+      FUNC openapi (packages/openapi/src/securitySchemes.ts:15)
+      FUNC constructor (packages/openapi/src/securitySchemes.ts:4)
+    CLASS util
+      FUNC ensureString (packages/openapi/src/util.ts:128) static
+    CLASS Warnings
+      FUNC dup (packages/openapi/src/Warnings.ts:10)
+      FUNC merge (packages/openapi/src/Warnings.ts:22)
+      FUNC constructor (packages/openapi/src/Warnings.ts:7)
+
+EVENT CALL id:1 thread:0 OpenAPICommand.constructor(appmapDir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby')
+EVENT RETURN id:2 parent:1 elapsed:0.000005671987310051918
+EVENT CALL id:3 thread:0 OpenAPICommand.execute receiver: OpenAPICommand {
+  appmapDir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby',
+  errors: [],
+  filter: [AsyncFunction (anonymous)]
+}
+EVENT CALL id:4 thread:0 DataStore.constructor
+EVENT RETURN id:5 parent:4 elapsed:0.0000030460068956017494
+EVENT CALL id:6 thread:0 DataStore.initialize receiver: DataStore { requestFiles: Map(0) {} }
+EVENT RETURN id:7 parent:6 elapsed:0.0003611459396779537 return: Promise { undefined }
+EVENT RETURN id:8 parent:3 elapsed:0.052344862022437155 return: Promise { [ [Object], 2 ] }
+EVENT CALL id:9 thread:0 utils.findFiles(directory: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby', extensionOrPredicate: '.appmap.json')
+EVENT CALL id:10 thread:0 utils.verbose
+EVENT RETURN id:11 parent:10 elapsed:6.760237738490105e-7 return: false
+EVENT CALL id:12 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby')
+EVENT RETURN id:13 parent:12 elapsed:0.005071096937172115 return: Promise {
+  [
+    '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/revoke_api_key.appmap.json',
+    '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/user_page_scenario.appmap.json'
+  ]
+}
+EVENT RETURN id:14 parent:9 elapsed:0.005270983907394111 return: Promise {
+  [
+    '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/revoke_api_key.appmap.json',
+    '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/user_page_scenario.appmap.json'
+  ]
+}
+EVENT CALL id:15 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/.appmap', result: [])
+EVENT RETURN id:16 parent:15 elapsed:0.000870733056217432 return: Promise { [] }
+EVENT CALL id:17 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/.appmap/archive', result: [])
+EVENT RETURN id:18 parent:17 elapsed:0.0005106009775772691 return: Promise { [] }
+EVENT CALL id:19 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/.appmap/archive/full', result: [])
+EVENT RETURN id:20 parent:19 elapsed:0.00013281300198286772 return: Promise { [] }
+EVENT CALL id:21 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/.run-stats', result: [])
+EVENT RETURN id:22 parent:21 elapsed:0.00021731900051236153 return: Promise { [] }
+EVENT CALL id:23 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/app', result: [])
+EVENT RETURN id:24 parent:23 elapsed:0.0009419800480827689 return: Promise { [] }
+EVENT CALL id:25 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/app/controllers', result: [])
+EVENT RETURN id:26 parent:25 elapsed:0.00012375006917864084 return: Promise { [] }
+EVENT CALL id:27 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/app/models', result: [])
+EVENT RETURN id:28 parent:27 elapsed:0.00016732607036828995 return: Promise { [] }
+EVENT CALL id:29 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/canonicalize', result: [])
+EVENT RETURN id:30 parent:29 elapsed:0.0001497119665145874 return: Promise { [] }
+EVENT CALL id:31 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/revoke_api_key', result: [])
+EVENT RETURN id:32 parent:31 elapsed:0.00029441993683576584 return: Promise { [] }
+EVENT CALL id:33 thread:0 utils.traverseDirectory(dir: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/user_page_scenario', result: [
+  '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/revoke_api_key.appmap.json'
+])
+EVENT RETURN id:34 parent:33 elapsed:0.0003768329042941332 return: Promise {
+  [
+    '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/revoke_api_key.appmap.json'
+  ]
+}
+EVENT CALL id:35 thread:0 openapi.collectAppMap(file: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/revoke_api_key.appmap.json')
+EVENT CALL id:36 thread:0 DataStore.storeAppMap(appMapFile: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/revoke_api_key.appmap.json') receiver: DataStore {
+  requestFiles: Map(0) {},
+  workDir: '/tmp/appmap-openapi-sEI2kH'
+}
+EVENT RETURN id:37 parent:36 elapsed:0.014717243961058557 return: Promise { undefined }
+EVENT RETURN id:38 parent:35 elapsed:0.014970368007197976 return: Promise { undefined }
+EVENT CALL id:39 thread:0 parseHTTPServerRequests.parseHTTPServerRequests(source: {
+  events: [
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object]
+  ],
+  version: '1.3',
+  metadata: {
+    app: 'appland/AppLand',
+    language: [Object],
+    client: [Object],
+    frameworks: [Array],
+    git: [Object],
+    name: 'API::APIKeysController revoke an existing api key',
+    feature: 'API::APIKeysController revoke',
+    feature_group: 'API API keys',
+    labels: [Array],
+    recorder: [Object],
+    fingerprints: [Array]
+  },
+  classMap: [ [Object], [Object], [Object], [Object], [Object] ]
+}, collector: [Function (anonymous)])
+EVENT RETURN id:40 parent:39 elapsed:0.0013604969717562199
+EVENT CALL id:41 thread:0 rpcRequest.rpcRequestForEvent(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 7,
+  event: 'call',
+  thread_id: 70143606759380,
+  http_server_request: { request_method: 'DELETE', path_info: '/api/api_keys' }
+})
+EVENT CALL id:42 thread:0 rpcRequest.isServerEvent(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 7,
+  event: 'call',
+  thread_id: 70143606759380,
+  http_server_request: { request_method: 'DELETE', path_info: '/api/api_keys' }
+})
+EVENT RETURN id:43 parent:42 elapsed:0.000006811926141381264 return: true
+EVENT CALL id:44 thread:0 ServerRPCRequest.constructor(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 7,
+  event: 'call',
+  thread_id: 70143606759380,
+  http_server_request: { request_method: 'DELETE', path_info: '/api/api_keys' }
+})
+EVENT RETURN id:45 parent:44 elapsed:0.000002029002644121647
+EVENT RETURN id:46 parent:41 elapsed:0.0005204669432714581 return: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:47 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:48 thread:0 util.ensureString(value: '/api/api_keys')
+EVENT RETURN id:49 parent:48 elapsed:0.000004147994332015514 return: '/api/api_keys'
+EVENT RETURN id:50 parent:47 elapsed:0.00012980098836123943 return: '/api/api_keys'
+EVENT CALL id:51 thread:0 DataStore.openRequestFile(requestId: '/api/api_keys')
+EVENT CALL id:52 thread:0 utils.verbose
+EVENT RETURN id:53 parent:52 elapsed:8.119968697428703e-7 return: false
+EVENT CALL id:54 thread:0 RequestDataFile.constructor(fd: 710, fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==')
+EVENT RETURN id:55 parent:54 elapsed:0.000018427963368594646
+EVENT RETURN id:56 parent:51 elapsed:0.00026726594660431147 return: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 2
+}
+EVENT CALL id:57 thread:0 RequestDataFile.writeRequest(request: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}) receiver: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 2
+}
+EVENT CALL id:58 thread:0 ServerRPCRequest.status receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:59 parent:58 elapsed:0.000003891065716743469 return: 200
+EVENT CALL id:60 thread:0 ServerRPCRequest.parameters receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:61 parent:60 elapsed:0.0000022209715098142624 return: [
+  {
+    name: 'controller',
+    class: 'String',
+    value: 'api/api_keys',
+    object_id: 70143625900420
+  },
+  {
+    name: 'action',
+    class: 'String',
+    value: 'destroy',
+    object_id: 70143625903660
+  }
+]
+EVENT CALL id:62 thread:0 ServerRPCRequest.returnValue receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:63 parent:62 elapsed:0.0000019440194591879845
+EVENT CALL id:64 thread:0 ServerRPCRequest.requestHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:65 parent:64 elapsed:0.0000016560079529881477 return: {}
+EVENT CALL id:66 thread:0 ServerRPCRequest.responseHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:67 parent:66 elapsed:0.0000020010629668831825 return: {}
+EVENT CALL id:68 thread:0 ServerRPCRequest.requestContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:69 parent:68 elapsed:0.000004344037733972073 return: null
+EVENT CALL id:70 thread:0 ServerRPCRequest.responseContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:71 parent:70 elapsed:0.0000028159702196717262 return: null
+EVENT CALL id:72 thread:0 ServerRPCRequest.requestMethod receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:73 parent:72 elapsed:0.000003227032721042633 return: 'delete'
+EVENT CALL id:74 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 7,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:75 thread:0 util.ensureString(value: '/api/api_keys')
+EVENT RETURN id:76 parent:75 elapsed:0.000003883033059537411 return: '/api/api_keys'
+EVENT RETURN id:77 parent:74 elapsed:0.0000877289567142725 return: '/api/api_keys'
+EVENT RETURN id:78 parent:57 elapsed:0.0017466420540586114 return: Promise { undefined }
+EVENT CALL id:79 thread:0 rpcRequest.rpcRequestForEvent(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 38,
+  event: 'return',
+  thread_id: 70143606759380,
+  parent_id: 7,
+  elapsed: 0.163302,
+  http_server_response: { mime_type: 'application/json; charset=utf-8', status: 200 }
+})
+EVENT CALL id:80 thread:0 rpcRequest.isServerEvent(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 38,
+  event: 'return',
+  thread_id: 70143606759380,
+  parent_id: 7,
+  elapsed: 0.163302,
+  http_server_response: { mime_type: 'application/json; charset=utf-8', status: 200 }
+})
+EVENT RETURN id:81 parent:80 elapsed:0.000005487934686243534 return: true
+EVENT CALL id:82 thread:0 ServerRPCRequest.constructor(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 38,
+  event: 'return',
+  thread_id: 70143606759380,
+  parent_id: 7,
+  elapsed: 0.163302,
+  http_server_response: { mime_type: 'application/json; charset=utf-8', status: 200 }
+})
+EVENT RETURN id:83 parent:82 elapsed:0.0000011950032785534859
+EVENT RETURN id:84 parent:79 elapsed:0.0002820640802383423 return: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:85 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:86 thread:0 util.ensureString(value: '/api/api_keys')
+EVENT RETURN id:87 parent:86 elapsed:0.0000028759241104125977 return: '/api/api_keys'
+EVENT RETURN id:88 parent:85 elapsed:0.00009103200864046812 return: '/api/api_keys'
+EVENT CALL id:89 thread:0 DataStore.openRequestFile(requestId: '/api/api_keys')
+EVENT RETURN id:90 parent:89 elapsed:0.0000013289973139762878 return: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 353
+}
+EVENT CALL id:91 thread:0 RequestDataFile.writeRequest(request: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}) receiver: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 353
+}
+EVENT CALL id:92 thread:0 ServerRPCRequest.status receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:93 parent:92 elapsed:0.0000024669570848345757 return: 200
+EVENT CALL id:94 thread:0 ServerRPCRequest.parameters receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:95 parent:94 elapsed:0.000002193031832575798 return: [
+  {
+    name: 'controller',
+    class: 'String',
+    value: 'api/api_keys',
+    object_id: 70143625900420
+  },
+  {
+    name: 'action',
+    class: 'String',
+    value: 'destroy',
+    object_id: 70143625903660
+  }
+]
+EVENT CALL id:96 thread:0 ServerRPCRequest.returnValue receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:97 parent:96 elapsed:0.0000026529887691140175
+EVENT CALL id:98 thread:0 ServerRPCRequest.requestHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:99 parent:98 elapsed:0.00000206800177693367 return: {}
+EVENT CALL id:100 thread:0 ServerRPCRequest.responseHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:101 parent:100 elapsed:0.0000019309809431433678 return: {}
+EVENT CALL id:102 thread:0 ServerRPCRequest.requestContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:103 parent:102 elapsed:0.000004785018973052502 return: null
+EVENT CALL id:104 thread:0 ServerRPCRequest.responseContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:105 parent:104 elapsed:0.000002866028808057308 return: null
+EVENT CALL id:106 thread:0 ServerRPCRequest.requestMethod receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:107 parent:106 elapsed:0.0000034660333767533302 return: 'delete'
+EVENT CALL id:108 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 38,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 7,
+    elapsed: 0.163302,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:109 thread:0 util.ensureString(value: '/api/api_keys')
+EVENT RETURN id:110 parent:109 elapsed:0.0000028280774131417274 return: '/api/api_keys'
+EVENT RETURN id:111 parent:108 elapsed:0.00008500192780047655 return: '/api/api_keys'
+EVENT RETURN id:112 parent:91 elapsed:0.001674107974395156 return: Promise { undefined }
+EVENT CALL id:113 thread:0 rpcRequest.rpcRequestForEvent(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 39,
+  event: 'call',
+  thread_id: 70143606759380,
+  http_server_request: { request_method: 'DELETE', path_info: '/api/api_keys' }
+})
+EVENT CALL id:114 thread:0 rpcRequest.isServerEvent(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 39,
+  event: 'call',
+  thread_id: 70143606759380,
+  http_server_request: { request_method: 'DELETE', path_info: '/api/api_keys' }
+})
+EVENT RETURN id:115 parent:114 elapsed:0.0000036009587347507477 return: true
+EVENT CALL id:116 thread:0 ServerRPCRequest.constructor(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 39,
+  event: 'call',
+  thread_id: 70143606759380,
+  http_server_request: { request_method: 'DELETE', path_info: '/api/api_keys' }
+})
+EVENT RETURN id:117 parent:116 elapsed:7.170019671320915e-7
+EVENT RETURN id:118 parent:113 elapsed:0.0002735699526965618 return: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:119 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:120 thread:0 util.ensureString(value: '/api/api_keys')
+EVENT RETURN id:121 parent:120 elapsed:0.0000017039710655808449 return: '/api/api_keys'
+EVENT RETURN id:122 parent:119 elapsed:0.00006768503226339817 return: '/api/api_keys'
+EVENT CALL id:123 thread:0 DataStore.openRequestFile(requestId: '/api/api_keys')
+EVENT RETURN id:124 parent:123 elapsed:0.0000017549609765410423 return: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 704
+}
+EVENT CALL id:125 thread:0 RequestDataFile.writeRequest(request: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}) receiver: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 704
+}
+EVENT CALL id:126 thread:0 ServerRPCRequest.status receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:127 parent:126 elapsed:0.000001309090293943882 return: 401
+EVENT CALL id:128 thread:0 ServerRPCRequest.parameters receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:129 parent:128 elapsed:0.0000015349360182881355 return: [
+  {
+    name: 'controller',
+    class: 'String',
+    value: 'api/api_keys',
+    object_id: 70143625900420
+  },
+  {
+    name: 'action',
+    class: 'String',
+    value: 'destroy',
+    object_id: 70143625903660
+  }
+]
+EVENT CALL id:130 thread:0 ServerRPCRequest.returnValue receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:131 parent:130 elapsed:0.000001811073161661625
+EVENT CALL id:132 thread:0 ServerRPCRequest.requestHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:133 parent:132 elapsed:0.0000012669479474425316 return: {}
+EVENT CALL id:134 thread:0 ServerRPCRequest.responseHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:135 parent:134 elapsed:0.0000011810334399342537 return: {}
+EVENT CALL id:136 thread:0 ServerRPCRequest.requestContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:137 parent:136 elapsed:0.000002649961970746517 return: null
+EVENT CALL id:138 thread:0 ServerRPCRequest.responseContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:139 parent:138 elapsed:0.000001651933416724205 return: null
+EVENT CALL id:140 thread:0 ServerRPCRequest.requestMethod receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:141 parent:140 elapsed:0.0000023370375856757164 return: 'delete'
+EVENT CALL id:142 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 39,
+    event: 'call',
+    thread_id: 70143606759380,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:143 thread:0 util.ensureString(value: '/api/api_keys')
+EVENT RETURN id:144 parent:143 elapsed:0.000001291045919060707 return: '/api/api_keys'
+EVENT RETURN id:145 parent:142 elapsed:0.00006664602551609278 return: '/api/api_keys'
+EVENT RETURN id:146 parent:125 elapsed:0.0014715360011905432 return: Promise { undefined }
+EVENT CALL id:147 thread:0 rpcRequest.rpcRequestForEvent(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 48,
+  event: 'return',
+  thread_id: 70143606759380,
+  parent_id: 39,
+  elapsed: 0.006339,
+  http_server_response: { mime_type: 'application/json; charset=utf-8', status: 401 }
+})
+EVENT CALL id:148 thread:0 rpcRequest.isServerEvent(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 48,
+  event: 'return',
+  thread_id: 70143606759380,
+  parent_id: 39,
+  elapsed: 0.006339,
+  http_server_response: { mime_type: 'application/json; charset=utf-8', status: 401 }
+})
+EVENT RETURN id:149 parent:148 elapsed:0.0000020849984139204025 return: true
+EVENT CALL id:150 thread:0 ServerRPCRequest.constructor(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 48,
+  event: 'return',
+  thread_id: 70143606759380,
+  parent_id: 39,
+  elapsed: 0.006339,
+  http_server_response: { mime_type: 'application/json; charset=utf-8', status: 401 }
+})
+EVENT RETURN id:151 parent:150 elapsed:3.9709266275167465e-7
+EVENT RETURN id:152 parent:147 elapsed:0.00022736901883035898 return: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:153 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:154 thread:0 util.ensureString(value: '/api/api_keys')
+EVENT RETURN id:155 parent:154 elapsed:0.000001392909325659275 return: '/api/api_keys'
+EVENT RETURN id:156 parent:153 elapsed:0.00007039005868136883 return: '/api/api_keys'
+EVENT CALL id:157 thread:0 DataStore.openRequestFile(requestId: '/api/api_keys')
+EVENT RETURN id:158 parent:157 elapsed:9.740469977259636e-7 return: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 1055
+}
+EVENT CALL id:159 thread:0 RequestDataFile.writeRequest(request: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}) receiver: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 1055
+}
+EVENT CALL id:160 thread:0 ServerRPCRequest.status receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:161 parent:160 elapsed:0.0000011579832062125206 return: 401
+EVENT CALL id:162 thread:0 ServerRPCRequest.parameters receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:163 parent:162 elapsed:0.000001776963472366333 return: [
+  {
+    name: 'controller',
+    class: 'String',
+    value: 'api/api_keys',
+    object_id: 70143625900420
+  },
+  {
+    name: 'action',
+    class: 'String',
+    value: 'destroy',
+    object_id: 70143625903660
+  }
+]
+EVENT CALL id:164 thread:0 ServerRPCRequest.returnValue receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:165 parent:164 elapsed:0.0000016660196706652641
+EVENT CALL id:166 thread:0 ServerRPCRequest.requestHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:167 parent:166 elapsed:0.0000011909287422895432 return: {}
+EVENT CALL id:168 thread:0 ServerRPCRequest.responseHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:169 parent:168 elapsed:0.000001611071638762951 return: {}
+EVENT CALL id:170 thread:0 ServerRPCRequest.requestContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:171 parent:170 elapsed:0.000004178960807621479 return: null
+EVENT CALL id:172 thread:0 ServerRPCRequest.responseContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:173 parent:172 elapsed:0.0000026399502530694008 return: null
+EVENT CALL id:174 thread:0 ServerRPCRequest.requestMethod receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:175 parent:174 elapsed:0.0000030189985409379005 return: 'delete'
+EVENT CALL id:176 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 48,
+    event: 'return',
+    thread_id: 70143606759380,
+    parent_id: 39,
+    elapsed: 0.006339,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:177 thread:0 util.ensureString(value: '/api/api_keys')
+EVENT RETURN id:178 parent:177 elapsed:0.0000031030504032969475 return: '/api/api_keys'
+EVENT RETURN id:179 parent:176 elapsed:0.00008945493027567863 return: '/api/api_keys'
+EVENT RETURN id:180 parent:159 elapsed:0.001645940006710589 return: Promise { undefined }
+EVENT CALL id:181 thread:0 openapi.collectAppMap(file: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/user_page_scenario.appmap.json')
+EVENT CALL id:182 thread:0 DataStore.storeAppMap(appMapFile: '/home/divide/projects/appmap-js/packages/cli/tests/unit/fixtures/ruby/user_page_scenario.appmap.json') receiver: DataStore {
+  requestFiles: Map(1) { '/api/api_keys' => [RequestDataFile] },
+  workDir: '/tmp/appmap-openapi-sEI2kH'
+}
+EVENT RETURN id:183 parent:182 elapsed:0.008789625018835068 return: Promise { undefined }
+EVENT RETURN id:184 parent:181 elapsed:0.009065181016921997 return: Promise { undefined }
+EVENT CALL id:185 thread:0 parseHTTPServerRequests.parseHTTPServerRequests(source: {
+  events: [
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object], [Object],
+    [Object], [Object], [Object], [Object]
+  ],
+  version: '1.3',
+  metadata: {
+    app: 'appland/AppLand',
+    language: [Object],
+    client: [Object],
+    frameworks: [Array],
+    git: [Object],
+    name: 'User page for an admin user organization list has a link to create an organization',
+    feature: 'User page for an admin user',
+    feature_group: 'User page',
+    recorder: [Object],
+    fingerprints: [Array]
+  },
+  classMap: [
+    [Object], [Object],
+    [Object], [Object],
+    [Object], [Object],
+    [Object]
+  ]
+}, collector: [Function (anonymous)])
+EVENT RETURN id:186 parent:185 elapsed:0.0013728829799219966
+EVENT CALL id:187 thread:0 rpcRequest.rpcRequestForEvent(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 33,
+  event: 'call',
+  thread_id: 70301283309360,
+  http_server_request: { request_method: 'GET', path_info: '/organizations/new' }
+})
+EVENT CALL id:188 thread:0 rpcRequest.isServerEvent(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 33,
+  event: 'call',
+  thread_id: 70301283309360,
+  http_server_request: { request_method: 'GET', path_info: '/organizations/new' }
+})
+EVENT RETURN id:189 parent:188 elapsed:0.0000031510135158896446 return: true
+EVENT CALL id:190 thread:0 ServerRPCRequest.constructor(event: b {
+  dataKeys: [ 'id', 'event', 'thread_id', 'http_server_request', 'message' ],
+  id: 33,
+  event: 'call',
+  thread_id: 70301283309360,
+  http_server_request: { request_method: 'GET', path_info: '/organizations/new' }
+})
+EVENT RETURN id:191 parent:190 elapsed:9.579816833138466e-7
+EVENT RETURN id:192 parent:187 elapsed:0.00034545501694083214 return: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:193 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:194 thread:0 util.ensureString(value: '/organizations/new')
+EVENT RETURN id:195 parent:194 elapsed:0.0000018499558791518211 return: '/organizations/new'
+EVENT RETURN id:196 parent:193 elapsed:0.00007125688716769218 return: '/organizations/new'
+EVENT CALL id:197 thread:0 DataStore.openRequestFile(requestId: '/organizations/new')
+EVENT CALL id:198 thread:0 utils.verbose
+EVENT RETURN id:199 parent:198 elapsed:4.930188879370689e-7 return: false
+EVENT CALL id:200 thread:0 RequestDataFile.constructor(fd: 711, fileName: '/tmp/appmap-openapi-sEI2kH/L29yZ2FuaXphdGlvbnMvbmV3')
+EVENT RETURN id:201 parent:200 elapsed:0.000012260046787559986
+EVENT RETURN id:202 parent:197 elapsed:0.00019211997278034687 return: RequestDataFile {
+  fd: 711,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L29yZ2FuaXphdGlvbnMvbmV3',
+  bytesWritten: 2
+}
+EVENT CALL id:203 thread:0 RequestDataFile.writeRequest(request: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}) receiver: RequestDataFile {
+  fd: 711,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L29yZ2FuaXphdGlvbnMvbmV3',
+  bytesWritten: 2
+}
+EVENT CALL id:204 thread:0 ServerRPCRequest.status receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:205 parent:204 elapsed:0.000002268003299832344 return: 200
+EVENT CALL id:206 thread:0 ServerRPCRequest.parameters receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:207 parent:206 elapsed:0.0000017120037227869034 return: [
+  {
+    name: '_method',
+    class: 'String',
+    value: 'get',
+    object_id: 70301206015280
+  },
+  {
+    name: 'controller',
+    class: 'String',
+    value: 'organizations',
+    object_id: 70301208859520
+  },
+  {
+    name: 'action',
+    class: 'String',
+    value: 'new',
+    object_id: 70301209377440
+  }
+]
+EVENT CALL id:208 thread:0 ServerRPCRequest.returnValue receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:209 parent:208 elapsed:0.0000016560079529881477
+EVENT CALL id:210 thread:0 ServerRPCRequest.requestHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:211 parent:210 elapsed:0.0000011059455573558807 return: {}
+EVENT CALL id:212 thread:0 ServerRPCRequest.responseHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:213 parent:212 elapsed:0.0000017300480976700783 return: {}
+EVENT CALL id:214 thread:0 ServerRPCRequest.requestContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:215 parent:214 elapsed:0.000003593042492866516 return: null
+EVENT CALL id:216 thread:0 ServerRPCRequest.responseContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:217 parent:216 elapsed:0.000002240994945168495 return: null
+EVENT CALL id:218 thread:0 ServerRPCRequest.requestMethod receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT RETURN id:219 parent:218 elapsed:0.0000035820994526147842 return: 'get'
+EVENT CALL id:220 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 33,
+    event: 'call',
+    thread_id: 70301283309360,
+    http_server_request: [Object]
+  }
+}
+EVENT CALL id:221 thread:0 util.ensureString(value: '/organizations/new')
+EVENT RETURN id:222 parent:221 elapsed:0.000003086053766310215 return: '/organizations/new'
+EVENT RETURN id:223 parent:220 elapsed:0.00010619789827615023 return: '/organizations/new'
+EVENT RETURN id:224 parent:203 elapsed:0.0018265959806740284 return: Promise { undefined }
+EVENT CALL id:225 thread:0 rpcRequest.rpcRequestForEvent(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 68,
+  event: 'return',
+  thread_id: 70301283309360,
+  parent_id: 33,
+  elapsed: 0.082122,
+  http_server_response: { mime_type: 'text/html; charset=utf-8', status: 200 }
+})
+EVENT CALL id:226 thread:0 rpcRequest.isServerEvent(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 68,
+  event: 'return',
+  thread_id: 70301283309360,
+  parent_id: 33,
+  elapsed: 0.082122,
+  http_server_response: { mime_type: 'text/html; charset=utf-8', status: 200 }
+})
+EVENT RETURN id:227 parent:226 elapsed:0.000004934961907565594 return: true
+EVENT CALL id:228 thread:0 ServerRPCRequest.constructor(event: b {
+  dataKeys: [
+    'id',
+    'event',
+    'thread_id',
+    'parent_id',
+    'elapsed',
+    'http_server_response'
+  ],
+  id: 68,
+  event: 'return',
+  thread_id: 70301283309360,
+  parent_id: 33,
+  elapsed: 0.082122,
+  http_server_response: { mime_type: 'text/html; charset=utf-8', status: 200 }
+})
+EVENT RETURN id:229 parent:228 elapsed:9.799841791391373e-7
+EVENT RETURN id:230 parent:225 elapsed:0.0003011960070580244 return: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:231 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:232 thread:0 util.ensureString(value: '/organizations/new')
+EVENT RETURN id:233 parent:232 elapsed:0.0000030619557946920395 return: '/organizations/new'
+EVENT RETURN id:234 parent:231 elapsed:0.00010904204100370407 return: '/organizations/new'
+EVENT CALL id:235 thread:0 DataStore.openRequestFile(requestId: '/organizations/new')
+EVENT RETURN id:236 parent:235 elapsed:0.0000025440240278840065 return: RequestDataFile {
+  fd: 711,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L29yZ2FuaXphdGlvbnMvbmV3',
+  bytesWritten: 429
+}
+EVENT CALL id:237 thread:0 RequestDataFile.writeRequest(request: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}) receiver: RequestDataFile {
+  fd: 711,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L29yZ2FuaXphdGlvbnMvbmV3',
+  bytesWritten: 429
+}
+EVENT CALL id:238 thread:0 ServerRPCRequest.status receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:239 parent:238 elapsed:0.000002642977051436901 return: 200
+EVENT CALL id:240 thread:0 ServerRPCRequest.parameters receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:241 parent:240 elapsed:0.0000020400620996952057 return: [
+  {
+    name: '_method',
+    class: 'String',
+    value: 'get',
+    object_id: 70301206015280
+  },
+  {
+    name: 'controller',
+    class: 'String',
+    value: 'organizations',
+    object_id: 70301208859520
+  },
+  {
+    name: 'action',
+    class: 'String',
+    value: 'new',
+    object_id: 70301209377440
+  }
+]
+EVENT CALL id:242 thread:0 ServerRPCRequest.returnValue receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:243 parent:242 elapsed:0.0000017069978639483452
+EVENT CALL id:244 thread:0 ServerRPCRequest.requestHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:245 parent:244 elapsed:0.0000017890706658363342 return: {}
+EVENT CALL id:246 thread:0 ServerRPCRequest.responseHeaders receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:247 parent:246 elapsed:0.0000018570572137832642 return: {}
+EVENT CALL id:248 thread:0 ServerRPCRequest.requestContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:249 parent:248 elapsed:0.0000047209905460476875 return: null
+EVENT CALL id:250 thread:0 ServerRPCRequest.responseContentType receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:251 parent:250 elapsed:0.0000023070024326443672 return: null
+EVENT CALL id:252 thread:0 ServerRPCRequest.requestMethod receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT RETURN id:253 parent:252 elapsed:0.0000025889603421092033 return: 'get'
+EVENT CALL id:254 thread:0 ServerRPCRequest.requestPath receiver: ServerRPCRequest {
+  event: b {
+    dataKeys: [Array],
+    id: 68,
+    event: 'return',
+    thread_id: 70301283309360,
+    parent_id: 33,
+    elapsed: 0.082122,
+    http_server_response: [Object]
+  }
+}
+EVENT CALL id:255 thread:0 util.ensureString(value: '/organizations/new')
+EVENT RETURN id:256 parent:255 elapsed:0.000004124944098293781 return: '/organizations/new'
+EVENT RETURN id:257 parent:254 elapsed:0.00010323000606149435 return: '/organizations/new'
+EVENT RETURN id:258 parent:237 elapsed:0.0016684490256011486 return: Promise { undefined }
+EVENT CALL id:259 thread:0 DataStore.closeAll receiver: DataStore {
+  requestFiles: Map(2) {
+    '/api/api_keys' => [RequestDataFile],
+    '/organizations/new' => [RequestDataFile]
+  },
+  workDir: '/tmp/appmap-openapi-sEI2kH'
+}
+EVENT CALL id:260 thread:0 RequestDataFile.close receiver: RequestDataFile {
+  fd: 710,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  bytesWritten: 1406
+}
+EVENT RETURN id:261 parent:260 elapsed:0.000014072982594370842 return: Promise { undefined }
+EVENT RETURN id:262 parent:259 elapsed:0.0005807180423289537 return: Promise { undefined }
+EVENT CALL id:263 thread:0 RequestDataFile.close receiver: RequestDataFile {
+  fd: 711,
+  fileName: '/tmp/appmap-openapi-sEI2kH/L29yZ2FuaXphdGlvbnMvbmV3',
+  bytesWritten: 856
+}
+EVENT RETURN id:264 parent:263 elapsed:0.0000052140094339847565 return: Promise { undefined }
+EVENT CALL id:265 thread:0 DefinitionGenerator.constructor(dataStore: DataStore {
+  requestFiles: Map(2) {
+    '/api/api_keys' => [RequestDataFile],
+    '/organizations/new' => [RequestDataFile]
+  },
+  workDir: '/tmp/appmap-openapi-sEI2kH'
+})
+EVENT RETURN id:266 parent:265 elapsed:9.780051186680794e-7
+EVENT CALL id:267 thread:0 DefinitionGenerator.generate receiver: DefinitionGenerator {
+  dataStore: DataStore {
+    requestFiles: [Map],
+    workDir: '/tmp/appmap-openapi-sEI2kH'
+  }
+}
+EVENT CALL id:268 thread:0 SecuritySchemes.constructor
+EVENT RETURN id:269 parent:268 elapsed:7.529743015766144e-7
+EVENT CALL id:270 thread:0 DataStore.requestFileNames receiver: DataStore {
+  requestFiles: Map(2) {
+    '/api/api_keys' => [RequestDataFile],
+    '/organizations/new' => [RequestDataFile]
+  },
+  workDir: '/tmp/appmap-openapi-sEI2kH'
+}
+EVENT RETURN id:271 parent:270 elapsed:0.0000025420449674129486 return: [
+  '/tmp/appmap-openapi-sEI2kH/L2FwaS9hcGlfa2V5cw==',
+  '/tmp/appmap-openapi-sEI2kH/L29yZ2FuaXphdGlvbnMvbmV3'
+]
+EVENT RETURN id:272 parent:267 elapsed:0.01998813298996538 return: Promise { { warnings: {}, paths: [Object], securitySchemes: {} } }
+EVENT CALL id:273 thread:0 Model.constructor
+EVENT CALL id:274 thread:0 Warnings.constructor
+EVENT RETURN id:275 parent:274 elapsed:5.440087988972664e-7
+EVENT RETURN id:276 parent:273 elapsed:0.000016405014321208
+EVENT CALL id:277 thread:0 Model.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Model { paths: {}, warnings: Warnings { warnings: {} } }
+EVENT CALL id:278 thread:0 Model.basePath(path: '/api/api_keys') receiver: [class Model]
+EVENT RETURN id:279 parent:278 elapsed:0.000008078059181571007 return: '/api/api_keys'
+EVENT CALL id:280 thread:0 Path.constructor
+EVENT CALL id:281 thread:0 Warnings.constructor
+EVENT RETURN id:282 parent:281 elapsed:4.6403147280216217e-7
+EVENT RETURN id:283 parent:280 elapsed:0.00001878407783806324
+EVENT CALL id:284 thread:0 Path.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Path { methods: {}, warnings: Warnings { warnings: {} } }
+EVENT CALL id:285 thread:0 Method.constructor
+EVENT CALL id:286 thread:0 Warnings.constructor
+EVENT RETURN id:287 parent:286 elapsed:3.4796539694070816e-7
+EVENT RETURN id:288 parent:285 elapsed:0.000014159013517200947
+EVENT CALL id:289 thread:0 Method.addRpcRequest(request: {
+  status: 200,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Method {
+  rpcRequests: [],
+  responses: {},
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:290 thread:0 method.statusError
+EVENT RETURN id:291 parent:290 elapsed:4.790490493178368e-7
+EVENT CALL id:292 thread:0 Response.constructor(statusCode: 200)
+EVENT CALL id:293 thread:0 Warnings.constructor
+EVENT RETURN id:294 parent:293 elapsed:2.8603244572877884e-7
+EVENT RETURN id:295 parent:292 elapsed:0.000014586024917662144
+EVENT CALL id:296 thread:0 Response.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Response {
+  statusCode: 200,
+  rpcRequests: [],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:297 parent:296 elapsed:0.000001552049070596695
+EVENT RETURN id:298 parent:289 elapsed:0.0002877359511330724
+EVENT RETURN id:299 parent:284 elapsed:0.0005240159807726741
+EVENT RETURN id:300 parent:277 elapsed:0.0009802610147744417
+EVENT CALL id:301 thread:0 rpcRequest.headerValue(headers: {}, name: 'Authorization')
+EVENT RETURN id:302 parent:301 elapsed:0.000005498062819242477
+EVENT CALL id:303 thread:0 Model.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Model {
+  paths: { '/api/api_keys': [Path] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:304 thread:0 Model.basePath(path: '/api/api_keys') receiver: [class Model]
+EVENT RETURN id:305 parent:304 elapsed:0.00001034303568303585 return: '/api/api_keys'
+EVENT CALL id:306 thread:0 Path.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Path {
+  methods: { delete: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:307 thread:0 Method.addRpcRequest(request: {
+  status: 200,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Method {
+  rpcRequests: [ [Object] ],
+  responses: { '200': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:308 thread:0 method.statusError
+EVENT RETURN id:309 parent:308 elapsed:6.919726729393005e-7
+EVENT CALL id:310 thread:0 Response.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Response {
+  statusCode: 200,
+  rpcRequests: [ [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:311 parent:310 elapsed:0.0000014110701158642769
+EVENT RETURN id:312 parent:307 elapsed:0.0002542129950597882
+EVENT RETURN id:313 parent:306 elapsed:0.000501970062032342
+EVENT RETURN id:314 parent:303 elapsed:0.0009383800206705928
+EVENT CALL id:315 thread:0 rpcRequest.headerValue(headers: {}, name: 'Authorization')
+EVENT RETURN id:316 parent:315 elapsed:0.000005376990884542465
+EVENT CALL id:317 thread:0 Model.addRpcRequest(rpcRequest: {
+  status: 401,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Model {
+  paths: { '/api/api_keys': [Path] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:318 thread:0 Model.basePath(path: '/api/api_keys') receiver: [class Model]
+EVENT RETURN id:319 parent:318 elapsed:0.000008004019036889076 return: '/api/api_keys'
+EVENT CALL id:320 thread:0 Path.addRpcRequest(rpcRequest: {
+  status: 401,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Path {
+  methods: { delete: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:321 thread:0 Method.addRpcRequest(request: {
+  status: 401,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Method {
+  rpcRequests: [ [Object], [Object] ],
+  responses: { '200': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:322 thread:0 method.statusError
+EVENT RETURN id:323 parent:322 elapsed:3.949971869587898e-7
+EVENT CALL id:324 thread:0 Response.constructor(statusCode: 401)
+EVENT CALL id:325 thread:0 Warnings.constructor
+EVENT RETURN id:326 parent:325 elapsed:8.440110832452774e-7
+EVENT RETURN id:327 parent:324 elapsed:0.000016423058696091175
+EVENT CALL id:328 thread:0 Response.addRpcRequest(rpcRequest: {
+  status: 401,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Response {
+  statusCode: 401,
+  rpcRequests: [],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:329 parent:328 elapsed:0.000001937965862452984
+EVENT RETURN id:330 parent:321 elapsed:0.00029867200646549463
+EVENT RETURN id:331 parent:320 elapsed:0.0005188920767977834
+EVENT RETURN id:332 parent:317 elapsed:0.0009100940078496933
+EVENT CALL id:333 thread:0 rpcRequest.headerValue(headers: {}, name: 'Authorization')
+EVENT RETURN id:334 parent:333 elapsed:0.000004384084604680538
+EVENT CALL id:335 thread:0 Model.addRpcRequest(rpcRequest: {
+  status: 401,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Model {
+  paths: { '/api/api_keys': [Path] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:336 thread:0 Model.basePath(path: '/api/api_keys') receiver: [class Model]
+EVENT RETURN id:337 parent:336 elapsed:0.000006781076081097126 return: '/api/api_keys'
+EVENT CALL id:338 thread:0 Path.addRpcRequest(rpcRequest: {
+  status: 401,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Path {
+  methods: { delete: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:339 thread:0 Method.addRpcRequest(request: {
+  status: 401,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Method {
+  rpcRequests: [ [Object], [Object], [Object] ],
+  responses: { '200': [Response], '401': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:340 thread:0 method.statusError
+EVENT RETURN id:341 parent:340 elapsed:3.6403071135282516e-7
+EVENT CALL id:342 thread:0 Response.addRpcRequest(rpcRequest: {
+  status: 401,
+  parameters: [ [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'delete',
+  requestPath: '/api/api_keys'
+}) receiver: Response {
+  statusCode: 401,
+  rpcRequests: [ [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:343 parent:342 elapsed:8.869683369994164e-7
+EVENT RETURN id:344 parent:339 elapsed:0.00022381299640983343
+EVENT RETURN id:345 parent:338 elapsed:0.00043376500252634287
+EVENT RETURN id:346 parent:335 elapsed:0.0007989599835127592
+EVENT CALL id:347 thread:0 rpcRequest.headerValue(headers: {}, name: 'Authorization')
+EVENT RETURN id:348 parent:347 elapsed:0.0000031990930438041687
+EVENT CALL id:349 thread:0 Model.openapi receiver: Model {
+  paths: { '/api/api_keys': [Path] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:350 thread:0 Path.openapi receiver: Path {
+  methods: { delete: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:351 thread:0 Method.openapi receiver: Method {
+  rpcRequests: [ [Object], [Object], [Object], [Object] ],
+  responses: { '200': [Response], '401': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:352 thread:0 Response.openapi receiver: Response {
+  statusCode: 200,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:353 thread:0 response.contentTypes
+EVENT RETURN id:354 parent:353 elapsed:0.0000017980346456170082 return: []
+EVENT RETURN id:355 parent:352 elapsed:0.00010081299114972353 return: { content: {}, description: 'OK' }
+EVENT CALL id:356 thread:0 Response.openapi receiver: Response {
+  statusCode: 401,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:357 thread:0 response.contentTypes
+EVENT RETURN id:358 parent:357 elapsed:5.869660526514053e-7 return: []
+EVENT RETURN id:359 parent:356 elapsed:0.0000959980534389615 return: { content: {}, description: 'Unauthorized' }
+EVENT CALL id:360 thread:0 Method.summaries receiver: Method {
+  rpcRequests: [ [Object], [Object], [Object], [Object] ],
+  responses: { '200': [Response], '401': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:361 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:362 parent:361 elapsed:0.0000036050332710146904
+EVENT CALL id:363 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:364 parent:363 elapsed:0.0000015320256352424622
+EVENT CALL id:365 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:366 parent:365 elapsed:0.0000012069940567016602
+EVENT CALL id:367 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:368 parent:367 elapsed:0.0000013159587979316711
+EVENT RETURN id:369 parent:360 elapsed:0.0005579639691859484 return: []
+EVENT RETURN id:370 parent:351 elapsed:0.0014907600125297904 return: { responses: { '200': [Object], '401': [Object] } }
+EVENT RETURN id:371 parent:350 elapsed:0.0017086389707401395 return: { delete: { responses: [Object] } }
+EVENT CALL id:372 thread:0 Path.openapi receiver: Path {
+  methods: { delete: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:373 thread:0 Method.openapi receiver: Method {
+  rpcRequests: [ [Object], [Object], [Object], [Object] ],
+  responses: { '200': [Response], '401': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:374 thread:0 Response.openapi receiver: Response {
+  statusCode: 200,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:375 thread:0 response.contentTypes
+EVENT RETURN id:376 parent:375 elapsed:9.019859135150909e-7 return: []
+EVENT RETURN id:377 parent:374 elapsed:0.00011009396985173225 return: { content: {}, description: 'OK' }
+EVENT CALL id:378 thread:0 Response.openapi receiver: Response {
+  statusCode: 401,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:379 thread:0 response.contentTypes
+EVENT RETURN id:380 parent:379 elapsed:5.559995770454407e-7 return: []
+EVENT RETURN id:381 parent:378 elapsed:0.00009985803626477718 return: { content: {}, description: 'Unauthorized' }
+EVENT CALL id:382 thread:0 Method.summaries receiver: Method {
+  rpcRequests: [ [Object], [Object], [Object], [Object] ],
+  responses: { '200': [Response], '401': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:383 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:384 parent:383 elapsed:0.0000028819777071475983
+EVENT CALL id:385 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:386 parent:385 elapsed:0.0000024070031940937042
+EVENT CALL id:387 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:388 parent:387 elapsed:0.0000014959368854761124
+EVENT CALL id:389 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:390 parent:389 elapsed:0.0000015030382201075554
+EVENT RETURN id:391 parent:382 elapsed:0.0005512610077857971 return: []
+EVENT RETURN id:392 parent:373 elapsed:0.0014041230315342546 return: { responses: { '200': [Object], '401': [Object] } }
+EVENT RETURN id:393 parent:372 elapsed:0.0016262349672615528 return: { delete: { responses: [Object] } }
+EVENT RETURN id:394 parent:349 elapsed:0.0037701379042118788 return: { '/api/api_keys': { delete: [Object] } }
+EVENT CALL id:395 thread:0 Model.collectWarnings receiver: Model {
+  paths: { '/api/api_keys': [Path] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:396 thread:0 Warnings.dup receiver: Warnings { warnings: {} }
+EVENT CALL id:397 thread:0 Warnings.constructor
+EVENT RETURN id:398 parent:397 elapsed:0.0000011600786820054054
+EVENT RETURN id:399 parent:396 elapsed:0.000021312967874109745 return: Warnings { warnings: {} }
+EVENT CALL id:400 thread:0 Warnings.merge(warningProviders: [ Path { methods: [Object], warnings: [Warnings] } ]) receiver: Warnings { warnings: {} }
+EVENT CALL id:401 thread:0 Path.containedWarningProviders receiver: Path {
+  methods: { delete: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:402 parent:401 elapsed:0.000002587912604212761 return: [
+  Method {
+    rpcRequests: [Array],
+    responses: [Object],
+    warnings: [Warnings]
+  }
+]
+EVENT CALL id:403 thread:0 Warnings.merge(warningProviders: [
+  Method {
+    rpcRequests: [Array],
+    responses: [Object],
+    warnings: [Warnings]
+  }
+]) receiver: Warnings { warnings: {} }
+EVENT CALL id:404 thread:0 Method.containedWarningProviders receiver: Method {
+  rpcRequests: [ [Object], [Object], [Object], [Object] ],
+  responses: { '200': [Response], '401': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:405 parent:404 elapsed:0.000002696993760764599 return: [
+  Response {
+    statusCode: 200,
+    rpcRequests: [Array],
+    warnings: [Warnings]
+  },
+  Response {
+    statusCode: 401,
+    rpcRequests: [Array],
+    warnings: [Warnings]
+  }
+]
+EVENT CALL id:406 thread:0 Warnings.merge(warningProviders: [
+  Response {
+    statusCode: 200,
+    rpcRequests: [Array],
+    warnings: [Warnings]
+  },
+  Response {
+    statusCode: 401,
+    rpcRequests: [Array],
+    warnings: [Warnings]
+  }
+]) receiver: Warnings { warnings: {} }
+EVENT CALL id:407 thread:0 Response.containedWarningProviders receiver: Response {
+  statusCode: 200,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:408 parent:407 elapsed:6.119953468441963e-7 return: []
+EVENT CALL id:409 thread:0 Warnings.merge(warningProviders: []) receiver: Warnings { warnings: {} }
+EVENT RETURN id:410 parent:409 elapsed:8.00006091594696e-7
+EVENT CALL id:411 thread:0 Response.containedWarningProviders receiver: Response {
+  statusCode: 401,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:412 parent:411 elapsed:3.7904828786849976e-7 return: []
+EVENT CALL id:413 thread:0 Warnings.merge(warningProviders: []) receiver: Warnings { warnings: {} }
+EVENT RETURN id:414 parent:413 elapsed:4.570465534925461e-7
+EVENT RETURN id:415 parent:406 elapsed:0.0008340469794347882
+EVENT RETURN id:416 parent:403 elapsed:0.0012932170648127794
+EVENT RETURN id:417 parent:400 elapsed:0.0017513580387458205
+EVENT RETURN id:418 parent:395 elapsed:0.0022209930466488004 return: {}
+EVENT CALL id:419 thread:0 Model.constructor
+EVENT CALL id:420 thread:0 Warnings.constructor
+EVENT RETURN id:421 parent:420 elapsed:6.230548024177551e-7
+EVENT RETURN id:422 parent:419 elapsed:0.000018727034330368042
+EVENT CALL id:423 thread:0 Model.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'get',
+  requestPath: '/organizations/new'
+}) receiver: Model { paths: {}, warnings: Warnings { warnings: {} } }
+EVENT CALL id:424 thread:0 Model.basePath(path: '/organizations/new') receiver: [class Model]
+EVENT RETURN id:425 parent:424 elapsed:0.000009556999430060387 return: '/organizations/new'
+EVENT CALL id:426 thread:0 Path.constructor
+EVENT CALL id:427 thread:0 Warnings.constructor
+EVENT RETURN id:428 parent:427 elapsed:3.400491550564766e-7
+EVENT RETURN id:429 parent:426 elapsed:0.00001605600118637085
+EVENT CALL id:430 thread:0 Path.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'get',
+  requestPath: '/organizations/new'
+}) receiver: Path { methods: {}, warnings: Warnings { warnings: {} } }
+EVENT CALL id:431 thread:0 Method.constructor
+EVENT CALL id:432 thread:0 Warnings.constructor
+EVENT RETURN id:433 parent:432 elapsed:2.420274540781975e-7
+EVENT RETURN id:434 parent:431 elapsed:0.000013138051144778728
+EVENT CALL id:435 thread:0 Method.addRpcRequest(request: {
+  status: 200,
+  parameters: [ [Object], [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'get',
+  requestPath: '/organizations/new'
+}) receiver: Method {
+  rpcRequests: [],
+  responses: {},
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:436 thread:0 method.statusError
+EVENT RETURN id:437 parent:436 elapsed:7.209600880742073e-7
+EVENT CALL id:438 thread:0 Response.constructor(statusCode: 200)
+EVENT CALL id:439 thread:0 Warnings.constructor
+EVENT RETURN id:440 parent:439 elapsed:2.420274540781975e-7
+EVENT RETURN id:441 parent:438 elapsed:0.0000206709373742342
+EVENT CALL id:442 thread:0 Response.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'get',
+  requestPath: '/organizations/new'
+}) receiver: Response {
+  statusCode: 200,
+  rpcRequests: [],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:443 parent:442 elapsed:8.719507604837418e-7
+EVENT RETURN id:444 parent:435 elapsed:0.0003089499659836292
+EVENT RETURN id:445 parent:430 elapsed:0.0005413750186562538
+EVENT RETURN id:446 parent:423 elapsed:0.0009793570498004556
+EVENT CALL id:447 thread:0 rpcRequest.headerValue(headers: {}, name: 'Authorization')
+EVENT RETURN id:448 parent:447 elapsed:0.000004373025149106979
+EVENT CALL id:449 thread:0 Model.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'get',
+  requestPath: '/organizations/new'
+}) receiver: Model {
+  paths: { '/organizations/new': [Path] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:450 thread:0 Model.basePath(path: '/organizations/new') receiver: [class Model]
+EVENT RETURN id:451 parent:450 elapsed:0.000004183966666460037 return: '/organizations/new'
+EVENT CALL id:452 thread:0 Path.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'get',
+  requestPath: '/organizations/new'
+}) receiver: Path {
+  methods: { get: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:453 thread:0 Method.addRpcRequest(request: {
+  status: 200,
+  parameters: [ [Object], [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'get',
+  requestPath: '/organizations/new'
+}) receiver: Method {
+  rpcRequests: [ [Object] ],
+  responses: { '200': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:454 thread:0 method.statusError
+EVENT RETURN id:455 parent:454 elapsed:2.9301736503839493e-7
+EVENT CALL id:456 thread:0 Response.addRpcRequest(rpcRequest: {
+  status: 200,
+  parameters: [ [Object], [Object], [Object] ],
+  requestHeaders: {},
+  responseHeaders: {},
+  requestContentType: null,
+  responseContentType: null,
+  requestMethod: 'get',
+  requestPath: '/organizations/new'
+}) receiver: Response {
+  statusCode: 200,
+  rpcRequests: [ [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:457 parent:456 elapsed:5.3399708122015e-7
+EVENT RETURN id:458 parent:453 elapsed:0.00021969794761389494
+EVENT RETURN id:459 parent:452 elapsed:0.0004311169032007456
+EVENT RETURN id:460 parent:449 elapsed:0.0007911999709904194
+EVENT CALL id:461 thread:0 rpcRequest.headerValue(headers: {}, name: 'Authorization')
+EVENT RETURN id:462 parent:461 elapsed:0.0000033050309866666794
+EVENT CALL id:463 thread:0 Model.openapi receiver: Model {
+  paths: { '/organizations/new': [Path] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:464 thread:0 Path.openapi receiver: Path {
+  methods: { get: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:465 thread:0 Method.openapi receiver: Method {
+  rpcRequests: [ [Object], [Object] ],
+  responses: { '200': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:466 thread:0 Response.openapi receiver: Response {
+  statusCode: 200,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:467 thread:0 response.contentTypes
+EVENT RETURN id:468 parent:467 elapsed:0.0000015830155462026596 return: []
+EVENT RETURN id:469 parent:466 elapsed:0.00010865996591746807 return: { content: {}, description: 'OK' }
+EVENT CALL id:470 thread:0 Method.summaries receiver: Method {
+  rpcRequests: [ [Object], [Object] ],
+  responses: { '200': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:471 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:472 parent:471 elapsed:0.000003096996806561947
+EVENT CALL id:473 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:474 parent:473 elapsed:0.0000020479783415794373
+EVENT RETURN id:475 parent:470 elapsed:0.0002816820051521063 return: []
+EVENT RETURN id:476 parent:465 elapsed:0.0008528759935870767 return: { responses: { '200': [Object] } }
+EVENT RETURN id:477 parent:464 elapsed:0.0010720279533416033 return: { get: { responses: [Object] } }
+EVENT CALL id:478 thread:0 Path.openapi receiver: Path {
+  methods: { get: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:479 thread:0 Method.openapi receiver: Method {
+  rpcRequests: [ [Object], [Object] ],
+  responses: { '200': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:480 thread:0 Response.openapi receiver: Response {
+  statusCode: 200,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:481 thread:0 response.contentTypes
+EVENT RETURN id:482 parent:481 elapsed:0.0000015640398487448692 return: []
+EVENT RETURN id:483 parent:480 elapsed:0.0001131939934566617 return: { content: {}, description: 'OK' }
+EVENT CALL id:484 thread:0 Method.summaries receiver: Method {
+  rpcRequests: [ [Object], [Object] ],
+  responses: { '200': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:485 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:486 parent:485 elapsed:0.0000033389078453183174
+EVENT CALL id:487 thread:0 rpcRequest.headerValue(headers: {}, name: 'x-openapi-summary')
+EVENT RETURN id:488 parent:487 elapsed:0.0000017570564523339272
+EVENT RETURN id:489 parent:484 elapsed:0.0002953020157292485 return: []
+EVENT RETURN id:490 parent:479 elapsed:0.0008463610429316759 return: { responses: { '200': [Object] } }
+EVENT RETURN id:491 parent:478 elapsed:0.0011024420382454991 return: { get: { responses: [Object] } }
+EVENT RETURN id:492 parent:463 elapsed:0.0026297980220988393 return: { '/organizations/new': { get: [Object] } }
+EVENT CALL id:493 thread:0 Model.collectWarnings receiver: Model {
+  paths: { '/organizations/new': [Path] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT CALL id:494 thread:0 Warnings.dup receiver: Warnings { warnings: {} }
+EVENT CALL id:495 thread:0 Warnings.constructor
+EVENT RETURN id:496 parent:495 elapsed:0.0000012620585039258003
+EVENT RETURN id:497 parent:494 elapsed:0.000022826949134469032 return: Warnings { warnings: {} }
+EVENT CALL id:498 thread:0 Warnings.merge(warningProviders: [ Path { methods: [Object], warnings: [Warnings] } ]) receiver: Warnings { warnings: {} }
+EVENT CALL id:499 thread:0 Path.containedWarningProviders receiver: Path {
+  methods: { get: [Method] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:500 parent:499 elapsed:0.000001991051249206066 return: [
+  Method {
+    rpcRequests: [Array],
+    responses: [Object],
+    warnings: [Warnings]
+  }
+]
+EVENT CALL id:501 thread:0 Warnings.merge(warningProviders: [
+  Method {
+    rpcRequests: [Array],
+    responses: [Object],
+    warnings: [Warnings]
+  }
+]) receiver: Warnings { warnings: {} }
+EVENT CALL id:502 thread:0 Method.containedWarningProviders receiver: Method {
+  rpcRequests: [ [Object], [Object] ],
+  responses: { '200': [Response] },
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:503 parent:502 elapsed:0.000002022017724812031 return: [
+  Response {
+    statusCode: 200,
+    rpcRequests: [Array],
+    warnings: [Warnings]
+  }
+]
+EVENT CALL id:504 thread:0 Warnings.merge(warningProviders: [
+  Response {
+    statusCode: 200,
+    rpcRequests: [Array],
+    warnings: [Warnings]
+  }
+]) receiver: Warnings { warnings: {} }
+EVENT CALL id:505 thread:0 Response.containedWarningProviders receiver: Response {
+  statusCode: 200,
+  rpcRequests: [ [Object], [Object] ],
+  warnings: Warnings { warnings: {} }
+}
+EVENT RETURN id:506 parent:505 elapsed:0.0000038049183785915375 return: []
+EVENT CALL id:507 thread:0 Warnings.merge(warningProviders: []) receiver: Warnings { warnings: {} }
+EVENT RETURN id:508 parent:507 elapsed:7.629860192537308e-7
+EVENT RETURN id:509 parent:504 elapsed:0.0004099420038983226
+EVENT RETURN id:510 parent:501 elapsed:0.0008244060445576906
+EVENT RETURN id:511 parent:498 elapsed:0.001259014941751957
+EVENT RETURN id:512 parent:493 elapsed:0.001702581997960806 return: {}
+EVENT CALL id:513 thread:0 SecuritySchemes.openapi receiver: SecuritySchemes { authorizationHeaders: [] }
+EVENT RETURN id:514 parent:513 elapsed:0.0000014499528333544731 return: {}
+EVENT CALL id:515 thread:0 DataStore.cleanup receiver: DataStore {
+  requestFiles: Map(2) {
+    '/api/api_keys' => [RequestDataFile],
+    '/organizations/new' => [RequestDataFile]
+  },
+  workDir: '/tmp/appmap-openapi-sEI2kH'
+}
+EVENT RETURN id:516 parent:515 elapsed:0.00043218396604061127 return: Promise { undefined }

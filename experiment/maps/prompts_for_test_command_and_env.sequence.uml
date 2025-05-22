@@ -1,0 +1,85 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant prompt as "prompt"
+participant prompt as "prompt"
+participant cmds as "cmds"
+participant record as "record"
+  [->prompt: <u>promptForTestCommandAndEnv</u> <color:gray> 6.09 ms</color>
+  activate prompt
+    prompt->prompt: <u>obtainTestCommands</u> <color:gray> 4.26 ms</color>
+    activate prompt
+      Loop 3 times <color:gray> 0.0216 ms</color>
+        prompt->cmds: progress <color:gray> 0.0216 ms</color>
+        activate cmds
+        prompt<--cmds: void
+        deactivate cmds
+      End
+    prompt<--prompt: Promise<undefined>
+    deactivate prompt
+  [<--prompt: Promise<undefined>
+  deactivate prompt
+  [->cmds: progress <color:gray> 0.00352 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+  [->cmds: progress <color:gray> 0.00245 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+  [->record: <u>toString</u> <color:gray> 0.167 ms</color>
+  activate record
+    record->record: <u>envString</u> <color:gray> 0.00702 ms</color>
+    activate record
+    record<--record: string
+    deactivate record
+  [<--record: string
+  deactivate record
+  [->cmds: progress <color:gray> 0.00226 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+  [->cmds: progress <color:gray> 0.00208 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+  [->cmds: progress <color:gray> 0.00303 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+  [->cmds: progress <color:gray> 0.00477 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+  [->record: <u>envString</u> <color:gray> 0.00637 ms</color>
+  activate record
+  [<--record: string
+  deactivate record
+  [->cmds: progress <color:gray> 0.00211 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+  [->cmds: progress <color:gray> 0.00177 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+  [->record: setConfigOption <color:gray> 0.152 ms</color>
+  activate record
+    record->record: <u>mergeConfigData</u> <color:gray> 0.0203 ms</color>
+    activate record
+    record<--record: void
+    deactivate record
+  [<--record: void
+  deactivate record
+  [->record: write <color:gray> 0.445 ms</color>
+  activate record
+  [<--record: Promise<undefined>
+  deactivate record
+  [->record: configOption <color:gray> 0.141 ms</color>
+  activate record
+    record->record: <u>findOption</u> <color:gray> 0.00647 ms</color>
+    activate record
+    record<--record: array
+    deactivate record
+  [<--record: array
+  deactivate record
+@enduml

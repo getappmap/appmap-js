@@ -1,0 +1,946 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant openapi as "openapi"
+participant src as "src"
+participant src as "src"
+  [->openapi: constructor <color:gray> 0.00567 ms</color>
+  activate openapi
+  [<--openapi: void
+  deactivate openapi
+  [->openapi: execute <color:gray> 52.3 ms</color>
+  activate openapi
+    openapi->openapi: constructor <color:gray> 0.00305 ms</color>
+    activate openapi
+    openapi<--openapi: void
+    deactivate openapi
+    openapi->openapi: initialize <color:gray> 0.361 ms</color>
+    activate openapi
+    openapi<--openapi: Promise<undefined>
+    deactivate openapi
+  [<--openapi: Promise<Array>
+  deactivate openapi
+  [->src: <u>findFiles</u> <color:gray> 5.27 ms</color>
+  activate src
+    src->src: <u>verbose</u> <color:gray> 0.000676 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+    src->src: <u>traverseDirectory</u> <color:gray> 5.07 ms</color>
+    activate src
+    src<--src: Promise<Array>
+    deactivate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.871 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.511 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.133 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.217 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.942 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.124 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.167 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.15 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.294 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->src: <u>traverseDirectory</u> <color:gray> 0.377 ms</color>
+  activate src
+  [<--src: Promise<Array>
+  deactivate src
+  [->openapi: <u>collectAppMap</u> <color:gray> 15 ms</color>
+  activate openapi
+    openapi->openapi: storeAppMap <color:gray> 14.7 ms</color>
+    activate openapi
+    openapi<--openapi: Promise<undefined>
+    deactivate openapi
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->src: <u>parseHTTPServerRequests</u> <color:gray> 1.36 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->src: <u>rpcRequestForEvent</u> <color:gray> 0.52 ms</color>
+  activate src
+    src->src: <u>isServerEvent</u> <color:gray> 0.00681 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+    src->src: constructor <color:gray> 0.00203 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: ServerRPCRequest
+  deactivate src
+  [->src: requestPath <color:gray> 0.13 ms</color>
+  activate src
+    src->src: <u>ensureString</u> <color:gray> 0.00415 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+  [<--src: string
+  deactivate src
+  [->openapi: <u>openRequestFile</u> <color:gray> 0.267 ms</color>
+  activate openapi
+    openapi->src: <u>verbose</u> <color:gray> 0.000812 ms</color>
+    activate src
+    openapi<--src: Boolean
+    deactivate src
+    openapi->openapi: constructor <color:gray> 0.0184 ms</color>
+    activate openapi
+    openapi<--openapi: void
+    deactivate openapi
+  [<--openapi: RequestDataFile
+  deactivate openapi
+  [->openapi: writeRequest <color:gray> 1.75 ms</color>
+  activate openapi
+    openapi->src: status <color:gray> 0.00389 ms</color>
+    activate src
+    openapi<--src: Number
+    deactivate src
+    openapi->src: parameters <color:gray> 0.00222 ms</color>
+    activate src
+    openapi<--src: array
+    deactivate src
+    openapi->src: returnValue <color:gray> 0.00194 ms</color>
+    activate src
+    openapi<--src: void
+    deactivate src
+    openapi->src: requestHeaders <color:gray> 0.00166 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: responseHeaders <color:gray> 0.002 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: requestContentType <color:gray> 0.00434 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: responseContentType <color:gray> 0.00282 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: requestMethod <color:gray> 0.00323 ms</color>
+    activate src
+    openapi<--src: string
+    deactivate src
+    openapi->src: requestPath <color:gray> 0.0877 ms</color>
+    activate src
+      src->src: <u>ensureString</u> <color:gray> 0.00388 ms</color>
+      activate src
+      src<--src: string
+      deactivate src
+    openapi<--src: string
+    deactivate src
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->src: <u>rpcRequestForEvent</u> <color:gray> 0.282 ms</color>
+  activate src
+    src->src: <u>isServerEvent</u> <color:gray> 0.00549 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+    src->src: constructor <color:gray> 0.0012 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: ServerRPCRequest
+  deactivate src
+  [->src: requestPath <color:gray> 0.091 ms</color>
+  activate src
+    src->src: <u>ensureString</u> <color:gray> 0.00288 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+  [<--src: string
+  deactivate src
+  [->openapi: <u>openRequestFile</u> <color:gray> 0.00133 ms</color>
+  activate openapi
+  [<--openapi: RequestDataFile
+  deactivate openapi
+  [->openapi: writeRequest <color:gray> 1.67 ms</color>
+  activate openapi
+    openapi->src: status <color:gray> 0.00247 ms</color>
+    activate src
+    openapi<--src: Number
+    deactivate src
+    openapi->src: parameters <color:gray> 0.00219 ms</color>
+    activate src
+    openapi<--src: array
+    deactivate src
+    openapi->src: returnValue <color:gray> 0.00265 ms</color>
+    activate src
+    openapi<--src: void
+    deactivate src
+    openapi->src: requestHeaders <color:gray> 0.00207 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: responseHeaders <color:gray> 0.00193 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: requestContentType <color:gray> 0.00479 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: responseContentType <color:gray> 0.00287 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: requestMethod <color:gray> 0.00347 ms</color>
+    activate src
+    openapi<--src: string
+    deactivate src
+    openapi->src: requestPath <color:gray> 0.085 ms</color>
+    activate src
+      src->src: <u>ensureString</u> <color:gray> 0.00283 ms</color>
+      activate src
+      src<--src: string
+      deactivate src
+    openapi<--src: string
+    deactivate src
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->src: <u>rpcRequestForEvent</u> <color:gray> 0.274 ms</color>
+  activate src
+    src->src: <u>isServerEvent</u> <color:gray> 0.0036 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+    src->src: constructor <color:gray> 0.000717 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: ServerRPCRequest
+  deactivate src
+  [->src: requestPath <color:gray> 0.0677 ms</color>
+  activate src
+    src->src: <u>ensureString</u> <color:gray> 0.0017 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+  [<--src: string
+  deactivate src
+  [->openapi: <u>openRequestFile</u> <color:gray> 0.00175 ms</color>
+  activate openapi
+  [<--openapi: RequestDataFile
+  deactivate openapi
+  [->openapi: writeRequest <color:gray> 1.47 ms</color>
+  activate openapi
+    openapi->src: status <color:gray> 0.00131 ms</color>
+    activate src
+    openapi<--src: Number
+    deactivate src
+    openapi->src: parameters <color:gray> 0.00153 ms</color>
+    activate src
+    openapi<--src: array
+    deactivate src
+    openapi->src: returnValue <color:gray> 0.00181 ms</color>
+    activate src
+    openapi<--src: void
+    deactivate src
+    openapi->src: requestHeaders <color:gray> 0.00127 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: responseHeaders <color:gray> 0.00118 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: requestContentType <color:gray> 0.00265 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: responseContentType <color:gray> 0.00165 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: requestMethod <color:gray> 0.00234 ms</color>
+    activate src
+    openapi<--src: string
+    deactivate src
+    openapi->src: requestPath <color:gray> 0.0666 ms</color>
+    activate src
+      src->src: <u>ensureString</u> <color:gray> 0.00129 ms</color>
+      activate src
+      src<--src: string
+      deactivate src
+    openapi<--src: string
+    deactivate src
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->src: <u>rpcRequestForEvent</u> <color:gray> 0.227 ms</color>
+  activate src
+    src->src: <u>isServerEvent</u> <color:gray> 0.00208 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+    src->src: constructor <color:gray> 0.000397 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: ServerRPCRequest
+  deactivate src
+  [->src: requestPath <color:gray> 0.0704 ms</color>
+  activate src
+    src->src: <u>ensureString</u> <color:gray> 0.00139 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+  [<--src: string
+  deactivate src
+  [->openapi: <u>openRequestFile</u> <color:gray> 0.000974 ms</color>
+  activate openapi
+  [<--openapi: RequestDataFile
+  deactivate openapi
+  [->openapi: writeRequest <color:gray> 1.65 ms</color>
+  activate openapi
+    openapi->src: status <color:gray> 0.00116 ms</color>
+    activate src
+    openapi<--src: Number
+    deactivate src
+    openapi->src: parameters <color:gray> 0.00178 ms</color>
+    activate src
+    openapi<--src: array
+    deactivate src
+    openapi->src: returnValue <color:gray> 0.00167 ms</color>
+    activate src
+    openapi<--src: void
+    deactivate src
+    openapi->src: requestHeaders <color:gray> 0.00119 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: responseHeaders <color:gray> 0.00161 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: requestContentType <color:gray> 0.00418 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: responseContentType <color:gray> 0.00264 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: requestMethod <color:gray> 0.00302 ms</color>
+    activate src
+    openapi<--src: string
+    deactivate src
+    openapi->src: requestPath <color:gray> 0.0895 ms</color>
+    activate src
+      src->src: <u>ensureString</u> <color:gray> 0.0031 ms</color>
+      activate src
+      src<--src: string
+      deactivate src
+    openapi<--src: string
+    deactivate src
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->openapi: <u>collectAppMap</u> <color:gray> 9.07 ms</color>
+  activate openapi
+    openapi->openapi: storeAppMap <color:gray> 8.79 ms</color>
+    activate openapi
+    openapi<--openapi: Promise<undefined>
+    deactivate openapi
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->src: <u>parseHTTPServerRequests</u> <color:gray> 1.37 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->src: <u>rpcRequestForEvent</u> <color:gray> 0.345 ms</color>
+  activate src
+    src->src: <u>isServerEvent</u> <color:gray> 0.00315 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+    src->src: constructor <color:gray> 0.000958 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: ServerRPCRequest
+  deactivate src
+  [->src: requestPath <color:gray> 0.0713 ms</color>
+  activate src
+    src->src: <u>ensureString</u> <color:gray> 0.00185 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+  [<--src: string
+  deactivate src
+  [->openapi: <u>openRequestFile</u> <color:gray> 0.192 ms</color>
+  activate openapi
+    openapi->src: <u>verbose</u> <color:gray> 0.000493 ms</color>
+    activate src
+    openapi<--src: Boolean
+    deactivate src
+    openapi->openapi: constructor <color:gray> 0.0123 ms</color>
+    activate openapi
+    openapi<--openapi: void
+    deactivate openapi
+  [<--openapi: RequestDataFile
+  deactivate openapi
+  [->openapi: writeRequest <color:gray> 1.83 ms</color>
+  activate openapi
+    openapi->src: status <color:gray> 0.00227 ms</color>
+    activate src
+    openapi<--src: Number
+    deactivate src
+    openapi->src: parameters <color:gray> 0.00171 ms</color>
+    activate src
+    openapi<--src: array
+    deactivate src
+    openapi->src: returnValue <color:gray> 0.00166 ms</color>
+    activate src
+    openapi<--src: void
+    deactivate src
+    openapi->src: requestHeaders <color:gray> 0.00111 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: responseHeaders <color:gray> 0.00173 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: requestContentType <color:gray> 0.00359 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: responseContentType <color:gray> 0.00224 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: requestMethod <color:gray> 0.00358 ms</color>
+    activate src
+    openapi<--src: string
+    deactivate src
+    openapi->src: requestPath <color:gray> 0.106 ms</color>
+    activate src
+      src->src: <u>ensureString</u> <color:gray> 0.00309 ms</color>
+      activate src
+      src<--src: string
+      deactivate src
+    openapi<--src: string
+    deactivate src
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->src: <u>rpcRequestForEvent</u> <color:gray> 0.301 ms</color>
+  activate src
+    src->src: <u>isServerEvent</u> <color:gray> 0.00493 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+    src->src: constructor <color:gray> 0.00098 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: ServerRPCRequest
+  deactivate src
+  [->src: requestPath <color:gray> 0.109 ms</color>
+  activate src
+    src->src: <u>ensureString</u> <color:gray> 0.00306 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+  [<--src: string
+  deactivate src
+  [->openapi: <u>openRequestFile</u> <color:gray> 0.00254 ms</color>
+  activate openapi
+  [<--openapi: RequestDataFile
+  deactivate openapi
+  [->openapi: writeRequest <color:gray> 1.67 ms</color>
+  activate openapi
+    openapi->src: status <color:gray> 0.00264 ms</color>
+    activate src
+    openapi<--src: Number
+    deactivate src
+    openapi->src: parameters <color:gray> 0.00204 ms</color>
+    activate src
+    openapi<--src: array
+    deactivate src
+    openapi->src: returnValue <color:gray> 0.00171 ms</color>
+    activate src
+    openapi<--src: void
+    deactivate src
+    openapi->src: requestHeaders <color:gray> 0.00179 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: responseHeaders <color:gray> 0.00186 ms</color>
+    activate src
+    openapi<--src: Object
+    deactivate src
+    openapi->src: requestContentType <color:gray> 0.00472 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: responseContentType <color:gray> 0.00231 ms</color>
+    activate src
+    openapi<--src: object
+    deactivate src
+    openapi->src: requestMethod <color:gray> 0.00259 ms</color>
+    activate src
+    openapi<--src: string
+    deactivate src
+    openapi->src: requestPath <color:gray> 0.103 ms</color>
+    activate src
+      src->src: <u>ensureString</u> <color:gray> 0.00412 ms</color>
+      activate src
+      src<--src: string
+      deactivate src
+    openapi<--src: string
+    deactivate src
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->openapi: closeAll <color:gray> 0.581 ms</color>
+  activate openapi
+    openapi->openapi: close <color:gray> 0.0141 ms</color>
+    activate openapi
+    openapi<--openapi: Promise
+    deactivate openapi
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+  [->openapi: close <color:gray> 0.00521 ms</color>
+  activate openapi
+  [<--openapi: Promise
+  deactivate openapi
+  [->openapi: constructor <color:gray> 0.000978 ms</color>
+  activate openapi
+  [<--openapi: void
+  deactivate openapi
+  [->openapi: generate <color:gray> 20 ms</color>
+  activate openapi
+    openapi->src: constructor <color:gray> 0.000753 ms</color>
+    activate src
+    openapi<--src: void
+    deactivate src
+    openapi->openapi: requestFileNames <color:gray> 0.00254 ms</color>
+    activate openapi
+    openapi<--openapi: array
+    deactivate openapi
+  [<--openapi: Promise<Object>
+  deactivate openapi
+  [->src: constructor <color:gray> 0.0164 ms</color>
+  activate src
+    src->src: constructor <color:gray> 0.000544 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: addRpcRequest <color:gray> 0.98 ms</color>
+  activate src
+    src->src: <u>basePath</u> <color:gray> 0.00808 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+    src->src: constructor <color:gray> 0.0188 ms</color>
+    activate src
+      src->src: constructor <color:gray> 0.000464 ms</color>
+      activate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+    src->src: addRpcRequest <color:gray> 0.524 ms</color>
+    activate src
+      src->src: constructor <color:gray> 0.0142 ms</color>
+      activate src
+        src->src: constructor <color:gray> 0.000348 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+      src->src: addRpcRequest <color:gray> 0.288 ms</color>
+      activate src
+        src->src: <u>statusError</u> <color:gray> 0.000479 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+        src->src: constructor <color:gray> 0.0146 ms</color>
+        activate src
+          src->src: constructor <color:gray> 0.000286 ms</color>
+          activate src
+          src<--src: void
+          deactivate src
+        src<--src: void
+        deactivate src
+        src->src: addRpcRequest <color:gray> 0.00155 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: <u>headerValue</u> <color:gray> 0.0055 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->src: addRpcRequest <color:gray> 0.938 ms</color>
+  activate src
+    src->src: <u>basePath</u> <color:gray> 0.0103 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+    src->src: addRpcRequest <color:gray> 0.502 ms</color>
+    activate src
+      src->src: addRpcRequest <color:gray> 0.254 ms</color>
+      activate src
+        src->src: <u>statusError</u> <color:gray> 0.000692 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+        src->src: addRpcRequest <color:gray> 0.00141 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: <u>headerValue</u> <color:gray> 0.00538 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->src: addRpcRequest <color:gray> 0.91 ms</color>
+  activate src
+    src->src: <u>basePath</u> <color:gray> 0.008 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+    src->src: addRpcRequest <color:gray> 0.519 ms</color>
+    activate src
+      src->src: addRpcRequest <color:gray> 0.299 ms</color>
+      activate src
+        src->src: <u>statusError</u> <color:gray> 0.000395 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+        src->src: constructor <color:gray> 0.0164 ms</color>
+        activate src
+          src->src: constructor <color:gray> 0.000844 ms</color>
+          activate src
+          src<--src: void
+          deactivate src
+        src<--src: void
+        deactivate src
+        src->src: addRpcRequest <color:gray> 0.00194 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: <u>headerValue</u> <color:gray> 0.00438 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->src: addRpcRequest <color:gray> 0.799 ms</color>
+  activate src
+    src->src: <u>basePath</u> <color:gray> 0.00678 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+    src->src: addRpcRequest <color:gray> 0.434 ms</color>
+    activate src
+      src->src: addRpcRequest <color:gray> 0.224 ms</color>
+      activate src
+        src->src: <u>statusError</u> <color:gray> 0.000364 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+        src->src: addRpcRequest <color:gray> 0.000887 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: <u>headerValue</u> <color:gray> 0.0032 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->src: openapi <color:gray> 3.77 ms</color>
+  activate src
+    Loop 2 times <color:gray> 3.33 ms</color>
+      src->src: openapi <color:gray> 3.33 ms</color>
+      activate src
+        src->src: openapi <color:gray> 2.89 ms</color>
+        activate src
+          Loop ~2 times <color:gray> 0.407 ms</color>
+            src->src: openapi <color:gray> 0.407 ms</color>
+            activate src
+              src->src: <u>contentTypes</u> <color:gray> 0.00384 ms</color>
+              activate src
+              src<--src: array
+              deactivate src
+            src<--src: Object
+            deactivate src
+          End
+          src->src: summaries <color:gray> 1.11 ms</color>
+          activate src
+            Loop ~4 times <color:gray> 0.0159 ms</color>
+              src->src: <u>headerValue</u> <color:gray> 0.0159 ms</color>
+              activate src
+              src<--src: void
+              deactivate src
+            End
+          src<--src: array
+          deactivate src
+        src<--src: Object
+        deactivate src
+      src<--src: Object
+      deactivate src
+    End
+  [<--src: Object
+  deactivate src
+  [->src: collectWarnings <color:gray> 2.22 ms</color>
+  activate src
+    src->src: dup <color:gray> 0.0213 ms</color>
+    activate src
+      src->src: constructor <color:gray> 0.00116 ms</color>
+      activate src
+      src<--src: void
+      deactivate src
+    src<--src: Warnings
+    deactivate src
+    src->src: merge <color:gray> 1.75 ms</color>
+    activate src
+      src->src: containedWarningProviders <color:gray> 0.00259 ms</color>
+      activate src
+      src<--src: array
+      deactivate src
+      src->src: merge <color:gray> 1.29 ms</color>
+      activate src
+        src->src: containedWarningProviders <color:gray> 0.0027 ms</color>
+        activate src
+        src<--src: array
+        deactivate src
+        src->src: merge <color:gray> 0.834 ms</color>
+        activate src
+          Loop 2 times <color:gray> 0.00225 ms</color>
+            src->src: containedWarningProviders <color:gray> 0.000991 ms</color>
+            activate src
+            src<--src: array
+            deactivate src
+            src->src: merge <color:gray> 0.00126 ms</color>
+            activate src
+            src<--src: void
+            deactivate src
+          End
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+  [<--src: Object
+  deactivate src
+  [->src: constructor <color:gray> 0.0187 ms</color>
+  activate src
+    src->src: constructor <color:gray> 0.000623 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: addRpcRequest <color:gray> 0.979 ms</color>
+  activate src
+    src->src: <u>basePath</u> <color:gray> 0.00956 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+    src->src: constructor <color:gray> 0.0161 ms</color>
+    activate src
+      src->src: constructor <color:gray> 0.00034 ms</color>
+      activate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+    src->src: addRpcRequest <color:gray> 0.541 ms</color>
+    activate src
+      src->src: constructor <color:gray> 0.0131 ms</color>
+      activate src
+        src->src: constructor <color:gray> 0.000242 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+      src->src: addRpcRequest <color:gray> 0.309 ms</color>
+      activate src
+        src->src: <u>statusError</u> <color:gray> 0.000721 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+        src->src: constructor <color:gray> 0.0207 ms</color>
+        activate src
+          src->src: constructor <color:gray> 0.000242 ms</color>
+          activate src
+          src<--src: void
+          deactivate src
+        src<--src: void
+        deactivate src
+        src->src: addRpcRequest <color:gray> 0.000872 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: <u>headerValue</u> <color:gray> 0.00437 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->src: addRpcRequest <color:gray> 0.791 ms</color>
+  activate src
+    src->src: <u>basePath</u> <color:gray> 0.00418 ms</color>
+    activate src
+    src<--src: string
+    deactivate src
+    src->src: addRpcRequest <color:gray> 0.431 ms</color>
+    activate src
+      src->src: addRpcRequest <color:gray> 0.22 ms</color>
+      activate src
+        src->src: <u>statusError</u> <color:gray> 0.000293 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+        src->src: addRpcRequest <color:gray> 0.000534 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: <u>headerValue</u> <color:gray> 0.00331 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->src: openapi <color:gray> 2.63 ms</color>
+  activate src
+    Loop 2 times <color:gray> 2.17 ms</color>
+      src->src: openapi <color:gray> 2.17 ms</color>
+      activate src
+        src->src: openapi <color:gray> 1.7 ms</color>
+        activate src
+          src->src: openapi <color:gray> 0.222 ms</color>
+          activate src
+            src->src: <u>contentTypes</u> <color:gray> 0.00315 ms</color>
+            activate src
+            src<--src: array
+            deactivate src
+          src<--src: Object
+          deactivate src
+          src->src: summaries <color:gray> 0.577 ms</color>
+          activate src
+            Loop ~2 times <color:gray> 0.0102 ms</color>
+              src->src: <u>headerValue</u> <color:gray> 0.0102 ms</color>
+              activate src
+              src<--src: void
+              deactivate src
+            End
+          src<--src: array
+          deactivate src
+        src<--src: Object
+        deactivate src
+      src<--src: Object
+      deactivate src
+    End
+  [<--src: Object
+  deactivate src
+  [->src: collectWarnings <color:gray> 1.7 ms</color>
+  activate src
+    src->src: dup <color:gray> 0.0228 ms</color>
+    activate src
+      src->src: constructor <color:gray> 0.00126 ms</color>
+      activate src
+      src<--src: void
+      deactivate src
+    src<--src: Warnings
+    deactivate src
+    src->src: merge <color:gray> 1.26 ms</color>
+    activate src
+      src->src: containedWarningProviders <color:gray> 0.00199 ms</color>
+      activate src
+      src<--src: array
+      deactivate src
+      src->src: merge <color:gray> 0.824 ms</color>
+      activate src
+        src->src: containedWarningProviders <color:gray> 0.00202 ms</color>
+        activate src
+        src<--src: array
+        deactivate src
+        src->src: merge <color:gray> 0.41 ms</color>
+        activate src
+          src->src: containedWarningProviders <color:gray> 0.0038 ms</color>
+          activate src
+          src<--src: array
+          deactivate src
+          src->src: merge <color:gray> 0.000763 ms</color>
+          activate src
+          src<--src: void
+          deactivate src
+        src<--src: void
+        deactivate src
+      src<--src: void
+      deactivate src
+    src<--src: void
+    deactivate src
+  [<--src: Object
+  deactivate src
+  [->src: openapi <color:gray> 0.00145 ms</color>
+  activate src
+  [<--src: Object
+  deactivate src
+  [->openapi: cleanup <color:gray> 0.432 ms</color>
+  activate openapi
+  [<--openapi: Promise<undefined>
+  deactivate openapi
+@enduml

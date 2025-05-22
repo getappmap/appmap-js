@@ -1,0 +1,185 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant commands as "commands"
+participant commands as "commands"
+participant lib as "lib"
+participant src as "src"
+  [->commands: <u>defaultExplainOptions</u> <color:gray> 0.00305 ms</color>
+  activate commands
+  [<--commands: Object
+  deactivate commands
+  [->commands: <u>buildExplainCommand</u> <color:gray> 0.369 ms</color>
+  activate commands
+    commands->commands: constructor <color:gray> 0.00128 ms</color>
+    activate commands
+    commands<--commands: void
+    deactivate commands
+  [<--commands: ExplainCommand
+  deactivate commands
+  [->commands: <u>buildCommandRequest</u> <color:gray> 0.0439 ms</color>
+  activate commands
+    commands->lib: constructor <color:gray> 0.000555 ms</color>
+    activate lib
+    commands<--lib: void
+    deactivate lib
+  [<--commands: Object
+  deactivate commands
+  [->commands: <u>chatHistory</u> <color:gray> 0.00216 ms</color>
+  activate commands
+  [<--commands: array
+  deactivate commands
+  [->commands: <u>explain</u> <color:gray> 4.57 ms</color>
+  activate commands
+    commands->commands: <u>defaultExplainOptions</u> <color:gray> 0.00105 ms</color>
+    activate commands
+    commands<--commands: Object
+    deactivate commands
+    commands->commands: <u>buildExplainCommand</u> <color:gray> 0.315 ms</color>
+    activate commands
+      commands->commands: constructor <color:gray> 0.00133 ms</color>
+      activate commands
+      commands<--commands: void
+      deactivate commands
+    commands<--commands: ExplainCommand
+    deactivate commands
+    commands->commands: <u>buildCommandRequest</u> <color:gray> 0.0537 ms</color>
+    activate commands
+      commands->lib: constructor <color:gray> 0.000577 ms</color>
+      activate lib
+      commands<--lib: void
+      deactivate lib
+    commands<--commands: Object
+    deactivate commands
+    commands->commands: <u>chatHistory</u> <color:gray> 0.00286 ms</color>
+    activate commands
+    commands<--commands: array
+    deactivate commands
+    commands->lib: isEnabled <color:gray> 0.0513 ms</color>
+    activate lib
+      lib->lib: booleanValue <color:gray> 0.00107 ms</color>
+      activate lib
+      lib<--lib: Boolean
+      deactivate lib
+    commands<--lib: Boolean
+    deactivate lib
+    commands->lib: numberValue <color:gray> 0.00375 ms</color>
+    activate lib
+    commands<--lib: void
+    deactivate lib
+    commands->commands: <u>isProjectInfoEnabled</u> <color:gray> 0.352 ms</color>
+    activate commands
+      Loop 2 times <color:gray> 0.139 ms</color>
+        commands->lib: isEnabled <color:gray> 0.139 ms</color>
+        activate lib
+          lib->lib: booleanValue <color:gray> 0.00115 ms</color>
+          activate lib
+          lib<--lib: Boolean
+          deactivate lib
+        commands<--lib: Boolean
+        deactivate lib
+      End
+    commands<--commands: Boolean
+    deactivate commands
+    commands->lib: stringValue <color:gray> 0.0209 ms</color>
+    activate lib
+    commands<--lib: void
+    deactivate lib
+    commands->lib: isEnabled <color:gray> 0.0544 ms</color>
+    activate lib
+      lib->lib: booleanValue <color:gray> 0.000999 ms</color>
+      activate lib
+      lib<--lib: Boolean
+      deactivate lib
+    commands<--lib: Boolean
+    deactivate lib
+  [<--commands: Promise<Array>
+  deactivate commands
+  [->src: constructor <color:gray> 0.00385 ms</color>
+  activate src
+  [<--src: void
+  deactivate src
+  [->lib: numberValue <color:gray> 0.00157 ms</color>
+  activate lib
+  [<--lib: void
+  deactivate lib
+  [->lib: <u>getMostRecentMessages</u> <color:gray> 0.328 ms</color>
+  activate lib
+    lib->lib: <u>filterNonConversationalMessages</u> <color:gray> 0.0701 ms</color>
+    activate lib
+    lib<--lib: array
+    deactivate lib
+    Loop 2 times <color:gray> 0.0891 ms</color>
+      lib->src: constructor <color:gray> 0.0891 ms</color>
+      activate src
+        src->src: constructor <color:gray> 0.0032 ms</color>
+        activate src
+        src<--src: void
+        deactivate src
+      lib<--src: void
+      deactivate src
+    End
+  [<--lib: array
+  deactivate lib
+  [->src: addEvent <color:gray> 0.0805 ms</color>
+  activate src
+    src->src: validateEvent <color:gray> 0.00155 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: addEvent <color:gray> 0.111 ms</color>
+  activate src
+    src->src: validateEvent <color:gray> 0.000599 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->commands: <u>isGathererEnabled</u> <color:gray> 0.14 ms</color>
+  activate commands
+    commands->lib: isEnabled <color:gray> 0.0545 ms</color>
+    activate lib
+      lib->lib: booleanValue <color:gray> 0.00176 ms</color>
+      activate lib
+      lib<--lib: Boolean
+      deactivate lib
+    commands<--lib: Boolean
+    deactivate lib
+  [<--commands: Boolean
+  deactivate commands
+  [->src: buildState <color:gray> 0.395 ms</color>
+  activate src
+    Loop 2 times <color:gray> 0.161 ms</color>
+      src->src: updateState <color:gray> 0.161 ms</color>
+      activate src
+        src->src: fullContent <color:gray> 0.00865 ms</color>
+        activate src
+        src<--src: string
+        deactivate src
+      src<--src: void
+      deactivate src
+    End
+  [<--src: InteractionState
+  deactivate src
+  [->src: constructor <color:gray> 0.0445 ms</color>
+  activate src
+    src->src: constructor <color:gray> 0.00248 ms</color>
+    activate src
+    src<--src: void
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->src: addEvent <color:gray> 0.0634 ms</color>
+  activate src
+    src->src: validateEvent <color:gray> 0.00149 ms</color>
+    activate src
+    src<--src: Boolean
+    deactivate src
+  [<--src: void
+  deactivate src
+  [->lib: constructor <color:gray> 0.00141 ms</color>
+  activate lib
+  [<--lib: void
+  deactivate lib
+@enduml

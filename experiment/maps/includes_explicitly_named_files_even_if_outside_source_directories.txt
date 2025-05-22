@@ -1,0 +1,127 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.9.0"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: collectLocationContext with valid locations includes explicitly named files even if outside source directories
+META source_location: packages/cli/tests/unit/rpc/explain/collect-location-context.spec.ts
+META test_status: succeeded
+
+CLASS package: src
+  CLASS package: rpc
+    CLASS package: explain
+      CLASS collect-location-context
+        FUNC collectLocationContext (packages/cli/src/rpc/explain/collect-location-context.ts:29) static
+      CLASS ContentRestrictions
+        FUNC safeRestricted (packages/cli/src/rpc/explain/ContentRestrictions.ts:26)
+        FUNC isRestricted (packages/cli/src/rpc/explain/ContentRestrictions.ts:39)
+        FUNC isRestrictedImpl (packages/cli/src/rpc/explain/ContentRestrictions.ts:50)
+        FUNC instance (packages/cli/src/rpc/explain/ContentRestrictions.ts:79) static
+        FUNC normalizeAbsolute (packages/cli/src/rpc/explain/ContentRestrictions.ts:98) static
+      CLASS Location
+        FUNC constructor (packages/cli/src/rpc/explain/location.ts:21)
+        FUNC snippet (packages/cli/src/rpc/explain/location.ts:23)
+        FUNC toString (packages/cli/src/rpc/explain/location.ts:49)
+        FUNC parse (packages/cli/src/rpc/explain/location.ts:53) static
+      CLASS location
+        FUNC normalizePath (packages/cli/src/rpc/explain/location.ts:4) static
+  CLASS utils
+    FUNC verbose (packages/cli/src/utils.ts:18) static
+CLASS package: tests
+  CLASS package: unit
+    CLASS package: rpc
+      CLASS package: explain
+        CLASS collect-location-context.spec
+          FUNC collect (packages/cli/tests/unit/rpc/explain/collect-location-context.spec.ts:32) static
+
+EVENT CALL id:1 thread:0 collect-location-context/spec.collect
+EVENT CALL id:2 thread:0 Location.parse(location: 'file1.js:1-1', undefined: 0, undefined: [ 'file1.js:1-1', '/src/file2.js', '/other/file3.js' ])
+EVENT CALL id:3 thread:0 location.normalizePath(location: 'file1.js:1-1')
+EVENT RETURN id:4 parent:3 elapsed:0.00006110197864472866 return: 'file1.js:1-1'
+EVENT CALL id:5 thread:0 Location.constructor(path: 'file1.js', lineRange: '1-1')
+EVENT RETURN id:6 parent:5 elapsed:0.00003342493437230587
+EVENT RETURN id:7 parent:2 elapsed:0.0008524820441380143 return: Location { path: 'file1.js', lineRange: '1-1' }
+EVENT CALL id:8 thread:0 Location.parse(location: '/src/file2.js', undefined: 1, undefined: [ 'file1.js:1-1', '/src/file2.js', '/other/file3.js' ])
+EVENT CALL id:9 thread:0 location.normalizePath(location: '/src/file2.js')
+EVENT RETURN id:10 parent:9 elapsed:0.000006031012162566185 return: '/src/file2.js'
+EVENT CALL id:11 thread:0 Location.constructor(path: '/src/file2.js')
+EVENT RETURN id:12 parent:11 elapsed:0.000002127024345099926
+EVENT RETURN id:13 parent:8 elapsed:0.00022859405726194382 return: Location { path: '/src/file2.js', lineRange: undefined }
+EVENT CALL id:14 thread:0 Location.parse(location: '/other/file3.js', undefined: 2, undefined: [ 'file1.js:1-1', '/src/file2.js', '/other/file3.js' ])
+EVENT CALL id:15 thread:0 location.normalizePath(location: '/other/file3.js')
+EVENT RETURN id:16 parent:15 elapsed:0.000005949987098574638 return: '/other/file3.js'
+EVENT CALL id:17 thread:0 Location.constructor(path: '/other/file3.js')
+EVENT RETURN id:18 parent:17 elapsed:0.000001661013811826706
+EVENT RETURN id:19 parent:14 elapsed:0.00026817002799361944 return: Location { path: '/other/file3.js', lineRange: undefined }
+EVENT CALL id:20 thread:0 collect-location-context.collectLocationContext(sourceDirectories: [ '/src', '/lib' ], locations: [
+  Location { path: 'file1.js', lineRange: '1-1' },
+  Location { path: '/src/file2.js', lineRange: undefined },
+  Location { path: '/other/file3.js', lineRange: undefined }
+], explicitFiles: [ '/other/file3.js' ])
+EVENT CALL id:21 thread:0 utils.verbose
+EVENT RETURN id:22 parent:21 elapsed:0.000001600012183189392 return: false
+EVENT CALL id:23 thread:0 ContentRestrictions.instance receiver: [class ContentRestrictions]
+EVENT RETURN id:24 parent:23 elapsed:0.0000024759210646152496 return: ContentRestrictions { localRequired: false }
+EVENT CALL id:25 thread:0 ContentRestrictions.safeRestricted(rootOrAbsolute: '/src', relative: 'file1.js') receiver: ContentRestrictions { localRequired: false }
+EVENT CALL id:26 thread:0 ContentRestrictions.isRestricted(rootOrAbsolute: '/src', relative: 'file1.js') receiver: ContentRestrictions { localRequired: false }
+EVENT CALL id:27 thread:0 ContentRestrictions.normalizeAbsolute(path: '/src')
+EVENT RETURN id:28 parent:27 elapsed:0.000007614027708768845 return: '/src'
+EVENT CALL id:29 thread:0 ContentRestrictions.isRestrictedImpl(root: '/src', path: 'file1.js') receiver: ContentRestrictions { localRequired: false }
+EVENT RETURN id:30 parent:29 elapsed:0.000014520017430186272 return: false
+EVENT RETURN id:31 parent:26 elapsed:0.0002955569652840495 return: false
+EVENT RETURN id:32 parent:25 elapsed:0.0006533210398629308 return: false
+EVENT RETURN id:33 parent:20 elapsed:0.007151145022362471 return: Promise { [ [Object], [Object], [Object], [Object] ] }
+EVENT RETURN id:34 parent:1 elapsed:0.011177113046869636 return: Promise { [ [Object], [Object], [Object], [Object] ] }
+EVENT CALL id:35 thread:0 utils.verbose
+EVENT RETURN id:36 parent:35 elapsed:7.00005330145359e-7 return: false
+EVENT CALL id:37 thread:0 Location.snippet(contents: 'file contents') receiver: Location { path: 'file1.js', lineRange: '1-1' }
+EVENT RETURN id:38 parent:37 elapsed:0.00007446098607033491 return: 'file contents'
+EVENT CALL id:39 thread:0 Location.toString receiver: Location { path: 'file1.js', lineRange: '1-1' }
+EVENT RETURN id:40 parent:39 elapsed:0.000013428973034024239 return: 'file1.js:1-1'
+EVENT CALL id:41 thread:0 ContentRestrictions.instance receiver: [class ContentRestrictions]
+EVENT RETURN id:42 parent:41 elapsed:0.0000015438999980688095 return: ContentRestrictions { localRequired: false }
+EVENT CALL id:43 thread:0 ContentRestrictions.safeRestricted(rootOrAbsolute: '/lib', relative: 'file1.js') receiver: ContentRestrictions { localRequired: false }
+EVENT CALL id:44 thread:0 ContentRestrictions.isRestricted(rootOrAbsolute: '/lib', relative: 'file1.js') receiver: ContentRestrictions { localRequired: false }
+EVENT CALL id:45 thread:0 ContentRestrictions.normalizeAbsolute(path: '/lib')
+EVENT RETURN id:46 parent:45 elapsed:0.000004025059752166271 return: '/lib'
+EVENT CALL id:47 thread:0 ContentRestrictions.isRestrictedImpl(root: '/lib', path: 'file1.js') receiver: ContentRestrictions { localRequired: false }
+EVENT RETURN id:48 parent:47 elapsed:0.0000055710552260279655 return: false
+EVENT RETURN id:49 parent:44 elapsed:0.00026769505348056555 return: false
+EVENT RETURN id:50 parent:43 elapsed:0.00044321396853774786 return: false
+EVENT CALL id:51 thread:0 utils.verbose
+EVENT RETURN id:52 parent:51 elapsed:6.830086931586266e-7 return: false
+EVENT CALL id:53 thread:0 Location.snippet(contents: 'file contents') receiver: Location { path: 'file1.js', lineRange: '1-1' }
+EVENT RETURN id:54 parent:53 elapsed:0.000014108954928815365 return: 'file contents'
+EVENT CALL id:55 thread:0 Location.toString receiver: Location { path: 'file1.js', lineRange: '1-1' }
+EVENT RETURN id:56 parent:55 elapsed:0.0000015150289982557297 return: 'file1.js:1-1'
+EVENT CALL id:57 thread:0 ContentRestrictions.instance receiver: [class ContentRestrictions]
+EVENT RETURN id:58 parent:57 elapsed:0.0000021420419216156006 return: ContentRestrictions { localRequired: false }
+EVENT CALL id:59 thread:0 ContentRestrictions.safeRestricted(rootOrAbsolute: '/src', relative: 'file2.js') receiver: ContentRestrictions { localRequired: false }
+EVENT CALL id:60 thread:0 ContentRestrictions.isRestricted(rootOrAbsolute: '/src', relative: 'file2.js') receiver: ContentRestrictions { localRequired: false }
+EVENT CALL id:61 thread:0 ContentRestrictions.normalizeAbsolute(path: '/src')
+EVENT RETURN id:62 parent:61 elapsed:0.000004499917849898338 return: '/src'
+EVENT CALL id:63 thread:0 ContentRestrictions.isRestrictedImpl(root: '/src', path: 'file2.js') receiver: ContentRestrictions { localRequired: false }
+EVENT RETURN id:64 parent:63 elapsed:0.000004956964403390884 return: false
+EVENT RETURN id:65 parent:60 elapsed:0.0003123310161754489 return: false
+EVENT RETURN id:66 parent:59 elapsed:0.00048260600306093693 return: false
+EVENT CALL id:67 thread:0 utils.verbose
+EVENT RETURN id:68 parent:67 elapsed:8.050119504332542e-7 return: false
+EVENT CALL id:69 thread:0 Location.snippet(contents: 'file contents') receiver: Location { path: 'file2.js', lineRange: undefined }
+EVENT RETURN id:70 parent:69 elapsed:0.000002495013177394867 return: 'file contents'
+EVENT CALL id:71 thread:0 Location.toString receiver: Location { path: 'file2.js', lineRange: undefined }
+EVENT RETURN id:72 parent:71 elapsed:0.0000018600840121507645 return: 'file2.js'
+EVENT CALL id:73 thread:0 ContentRestrictions.instance receiver: [class ContentRestrictions]
+EVENT RETURN id:74 parent:73 elapsed:0.0000028479844331741333 return: ContentRestrictions { localRequired: false }
+EVENT CALL id:75 thread:0 ContentRestrictions.safeRestricted(rootOrAbsolute: '/other', relative: 'file3.js') receiver: ContentRestrictions { localRequired: false }
+EVENT CALL id:76 thread:0 ContentRestrictions.isRestricted(rootOrAbsolute: '/other', relative: 'file3.js') receiver: ContentRestrictions { localRequired: false }
+EVENT CALL id:77 thread:0 ContentRestrictions.normalizeAbsolute(path: '/other')
+EVENT RETURN id:78 parent:77 elapsed:0.000018292921595275402 return: '/other'
+EVENT CALL id:79 thread:0 ContentRestrictions.isRestrictedImpl(root: '/other', path: 'file3.js') receiver: ContentRestrictions { localRequired: false }
+EVENT RETURN id:80 parent:79 elapsed:0.000006029964424669743 return: false
+EVENT RETURN id:81 parent:76 elapsed:0.0002755499444901943 return: false
+EVENT RETURN id:82 parent:75 elapsed:0.0004358569858595729 return: false
+EVENT CALL id:83 thread:0 utils.verbose
+EVENT RETURN id:84 parent:83 elapsed:5.509937182068825e-7 return: false
+EVENT CALL id:85 thread:0 Location.snippet(contents: 'file contents') receiver: Location { path: 'file3.js', lineRange: undefined }
+EVENT RETURN id:86 parent:85 elapsed:0.000002522021532058716 return: 'file contents'
+EVENT CALL id:87 thread:0 Location.toString receiver: Location { path: 'file3.js', lineRange: undefined }
+EVENT RETURN id:88 parent:87 elapsed:7.08969309926033e-7 return: 'file3.js'

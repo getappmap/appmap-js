@@ -1,0 +1,73 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.9.0"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: failedTests with a failure header reports 1 failed
+META source_location: packages/cli/tests/unit/compareReport/failedTests.spec.ts
+META test_status: succeeded
+
+CLASS package: cmds
+  CLASS package: compare-report
+    CLASS ReportSection
+      FUNC buildContext (packages/cli/src/cmds/compare-report/ReportSection.ts:122)
+      FUNC helpers (packages/cli/src/cmds/compare-report/ReportSection.ts:139) static
+      FUNC section_link (packages/cli/src/cmds/compare-report/ReportSection.ts:168) static
+      FUNC generateHeading (packages/cli/src/cmds/compare-report/ReportSection.ts:94)
+CLASS package: report
+  CLASS helpers
+    FUNC length (packages/cli/src/report/helpers.ts:8) static
+
+EVENT CALL id:1 thread:0 ReportSection.generateHeading(changeReport: { testFailures: [ [TestFailure] ] }) receiver: ReportSection {
+  section: 'failed-tests',
+  headingTemplate: [Function: ret] {
+    _setup: [Function (anonymous)],
+    _child: [Function (anonymous)]
+  },
+  detailsTemplate: [Function: ret] {
+    _setup: [Function (anonymous)],
+    _child: [Function (anonymous)]
+  }
+}
+EVENT CALL id:2 thread:0 ReportSection.buildContext(changeReport: { testFailures: [ [TestFailure] ] }) receiver: ReportSection {
+  section: 'failed-tests',
+  headingTemplate: [Function: ret] {
+    _setup: [Function (anonymous)],
+    _child: [Function (anonymous)]
+  },
+  detailsTemplate: [Function: ret] {
+    _setup: [Function (anonymous)],
+    _child: [Function (anonymous)]
+  }
+}
+EVENT RETURN id:3 parent:2 elapsed:0.00002466107252985239 return: { testFailures: [ [TestFailure] ] }
+EVENT CALL id:4 thread:0 ReportSection.helpers receiver: [class ReportSection]
+EVENT RETURN id:5 parent:4 elapsed:0.000008455011993646622 return: {
+  appmap_title: [Function: appmap_title],
+  group_appmaps_by_recorder_name: [Function: group_appmaps_by_recorder_name],
+  section_link: [Function: section_link]
+}
+EVENT CALL id:6 thread:0 helpers.length(undefined: [
+  TestFailure {
+    appmap: [AppMap],
+    testLocation: 'spec/controllers/users_controller_test.rb:10',
+    failureMessage: 'Expected response to be a <3XX: redirect>, but was a <200: OK>',
+    failureLocation: 'spec/controllers/users_controller_test.rb:10',
+    testSnippet: [Object]
+  }
+], undefined: {
+  lookupProperty: [Function: lookupProperty],
+  name: 'length',
+  hash: {},
+  data: { root: [Object] },
+  loc: { start: [Object], end: [Object] }
+})
+EVENT RETURN id:7 parent:6 elapsed:0.000008387956768274307 return: 1
+EVENT CALL id:8 thread:0 ReportSection.section_link(sectionName: 'Failed tests', anchor: 'failed-tests', itemCount: 1, undefined: {
+  lookupProperty: [Function: lookupProperty],
+  name: 'section_link',
+  hash: {},
+  data: { root: [Object] },
+  loc: { start: [Object], end: [Object] }
+})
+EVENT RETURN id:9 parent:8 elapsed:0.000005152076482772827 return: SafeString { string: '[Failed tests](#failed-tests)' }
+EVENT RETURN id:10 parent:1 elapsed:0.0018115800339728594 return: '| [Failed tests](#failed-tests) | :warning: 1 failed |'

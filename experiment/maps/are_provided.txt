@@ -1,0 +1,188 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.9.0"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: removedAppMaps when there is a removed AppMap details are provided
+META source_location: packages/cli/tests/unit/compareReport/removedAppMaps.spec.ts
+META test_status: succeeded
+
+CLASS package: cmds
+  CLASS package: compare-report
+    CLASS AppMap
+      FUNC name (packages/cli/src/cmds/compare-report/ChangeReport.ts:36)
+      FUNC recorderName (packages/cli/src/cmds/compare-report/ChangeReport.ts:44)
+      FUNC displayName (packages/cli/src/cmds/compare-report/ChangeReport.ts:48)
+    CLASS RemovedAppMapsPreprocessor
+      FUNC constructor (packages/cli/src/cmds/compare-report/Preprocessor.ts:165)
+      FUNC numElements (packages/cli/src/cmds/compare-report/Preprocessor.ts:167)
+    CLASS Preprocessor
+      FUNC buildPreprocessor (packages/cli/src/cmds/compare-report/Preprocessor.ts:196) static
+    CLASS ReportSection
+      FUNC generateDetails (packages/cli/src/cmds/compare-report/ReportSection.ts:100)
+      FUNC buildContext (packages/cli/src/cmds/compare-report/ReportSection.ts:122)
+      FUNC helpers (packages/cli/src/cmds/compare-report/ReportSection.ts:139) static
+      FUNC appmap_title (packages/cli/src/cmds/compare-report/ReportSection.ts:161) static
+CLASS package: report
+  CLASS urlHelpers
+    FUNC buildUrlString (packages/cli/src/report/urlHelpers.ts:14) static
+    FUNC urlHelpers (packages/cli/src/report/urlHelpers.ts:20) static
+    FUNC appmap_url (packages/cli/src/report/urlHelpers.ts:55) static
+
+EVENT CALL id:1 thread:0 ReportSection.generateDetails(changeReport: { removedAppMaps: [ [AppMap] ] }, options: {
+  sourceURL: 'file:///projects/my-project',
+  appmapURL: 'https://getappmap.com',
+  baseDir: '/projects/my-project'
+}) receiver: ReportSection {
+  section: 'removed-appmaps',
+  headingTemplate: [Function: ret] {
+    _setup: [Function (anonymous)],
+    _child: [Function (anonymous)]
+  },
+  detailsTemplate: [Function: ret] {
+    _setup: [Function (anonymous)],
+    _child: [Function (anonymous)]
+  }
+}
+EVENT CALL id:2 thread:0 Preprocessor.buildPreprocessor(section: 'removed-appmaps', report: { removedAppMaps: [ [AppMap] ] })
+EVENT CALL id:3 thread:0 RemovedAppMapsPreprocessor.constructor(report: { removedAppMaps: [ [AppMap] ] })
+EVENT RETURN id:4 parent:3 elapsed:0.0000021259766072034836
+EVENT RETURN id:5 parent:2 elapsed:0.0001689479686319828 return: RemovedAppMapsPreprocessor { report: { removedAppMaps: [Array] } }
+EVENT CALL id:6 thread:0 RemovedAppMapsPreprocessor.numElements receiver: RemovedAppMapsPreprocessor { report: { removedAppMaps: [Array] } }
+EVENT RETURN id:7 parent:6 elapsed:0.0000012719538062810898 return: 1
+EVENT CALL id:8 thread:0 ReportSection.buildContext(changeReport: { removedAppMaps: [ [AppMap] ] }) receiver: ReportSection {
+  section: 'removed-appmaps',
+  headingTemplate: [Function: ret] {
+    _setup: [Function (anonymous)],
+    _child: [Function (anonymous)]
+  },
+  detailsTemplate: [Function: ret] {
+    _setup: [Function (anonymous)],
+    _child: [Function (anonymous)]
+  }
+}
+EVENT RETURN id:9 parent:8 elapsed:0.000009909039363265038 return: { removedAppMaps: [ [AppMap] ] }
+EVENT CALL id:10 thread:0 ReportSection.helpers receiver: [class ReportSection]
+EVENT RETURN id:11 parent:10 elapsed:0.0000011810334399342537 return: {
+  appmap_title: [Function: appmap_title],
+  group_appmaps_by_recorder_name: [Function: group_appmaps_by_recorder_name],
+  section_link: [Function: section_link]
+}
+EVENT CALL id:12 thread:0 urlHelpers.urlHelpers(options: {
+  sourceURL: 'file:///projects/my-project',
+  appmapURL: 'https://getappmap.com',
+  baseDir: '/projects/my-project'
+})
+EVENT RETURN id:13 parent:12 elapsed:0.000009921030141413212 return: {
+  appmap_url: [Function: appmap_url],
+  appmap_diff_url: [Function: appmap_diff_url],
+  appmap_url_with_finding: [Function: appmap_url_with_finding],
+  first_source_link: [Function: first_source_link],
+  source_link: [Function: source_link],
+  source_link_html: [Function: source_link_html],
+  source_url: [Function: source_url]
+}
+EVENT CALL id:14 thread:0 ReportSection.appmap_title(appmap: AppMap {
+  id: 'minitest/users_controller_test',
+  metadata: {
+    name: 'Users controller test',
+    client: {},
+    recorder: [Object],
+    source_location: 'spec/controllers/users_controller_test.rb:10'
+  },
+  changed: false,
+  sourceDiff: undefined
+}, undefined: {
+  lookupProperty: [Function: lookupProperty],
+  name: 'appmap_title',
+  hash: {},
+  data: {
+    root: [Object],
+    _parent: [Object],
+    key: 0,
+    index: 0,
+    first: true,
+    last: true
+  },
+  loc: { start: [Object], end: [Object] }
+})
+EVENT CALL id:15 thread:0 AppMap.recorderName receiver: AppMap {
+  id: 'minitest/users_controller_test',
+  metadata: {
+    name: 'Users controller test',
+    client: {},
+    recorder: [Object],
+    source_location: 'spec/controllers/users_controller_test.rb:10'
+  },
+  changed: false,
+  sourceDiff: undefined
+}
+EVENT RETURN id:16 parent:15 elapsed:0.000001084059476852417 return: 'rspec'
+EVENT CALL id:17 thread:0 AppMap.recorderName receiver: AppMap {
+  id: 'minitest/users_controller_test',
+  metadata: {
+    name: 'Users controller test',
+    client: {},
+    recorder: [Object],
+    source_location: 'spec/controllers/users_controller_test.rb:10'
+  },
+  changed: false,
+  sourceDiff: undefined
+}
+EVENT RETURN id:18 parent:17 elapsed:4.7497451305389404e-7 return: 'rspec'
+EVENT CALL id:19 thread:0 AppMap.displayName receiver: AppMap {
+  id: 'minitest/users_controller_test',
+  metadata: {
+    name: 'Users controller test',
+    client: {},
+    recorder: [Object],
+    source_location: 'spec/controllers/users_controller_test.rb:10'
+  },
+  changed: false,
+  sourceDiff: undefined
+}
+EVENT CALL id:20 thread:0 AppMap.name receiver: AppMap {
+  id: 'minitest/users_controller_test',
+  metadata: {
+    name: 'Users controller test',
+    client: {},
+    recorder: [Object],
+    source_location: 'spec/controllers/users_controller_test.rb:10'
+  },
+  changed: false,
+  sourceDiff: undefined
+}
+EVENT RETURN id:21 parent:20 elapsed:0.000010680058039724827 return: 'Users controller test'
+EVENT RETURN id:22 parent:19 elapsed:0.00030759500805288553 return: 'Users controller test'
+EVENT RETURN id:23 parent:14 elapsed:0.0010332859819754958 return: '[rspec] Users controller test'
+EVENT CALL id:24 thread:0 urlHelpers.appmap_url(revisionName: 'base', appmap: AppMap {
+  id: 'minitest/users_controller_test',
+  metadata: {
+    name: 'Users controller test',
+    client: {},
+    recorder: [Object],
+    source_location: 'spec/controllers/users_controller_test.rb:10'
+  },
+  changed: false,
+  sourceDiff: undefined
+}, undefined: {
+  lookupProperty: [Function: lookupProperty],
+  name: 'appmap_url',
+  hash: {},
+  data: {
+    root: [Object],
+    _parent: [Object],
+    key: 0,
+    index: 0,
+    first: true,
+    last: true
+  },
+  loc: { start: [Object], end: [Object] }
+})
+EVENT CALL id:25 thread:0 urlHelpers.buildUrlString(appmapURL: 'https://getappmap.com', searchParams: { path: 'base/minitest/users_controller_test.appmap.json' })
+EVENT RETURN id:26 parent:25 elapsed:0.00006321596447378397 return: 'https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json'
+EVENT RETURN id:27 parent:24 elapsed:0.00045912095811218023 return: SafeString {
+  string: 'https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json'
+}
+EVENT RETURN id:28 parent:1 elapsed:0.004717467003501952 return: '<h2 id="removed-appmaps">✖️ Removed AppMaps</h2>\n' +
+  '\n' +
+  '[[rspec] Users controller test](https://getappmap.com/?path=base%2Fminitest%2Fusers_controller_test.appmap.json)\n'

@@ -1,0 +1,18 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant HTTP_server_requests as "HTTP server requests"
+participant ticket as "ticket"
+participant cmds as "cmds"
+  [->ticket: <u>createRequest</u> <color:gray> 3.98 ms</color>
+  activate ticket
+  [<--ticket: <i>Promise</i>
+  deactivate ticket
+  [->HTTP_server_requests: POST /api/v2/requests.json <color:gray> 0.407 ms</color>
+  activate HTTP_server_requests
+  [<--HTTP_server_requests: <i>400</i>
+  deactivate HTTP_server_requests
+  [->cmds: constructor <color:gray> 0.0558 ms</color>
+  activate cmds
+  [<--cmds: void
+  deactivate cmds
+@enduml

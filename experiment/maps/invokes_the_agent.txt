@@ -1,0 +1,744 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.11.1"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: ExplainCommand follow-up question invokes the agent
+META source_location: packages/navie/test/commands/explain-command.spec.ts
+META test_status: succeeded
+
+CLASS package: src
+  CLASS package: commands
+    CLASS explain-command
+      FUNC isProjectInfoEnabled (packages/navie/src/commands/explain-command.ts:219) static
+      FUNC isGathererEnabled (packages/navie/src/commands/explain-command.ts:224) static
+    CLASS ExplainCommand
+      FUNC constructor (packages/navie/src/commands/explain-command.ts:33)
+  CLASS package: lib
+    CLASS get-most-recent-messages
+      FUNC filterNonConversationalMessages (packages/navie/src/lib/get-most-recent-messages.ts:17) static
+      FUNC getMostRecentMessages (packages/navie/src/lib/get-most-recent-messages.ts:38) static
+    CLASS UserOptions
+      FUNC isEnabled (packages/navie/src/lib/parse-options.ts:10)
+      FUNC numberValue (packages/navie/src/lib/parse-options.ts:14)
+      FUNC booleanValue (packages/navie/src/lib/parse-options.ts:26)
+      FUNC stringValue (packages/navie/src/lib/parse-options.ts:35)
+      FUNC constructor (packages/navie/src/lib/parse-options.ts:4)
+  CLASS AgentOptions
+    FUNC constructor (packages/navie/src/agent.ts:18)
+  CLASS PromptInteractionEvent
+    FUNC updateState (packages/navie/src/interaction-history.ts:103)
+    FUNC constructor (packages/navie/src/interaction-history.ts:78)
+    FUNC fullContent (packages/navie/src/interaction-history.ts:99)
+  CLASS CompletionEvent
+    FUNC constructor (packages/navie/src/interaction-history.ts:130)
+  CLASS InteractionEvent
+    FUNC constructor (packages/navie/src/interaction-history.ts:19)
+  CLASS InteractionHistory
+    FUNC addEvent (packages/navie/src/interaction-history.ts:312)
+    FUNC buildState (packages/navie/src/interaction-history.ts:336)
+    FUNC validateEvent (packages/navie/src/interaction-history.ts:356)
+CLASS package: test
+  CLASS package: commands
+    CLASS explain-command.spec
+      FUNC explain (packages/navie/test/commands/explain-command.spec.ts:102) static
+      FUNC buildExplainCommand (packages/navie/test/commands/explain-command.spec.ts:42) static
+      FUNC defaultExplainOptions (packages/navie/test/commands/explain-command.spec.ts:55) static
+      FUNC chatHistory (packages/navie/test/commands/explain-command.spec.ts:65) static
+      FUNC buildCommandRequest (packages/navie/test/commands/explain-command.spec.ts:77) static
+
+EVENT CALL id:1 thread:0 explain-command/spec.defaultExplainOptions
+EVENT RETURN id:2 parent:1 elapsed:0.0000030529918149113655 return: {
+  agentMode: 'explain',
+  modelName: 'gpt-3.5-turbo',
+  responseTokens: 1000,
+  tokenLimit: 5000,
+  temperature: 0.5
+}
+EVENT CALL id:3 thread:0 explain-command/spec.buildExplainCommand(options: {
+  agentMode: 'explain',
+  modelName: 'gpt-3.5-turbo',
+  responseTokens: 1000,
+  tokenLimit: 5000,
+  temperature: 0.5
+})
+EVENT CALL id:4 thread:0 ExplainCommand.constructor(options: {
+  agentMode: 'explain',
+  modelName: 'gpt-3.5-turbo',
+  responseTokens: 1000,
+  tokenLimit: 5000,
+  temperature: 0.5
+}, interactionHistory: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}, completionService: {
+  complete: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  },
+  json: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  },
+  modelName: 'mock',
+  miniModelName: 'mock-mini',
+  temperature: 0.5
+}, classifierService: {
+  classifyQuestion: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  }
+}, agentSelectionService: {
+  selectAgent: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  }
+}, codeSelectionService: CodeSelectionService {
+  interactionHistory: InteractionHistory {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    events: [],
+    acceptPinnedFileContext: true,
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  }
+}, projectInfoService: {
+  lookupProjectInfo: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  },
+  promptProjectInfo: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  }
+}, memoryService: {
+  predictSummary: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  }
+})
+EVENT RETURN id:5 parent:4 elapsed:0.0000012840027920901775
+EVENT RETURN id:6 parent:3 elapsed:0.00036943104350939393 return: ExplainCommand {
+  options: {
+    agentMode: 'explain',
+    modelName: 'gpt-3.5-turbo',
+    responseTokens: 1000,
+    tokenLimit: 5000,
+    temperature: 0.5
+  },
+  interactionHistory: InteractionHistory {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    events: [],
+    acceptPinnedFileContext: true,
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  },
+  completionService: {
+    complete: [Function],
+    json: [Function],
+    modelName: 'mock',
+    miniModelName: 'mock-mini',
+    temperature: 0.5
+  },
+  classifierService: { classifyQuestion: [Function] },
+  agentSelectionService: { selectAgent: [Function] },
+  codeSelectionService: CodeSelectionService { interactionHistory: [InteractionHistory] },
+  projectInfoService: { lookupProjectInfo: [Function], promptProjectInfo: [Function] },
+  memoryService: { predictSummary: [Function] }
+}
+EVENT CALL id:7 thread:0 explain-command/spec.buildCommandRequest
+EVENT CALL id:8 thread:0 UserOptions.constructor(options: Map(0) {})
+EVENT RETURN id:9 parent:8 elapsed:5.550100468099117e-7
+EVENT RETURN id:10 parent:7 elapsed:0.000043894979171454906 return: {
+  question: 'What about user roles?',
+  userOptions: UserOptions { options: Map(0) {} }
+}
+EVENT CALL id:11 thread:0 explain-command/spec.chatHistory
+EVENT RETURN id:12 parent:11 elapsed:0.0000021649757400155067 return: [
+  { content: 'How does user management work?', role: 'user' },
+  { content: 'User management works by...', role: 'assistant' }
+]
+EVENT CALL id:13 thread:0 explain-command/spec.explain
+EVENT CALL id:14 thread:0 explain-command/spec.defaultExplainOptions
+EVENT RETURN id:15 parent:14 elapsed:0.0000010509975254535675 return: {
+  agentMode: 'explain',
+  modelName: 'gpt-3.5-turbo',
+  responseTokens: 1000,
+  tokenLimit: 5000,
+  temperature: 0.5
+}
+EVENT CALL id:16 thread:0 explain-command/spec.buildExplainCommand(options: {
+  agentMode: 'explain',
+  modelName: 'gpt-3.5-turbo',
+  responseTokens: 1000,
+  tokenLimit: 5000,
+  temperature: 0.5
+})
+EVENT CALL id:17 thread:0 ExplainCommand.constructor(options: {
+  agentMode: 'explain',
+  modelName: 'gpt-3.5-turbo',
+  responseTokens: 1000,
+  tokenLimit: 5000,
+  temperature: 0.5
+}, interactionHistory: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}, completionService: {
+  complete: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  },
+  json: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  },
+  modelName: 'mock',
+  miniModelName: 'mock-mini',
+  temperature: 0.5
+}, classifierService: {
+  classifyQuestion: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  }
+}, agentSelectionService: {
+  selectAgent: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  }
+}, codeSelectionService: CodeSelectionService {
+  interactionHistory: InteractionHistory {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    events: [],
+    acceptPinnedFileContext: true,
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  }
+}, projectInfoService: {
+  lookupProjectInfo: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  },
+  promptProjectInfo: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  }
+}, memoryService: {
+  predictSummary: [Function: mockConstructor] {
+    _isMockFunction: true,
+    getMockImplementation: [Function (anonymous)],
+    mock: [Getter/Setter],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: bound withImplementation],
+    mockImplementation: [Function (anonymous)],
+    mockReturnThis: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    getMockName: [Function (anonymous)]
+  }
+})
+EVENT RETURN id:18 parent:17 elapsed:0.000001334003172814846
+EVENT RETURN id:19 parent:16 elapsed:0.0003149039694108069 return: ExplainCommand {
+  options: {
+    agentMode: 'explain',
+    modelName: 'gpt-3.5-turbo',
+    responseTokens: 1000,
+    tokenLimit: 5000,
+    temperature: 0.5
+  },
+  interactionHistory: InteractionHistory {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    events: [],
+    acceptPinnedFileContext: true,
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  },
+  completionService: {
+    complete: [Function],
+    json: [Function],
+    modelName: 'mock',
+    miniModelName: 'mock-mini',
+    temperature: 0.5
+  },
+  classifierService: { classifyQuestion: [Function] },
+  agentSelectionService: { selectAgent: [Function] },
+  codeSelectionService: CodeSelectionService { interactionHistory: [InteractionHistory] },
+  projectInfoService: { lookupProjectInfo: [Function], promptProjectInfo: [Function] },
+  memoryService: { predictSummary: [Function] }
+}
+EVENT CALL id:20 thread:0 explain-command/spec.buildCommandRequest
+EVENT CALL id:21 thread:0 UserOptions.constructor(options: Map(0) {})
+EVENT RETURN id:22 parent:21 elapsed:5.769543349742889e-7
+EVENT RETURN id:23 parent:20 elapsed:0.00005366699770092964 return: {
+  question: 'What about user roles?',
+  userOptions: UserOptions { options: Map(0) {} }
+}
+EVENT CALL id:24 thread:0 explain-command/spec.chatHistory
+EVENT RETURN id:25 parent:24 elapsed:0.000002863991539925337 return: [
+  { content: 'How does user management work?', role: 'user' },
+  { content: 'User management works by...', role: 'assistant' }
+]
+EVENT CALL id:26 thread:0 UserOptions.isEnabled(key: 'classify', defaultValue: true) receiver: UserOptions { options: Map(0) {} }
+EVENT CALL id:27 thread:0 UserOptions.booleanValue(key: 'classify', defaultValue: true) receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:28 parent:27 elapsed:0.0000010709627531468868 return: true
+EVENT RETURN id:29 parent:26 elapsed:0.000051273033022880554 return: true
+EVENT CALL id:30 thread:0 UserOptions.numberValue(key: 'tokenlimit') receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:31 parent:30 elapsed:0.0000037460122257471085
+EVENT CALL id:32 thread:0 explain-command.isProjectInfoEnabled(userOptions: UserOptions { options: Map(0) {} })
+EVENT CALL id:33 thread:0 UserOptions.isEnabled(key: 'diff', defaultValue: false) receiver: UserOptions { options: Map(0) {} }
+EVENT CALL id:34 thread:0 UserOptions.booleanValue(key: 'diff', defaultValue: false) receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:35 parent:34 elapsed:5.849869921803474e-7 return: false
+EVENT RETURN id:36 parent:33 elapsed:0.00007150694727897644 return: false
+EVENT CALL id:37 thread:0 UserOptions.isEnabled(key: 'projectinfo', defaultValue: true) receiver: UserOptions { options: Map(0) {} }
+EVENT CALL id:38 thread:0 UserOptions.booleanValue(key: 'projectinfo', defaultValue: true) receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:39 parent:38 elapsed:5.610054358839989e-7 return: true
+EVENT RETURN id:40 parent:37 elapsed:0.0000673930044285953 return: true
+EVENT RETURN id:41 parent:32 elapsed:0.00035159499384462833 return: true
+EVENT CALL id:42 thread:0 UserOptions.stringValue(key: 'base') receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:43 parent:42 elapsed:0.000020946958102285862
+EVENT CALL id:44 thread:0 UserOptions.isEnabled(key: 'diff', defaultValue: false) receiver: UserOptions { options: Map(0) {} }
+EVENT CALL id:45 thread:0 UserOptions.booleanValue(key: 'diff', defaultValue: false) receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:46 parent:45 elapsed:9.989598765969276e-7 return: false
+EVENT RETURN id:47 parent:44 elapsed:0.00005438999505713582 return: false
+EVENT RETURN id:48 parent:13 elapsed:0.004570522054564208 return: Promise {
+  [
+    'The user management system is a system ',
+    'that allows users to create and manage their own accounts.'
+  ]
+}
+EVENT CALL id:49 thread:0 AgentOptions.constructor(question: 'What about user roles?', aggregateQuestion: 'How does user management work?\n\nWhat about user roles?', userOptions: UserOptions { options: Map(0) {} }, chatHistory: [
+  { content: 'How does user management work?', role: 'user' },
+  { content: 'User management works by...', role: 'assistant' }
+], projectInfo: [ { appmapConfig: [Object], appmapStats: [Object] } ], codeSelection: undefined, contextLabels: [])
+EVENT RETURN id:50 parent:49 elapsed:0.000003847992047667503
+EVENT CALL id:51 thread:0 UserOptions.numberValue(key: 'history') receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:52 parent:51 elapsed:0.000001568987499922514
+EVENT CALL id:53 thread:0 get-most-recent-messages.getMostRecentMessages(messages: [
+  { content: 'How does user management work?', role: 'user' },
+  { content: 'User management works by...', role: 'assistant' }
+], numMessages: undefined)
+EVENT CALL id:54 thread:0 get-most-recent-messages.filterNonConversationalMessages(messages: [
+  { content: 'How does user management work?', role: 'user' },
+  { content: 'User management works by...', role: 'assistant' }
+])
+EVENT RETURN id:55 parent:54 elapsed:0.00007005297811701894 return: [
+  { content: 'How does user management work?', role: 'user' },
+  { content: 'User management works by...', role: 'assistant' }
+]
+EVENT CALL id:56 thread:0 PromptInteractionEvent.constructor(name: 'historicalMessage', role: 'user', content: 'How does user management work?')
+EVENT CALL id:57 thread:0 InteractionEvent.constructor(type: 'prompt')
+EVENT RETURN id:58 parent:57 elapsed:0.0000026939669623970985
+EVENT RETURN id:59 parent:56 elapsed:0.000057564000599086285
+EVENT CALL id:60 thread:0 PromptInteractionEvent.constructor(name: 'historicalMessage', role: 'assistant', content: 'User management works by...')
+EVENT CALL id:61 thread:0 InteractionEvent.constructor(type: 'prompt')
+EVENT RETURN id:62 parent:61 elapsed:5.090259946882725e-7
+EVENT RETURN id:63 parent:60 elapsed:0.00003157701576128602
+EVENT RETURN id:64 parent:53 elapsed:0.00032801798079162836 return: [
+  PromptInteractionEvent {
+    type: 'prompt',
+    name: 'historicalMessage',
+    role: 'user',
+    content: 'How does user management work?',
+    prefix: undefined
+  },
+  PromptInteractionEvent {
+    type: 'prompt',
+    name: 'historicalMessage',
+    role: 'assistant',
+    content: 'User management works by...',
+    prefix: undefined
+  }
+]
+EVENT CALL id:65 thread:0 InteractionHistory.addEvent(event: PromptInteractionEvent {
+  type: 'prompt',
+  name: 'historicalMessage',
+  role: 'user',
+  content: 'How does user management work?',
+  prefix: undefined
+}) receiver: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}
+EVENT CALL id:66 thread:0 InteractionHistory.validateEvent(event: PromptInteractionEvent {
+  type: 'prompt',
+  name: 'historicalMessage',
+  role: 'user',
+  content: 'How does user management work?',
+  prefix: undefined
+}) receiver: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}
+EVENT RETURN id:67 parent:66 elapsed:0.0000015459954738616943 return: true
+EVENT RETURN id:68 parent:65 elapsed:0.00008052197517827153
+EVENT CALL id:69 thread:0 InteractionHistory.addEvent(event: PromptInteractionEvent {
+  type: 'prompt',
+  name: 'historicalMessage',
+  role: 'assistant',
+  content: 'User management works by...',
+  prefix: undefined
+}) receiver: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [ [PromptInteractionEvent] ],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}
+EVENT CALL id:70 thread:0 InteractionHistory.validateEvent(event: PromptInteractionEvent {
+  type: 'prompt',
+  name: 'historicalMessage',
+  role: 'assistant',
+  content: 'User management works by...',
+  prefix: undefined
+}) receiver: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [ [PromptInteractionEvent] ],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}
+EVENT RETURN id:71 parent:70 elapsed:5.990150384604931e-7 return: true
+EVENT RETURN id:72 parent:69 elapsed:0.0001109110307879746
+EVENT CALL id:73 thread:0 explain-command.isGathererEnabled(userOptions: UserOptions { options: Map(0) {} }, agentMode: undefined, contextLabels: [])
+EVENT CALL id:74 thread:0 UserOptions.isEnabled(key: 'gather', defaultValue: false) receiver: UserOptions { options: Map(0) {} }
+EVENT CALL id:75 thread:0 UserOptions.booleanValue(key: 'gather', defaultValue: false) receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:76 parent:75 elapsed:0.0000017629936337471008 return: false
+EVENT RETURN id:77 parent:74 elapsed:0.00005451199831441045 return: false
+EVENT RETURN id:78 parent:73 elapsed:0.00014041701797395945 return: false
+EVENT CALL id:79 thread:0 InteractionHistory.buildState receiver: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [ [PromptInteractionEvent], [PromptInteractionEvent] ],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}
+EVENT CALL id:80 thread:0 PromptInteractionEvent.updateState(state: InteractionState {
+  messages: [],
+  vectorTerms: [],
+  completionModel: undefined,
+  completionTemperature: undefined,
+  contextAvailable: undefined,
+  helpAvailable: undefined,
+  techStackTerms: undefined
+}) receiver: PromptInteractionEvent {
+  type: 'prompt',
+  name: 'historicalMessage',
+  role: 'user',
+  content: 'How does user management work?',
+  prefix: undefined
+}
+EVENT CALL id:81 thread:0 PromptInteractionEvent.fullContent receiver: PromptInteractionEvent {
+  type: 'prompt',
+  name: 'historicalMessage',
+  role: 'user',
+  content: 'How does user management work?',
+  prefix: undefined
+}
+EVENT RETURN id:82 parent:81 elapsed:0.0000061219907365739346 return: 'How does user management work?'
+EVENT RETURN id:83 parent:80 elapsed:0.00010969798313453794
+EVENT CALL id:84 thread:0 PromptInteractionEvent.updateState(state: InteractionState {
+  messages: [ [Object] ],
+  vectorTerms: [],
+  completionModel: undefined,
+  completionTemperature: undefined,
+  contextAvailable: undefined,
+  helpAvailable: undefined,
+  techStackTerms: undefined
+}) receiver: PromptInteractionEvent {
+  type: 'prompt',
+  name: 'historicalMessage',
+  role: 'assistant',
+  content: 'User management works by...',
+  prefix: undefined
+}
+EVENT CALL id:85 thread:0 PromptInteractionEvent.fullContent receiver: PromptInteractionEvent {
+  type: 'prompt',
+  name: 'historicalMessage',
+  role: 'assistant',
+  content: 'User management works by...',
+  prefix: undefined
+}
+EVENT RETURN id:86 parent:85 elapsed:0.000002529995981603861 return: 'User management works by...'
+EVENT RETURN id:87 parent:84 elapsed:0.000050920003559440374
+EVENT RETURN id:88 parent:79 elapsed:0.0003954080166295171 return: InteractionState {
+  messages: [ [Object], [Object] ],
+  vectorTerms: [],
+  completionModel: undefined,
+  completionTemperature: undefined,
+  contextAvailable: undefined,
+  helpAvailable: undefined,
+  techStackTerms: undefined
+}
+EVENT CALL id:89 thread:0 CompletionEvent.constructor(model: 'mock', temperature: 0.5)
+EVENT CALL id:90 thread:0 InteractionEvent.constructor(type: 'completion')
+EVENT RETURN id:91 parent:90 elapsed:0.0000024780165404081345
+EVENT RETURN id:92 parent:89 elapsed:0.000044546963181346655
+EVENT CALL id:93 thread:0 InteractionHistory.addEvent(event: CompletionEvent { type: 'completion', model: 'mock', temperature: 0.5 }) receiver: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [ [PromptInteractionEvent], [PromptInteractionEvent] ],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}
+EVENT CALL id:94 thread:0 InteractionHistory.validateEvent(event: CompletionEvent { type: 'completion', model: 'mock', temperature: 0.5 }) receiver: InteractionHistory {
+  _events: [Object: null prototype] {},
+  _eventsCount: 0,
+  _maxListeners: undefined,
+  events: [ [PromptInteractionEvent], [PromptInteractionEvent] ],
+  acceptPinnedFileContext: true,
+  [Symbol(shapeMode)]: false,
+  [Symbol(kCapture)]: false
+}
+EVENT RETURN id:95 parent:94 elapsed:0.000001494016032665968 return: true
+EVENT RETURN id:96 parent:93 elapsed:0.00006340898107737303
+EVENT CALL id:97 thread:0 UserOptions.constructor(options: Map(0) {})
+EVENT RETURN id:98 parent:97 elapsed:0.0000014060060493648052

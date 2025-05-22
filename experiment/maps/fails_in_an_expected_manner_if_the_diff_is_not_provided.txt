@@ -1,0 +1,46 @@
+META client: {"name":"appmap-node","version":"2.23.0","url":"https://github.com/getappmap/appmap-node"}
+META language: {"name":"javascript","engine":"Node.js","version":"v23.11.1"}
+META app: appmap-js
+META recorder: {"type":"tests","name":"jest"}
+META name: ReviewCommand fails in an expected manner if the diff is not provided
+META source_location: packages/navie/test/commands/review-command.spec.ts
+META test_status: succeeded
+
+CLASS package: src
+  CLASS package: lib
+    CLASS GitDiffError
+      FUNC constructor (packages/navie/src/lib/git-diff.ts:12)
+    CLASS git-diff
+      FUNC getGitDiff (packages/navie/src/lib/git-diff.ts:22) static
+    CLASS UserOptions
+      FUNC booleanValue (packages/navie/src/lib/parse-options.ts:26)
+      FUNC constructor (packages/navie/src/lib/parse-options.ts:4)
+  CLASS command
+    FUNC hasCodeSelectionArray (packages/navie/src/command.ts:26) static
+CLASS package: test
+  CLASS package: commands
+    CLASS review-command.spec
+      FUNC read (packages/navie/test/commands/review-command.spec.ts:69) static
+
+EVENT CALL id:1 thread:0 UserOptions.constructor(options: Map(0) {})
+EVENT RETURN id:2 parent:1 elapsed:0.000010324001777917147
+EVENT CALL id:3 thread:0 review-command/spec.read(input: Object [AsyncGenerator] {})
+EVENT CALL id:4 thread:0 UserOptions.booleanValue(key: 'review2', defaultValue: false) receiver: UserOptions { options: Map(0) {} }
+EVENT RETURN id:5 parent:4 elapsed:0.00000271195312961936 return: false
+EVENT CALL id:6 thread:0 command.hasCodeSelectionArray(request: {
+  question: 'review',
+  userOptions: UserOptions { options: Map(0) {} },
+  codeSelection: []
+})
+EVENT RETURN id:7 parent:6 elapsed:0.000005545967724174261 return: true
+EVENT CALL id:8 thread:0 git-diff.getGitDiff(req: {
+  question: 'review',
+  userOptions: UserOptions { options: Map(0) {} },
+  codeSelection: []
+})
+EVENT CALL id:9 thread:0 GitDiffError.constructor(message: 'Unable to obtain the diff for the current branch. Please try again.')
+EVENT RETURN id:10 parent:9 elapsed:0.00004899600753560662
+EVENT RETURN id:11 parent:8 elapsed:0.00009818194666877389 EXCEPTION GitDiffError: Unable to obtain the diff for the current branch. Please try again.
+EVENT RETURN id:12 parent:3 elapsed:0.000483023002743721 return: Promise {
+  'Unable to obtain the diff for the current branch. Please try again.'
+}

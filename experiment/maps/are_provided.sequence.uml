@@ -1,0 +1,59 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/getappmap/plantuml-theme/main/appmap-theme.puml
+participant compare_report as "compare-report"
+participant report as "report"
+  [->compare_report: generateDetails <color:gray> 4.72 ms</color>
+  activate compare_report
+    compare_report->compare_report: <u>buildPreprocessor</u> <color:gray> 0.169 ms</color>
+    activate compare_report
+      compare_report->compare_report: constructor <color:gray> 0.00213 ms</color>
+      activate compare_report
+      compare_report<--compare_report: void
+      deactivate compare_report
+    compare_report<--compare_report: RemovedAppMapsPreprocessor
+    deactivate compare_report
+    compare_report->compare_report: numElements <color:gray> 0.00127 ms</color>
+    activate compare_report
+    compare_report<--compare_report: Number
+    deactivate compare_report
+    compare_report->compare_report: buildContext <color:gray> 0.00991 ms</color>
+    activate compare_report
+    compare_report<--compare_report: Object
+    deactivate compare_report
+    compare_report->compare_report: <u>helpers</u> <color:gray> 0.00118 ms</color>
+    activate compare_report
+    compare_report<--compare_report: Object
+    deactivate compare_report
+    compare_report->report: <u>urlHelpers</u> <color:gray> 0.00992 ms</color>
+    activate report
+    compare_report<--report: Object
+    deactivate report
+    compare_report->compare_report: <u>appmap_title</u> <color:gray> 1.03 ms</color>
+    activate compare_report
+      Loop 2 times <color:gray> 0.00156 ms</color>
+        compare_report->compare_report: recorderName <color:gray> 0.00156 ms</color>
+        activate compare_report
+        compare_report<--compare_report: string
+        deactivate compare_report
+      End
+      compare_report->compare_report: displayName <color:gray> 0.308 ms</color>
+      activate compare_report
+        compare_report->compare_report: name <color:gray> 0.0107 ms</color>
+        activate compare_report
+        compare_report<--compare_report: string
+        deactivate compare_report
+      compare_report<--compare_report: string
+      deactivate compare_report
+    compare_report<--compare_report: string
+    deactivate compare_report
+    compare_report->report: <u>appmap_url</u> <color:gray> 0.459 ms</color>
+    activate report
+      report->report: <u>buildUrlString</u> <color:gray> 0.0632 ms</color>
+      activate report
+      report<--report: string
+      deactivate report
+    compare_report<--report: SafeString
+    deactivate report
+  [<--compare_report: string
+  deactivate compare_report
+@enduml
