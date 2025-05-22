@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.189.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.2...@appland/appmap-v3.189.3) (2025-05-22)
+
+
+### Bug Fixes
+
+* Update pkg dependency to use patched version ([173c58a](https://github.com/getappmap/appmap-js/commit/173c58a027ef1ab9b3fa81bfc9986af3dfc662a2))
+
 # [@appland/appmap-v3.189.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.1...@appland/appmap-v3.189.2) (2025-05-22)
 
 
