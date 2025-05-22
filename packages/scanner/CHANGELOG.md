@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.88.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.88.0...@appland/scanner-v1.88.1) (2025-05-22)
+
+
+### Bug Fixes
+
+* Update pkg dependency to use patched version ([173c58a](https://github.com/getappmap/appmap-js/commit/173c58a027ef1ab9b3fa81bfc9986af3dfc662a2))
+
 # [@appland/scanner-v1.88.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.87.1...@appland/scanner-v1.88.0) (2024-08-16)
 
 
