@@ -1,3 +1,18 @@
+# [@appland/navie-v1.45.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.44.2...@appland/navie-v1.45.0) (2025-05-23)
+
+
+### Bug Fixes
+
+* Don't spew error traces in console on Sonnet with Copilot ([eeef497](https://github.com/getappmap/appmap-js/commit/eeef49746d48b5385070dceb85a74a7906918d8c)), closes [#2232](https://github.com/getappmap/appmap-js/issues/2232)
+* Truncate context in json calls when required ([878b796](https://github.com/getappmap/appmap-js/commit/878b796d2cb31a0b7824274926c1fbbcad870c6c))
+
+
+### Features
+
+* Enhance context overflow handling with customizable actions and improve error messaging ([228760b](https://github.com/getappmap/appmap-js/commit/228760b32635a59f313dc91e4c854f28dcdb31cc))
+* Implement context overflow handling in Gatherer and add corresponding tests ([75c765d](https://github.com/getappmap/appmap-js/commit/75c765d2df118687db8088a03cffdcc0a459d6b1))
+* Implement proactive message truncation based on token count limit ([05f8344](https://github.com/getappmap/appmap-js/commit/05f83440cb49eefed691a194cc111b284cb873f0))
+
 # [@appland/navie-v1.44.2](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.44.1...@appland/navie-v1.44.2) (2025-05-11)
 
 
