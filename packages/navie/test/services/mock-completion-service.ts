@@ -5,9 +5,15 @@ import { ZodType } from 'zod';
 import type { Message } from '../../src';
 import CompletionService, { type Completion, Usage } from '../../src/services/completion-service';
 
-export default class MockCompletionService implements CompletionService {
+export default class MockCompletionService extends CompletionService {
+  constructor() {
+    super('mock-model', 0.7, {} as never);
+    jest.spyOn(this as never, 'complete');
+    jest.spyOn(this as never, 'json');
+  }
+
   // eslint-disable-next-line @typescript-eslint/require-await
-  async *complete(messages: readonly Message[]): Completion {
+  async *_complete(messages: readonly Message[]): Completion {
     const completion = this.completion(messages);
     for (const c of completion) {
       yield c;
@@ -44,7 +50,7 @@ export default class MockCompletionService implements CompletionService {
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  async json<T>(messages: Message[], schema: ZodType<T>): Promise<T | undefined> {
+  async _json<T>(messages: Message[], schema: ZodType<T>): Promise<T | undefined> {
     const completion = this.completion(messages).join('');
     return schema.parse(JSON.parse(completion));
   }

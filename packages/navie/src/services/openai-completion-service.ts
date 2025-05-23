@@ -1,12 +1,12 @@
 import { debug as makeDebug } from 'node:util';
 import { isNativeError } from 'node:util/types';
 
+import { getModelNameForTiktoken } from '@langchain/core/language_models/base';
 import { ChatOpenAI } from '@langchain/openai';
 import type { ChatCompletion, ChatCompletionChunk } from 'openai/resources/index';
 import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { warn } from 'console';
-import Message from '../message';
 import CompletionService, {
   Completion,
   CompletionRetries,
@@ -17,11 +17,17 @@ import CompletionService, {
   CompletionServiceOptions,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
+import Message, { CHARACTERS_PER_TOKEN } from '../message';
 import { APIError } from 'openai';
-import MessageTokenReducerService from './message-token-reducer-service';
 import { findObject, tryParseJson } from '../lib/parse-json';
 import trimFences from '../lib/trim-fences';
 import { performance } from 'node:perf_hooks';
+
+// For some reason this doesn't work as import
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { getEncodingNameForModel } = require('js-tiktoken/lite') as {
+  getEncodingNameForModel: (x: string) => string;
+};
 
 const debug = makeDebug('appmap:navie:openai-completion-service');
 
@@ -185,15 +191,15 @@ export type OpenAICompletionServiceOptions = CompletionServiceOptions & {
   apiUrl?: string;
 };
 
-export default class OpenAICompletionService implements CompletionService {
+export default class OpenAICompletionService extends CompletionService {
   constructor(
-    public readonly modelName: string,
-    public readonly temperature: number,
-    private trajectory: Trajectory,
-    private readonly messageTokenReducerService: MessageTokenReducerService,
+    modelName: string,
+    temperature: number,
+    trajectory: Trajectory,
     private apiUrl?: string,
     private apiKey?: string
   ) {
+    super(modelName, temperature, trajectory);
     this.model = new ChatOpenAI({
       modelName: this.modelName,
       temperature: this.temperature,
@@ -204,6 +210,15 @@ export default class OpenAICompletionService implements CompletionService {
       configuration: { baseURL: this.apiUrl },
       apiKey: this.apiKey,
     });
+    try {
+      getEncodingNameForModel(getModelNameForTiktoken(modelName));
+    } catch {
+      warn(`Unknown model ${modelName}, using estimated token count`);
+      this.model.getNumTokens = (c) =>
+        Promise.resolve(typeof c === 'string' ? c.length / CHARACTERS_PER_TOKEN : 0);
+    }
+    this.countMessageTokens = this.model.getNumTokens.bind(this.model);
+    this.maxTokens = contextWindowSize(modelName);
   }
   model: ChatOpenAI;
 
@@ -231,7 +246,7 @@ export default class OpenAICompletionService implements CompletionService {
   }
 
   // Request a JSON object with a given JSON schema.
-  async json<Schema extends z.ZodType>(
+  async _json<Schema extends z.ZodType>(
     messages: readonly Message[],
     schema: Schema,
     options?: CompleteOptions
@@ -279,9 +294,15 @@ export default class OpenAICompletionService implements CompletionService {
       const generateJson = this.isLocalModel ? generateLocal : generateOpenAi;
       warn(`Requesting JSON completion`);
       const startTime = performance.now();
-      const response = await generateJson(); // eslint-disable-line no-await-in-loop
-      const endTime = performance.now();
-      warn(`Received JSON response in ${(endTime.valueOf() - startTime.valueOf()) / 1000}s`);
+      let response;
+      try {
+        response = await generateJson(); // eslint-disable-line no-await-in-loop
+      } catch (error) {
+        await this.checkError(messages, error);
+      } finally {
+        const endTime = performance.now();
+        warn(`Received JSON response in ${(endTime.valueOf() - startTime.valueOf()) / 1000}s`);
+      }
       if (!response?.choices?.length) {
         warn(`Bad response, retrying (${i + 1}/${maxRetries})`);
         continue; // eslint-disable-line no-continue
@@ -314,7 +335,8 @@ export default class OpenAICompletionService implements CompletionService {
           const parsed = tryParseJson(completion.content, trimFences, findObject);
           schema.parse(parsed);
           return parsed;
-        } catch {
+        } catch (e) {
+          warn(`Failed to parse JSON: ${String(e)}`);
           // fall through
         }
       }
@@ -325,12 +347,12 @@ export default class OpenAICompletionService implements CompletionService {
     return undefined;
   }
 
-  async *complete(messages: readonly Message[], options?: CompleteOptions): Completion {
+  async *_complete(messages: readonly Message[], options?: CompleteOptions): Completion {
     const tokens = new Array<string>();
     const model = options?.model ?? this.model.modelName;
     const isO1 = this.modelName.startsWith('o1-');
     const usage = new Usage(COST_PER_M_TOKEN[model]);
-    let sentMessages: Message[] = mergeSystemMessages(messages);
+    const sentMessages: Message[] = mergeSystemMessages(messages);
 
     if (isO1) {
       // O1 does not support system messages, so prepend the system message to the newest user message.
@@ -420,16 +442,8 @@ export default class OpenAICompletionService implements CompletionService {
         }
         break; // Exit loop if successful
       } catch (error) {
-        if (!(error instanceof APIError)) throw error; // only retry on server errors
+        await this.checkError(messages, error);
         if (tokens.length || attempt === CompletionRetries - 1) throw error; // Rethrow if tokens were yielded or max attempts reached
-        if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
-          warn('Context length exceeded. Reducing token count and retrying.');
-          sentMessages = await this.messageTokenReducerService.reduceMessageTokens(
-            sentMessages,
-            model,
-            { message: error.message }
-          );
-        } else if (error.type !== 'server_error') throw error; // only retry on server errors
         await new Promise(
           (resolve) => setTimeout(resolve, CompletionRetryDelay * Math.pow(2, attempt)) // Exponential backoff
         );
@@ -440,6 +454,17 @@ export default class OpenAICompletionService implements CompletionService {
 
     warn(usage.toString());
     return usage;
+  }
+
+  private async checkError(messages: readonly Message[], error: unknown) {
+    if (!(error instanceof APIError)) throw error; // only retry on server errors
+    if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
+      const message = error.message;
+      // messages are like "This model's maximum context length is 16385 tokens. However, your messages resulted in 40007 tokens"
+      const promptLength = parseInt(message.match(/in (\d+) tokens/)?.[1] ?? '0', 10);
+      const maxTokens = parseInt(message.match(/maximum context length is (\d+)/)?.[1] ?? '0', 10);
+      throw await this.promptTooLong(messages, error, promptLength, maxTokens);
+    } else if (error.type !== 'server_error') throw error; // only retry on server errors
   }
 }
 
@@ -462,4 +487,12 @@ function schemaPrompt(jsonSchema: Record<string, unknown>): Message {
       2
     )}`,
   };
+}
+
+function contextWindowSize(modelName: string): number {
+  if (modelName.startsWith('gpt-4')) return 128_000;
+  if (modelName.startsWith('gpt-4.1')) return 1_048_576;
+  if (modelName.startsWith('gpt-3.5')) return 16_384;
+  if (modelName.startsWith('o')) return 128_000;
+  return Infinity;
 }
