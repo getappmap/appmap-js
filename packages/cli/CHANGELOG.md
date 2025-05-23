@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.189.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.3...@appland/appmap-v3.189.4) (2025-05-23)
+
+
+### Bug Fixes
+
+* Limit number of subdirectory entries when listing files ([35db9ca](https://github.com/getappmap/appmap-js/commit/35db9ca00ff125e86648533227933cb6419e18f8))
+
 # [@appland/appmap-v3.189.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.2...@appland/appmap-v3.189.3) (2025-05-22)
 
 
