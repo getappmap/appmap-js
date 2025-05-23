@@ -4,12 +4,13 @@ import { INavieProvider } from '../explain/navie/inavie';
 
 // We don't want to support context lookups
 const NOP = () => Promise.resolve([]);
+const NOP_OBJECT = () => Promise.resolve(undefined);
 
 export function getSuggestions(
   navieProvider: INavieProvider,
   threadId: string
 ): Promise<NavieRpc.V1.Suggest.Response> {
-  const navie = navieProvider(NOP, NOP, NOP);
+  const navie = navieProvider(NOP, NOP, NOP, NOP_OBJECT as any);
   return new Promise((resolve, reject) => {
     navie
       .on('token', (response: string) =>

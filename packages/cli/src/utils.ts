@@ -179,7 +179,6 @@ export function isNodeError(error: unknown, code?: string): error is NodeJS.Errn
   return error instanceof Error && (!code || (error as NodeJS.ErrnoException).code === code);
 }
 
-
 /**
  * Lists all matching files in a directory, and passes them to an optional function.
  */
@@ -282,4 +281,16 @@ export function formatHttpServerRequest(event: Event): string {
         : '<none>',
   };
   return [data.method, data.path, `(${data.statusCode})`].join(' ');
+}
+
+/**
+ * Convert a kebab-case string to camelCase.
+ */
+export function kebabToCamelCase(kebabStr: string): string {
+  const tokens = kebabStr.split('-');
+  const [firstToken, ...remainingTokens] = tokens;
+  const capitalizedTokens = remainingTokens.map((token) =>
+    token.length === 0 ? token : token.charAt(0).toUpperCase() + token.slice(1)
+  );
+  return [firstToken, ...capitalizedTokens].join('');
 }

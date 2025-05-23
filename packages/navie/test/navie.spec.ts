@@ -3,12 +3,14 @@ import { ContextV2 } from '../src/context';
 import { HelpProvider } from '../src/help';
 import { ClientRequest, NavieOptions, default as navie } from '../src/navie';
 import { ProjectInfoProvider } from '../src/project-info';
+import { TestInvocationProvider } from '../src/test-invocation';
 
 describe('Navie Function', () => {
   let clientRequest: ClientRequest;
   let contextProvider: ContextV2.ContextProvider;
   let projectInfoProvider: ProjectInfoProvider;
   let helpProvider: HelpProvider;
+  let testInvocationProvider: TestInvocationProvider;
   let options: NavieOptions;
 
   beforeEach(() => {
@@ -16,6 +18,7 @@ describe('Navie Function', () => {
     contextProvider = jest.fn().mockResolvedValue({});
     projectInfoProvider = jest.fn().mockResolvedValue({});
     helpProvider = jest.fn().mockResolvedValue({});
+    testInvocationProvider = jest.fn().mockResolvedValue({});
     options = new NavieOptions();
   });
 
@@ -25,6 +28,7 @@ describe('Navie Function', () => {
       contextProvider,
       projectInfoProvider,
       helpProvider,
+      testInvocationProvider,
       options
     );
     const result = [];
