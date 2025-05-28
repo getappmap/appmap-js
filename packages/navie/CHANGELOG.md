@@ -1,3 +1,11 @@
+# [@appland/navie-v1.46.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.45.0...@appland/navie-v1.46.0) (2025-05-28)
+
+
+### Features
+
+* Add new review2 command and supporting services ([fa742cb](https://github.com/getappmap/appmap-js/commit/fa742cb814ee5952142c2c2cf0013868c806899e))
+* Integrate test invocation into Navie RPC context ([6bfd96d](https://github.com/getappmap/appmap-js/commit/6bfd96d8f5504d3897ca892cb7be20196af83b1c))
+
 # [@appland/navie-v1.45.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.44.2...@appland/navie-v1.45.0) (2025-05-23)
 
 
