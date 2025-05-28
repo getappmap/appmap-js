@@ -57,6 +57,18 @@ describe(ModelRegistry, () => {
       modelRegistry.add(model);
       expect(modelRegistry.list()).toEqual([model]);
     });
+    it('selects a pending model if it did not exist before', () => {
+      const model = {
+        id: 'model',
+        name: 'Test Model',
+        provider: 'provider',
+        createdAt: '2023-01-01',
+      };
+      modelRegistry.select('provider:model');
+      expect(modelRegistry.selectedModel).toBeUndefined();
+      modelRegistry.add(model);
+      expect(modelRegistry.selectedModel).toEqual(model);
+    });
   });
 
   describe('list', () => {
@@ -215,6 +227,17 @@ describe(ModelRegistry, () => {
       fetchMock.mockImplementation(() => Promise.reject(new Error('Fetch failed')));
       await modelRegistry.refresh();
       expect(modelRegistry.list()).toStrictEqual([]);
+    });
+
+    it('selects a pending model if it did not exist before', async () => {
+      delete process.env.ANTHROPIC_API_KEY;
+      delete process.env.OPENAI_API_KEY;
+
+      modelRegistry.select('Ollama:example');
+      expect(modelRegistry.selectedModel).toBeUndefined();
+
+      await modelRegistry.refresh();
+      expect(modelRegistry.selectedModel?.id).toEqual('example');
     });
   });
 });
