@@ -24,6 +24,7 @@ export default class ModelRegistry {
   private clientModels = new Map<string, NavieRpc.V1.Models.ClientModel>();
   private apiModels: NavieRpc.V1.Models.Model[] = [];
   private _selectedModel?: NavieRpc.V1.Models.Model;
+  private _selectedModelId?: string;
 
   static readonly instance = new ModelRegistry();
 
@@ -51,10 +52,11 @@ export default class ModelRegistry {
 
     let model = findModel(this.apiModels, id, provider);
     model = model ?? findModel(Array.from(this.clientModels.values()), id, provider);
-    if (model) {
+    if (model && model !== this.selectedModel) {
       console.log(`[ModelRegistry] Selecting model "${modelId}"`);
     } else if (!model) {
-      console.warn(`[ModelRegistry] Model ${modelId} not found`);
+      this._selectedModelId = modelId;
+      return;
     }
 
     this._selectedModel = model;
@@ -67,6 +69,7 @@ export default class ModelRegistry {
   add(model: NavieRpc.V1.Models.ClientModel) {
     const key = `${model.provider.toLowerCase()}:${model.id.toLowerCase()}`;
     this.clientModels.set(key, model);
+    this.onUpdateModels();
   }
 
   list(): NavieRpc.V1.Models.ListModel[] {
@@ -127,5 +130,20 @@ export default class ModelRegistry {
           result.status === 'fulfilled'
       )
       .flatMap((result) => result.value); // eslint-disable-line @typescript-eslint/no-unsafe-return
+
+    this.onUpdateModels();
+  }
+
+  private onUpdateModels() {
+    this.trySelectModel();
+  }
+
+  private trySelectModel() {
+    if (this.selectedModel || !this._selectedModelId) return;
+
+    this.select(this._selectedModelId);
+    if (this.selectedModel) {
+      this._selectedModelId = undefined;
+    }
   }
 }
