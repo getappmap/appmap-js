@@ -1,0 +1,29 @@
+Use a tag prefix without a module in parentheses; keep the commit message 
+subject short and simple (up to 60 chars); capitalize the first word after prefix,
+but do not capitalize the prefix (keep it all-lower-case).
+
+Use commit descriptions, explaining the change and especially any tricky bits.
+Wrap the descriptions at line length 80.
+
+Here's an example of a good commit message:
+
+    fix: Patch pkg to avoid a race condition when creating directories
+
+    Replace custom recursive directory creation with built-in recursive mkdir in
+    node addon loading.
+
+    When multiple packaged applications try to start simultaneously, they can
+    encounter race conditions when creating temporary directories for loading native
+    node addons. This manifests as an "EEXIST" error when calling `mkdirSync()`.
+
+    The issue occurs in the native module loading code path where pkg needs to
+    extract native addons to a temporary location before they can be loaded via
+    `process.dlopen()`. The current implementation uses a custom
+    `createDirRecursively()` function that has a race condition - it checks if a
+    directory exists and then tries to create it, but another process could create
+    the directory between the check and creation.
+
+    Node.js has built-in support for recursive directory creation via the
+    `recursive: true` option in `mkdirSync()`. This handles race conditions properly
+    - if the directory already exists, it will not throw an error. This is exactly
+    what we need.
