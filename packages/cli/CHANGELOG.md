@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.190.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.4...@appland/appmap-v3.190.0) (2025-05-28)
+
+
+### Features
+
+* Add RPC endpoints for test invocation ([9aea807](https://github.com/getappmap/appmap-js/commit/9aea807260acbe54048aa9f1bb471882ef8da0a1))
+* Implement core test invocation logic in CLI ([4e9ea04](https://github.com/getappmap/appmap-js/commit/4e9ea0492ec540d2fd0b4aa6716c61fb94a84273))
+* Integrate test invocation into Navie RPC context ([6bfd96d](https://github.com/getappmap/appmap-js/commit/6bfd96d8f5504d3897ca892cb7be20196af83b1c))
+
 # [@appland/appmap-v3.189.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.3...@appland/appmap-v3.189.4) (2025-05-23)
 
 
