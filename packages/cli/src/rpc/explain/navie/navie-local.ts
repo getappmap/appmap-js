@@ -2,7 +2,15 @@ import { log, warn } from 'console';
 import EventEmitter from 'events';
 import { randomUUID } from 'crypto';
 
-import { ContextV2, Help, Navie, navie, ProjectInfo, UserContext } from '@appland/navie';
+import {
+  ContextV2,
+  Help,
+  Navie,
+  navie,
+  ProjectInfo,
+  TestInvocation,
+  UserContext,
+} from '@appland/navie';
 
 import INavie from './inavie';
 import Telemetry from '../../../telemetry';
@@ -50,7 +58,8 @@ export default class LocalNavie extends EventEmitter implements INavie {
   constructor(
     private readonly contextProvider: ContextV2.ContextProvider,
     private readonly projectInfoProvider: ProjectInfo.ProjectInfoProvider,
-    private readonly helpProvider: Help.HelpProvider
+    private readonly helpProvider: Help.HelpProvider,
+    private readonly testInvocationProvider: TestInvocation.TestInvocationProvider
   ) {
     super();
   }
@@ -172,6 +181,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
         this.contextProvider,
         this.projectInfoProvider,
         this.helpProvider,
+        this.testInvocationProvider,
         this.navieOptions,
         chatHistory,
         ModelRegistry.instance.selectedModel
