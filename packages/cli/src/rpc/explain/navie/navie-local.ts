@@ -10,6 +10,7 @@ import {
   ProjectInfo,
   TestInvocation,
   UserContext,
+  InteractionHistory,
 } from '@appland/navie';
 
 import INavie from './inavie';
@@ -29,6 +30,7 @@ import { verbose } from '../../../utils';
 import { container } from 'tsyringe';
 import ThreadService from '../../navie/services/threadService';
 import LegacyHistory from '../../navie/legacy/history';
+import { events, properties, metrics } from '../../../lib/telemetryConstants';
 
 const OPTION_SETTERS: Record<
   string,
@@ -189,10 +191,40 @@ export default class LocalNavie extends EventEmitter implements INavie {
 
       let agentName: string | undefined;
       let classification: ContextV2.ContextLabel[] | undefined;
-
-      this.activeNavie.on('event', (event) => this.emit('event', event));
-      this.activeNavie.on('agent', (agent) => (agentName = agent));
-      this.activeNavie.on('classification', (labels) => (classification = labels));
+      const debugProperties: Record<string, string> = {};
+      const debugMetrics: Record<string, number> = {};
+      this.activeNavie.on('event', (event) => {
+        switch (event.type) {
+          case 'vectorTerms':
+            debugMetrics[metrics.NavieVectorTermsMs] = Date.now() - startTime;
+            break;
+          case 'contextLookup': {
+            const contextEvent = event as InteractionHistory.ContextLookupEvent;
+            debugMetrics[metrics.NavieContextLookupCount] ||= 0;
+            debugMetrics[metrics.NavieContextLookupCount] += 1;
+            debugMetrics[metrics.NavieContextLookupResults] ||= 0;
+            debugMetrics[metrics.NavieContextLookupResults] += contextEvent.context?.length ?? 0;
+            debugMetrics[metrics.NavieContextLookupMs] = Date.now() - startTime;
+            break;
+          }
+          case 'completion':
+            debugMetrics[metrics.NavieCompletionStartMs] = Date.now() - startTime;
+            break;
+        }
+        this.emit('event', event);
+      });
+      this.activeNavie.on('agent', (agent) => {
+        debugProperties[properties.NavieAgent] = agent;
+        agentName = agent;
+      });
+      this.activeNavie.on('classification', (labels) => {
+        labels.forEach((label) => {
+          debugProperties[properties.NavieClassification(label.name)] = label.weight;
+        });
+        debugMetrics[metrics.NavieClassificationCount] = labels.length;
+        debugMetrics[metrics.NavieClassificationMs] = Date.now() - startTime;
+        classification = labels;
+      });
       if (this.trajectory)
         this.activeNavie.on('trajectory', this.trajectory.logMessage.bind(this.trajectory));
 
@@ -204,6 +236,22 @@ export default class LocalNavie extends EventEmitter implements INavie {
       }
       const endTime = Date.now();
       const duration = endTime - startTime;
+
+      // Record broad response times for measuring generation performance.
+      const { selectedModel } = ModelRegistry.instance;
+      Telemetry.sendEvent({
+        name: events.NavieResponse,
+        properties: {
+          [properties.NavieModelId]: selectedModel?.id ?? this.navieOptions.modelName,
+          [properties.NavieModelProvider]: selectedModel?.provider,
+          ...debugProperties,
+        },
+        metrics: {
+          [metrics.NavieCompletionEndMs]: duration,
+          [metrics.NavieCompletionLength]: response.join('').length,
+          ...debugMetrics,
+        },
+      });
 
       warn(`[local-navie] Completed question ${userMessageId} in ${duration}ms`);
 
