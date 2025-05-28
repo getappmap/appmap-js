@@ -22,6 +22,8 @@ import { getTokenizedString, hasCode, hasMessage, hasNestedError, hasStatus } fr
 import INavie from '../../explain/navie/inavie';
 import { normalizePath } from '../../explain/location';
 import { isNativeError } from 'util/types';
+import Telemetry from '../../../telemetry';
+import { events as TelemetryEvents, properties } from '../../../lib/telemetryConstants';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EventListener = (...args: any[]) => void;
@@ -371,6 +373,15 @@ export class Thread {
           } else if (typeof code === 'number') {
             error.code = code;
           }
+
+          Telemetry.sendEvent({
+            name: TelemetryEvents.DebugException,
+            properties: {
+              [properties.DebugErrorCode]: 'GenerationResponseError',
+              [properties.DebugUserError]: JSON.stringify(error),
+              [properties.DebugException]: err instanceof Error ? err.stack : String(err),
+            },
+          });
 
           this.logEvent({ type: 'error', error });
           this.activeNavie = undefined;
