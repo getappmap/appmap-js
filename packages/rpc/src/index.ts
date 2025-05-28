@@ -13,3 +13,4 @@ export * from './configuration';
 export * from './file';
 export * from './navie';
 export * from './uri';
+export * from './test-invocation';
