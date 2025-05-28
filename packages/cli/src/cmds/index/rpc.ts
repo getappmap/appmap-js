@@ -49,6 +49,8 @@ import {
   navieThreadAddMessageAttachmentHandler,
   navieThreadRemoveMessageAttachmentHandler,
 } from '../../rpc/navie/thread/handlers/messageAttachment';
+import { getInvocationRequestsHandler } from '../../rpc/test-invocation/requests';
+import { submitInvocationResultsHandler } from '../../rpc/test-invocation/results';
 
 export const command = 'rpc';
 export const describe = 'Run AppMap JSON-RPC server';
@@ -103,6 +105,8 @@ export function rpcMethods(navie: INavieProvider, codeEditor?: string): RpcHandl
     navieThreadQueryHandler(threadIndexService),
     navieThreadAddMessageAttachmentHandler(threadService),
     navieThreadRemoveMessageAttachmentHandler(threadService),
+    getInvocationRequestsHandler(),
+    submitInvocationResultsHandler(),
   ];
 }
 

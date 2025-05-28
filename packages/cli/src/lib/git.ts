@@ -121,10 +121,14 @@ export async function getWorkingDiff(cwd?: string): Promise<string> {
     try {
       untrackedDiffs.push(
         // When using `--no-index`, an exit code of 1 is expected.
-        await execute('git', ['--no-pager', 'diff', '--no-index', DEV_NULL, file], {
-          cwd,
-          exitCode: 1,
-        })
+        await execute(
+          'git',
+          ['--no-pager', 'diff', '--no-index', '--function-context', DEV_NULL, file],
+          {
+            cwd,
+            exitCode: 1,
+          }
+        )
       );
     } catch (e) {
       warn(`Failed to retrieve diff for ${file}`);
@@ -132,7 +136,9 @@ export async function getWorkingDiff(cwd?: string): Promise<string> {
     }
   }
 
-  const indexedDiff = await execute('git', ['--no-pager', 'diff', 'HEAD'], { cwd }).catch((e) => {
+  const indexedDiff = await execute('git', ['--no-pager', 'diff', '--function-context', 'HEAD'], {
+    cwd,
+  }).catch((e) => {
     warn(`Failed to retrieve diff for HEAD`);
     warn(e);
     return '';

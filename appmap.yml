@@ -1,4 +1,5 @@
 name: appmap-js
+language: javascript
 appmap_dir: tmp/appmap
 packages:
   - path: packages/cli
@@ -35,4 +36,6 @@ packages:
     exclude:
       - node_modules
       - .yarn
-language: javascript
+test_commands:
+  - language: javascript
+    command: npx appmap-node yarn test $(test_name)

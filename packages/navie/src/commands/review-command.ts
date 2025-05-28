@@ -7,6 +7,10 @@ import { ExplainOptions } from './explain-command';
 import { ContextV2 } from '../context';
 import z from 'zod';
 import VectorTermsService from '../services/vector-terms-service';
+import { getGitDiff, getPinnedItemsExceptGitDiff, GitDiffError } from '../lib/git-diff';
+import Review2Command from './review2-command';
+import InvokeTestsService from '../services/invoke-tests-service';
+import ProjectInfoService from '../services/project-info-service';
 
 // These are the default review domains that will be used in the absence of any user input.
 const GENERIC_REVIEW_DOMAINS = `- **Correctness**: Identify bugs, flaws, defects, logical errors, or edge cases that will cause the code to fail. This includes checking for copy-paste errors, incorrect variable usage, and any inconsistencies in the code.
@@ -70,25 +74,19 @@ const ReviewSummary = z.object({
     .describe('Each domain being reviewed should contain its own review domain object.'),
 });
 
-/**
- * This error is thrown when the git diff cannot be resolved.
- */
-class GitDiffError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'GitDiffError';
-  }
-}
-
 type ReviewAnalysis = AsyncGenerator<string, readonly Message[], void>;
 
 export default class ReviewCommand implements Command {
   constructor(
     private readonly options: ExplainOptions,
+    private readonly projectInfoService: ProjectInfoService,
     private readonly completionService: CompletionService,
     private readonly lookupContextService: LookupContextService,
-    private readonly vectorTermsService: VectorTermsService
+    private readonly vectorTermsService: VectorTermsService,
+    private readonly invokeTestsService: InvokeTestsService
   ) {}
+
+  private note?: string;
 
   /**
    * Builds the user prompt to be sent to the LLM. If the user specifies additional text within the
@@ -168,61 +166,6 @@ ${userPrompt}
   }
 
   /**
-   * Retrieves the git diff from the code selection.
-   * @param req The command request.
-   */
-  private static getGitDiff(
-    req: CommandRequest & { codeSelection: UserContext.ContextItem[] }
-  ): UserContext.CodeSnippetItem {
-    const gitDiff = req.codeSelection.find(
-      (cs): cs is UserContext.CodeSnippetItem =>
-        cs.type === 'code-snippet' && cs.location === REVIEW_DIFF_LOCATION
-    );
-    if (!gitDiff) {
-      throw new GitDiffError('Unable to obtain the diff for the current branch. Please try again.');
-    }
-
-    if (gitDiff.content.trim().length === 0) {
-      throw new GitDiffError('The base is the same as the head. A review cannot be performed.');
-    }
-
-    return gitDiff;
-  }
-
-  /**
-   * Performs a context lookup for pinned items, excluding the git diff.
-   * @param codeSelection The code selection provided by the user.
-   * @param gitDiff The git diff to be reviewed.
-   */
-  private async getPinnedItems(
-    codeSelection: readonly UserContext.ContextItem[],
-    gitDiff: UserContext.ContextItem
-  ): Promise<ContextV2.ContextResponse> {
-    const pinnedItems = codeSelection.filter((cs) => cs !== gitDiff);
-    const locations = pinnedItems.filter(UserContext.hasLocation).map((cs) => cs.location);
-    let pinnedItemLookup: ContextV2.ContextResponse = [];
-    if (locations.length > 0) {
-      pinnedItemLookup = await this.lookupContextService.lookupContext(
-        [],
-        this.options.tokenLimit,
-        { locations }
-      );
-    }
-
-    // For backwards compatibility, include the code selections which have been sent
-    // without a location.
-    pinnedItemLookup.push(
-      ...pinnedItems
-        .filter(UserContext.isCodeSelectionItem)
-        .map((cs) => ({ ...cs, type: ContextV2.ContextItemType.CodeSelection }))
-    );
-
-    return pinnedItemLookup;
-  }
-
-  private note: string | undefined;
-
-  /**
    * This function is responsible for context lookups and providing generation of the initial
    * review analysis.
    * @param req The command request.
@@ -234,7 +177,12 @@ ${userPrompt}
     req: CommandRequest & { codeSelection: UserContext.ContextItem[] },
     gitDiff: UserContext.CodeSnippetItem
   ): ReviewAnalysis {
-    const pinnedItems = await this.getPinnedItems(req.codeSelection, gitDiff);
+    const pinnedItems = await getPinnedItemsExceptGitDiff(
+      this.options,
+      this.lookupContextService,
+      req.codeSelection,
+      gitDiff
+    );
     const userPrompt = ReviewCommand.buildUserPrompt(req.question, pinnedItems);
     const vectorTerms = await this.vectorTermsService.suggestTerms(
       [gitDiff.content, userPrompt].join('\n')
@@ -330,6 +278,20 @@ ${userPrompt}
   }
 
   async *execute(req: CommandRequest): AsyncIterable<string> {
+    const useReview2 = req.userOptions.booleanValue('review2', false);
+    if (useReview2) {
+      const review2Command = new Review2Command(
+        this.options,
+        this.projectInfoService,
+        this.completionService,
+        this.lookupContextService,
+        this.vectorTermsService,
+        this.invokeTestsService
+      );
+      yield* review2Command.execute(req);
+      return;
+    }
+
     if (!hasCodeSelectionArray(req)) {
       yield 'No code selection was provided.';
       return;
@@ -337,7 +299,7 @@ ${userPrompt}
 
     let gitDiff: UserContext.CodeSnippetItem;
     try {
-      gitDiff = ReviewCommand.getGitDiff(req);
+      gitDiff = getGitDiff(req);
     } catch (e) {
       if (e instanceof GitDiffError) {
         yield e.message;

@@ -6,7 +6,6 @@ import VectorTermsService from './vector-terms-service';
 import { ContextV2 } from '../context';
 import InteractionHistory, { ContextItemEvent, ContextItemRequestor } from '../interaction-history';
 import ApplyContextService, { eventOfContextItem } from './apply-context-service';
-import { ProjectInfo } from '../project-info';
 
 export default class ContextService {
   constructor(
