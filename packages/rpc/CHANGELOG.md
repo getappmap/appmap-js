@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.20.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.19.0...@appland/rpc-v1.20.0) (2025-05-28)
+
+
+### Features
+
+* Add RPC endpoints for test invocation ([9aea807](https://github.com/getappmap/appmap-js/commit/9aea807260acbe54048aa9f1bb471882ef8da0a1))
+
 # [@appland/rpc-v1.19.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.18.0...@appland/rpc-v1.19.0) (2025-04-09)
 
 
