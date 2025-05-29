@@ -31,6 +31,7 @@ import { container } from 'tsyringe';
 import ThreadService from '../../navie/services/threadService';
 import LegacyHistory from '../../navie/legacy/history';
 import { events, properties, metrics } from '../../../lib/telemetryConstants';
+import { performance } from 'node:perf_hooks';
 
 const OPTION_SETTERS: Record<
   string,
@@ -177,7 +178,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
 
       this.emit('ack', userMessageId, threadId);
 
-      const startTime = Date.now();
+      const startTime = performance.now();
       this.activeNavie = navie(
         clientRequest,
         this.contextProvider,
@@ -196,7 +197,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
       this.activeNavie.on('event', (event) => {
         switch (event.type) {
           case 'vectorTerms':
-            debugMetrics[metrics.NavieVectorTermsMs] = Date.now() - startTime;
+            debugMetrics[metrics.NavieVectorTermsMs] = performance.now() - startTime;
             break;
           case 'contextLookup': {
             const contextEvent = event as InteractionHistory.ContextLookupEvent;
@@ -204,11 +205,11 @@ export default class LocalNavie extends EventEmitter implements INavie {
             debugMetrics[metrics.NavieContextLookupCount] += 1;
             debugMetrics[metrics.NavieContextLookupResults] ||= 0;
             debugMetrics[metrics.NavieContextLookupResults] += contextEvent.context?.length ?? 0;
-            debugMetrics[metrics.NavieContextLookupMs] = Date.now() - startTime;
+            debugMetrics[metrics.NavieContextLookupMs] = performance.now() - startTime;
             break;
           }
           case 'completion':
-            debugMetrics[metrics.NavieCompletionStartMs] = Date.now() - startTime;
+            debugMetrics[metrics.NavieCompletionStartMs] = performance.now() - startTime;
             break;
         }
         this.emit('event', event);
@@ -222,7 +223,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
           debugProperties[properties.NavieClassification(label.name)] = label.weight;
         });
         debugMetrics[metrics.NavieClassificationCount] = labels.length;
-        debugMetrics[metrics.NavieClassificationMs] = Date.now() - startTime;
+        debugMetrics[metrics.NavieClassificationMs] = performance.now() - startTime;
         classification = labels;
       });
       if (this.trajectory)
@@ -234,7 +235,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
         history?.token(threadId, userMessageId, agentMessageId, token);
         this.emit('token', token, agentMessageId);
       }
-      const endTime = Date.now();
+      const endTime = performance.now();
       const duration = endTime - startTime;
 
       // Record broad response times for measuring generation performance.
