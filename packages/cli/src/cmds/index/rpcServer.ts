@@ -13,6 +13,8 @@ import shadowLocalhost from '../../lib/shadowLocalhost';
 import { RpcCallback, RpcHandler, toJaysonRpcError } from '../../rpc/rpc';
 import { WebSocketServer } from 'ws';
 import { bindConnectionHandler } from '../../rpc/navie/thread/handlers/subscribe';
+import Telemetry from '../../telemetry';
+import { events, properties } from '../../lib/telemetryConstants';
 
 const debug = makeDebug('appmap:rpcServer');
 
@@ -28,6 +30,13 @@ function handlerMiddleware<Args, Result>(
       callback(null, result);
     } catch (error) {
       debug(`[RPCServer] JSON-RPC error for ${name}: ${JSON.stringify(error)}`);
+      Telemetry.sendEvent({
+        name: events.DebugException,
+        properties: {
+          [properties.DebugErrorCode]: 'RpcError',
+          [properties.DebugException]: error instanceof Error ? error.stack : String(error),
+        },
+      });
       callback(toJaysonRpcError(error));
     }
   };
