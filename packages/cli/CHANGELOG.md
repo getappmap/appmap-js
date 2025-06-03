@@ -1,3 +1,11 @@
+# [@appland/appmap-v3.191.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.190.0...@appland/appmap-v3.191.0) (2025-06-03)
+
+
+### Features
+
+* Add telemetry for Navie and RPC errors ([b98a9f4](https://github.com/getappmap/appmap-js/commit/b98a9f416d34f07b91376ca5b87d1f6c5e220aac))
+* Improve ModelRegistry selection robustness ([735e88d](https://github.com/getappmap/appmap-js/commit/735e88d3c1857d1d85c9bd1d150a6658b3d2ae5e))
+
 # [@appland/appmap-v3.190.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.189.4...@appland/appmap-v3.190.0) (2025-05-28)
 
 
