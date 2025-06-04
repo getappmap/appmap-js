@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.191.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.191.0...@appland/appmap-v3.191.1) (2025-06-04)
+
+
+### Bug Fixes
+
+* Package MacOS binaries with native modules of the correct ([ce65cf1](https://github.com/getappmap/appmap-js/commit/ce65cf18594b275148696b8ec93dc514b9f4e368))
+
 # [@appland/appmap-v3.191.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.190.0...@appland/appmap-v3.191.0) (2025-06-03)
 
 
