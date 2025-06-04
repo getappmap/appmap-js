@@ -15,12 +15,12 @@ runs:
       uses: actions/cache/restore@v3
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-${{ runner.arch }}yarn-${{ hashFiles('yarn.lock') }}
+        key: ${{ github.job }}-yarn-${{ hashFiles('yarn.lock') }}
     - name: Restore node_modules
       uses: actions/cache@v3
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-${{ runner.arch }}-node-modules-${{ hashFiles('yarn.lock') }}
+        key: ${{ github.job }}-node-modules-${{ hashFiles('yarn.lock') }}
     - name: Yarn install
       shell: bash
       run: yarn
