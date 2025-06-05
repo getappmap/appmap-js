@@ -12,6 +12,7 @@ export enum CommandMode {
   Suggest = 'suggest',
   Observe = 'observe',
   Review = 'review',
+  Diff = 'diff',
   Welcome = 'welcome',
 }
 
