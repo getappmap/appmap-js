@@ -195,11 +195,8 @@ export default function navie(
       interactionHistory,
       projectInfoService
     );
-  
-  const buildDiffCommand = () =>
-    new DiffCommand(
-      projectInfoService
-    )
+
+  const buildDiffCommand = () => new DiffCommand(projectInfoService);
 
   const buildReviewCommand = () =>
     new ReviewCommand(
