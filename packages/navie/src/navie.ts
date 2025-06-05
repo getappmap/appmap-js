@@ -41,6 +41,7 @@ import ReviewCommand from './commands/review-command';
 import WelcomeCommand from './commands/welcome-command';
 import InvokeTestsService from './services/invoke-tests-service';
 import { TestInvocationProvider } from './test-invocation';
+import DiffCommand from './commands/diff-command';
 
 export type ChatHistory = Message[];
 
@@ -195,6 +196,8 @@ export default function navie(
       projectInfoService
     );
 
+  const buildDiffCommand = () => new DiffCommand(projectInfoService);
+
   const buildReviewCommand = () =>
     new ReviewCommand(
       options,
@@ -217,6 +220,7 @@ export default function navie(
     [CommandMode.Suggest]: buildSuggestCommand,
     [CommandMode.Observe]: buildObserveCommand,
     [CommandMode.Review]: buildReviewCommand,
+    [CommandMode.Diff]: buildDiffCommand,
     [CommandMode.Welcome]: buildWelcomeCommand,
   };
 
