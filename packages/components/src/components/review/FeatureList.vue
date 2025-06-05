@@ -92,14 +92,16 @@
               v-if="feature.hasCoverage || isFeatureDismissed(index)"
               class="feature-list__icon feature-list__icon--success feature-list__icon--feature-status"
               aria-label="Covered or Dismissed"
-              >✓</span
             >
+              <v-check />
+            </span>
             <span
               v-else
               class="feature-list__icon feature-list__icon--warning feature-list__icon--feature-status"
               aria-label="Needs Coverage"
-              >⚠</span
             >
+              <v-triangle-alert />
+            </span>
             <div class="feature-list__card-details">
               <p class="feature-list__text">{{ feature.text }}</p>
 
@@ -238,6 +240,7 @@
 import Vue, { PropType } from 'vue';
 import SectionHeading from '@/components/review/SectionHeading.vue'; // Adjust path as needed
 import { parse } from 'yaml';
+import { Check as VCheck, TriangleAlert as VTriangleAlert } from 'lucide-vue';
 
 // This is where you'd load your YAML. For this example, it's a placeholder.
 // In a Vite project with Vue 2, you might use: import featureYamlContent from '../data/features.yaml?raw';
@@ -303,6 +306,8 @@ export default Vue.extend({
   name: 'FeatureList',
   components: {
     SectionHeading,
+    VCheck,
+    VTriangleAlert,
   },
   data() {
     return {
@@ -429,8 +434,6 @@ export default Vue.extend({
 }
 
 .feature-list {
-  padding-top: 2.5rem; //
-  padding-bottom: 2.5rem;
   font-family: $font-family;
 
   &__container {
@@ -440,12 +443,14 @@ export default Vue.extend({
     margin-right: auto;
     padding-left: 1rem;
     padding-right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   &__test-status-section {
-    margin-bottom: 2rem;
     background-color: $color-tile-background;
-    border-radius: $border-radius-big;
+    border-radius: 0.5rem;
     padding: 1.5rem;
     border: 1px solid $color-border;
   }
@@ -461,6 +466,7 @@ export default Vue.extend({
     font-size: 1.125rem;
     font-weight: 600;
     color: $color-foreground-light;
+    margin: 0;
   }
 
   &__button {
@@ -612,12 +618,6 @@ export default Vue.extend({
     font-weight: 500;
     font-size: 0.875rem;
   }
-  &__link {
-    color: $color-link;
-    &:hover {
-      color: rgba(white, 0.1);
-    }
-  }
   &__test-file-info {
     color: $color-foreground-secondary;
     font-size: 0.875rem;
@@ -635,14 +635,13 @@ export default Vue.extend({
   }
 
   &__grid {
-    margin-top: 1.5rem;
     display: grid;
     gap: 1rem;
   }
 
   &__card {
     background-color: $color-tile-background;
-    border-radius: $border-radius-big;
+    border-radius: 0.5rem;
     padding: 1rem;
     border-left: 4px solid $color-highlight;
 
@@ -660,6 +659,7 @@ export default Vue.extend({
   }
   &__text {
     color: $color-input-fg;
+    margin-top: 0.33rem;
     margin-bottom: 0.5rem;
   }
   &__toggle-details {
@@ -672,14 +672,10 @@ export default Vue.extend({
 
   &__collapsible-content {
     margin-top: 0.5rem;
-    background-color: $color-input-bg;
+    background-color: $color-background-dark;
     border-radius: $border-radius;
     padding: 0.75rem;
     border: 1px solid $color-border;
-
-    &--warning {
-      border-color: $color-warning;
-    }
   }
   &__collapsible-header {
     display: flex;
@@ -752,7 +748,7 @@ export default Vue.extend({
 
   &__modal-content {
     background-color: $color-tile-background;
-    border-radius: $border-radius-big;
+    border-radius: 0.5rem;
     padding: 1.5rem;
     max-width: 500px;
     width: 100%;

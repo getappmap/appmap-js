@@ -4,13 +4,12 @@
       <SectionHeading title="Suggestions" />
 
       <!-- Summary -->
-      <div class="summary-grid mb-8">
+      <div class="summary-grid">
         <a
           v-for="category in summaryCategories"
           :key="category.name"
           :href="`#${category.name}-suggestions`"
           class="summary-card"
-          :class="{ 'has-issues': category.stats.high > 0 || category.stats.medium > 0 }"
         >
           <div class="summary-card__header">
             <component :is="getCategoryIconComponent(category.name)" :size="20" class="icon" />
@@ -34,7 +33,7 @@
         :id="`${category}-suggestions`"
         class="category-section mb-12"
       >
-        <div class="category-header mb-6">
+        <div class="category-header">
           <component :is="getCategoryIconComponent(category)" :size="24" class="icon" />
           <h3 class="category-title">{{ category }}</h3>
         </div>
@@ -165,7 +164,7 @@
           </div>
 
           <div
-            class="dialog-actions mb-6"
+            class="dialog-actions"
             v-if="selectedSuggestionId !== null && !findDismissedSuggestion(selectedSuggestionId)"
           >
             <VPopper content="Apply Fix" placement="top">
@@ -244,19 +243,19 @@
             </VPopper>
           </div>
 
-          <div class="info-block mb-6">
+          <div class="info-block">
             <h4 class="info-block__title">Location</h4>
             <code class="info-block__code">{{ selectedSuggestion.location }}</code>
           </div>
 
-          <div class="info-block mb-6">
+          <div class="info-block">
             <h4 class="info-block__title">Code</h4>
             <pre
               class="code-block"
             ><code class="font-mono">{{ selectedSuggestion.code }}</code></pre>
           </div>
 
-          <div v-if="selectedSuggestion.runtime" class="info-block mb-6">
+          <div v-if="selectedSuggestion.runtime" class="info-block">
             <h4 class="info-block__title">Runtime Analysis</h4>
             <div v-if="selectedSuggestion.runtime.stackTrace" class="mb-4">
               <h5 class="info-block__subtitle">Stack Trace</h5>
@@ -295,7 +294,7 @@
           <XIcon :size="20" />
         </button>
 
-        <div class="mb-6">
+        <div>
           <label for="dismiss-reason" class="form-label">Reason for dismissal</label>
           <textarea
             id="dismiss-reason"
@@ -672,19 +671,15 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-// General Container and Section
-.suggestions-section {
-  background-color: $color-background; // Tailwind bg-gray-900
-  color: $color-foreground;
-  padding: 2.5rem 0; // Tailwind py-10
-}
-
 .container {
   max-width: $max-width;
   margin-left: auto;
   margin-right: auto;
   padding-left: 1rem; // Tailwind px-4
   padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 // Helper classes from Tailwind that are frequently used
@@ -694,14 +689,8 @@ export default Vue.extend({
 .mb-4 {
   margin-bottom: 1rem;
 }
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
 .mb-8 {
   margin-bottom: 2rem;
-}
-.mb-12 {
-  margin-bottom: 3rem;
 }
 .mt-2 {
   margin-top: 0.5rem;
@@ -742,10 +731,6 @@ export default Vue.extend({
     border-color: rgba($color-highlight, 0.5); // Tailwind hover:border-blue-500/50
   }
 
-  &.has-issues {
-    border-color: rgba($color-warning, 0.5); // Tailwind border-yellow-500/50
-  }
-
   &__header {
     display: flex;
     align-items: center;
@@ -761,15 +746,18 @@ export default Vue.extend({
     font-weight: 500; // Tailwind font-medium
     text-transform: capitalize;
     color: $color-foreground-light;
+    margin: 0;
   }
 
   &__stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+
     p {
       font-size: $font-size; // Tailwind text-sm
       color: $color-foreground-secondary;
-      &:not(:last-child) {
-        margin-bottom: 0.25rem; // Tailwind space-y-1
-      }
+      margin: 0;
     }
     .priority-high-text {
       color: $color-error; // Tailwind text-red-400
@@ -782,16 +770,12 @@ export default Vue.extend({
   }
 }
 
-// Category Section
-.category-section {
-  // .mb-12 applied by utility class
-}
-
 .category-header {
   display: flex;
   align-items: center;
   gap: 0.5rem; // Tailwind gap-2
-  // .mb-6 applied by utility class
+  margin-bottom: 1rem;
+
   .icon {
     color: $color-foreground-light;
   }
@@ -802,6 +786,7 @@ export default Vue.extend({
   font-weight: 600; // Tailwind font-semibold
   text-transform: capitalize;
   color: $color-foreground-light;
+  margin: 0;
 }
 
 // Suggestions Grid
@@ -850,6 +835,7 @@ export default Vue.extend({
   &__title {
     color: $color-foreground-light; // Tailwind text-white
     font-weight: 500; // Tailwind font-medium
+    margin: 0;
   }
 
   &__meta {

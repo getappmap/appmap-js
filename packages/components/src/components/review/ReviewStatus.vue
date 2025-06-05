@@ -1,7 +1,8 @@
 <template>
   <section id="summary" class="review-status">
     <div class="review-status__container">
-      <div class="review-status__header">
+      <SectionHeading title="Summary" />
+      <!-- <div class="review-status__header">
         <span
           v-if="isGreenStatus"
           class="review-status__icon review-status__icon--success"
@@ -17,7 +18,7 @@
           <alert-triangle />
         </span>
         <h2 class="review-status__title">Summary</h2>
-      </div>
+      </div> -->
 
       <div class="review-status__grid">
         <div class="review-status__card">
@@ -67,6 +68,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { AlertTriangle, CheckCircle } from 'lucide-vue';
+import SectionHeading from './SectionHeading.vue';
 
 interface Suggestions {
   high: number;
@@ -79,6 +81,7 @@ export default Vue.extend({
   components: {
     AlertTriangle,
     CheckCircle,
+    SectionHeading,
   },
   props: {
     totalFeatures: {
@@ -120,12 +123,10 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-//
 $text-xl-equivalent: 1.25rem;
 
 .review-status {
   background-color: $color-input-bg;
-  border-bottom: 1px solid $color-tile-background;
   font-family: $font-family;
 
   &__container {
@@ -133,7 +134,9 @@ $text-xl-equivalent: 1.25rem;
     max-width: $max-width;
     margin-left: auto;
     margin-right: auto;
-    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   &__header {
@@ -164,6 +167,7 @@ $text-xl-equivalent: 1.25rem;
     font-size: $text-xl-equivalent;
     font-weight: 600;
     color: $color-foreground-light;
+    margin: 0;
   }
 
   &__grid {
@@ -177,7 +181,7 @@ $text-xl-equivalent: 1.25rem;
 
   &__card {
     background-color: $color-tile-background;
-    border-radius: $border-radius-big;
+    border-radius: 0.5rem;
     overflow: hidden;
   }
 
@@ -190,20 +194,20 @@ $text-xl-equivalent: 1.25rem;
     color: $color-foreground-light;
     font-weight: 600;
     font-size: $font-size;
+    margin: 0;
   }
 
   &__card-body {
-    padding: 1rem;
-
-    // Simulates space-y-2
-    > * + * {
-      margin-top: 0.5rem; // space-y-2 (0.5rem)
-    }
+    padding: 0.75em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
   }
 
   &__text {
-    color: $color-input-fg; //
+    color: $color-input-fg;
     font-size: $font-size;
+    margin: 0;
   }
 
   &__value {

@@ -1,7 +1,6 @@
 <template>
   <div class="review-page">
     <v-header />
-
     <v-review-status
       :total-features="totalFeatures"
       :features-needing-tests="featuresNeedingTests"
@@ -9,11 +8,8 @@
       :suggestions="suggestionsSummary"
       :dismissed-suggestions="dismissedSuggestions.length"
     />
-
-    <main>
-      <v-feature-list @feature-dismiss="handleFeatureDismiss" />
-      <v-suggestions @suggestion-dismiss="handleSuggestionDismiss" :suggestions="suggestions" />
-    </main>
+    <v-feature-list @feature-dismiss="handleFeatureDismiss" />
+    <v-suggestions @suggestion-dismiss="handleSuggestionDismiss" :suggestions="suggestions" />
   </div>
 </template>
 
@@ -84,10 +80,25 @@ export default Vue.extend({
 });
 </script>
 
+<style lang="scss">
+a {
+  color: $color-link;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-link-hover;
+    text-decoration: underline;
+  }
+}
+</style>
+
 <style scoped lang="scss">
 .review-page {
   min-height: 100vh;
   background-color: $color-input-bg;
   color: $color-foreground-dark;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 </style>

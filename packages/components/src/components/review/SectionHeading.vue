@@ -26,9 +26,8 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .section-heading {
-  margin-bottom: 1.5rem;
-
   &__title {
+    margin: 0;
     font-size: 1.75rem;
     font-weight: bold;
     color: $color-foreground-light;
