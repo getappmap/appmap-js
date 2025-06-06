@@ -1,11 +1,11 @@
 import * as components from '@/componentExports';
 
 // install function executed by Vue.use()
-const install = function installComponents(Vue) {
+const install = function installComponents(app) {
   if (install.installed) return;
   install.installed = true;
   Object.entries(components).forEach(([componentName, component]) => {
-    Vue.component(componentName, component);
+    app.component(componentName, component);
   });
 };
 

@@ -89,6 +89,7 @@ import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import Navigation from '@/components/mixins/navigation';
 import VAppmapPin from '@/assets/appmap-pin.svg';
 import VPopper from '@/components/Popper.vue';
+import emitter from '@/lib/eventBus';
 
 export default {
   name: 'FindingDetails',
@@ -119,15 +120,15 @@ export default {
     },
 
     openInSourceCode(location) {
-      this.$root.$emit('open-in-source-code', location);
+      emitter.emit('open-in-source-code', location);
     },
 
     openMap(mapFile, uri) {
-      this.$root.$emit('open-map', mapFile, uri);
+      emitter.emit('open-map', mapFile, uri);
     },
 
     backToOverview() {
-      this.$root.$emit('open-findings-overview');
+      emitter.emit('open-findings-overview');
     },
   },
 

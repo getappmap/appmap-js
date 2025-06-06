@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 import {
   AppMap,
   buildAppMap,
@@ -8,8 +7,6 @@ import {
   deserializeFilter,
   base64UrlDecode,
 } from '@appland/models';
-
-Vue.use(Vuex);
 
 export const SELECT_CODE_OBJECT = 'selectCodeObject';
 export const SELECT_LABEL = 'selectLabel';
@@ -55,7 +52,7 @@ function savedFiltersSorter(a, b) {
 }
 
 export function buildStore() {
-  return new Vuex.Store({
+  return createStore({
     state: {
       appMap: new AppMap(),
       precomputedSequenceDiagram: null,

@@ -33,6 +33,7 @@
 <script>
 import ClipboardIcon from '@/assets/copy-icon.svg';
 import VPopper from './Popper.vue';
+import emitter from '@/lib/eventBus';
 
 import hljs from 'highlight.js';
 
@@ -95,7 +96,7 @@ export default {
     },
     onCopy() {
       const text = this.transformedText.trim();
-      this.$root.$emit('clipboard', text);
+      emitter.emit('clipboard', text);
     },
   },
 };

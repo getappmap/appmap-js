@@ -11,7 +11,7 @@ module.exports = {
   webpackFinal: async (config, { configType }) => {
     config.resolve.alias = {
       '@': path.resolve(__dirname, '..', 'src'),
-      vue$: 'vue/dist/vue.common.dev.js', // This must match the alias in packages/components/babel.config.js
+      vue$: 'vue/dist/vue.esm-bundler.js', // This must match the alias in packages/components/babel.config.js
     };
 
     config.resolve.fallback = {
