@@ -1,4 +1,6 @@
 import { configureCompat } from 'vue';
+import { setup } from '@storybook/vue3'; // Import setup
+import { store } from '@/store/vsCode'; // Import the store
 
 // Configure Vue compatibility mode
 configureCompat({
@@ -39,3 +41,8 @@ export const parameters = {
     },
   },
 };
+
+// Use setup to install plugins on the Storybook Vue app
+setup((app) => {
+  app.use(store);
+});

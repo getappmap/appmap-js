@@ -30,9 +30,6 @@ const baseConfig = {
     },
     vue: {
       css: true,
-      data: {
-        scss: () => '@import "src/scss/vue";',
-      },
       style: {
         preprocessOptions: {
           scss: {
@@ -43,6 +40,7 @@ const baseConfig = {
                   .replace(/^@/, `${path.resolve(__dirname, 'src')}/`),
               }),
             ],
+            additionalData: '@import "@/scss/vue.scss";',
           },
         },
       },

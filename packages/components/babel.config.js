@@ -6,7 +6,7 @@ module.exports = {
       {
         root: ['node_modules'],
         alias: {
-          '^vue$': 'vue/dist/vue.common.dev.js', // This must match the alias in packages/components/.storybook/main.js
+          '^vue$': 'vue/dist/vue.esm-bundler.js', // This must match the alias in packages/components/.storybook/main.js
         },
       },
     ],

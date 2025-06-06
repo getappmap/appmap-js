@@ -37,19 +37,16 @@ module.exports = {
       include: path.resolve(__dirname, '../'),
     });
 
-    let rule = config.module.rules.find((r) => r.test && r.test.toString().includes('svg'));
-    rule.test = new RegExp(rule.test.toString().replace(/(^\/)|(\|svg|svg\|)|(\/$)/g, ''));
-
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['vue-svg-loader'],
+      loader: 'vue-loader',
     });
 
     return config;
   },
 
   framework: {
-    name: getAbsolutePath('@storybook/vue-webpack5'),
+    name: getAbsolutePath('@storybook/vue3-webpack5'),
     options: {},
   },
 
