@@ -15,10 +15,9 @@ export interface Suggestion {
   };
 }
 
-export interface DismissedSuggestion {
-  id: string;
+export interface SuggestionStatus {
+  status: 'applied' | 'todo' | 'fixed' | 'dismissed';
   reason: string;
-  status?: 'applied' | 'todo' | 'fixed' | 'dismissed';
 }
 
 export interface TestCoverageItem {

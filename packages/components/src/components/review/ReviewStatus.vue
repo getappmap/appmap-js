@@ -128,9 +128,11 @@ $text-xl-equivalent: 1.25rem;
 .review-status {
   background-color: $color-input-bg;
   font-family: $font-family;
+  padding: 0 1rem;
 
   &__container {
     width: 100%;
+
     max-width: $max-width;
     margin-left: auto;
     margin-right: auto;

@@ -42,26 +42,37 @@
           <v-suggestion-card
             v-for="(suggestion, index) in items"
             @details="openDetailsDialog(suggestion)"
+            @reopen="handleReopen(suggestion.id)"
             :key="index"
-            :id="'TODO'"
+            :id="suggestion.id"
             :title="suggestion.title"
             :type="suggestion.type"
             :priority="suggestion.priority"
             :location="suggestion.location"
             :code="suggestion.code"
             :runtime="Boolean(suggestion.runtime)"
-            :status="'?'"
+            :status="
+              getSuggestionStatus(suggestion.id)
+                ? getSuggestionStatus(suggestion.id).status
+                : undefined
+            "
             :stack-trace="suggestion.runtime && suggestion.runtime.stackTrace"
             :sequence-diagram="suggestion.runtime && suggestion.runtime.sequenceDiagram"
-            :dismissed="findDismissedSuggestion(suggestion.id)"
+            :dismissed="getSuggestionStatus(suggestion.id) !== undefined"
           />
         </div>
       </div>
     </div>
 
+    <v-dismiss-modal
+      @close="closeDismissDialog"
+      @submit="dismissSuggestion"
+      v-if="showDismissDialogForSuggestionId"
+    />
     <v-suggestion-modal
-      v-if="selectedSuggestion"
+      v-else-if="selectedSuggestion"
       @close="handleDialogClose"
+      @dismiss="openDismissDialog"
       :id="selectedSuggestion.id"
       :title="selectedSuggestion.title"
       :type="selectedSuggestion.type"
@@ -71,7 +82,7 @@
       :runtime="Boolean(selectedSuggestion.runtime)"
       :stack-trace="selectedSuggestion.runtime && selectedSuggestion.runtime.stackTrace"
       :sequence-diagram="selectedSuggestion.runtime && selectedSuggestion.runtime.sequenceDiagram"
-      :dismissed="findDismissedSuggestion(selectedSuggestion.id) !== undefined"
+      :dismissed="getSuggestionStatus(selectedSuggestion.id) !== undefined"
     />
   </section>
 </template>
@@ -101,8 +112,9 @@ import SectionHeading from './SectionHeading.vue';
 import VButton from '@/components/Button.vue';
 import VPopper from '@/components/Popper.vue';
 import VSuggestionModal from './SuggestionModal.vue';
-import { type Suggestion, type DismissedSuggestion, getCategoryIconComponent } from '.';
-import { runFunc } from 'mermaid/dist/utils';
+import VDismissModal from './DismissModal.vue';
+import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
+import { get } from 'http';
 
 export default Vue.extend({
   name: 'SuggestionsList',
@@ -126,6 +138,7 @@ export default Vue.extend({
     Maximize2,
     VSuggestionCard,
     VSuggestionModal,
+    VDismissModal,
   },
   props: {
     suggestions: {
@@ -141,8 +154,7 @@ export default Vue.extend({
     return {
       selectedSuggestion: undefined as Suggestion | undefined,
       showDismissDialogForSuggestionId: undefined as string | undefined,
-      dismissReason: '',
-      dismissedSuggestions: [] as DismissedSuggestion[],
+      suggestionStatuses: {} as Record<string, SuggestionStatus>,
       showExplanation: false,
       isLoading: undefined as { id: string; action: 'apply' | 'explain' } | undefined,
       openActionMenu: undefined as string | undefined,
@@ -201,8 +213,8 @@ export default Vue.extend({
     document.removeEventListener('mousedown', this.handleClickOutsideActionMenu);
   },
   methods: {
-    findDismissedSuggestion(id: string): DismissedSuggestion | undefined {
-      return this.dismissedSuggestions.find((ds) => ds.id === id);
+    getSuggestionStatus(id: string): SuggestionStatus | undefined {
+      return this.suggestionStatuses[id];
     },
     getItemIndexById(id: string): number {
       // This is needed if original handleAction relied on index for something other than identification
@@ -211,7 +223,7 @@ export default Vue.extend({
     },
     getCategoryStats(category: string): { high: number; medium: number } {
       const categoryItems = this.suggestions.filter(
-        (item: Suggestion) => item.category === category && !this.findDismissedSuggestion(item.id)
+        (item: Suggestion) => item.category === category && !this.getSuggestionStatus(item.id)
       );
       return {
         high: categoryItems.filter((item: Suggestion) => item.priority === 'high').length,
@@ -253,10 +265,10 @@ export default Vue.extend({
             }
           } else {
             // 'apply'
-            this.dismissedSuggestions = [
-              ...this.dismissedSuggestions,
-              { id: suggestionId, reason: 'Fix applied automatically', status: 'applied' },
-            ];
+            this.$set(this.suggestionStatuses, suggestionId, {
+              reason: 'Fix applied automatically',
+              status: 'applied',
+            });
             this.onSuggestionDismiss(suggestionId); // Use ID
             this.handleDialogClose();
           }
@@ -267,34 +279,27 @@ export default Vue.extend({
       } else {
         // 'todo' or 'fixed'
         const reason = action === 'todo' ? 'Added to TODO list' : 'Marked as fixed';
-        this.dismissedSuggestions = [
-          ...this.dismissedSuggestions,
-          { id: suggestionId, reason, status: action },
-        ];
+        this.$set(this.suggestionStatuses, suggestionId, { reason, status: action });
         this.onSuggestionDismiss(suggestionId);
         this.handleDialogClose();
       }
     },
-    confirmDismissal() {
-      const reason = this.dismissReason.trim();
-      if (reason && this.showDismissDialogForSuggestionId !== undefined) {
-        const idToDismiss = this.showDismissDialogForSuggestionId;
-        this.dismissedSuggestions = [
-          ...this.dismissedSuggestions,
-          { id: idToDismiss, reason, status: 'dismissed' },
-        ];
-        this.onSuggestionDismiss(idToDismiss);
-        this.closeDismissDialog();
-        if (this.selectedSuggestion?.id === idToDismiss) this.handleDialogClose();
-      }
+    dismissSuggestion(reason: string) {
+      const id = this.showDismissDialogForSuggestionId;
+      if (!reason || !id) return;
+
+      this.$set(this.suggestionStatuses, id, { reason, status: 'dismissed' });
+      this.closeDismissDialog();
+      this.selectedSuggestion = undefined;
+    },
+    openDismissDialog(id: string) {
+      this.showDismissDialogForSuggestionId = id;
     },
     closeDismissDialog() {
       this.showDismissDialogForSuggestionId = undefined;
-      this.dismissReason = '';
     },
     handleReopen(id: string) {
-      this.dismissedSuggestions = this.dismissedSuggestions.filter((ds) => ds.id !== id);
-      // Potentially emit an event like this.$emit('suggestion-reopened', id) if parent needs to know
+      this.$delete(this.suggestionStatuses, id);
     },
     isLoadingAction(id: string, action: 'apply' | 'explain'): boolean {
       return !!(this.isLoading && this.isLoading.id === id && this.isLoading.action === action);

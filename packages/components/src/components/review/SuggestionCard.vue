@@ -6,12 +6,12 @@
           <CheckCircle v-if="dismissed" :size="20" :class="statusClass" />
           <component v-else :is="categoryIconComponent" :size="20" class="icon" />
           <h4 class="suggestion-card__title">{{ title }}</h4>
-          <span v-if="runtime" class="tag tag--runtime">Runtime</span>
         </div>
         <div class="suggestion-card__meta mt-2">
-          <span class="meta-item type">{{ type }}</span>
+          <v-badge v-if="runtime"><Zap :size="10" class="full icon-adjust" />Runtime</v-badge>
+          <v-type-badge :type="type" />
           <v-priority-badge :priority="priority" class="meta-item" />
-          <code class="meta-item location">{{ location }}</code>
+          <span class="meta-item location">{{ location }}</span>
         </div>
 
         <div v-if="dismissed" class="suggestion-card__status mt-2">
@@ -26,13 +26,6 @@
       </div>
       <div class="suggestion-card__actions">
         <div v-if="!dismissed" class="action-menu-container">
-          <v-button
-            @click.stop.native="toggleActionMenu()"
-            :ref="`actionMenuTrigger-${id}`"
-            class="action-menu-button"
-          >
-            <MoreVertical :size="20" />
-          </v-button>
           <div v-if="showActionMenu" class="action-menu-dropdown" :ref="`actionMenuDropdown-${id}`">
             <v-button
               @click.native="onAction('apply')"
@@ -58,6 +51,13 @@
           </div>
         </div>
         <v-button kind="native-ghost" @click.native="$emit('details', id)"> Details </v-button>
+        <v-button
+          @click.stop.native="toggleActionMenu()"
+          :ref="`actionMenuTrigger-${id}`"
+          class="action-menu-button"
+        >
+          <MoreVertical :size="20" />
+        </v-button>
       </div>
     </div>
   </div>
@@ -78,9 +78,12 @@ import {
   AlertTriangle,
   Database,
   Globe,
+  Zap,
 } from 'lucide-vue';
 import VButton from '@/components/Button.vue';
 import VPriorityBadge from '@/components/review/PriorityBadge.vue';
+import VBadge from '@/components/Badge.vue';
+import VTypeBadge from '@/components/review/TypeBadge.vue';
 import { getCategoryIconComponent } from '.';
 
 export default Vue.extend({
@@ -99,6 +102,9 @@ export default Vue.extend({
     Database,
     Globe,
     VPriorityBadge,
+    VBadge,
+    Zap,
+    VTypeBadge,
   },
   props: {
     id: {
@@ -234,14 +240,15 @@ export default Vue.extend({
   }
 
   &__content {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
   }
 
   &__main {
-    flex: 1;
+    min-width: 0;
   }
 
   &__title-area {
@@ -257,11 +264,12 @@ export default Vue.extend({
     color: $color-foreground-light;
     font-weight: 500;
     margin: 0;
+    margin-bottom: 1rem;
   }
 
   &__meta {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 0.5rem;
     align-items: center;
     font-size: 0.875rem;
@@ -269,7 +277,13 @@ export default Vue.extend({
     .meta-item {
       color: $color-foreground-secondary;
       &.location {
+        padding-top: 0.33rem;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
         font-family: monospace;
+        text-overflow: ellipsis;
+        direction: rtl;
         color: $color-link;
         cursor: pointer;
         transition: $transition;
@@ -289,9 +303,18 @@ export default Vue.extend({
 
   &__actions {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    align-self: center;
+    gap: 0;
   }
+}
+
+.full {
+  fill: currentColor;
+}
+
+.icon-adjust {
+  transform: translateY(1px);
+  padding-right: 0.15rem;
 }
 
 .status-applied {
@@ -367,6 +390,7 @@ export default Vue.extend({
   }
   svg {
     opacity: 0.8;
+    padding-right: 0.5rem;
   }
 }
 

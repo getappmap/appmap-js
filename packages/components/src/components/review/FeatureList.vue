@@ -349,7 +349,6 @@ export default Vue.extend({
   font-family: $font-family;
 
   &__container {
-    width: 100%;
     max-width: $max-width;
     margin-left: auto;
     margin-right: auto;

@@ -1,109 +1,101 @@
 <template>
-  <div>
-    <v-dismiss-modal
-      @close="closeDismissDialog"
-      @submit="submitDismissReason"
-      v-if="isDismissDialogOpen"
-    />
-    <v-modal-container @close="$emit('close')" v-else>
-      <h3 class="modal-title pr-8">{{ title }}</h3>
-      <button @click="handleDialogClose" class="modal-close-button">
-        <v-x-icon :size="20" />
-      </button>
+  <v-modal-container @close="$emit('close')">
+    <h3 class="modal-title pr-8">{{ title }}</h3>
+    <button @click="handleDialogClose" class="modal-close-button">
+      <v-x-icon :size="20" />
+    </button>
 
-      <div class="meta">
-        <v-badge v-if="runtime">runtime</v-badge>
-        <v-badge>{{ type }}</v-badge>
-        <v-priority-badge :priority="priority" />
+    <div class="meta">
+      <v-badge v-if="runtime">runtime</v-badge>
+      <v-badge>{{ type }}</v-badge>
+      <v-priority-badge :priority="priority" />
+    </div>
+
+    <template #footer>
+      <div class="dialog-actions" v-if="!dismissed">
+        <v-popper :time-to-display="250" text="Apply Fix" placement="top">
+          <button
+            class="action"
+            @click="$emit('apply', id)"
+            :loading="currentActions.includes('fix')"
+            variant="primary"
+          >
+            <v-wrench-icon :size="16" />
+            <span class="label">Apply Fix</span>
+          </button>
+        </v-popper>
+        <v-popper :time-to-display="250" text="Explain" placement="top">
+          <button
+            class="action"
+            @click="$emit('explain', id)"
+            :loading="currentActions.includes('explain')"
+          >
+            <v-help-circle-icon :size="16" />
+            <span class="label">Explain</span>
+          </button>
+        </v-popper>
+        <v-popper :time-to-display="250" text="Add TODO" placement="top">
+          <button class="action" @click="$emit('todo', id)">
+            <v-file-code-icon :size="16" />
+            <span class="label">Add TODO</span>
+          </button>
+        </v-popper>
+        <v-popper :time-to-display="250" text="Mark Fixed" placement="top">
+          <button class="action" @click="$emit('fixed', id)">
+            <v-check-icon :size="16" />
+            <span class="label">Mark Fixed</span>
+          </button>
+        </v-popper>
+        <v-popper :time-to-display="250" text="Dismiss" placement="top">
+          <button class="action" @click="openDismissDialog">
+            <v-trash-icon :size="16" />
+            <span class="label">Dismiss</span>
+          </button>
+        </v-popper>
+      </div>
+    </template>
+
+    <div class="info-block">
+      <h4 class="info-block__title">Location</h4>
+      <code class="info-block__code">{{ location }}</code>
+    </div>
+
+    <div class="info-block">
+      <h4 class="info-block__title">Code</h4>
+      <v-code-snippet
+        :clipboard-text="code"
+        :language="fileExtension"
+        :show-copy="false"
+        class="code-snippet"
+      />
+    </div>
+
+    <div v-if="runtime" class="info-block">
+      <h4 class="info-block__title">Runtime Analysis</h4>
+      <div v-if="stackTrace" class="mb-4">
+        <h5 class="info-block__subtitle">Stack Trace</h5>
+        <v-code-snippet :clipboard-text="stackTrace" language="txt" class="code-snippet" />
       </div>
 
-      <template #footer>
-        <div class="dialog-actions" v-if="!dismissed">
-          <v-popper :time-to-display="250" text="Apply Fix" placement="top">
-            <button
-              class="action"
-              @click="$emit('apply', id)"
-              :loading="currentActions.includes('fix')"
-              variant="primary"
-            >
-              <v-wrench-icon :size="16" />
-              <span class="label">Apply Fix</span>
-            </button>
-          </v-popper>
-          <v-popper :time-to-display="250" text="Explain" placement="top">
-            <button
-              class="action"
-              @click="$emit('explain', id)"
-              :loading="currentActions.includes('explain')"
-            >
-              <v-help-circle-icon :size="16" />
-              <span class="label">Explain</span>
-            </button>
-          </v-popper>
-          <v-popper :time-to-display="250" text="Add TODO" placement="top">
-            <button class="action" @click="$emit('todo', id)">
-              <v-file-code-icon :size="16" />
-              <span class="label">Add TODO</span>
-            </button>
-          </v-popper>
-          <v-popper :time-to-display="250" text="Mark Fixed" placement="top">
-            <button class="action" @click="$emit('fixed', id)">
-              <v-check-icon :size="16" />
-              <span class="label">Mark Fixed</span>
-            </button>
-          </v-popper>
-          <v-popper :time-to-display="250" text="Dismiss" placement="top">
-            <button class="action" @click="openDismissDialog">
-              <v-trash-icon :size="16" />
-              <span class="label">Dismiss</span>
-            </button>
-          </v-popper>
-        </div>
-      </template>
+      <v-mermaid-diagram v-if="sequenceDiagram">
+        {{ sequenceDiagram }}
+      </v-mermaid-diagram>
+    </div>
 
-      <div class="info-block">
-        <h4 class="info-block__title">Location</h4>
-        <code class="info-block__code">{{ location }}</code>
-      </div>
-
-      <div class="info-block">
-        <h4 class="info-block__title">Code</h4>
-        <v-code-snippet
-          :clipboard-text="code"
-          :language="fileExtension"
-          :show-copy="false"
-          class="code-snippet"
-        />
-      </div>
-
-      <div v-if="runtime" class="info-block">
-        <h4 class="info-block__title">Runtime Analysis</h4>
-        <div v-if="stackTrace" class="mb-4">
-          <h5 class="info-block__subtitle">Stack Trace</h5>
-          <v-code-snippet :clipboard-text="stackTrace" language="txt" class="code-snippet" />
-        </div>
-
-        <v-mermaid-diagram v-if="sequenceDiagram">
-          {{ sequenceDiagram }}
-        </v-mermaid-diagram>
-      </div>
-
-      <div v-if="showExplanation" class="explanation-block mt-6">
-        <h4 class="info-block__subtitle">Explanation</h4>
-        <p>This is a detailed explanation of the issue and its potential impact...</p>
-      </div>
-    </v-modal-container>
-  </div>
+    <div v-if="showExplanation" class="explanation-block mt-6">
+      <h4 class="info-block__subtitle">Explanation</h4>
+      <p>This is a detailed explanation of the issue and its potential impact...</p>
+    </div>
+  </v-modal-container>
 </template>
 
 <script lang="ts">
-import Vue, { Component, PropType } from 'vue';
+import Vue, { PropType } from 'vue';
 import VPopper from '@/components/Popper.vue';
 import VModalContainer from '@/components/review/ModalContainer.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
 import VPriorityBadge from '@/components/review/PriorityBadge.vue';
-import VDismissModal from '@/components/review/DismissModal.vue';
 import VBadge from '@/components/Badge.vue';
 import {
   X as VXIcon,
@@ -128,7 +120,6 @@ export default Vue.extend({
     VMermaidDiagram,
     VPriorityBadge,
     VBadge,
-    VDismissModal,
   },
   props: {
     id: {
@@ -179,7 +170,6 @@ export default Vue.extend({
   data() {
     return {
       showExplanation: false,
-      isDismissDialogOpen: false,
     };
   },
   computed: {
@@ -204,14 +194,7 @@ export default Vue.extend({
       this.showExplanation = !this.showExplanation;
     },
     openDismissDialog() {
-      this.isDismissDialogOpen = true;
-    },
-    closeDismissDialog() {
-      this.isDismissDialogOpen = false;
-    },
-    submitDismissReason(reason: string) {
-      this.$emit('dismissed', this.id, reason);
-      this.closeDismissDialog();
+      this.$emit('dismiss', this.id);
     },
   },
 });
