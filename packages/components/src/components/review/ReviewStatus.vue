@@ -67,7 +67,6 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { AlertTriangle, CheckCircle } from 'lucide-vue';
 import SectionHeading from './SectionHeading.vue';
 
 interface Suggestions {
@@ -79,8 +78,6 @@ interface Suggestions {
 export default Vue.extend({
   name: 'ReviewStatus',
   components: {
-    AlertTriangle,
-    CheckCircle,
     SectionHeading,
   },
   props: {
