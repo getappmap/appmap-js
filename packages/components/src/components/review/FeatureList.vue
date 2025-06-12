@@ -4,77 +4,17 @@
       <v-section-heading title="Features" />
 
       <!-- Test Status Section -->
-      <div class="feature-list__test-status-section">
-        <div class="feature-list__test-status-header">
-          <h3 class="feature-list__sub-heading">Test Status</h3>
-          <button
-            @click="runTests"
-            :disabled="isRunningTests"
-            class="feature-list__button feature-list__button--primary"
-          >
+      <div class="feature-list__actions">
+        <v-button @click="runTests" :disabled="isRunningTests" kind="native-ghost">
             <template v-if="isRunningTests">
-              <span
-                class="feature-list__icon feature-list__icon--loader animate-spin"
-                aria-hidden="true"
-                >↻</span
-              >
+            <v-rotate-cw size="14" class="button-icon" />
               Running Tests...
             </template>
             <template v-else>
-              <span class="feature-list__icon" aria-hidden="true">▶</span>
+            <v-play size="14" class="button-icon" />
               Run Tests
-            </template>
-          </button>
-        </div>
-
-        <div v-if="testsStarted" class="feature-list__test-results-container">
-          <template v-for="(feature, index) in features">
-            <div
-              v-if="feature.testDetails"
-              :key="`test-group-${index}`"
-              class="feature-list__test-group"
-            >
-              <div
-                v-for="(test, testIndex) in feature.testDetails.tests"
-                :key="`test-${index}-${testIndex}`"
-                class="feature-list__test-item"
-              >
-                <span
-                  v-if="test.status === 'pass'"
-                  class="feature-list__icon feature-list__icon--success feature-list__icon--test-status"
-                  aria-label="Pass"
-                  >✓</span
-                >
-                <span
-                  v-else
-                  class="feature-list__icon feature-list__icon--error feature-list__icon--test-status"
-                  aria-label="Fail"
-                  >✗</span
-                >
-                <div class="feature-list__test-item-details">
-                  <div class="feature-list__test-item-header">
-                    <a href="#" @click.prevent class="feature-list__link feature-list__test-name">{{
-                      test.name
-                    }}</a>
-                    <span class="feature-list__test-file-info">{{ feature.testDetails.file }}</span>
-                    <button
-                      v-if="test.status === 'fail'"
-                      class="feature-list__button feature-list__button--xs feature-list__button--danger-ghost"
-                      @click.prevent="handleFixTest(feature, test)"
-                    >
-                      <span class="feature-list__icon" aria-hidden="true">🛠</span>
-                      Fix
-                    </button>
-                  </div>
-                  <p v-if="test.message" class="feature-list__test-message">{{ test.message }}</p>
-                </div>
-              </div>
-            </div>
           </template>
-        </div>
-        <div v-else class="feature-list__no-tests-placeholder">
-          Click "Run Tests" to start the test suite
-        </div>
+        </v-button>
       </div>
 
       <!-- Features Grid -->
@@ -221,8 +161,15 @@
 import Vue, { PropType } from 'vue';
 import VSectionHeading from '@/components/review/SectionHeading.vue';
 import VDismissModal from '@/components/review/DismissModal.vue';
-import { Check as VCheck, TriangleAlert as VTriangleAlert } from 'lucide-vue';
+import VButton from '@/components/Button.vue';
+import {
+  Check as VCheck,
+  TriangleAlert as VTriangleAlert,
+  Play as VPlay,
+  RotateCw as VRotateCw,
+} from 'lucide-vue';
 import type { Test, Feature, DismissedFeature } from '.';
+
 export default Vue.extend({
   name: 'FeatureList',
   components: {
@@ -230,6 +177,9 @@ export default Vue.extend({
     VCheck,
     VTriangleAlert,
     VDismissModal,
+    VButton,
+    VPlay,
+    VRotateCw,
   },
   props: {
     features: {
@@ -345,6 +295,10 @@ export default Vue.extend({
   animation: spin 1s linear infinite;
 }
 
+.button-icon {
+  padding-right: 0.5em;
+}
+
 .feature-list {
   font-family: $font-family;
 
@@ -357,6 +311,12 @@ export default Vue.extend({
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
   }
 
   &__test-status-section {
