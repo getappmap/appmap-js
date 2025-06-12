@@ -1,18 +1,18 @@
 <template>
   <section id="features" class="feature-list">
     <div class="feature-list__container">
-      <v-section-heading title="Features" />
+      <v-section-heading title="Features" :loading="loading" />
 
       <!-- Test Status Section -->
       <div class="feature-list__actions">
         <v-button @click="runTests" :disabled="isRunningTests" kind="native-ghost">
-            <template v-if="isRunningTests">
+          <template v-if="isRunningTests">
             <v-rotate-cw size="14" class="button-icon" />
-              Running Tests...
-            </template>
-            <template v-else>
+            Running Tests...
+          </template>
+          <template v-else>
             <v-play size="14" class="button-icon" />
-              Run Tests
+            Run Tests
           </template>
         </v-button>
       </div>
@@ -144,6 +144,7 @@
             </div>
           </div>
         </div>
+        <v-skeleton-loader class="feature-list__card-loader" v-if="loading" />
       </div>
 
       <v-dismiss-modal
@@ -162,6 +163,7 @@ import Vue, { PropType } from 'vue';
 import VSectionHeading from '@/components/review/SectionHeading.vue';
 import VDismissModal from '@/components/review/DismissModal.vue';
 import VButton from '@/components/Button.vue';
+import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 import {
   Check as VCheck,
   TriangleAlert as VTriangleAlert,
@@ -180,8 +182,13 @@ export default Vue.extend({
     VButton,
     VPlay,
     VRotateCw,
+    VSkeletonLoader,
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     features: {
       type: Array as PropType<Feature[]>,
       required: true,
@@ -519,6 +526,12 @@ export default Vue.extend({
     &--needs-tests {
       border-left-color: $color-warning;
     }
+  }
+
+  &__card-loader {
+    height: 8em !important;
+    width: 100%;
+    border-radius: $border-radius;
   }
 
   &__card-content {

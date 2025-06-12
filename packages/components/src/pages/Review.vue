@@ -7,9 +7,18 @@
       :dismissed-features="dismissedFeatures.length"
       :suggestions="suggestionsSummary"
       :dismissed-suggestions="dismissedSuggestions.length"
+      :loading="loading"
     />
-    <v-feature-list :features="features" @feature-dismiss="handleFeatureDismiss" />
-    <v-suggestions @suggestion-dismiss="handleSuggestionDismiss" :suggestions="suggestions" />
+    <v-feature-list
+      :features="features"
+      @feature-dismiss="handleFeatureDismiss"
+      :loading="loading"
+    />
+    <v-suggestions
+      @suggestion-dismiss="handleSuggestionDismiss"
+      :suggestions="suggestions"
+      :loading="loading"
+    />
   </div>
 </template>
 
@@ -30,6 +39,10 @@ export default Vue.extend({
     VSuggestions,
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     features: {
       type: Array as PropType<Feature[]>,
       default: () => [],
