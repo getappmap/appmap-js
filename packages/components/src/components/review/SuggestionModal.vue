@@ -102,7 +102,7 @@ import {
   Trash as VTrashIcon,
   Check as VCheckIcon,
   FileCode as VFileCodeIcon,
-  HelpCircle as VHelpCircleIcon,
+  CircleHelp as VHelpCircleIcon,
   Wrench as VWrenchIcon,
 } from 'lucide-vue';
 
