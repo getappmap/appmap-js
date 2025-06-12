@@ -17,6 +17,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "declaration": true,
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": ["build/svg.d.ts", "build/vue.d.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
