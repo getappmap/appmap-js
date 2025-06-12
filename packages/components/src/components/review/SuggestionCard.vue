@@ -3,7 +3,7 @@
     <div class="suggestion-card__content">
       <div class="suggestion-card__main">
         <div class="suggestion-card__title-area">
-          <CheckCircle v-if="dismissed" :size="20" :class="statusClass" />
+          <CircleCheck v-if="dismissed" :size="20" :class="statusClass" />
           <component v-else :is="categoryIconComponent" :size="20" class="icon" />
           <h4 class="suggestion-card__title">{{ title }}</h4>
         </div>
@@ -32,12 +32,12 @@
               :disabled="action === 'apply'"
               class="action-menu-item"
             >
-              <Loader2 v-if="action === 'apply'" :size="16" class="animate-spin" />
+              <LoaderCircle v-if="action === 'apply'" :size="16" class="animate-spin" />
               <Wrench v-else :size="16" />
               Apply Fix
             </v-button>
             <v-button @click.native="onAction('explain')" class="action-menu-item">
-              <HelpCircle :size="16" /> Explain
+              <CircleHelp :size="16" /> Explain
             </v-button>
             <v-button @click.native="onAction('todo')" class="action-menu-item">
               <FileCode :size="16" /> Add TODO
@@ -67,15 +67,15 @@
 import Vue, { Component, PropType } from 'vue';
 import {
   Wrench,
-  HelpCircle,
+  CircleHelp,
   FileCode,
   Check,
   RotateCcw,
-  Loader2,
+  LoaderCircle,
   Trash,
-  MoreVertical,
-  CheckCircle,
-  AlertTriangle,
+  EllipsisVertical,
+  CircleCheck,
+  TriangleAlert,
   Database,
   Globe,
   Zap,
@@ -90,15 +90,15 @@ export default Vue.extend({
   components: {
     VButton,
     Wrench,
-    HelpCircle,
+    CircleHelp,
     FileCode,
     Check,
     RotateCcw,
-    Loader2,
+    LoaderCircle,
     Trash,
-    MoreVertical,
-    CheckCircle,
-    AlertTriangle,
+    EllipsisVertical,
+    CircleCheck,
+    TriangleAlert,
     Database,
     Globe,
     VPriorityBadge,

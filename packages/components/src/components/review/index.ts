@@ -1,4 +1,4 @@
-import { AlertTriangle, Database, Globe } from 'lucide-vue';
+import { Database, Globe, TriangleAlert } from 'lucide-vue';
 import type { Component } from 'vue';
 
 export interface Suggestion {
@@ -58,7 +58,7 @@ export interface CodeLabelItem {
 export function getCategoryIconComponent(category: string): Component | undefined {
   switch (category) {
     case 'security':
-      return AlertTriangle;
+      return TriangleAlert;
     case 'sql':
       return Database;
     case 'http':
