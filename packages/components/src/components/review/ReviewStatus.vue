@@ -1,7 +1,7 @@
 <template>
   <section id="summary" class="review-status">
     <div class="review-status__container">
-      <SectionHeading title="Summary" />
+      <SectionHeading title="Summary" :loading="loading" />
       <!-- <div class="review-status__header">
         <span
           v-if="isGreenStatus"
@@ -81,6 +81,10 @@ export default Vue.extend({
     SectionHeading,
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     totalFeatures: {
       type: Number as PropType<number>,
       required: true,

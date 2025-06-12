@@ -1,7 +1,7 @@
 <template>
   <section id="suggestions" class="suggestions-section">
     <div class="container">
-      <SectionHeading title="Suggestions" />
+      <SectionHeading title="Suggestions" :loading="loading" />
 
       <!-- Summary -->
       <div class="summary-grid">
@@ -60,6 +60,7 @@
             :sequence-diagram="suggestion.runtime && suggestion.runtime.sequenceDiagram"
             :dismissed="getSuggestionStatus(suggestion.id) !== undefined"
           />
+          <v-skeleton-loader class="card-loader" v-if="loading" />
         </div>
       </div>
     </div>
@@ -113,8 +114,8 @@ import VButton from '@/components/Button.vue';
 import VPopper from '@/components/Popper.vue';
 import VSuggestionModal from './SuggestionModal.vue';
 import VDismissModal from './DismissModal.vue';
+import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
-import { get } from 'http';
 
 export default Vue.extend({
   name: 'SuggestionsList',
@@ -139,8 +140,13 @@ export default Vue.extend({
     VSuggestionCard,
     VSuggestionModal,
     VDismissModal,
+    VSkeletonLoader,
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     suggestions: {
       type: Array as PropType<Suggestion[]>,
       default: () => [],
@@ -392,6 +398,12 @@ export default Vue.extend({
   // Common icon styling if needed
   // display: inline-block;
   // vertical-align: middle;
+}
+
+.card-loader {
+  width: 100%;
+  height: 6rem;
+  border-radius: $border-radius;
 }
 
 // Summary Section

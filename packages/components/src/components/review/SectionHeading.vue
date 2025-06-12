@@ -1,16 +1,27 @@
 <template>
   <div class="section-heading">
-    <h2 class="section-heading__title">{{ title }}</h2>
+    <h2 class="section-heading__title">
+      {{ title }} <v-loader class="section-heading__loader" v-if="loading" />
+    </h2>
+
     <p v-if="subtitle" class="section-heading__subtitle">{{ subtitle }}</p>
-    <div class="section-heading__decorator"></div>
+
+    <v-skeleton-loader v-if="loading" class="section-heading__decorator" />
+    <div class="section-heading__decorator section-heading__decorator--loaded" v-else></div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
+import VLoader from '@/components/chat/Loader.vue';
+import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 
 export default Vue.extend({
   name: 'SectionHeading',
+  components: {
+    VLoader,
+    VSkeletonLoader,
+  },
   props: {
     title: {
       type: String as PropType<string>,
@@ -19,6 +30,10 @@ export default Vue.extend({
     subtitle: {
       type: String as PropType<string | undefined>,
       required: false,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 });
@@ -39,11 +54,24 @@ export default Vue.extend({
   }
 
   &__decorator {
-    width: 5rem;
-    height: 0.25rem;
-    background-color: $color-highlight;
-    margin-top: 0.5rem;
+    width: 5rem !important;
+    height: 0.25rem !important;
     border-radius: $border-radius;
+    margin-top: 0.5rem;
+
+    &--loaded {
+      background-color: $color-highlight;
+    }
+  }
+
+  &__loader {
+    display: inline-flex;
+    transform: translateY(-50%);
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    opacity: 0.2;
+    padding-left: 1em;
   }
 }
 </style>
