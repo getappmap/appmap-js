@@ -14,14 +14,9 @@
           <span class="meta-item location">{{ location }}</span>
         </div>
 
-        <div v-if="dismissed" class="suggestion-card__status mt-2">
-          <span :class="statusClass">
-            {{ statusText }}
-          </span>
-          <button @click="$emit('reopen', id)" class="reopen-button">
-            <RotateCcw :size="16" />
-            Reopen
-          </button>
+        <div v-if="dismissed" class="suggestion-card__status">
+          <span :class="statusClass"> {{ statusText }}. </span>
+          <a href="#" @click.prevent="$emit('reopen', id)" class="reopen-button"> Reopen </a>
         </div>
       </div>
       <div class="suggestion-card__actions">
@@ -258,6 +253,10 @@ export default Vue.extend({
     .icon {
       color: $color-foreground-secondary;
     }
+
+    svg {
+      align-self: start;
+    }
   }
 
   &__title {
@@ -299,6 +298,7 @@ export default Vue.extend({
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
+    margin-top: 1rem;
   }
 
   &__actions {
