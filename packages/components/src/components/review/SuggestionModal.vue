@@ -1,16 +1,5 @@
 <template>
   <v-modal-container @close="$emit('close')">
-    <h3 class="modal-title pr-8">{{ title }}</h3>
-    <button @click="handleDialogClose" class="modal-close-button">
-      <v-x-icon :size="20" />
-    </button>
-
-    <div class="meta">
-      <v-badge v-if="runtime">runtime</v-badge>
-      <v-badge>{{ type }}</v-badge>
-      <v-priority-badge :priority="priority" />
-    </div>
-
     <template #footer>
       <div class="dialog-actions" v-if="!dismissed">
         <v-popper :time-to-display="250" text="Apply Fix" placement="top">
@@ -55,36 +44,49 @@
       </div>
     </template>
 
-    <div class="info-block">
-      <h4 class="info-block__title">Location</h4>
-      <code class="info-block__code">{{ location }}</code>
-    </div>
+    <div class="suggestion-modal-container">
+      <h3 class="modal-title pr-8">{{ title }}</h3>
+      <button @click="handleDialogClose" class="modal-close-button">
+        <v-x-icon :size="20" />
+      </button>
 
-    <div class="info-block">
-      <h4 class="info-block__title">Code</h4>
-      <v-code-snippet
-        :clipboard-text="code"
-        :language="fileExtension"
-        :show-copy="false"
-        class="code-snippet"
-      />
-    </div>
-
-    <div v-if="runtime" class="info-block">
-      <h4 class="info-block__title">Runtime Analysis</h4>
-      <div v-if="stackTrace" class="mb-4">
-        <h5 class="info-block__subtitle">Stack Trace</h5>
-        <v-code-snippet :clipboard-text="stackTrace" language="txt" class="code-snippet" />
+      <div class="meta">
+        <v-badge v-if="runtime">runtime</v-badge>
+        <v-badge>{{ type }}</v-badge>
+        <v-priority-badge :priority="priority" />
       </div>
 
-      <v-mermaid-diagram v-if="sequenceDiagram">
-        {{ sequenceDiagram }}
-      </v-mermaid-diagram>
-    </div>
+      <div class="info-block">
+        <h4 class="info-block__title">Location</h4>
+        <code class="info-block__code">{{ location }}</code>
+      </div>
 
-    <div v-if="showExplanation" class="explanation-block mt-6">
-      <h4 class="info-block__subtitle">Explanation</h4>
-      <p>This is a detailed explanation of the issue and its potential impact...</p>
+      <div class="info-block">
+        <h4 class="info-block__title">Code</h4>
+        <v-code-snippet
+          :clipboard-text="code"
+          :language="fileExtension"
+          :show-copy="false"
+          class="code-snippet"
+        />
+      </div>
+
+      <div v-if="runtime" class="info-block">
+        <h4 class="info-block__title">Runtime Analysis</h4>
+        <div v-if="stackTrace" class="mb-4">
+          <h5 class="info-block__subtitle">Stack Trace</h5>
+          <v-code-snippet :clipboard-text="stackTrace" language="txt" class="code-snippet" />
+        </div>
+
+        <v-mermaid-diagram v-if="sequenceDiagram">
+          {{ sequenceDiagram }}
+        </v-mermaid-diagram>
+      </div>
+
+      <div v-if="showExplanation" class="explanation-block mt-6">
+        <h4 class="info-block__subtitle">Explanation</h4>
+        <p>This is a detailed explanation of the issue and its potential impact...</p>
+      </div>
     </div>
   </v-modal-container>
 </template>
@@ -201,6 +203,10 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+.suggestion-modal-container {
+  margin-bottom: 4em;
+}
+
 .meta {
   display: flex;
   flex-wrap: wrap;
@@ -255,6 +261,7 @@ export default Vue.extend({
 .dialog-actions {
   display: flex;
   justify-content: space-evenly;
+  box-shadow: 0 0 0.25rem $color-tile-shadow;
 
   &::v-deep {
     .popper__text {
