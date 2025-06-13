@@ -27,6 +27,18 @@
       </div>
 
       <!-- Suggestions by category -->
+      <v-data-table
+        :headers="[
+          { text: 'Description', value: 'title' },
+          { text: 'Category', value: 'category' },
+          { text: 'Severity', value: 'priority' },
+          { text: 'Location', value: 'location' },
+        ]"
+        :items="suggestions"
+        :items-per-page="50"
+      >
+      </v-data-table>
+
       <div
         v-for="(items, category) in categorizedSuggestions"
         :key="category"
@@ -115,6 +127,7 @@ import VPopper from '@/components/Popper.vue';
 import VSuggestionModal from './SuggestionModal.vue';
 import VDismissModal from './DismissModal.vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
+import { VDataTable } from 'vuetify/lib/components';
 import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
 
 export default Vue.extend({
@@ -141,6 +154,7 @@ export default Vue.extend({
     VSuggestionModal,
     VDismissModal,
     VSkeletonLoader,
+    VDataTable,
   },
   props: {
     loading: {

@@ -6,6 +6,7 @@ module.exports = {
   addons: [
     getAbsolutePath('@storybook/addon-links'),
     getAbsolutePath('@storybook/addon-essentials'),
+    getAbsolutePath('@storybook/preset-scss'),
   ],
 
   webpackFinal: async (config, { configType }) => {
@@ -24,8 +25,6 @@ module.exports = {
     config.module.rules.push({
       test: /\.scss$/,
       use: [
-        'style-loader',
-        'css-loader',
         'sass-loader',
         {
           loader: 'sass-resources-loader',

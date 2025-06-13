@@ -51,6 +51,7 @@
     "sax": "^1.4.1",
     "sql-formatter": "^4.0.2",
     "vue": "^2.7.16",
+    "vuetify": "2.6.12",
     "vuex": "^3.6.0"
   },
   "devDependencies": {
@@ -66,6 +67,7 @@
     "@storybook/addon-actions": "^7.6.17",
     "@storybook/addon-essentials": "^7.6.17",
     "@storybook/addon-links": "^7.6.17",
+    "@storybook/preset-scss": "^1.0.3",
     "@storybook/vue": "^7.6.17",
     "@storybook/vue-webpack5": "^7.6.17",
     "@types/assert": "^1.5.6",
@@ -125,6 +127,7 @@
     "vue-loader": "^15.7.0",
     "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.7.16",
+    "vuetify-loader": "^1.9.2",
     "webpack": "^5.75.0"
   },
   "repository": {
