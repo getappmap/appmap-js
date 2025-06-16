@@ -7,11 +7,11 @@
       <div class="feature-list__actions">
         <v-button @click="runTests" :disabled="isRunningTests" kind="native-ghost">
           <template v-if="isRunningTests">
-            <v-rotate-cw size="14" class="button-icon" />
+            <v-rotate-cw :size="14" class="button-icon" />
             Running Tests...
           </template>
           <template v-else>
-            <v-play size="14" class="button-icon" />
+            <v-play :size="14" class="button-icon" />
             Run Tests
           </template>
         </v-button>

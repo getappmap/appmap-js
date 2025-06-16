@@ -1,9 +1,11 @@
 <template>
-  <div class="suggestion-card" :class="{ 'is-dismissed': dismissed }">
+  <div class="suggestion-card" :class="{ 'is-dismissed': status === 'dismissed' }">
     <div class="suggestion-card__content">
       <div class="suggestion-card__main">
         <div class="suggestion-card__title-area">
-          <CircleCheck v-if="dismissed" :size="20" :class="statusClass" />
+          <CircleEllipsis v-if="status === 'fix-in-progress'" :size="20" :class="statusClass" />
+          <CircleAlert v-else-if="status === 'fixed'" :size="20" :class="statusClass" />
+          <CircleCheck v-else-if="dismissed" :size="20" :class="statusClass" />
           <component v-else :is="categoryIconComponent" :size="20" class="icon" />
           <h4 class="suggestion-card__title">{{ title }}</h4>
         </div>
@@ -11,12 +13,30 @@
           <v-badge v-if="runtime"><Zap :size="10" class="full icon-adjust" />Runtime</v-badge>
           <v-type-badge :type="type" />
           <v-priority-badge :priority="priority" class="meta-item" />
-          <span class="meta-item location">{{ location }}</span>
+          <a href="#" @click.prevent.stop="openLocation">
+            <span class="meta-item location">{{ location }}</span>
+          </a>
         </div>
 
-        <div v-if="dismissed" class="suggestion-card__status">
-          <span :class="statusClass"> {{ statusText }}. </span>
-          <a href="#" @click.prevent="$emit('reopen', id)" class="reopen-button"> Reopen </a>
+        <div v-if="status === 'fix-in-progress'" class="suggestion-card__status">
+          <span :class="statusClass"> A fix is being worked on. </span>
+          <a href="#" @click.prevent.stop="$emit('view-fix-thread', id)" class="reopen-button">
+            View progress
+          </a>
+        </div>
+        <div v-else-if="status === 'dismissed'" class="suggestion-card__status">
+          <span :class="statusClass"> Dismissed. </span>
+          <a href="#" @click.prevent.stop="$emit('reopen', id)" class="reopen-button"> Reopen </a>
+        </div>
+        <div v-else-if="status === 'fixed'" class="suggestion-card__status">
+          <span :class="statusClass"> A fix has been created. </span>
+          <a href="#" @click.prevent.stop="$emit('view-fix-thread', id)" class="reopen-button">
+            View results
+          </a>
+        </div>
+        <div v-else-if="status && status !== 'todo'" class="suggestion-card__status">
+          <span :class="statusClass"> Status unknown. </span>
+          <a href="#" @click.prevent.stop="$emit('reopen', id)" class="reopen-button"> Clear </a>
         </div>
       </div>
       <div class="suggestion-card__actions">
@@ -45,14 +65,15 @@
             </v-button>
           </div>
         </div>
-        <v-button kind="native-ghost" @click.native="$emit('details', id)"> Details </v-button>
         <v-button
           @click.stop.native="toggleActionMenu()"
           :ref="`actionMenuTrigger-${id}`"
           class="action-menu-button"
+          v-if="!dismissed"
         >
-          <MoreVertical :size="20" />
+          <EllipsisVertical :size="20" />
         </v-button>
+        <v-button kind="native-ghost" @click.native="$emit('details', id)"> Details </v-button>
       </div>
     </div>
   </div>
@@ -70,6 +91,8 @@ import {
   Trash,
   EllipsisVertical,
   CircleCheck,
+  CircleEllipsis,
+  CircleAlert,
   TriangleAlert,
   Database,
   Globe,
@@ -100,6 +123,8 @@ export default Vue.extend({
     VBadge,
     Zap,
     VTypeBadge,
+    CircleEllipsis,
+    CircleAlert,
   },
   props: {
     id: {
@@ -189,6 +214,8 @@ export default Vue.extend({
     },
     statusText(): string {
       switch (this.status) {
+        case 'fix-in-progress':
+          return 'A fix is being generated.';
         case 'applied':
           return 'Applied';
         case 'todo':
@@ -213,6 +240,11 @@ export default Vue.extend({
     onAction(action: 'apply' | 'explain' | 'todo' | 'fix' | 'dismiss') {
       this.$emit(action, this.id);
       this.showActionMenu = false;
+    },
+    openLocation() {
+      if (this.location) {
+        this.$root.$emit('open-file', this.location);
+      }
     },
   },
 });
@@ -322,9 +354,6 @@ export default Vue.extend({
 }
 .status-todo {
   color: $color-warning !important;
-}
-.status-fixed {
-  color: $color-highlight-light !important;
 }
 .status-dismissed {
   color: $color-foreground-secondary !important;

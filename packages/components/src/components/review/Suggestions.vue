@@ -26,6 +26,8 @@
         </a>
       </div>
 
+      <v-skeleton-loader class="suggestions-loader" v-if="!suggestions || !suggestions.length" />
+
       <!-- Suggestions by category -->
       <div
         v-for="(items, category) in categorizedSuggestions"
@@ -43,6 +45,8 @@
             v-for="(suggestion, index) in items"
             @details="openDetailsDialog(suggestion)"
             @reopen="handleReopen(suggestion.id)"
+            @apply="fix"
+            @view-fix-thread="fix(suggestion.id)"
             :key="index"
             :id="suggestion.id"
             :title="suggestion.title"
@@ -74,6 +78,7 @@
       v-else-if="selectedSuggestion"
       @close="handleDialogClose"
       @dismiss="openDismissDialog"
+      @apply="fix"
       :id="selectedSuggestion.id"
       :title="selectedSuggestion.title"
       :type="selectedSuggestion.type"
@@ -83,6 +88,7 @@
       :runtime="Boolean(selectedSuggestion.runtime)"
       :stack-trace="selectedSuggestion.runtime && selectedSuggestion.runtime.stackTrace"
       :sequence-diagram="selectedSuggestion.runtime && selectedSuggestion.runtime.sequenceDiagram"
+      :appmap-references="selectedSuggestion.runtime && selectedSuggestion.runtime.appMapReferences"
       :dismissed="getSuggestionStatus(selectedSuggestion.id) !== undefined"
     />
   </section>
@@ -116,6 +122,11 @@ import VSuggestionModal from './SuggestionModal.vue';
 import VDismissModal from './DismissModal.vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
+import type AppMapRPC from '@/lib/AppMapRPC';
+
+interface Injected {
+  rpcClient: AppMapRPC;
+}
 
 export default Vue.extend({
   name: 'SuggestionsList',
@@ -165,6 +176,9 @@ export default Vue.extend({
       isLoading: undefined as { id: string; action: 'apply' | 'explain' } | undefined,
       openActionMenu: undefined as string | undefined,
     };
+  },
+  inject: {
+    rpcClient: {},
   },
   computed: {
     summaryCategories(): { name: string; stats: { high: number; medium: number } }[] {
@@ -290,6 +304,86 @@ export default Vue.extend({
         this.handleDialogClose();
       }
     },
+    async fix(suggestionId: string) {
+      const suggestion = this.suggestions.find((s) => s.id === suggestionId);
+      if (!suggestion) return;
+
+      const existingStatus = this.getSuggestionStatus(suggestion.id);
+      if (existingStatus?.threadId) {
+        this.$root.$emit('open-navie-thread', existingStatus.threadId);
+        return;
+      }
+
+      const status: SuggestionStatus = {
+        status: 'fix-in-progress',
+      };
+
+      this.$set(this.suggestionStatuses, suggestion.id, status);
+
+      const { rpcClient } = this as unknown as Injected;
+      const registration = await rpcClient.register();
+      status.threadId = registration.thread.id;
+
+      const listener = await rpcClient.thread.subscribe(registration.thread.id);
+
+      let issueDescription = '';
+      if (suggestion.runtime?.finding) {
+        const { finding } = suggestion.runtime;
+        const req = finding?.event?.['http_server_request'];
+        const query = finding?.event?.['sql_query'];
+        const relatedClasses = new Set<string>(
+          (finding.relatedEvents ?? []).map(({ defined_class, method }) => {
+            if (method === undefined) {
+              return defined_class;
+            }
+            return `${defined_class}#${method}`;
+          })
+        );
+        issueDescription = [
+          `The issue is described as "${suggestion.title}"`,
+          finding.description,
+          '\nDetails are as follows:',
+          finding.message,
+          finding.locationLabel,
+          finding.event?.path,
+          req && `${req.method} ${req.path}`,
+          query && `SQL${query.database_type ? ` (${query.database_type})` : ''}: ${query.sql}`,
+          ...[...relatedClasses],
+          ...[...new Set(finding.stack.map((l: any) => l.replace(/:-1$/, '')))],
+        ]
+          .filter(Boolean)
+          .join('\n');
+      } else {
+        issueDescription = [
+          `${suggestion.title} in ${suggestion.location}:`,
+          '```',
+          suggestion.code,
+          '```',
+        ].join('\n');
+      }
+      const messageQueue = [
+        `@explain /gather identify and explain the root cause of the following issue.\n${issueDescription}`,
+        '@plan a concise resolution to the issue, keeping changes to the minimum necessary - be specific and precise in your response, and always follow best practices.',
+        '@generate /format=xml',
+      ];
+      let currentMessageComplete: Promise<void>;
+      let resolver: () => void;
+      listener.on('event', (e) => {
+        if (e.type === 'message-complete') {
+          if (resolver) resolver();
+        }
+      });
+      for (const message of messageQueue) {
+        currentMessageComplete = new Promise((resolve) => {
+          resolver = resolve;
+        });
+
+        await rpcClient.thread.sendMessage(registration.thread.id, message);
+        await currentMessageComplete;
+      }
+
+      status.status = 'fixed';
+    },
     dismissSuggestion(reason: string) {
       const id = this.showDismissDialogForSuggestionId;
       if (!reason || !id) return;
@@ -399,11 +493,15 @@ export default Vue.extend({
   // display: inline-block;
   // vertical-align: middle;
 }
-
+.suggestions-loader,
 .card-loader {
   width: 100%;
   height: 6rem;
   border-radius: $border-radius;
+}
+
+.suggestions-loader {
+  height: 16rem;
 }
 
 // Summary Section
