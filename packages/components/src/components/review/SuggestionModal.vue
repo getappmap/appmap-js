@@ -58,10 +58,12 @@
 
       <div class="info-block">
         <h4 class="info-block__title">Location</h4>
-        <code class="info-block__code">{{ location }}</code>
+        <a href="#" @click.prevent.stop="openLocation">
+          <code class="info-block__code">{{ location }}</code>
+        </a>
       </div>
 
-      <div class="info-block">
+      <div class="info-block" v-if="code">
         <h4 class="info-block__title">Code</h4>
         <v-code-snippet
           :clipboard-text="code"
@@ -81,6 +83,20 @@
         <v-mermaid-diagram v-if="sequenceDiagram">
           {{ sequenceDiagram }}
         </v-mermaid-diagram>
+
+        <div v-if="appmapReferences && appmapReferences.length">
+          <h5 class="info-block__subtitle">Runtime Traces</h5>
+          <ul>
+            <li v-for="ref in appmapReferences" :key="ref.findingHash">
+              <a
+                href="#"
+                @click.prevent.stop="$root.$emit('open-appmap-finding', ref.path, ref.findingHash)"
+              >
+                {{ ref.name }}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div v-if="showExplanation" class="explanation-block mt-6">
@@ -93,6 +109,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
+import type { ReviewRpc } from '@appland/rpc';
 import VPopper from '@/components/Popper.vue';
 import VModalContainer from '@/components/review/ModalContainer.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
@@ -168,6 +185,10 @@ export default Vue.extend({
       type: Array as PropType<Array<'explain' | 'fix'>>,
       default: () => [],
     },
+    appmapReferences: {
+      type: Array as PropType<Array<ReviewRpc.AppMapFindingReference>>,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -197,6 +218,11 @@ export default Vue.extend({
     },
     openDismissDialog() {
       this.$emit('dismiss', this.id);
+    },
+    openLocation() {
+      if (this.location) {
+        this.$root.$emit('open-file', this.location);
+      }
     },
   },
 });

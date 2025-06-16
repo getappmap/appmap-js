@@ -65,11 +65,11 @@ export default Vue.extend({
   }
 
   &__loader {
-    display: inline-flex;
+    display: inline-flex !important;
     transform: translateY(-50%);
     align-items: center;
     justify-content: center;
-    width: 2rem;
+    width: 2rem !important;
     opacity: 0.2;
     padding-left: 1em;
   }

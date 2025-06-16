@@ -1,4 +1,10 @@
 export namespace ReviewRpc {
+  export interface AppMapFindingReference {
+    path: string;
+    name: string;
+    findingHash: string;
+  }
+
   export interface Suggestion {
     id: string;
     title: string;
@@ -10,6 +16,7 @@ export namespace ReviewRpc {
     runtime?: {
       stackTrace?: string;
       sequenceDiagram?: string;
+      appMapReferences?: AppMapFindingReference[];
     };
   }
 
@@ -61,5 +68,6 @@ export namespace ReviewRpc {
     features: Feature[];
     dismissedFeatures: DismissedFeature[];
     codeLabels: CodeLabelItem[];
+    complete?: boolean;
   }
 }

@@ -29,6 +29,7 @@ import VReviewStatus from '@/components/review/ReviewStatus.vue';
 import VFeatureList from '@/components/review/FeatureList.vue';
 import VSuggestions from '@/components/review/Suggestions.vue';
 import type { Feature, Suggestion } from '@/components/review';
+import AppMapRPC from '@/lib/AppMapRPC';
 
 export default Vue.extend({
   name: 'ReviewPage',
@@ -55,11 +56,20 @@ export default Vue.extend({
       type: Array,
       default: () => [],
     },
+    appmapRpcPort: {
+      type: Number,
+    },
   },
   data() {
     return {
       dismissedFeatures: [] as number[],
       dismissedSuggestions: [] as string[],
+      rpcClient: new AppMapRPC(this.appmapRpcPort ?? 30101),
+    };
+  },
+  provide() {
+    return {
+      rpcClient: this.rpcClient,
     };
   },
   computed: {
@@ -119,7 +129,7 @@ a {
 <style scoped lang="scss">
 .review-page {
   min-height: 100vh;
-  background-color: $color-input-bg;
+  background-color: $color-background;
   color: $color-foreground-dark;
   display: flex;
   flex-direction: column;

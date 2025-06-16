@@ -38,7 +38,7 @@ export default Vue.extend({
 $text-xl-equivalent: 1.25rem; //
 
 .app-header {
-  background-color: $color-input-bg;
+  background-color: $color-background;
   border-bottom: 1px solid $color-tile-background;
   padding-top: 1rem;
   padding-bottom: 1rem;
