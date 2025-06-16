@@ -1,6 +1,26 @@
 import { Database, Globe, TriangleAlert } from 'lucide-vue';
 import type { Component } from 'vue';
 
+export interface AppMapFindingReference {
+  path: string;
+  name: string;
+  findingHash: string;
+}
+
+interface Event {
+  path: string;
+  defined_class: string;
+  method: string;
+  http_server_request?: {
+    method: string;
+    path: string;
+  };
+  sql_query?: {
+    sql: string;
+    database_type?: string;
+  };
+}
+
 export interface Suggestion {
   id: string;
   title: string;
@@ -12,12 +32,22 @@ export interface Suggestion {
   runtime?: {
     stackTrace?: string;
     sequenceDiagram?: string;
+    appMapReferences?: AppMapFindingReference[];
+    finding?: {
+      description: string;
+      message: string;
+      locationLabel?: string;
+      relatedEvents?: Event[];
+      event?: Event;
+      stack: string[];
+    };
   };
 }
 
 export interface SuggestionStatus {
-  status: 'applied' | 'todo' | 'fixed' | 'dismissed';
-  reason: string;
+  status: 'fix-in-progress' | 'todo' | 'fixed' | 'dismissed';
+  reason?: string;
+  threadId?: string;
 }
 
 export interface TestCoverageItem {

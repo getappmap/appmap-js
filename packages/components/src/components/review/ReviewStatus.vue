@@ -127,7 +127,6 @@ export default Vue.extend({
 $text-xl-equivalent: 1.25rem;
 
 .review-status {
-  background-color: $color-input-bg;
   font-family: $font-family;
   padding: 0 1rem;
 
