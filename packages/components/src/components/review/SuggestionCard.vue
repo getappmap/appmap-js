@@ -1,80 +1,65 @@
 <template>
-  <div class="suggestion-card" :class="{ 'is-dismissed': status === 'dismissed' }">
-    <div class="suggestion-card__content">
-      <div class="suggestion-card__main">
-        <div class="suggestion-card__title-area">
-          <CircleEllipsis v-if="status === 'fix-in-progress'" :size="20" :class="statusClass" />
-          <CircleAlert v-else-if="status === 'fixed'" :size="20" :class="statusClass" />
-          <CircleCheck v-else-if="dismissed" :size="20" :class="statusClass" />
-          <component v-else :is="categoryIconComponent" :size="20" class="icon" />
-          <h4 class="suggestion-card__title">{{ title }}</h4>
-        </div>
-        <div class="suggestion-card__meta mt-2">
-          <v-badge v-if="runtime"><Zap :size="10" class="full icon-adjust" />Runtime</v-badge>
-          <v-type-badge :type="type" />
-          <v-priority-badge :priority="priority" class="meta-item" />
-          <a href="#" @click.prevent.stop="openLocation">
-            <span class="meta-item location">{{ location }}</span>
-          </a>
-        </div>
+  <div
+    class="suggestion-card"
+    :class="{ [status.status]: true, 'is-expanded': expanded }"
+    @click="expanded = !expanded"
+  >
+    <div class="suggestion-card__meta">
+      <CircleEllipsis v-if="status.status === 'fix-in-progress'" :size="20" :class="statusClass" />
+      <CircleAlert v-else-if="status.status === 'fixed'" :size="20" :class="statusClass" />
+      <CircleCheck v-else-if="dismissed" :size="20" :class="statusClass" />
+      <component v-else :is="categoryIconComponent" :size="20" class="icon" />
+      <v-badge v-if="hasRuntime"><Zap :size="10" class="full icon-adjust" />Runtime</v-badge>
+      <v-type-badge :type="type" />
+      <v-priority-badge :priority="priority" class="meta-item" />
+      <h4 class="title">{{ title }}</h4>
+      <div v-if="!expanded" class="suggestion-card__title-area">
+        <a class="file" :href="location" :title="location">{{ location.replace(/^.*\//, '') }}</a>
+        <a
+          class="appmap"
+          v-for="appmap in appMapReferences"
+          :key="appmap.name"
+          :href="appmap.path"
+          :title="appmap.name"
+        />
 
-        <div v-if="status === 'fix-in-progress'" class="suggestion-card__status">
-          <span :class="statusClass"> A fix is being worked on. </span>
-          <a href="#" @click.prevent.stop="$emit('view-fix-thread', id)" class="reopen-button">
-            View progress
-          </a>
-        </div>
-        <div v-else-if="status === 'dismissed'" class="suggestion-card__status">
-          <span :class="statusClass"> Dismissed. </span>
-          <a href="#" @click.prevent.stop="$emit('reopen', id)" class="reopen-button"> Reopen </a>
-        </div>
-        <div v-else-if="status === 'fixed'" class="suggestion-card__status">
-          <span :class="statusClass"> A fix has been created. </span>
-          <a href="#" @click.prevent.stop="$emit('view-fix-thread', id)" class="reopen-button">
-            View results
-          </a>
-        </div>
-        <div v-else-if="status && status !== 'todo'" class="suggestion-card__status">
-          <span :class="statusClass"> Status unknown. </span>
-          <a href="#" @click.prevent.stop="$emit('reopen', id)" class="reopen-button"> Clear </a>
-        </div>
+        <section class="buttons" v-if="!expanded">
+          <button v-if="!done" @click.stop="$emit('fix')" title="Fix">
+            <Wrench title="Fix" :size="16" />
+          </button>
+          <button v-if="!done" @click.stop="$emit('dismiss')" title="Dismiss">
+            <Trash title="Dismiss" :size="16" />
+          </button>
+          <button v-if="done" @click.stop="$emit('reopen')" title="Reopen">
+            <RotateCcw title="Reopen" :size="16" />
+          </button>
+        </section>
       </div>
-      <div class="suggestion-card__actions">
-        <div v-if="!dismissed" class="action-menu-container">
-          <div v-if="showActionMenu" class="action-menu-dropdown" :ref="`actionMenuDropdown-${id}`">
-            <v-button
-              @click.native="onAction('apply')"
-              :disabled="action === 'apply'"
-              class="action-menu-item"
-            >
-              <LoaderCircle v-if="action === 'apply'" :size="16" class="animate-spin" />
-              <Wrench v-else :size="16" />
-              Apply Fix
-            </v-button>
-            <v-button @click.native="onAction('explain')" class="action-menu-item">
-              <CircleHelp :size="16" /> Explain
-            </v-button>
-            <v-button @click.native="onAction('todo')" class="action-menu-item">
-              <FileCode :size="16" /> Add TODO
-            </v-button>
-            <v-button @click.native="onAction('fix')" class="action-menu-item">
-              <Check :size="16" /> Mark Fixed
-            </v-button>
-            <v-button @click.native="onAction('dismiss')" class="action-menu-item">
-              <Trash :size="16" /> Dismiss
-            </v-button>
-          </div>
-        </div>
-        <v-button
-          @click.stop.native="toggleActionMenu()"
-          :ref="`actionMenuTrigger-${id}`"
-          class="action-menu-button"
-          v-if="!dismissed"
-        >
-          <EllipsisVertical :size="20" />
-        </v-button>
-        <v-button kind="native-ghost" @click.native="$emit('details', id)"> Details </v-button>
-      </div>
+    </div>
+    <div v-if="expanded" class="suggestion-card__content">
+      <p>{{ description }}</p>
+      <p class="code">
+        <a :href="location" :title="location" class="file">{{ location }}</a>
+        <v-code-snippet
+          :clipboard-text="code"
+          :language="language"
+          :show-copy="false"
+          class="code-snippet"
+        />
+      </p>
+      <section class="appmaps" v-if="appMapReferences.length">
+        <h5>Related AppMaps:</h5>
+        <ul>
+          <li v-for="appmap in appMapReferences" :key="appmap.name">
+            <a class="appmap" :href="appmap.path" :title="appmap.path">{{ appmap.name }}</a>
+          </li>
+        </ul>
+      </section>
+      <section class="buttons">
+        <button v-if="!done" @click.stop="$emit('fix')"><Wrench :size="16" /> Apply Fix</button>
+        <button v-if="!done" @click.stop="$emit('dismiss')"><Trash :size="16" /> Dismiss</button>
+        <button v-if="done" @click.stop="$emit('reopen')"><RotateCcw :size="16" /> Reopen</button>
+      </section>
     </div>
   </div>
 </template>
@@ -83,42 +68,29 @@
 import Vue, { Component, PropType } from 'vue';
 import {
   Wrench,
-  CircleHelp,
-  FileCode,
-  Check,
   RotateCcw,
-  LoaderCircle,
   Trash,
-  EllipsisVertical,
   CircleCheck,
   CircleEllipsis,
   CircleAlert,
-  TriangleAlert,
-  Database,
-  Globe,
   Zap,
 } from 'lucide-vue';
 import VButton from '@/components/Button.vue';
 import VPriorityBadge from '@/components/review/PriorityBadge.vue';
 import VBadge from '@/components/Badge.vue';
 import VTypeBadge from '@/components/review/TypeBadge.vue';
-import { getCategoryIconComponent } from '.';
+import VCodeSnippet from '@/components/CodeSnippet.vue';
+import { getCategoryIconComponent, SuggestionStatus } from '.';
+import { ReviewRpc } from '@appland/rpc';
 
 export default Vue.extend({
   components: {
     VButton,
+    VCodeSnippet,
     Wrench,
-    CircleHelp,
-    FileCode,
-    Check,
     RotateCcw,
-    LoaderCircle,
     Trash,
-    EllipsisVertical,
     CircleCheck,
-    TriangleAlert,
-    Database,
-    Globe,
     VPriorityBadge,
     VBadge,
     Zap,
@@ -136,9 +108,9 @@ export default Vue.extend({
       required: true,
     },
     status: {
-      type: String as PropType<'applied' | 'todo' | 'fixed' | 'dismissed'>,
-      required: true,
-      default: 'todo',
+      type: Object as PropType<SuggestionStatus>,
+      required: false,
+      default: () => ({ status: 'todo' }),
     },
     type: {
       type: String,
@@ -160,31 +132,44 @@ export default Vue.extend({
       type: String,
       required: false,
     },
-    stackTrace: {
+    description: {
       type: String,
       required: false,
     },
-    sequenceDiagram: {
-      type: String,
+    runtime: {
+      type: Object as PropType<ReviewRpc.Suggestion['runtime']>,
       required: false,
-    },
-    dismissed: {
-      type: Boolean,
-      default: false,
-    },
-    action: {
-      type: String as PropType<'apply' | 'explain' | 'todo' | 'fix' | 'dismiss'>,
-      required: false,
+      default: undefined,
     },
   },
+  /* emits: ['fix', 'dismiss', 'reopen'], */
   data() {
     return {
-      showActionMenu: false,
+      expanded: false,
     };
   },
   computed: {
+    language(): string {
+      if (this.location) {
+        const ext = this.location.split('.').pop()?.split(':')[0];
+        return ext ? ext.toLowerCase() : 'txt';
+      }
+      return 'txt';
+    },
+    appMapReferences() {
+      return this.runtime?.appMapReferences || [];
+    },
+    hasRuntime(): boolean {
+      return (this.runtime?.appMapReferences?.length ?? 0) > 0;
+    },
     categoryIconComponent(): Component | undefined {
       return getCategoryIconComponent(this.category);
+    },
+    dismissed(): boolean {
+      return this.status.status === 'dismissed';
+    },
+    done(): boolean {
+      return this.status.status === 'fixed' || this.status.status === 'dismissed';
     },
     priorityClass(): string[] {
       switch (this.priority) {
@@ -199,8 +184,8 @@ export default Vue.extend({
       }
     },
     statusClass(): string[] {
-      switch (this.status) {
-        case 'applied':
+      switch (this.status.status) {
+        case 'fix-in-progress':
           return ['status-applied'];
         case 'todo':
           return ['status-todo'];
@@ -212,40 +197,6 @@ export default Vue.extend({
           return ['status-unknown'];
       }
     },
-    statusText(): string {
-      switch (this.status) {
-        case 'fix-in-progress':
-          return 'A fix is being generated.';
-        case 'applied':
-          return 'Applied';
-        case 'todo':
-          return 'TODO Added';
-        case 'fixed':
-          return 'Fixed';
-        case 'dismissed':
-          return 'Dismissed';
-        default:
-          'Status Unknown';
-      }
-      return 'Status Unknown';
-    },
-    runtime(): boolean {
-      return Boolean(this.sequenceDiagram || this.stackTrace);
-    },
-  },
-  methods: {
-    toggleActionMenu() {
-      this.showActionMenu = !this.showActionMenu;
-    },
-    onAction(action: 'apply' | 'explain' | 'todo' | 'fix' | 'dismiss') {
-      this.$emit(action, this.id);
-      this.showActionMenu = false;
-    },
-    openLocation() {
-      if (this.location) {
-        this.$root.$emit('open-file', this.location);
-      }
-    },
   },
 });
 </script>
@@ -253,25 +204,50 @@ export default Vue.extend({
 <style scoped lang="scss">
 .suggestion-card {
   background-color: $color-tile-background;
-  padding: 1rem;
-  border-radius: $border-radius-big;
-  border: 1px solid $color-border;
+  padding: 0.5rem 1rem;
   transition: $transition;
+  cursor: pointer;
+  border: 1px solid transparent;
 
-  &:hover:not(.is-dismissed) {
-    border-color: rgba($color-highlight, 0.5);
+  &.is-expanded {
+    padding: 1rem;
+    background-color: $color-tile-background;
+    border-radius: $border-radius-big;
+    border: 1px solid $color-border;
   }
 
-  &.is-dismissed {
+  &:hover:not(.is-dismissed) {
+    border: 1px solid $color-highlight;
+  }
+
+  &.dismissed {
     opacity: 0.7;
+    .title {
+      text-decoration: line-through;
+    }
   }
 
   &__content {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
+    margin-top: 0.75rem;
+    border-top: 1px solid $color-border;
+    padding-top: 0.75rem;
+    .appmaps ul {
+      padding: 0;
+      margin-left: 1rem;
+      li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        a.appmap {
+          color: $color-foreground-light;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
   }
 
   &__main {
@@ -280,22 +256,27 @@ export default Vue.extend({
 
   &__title-area {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 0.5rem;
     .icon {
       color: $color-foreground-secondary;
     }
 
     svg {
-      align-self: start;
+      position: relative;
+      top: 2px;
     }
+    margin-left: auto;
   }
 
-  &__title {
+  .title {
     color: $color-foreground-light;
     font-weight: 500;
     margin: 0;
-    margin-bottom: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 30rem;
   }
 
   &__meta {
@@ -305,22 +286,9 @@ export default Vue.extend({
     align-items: center;
     font-size: 0.875rem;
 
-    .meta-item {
-      color: $color-foreground-secondary;
-      &.location {
-        padding-top: 0.33rem;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        font-family: monospace;
-        text-overflow: ellipsis;
-        direction: rtl;
-        color: $color-link;
-        cursor: pointer;
-        transition: $transition;
-        &:hover {
-          color: $color-link-hover;
-        }
+    button {
+      svg {
+        stroke: $color-highlight;
       }
     }
   }
@@ -340,6 +308,20 @@ export default Vue.extend({
   }
 }
 
+a.file {
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+a.appmap::before {
+  color: $hotpink;
+  font-weight: 900;
+  content: 'Λ';
+  margin-right: 0.5rem;
+}
+
 .full {
   fill: currentColor;
 }
@@ -357,6 +339,9 @@ export default Vue.extend({
 }
 .status-dismissed {
   color: $color-foreground-secondary !important;
+}
+.status-fixed {
+  color: $color-success !important;
 }
 .status-unknown {
   color: $color-foreground-secondary !important;
