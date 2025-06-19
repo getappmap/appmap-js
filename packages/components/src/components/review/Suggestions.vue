@@ -3,29 +3,6 @@
     <div class="container">
       <SectionHeading title="Suggestions" :loading="loading" />
 
-      <!-- Summary -->
-      <div class="summary-grid">
-        <a
-          v-for="category in summaryCategories"
-          :key="category.name"
-          :href="`#${category.name}-suggestions`"
-          class="summary-card"
-        >
-          <div class="summary-card__header">
-            <component :is="getCategoryIconComponent(category.name)" :size="20" class="icon" />
-            <h3 class="summary-card__title">{{ category.name }}</h3>
-          </div>
-          <div class="summary-card__stats">
-            <p class="text-sm">
-              High Priority: <span class="priority-high-text">{{ category.stats.high }}</span>
-            </p>
-            <p class="text-sm">
-              Medium Priority: <span class="priority-medium-text">{{ category.stats.medium }}</span>
-            </p>
-          </div>
-        </a>
-      </div>
-
       <v-skeleton-loader class="suggestions-loader" v-if="!suggestions || !suggestions.length" />
 
       <!-- Suggestions by category -->
@@ -38,6 +15,17 @@
         <div class="category-header">
           <component :is="getCategoryIconComponent(category)" :size="24" class="icon" />
           <h3 class="category-title">{{ category }}</h3>
+          <div class="category-stats">
+            <span class="suggestion-count high" v-if="getPriorityCounts(items).high">
+              {{ getPriorityCounts(items).high }}
+            </span>
+            <span class="suggestion-count medium" v-if="getPriorityCounts(items).medium">
+              {{ getPriorityCounts(items).medium }}
+            </span>
+            <span class="suggestion-count low" v-if="getPriorityCounts(items).low">
+              {{ getPriorityCounts(items).low }}
+            </span>
+          </div>
         </div>
 
         <div class="suggestions-grid">
@@ -219,6 +207,25 @@ export default Vue.extend({
     document.removeEventListener('mousedown', this.handleClickOutsideActionMenu);
   },
   methods: {
+    getPriorityCounts(items: Suggestion[]): {
+      high: number;
+      medium: number;
+      low: number;
+      total: number;
+    } {
+      const counts = { high: 0, medium: 0, low: 0, total: 0 };
+      for (const item of items) {
+        if (item.priority === 'high') {
+          counts.high++;
+        } else if (item.priority === 'medium') {
+          counts.medium++;
+        } else if (item.priority === 'low') {
+          counts.low++;
+        }
+        counts.total++;
+      }
+      return counts;
+    },
     getSuggestionStatus(id: string): SuggestionStatus | undefined {
       return this.suggestionStatuses[id];
     },
@@ -484,6 +491,40 @@ export default Vue.extend({
   width: 100%;
   height: 6rem;
   border-radius: $border-radius;
+}
+
+.category-stats {
+  display: flex;
+  gap: 0.5rem; // Tailwind gap-2
+  align-items: center;
+  margin-left: auto; // Align to the right
+
+  .suggestion-count {
+    padding: 0.125rem 0.5rem;
+
+    &::after {
+      margin-left: 0.25rem;
+    }
+
+    &.high {
+      color: $color-error;
+      &::after {
+        content: 'high';
+      }
+    }
+    &.medium {
+      color: $color-warning;
+      &::after {
+        content: 'medium';
+      }
+    }
+    &.low {
+      color: $color-foreground;
+      &::after {
+        content: 'low';
+      }
+    }
+  }
 }
 
 .suggestions-loader {
