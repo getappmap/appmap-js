@@ -41,29 +41,15 @@
         </div>
 
         <div class="suggestions-grid">
-          <v-suggestion-card
-            v-for="(suggestion, index) in items"
-            @details="openDetailsDialog(suggestion)"
-            @reopen="handleReopen(suggestion.id)"
-            @apply="fix"
-            @view-fix-thread="fix(suggestion.id)"
-            :key="index"
-            :id="suggestion.id"
-            :title="suggestion.title"
-            :type="suggestion.type"
-            :priority="suggestion.priority"
-            :location="suggestion.location"
-            :code="suggestion.code"
-            :runtime="Boolean(suggestion.runtime)"
-            :status="
-              getSuggestionStatus(suggestion.id)
-                ? getSuggestionStatus(suggestion.id).status
-                : undefined
-            "
-            :stack-trace="suggestion.runtime && suggestion.runtime.stackTrace"
-            :sequence-diagram="suggestion.runtime && suggestion.runtime.sequenceDiagram"
-            :dismissed="getSuggestionStatus(suggestion.id) !== undefined"
-          />
+          <div v-for="suggestion in items" :key="suggestion.id">
+            <v-suggestion-card
+              v-bind="suggestion"
+              @apply="fix(suggestion.id)"
+              @dismiss="openDismissDialog(suggestion.id)"
+              @reopen="handleReopen(suggestion.id)"
+              :status="suggestionStatuses[suggestion.id]"
+            />
+          </div>
           <v-skeleton-loader class="card-loader" v-if="loading" />
         </div>
       </div>
