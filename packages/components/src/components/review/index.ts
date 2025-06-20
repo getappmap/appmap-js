@@ -4,7 +4,7 @@ import type { Component } from 'vue';
 export interface AppMapFindingReference {
   path: string;
   name: string;
-  findingHash: string;
+  findingHash?: string;
 }
 
 interface Event {
@@ -28,7 +28,7 @@ export interface Suggestion {
   priority: 'high' | 'medium' | 'low';
   location: string;
   code: string;
-  category: 'security' | 'sql' | 'http';
+  category: 'security' | 'sql' | 'http' | string;
   runtime?: {
     stackTrace?: string;
     sequenceDiagram?: string;
@@ -57,7 +57,7 @@ export interface TestCoverageItem {
 
 export interface Test {
   name: string;
-  status: 'pass' | 'fail';
+  status?: 'pass' | 'fail';
   message?: string;
 }
 
@@ -69,7 +69,7 @@ export interface TestDetails {
 
 export interface Feature {
   description: string;
-  hasCoverage: boolean;
+  hasCoverage?: boolean;
   testDetails?: TestDetails;
   aiPrompt?: string;
 }
