@@ -258,7 +258,7 @@ export default Vue.extend({
         margin: 0;
         padding: 0;
 
-        a.appmap {
+        a.appmap-link {
           color: $color-foreground-light;
           text-decoration: none;
           &:hover {
@@ -334,7 +334,7 @@ a.file {
   text-overflow: ellipsis;
 }
 
-a.appmap::before {
+a.appmap-link::before {
   color: $hotpink;
   font-weight: 900;
   content: 'Λ';
