@@ -162,13 +162,21 @@ export default Vue.extend({
       }));
     },
     categorizedSuggestions(): Record<string, Suggestion[]> {
-      return this.suggestions.reduce((acc: Record<string, Suggestion[]>, suggestion) => {
-        if (!acc[suggestion.category]) {
-          acc[suggestion.category] = [];
+      const categories: Record<string, Suggestion[]> = {};
+      for (const suggestion of this.suggestions) {
+        if (!categories[suggestion.category]) {
+          categories[suggestion.category] = [];
         }
-        acc[suggestion.category].push(suggestion);
-        return acc;
-      }, {});
+        categories[suggestion.category].push(suggestion);
+      }
+      // Sort each category by priority
+      for (const category in categories) {
+        categories[category].sort((a, b) => {
+          const priorityOrder = { high: 3, medium: 2, low: 1 };
+          return priorityOrder[b.priority] - priorityOrder[a.priority];
+        });
+      }
+      return categories;
     },
   },
   watch: {
