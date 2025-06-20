@@ -27,7 +27,7 @@
           :key="appmap.name"
           :href="appmap.path"
           :title="appmap.name"
-          @click.stop.prevent="$root.$emit('open-appmap', appmap)"
+          @click.stop.prevent="$root.$emit('open-location', appmap.path)"
         />
 
         <section class="buttons" v-if="!expanded">
@@ -68,7 +68,7 @@
               class="appmap-link"
               :href="appmap.path"
               :title="appmap.path"
-              @click.stop.prevent="$root.$emit('open-appmap', appmap)"
+              @click.stop.prevent="$root.$emit('open-location', appmap.path)"
               >{{ appmap.name }}</a
             >
           </li>
