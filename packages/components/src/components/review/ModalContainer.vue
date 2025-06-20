@@ -1,5 +1,5 @@
 <template>
-  <v-modal @close="$emit('close')">
+  <v-modal v-on="$listeners">
     <div class="modal-outer details-dialog">
       <div class="modal-content">
         <slot />

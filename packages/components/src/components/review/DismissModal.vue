@@ -1,5 +1,5 @@
 <template>
-  <v-modal-container @close="$emit('close')">
+  <v-modal-container @close="$emit('close')" @submit="submitDismissReason">
     <div class="dismiss-modal">
       <h3 class="dismiss-modal__title">{{ title }}</h3>
       <label for="dismiss-reason" class="dismiss-modal__label">
