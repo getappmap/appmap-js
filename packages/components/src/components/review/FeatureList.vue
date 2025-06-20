@@ -185,13 +185,9 @@ export default Vue.extend({
     VSkeletonLoader,
   },
   props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
     features: {
-      type: Array as PropType<Feature[]>,
-      required: true,
+      type: Array as PropType<Feature[] | undefined>,
+      required: false,
     },
   },
   data() {
@@ -205,7 +201,11 @@ export default Vue.extend({
       retestingFeature: null as number | null,
     };
   },
-  computed: {},
+  computed: {
+    loading(): boolean {
+      return this.features === undefined;
+    },
+  },
   methods: {
     toggleTestDetails(index: number) {
       const existingIndex = this.expandedTests.indexOf(index);

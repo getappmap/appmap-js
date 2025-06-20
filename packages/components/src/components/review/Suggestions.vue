@@ -3,8 +3,6 @@
     <div class="container">
       <SectionHeading title="Suggestions" :loading="loading" />
 
-      <v-skeleton-loader class="suggestions-loader" v-if="!suggestions || !suggestions.length" />
-
       <!-- Suggestions by category -->
       <div
         v-for="(items, category) in categorizedSuggestions"
@@ -38,9 +36,9 @@
               :status="suggestionStatuses[suggestion.id]"
             />
           </div>
-          <v-skeleton-loader class="card-loader" v-if="loading" />
         </div>
       </div>
+      <v-skeleton-loader class="card-loader" v-if="loading" />
     </div>
 
     <v-dismiss-modal

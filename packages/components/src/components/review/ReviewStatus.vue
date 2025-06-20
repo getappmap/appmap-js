@@ -25,7 +25,7 @@
           <div class="review-status__card-header">
             <h3 class="review-status__card-title">Features</h3>
           </div>
-          <div class="review-status__card-body">
+          <div class="review-status__card-body" v-if="totalFeatures !== undefined">
             <p class="review-status__text">
               Total Features: <span class="review-status__value">{{ totalFeatures }}</span>
             </p>
@@ -36,13 +36,17 @@
               }}</span>
             </p>
           </div>
+          <div v-else class="review-status__card-body">
+            <v-loader class="v-loader" />
+          </div>
         </div>
 
         <div class="review-status__card">
           <div class="review-status__card-header">
-            <h3 class="review-status__card-title">Suggestions</h3>
+            <h3 class="review-status__card-title">
+              Suggestions <v-loader class="v-loader" v-if="loading" /></h3>
           </div>
-          <div class="review-status__card-body">
+          <div class="review-status__card-body" v-if="suggestions !== undefined">
             <p class="review-status__text">
               High Priority:
               <span class="review-status__value review-status__value--error">{{
@@ -68,6 +72,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import SectionHeading from './SectionHeading.vue';
+import VLoader from '@/components/chat/Loader.vue';
 
 interface Suggestions {
   high: number;
@@ -79,6 +84,7 @@ export default Vue.extend({
   name: 'ReviewStatus',
   components: {
     SectionHeading,
+    VLoader,
   },
   props: {
     loading: {
@@ -86,35 +92,41 @@ export default Vue.extend({
       default: false,
     },
     totalFeatures: {
-      type: Number as PropType<number>,
-      required: true,
+      type: Number as PropType<number | undefined>,
+      required: false,
     },
     featuresNeedingTests: {
-      type: Number as PropType<number>,
-      required: true,
+      type: Number as PropType<number | undefined>,
+      required: false,
     },
     dismissedFeatures: {
-      type: Number as PropType<number>,
-      required: true,
+      type: Number as PropType<number | undefined>,
+      required: false,
     },
     dismissedSuggestions: {
-      type: Number as PropType<number>,
-      required: true,
+      type: Number as PropType<number | undefined>,
+      required: false,
     },
     suggestions: {
-      type: Object as PropType<Suggestions>,
-      required: true,
+      type: Object as PropType<Suggestions | undefined>,
+      required: false,
     },
   },
   computed: {
-    remainingTestsNeeded(): number {
-      return this.featuresNeedingTests - this.dismissedFeatures;
+    remainingTestsNeeded(): number | undefined {
+      return this.featuresNeedingTests !== undefined && this.dismissedFeatures !== undefined
+        ? this.featuresNeedingTests - this.dismissedFeatures
+        : undefined;
     },
-    totalHighMedium(): number {
-      return this.suggestions.high + this.suggestions.medium;
+    totalHighMedium(): number | undefined {
+      return this.suggestions?.high !== undefined && this.suggestions?.medium !== undefined
+        ? this.suggestions.high + this.suggestions.medium
+        : undefined;
     },
-    remainingSuggestions(): number {
-      return this.totalHighMedium - this.dismissedSuggestions;
+    remainingSuggestions(): number | undefined {
+      return this.totalHighMedium !== undefined && this.dismissedSuggestions !== undefined
+        ? this.totalHighMedium - this.dismissedSuggestions
+        : undefined;
     },
     isGreenStatus(): boolean {
       return this.remainingTestsNeeded === 0 && this.remainingSuggestions === 0;
@@ -125,6 +137,16 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 $text-xl-equivalent: 1.25rem;
+
+.v-loader {
+  display: inline-flex !important;
+  transform: translateY(-50%);
+  align-items: center;
+  justify-content: center;
+  width: 2ex;
+  margin: 1ex;
+  opacity: 0.2;
+}
 
 .review-status {
   font-family: $font-family;

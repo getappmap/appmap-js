@@ -9,11 +9,7 @@
       :dismissed-suggestions="dismissedSuggestions.length"
       :loading="loading"
     />
-    <v-feature-list
-      :features="features"
-      @feature-dismiss="handleFeatureDismiss"
-      :loading="loading"
-    />
+    <v-feature-list :features="features" @feature-dismiss="handleFeatureDismiss" />
     <v-suggestions
       @suggestion-dismiss="handleSuggestionDismiss"
       :suggestions="suggestions"
@@ -42,22 +38,23 @@ export default Vue.extend({
   props: {
     loading: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     features: {
-      type: Array as PropType<Feature[]>,
-      default: () => [],
+      type: Array as PropType<Feature[] | undefined>,
+      required: false,
     },
     suggestions: {
-      type: Array as PropType<Suggestion[]>,
-      default: () => [],
+      type: Array as PropType<Suggestion[] | undefined>,
+      required: false,
     },
     testCoverageItems: {
       type: Array,
-      default: () => [],
+      required: false,
     },
     appmapRpcPort: {
       type: Number,
+      required: false,
     },
   },
   data() {
@@ -73,16 +70,17 @@ export default Vue.extend({
     };
   },
   computed: {
-    totalFeatures(): number {
-      return this.features.length;
+    totalFeatures(): number | undefined {
+      return this.features?.length;
     },
-    featuresNeedingTests(): number {
-      return this.features.filter((f) => !f.hasCoverage).length;
+    featuresNeedingTests(): number | undefined {
+      return this.features?.filter((f) => !f.hasCoverage).length;
     },
     currentYear(): number {
       return new Date().getFullYear();
     },
-    suggestionsSummary(): { high: number; medium: number; low: number } {
+    suggestionsSummary(): { high: number; medium: number; low: number } | undefined{
+      if (!this.suggestions) return undefined;
       const summary = { high: 0, medium: 0, low: 0 };
       if (Array.isArray(this.suggestions)) {
         for (const suggestion of this.suggestions) {
