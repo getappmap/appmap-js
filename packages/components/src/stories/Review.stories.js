@@ -26,8 +26,8 @@ export function ReviewGradual(args, { argTypes }) {
     components: { VReview },
     data() {
       return {
-        features: [],
-        suggestions: [],
+        features: undefined,
+        suggestions: undefined,
       };
     },
     mounted() {
@@ -38,8 +38,8 @@ export function ReviewGradual(args, { argTypes }) {
     },
     methods: {
       nextChunk() {
-        if (this.suggestions.length < suggestions.length) {
-          this.suggestions = suggestions.slice(0, this.suggestions.length + chunkSize);
+        if (this.suggestions?.length || 0 < suggestions.length) {
+          this.suggestions = suggestions.slice(0, (this.suggestions?.length || 0) + chunkSize);
           setTimeout(() => {
             this.nextChunk();
           }, delay);
@@ -48,9 +48,7 @@ export function ReviewGradual(args, { argTypes }) {
     },
     computed: {
       loading() {
-        return (
-          this.suggestions.length < suggestions.length || this.features.length < features.length
-        );
+        return !this.features || !this.suggestions || this.suggestions.length < suggestions.length;
       },
     },
     template: '<v-review v-bind="$data" :loading="loading" />',
