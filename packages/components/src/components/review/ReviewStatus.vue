@@ -143,7 +143,7 @@ $text-xl-equivalent: 1.25rem;
   transform: translateY(-50%);
   align-items: center;
   justify-content: center;
-  width: 2ex;
+  width: 2ex !important;
   margin: 1ex;
   opacity: 0.2;
 }

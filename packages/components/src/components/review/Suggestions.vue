@@ -30,7 +30,7 @@
           <div v-for="suggestion in items" :key="suggestion.id">
             <v-suggestion-card
               v-bind="suggestion"
-              @apply="fix(suggestion.id)"
+              @fix="$root.$emit('fix', suggestion)"
               @dismiss="openDismissDialog(suggestion.id)"
               @reopen="handleReopen(suggestion.id)"
               :status="suggestionStatuses[suggestion.id]"

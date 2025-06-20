@@ -14,13 +14,20 @@
       <v-priority-badge :priority="priority" class="meta-item" />
       <h4 class="title">{{ title }}</h4>
       <div v-if="!expanded" class="suggestion-card__title-area">
-        <a class="file" :href="location" :title="location">{{ location.replace(/^.*\//, '') }}</a>
         <a
-          class="appmap"
+          class="file"
+          :href="location"
+          :title="location"
+          @click.stop.prevent="$root.$emit('open-location', location)"
+          >{{ location.replace(/^.*\//, '') }}</a
+        >
+        <a
+          class="appmap-link"
           v-for="appmap in appMapReferences"
           :key="appmap.name"
           :href="appmap.path"
           :title="appmap.name"
+          @click.stop.prevent="$root.$emit('open-appmap', appmap)"
         />
 
         <section class="buttons" v-if="!expanded">
@@ -39,7 +46,13 @@
     <div v-if="expanded" class="suggestion-card__content">
       <p>{{ description }}</p>
       <p class="code">
-        <a :href="location" :title="location" class="file">{{ location }}</a>
+        <a
+          :href="location"
+          :title="location"
+          class="file"
+          @click.stop.prevent="$root.$emit('open-location', location)"
+          >{{ location }}</a
+        >
         <v-code-snippet
           :clipboard-text="code"
           :language="language"
@@ -51,7 +64,13 @@
         <h5>Related AppMaps:</h5>
         <ul>
           <li v-for="appmap in appMapReferences" :key="appmap.name">
-            <a class="appmap" :href="appmap.path" :title="appmap.path">{{ appmap.name }}</a>
+            <a
+              class="appmap-link"
+              :href="appmap.path"
+              :title="appmap.path"
+              @click.stop.prevent="$root.$emit('open-appmap', appmap)"
+              >{{ appmap.name }}</a
+            >
           </li>
         </ul>
       </section>
