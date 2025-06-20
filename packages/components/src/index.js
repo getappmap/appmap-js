@@ -1,5 +1,5 @@
 import * as components from '@/componentExports';
-import ReviewStream from '@/lib/reviewStream';
+import ReviewBackend from '@/lib/ReviewBackend';
 
 // install function executed by Vue.use()
 const install = function installComponents(Vue) {
@@ -19,4 +19,4 @@ export default plugin;
 export * as FeatureFlags from '@/lib/featureFlags';
 export * from '@/componentExports';
 export * from '@/lib/PinFileRequest';
-export { ReviewStream };
+export { ReviewBackend };
