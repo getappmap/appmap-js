@@ -251,6 +251,7 @@ export default Vue.extend({
       // In a real app, you'd update feature.testDetails based on actual test results
     },
     async retestFeature(index: number) {
+      if (!this.features) return;
       this.retestingFeature = index;
       await new Promise((resolve) => setTimeout(resolve, 1500));
       this.retestingFeature = null;

@@ -1,3 +1,5 @@
+import { action } from '@storybook/addon-actions';
+
 import VReview from '@/pages/Review.vue';
 import { features, suggestions } from './data/review.json';
 import './scss/fullscreen.scss';
@@ -10,13 +12,19 @@ export default {
   args: {
     features,
     suggestions,
+    loading: false,
   },
 };
+
+const events = ['open-location', 'open-appmap', 'fix'];
 
 export const Review = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VReview },
   template: '<v-review v-bind="$props" ref="vsCode" />',
+  created() {
+    for (const event of events) this.$root.$on(event, action(event));
+  },
 });
 
 const chunkSize = 3;
