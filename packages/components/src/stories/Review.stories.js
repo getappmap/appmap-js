@@ -1,27 +1,27 @@
 import { action } from '@storybook/addon-actions';
 
 import VReview from '@/pages/Review.vue';
+import store from '@/store/review';
 import { features, suggestions } from './data/review.json';
 import './scss/fullscreen.scss';
 import './scss/vscode.scss';
+
+// Initialize the store with our test data
+store.dispatch('updateFeatures', features);
+store.dispatch('updateSuggestions', suggestions);
+store.dispatch('updateLoading', false);
 
 export default {
   title: 'Pages/Review',
   component: VReview,
   argTypes: {},
-  args: {
-    features,
-    suggestions,
-    loading: false,
-  },
 };
 
 const events = ['open-location', 'open-appmap', 'fix'];
 
 export const Review = (args, { argTypes }) => ({
-  props: Object.keys(argTypes),
   components: { VReview },
-  template: '<v-review v-bind="$props" ref="vsCode" />',
+  template: '<v-review ref="vsCode" />',
   created() {
     for (const event of events) this.$root.$on(event, action(event));
   },
@@ -30,35 +30,35 @@ export const Review = (args, { argTypes }) => ({
 const chunkSize = 3;
 const delay = 1000;
 export function ReviewGradual(args, { argTypes }) {
+  // Reset the store for this story
+  store.dispatch('updateFeatures', undefined);
+  store.dispatch('updateSuggestions', undefined);
+  store.dispatch('updateLoading', true);
+
   return {
     components: { VReview },
-    data() {
-      return {
-        features: undefined,
-        suggestions: undefined,
-      };
-    },
     mounted() {
       setTimeout(() => {
-        this.features = features;
+        store.dispatch('updateFeatures', features);
         this.nextChunk();
       }, delay);
     },
     methods: {
       nextChunk() {
-        if (this.suggestions?.length || 0 < suggestions.length) {
-          this.suggestions = suggestions.slice(0, (this.suggestions?.length || 0) + chunkSize);
+        const currentSuggestions = store.state.suggestions || [];
+        if (currentSuggestions.length < suggestions.length) {
+          store.dispatch(
+            'updateSuggestions',
+            suggestions.slice(0, currentSuggestions.length + chunkSize)
+          );
           setTimeout(() => {
             this.nextChunk();
           }, delay);
+        } else {
+          store.dispatch('updateLoading', false);
         }
       },
     },
-    computed: {
-      loading() {
-        return !this.features || !this.suggestions || this.suggestions.length < suggestions.length;
-      },
-    },
-    template: '<v-review v-bind="$data" :loading="loading" />',
+    template: '<v-review />',
   };
 }

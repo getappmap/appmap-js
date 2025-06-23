@@ -1,6 +1,7 @@
 import type { ReviewRpc } from '@appland/rpc';
 
 import type Review from '../pages/Review.vue';
+import store from '../store/review';
 
 import type { ExplainRequest } from './AppMapRPC';
 import AppMapRPC from './AppMapRPC';
@@ -13,15 +14,17 @@ class ReviewBackend {
   rpc?: AppMapRPC | undefined;
 
   constructor(public review: InstanceType<typeof Review>, options: Options) {
-    review.$props.suggestions = options.suggestions;
-    review.$props.features = options.features;
-    review.$props.loading = options.suggestions ? false : true;
+    review.$store = store; // Set the Vuex store on the review component
+    // Initialize store instead of directly setting props
+    store.dispatch('updateSuggestions', options.suggestions);
+    store.dispatch('updateFeatures', options.features);
+    store.dispatch('updateLoading', options.suggestions ? false : true);
     if (options.rpcPort) this.rpc = new AppMapRPC(options.rpcPort);
   }
 
   update(update: Partial<ReviewRpc.Review>) {
-    if (update.suggestions) this.review.$props.suggestions = update.suggestions;
-    if (update.features) this.review.$props.features = update.features;
+    if (update.suggestions) store.dispatch('updateSuggestions', update.suggestions);
+    if (update.features) store.dispatch('updateFeatures', update.features);
   }
 
   attach(explain: ExplainRequest) {
@@ -45,7 +48,7 @@ class ReviewBackend {
     };
 
     explain.on('token', recv);
-    explain.on('complete', this.review.$props.loading);
+    explain.on('complete', () => store.dispatch('updateLoading', false));
   }
 
   startReview(baseRef?: string) {

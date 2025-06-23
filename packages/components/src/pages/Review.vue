@@ -9,9 +9,9 @@
       :dismissed-suggestions="dismissedSuggestions.length"
       :loading="loading"
     />
-    <v-feature-list :features="features" @feature-dismiss="handleFeatureDismiss" />
+    <v-feature-list :features="features" @feature-dismiss="dismissFeature" />
     <v-suggestions
-      @suggestion-dismiss="handleSuggestionDismiss"
+      @suggestion-dismiss="dismissSuggestion"
       :suggestions="suggestions"
       :loading="loading"
     />
@@ -19,94 +19,39 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
+import { mapState, mapGetters, mapActions } from 'vuex';
+
 import VHeader from '@/components/review/Header.vue';
 import VReviewStatus from '@/components/review/ReviewStatus.vue';
 import VFeatureList from '@/components/review/FeatureList.vue';
 import VSuggestions from '@/components/review/Suggestions.vue';
-import type { Feature, Suggestion } from '@/components/review';
-import AppMapRPC from '@/lib/AppMapRPC';
+import store from '@/store/review';
 
 export default Vue.extend({
   name: 'ReviewPage',
+  store,
   components: {
     VHeader,
     VReviewStatus,
     VFeatureList,
     VSuggestions,
   },
-  props: {
-    loading: {
-      type: Boolean,
-      default: true,
-    },
-    features: {
-      type: Array as PropType<Feature[] | undefined>,
-      required: false,
-    },
-    suggestions: {
-      type: Array as PropType<Suggestion[] | undefined>,
-      required: false,
-    },
-    testCoverageItems: {
-      type: Array,
-      required: false,
-    },
-    appmapRpcPort: {
-      type: Number,
-      required: false,
-    },
-  },
-  data() {
-    return {
-      dismissedFeatures: [] as number[],
-      dismissedSuggestions: [] as string[],
-      rpcClient: new AppMapRPC(this.appmapRpcPort ?? 30101),
-    };
-  },
-  provide() {
-    return {
-      rpcClient: this.rpcClient,
-    };
-  },
   computed: {
-    totalFeatures(): number | undefined {
-      return this.features?.length;
-    },
-    featuresNeedingTests(): number | undefined {
-      return this.features?.filter((f) => !f.hasCoverage).length;
-    },
+    ...mapState([
+      'features',
+      'dismissedFeatures',
+      'suggestions',
+      'dismissedSuggestions',
+      'loading',
+    ]),
+    ...mapGetters(['totalFeatures', 'featuresNeedingTests', 'suggestionsSummary']),
     currentYear(): number {
       return new Date().getFullYear();
     },
-    suggestionsSummary(): { high: number; medium: number; low: number } | undefined{
-      if (!this.suggestions) return undefined;
-      const summary = { high: 0, medium: 0, low: 0 };
-      if (Array.isArray(this.suggestions)) {
-        for (const suggestion of this.suggestions) {
-          if (suggestion.priority === 'high') {
-            summary.high++;
-          } else if (suggestion.priority === 'medium') {
-            summary.medium++;
-          } else if (suggestion.priority === 'low') {
-            summary.low++;
-          }
-        }
-      }
-      return summary;
-    },
   },
   methods: {
-    handleFeatureDismiss(index: number) {
-      if (!this.dismissedFeatures.includes(index)) {
-        this.dismissedFeatures.push(index);
-      }
-    },
-    handleSuggestionDismiss(id: string) {
-      if (!this.dismissedSuggestions.includes(id)) {
-        this.dismissedSuggestions.push(id);
-      }
-    },
+    ...mapActions(['dismissFeature', 'dismissSuggestion']),
   },
 });
 </script>
