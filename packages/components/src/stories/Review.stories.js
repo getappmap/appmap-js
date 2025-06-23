@@ -17,13 +17,16 @@ export default {
   argTypes: {},
 };
 
-const events = ['open-location', 'open-appmap', 'fix'];
-
 export const Review = (args, { argTypes }) => ({
   components: { VReview },
   template: '<v-review ref="vsCode" />',
   created() {
-    for (const event of events) this.$root.$on(event, action(event));
+    for (const event of ['open-location', 'show-navie-thread'])
+      this.$root.$on(event, action(event));
+    this.$root.$on('fix', (suggestion) => {
+      action('fix')(suggestion);
+      store.dispatch('setFixThread', { id: suggestion.id, threadId: `navie-fix-${suggestion.id}` });
+    });
   },
 });
 

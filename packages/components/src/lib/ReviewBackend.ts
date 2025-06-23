@@ -1,5 +1,6 @@
 import type { ReviewRpc } from '@appland/rpc';
 
+import type { Suggestion } from '@/components/review';
 import type Review from '../pages/Review.vue';
 import store from '../store/review';
 

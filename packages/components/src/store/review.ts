@@ -85,5 +85,11 @@ export default new Vuex.Store<ReviewState>({
     reopenSuggestion({ commit }, id: string) {
       commit('removeSuggestionStatus', id);
     },
+    setFixThread({ commit }, { id, threadId }: { id: string; threadId: string }) {
+      commit('setSuggestionStatus', { id, status: { threadId, status: 'fix-in-progress' } });
+    },
+    markAsDone({ commit }, id: string) {
+      commit('setSuggestionStatus', { id, status: { status: 'fixed' } });
+    },
   },
 });
