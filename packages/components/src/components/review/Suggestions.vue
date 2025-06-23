@@ -33,6 +33,7 @@
               @fix="$root.$emit('fix', suggestion)"
               @dismiss="openDismissDialog(suggestion.id)"
               @reopen="reopenSuggestion(suggestion.id)"
+              @done="markAsDone(suggestion.id)"
               :status="getSuggestionStatus(suggestion.id)"
             />
           </div>
@@ -187,7 +188,7 @@ export default Vue.extend({
     document.removeEventListener('mousedown', this.handleClickOutsideActionMenu);
   },
   methods: {
-    ...mapActions(['reopenSuggestion']),
+    ...mapActions(['reopenSuggestion', 'markAsDone']),
     getPriorityCounts(items: Suggestion[]): {
       high: number;
       medium: number;
@@ -208,7 +209,7 @@ export default Vue.extend({
       return counts;
     },
     getSuggestionStatus(id: string): SuggestionStatus | undefined {
-      return this.suggestionStatuses[id];
+      return this.$store.state.suggestionStatuses[id];
     },
     getItemIndexById(id: string): number {
       // This is needed if original handleAction relied on index for something other than identification

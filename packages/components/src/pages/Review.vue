@@ -9,10 +9,7 @@
       :loading="loading"
     />
     <v-feature-list :features="features" @feature-dismiss="dismissFeature" />
-    <v-suggestions
-      :suggestions="suggestions"
-      :loading="loading"
-    />
+    <v-suggestions :suggestions="suggestions" :loading="loading" />
   </div>
 </template>
 

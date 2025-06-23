@@ -1,14 +1,16 @@
 <template>
   <div
     class="suggestion-card"
-    :class="{ [status.status]: true, 'is-expanded': expanded }"
+    :class="{ [status.status]: true, 'is-expanded': expanded, done }"
     @click="expanded = !expanded"
   >
     <div class="suggestion-card__meta">
-      <CircleEllipsis v-if="status.status === 'fix-in-progress'" :size="20" :class="statusClass" />
-      <CircleAlert v-else-if="status.status === 'fixed'" :size="20" :class="statusClass" />
-      <CircleCheck v-else-if="dismissed" :size="20" :class="statusClass" />
-      <component v-else :is="categoryIconComponent" :size="20" class="icon" />
+      <span class="status" :class="statusClass" :title="statusTitle">
+        <CircleEllipsis v-if="status.status === 'fix-in-progress'" :size="20" :class="statusClass" />
+        <CircleAlert v-else-if="status.status === 'todo'" :size="20" :class="statusClass" />
+        <CircleCheck v-else-if="done" :size="20" :class="statusClass" />
+        <component v-else :is="categoryIconComponent" :size="20" class="icon" />
+      </span>
       <v-badge v-if="hasRuntime"><Zap :size="10" class="full icon-adjust" />Runtime</v-badge>
       <v-type-badge :type="type" />
       <v-priority-badge :priority="priority" class="meta-item" />
@@ -31,8 +33,14 @@
         />
 
         <section class="buttons" v-if="!expanded">
-          <button v-if="!done" @click.stop="$emit('fix')" title="Fix">
+          <button v-if="!done && !fixInProgress" @click.stop="$emit('fix')" title="Fix">
             <Wrench title="Fix" :size="16" />
+          </button>
+          <button v-if="!done && fixInProgress" title="Open fix in progress" @click.stop="$root.$emit('show-navie-thread', status.threadId)">
+            <Wrench title="Show fix" :size="16" class="animate-working" />
+          </button>
+          <button v-if="!done" title="Mark as done" @click.stop="$emit('done')" class="status-applied">
+            <CircleCheck title="Done" :size="16" />
           </button>
           <button v-if="!done" @click.stop="$emit('dismiss')" title="Dismiss">
             <Trash title="Dismiss" :size="16" />
@@ -75,7 +83,11 @@
         </ul>
       </section>
       <section class="buttons">
-        <button v-if="!done" @click.stop="$emit('fix')"><Wrench :size="16" /> Apply Fix</button>
+        <button v-if="!done && !fixInProgress" @click.stop="$emit('fix')"><Wrench :size="16" /> Apply Fix</button>
+        <button v-if="!done && fixInProgress" @click.stop="$root.$emit('show-navie-thread', status.threadId)">
+          <Wrench :size="16" class="animate-working" /> Show Fix
+        </button>
+        <button v-if="!done" @click.stop="$emit('done')"><CircleCheck :size="16" /> Mark as Done</button>
         <button v-if="!done" @click.stop="$emit('dismiss')"><Trash :size="16" /> Dismiss</button>
         <button v-if="done" @click.stop="$emit('reopen')"><RotateCcw :size="16" /> Reopen</button>
       </section>
@@ -129,7 +141,7 @@ export default Vue.extend({
     status: {
       type: Object as PropType<SuggestionStatus>,
       required: false,
-      default: () => ({ status: 'todo' }),
+      default: () => ({ status: 'todo' } as SuggestionStatus),
     },
     type: {
       type: String,
@@ -168,6 +180,10 @@ export default Vue.extend({
     };
   },
   computed: {
+    fixInProgress(): boolean {
+      console.log('Checking fix-in-progress status:', this.status.status);
+      return this.status.status === 'fix-in-progress';
+    },
     language(): string {
       if (this.location) {
         const ext = this.location.split('.').pop()?.split(':')[0];
@@ -216,6 +232,21 @@ export default Vue.extend({
           return ['status-unknown'];
       }
     },
+    statusTitle(): string {
+      const { reason, status } = this.status;
+      switch (status) {
+        case 'todo':
+          return 'This suggestion needs to be addressed.';
+        case 'fix-in-progress':
+          return reason ? `Fix in progress: ${reason}` : 'Fix in progress';
+        case 'fixed':
+          return 'This suggestion has been addressed.';
+        case 'dismissed':
+          return reason ? `Dismissed: ${reason}` : 'This suggestion has been dismissed.';
+        default:
+          return 'Unknown status';
+      }
+    },
   },
 });
 </script>
@@ -239,7 +270,7 @@ export default Vue.extend({
     border: 1px solid $color-highlight;
   }
 
-  &.dismissed {
+  &.done {
     opacity: 0.7;
     .title {
       text-decoration: line-through;
@@ -325,6 +356,10 @@ export default Vue.extend({
     align-self: center;
     gap: 0;
   }
+}
+
+.animate-working {
+  animation: spin 1s linear infinite;
 }
 
 a.file {
