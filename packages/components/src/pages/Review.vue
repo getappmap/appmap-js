@@ -6,12 +6,10 @@
       :features-needing-tests="featuresNeedingTests"
       :dismissed-features="dismissedFeatures.length"
       :suggestions="suggestionsSummary"
-      :dismissed-suggestions="dismissedSuggestions.length"
       :loading="loading"
     />
     <v-feature-list :features="features" @feature-dismiss="dismissFeature" />
     <v-suggestions
-      @suggestion-dismiss="dismissSuggestion"
       :suggestions="suggestions"
       :loading="loading"
     />
@@ -38,20 +36,14 @@ export default Vue.extend({
     VSuggestions,
   },
   computed: {
-    ...mapState([
-      'features',
-      'dismissedFeatures',
-      'suggestions',
-      'dismissedSuggestions',
-      'loading',
-    ]),
+    ...mapState(['features', 'dismissedFeatures', 'suggestions', 'loading']),
     ...mapGetters(['totalFeatures', 'featuresNeedingTests', 'suggestionsSummary']),
     currentYear(): number {
       return new Date().getFullYear();
     },
   },
   methods: {
-    ...mapActions(['dismissFeature', 'dismissSuggestion']),
+    ...mapActions(['dismissFeature']),
   },
 });
 </script>

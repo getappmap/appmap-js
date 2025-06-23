@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import type { Feature, Suggestion } from '@/components/review';
+import type { Feature, Suggestion, SuggestionStatus } from '@/components/review';
 
 Vue.use(Vuex);
 
@@ -9,7 +9,7 @@ export interface ReviewState {
   features: Feature[] | undefined;
   suggestions: Suggestion[] | undefined;
   dismissedFeatures: number[];
-  dismissedSuggestions: string[];
+  suggestionStatuses: Record<string, SuggestionStatus>;
 }
 
 export default new Vuex.Store<ReviewState>({
@@ -18,7 +18,7 @@ export default new Vuex.Store<ReviewState>({
     features: undefined,
     suggestions: undefined,
     dismissedFeatures: [],
-    dismissedSuggestions: [],
+    suggestionStatuses: {},
   },
   getters: {
     totalFeatures: (state): number | undefined => {
@@ -59,10 +59,11 @@ export default new Vuex.Store<ReviewState>({
         state.dismissedFeatures.push(index);
       }
     },
-    dismissSuggestion(state, id: string) {
-      if (!state.dismissedSuggestions.includes(id)) {
-        state.dismissedSuggestions.push(id);
-      }
+    setSuggestionStatus(state, { id, status }: { id: string; status: SuggestionStatus }) {
+      Vue.set(state.suggestionStatuses, id, status);
+    },
+    removeSuggestionStatus(state, id: string) {
+      Vue.delete(state.suggestionStatuses, id);
     },
   },
   actions: {
@@ -78,8 +79,11 @@ export default new Vuex.Store<ReviewState>({
     dismissFeature({ commit }, index: number) {
       commit('dismissFeature', index);
     },
-    dismissSuggestion({ commit }, id: string) {
-      commit('dismissSuggestion', id);
+    dismissSuggestion({ commit }, { id, reason }: { id: string; reason: string }) {
+      commit('setSuggestionStatus', { id, status: { reason, status: 'dismissed' } });
+    },
+    reopenSuggestion({ commit }, id: string) {
+      commit('removeSuggestionStatus', id);
     },
   },
 });

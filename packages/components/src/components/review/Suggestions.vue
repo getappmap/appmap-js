@@ -32,8 +32,8 @@
               v-bind="suggestion"
               @fix="$root.$emit('fix', suggestion)"
               @dismiss="openDismissDialog(suggestion.id)"
-              @reopen="handleReopen(suggestion.id)"
-              :status="suggestionStatuses[suggestion.id]"
+              @reopen="reopenSuggestion(suggestion.id)"
+              :status="getSuggestionStatus(suggestion.id)"
             />
           </div>
         </div>
@@ -69,6 +69,7 @@ import {
   EllipsisVertical,
   Maximize2,
 } from 'lucide-vue';
+import { mapState, mapActions } from 'vuex';
 
 import SectionHeading from './SectionHeading.vue';
 import VButton from '@/components/Button.vue';
@@ -76,11 +77,6 @@ import VPopper from '@/components/Popper.vue';
 import VDismissModal from './DismissModal.vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
-import type AppMapRPC from '@/lib/AppMapRPC';
-
-interface Injected {
-  rpcClient: AppMapRPC;
-}
 
 export default Vue.extend({
   name: 'SuggestionsList',
@@ -124,16 +120,13 @@ export default Vue.extend({
     return {
       selectedSuggestion: undefined as Suggestion | undefined,
       showDismissDialogForSuggestionId: undefined as string | undefined,
-      suggestionStatuses: {} as Record<string, SuggestionStatus>,
       showExplanation: false,
       isLoading: undefined as { id: string; action: 'apply' | 'explain' } | undefined,
       openActionMenu: undefined as string | undefined,
     };
   },
-  inject: {
-    rpcClient: {},
-  },
   computed: {
+    ...mapState(['suggestionStatuses']),
     summaryCategories(): { name: string; stats: { high: number; medium: number } }[] {
       return (['security', 'sql', 'http'] as const).map((category) => ({
         name: category,
@@ -194,6 +187,7 @@ export default Vue.extend({
     document.removeEventListener('mousedown', this.handleClickOutsideActionMenu);
   },
   methods: {
+    ...mapActions(['reopenSuggestion']),
     getPriorityCounts(items: Suggestion[]): {
       high: number;
       medium: number;
@@ -244,131 +238,11 @@ export default Vue.extend({
       this.showExplanation = false;
       // this.showFullDiagram = false; // If this state exists
     },
-    async handleAction(
-      action: 'apply' | 'explain' | 'todo' | 'fixed' | 'dismissed',
-      suggestion: Suggestion
-    ) {
-      this.openActionMenu = undefined; // Close action menu
-      const suggestionId = suggestion.id;
-
-      if (action === 'apply' || action === 'explain') {
-        this.isLoading = { id: suggestionId, action };
-        await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate API call
-
-        if (this.isLoading && this.isLoading.id === suggestionId) {
-          // Check if still relevant
-          if (action === 'explain') {
-            this.showExplanation = true;
-            // If 'explain' happens outside main dialog, ensure it's open
-            if (!this.selectedSuggestion || this.selectedSuggestion.id !== suggestionId) {
-              this.openDetailsDialog(suggestion);
-            }
-          } else {
-            // 'apply'
-            this.$set(this.suggestionStatuses, suggestionId, {
-              reason: 'Fix applied automatically',
-              status: 'applied',
-            });
-            this.onSuggestionDismiss(suggestionId); // Use ID
-            this.handleDialogClose();
-          }
-        }
-        this.isLoading = undefined;
-      } else if (action === 'dismissed') {
-        this.showDismissDialogForSuggestionId = suggestionId;
-      } else {
-        // 'todo' or 'fixed'
-        const reason = action === 'todo' ? 'Added to TODO list' : 'Marked as fixed';
-        this.$set(this.suggestionStatuses, suggestionId, { reason, status: action });
-        this.onSuggestionDismiss(suggestionId);
-        this.handleDialogClose();
-      }
-    },
-    async fix(suggestionId: string) {
-      const suggestion = this.suggestions.find((s) => s.id === suggestionId);
-      if (!suggestion) return;
-
-      const existingStatus = this.getSuggestionStatus(suggestion.id);
-      if (existingStatus?.threadId) {
-        this.$root.$emit('open-navie-thread', existingStatus.threadId);
-        return;
-      }
-
-      const status: SuggestionStatus = {
-        status: 'fix-in-progress',
-      };
-
-      this.$set(this.suggestionStatuses, suggestion.id, status);
-
-      const { rpcClient } = this as unknown as Injected;
-      const registration = await rpcClient.register();
-      status.threadId = registration.thread.id;
-
-      const listener = await rpcClient.thread.subscribe(registration.thread.id);
-
-      let issueDescription = '';
-      if (suggestion.runtime?.finding) {
-        const { finding } = suggestion.runtime;
-        const req = finding?.event?.['http_server_request'];
-        const query = finding?.event?.['sql_query'];
-        const relatedClasses = new Set<string>(
-          (finding.relatedEvents ?? []).map(({ defined_class, method }) => {
-            if (method === undefined) {
-              return defined_class;
-            }
-            return `${defined_class}#${method}`;
-          })
-        );
-        issueDescription = [
-          `The issue is described as "${suggestion.title}"`,
-          finding.description,
-          '\nDetails are as follows:',
-          finding.message,
-          finding.locationLabel,
-          finding.event?.path,
-          req && `${req.method} ${req.path}`,
-          query && `SQL${query.database_type ? ` (${query.database_type})` : ''}: ${query.sql}`,
-          ...[...relatedClasses],
-          ...[...new Set(finding.stack.map((l: any) => l.replace(/:-1$/, '')))],
-        ]
-          .filter(Boolean)
-          .join('\n');
-      } else {
-        issueDescription = [
-          `${suggestion.title} in ${suggestion.location}:`,
-          '```',
-          suggestion.code,
-          '```',
-        ].join('\n');
-      }
-      const messageQueue = [
-        `@explain /gather identify and explain the root cause of the following issue.\n${issueDescription}`,
-        '@plan a concise resolution to the issue, keeping changes to the minimum necessary - be specific and precise in your response, and always follow best practices.',
-        '@generate /format=xml',
-      ];
-      let currentMessageComplete: Promise<void>;
-      let resolver: () => void;
-      listener.on('event', (e) => {
-        if (e.type === 'message-complete') {
-          if (resolver) resolver();
-        }
-      });
-      for (const message of messageQueue) {
-        currentMessageComplete = new Promise((resolve) => {
-          resolver = resolve;
-        });
-
-        await rpcClient.thread.sendMessage(registration.thread.id, message);
-        await currentMessageComplete;
-      }
-
-      status.status = 'fixed';
-    },
     dismissSuggestion(reason: string) {
       const id = this.showDismissDialogForSuggestionId;
       if (!reason || !id) return;
 
-      this.$set(this.suggestionStatuses, id, { reason, status: 'dismissed' });
+      this.$store.dispatch('dismissSuggestion', { id, reason });
       this.closeDismissDialog();
       this.selectedSuggestion = undefined;
     },
@@ -377,9 +251,6 @@ export default Vue.extend({
     },
     closeDismissDialog() {
       this.showDismissDialogForSuggestionId = undefined;
-    },
-    handleReopen(id: string) {
-      this.$delete(this.suggestionStatuses, id);
     },
     isLoadingAction(id: string, action: 'apply' | 'explain'): boolean {
       return !!(this.isLoading && this.isLoading.id === id && this.isLoading.action === action);
@@ -469,9 +340,8 @@ export default Vue.extend({
 } // For modal title to not overlap close button
 
 .icon {
-  // Common icon styling if needed
-  // display: inline-block;
-  // vertical-align: middle;
+  /* Common icon styling can be added here as needed */
+  display: inline-block;
 }
 .suggestions-loader,
 .card-loader {
