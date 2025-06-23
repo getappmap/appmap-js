@@ -46,23 +46,6 @@
       @submit="dismissSuggestion"
       v-if="showDismissDialogForSuggestionId"
     />
-    <v-suggestion-modal
-      v-else-if="selectedSuggestion"
-      @close="handleDialogClose"
-      @dismiss="openDismissDialog"
-      @apply="fix"
-      :id="selectedSuggestion.id"
-      :title="selectedSuggestion.title"
-      :type="selectedSuggestion.type"
-      :priority="selectedSuggestion.priority"
-      :location="selectedSuggestion.location"
-      :code="selectedSuggestion.code"
-      :runtime="Boolean(selectedSuggestion.runtime)"
-      :stack-trace="selectedSuggestion.runtime && selectedSuggestion.runtime.stackTrace"
-      :sequence-diagram="selectedSuggestion.runtime && selectedSuggestion.runtime.sequenceDiagram"
-      :appmap-references="selectedSuggestion.runtime && selectedSuggestion.runtime.appMapReferences"
-      :dismissed="getSuggestionStatus(selectedSuggestion.id) !== undefined"
-    />
   </section>
 </template>
 
@@ -90,7 +73,6 @@ import {
 import SectionHeading from './SectionHeading.vue';
 import VButton from '@/components/Button.vue';
 import VPopper from '@/components/Popper.vue';
-import VSuggestionModal from './SuggestionModal.vue';
 import VDismissModal from './DismissModal.vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
@@ -121,7 +103,6 @@ export default Vue.extend({
     EllipsisVertical,
     Maximize2,
     VSuggestionCard,
-    VSuggestionModal,
     VDismissModal,
     VSkeletonLoader,
   },
