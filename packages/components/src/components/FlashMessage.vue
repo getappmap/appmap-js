@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'FlashMessage',
   props: {
     type: {
@@ -24,7 +24,7 @@ export default {
       };
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
