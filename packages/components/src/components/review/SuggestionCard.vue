@@ -32,23 +32,16 @@
           @click.stop.prevent="$root.$emit('open-location', appmap.path)"
         />
 
-        <section class="buttons" v-if="!expanded">
-          <button v-if="!done && !fixInProgress" @click.stop="$emit('fix')" title="Fix">
-            <Wrench title="Fix" :size="16" />
-          </button>
-          <button v-if="!done && fixInProgress" title="Open fix in progress" @click.stop="$root.$emit('show-navie-thread', status.threadId)">
-            <Wrench title="Show fix" :size="16" class="animate-working" />
-          </button>
-          <button v-if="!done" title="Mark as done" @click.stop="$emit('done')" class="status-applied">
-            <CircleCheck title="Done" :size="16" />
-          </button>
-          <button v-if="!done" @click.stop="$emit('dismiss')" title="Dismiss">
-            <Trash title="Dismiss" :size="16" />
-          </button>
-          <button v-if="done" @click.stop="$emit('reopen')" title="Reopen">
-            <RotateCcw title="Reopen" :size="16" />
-          </button>
-        </section>
+        <SuggestionButtons
+          v-if="!expanded"
+          :done="done"
+          @fix="$emit('fix')"
+          @done="$emit('done')"
+          @dismiss="$emit('dismiss')"
+          @reopen="$emit('reopen')"
+          :compact="true"
+          :fix-thread="status.threadId"
+        />
       </div>
     </div>
     <div v-if="expanded" class="suggestion-card__content">
@@ -82,15 +75,14 @@
           </li>
         </ul>
       </section>
-      <section class="buttons">
-        <button v-if="!done && !fixInProgress" @click.stop="$emit('fix')"><Wrench :size="16" /> Apply Fix</button>
-        <button v-if="!done && fixInProgress" @click.stop="$root.$emit('show-navie-thread', status.threadId)">
-          <Wrench :size="16" class="animate-working" /> Show Fix
-        </button>
-        <button v-if="!done" @click.stop="$emit('done')"><CircleCheck :size="16" /> Mark as Done</button>
-        <button v-if="!done" @click.stop="$emit('dismiss')"><Trash :size="16" /> Dismiss</button>
-        <button v-if="done" @click.stop="$emit('reopen')"><RotateCcw :size="16" /> Reopen</button>
-      </section>
+      <SuggestionButtons
+        :done="done"
+        @fix="$emit('fix')"
+        @done="$emit('done')"
+        @dismiss="$emit('dismiss')"
+        @reopen="$emit('reopen')"
+        :fix-thread="status.threadId"
+      />
     </div>
   </div>
 </template>
@@ -113,6 +105,8 @@ import VTypeBadge from '@/components/review/TypeBadge.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 import { getCategoryIconComponent, SuggestionStatus } from '.';
 import { ReviewRpc } from '@appland/rpc';
+import SuggestionButtons from './SuggestionButtons.vue';
+import exp from 'constants';
 
 export default Vue.extend({
   components: {
@@ -128,6 +122,7 @@ export default Vue.extend({
     VTypeBadge,
     CircleEllipsis,
     CircleAlert,
+    SuggestionButtons,
   },
   props: {
     id: {
@@ -335,12 +330,6 @@ export default Vue.extend({
     gap: 0.5rem;
     align-items: center;
     font-size: 0.875rem;
-
-    button {
-      svg {
-        stroke: $color-highlight;
-      }
-    }
   }
 
   &__status {
@@ -356,10 +345,6 @@ export default Vue.extend({
     align-self: center;
     gap: 0;
   }
-}
-
-.animate-working {
-  animation: spin 1s linear infinite;
 }
 
 a.file {
@@ -459,15 +444,6 @@ a.appmap-link::before {
   svg {
     opacity: 0.8;
     padding-right: 0.5rem;
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
 </style>
