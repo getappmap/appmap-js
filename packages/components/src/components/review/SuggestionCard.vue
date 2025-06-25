@@ -176,7 +176,6 @@ export default Vue.extend({
   },
   computed: {
     fixInProgress(): boolean {
-      console.log('Checking fix-in-progress status:', this.status.status);
       return this.status.status === 'fix-in-progress';
     },
     language(): string {
