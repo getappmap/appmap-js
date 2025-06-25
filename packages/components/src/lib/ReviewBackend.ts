@@ -20,7 +20,10 @@ class ReviewBackend {
     store.dispatch('updateSuggestions', options.suggestions);
     store.dispatch('updateFeatures', options.features);
     store.dispatch('updateLoading', options.suggestions ? false : true);
-    if (options.rpcPort) this.rpc = new AppMapRPC(options.rpcPort);
+    if (options.rpcPort) {
+      this.rpc = new AppMapRPC(options.rpcPort);
+      review.$root.$on('fix', (suggestion: Suggestion) => this.startFix(suggestion));
+    }
   }
 
   update(update: Partial<ReviewRpc.Review>) {
@@ -64,6 +67,78 @@ class ReviewBackend {
     console.log('Starting explain with prompt:', prompt);
     explain.explain(prompt);
     this.attach(explain);
+  }
+
+  async startFix(suggestion: Suggestion): Promise<string | undefined> {
+    console.log('Starting fix for suggestion:', suggestion);
+    if (!this.rpc) {
+      console.error('RPC is not initialized');
+      return undefined;
+    }
+
+    const registration = await this.rpc.register();
+    const threadId = registration.thread.id;
+    store.dispatch('setFixThread', { id: suggestion.id, threadId });
+
+    const listener = await this.rpc.thread.subscribe(registration.thread.id);
+
+    let issueDescription = '';
+    if (suggestion.runtime?.finding) {
+      const { finding } = suggestion.runtime;
+      const req = finding?.event?.['http_server_request'];
+      const query = finding?.event?.['sql_query'];
+      const relatedClasses = new Set<string>(
+        (finding.relatedEvents ?? []).map(({ defined_class, method }) => {
+          if (method === undefined) {
+            return defined_class;
+          }
+          return `${defined_class}#${method}`;
+        })
+      );
+      issueDescription = [
+        `The issue is described as "${suggestion.title}"`,
+        finding.description,
+        '\nDetails are as follows:',
+        finding.message,
+        finding.locationLabel,
+        finding.event?.path,
+        req && `${req.method} ${req.path}`,
+        query && `SQL${query.database_type ? ` (${query.database_type})` : ''}: ${query.sql}`,
+        ...[...relatedClasses],
+        ...[...new Set(finding.stack.map((l: any) => l.replace(/:-1$/, '')))],
+      ]
+        .filter(Boolean)
+        .join('\n');
+    } else {
+      issueDescription = [
+        `${suggestion.title} in ${suggestion.location}:`,
+        '```',
+        suggestion.code,
+        '```',
+        suggestion.description,
+      ].join('\n');
+    }
+    console.log('Issue description:', issueDescription);
+    const messageQueue = [
+      `@explain /gather identify and explain the root cause of the following issue.\n${issueDescription}`,
+      '@plan a concise resolution to the issue, keeping changes to the minimum necessary - be specific and precise in your response, and always follow best practices.',
+      '@generate /format=xml',
+    ];
+    let currentMessageComplete: Promise<void>;
+    let resolver: () => void;
+    listener.on('event', (e) => {
+      if (e.type === 'message-complete') {
+        if (resolver) resolver();
+      }
+    });
+    for (const message of messageQueue) {
+      currentMessageComplete = new Promise((resolve) => {
+        resolver = resolve;
+      });
+
+      this.rpc.thread.sendMessage(registration.thread.id, message);
+      await currentMessageComplete;
+    }
   }
 }
 

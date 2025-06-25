@@ -28,6 +28,7 @@ export interface Suggestion {
   priority: 'high' | 'medium' | 'low';
   location: string;
   code: string;
+  description: string;
   category: 'security' | 'sql' | 'http' | string;
   runtime?: {
     stackTrace?: string;
