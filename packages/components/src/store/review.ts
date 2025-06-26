@@ -88,6 +88,15 @@ export default new Vuex.Store<ReviewState>({
     setFixThread({ commit }, { id, threadId }: { id: string; threadId: string }) {
       commit('setSuggestionStatus', { id, status: { threadId, status: 'fix-in-progress' } });
     },
+    setStatus({ commit }, { id, status }: { id: string; status: string }) {
+      // update the status to 'fix-in-progress', keeping the threadId if it exists
+      const currentStatus = this.state.suggestionStatuses[id];
+      if (currentStatus) {
+        commit('setSuggestionStatus', { id, status: { ...currentStatus, status } });
+      } else {
+        commit('setSuggestionStatus', { id, status: { status } });
+      }
+    },
     markAsDone({ commit }, id: string) {
       commit('setSuggestionStatus', { id, status: { status: 'fixed' } });
     },

@@ -30,7 +30,7 @@
           <div v-for="suggestion in items" :key="suggestion.id">
             <v-suggestion-card
               v-bind="suggestion"
-              @fix="$root.$emit('fix', suggestion)"
+              @fix="handleFix(suggestion)"
               @dismiss="openDismissDialog(suggestion.id)"
               @reopen="reopenSuggestion(suggestion.id)"
               @done="markAsDone(suggestion.id)"
@@ -246,6 +246,11 @@ export default Vue.extend({
       this.$store.dispatch('dismissSuggestion', { id, reason });
       this.closeDismissDialog();
       this.selectedSuggestion = undefined;
+    },
+    handleFix(suggestion: Suggestion) {
+      this.$root.$emit('fix', suggestion);
+      // set fix status immediately to prevent the user from clicking multiple times
+      this.$store.dispatch('setStatus', { id: suggestion.id, status: 'fix-in-progress' });
     },
     openDismissDialog(id: string) {
       this.showDismissDialogForSuggestionId = id;
