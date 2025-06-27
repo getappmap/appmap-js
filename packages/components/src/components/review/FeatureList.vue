@@ -24,12 +24,20 @@
           :key="index"
           class="feature-list__card"
           :class="{
-            'feature-list__card--needs-tests': !feature.hasCoverage && !isFeatureDismissed(index),
+            'feature-list__card--needs-tests':
+              feature.hasCoverage === false && !isFeatureDismissed(index),
           }"
         >
           <div class="feature-list__card-content">
             <span
-              v-if="feature.hasCoverage || isFeatureDismissed(index)"
+              v-if="feature.hasCoverage === undefined"
+              class="feature-list__icon feature-list__icon--loader feature-list__icon--test-status"
+              aria-label="Loading Test Status"
+            >
+              <v-rotate-cw />
+            </span>
+            <span
+              v-else-if="feature.hasCoverage || isFeatureDismissed(index)"
               class="feature-list__icon feature-list__icon--success feature-list__icon--feature-status"
               aria-label="Covered or Dismissed"
             >
@@ -112,7 +120,7 @@
               </div>
 
               <div
-                v-if="!feature.hasCoverage && !isFeatureDismissed(index)"
+                v-if="feature.hasCoverage === false && !isFeatureDismissed(index)"
                 class="feature-list__collapsible-content feature-list__collapsible-content--warning"
               >
                 <div class="feature-list__no-coverage-header">
