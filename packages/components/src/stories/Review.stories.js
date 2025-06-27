@@ -41,9 +41,16 @@ export function ReviewGradual(args, { argTypes }) {
   return {
     components: { VReview },
     mounted() {
+      const featuresWithoutCoverage = features.map((feature) => ({
+        ...feature,
+        hasCoverage: undefined, // Simulate loading state
+      }));
       setTimeout(() => {
-        store.dispatch('updateFeatures', features);
-        this.nextChunk();
+        store.dispatch('updateFeatures', featuresWithoutCoverage);
+        setTimeout(() => {
+          store.dispatch('updateFeatures', features);
+          this.nextChunk();
+        }, delay);
       }, delay);
     },
     methods: {
