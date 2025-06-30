@@ -53,7 +53,7 @@ const cli = yargs(hideBin(process.argv))
 
       const fileFilter = async (path: string) => {
         debug('Filtering: %s', path);
-        if (isBinaryFile(path)) {
+        if (await isBinaryFile(path)) {
           debug('Skipping binary file: %s', path);
           return false;
         }

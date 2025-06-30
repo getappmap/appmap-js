@@ -91,7 +91,7 @@ export default async function collectLocationContext(
       continue;
     }
 
-    if (isBinaryFile(path)) {
+    if (await isBinaryFile(path)) {
       if (verbose()) warn(`[location-context] Skipping binary file: ${path}`);
       continue;
     }
