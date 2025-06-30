@@ -1,6 +1,7 @@
 <script lang="ts">
 import { Wrench, CircleCheck, Trash, RotateCcw } from 'lucide-vue';
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
+import { SuggestionStatus } from '.';
 
 export default defineComponent({
   components: {
@@ -10,25 +11,30 @@ export default defineComponent({
     RotateCcw,
   },
   props: {
-    done: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: Object as PropType<SuggestionStatus>,
+      required: true,
     },
     compact: {
       type: Boolean,
       default: false,
     },
-    fixThread: {
-      type: String,
-      required: false,
-    },
   },
   emits: ['fix', 'done', 'dismiss', 'reopen'],
+  computed: {
+    done(): boolean {
+      return ['fixed', 'dismissed'].includes(this.status.status);
+    },
+    fixThread(): string | undefined {
+      console.log(this.status);
+      return this.status.threadId;
+    },
+  },
 });
 </script>
 
 <template>
-  <section class="buttons" :class="{ compact }">
+  <section class="buttons" :class="{ compact, [status.status]: true }">
     <button
       v-if="!done && !fixThread"
       @click.stop="$emit('fix')"
@@ -42,7 +48,7 @@ export default defineComponent({
       @click.stop="$root.$emit('show-navie-thread', fixThread)"
       :title="compact ? 'Show fix' : undefined"
     >
-      <Wrench :size="16" class="working" />
+      <Wrench :size="16" class="fix-icon" />
       <span v-if="!compact">Show fix</span>
     </button>
     <button v-if="!done" @click.stop="$emit('done')" :title="compact ? 'Mark as done' : undefined">
@@ -65,8 +71,13 @@ export default defineComponent({
   stroke: $color-highlight;
 }
 
-.working {
+.fix-in-progress .fix-icon {
   animation: spin 1s linear infinite;
+}
+
+.fix-ready .fix-icon {
+  animation: none;
+  stroke: $color-success;
 }
 
 @keyframes spin {

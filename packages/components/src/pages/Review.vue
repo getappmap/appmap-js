@@ -9,7 +9,7 @@
       :loading="loading"
     />
     <div class="toast-container" v-if="showToast">
-      <v-flash-message :type="toastType" @click="hideToast">
+      <v-flash-message :type="toastType" @click.native="toastAction">
         <p class="toast-message">{{ toastMessage }}</p>
       </v-flash-message>
     </div>
@@ -45,6 +45,7 @@ export default Vue.extend({
       toastMessage: '',
       toastType: 'info' as 'success' | 'error' | 'info',
       toastTimeout: null as number | null,
+      toastAction: undefined as undefined | (() => void),
       storeWatcher: null as null | (() => void),
     };
   },
@@ -57,13 +58,18 @@ export default Vue.extend({
   },
   mounted() {
     // Set up root event listener for fix event
-    this.storeWatcher = this.$store.subscribeAction({
-      after: (action, state) => {
-        console.log(`Action dispatched: ${action.type}`, action.payload);
+    this.storeWatcher = store.subscribeAction({
+      after: (action) => {
         if (action.type === 'setFixThread') {
           this.showToastNotification(
-            `Navie started working on a fix in the background.\nCheck the progress by clicking the button again.`,
-            'info'
+            `Navie started working on a fix in the background. You can review it later.`,
+            'info',
+            5000,
+            () => this.onToastClick(action.payload.id)
+          );
+        } else if (action.type === 'fixReady') {
+          this.showToastNotification(`Fix ready. Click to review and apply`, 'success', 5000, () =>
+            this.onToastClick(action.payload)
           );
         }
       },
@@ -82,19 +88,27 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['dismissFeature']),
+    onToastClick(suggestionId: string) {
+      const thread = this.$store.state.suggestionStatuses[suggestionId]?.threadId;
+      if (thread) this.$root.$emit('show-navie-thread', thread);
+      this.hideToast();
+    },
     showToastNotification(
       message: string,
       type: 'success' | 'error' | 'info' = 'info',
-      duration: number = 5000
+      duration: number = 5000,
+      action?: () => void
     ) {
       // Clear any existing timeout
       if (this.toastTimeout !== null) {
         window.clearTimeout(this.toastTimeout);
       }
 
+      // Set toast properties
       this.toastMessage = message;
       this.toastType = type;
       this.showToast = true;
+      this.toastAction = action ?? this.hideToast;
 
       // Hide toast after duration
       this.toastTimeout = window.setTimeout(() => {
