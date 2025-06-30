@@ -1,7 +1,7 @@
 import { stat } from 'fs/promises';
 import makeDebug from 'debug';
 
-import { isBinaryFileSync } from 'isbinaryfile';
+import { isBinaryFile as checkBinaryFile } from 'isbinaryfile';
 
 const debug = makeDebug('appmap:search:file-type');
 
@@ -108,10 +108,10 @@ export const isLargeFile = async (fileName: string): Promise<boolean> => {
   return fileSize > largeFileThreshold();
 };
 
-export const isBinaryFile = (filePath: string): boolean => {
+export const isBinaryFile = async (filePath: string): Promise<boolean> => {
   if (BINARY_FILE_EXTENSIONS.some((ext) => filePath.endsWith(ext))) return true;
   try {
-    return isBinaryFileSync(filePath);
+    return await checkBinaryFile(filePath);
   } catch (error) {
     debug(`Error reading file: %s`, filePath);
     debug(error);
