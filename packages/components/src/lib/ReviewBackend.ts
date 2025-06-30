@@ -139,6 +139,7 @@ class ReviewBackend {
       this.rpc.thread.sendMessage(registration.thread.id, message);
       await currentMessageComplete;
     }
+    store.dispatch('fixReady', suggestion.id);
   }
 }
 

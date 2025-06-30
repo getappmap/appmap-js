@@ -62,6 +62,15 @@ export default new Vuex.Store<ReviewState>({
     setSuggestionStatus(state, { id, status }: { id: string; status: SuggestionStatus }) {
       Vue.set(state.suggestionStatuses, id, status);
     },
+    setStatus(state, { id, status }: { id: string; status: string }) {
+      // Update the status of a suggestion, keeping the existing threadId if it exists
+      const currentStatus = state.suggestionStatuses[id];
+      if (currentStatus) {
+        Vue.set(state.suggestionStatuses, id, { ...currentStatus, status });
+      } else {
+        Vue.set(state.suggestionStatuses, id, { status });
+      }
+    },
     removeSuggestionStatus(state, id: string) {
       Vue.delete(state.suggestionStatuses, id);
     },
@@ -88,15 +97,9 @@ export default new Vuex.Store<ReviewState>({
     setFixThread({ commit }, { id, threadId }: { id: string; threadId: string }) {
       commit('setSuggestionStatus', { id, status: { threadId, status: 'fix-in-progress' } });
     },
-    setStatus({ commit }, { id, status }: { id: string; status: string }) {
-      // update the status to 'fix-in-progress', keeping the threadId if it exists
-      const currentStatus = this.state.suggestionStatuses[id];
-      if (currentStatus) {
-        commit('setSuggestionStatus', { id, status: { ...currentStatus, status } });
-      } else {
-        commit('setSuggestionStatus', { id, status: { status } });
-      }
-    },
+    fixInProgress: ({ commit }, id: string) =>
+      commit('setStatus', { id, status: 'fix-in-progress' }),
+    fixReady: ({ commit }, id: string) => commit('setStatus', { id, status: 'fix-ready' }),
     markAsDone({ commit }, id: string) {
       commit('setSuggestionStatus', { id, status: { status: 'fixed' } });
     },

@@ -250,7 +250,7 @@ export default Vue.extend({
     handleFix(suggestion: Suggestion) {
       this.$root.$emit('fix', suggestion);
       // set fix status immediately to prevent the user from clicking multiple times
-      this.$store.dispatch('setStatus', { id: suggestion.id, status: 'fix-in-progress' });
+      this.$store.dispatch('fixInProgress', suggestion.id);
     },
     openDismissDialog(id: string) {
       this.showDismissDialogForSuggestionId = id;

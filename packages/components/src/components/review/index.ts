@@ -46,7 +46,7 @@ export interface Suggestion {
 }
 
 export interface SuggestionStatus {
-  status: 'fix-in-progress' | 'todo' | 'fixed' | 'dismissed';
+  status: 'fix-in-progress' | 'fix-ready' | 'todo' | 'fixed' | 'dismissed';
   reason?: string;
   threadId?: string;
 }

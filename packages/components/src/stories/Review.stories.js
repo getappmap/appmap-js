@@ -26,6 +26,7 @@ export const Review = (args, { argTypes }) => ({
     this.$root.$on('fix', (suggestion) => {
       action('fix')(suggestion);
       store.dispatch('setFixThread', { id: suggestion.id, threadId: `navie-fix-${suggestion.id}` });
+      setTimeout(() => store.dispatch('fixReady', suggestion.id), 5000);
     });
   },
 });

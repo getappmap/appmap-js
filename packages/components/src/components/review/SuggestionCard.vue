@@ -5,10 +5,10 @@
     @click="expanded = !expanded"
   >
     <div class="suggestion-card__meta">
-      <span class="status" :class="statusClass" :title="statusTitle">
-        <CircleEllipsis v-if="status.status === 'fix-in-progress'" :size="20" :class="statusClass" />
-        <CircleAlert v-else-if="status.status === 'todo'" :size="20" :class="statusClass" />
-        <CircleCheck v-else-if="done" :size="20" :class="statusClass" />
+      <span class="status" :class="{ [`status-${status.status}`]: true }" :title="statusTitle">
+        <CircleEllipsis v-if="status.status === 'fix-in-progress'" :size="20" />
+        <CircleAlert v-else-if="status.status === 'todo'" :size="20" />
+        <CircleCheck v-else-if="done || fixReady" :size="20" />
         <component v-else :is="categoryIconComponent" :size="20" class="icon" />
       </span>
       <v-badge v-if="hasRuntime"><Zap :size="10" class="full icon-adjust" />Runtime</v-badge>
@@ -34,13 +34,12 @@
 
         <SuggestionButtons
           v-if="!expanded"
-          :done="done"
+          :compact="true"
+          :status="status"
           @fix="$emit('fix')"
           @done="$emit('done')"
           @dismiss="$emit('dismiss')"
           @reopen="$emit('reopen')"
-          :compact="true"
-          :fix-thread="status.threadId"
         />
       </div>
     </div>
@@ -76,12 +75,11 @@
         </ul>
       </section>
       <SuggestionButtons
-        :done="done"
+        :status="status"
         @fix="$emit('fix')"
         @done="$emit('done')"
         @dismiss="$emit('dismiss')"
         @reopen="$emit('reopen')"
-        :fix-thread="status.threadId"
       />
     </div>
   </div>
@@ -106,7 +104,6 @@ import VCodeSnippet from '@/components/CodeSnippet.vue';
 import { getCategoryIconComponent, SuggestionStatus } from '.';
 import { ReviewRpc } from '@appland/rpc';
 import SuggestionButtons from './SuggestionButtons.vue';
-import exp from 'constants';
 
 export default Vue.extend({
   components: {
@@ -175,6 +172,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    fixReady(): boolean {
+      return this.status.status === 'fix-ready';
+    },
     fixInProgress(): boolean {
       return this.status.status === 'fix-in-progress';
     },
@@ -200,32 +200,6 @@ export default Vue.extend({
     done(): boolean {
       return this.status.status === 'fixed' || this.status.status === 'dismissed';
     },
-    priorityClass(): string[] {
-      switch (this.priority) {
-        case 'high':
-          return ['priority-high'];
-        case 'medium':
-          return ['priority-medium'];
-        case 'low':
-          return ['priority-low'];
-        default:
-          return ['priority-default'];
-      }
-    },
-    statusClass(): string[] {
-      switch (this.status.status) {
-        case 'fix-in-progress':
-          return ['status-applied'];
-        case 'todo':
-          return ['status-todo'];
-        case 'fixed':
-          return ['status-fixed'];
-        case 'dismissed':
-          return ['status-dismissed'];
-        default:
-          return ['status-unknown'];
-      }
-    },
     statusTitle(): string {
       const { reason, status } = this.status;
       switch (status) {
@@ -233,6 +207,8 @@ export default Vue.extend({
           return 'This suggestion needs to be addressed.';
         case 'fix-in-progress':
           return reason ? `Fix in progress: ${reason}` : 'Fix in progress';
+        case 'fix-ready':
+          return reason ? `Fix ready: ${reason}` : 'Fix is ready to be applied.';
         case 'fixed':
           return 'This suggestion has been addressed.';
         case 'dismissed':
@@ -369,9 +345,6 @@ a.appmap-link::before {
   padding-right: 0.15rem;
 }
 
-.status-applied {
-  color: $color-success !important;
-}
 .status-todo {
   color: $color-warning !important;
 }
@@ -381,8 +354,11 @@ a.appmap-link::before {
 .status-fixed {
   color: $color-success !important;
 }
-.status-unknown {
-  color: $color-foreground-secondary !important;
+.status-fix-ready {
+  color: $color-warning !important;
+}
+.status-fix-in-progress {
+  color: $color-warning !important;
 }
 
 .action-menu-container {
