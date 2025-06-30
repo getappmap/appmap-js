@@ -40,6 +40,7 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
+    "@appland/rpc": "workspace:^",
     "@langchain/anthropic": "^0.3.1",
     "@langchain/core": "^0.2.27",
     "@langchain/google-vertexai-web": "^0.1.0",

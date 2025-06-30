@@ -1,5 +1,8 @@
 import { warn } from 'console';
 import z from 'zod';
+
+import type { ReviewRpc } from '@appland/rpc';
+
 import Command, { CommandRequest, hasCodeSelectionArray } from '../command';
 import { ExplainOptions } from './explain-command';
 import CompletionService from '../services/completion-service';
@@ -307,6 +310,47 @@ export const SuggestionList = z
 
 const DEFAULT_DIFF_TERMS_THRESHOLD = 1000;
 
+function jsonLine(obj: Partial<ReviewRpc.Review>) {
+  return JSON.stringify(obj) + '\n';
+}
+
+function location(file: string, startLine?: number, endLine?: number): string {
+  const locationTokens = [];
+  if (startLine) locationTokens.push(startLine);
+  if (endLine) locationTokens.push(endLine);
+  return [file, locationTokens.join('-')].filter(Boolean).join(':');
+}
+
+function appmapName(appmap: string): string {
+  // remove everything up to /appmap/ path segment
+  // and .appmap.json suffix, then replace slashes and underscores with spaces
+  return appmap
+    .replace(/^.*\/appmap\//, '')
+    .replace(/\.appmap\.json$/, '')
+    .replace(/\.appmap$/, '')
+    .replace(/[_/]/g, ' ');
+}
+
+function convertSuggestions(
+  suggestions: z.infer<typeof SuggestionList>,
+  category?: string
+): ReviewRpc.Suggestion[] {
+  return suggestions.suggestions.map<ReviewRpc.Suggestion>((suggestion) => ({
+    ...suggestion,
+    id: randomUUID(),
+    location: location(suggestion.file, suggestion.line),
+    code: suggestion.context,
+    title: suggestion.label,
+    category: category ?? suggestion.type,
+    runtime: {
+      appMapReferences: suggestion.appmaps?.map((appmap) => ({
+        path: appmap,
+        name: appmapName(appmap),
+      })),
+    },
+  }));
+}
+
 export default class Review2Command implements Command {
   constructor(
     private readonly options: ExplainOptions,
@@ -326,7 +370,8 @@ export default class Review2Command implements Command {
     const sqlSuggestions = request.userOptions.booleanValue('sql', true);
     const httpSuggestions = request.userOptions.booleanValue('http', true);
     const outputJson = request.userOptions.stringValue('format', 'text') === 'json';
-    const outputText = !outputJson;
+    const outputJsonLines = request.userOptions.stringValue('format', 'text') === 'jsonl';
+    const outputText = !outputJson && !outputJsonLines;
     const runTests = request.userOptions.stringValue('runtests');
     const runTestsImmediately = runTests === 'immediate';
     const baseBranch = request.userOptions.stringValue('base');
@@ -381,6 +426,10 @@ export default class Review2Command implements Command {
           yield `* ${feature}\n`;
         }
       }
+
+      if (outputJsonLines) {
+        yield jsonLine({ features: featureList.map((f) => ({ description: f })) });
+      }
       yield '\n\n';
 
       testMatrix = await this.buildTestMatrix(vectorTerms, featureList, gitDiff);
@@ -405,6 +454,29 @@ export default class Review2Command implements Command {
         }
 
         featureTest.tests = existingTestItems;
+      }
+
+      if (outputJsonLines) {
+        yield jsonLine({
+          features: testMatrix.featureTests.map((feature) => {
+            const result: ReviewRpc.Feature = {
+              description: feature.feature,
+            };
+            const [test] = feature.tests;
+            if (test) {
+              result.testDetails = {
+                file: test.file,
+                location: location(test.file, test.startLine, test.endLine),
+                tests: [{ name: test.testName }],
+              };
+              result.hasCoverage = true;
+            } else {
+              result.hasCoverage = false;
+              result.aiPrompt = `@test ${feature.feature}`;
+            }
+            return result;
+          }),
+        });
       }
 
       if (outputText) {
@@ -490,12 +562,17 @@ export default class Review2Command implements Command {
       }
     }
 
+    const allSuggestions: ReviewRpc.Suggestion[] = [];
     if (analyzeSuggestions) {
       suggestionList = await this.listSuggestions(gitDiff);
       if (outputText && suggestionList.suggestions.length > 0) {
         yield '## Suggestions\n\n';
         yield generateSuggestionsMarkdown(suggestionList.suggestions);
         yield '\n\n';
+      }
+      allSuggestions.push(...convertSuggestions(suggestionList));
+      if (outputJsonLines) {
+        yield jsonLine({ suggestions: allSuggestions });
       }
     }
 
@@ -506,6 +583,10 @@ export default class Review2Command implements Command {
         yield generateSuggestionsMarkdown(sqlSuggestionList.suggestions);
         yield '\n\n';
       }
+      allSuggestions.push(...convertSuggestions(sqlSuggestionList, 'sql'));
+      if (outputJsonLines) {
+        yield jsonLine({ suggestions: allSuggestions });
+      }
     }
 
     if (httpSuggestions) {
@@ -514,6 +595,10 @@ export default class Review2Command implements Command {
         yield '## HTTP Suggestions\n\n';
         yield generateSuggestionsMarkdown(httpSuggestionList.suggestions);
         yield '\n\n';
+      }
+      allSuggestions.push(...convertSuggestions(httpSuggestionList, 'http'));
+      if (outputJsonLines) {
+        yield jsonLine({ suggestions: allSuggestions });
       }
     }
 
