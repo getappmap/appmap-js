@@ -1,19 +1,11 @@
 <template>
   <div class="review-page">
     <v-header />
-    <v-review-status
-      :total-features="totalFeatures"
-      :features-needing-tests="featuresNeedingTests"
-      :dismissed-features="dismissedFeatures.length"
-      :suggestions="suggestionsSummary"
-      :loading="loading"
-    />
     <div class="toast-container" v-if="showToast">
       <v-flash-message :type="toastType" @click.native="toastAction">
         <p class="toast-message">{{ toastMessage }}</p>
       </v-flash-message>
     </div>
-    <v-feature-list :features="features" @feature-dismiss="dismissFeature" />
     <v-suggestions
       :suggestions="suggestions"
       :loading="loading"
@@ -27,19 +19,16 @@ import Vue from 'vue';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 import VHeader from '@/components/review/Header.vue';
-import VReviewStatus from '@/components/review/ReviewStatus.vue';
-import VFeatureList from '@/components/review/FeatureList.vue';
 import VSuggestions from '@/components/review/Suggestions.vue';
 import VFlashMessage from '@/components/FlashMessage.vue';
 import store from '@/store/review';
+import { Suggestion } from '@/components/review';
 
 export default Vue.extend({
   name: 'ReviewPage',
   store,
   components: {
     VHeader,
-    VReviewStatus,
-    VFeatureList,
     VSuggestions,
     VFlashMessage,
   },
