@@ -6,19 +6,6 @@
         <shield />
         <h1 class="app-header__title">AppMap Code Review</h1>
       </div>
-      <nav class="app-header__nav">
-        <ul class="app-header__nav-list">
-          <li class="app-header__nav-item">
-            <a href="#summary" class="app-header__nav-link">Summary</a>
-          </li>
-          <li class="app-header__nav-item">
-            <a href="#features" class="app-header__nav-link">Features</a>
-          </li>
-          <li class="app-header__nav-item">
-            <a href="#suggestions" class="app-header__nav-link">Suggestions</a>
-          </li>
-        </ul>
-      </nav>
     </div>
   </header>
 </template>
