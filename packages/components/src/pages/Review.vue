@@ -14,7 +14,11 @@
       </v-flash-message>
     </div>
     <v-feature-list :features="features" @feature-dismiss="dismissFeature" />
-    <v-suggestions :suggestions="suggestions" :loading="loading" />
+    <v-suggestions
+      :suggestions="suggestions"
+      :loading="loading"
+      :includes-runtime-references="includesRuntimeReferences"
+    />
   </div>
 </template>
 
@@ -54,6 +58,9 @@ export default Vue.extend({
     ...mapGetters(['totalFeatures', 'featuresNeedingTests', 'suggestionsSummary']),
     currentYear(): number {
       return new Date().getFullYear();
+    },
+    includesRuntimeReferences(): boolean {
+      return this.$store.state.suggestions.some((s: Suggestion) => Boolean(s.runtime));
     },
   },
   mounted() {

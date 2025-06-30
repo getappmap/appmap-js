@@ -5,6 +5,19 @@
         <CategoryStats :items="suggestions" />
       </SectionHeading>
 
+      <div v-if="!loading && !includesRuntimeReferences">
+        <p class="mt-0">
+          AppMap's code review works whether or not you've recorded any runtime data, but you'll get
+          the deepest insights if you first record AppMap trace data by exercising the changes in
+          your application.
+        </p>
+        <p>
+          <a href="#" @click.stop.prevent="viewRecordingInstructions">
+            Click here to view instructions for recording AppMap data.
+          </a>
+        </p>
+      </div>
+
       <!-- Suggestions by category -->
       <div
         v-for="(items, category) in categorizedSuggestions"
@@ -111,6 +124,10 @@ export default Vue.extend({
     onSuggestionDismiss: {
       type: Function as PropType<(id: string) => void>,
       default: () => () => {},
+    },
+    includesRuntimeReferences: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -286,6 +303,9 @@ export default Vue.extend({
       }
       this.openActionMenu = undefined;
     },
+    viewRecordingInstructions() {
+      this.$root.$emit('view-recording-instructions');
+    },
   },
 });
 </script>
@@ -321,6 +341,9 @@ export default Vue.extend({
 .pr-8 {
   padding-right: 2rem;
 } // For modal title to not overlap close button
+.mt-0 {
+  margin-top: 0;
+}
 
 .icon {
   /* Common icon styling can be added here as needed */
