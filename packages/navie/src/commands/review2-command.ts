@@ -130,6 +130,9 @@ Other types suggestions, such as:
 
 are generally _not_ desirable. However, in the rare case that this type of suggestion can make a large improvement to the code, you may include it.
 
+Pay special attention to any provided AppMaps (aka. sequence diagrams), as they may provide additional context.
+Indicate if information from the AppMaps was used in your analysis.
+
 Don't suggest changes that have already been considered by the developer and are explained in the comments.
 
 Respect implementation decisions that are explained in comments, including both current choices and future plans that are explicitly deferred.
@@ -146,6 +149,8 @@ You should focus on the following areas:
 * SQL style improvements
 
 All suggestions that you make must be related to SQL queries or related use of the database.
+Pay special attention to any provided AppMaps (aka. sequence diagrams) that contain SQL queries, as they may provide additional context.
+Indicate if information from the AppMaps was used in your analysis.
 
 Concentrate your analysis on the following potential weaknesses:
 
@@ -182,6 +187,8 @@ You should focus on the following areas:
 * HTTP request style improvements
 
 All suggestions that you make must be related to the application handling of HTTP requests, or related configuration.
+Pay special attention to any provided AppMaps (aka. sequence diagrams) that contain HTTP requests, as they may provide additional context.
+Indicate if information from the AppMaps was used in your analysis.
 
 Concentrate your analysis on the following potential weaknesses:
 
@@ -293,6 +300,12 @@ export const SuggestionItem = z.object({
     .string()
     .describe(
       'The type of code improvement that the suggestion suggests. Primary suggestion types are: bug, security, performance.'
+    ),
+  appmaps: z
+    .array(z.string())
+    .optional()
+    .describe(
+      'A list of AppMaps (sequence diagrams) that this suggestion is based on. This is used to provide context for the suggestion.'
     ),
   context: z.string().describe('A snippet of code that provides the context for the suggestion.'),
   priority: z.enum(['low', 'medium', 'high']).describe('Priority of the suggestion.'),
@@ -954,6 +967,16 @@ function generateSuggestionsMarkdown(suggestions: z.infer<typeof SuggestionItem>
     .map((suggestion) => {
       const emoji = priorityEmoji(suggestion.priority);
       const location = [suggestion.file, suggestion.line].filter(Boolean).join(':');
+      const appmapLinks =
+        (suggestion.appmaps?.length ?? 0 > 0)
+          ? 'AppMaps: ' +
+            suggestion.appmaps
+              ?.map((appmap) => {
+                const name = appmap.replace(/\.appmap\.json$/, '').replace(/.*appmap\//, '');
+                return `[${name}](${appmap})`;
+              })
+              .join(', ')
+          : '';
       return [
         `### ${emoji} ${suggestion.label} (${suggestion.type}, ${suggestion.priority} priority)`,
         '',
@@ -962,6 +985,7 @@ function generateSuggestionsMarkdown(suggestions: z.infer<typeof SuggestionItem>
         `<!-- file: ${location} -->`,
         suggestion.context,
         '```',
+        appmapLinks,
       ].join('\n');
     })
     .join('\n\n');
