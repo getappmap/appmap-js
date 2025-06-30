@@ -429,6 +429,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appland/navie@workspace:packages/navie"
   dependencies:
+    "@appland/rpc": "workspace:^"
     "@langchain/anthropic": ^0.3.1
     "@langchain/core": ^0.2.27
     "@langchain/google-vertexai-web": ^0.1.0
@@ -483,7 +484,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/rpc@workspace:^1.13.0, @appland/rpc@workspace:packages/rpc":
+"@appland/rpc@workspace:^, @appland/rpc@workspace:^1.13.0, @appland/rpc@workspace:packages/rpc":
   version: 0.0.0-use.local
   resolution: "@appland/rpc@workspace:packages/rpc"
   dependencies:
