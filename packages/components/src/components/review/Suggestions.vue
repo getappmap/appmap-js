@@ -1,7 +1,9 @@
 <template>
   <section id="suggestions" class="suggestions-section">
     <div class="container">
-      <SectionHeading title="Suggestions" :loading="loading" />
+      <SectionHeading title="Suggestions" :loading="loading">
+        <CategoryStats :items="suggestions" />
+      </SectionHeading>
 
       <!-- Suggestions by category -->
       <div
@@ -12,18 +14,10 @@
       >
         <div class="category-header">
           <component :is="getCategoryIconComponent(category)" :size="24" class="icon" />
-          <h3 class="category-title">{{ category }}</h3>
-          <div class="category-stats">
-            <span class="suggestion-count high" v-if="getPriorityCounts(items).high">
-              {{ getPriorityCounts(items).high }}
-            </span>
-            <span class="suggestion-count medium" v-if="getPriorityCounts(items).medium">
-              {{ getPriorityCounts(items).medium }}
-            </span>
-            <span class="suggestion-count low" v-if="getPriorityCounts(items).low">
-              {{ getPriorityCounts(items).low }}
-            </span>
-          </div>
+          <h3 class="category-title">
+            {{ category.replace('http', 'HTTP').replace('sql', 'SQL') }}
+          </h3>
+          <CategoryStats :items="items" />
         </div>
 
         <div class="suggestions-grid">
@@ -77,6 +71,7 @@ import VButton from '@/components/Button.vue';
 import VPopper from '@/components/Popper.vue';
 import VDismissModal from './DismissModal.vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
+import CategoryStats from './CategoryStats.vue';
 import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
 
 export default Vue.extend({
@@ -102,6 +97,7 @@ export default Vue.extend({
     VSuggestionCard,
     VDismissModal,
     VSkeletonLoader,
+    CategoryStats,
   },
   props: {
     loading: {
@@ -189,25 +185,6 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['reopenSuggestion', 'markAsDone']),
-    getPriorityCounts(items: Suggestion[]): {
-      high: number;
-      medium: number;
-      low: number;
-      total: number;
-    } {
-      const counts = { high: 0, medium: 0, low: 0, total: 0 };
-      for (const item of items) {
-        if (item.priority === 'high') {
-          counts.high++;
-        } else if (item.priority === 'medium') {
-          counts.medium++;
-        } else if (item.priority === 'low') {
-          counts.low++;
-        }
-        counts.total++;
-      }
-      return counts;
-    },
     getSuggestionStatus(id: string): SuggestionStatus | undefined {
       return this.$store.state.suggestionStatuses[id];
     },

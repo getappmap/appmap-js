@@ -1,8 +1,9 @@
 <template>
   <div class="section-heading">
-    <h2 class="section-heading__title">
-      {{ title }} <v-loader class="section-heading__loader" v-if="loading" />
-    </h2>
+    <div class="section-heading__title">
+      <h2>{{ title }} <v-loader class="section-heading__loader" v-if="loading" /></h2>
+      <slot />
+    </div>
 
     <p v-if="subtitle" class="section-heading__subtitle">{{ subtitle }}</p>
 
@@ -42,10 +43,13 @@ export default Vue.extend({
 <style scoped lang="scss">
 .section-heading {
   &__title {
-    margin: 0;
-    font-size: 1.75rem;
-    font-weight: bold;
-    color: $color-foreground-light;
+    display: flex;
+    h2 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: bold;
+      color: $color-foreground-light;
+    }
   }
 
   &__subtitle {
