@@ -255,10 +255,7 @@ export const LabelItemList = z.object({
 });
 
 export const TestItem = z.object({
-  file: z
-    .string()
-
-    .describe(`The name of the file that contains the test case.`),
+  file: z.string().describe(`The name of the file that contains the test case.`),
   startLine: z
     .number()
     .describe(
@@ -501,14 +498,8 @@ export default class Review2Command implements Command {
         for (const feature of testMatrix.featureTests) {
           const featureTestDescription = (testItem: z.infer<typeof TestItem>): string => {
             const { file, startLine, endLine, testName } = testItem;
-            const locationTokens = [];
-            if (startLine) locationTokens.push(startLine);
-            if (endLine) locationTokens.push(endLine);
 
-            return [
-              [file, locationTokens.join('-')].filter(Boolean).join(':'),
-              `(${testName})`,
-            ].join(' ');
+            return [location(file, startLine, endLine), `(${testName})`].join(' ');
           };
 
           const testList =
