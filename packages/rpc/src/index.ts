@@ -6,6 +6,7 @@ export namespace IndexRpc {
   export type NumProcessedResponse = number;
 }
 
+export * from './review';
 export * from './search';
 export * from './appmap';
 export * from './explain';

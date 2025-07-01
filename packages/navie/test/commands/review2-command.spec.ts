@@ -1,3 +1,7 @@
+import assert from 'node:assert';
+
+import type { ReviewRpc } from '@appland/rpc';
+
 import Review2Command, {
   FeatureList,
   FeatureTestItemList,
@@ -300,6 +304,7 @@ describe('Review2Command', () => {
             line: 5,
             label: 'n+1 query',
             priority: 'medium',
+            appmaps: ['tmp/appmap/users_query.appmap.json'],
           },
         ],
       };
@@ -308,6 +313,8 @@ describe('Review2Command', () => {
 
       expect(result).toContain('## SQL Suggestions');
       expect(result).toContain('n+1 query');
+      // AppMap reference should be present in the output (for markdown, not JSONL)
+      expect(result).toContain('users_query.appmap');
     });
 
     it('includes HTTP suggestions in the output', async () => {
@@ -331,6 +338,43 @@ describe('Review2Command', () => {
 
       expect(result).toContain('## HTTP Suggestions');
       expect(result).toContain('http 500 error');
+    });
+
+    it('outputs AppMap references and JSONL format for suggestions', async () => {
+      const reviewCommandOptions = new ReviewCommandOptions();
+      reviewCommandOptions.mockSuggestions = {
+        suggestions: [
+          {
+            type: 'bug',
+            context: 'some code',
+            description: 'A bug was found.',
+            file: 'buggy.ts',
+            line: 42,
+            label: 'bug label',
+            priority: 'high',
+            appmaps: ['tmp/appmap/buggy_case.appmap.json'],
+          },
+        ],
+      };
+      reviewCommandOptions.userOptions = new UserOptions(new Map([['format', 'jsonl']]));
+
+      const result = await executeReviewCommandWithMocks(command, reviewCommandOptions);
+
+      // Should output JSONL with appMapReferences
+      const suggestions = result
+        .trim()
+        .split('\n')
+        .find((line) => line.includes('suggestions'));
+      assert(suggestions, 'Expected suggestions to be present in the output');
+      const parsed = JSON.parse(suggestions) as Partial<ReviewRpc.Review>;
+      const suggestion = parsed.suggestions?.[0];
+      assert(suggestion, 'Expected suggestion to be present');
+      expect(suggestion.runtime?.appMapReferences?.at(0)?.path).toBe(
+        'tmp/appmap/buggy_case.appmap.json'
+      );
+      expect(suggestion.runtime?.appMapReferences?.at(0)?.name).toBe('buggy case');
+      expect(suggestion.title).toBe('bug label');
+      expect(suggestion.category).toBe('bug');
     });
   });
 });

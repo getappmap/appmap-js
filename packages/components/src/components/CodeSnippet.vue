@@ -3,6 +3,7 @@
     <div
       type="text"
       class="input code-snippet__input"
+      :class="{ 'input code-snippet__input--no-gutter': !showCopy }"
       role="textbox"
       ref="input"
       @click="onInputFocus"
@@ -168,6 +169,10 @@ export default {
     scrollbar-width: thin;
     padding: 0.5rem 1rem;
     padding-top: 1rem;
+
+    &--no-gutter {
+      margin-right: 0rem;
+    }
   }
 
   &__button {

@@ -1,0 +1,313 @@
+{
+  "features": [
+    {
+      "description": "User authentication with role-based access control",
+      "testDetails": {
+        "file": "src/test/java/org/springframework/samples/petclinic/security/LoginTests.java",
+        "location": "src/test/java/org/springframework/samples/petclinic/security/LoginTests.java:23-31",
+        "tests": [
+          {
+            "name": "testSuccessfulLoginAsAdmin"
+          }
+        ]
+      },
+      "hasCoverage": true
+    },
+    {
+      "description": "Failed login handling",
+      "testDetails": {
+        "file": "src/test/java/org/springframework/samples/petclinic/security/LoginTests.java",
+        "location": "src/test/java/org/springframework/samples/petclinic/security/LoginTests.java:42-48",
+        "tests": [
+          {
+            "name": "testFailedLoginWithInvalidPassword"
+          }
+        ]
+      },
+      "hasCoverage": true
+    },
+    {
+      "description": "Logout functionality",
+      "testDetails": {
+        "file": "src/test/java/org/springframework/samples/petclinic/security/LoginTests.java",
+        "location": "src/test/java/org/springframework/samples/petclinic/security/LoginTests.java:58-67",
+        "tests": [
+          {
+            "name": "testLogout"
+          }
+        ]
+      },
+      "hasCoverage": true
+    },
+    {
+      "description": "Role-based access control for Owner endpoints",
+      "testDetails": {
+        "file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+        "location": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:63-156",
+        "tests": [
+          {
+            "name": "OwnerControllerTests with @WithMockUser(username = \"admin\", roles = { \"ADMIN\" })"
+          }
+        ]
+      },
+      "hasCoverage": true
+    },
+    {
+      "description": "CSRF protection for form submissions",
+      "testDetails": {
+        "file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+        "location": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:117-127",
+        "tests": [
+          {
+            "name": "testProcessCreationFormSuccess"
+          }
+        ]
+      },
+      "hasCoverage": true
+    }
+  ],
+  "suggestions": [
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java",
+      "line": 40,
+      "type": "security",
+      "context": "http.authorizeHttpRequests(authorize -> authorize.requestMatchers(\"/\", \"/oups\", \"/error\").permitAll())",
+      "priority": "high",
+      "label": "Missing security headers",
+      "description": "Add security headers configuration using http.headers() to protect against common web vulnerabilities like XSS, clickjacking, and MIME type sniffing.",
+      "id": "76c2e2d4-c7f4-4028-bc65-1dbdaff5377b",
+      "location": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java:40",
+      "code": "http.authorizeHttpRequests(authorize -> authorize.requestMatchers(\"/\", \"/oups\", \"/error\").permitAll())",
+      "title": "Missing security headers",
+      "category": "security"
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/security/JpaUserDetailsService.java",
+      "line": 27,
+      "type": "performance",
+      "context": "@Transactional(readOnly = true)",
+      "priority": "medium",
+      "label": "Cache user details",
+      "description": "Add caching to loadUserByUsername() using Spring's @Cacheable to improve performance by avoiding repeated database lookups for the same username.",
+      "id": "981546d4-ec01-4e8e-bf69-579a43000399",
+      "location": "src/main/java/org/springframework/samples/petclinic/security/JpaUserDetailsService.java:27",
+      "code": "@Transactional(readOnly = true)",
+      "title": "Cache user details",
+      "category": "performance"
+    },
+    {
+      "file": "src/main/resources/db/h2/data.sql",
+      "line": 61,
+      "type": "security",
+      "context": "INSERT INTO users VALUES (default, 'admin', '$2a$12$34gXhmF2aGTUsJqINxzTyusB3n4pOQ2nvTc45K/kjsc0WeJQo1T3a', default);",
+      "priority": "high",
+      "label": "Default admin password",
+      "description": "Remove hardcoded default password from SQL file and implement a secure password initialization process for the admin account.",
+      "id": "57ffefa5-90a4-40be-b164-af7c1a76806d",
+      "location": "src/main/resources/db/h2/data.sql:61",
+      "code": "INSERT INTO users VALUES (default, 'admin', '$2a$12$34gXhmF2aGTUsJqINxzTyusB3n4pOQ2nvTc45K/kjsc0WeJQo1T3a', default);",
+      "title": "Default admin password",
+      "category": "security"
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java",
+      "line": 47,
+      "type": "security",
+      "context": ".logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher(\"/logout\"))",
+      "priority": "medium",
+      "label": "CSRF token missing in logout",
+      "description": "Add CSRF protection to logout by configuring logoutRequestMatcher to use POST method instead of GET to prevent CSRF attacks.",
+      "id": "3d799b66-1f69-4641-8e9d-ed4541a554dc",
+      "location": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java:47",
+      "code": ".logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher(\"/logout\"))",
+      "title": "CSRF token missing in logout",
+      "category": "security"
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/security/JpaUserDetailsService.java",
+      "line": 27,
+      "type": "performance",
+      "appmaps": [
+        "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testSuccessfulLoginAsAdmin.appmap.json"
+      ],
+      "context": "User user = userRepository.findByUsername(username)\n.orElseThrow(() -> new UsernameNotFoundException(\"User not found with username: \" + username));\n\nSet<GrantedAuthority> authorities = user.getRoles()\n.stream()\n.map(role -> new SimpleGrantedAuthority(role.getName()))\n.collect(Collectors.toSet());",
+      "priority": "high",
+      "label": "N+1 Query in User Role Loading",
+      "description": "The AppMap shows an N+1 query pattern where user roles are loaded in a separate query after fetching the user. Consider using JOIN FETCH in the UserRepository query to load roles eagerly in a single query.",
+      "id": "c86cf55a-3054-4118-a785-10b2f97675a7",
+      "location": "src/main/java/org/springframework/samples/petclinic/security/JpaUserDetailsService.java:27",
+      "code": "User user = userRepository.findByUsername(username)\n.orElseThrow(() -> new UsernameNotFoundException(\"User not found with username: \" + username));\n\nSet<GrantedAuthority> authorities = user.getRoles()\n.stream()\n.map(role -> new SimpleGrantedAuthority(role.getName()))\n.collect(Collectors.toSet());",
+      "title": "N+1 Query in User Role Loading",
+      "category": "sql",
+      "runtime": {
+        "appMapReferences": [
+          {
+            "path": "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testSuccessfulLoginAsAdmin.appmap.json",
+            "name": "junit org springframework samples petclinic security LoginTests testSuccessfulLoginAsAdmin"
+          }
+        ]
+      }
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/user/UserRepository.java",
+      "line": 8,
+      "type": "performance",
+      "appmaps": [
+        "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testSuccessfulLoginAsAdmin.appmap.json"
+      ],
+      "context": "Optional<User> findByUsername(String username);",
+      "priority": "medium",
+      "label": "Missing Index on Username Column",
+      "description": "While there is a unique constraint on username, an explicit index would improve login query performance. Add a database index on the username column.",
+      "id": "63eff548-166e-4453-b40d-995550a7750b",
+      "location": "src/main/java/org/springframework/samples/petclinic/user/UserRepository.java:8",
+      "code": "Optional<User> findByUsername(String username);",
+      "title": "Missing Index on Username Column",
+      "category": "sql",
+      "runtime": {
+        "appMapReferences": [
+          {
+            "path": "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testSuccessfulLoginAsAdmin.appmap.json",
+            "name": "junit org springframework samples petclinic security LoginTests testSuccessfulLoginAsAdmin"
+          }
+        ]
+      }
+    },
+    {
+      "file": "src/main/resources/db/h2/schema.sql",
+      "line": 73,
+      "type": "security",
+      "appmaps": [],
+      "context": "CREATE TABLE users_roles (\n    user_id INTEGER NOT NULL,\n    role_id INTEGER NOT NULL\n);",
+      "priority": "low",
+      "label": "Missing ON DELETE Constraint",
+      "description": "The users_roles junction table should specify ON DELETE behavior for foreign keys to prevent orphaned records and maintain referential integrity.",
+      "id": "83c657da-532a-494c-8bb8-dc462002e50d",
+      "location": "src/main/resources/db/h2/schema.sql:73",
+      "code": "CREATE TABLE users_roles (\n    user_id INTEGER NOT NULL,\n    role_id INTEGER NOT NULL\n);",
+      "title": "Missing ON DELETE Constraint",
+      "category": "sql",
+      "runtime": {
+        "appMapReferences": []
+      }
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java",
+      "line": 38,
+      "type": "security",
+      "appmaps": [
+        "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testSuccessfulLoginAsAdmin.appmap.json"
+      ],
+      "context": "public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {\n  http.authorizeHttpRequests(authorize -> authorize.requestMatchers(\"/\", \"/oups\", \"/error\")\n    .permitAll()",
+      "priority": "high",
+      "label": "Missing security headers configuration",
+      "description": "The security configuration lacks important security HTTP headers. Add headers().defaultsDisabled().frameOptions().deny().xssProtection().and().contentSecurityPolicy(\"default-src 'self'\") to prevent clickjacking and XSS attacks.",
+      "id": "33e06749-438e-4a8a-9196-6aa2ea385f32",
+      "location": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java:38",
+      "code": "public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {\n  http.authorizeHttpRequests(authorize -> authorize.requestMatchers(\"/\", \"/oups\", \"/error\")\n    .permitAll()",
+      "title": "Missing security headers configuration",
+      "category": "http",
+      "runtime": {
+        "appMapReferences": [
+          {
+            "path": "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testSuccessfulLoginAsAdmin.appmap.json",
+            "name": "junit org springframework samples petclinic security LoginTests testSuccessfulLoginAsAdmin"
+          }
+        ]
+      }
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java",
+      "line": 45,
+      "type": "security",
+      "appmaps": [
+        "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testFailedLoginWithInvalidPassword.appmap.json"
+      ],
+      "context": ".formLogin(formLogin -> formLogin.permitAll().defaultSuccessUrl(\"/\", true))",
+      "priority": "medium",
+      "label": "Missing login attempt rate limiting",
+      "description": "The login endpoint should implement rate limiting to prevent brute force attacks. Add a custom AuthenticationFailureHandler to track failed attempts and temporarily block IPs with too many failures.",
+      "id": "e567e785-479d-4600-b16b-68e996e6f833",
+      "location": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java:45",
+      "code": ".formLogin(formLogin -> formLogin.permitAll().defaultSuccessUrl(\"/\", true))",
+      "title": "Missing login attempt rate limiting",
+      "category": "http",
+      "runtime": {
+        "appMapReferences": [
+          {
+            "path": "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testFailedLoginWithInvalidPassword.appmap.json",
+            "name": "junit org springframework samples petclinic security LoginTests testFailedLoginWithInvalidPassword"
+          }
+        ]
+      }
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java",
+      "line": 41,
+      "type": "security",
+      "appmaps": [],
+      "context": ".requestMatchers(\"/webjars/**\", \"/css/**\", \"/js/**\", \"/images/**\", \"/resources/**\")\n.permitAll()",
+      "priority": "medium",
+      "label": "Overly permissive static resource access",
+      "description": "Static resource paths are too broadly permitted. Add specific path patterns and implement cache-control headers for these resources to improve security and performance.",
+      "id": "1c4ea5ee-befe-4589-af5d-fbe613d4cd78",
+      "location": "src/main/java/org/springframework/samples/petclinic/config/SecurityConfig.java:41",
+      "code": ".requestMatchers(\"/webjars/**\", \"/css/**\", \"/js/**\", \"/images/**\", \"/resources/**\")\n.permitAll()",
+      "title": "Overly permissive static resource access",
+      "category": "http",
+      "runtime": {
+        "appMapReferences": []
+      }
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/security/JpaUserDetailsService.java",
+      "line": 26,
+      "type": "security",
+      "appmaps": [
+        "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testFailedLoginWithInvalidUsername.appmap.json"
+      ],
+      "context": "public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {\n  User user = userRepository.findByUsername(username)",
+      "priority": "high",
+      "label": "Username enumeration vulnerability",
+      "description": "The error message reveals whether a username exists. Use a generic error message like 'Invalid username or password' to prevent username enumeration attacks.",
+      "id": "382e64d9-b42b-4134-b8b1-2979d7558ac5",
+      "location": "src/main/java/org/springframework/samples/petclinic/security/JpaUserDetailsService.java:26",
+      "code": "public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {\n  User user = userRepository.findByUsername(username)",
+      "title": "Username enumeration vulnerability",
+      "category": "http",
+      "runtime": {
+        "appMapReferences": [
+          {
+            "path": "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_security_LoginTests_testFailedLoginWithInvalidUsername.appmap.json",
+            "name": "junit org springframework samples petclinic security LoginTests testFailedLoginWithInvalidUsername"
+          }
+        ]
+      }
+    },
+    {
+      "file": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java",
+      "line": 129,
+      "type": "security",
+      "appmaps": [
+        "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_owner_OwnerControllerTests_testProcessCreationFormHasErrors.appmap.json"
+      ],
+      "context": "mockMvc.perform(post(\"/owners/new\").param(\"firstName\", \"Joe\")\n  .param(\"lastName\", \"Bloggs\")\n  .param(\"city\", \"London\")\n  .with(csrf()))",
+      "priority": "medium",
+      "label": "Input validation improvement needed",
+      "description": "The owner creation endpoint should validate input length and character restrictions. Add @Size and @Pattern constraints to the Owner entity fields.",
+      "id": "adfa98d4-4fa8-4ffb-99be-ecbc2a48ea5f",
+      "location": "src/test/java/org/springframework/samples/petclinic/owner/OwnerControllerTests.java:129",
+      "code": "mockMvc.perform(post(\"/owners/new\").param(\"firstName\", \"Joe\")\n  .param(\"lastName\", \"Bloggs\")\n  .param(\"city\", \"London\")\n  .with(csrf()))",
+      "title": "Input validation improvement needed",
+      "category": "http",
+      "runtime": {
+        "appMapReferences": [
+          {
+            "path": "/home/divide/projects/spring-petclinic/tmp/appmap/junit/org_springframework_samples_petclinic_owner_OwnerControllerTests_testProcessCreationFormHasErrors.appmap.json",
+            "name": "junit org springframework samples petclinic owner OwnerControllerTests testProcessCreationFormHasErrors"
+          }
+        ]
+      }
+    }
+  ]
+}

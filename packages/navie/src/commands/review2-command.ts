@@ -1,5 +1,8 @@
 import { warn } from 'console';
 import z from 'zod';
+
+import type { ReviewRpc } from '@appland/rpc';
+
 import Command, { CommandRequest, hasCodeSelectionArray } from '../command';
 import { ExplainOptions } from './explain-command';
 import CompletionService from '../services/completion-service';
@@ -127,6 +130,9 @@ Other types suggestions, such as:
 
 are generally _not_ desirable. However, in the rare case that this type of suggestion can make a large improvement to the code, you may include it.
 
+Pay special attention to any provided AppMaps (aka. sequence diagrams), as they may provide additional context.
+Indicate if information from the AppMaps was used in your analysis.
+
 Don't suggest changes that have already been considered by the developer and are explained in the comments.
 
 Respect implementation decisions that are explained in comments, including both current choices and future plans that are explicitly deferred.
@@ -143,6 +149,8 @@ You should focus on the following areas:
 * SQL style improvements
 
 All suggestions that you make must be related to SQL queries or related use of the database.
+Pay special attention to any provided AppMaps (aka. sequence diagrams) that contain SQL queries, as they may provide additional context.
+Indicate if information from the AppMaps was used in your analysis.
 
 Concentrate your analysis on the following potential weaknesses:
 
@@ -179,6 +187,8 @@ You should focus on the following areas:
 * HTTP request style improvements
 
 All suggestions that you make must be related to the application handling of HTTP requests, or related configuration.
+Pay special attention to any provided AppMaps (aka. sequence diagrams) that contain HTTP requests, as they may provide additional context.
+Indicate if information from the AppMaps was used in your analysis.
 
 Concentrate your analysis on the following potential weaknesses:
 
@@ -245,10 +255,7 @@ export const LabelItemList = z.object({
 });
 
 export const TestItem = z.object({
-  file: z
-    .string()
-
-    .describe(`The name of the file that contains the test case.`),
+  file: z.string().describe(`The name of the file that contains the test case.`),
   startLine: z
     .number()
     .describe(
@@ -291,6 +298,12 @@ export const SuggestionItem = z.object({
     .describe(
       'The type of code improvement that the suggestion suggests. Primary suggestion types are: bug, security, performance.'
     ),
+  appmaps: z
+    .array(z.string())
+    .optional()
+    .describe(
+      'A list of AppMaps (sequence diagrams) that this suggestion is based on. This is used to provide context for the suggestion.'
+    ),
   context: z.string().describe('A snippet of code that provides the context for the suggestion.'),
   priority: z.enum(['low', 'medium', 'high']).describe('Priority of the suggestion.'),
   label: z.string().describe('A few words that concisely describe the suggestion.'),
@@ -306,6 +319,47 @@ export const SuggestionList = z
   .describe('A collection of suggestions for review purposes.');
 
 const DEFAULT_DIFF_TERMS_THRESHOLD = 1000;
+
+function jsonLine(obj: Partial<ReviewRpc.Review>) {
+  return JSON.stringify(obj) + '\n';
+}
+
+function location(file: string, startLine?: number, endLine?: number): string {
+  const locationTokens = [];
+  if (startLine) locationTokens.push(startLine);
+  if (endLine) locationTokens.push(endLine);
+  return [file, locationTokens.join('-')].filter(Boolean).join(':');
+}
+
+function appmapName(appmap: string): string {
+  // remove everything up to /appmap/ path segment
+  // and .appmap.json suffix, then replace slashes and underscores with spaces
+  return appmap
+    .replace(/^.*\/appmap\//, '')
+    .replace(/\.appmap\.json$/, '')
+    .replace(/\.appmap$/, '')
+    .replace(/[_/]/g, ' ');
+}
+
+function convertSuggestions(
+  suggestions: z.infer<typeof SuggestionList>,
+  category?: string
+): ReviewRpc.Suggestion[] {
+  return suggestions.suggestions.map<ReviewRpc.Suggestion>((suggestion) => ({
+    ...suggestion,
+    id: randomUUID(),
+    location: location(suggestion.file, suggestion.line),
+    code: suggestion.context,
+    title: suggestion.label,
+    category: category ?? suggestion.type,
+    runtime: {
+      appMapReferences: suggestion.appmaps?.map((appmap) => ({
+        path: appmap,
+        name: appmapName(appmap),
+      })),
+    },
+  }));
+}
 
 export default class Review2Command implements Command {
   constructor(
@@ -326,7 +380,8 @@ export default class Review2Command implements Command {
     const sqlSuggestions = request.userOptions.booleanValue('sql', true);
     const httpSuggestions = request.userOptions.booleanValue('http', true);
     const outputJson = request.userOptions.stringValue('format', 'text') === 'json';
-    const outputText = !outputJson;
+    const outputJsonLines = request.userOptions.stringValue('format', 'text') === 'jsonl';
+    const outputText = !outputJson && !outputJsonLines;
     const runTests = request.userOptions.stringValue('runtests');
     const runTestsImmediately = runTests === 'immediate';
     const baseBranch = request.userOptions.stringValue('base');
@@ -381,6 +436,10 @@ export default class Review2Command implements Command {
           yield `* ${feature}\n`;
         }
       }
+
+      if (outputJsonLines) {
+        yield jsonLine({ features: featureList.map((f) => ({ description: f })) });
+      }
       yield '\n\n';
 
       testMatrix = await this.buildTestMatrix(vectorTerms, featureList, gitDiff);
@@ -407,6 +466,29 @@ export default class Review2Command implements Command {
         featureTest.tests = existingTestItems;
       }
 
+      if (outputJsonLines) {
+        yield jsonLine({
+          features: testMatrix.featureTests.map((feature) => {
+            const result: ReviewRpc.Feature = {
+              description: feature.feature,
+            };
+            const [test] = feature.tests;
+            if (test) {
+              result.testDetails = {
+                file: test.file,
+                location: location(test.file, test.startLine, test.endLine),
+                tests: [{ name: test.testName }],
+              };
+              result.hasCoverage = true;
+            } else {
+              result.hasCoverage = false;
+              result.aiPrompt = `@test ${feature.feature}`;
+            }
+            return result;
+          }),
+        });
+      }
+
       if (outputText) {
         yield '## Behavioral Analysis\n';
         yield 'When test coverage is available for code change, AppMap can use the runtime data generated from ';
@@ -416,14 +498,8 @@ export default class Review2Command implements Command {
         for (const feature of testMatrix.featureTests) {
           const featureTestDescription = (testItem: z.infer<typeof TestItem>): string => {
             const { file, startLine, endLine, testName } = testItem;
-            const locationTokens = [];
-            if (startLine) locationTokens.push(startLine);
-            if (endLine) locationTokens.push(endLine);
 
-            return [
-              [file, locationTokens.join('-')].filter(Boolean).join(':'),
-              `(${testName})`,
-            ].join(' ');
+            return [location(file, startLine, endLine), `(${testName})`].join(' ');
           };
 
           const testList =
@@ -490,12 +566,17 @@ export default class Review2Command implements Command {
       }
     }
 
+    const allSuggestions: ReviewRpc.Suggestion[] = [];
     if (analyzeSuggestions) {
       suggestionList = await this.listSuggestions(gitDiff);
       if (outputText && suggestionList.suggestions.length > 0) {
         yield '## Suggestions\n\n';
         yield generateSuggestionsMarkdown(suggestionList.suggestions);
         yield '\n\n';
+      }
+      allSuggestions.push(...convertSuggestions(suggestionList));
+      if (outputJsonLines) {
+        yield jsonLine({ suggestions: allSuggestions });
       }
     }
 
@@ -506,6 +587,10 @@ export default class Review2Command implements Command {
         yield generateSuggestionsMarkdown(sqlSuggestionList.suggestions);
         yield '\n\n';
       }
+      allSuggestions.push(...convertSuggestions(sqlSuggestionList, 'sql'));
+      if (outputJsonLines) {
+        yield jsonLine({ suggestions: allSuggestions });
+      }
     }
 
     if (httpSuggestions) {
@@ -514,6 +599,10 @@ export default class Review2Command implements Command {
         yield '## HTTP Suggestions\n\n';
         yield generateSuggestionsMarkdown(httpSuggestionList.suggestions);
         yield '\n\n';
+      }
+      allSuggestions.push(...convertSuggestions(httpSuggestionList, 'http'));
+      if (outputJsonLines) {
+        yield jsonLine({ suggestions: allSuggestions });
       }
     }
 
@@ -869,6 +958,16 @@ function generateSuggestionsMarkdown(suggestions: z.infer<typeof SuggestionItem>
     .map((suggestion) => {
       const emoji = priorityEmoji(suggestion.priority);
       const location = [suggestion.file, suggestion.line].filter(Boolean).join(':');
+      const appmapLinks =
+        (suggestion.appmaps?.length ?? 0 > 0)
+          ? 'AppMaps: ' +
+            suggestion.appmaps
+              ?.map((appmap) => {
+                const name = appmap.replace(/\.appmap\.json$/, '').replace(/.*appmap\//, '');
+                return `[${name}](${appmap})`;
+              })
+              .join(', ')
+          : '';
       return [
         `### ${emoji} ${suggestion.label} (${suggestion.type}, ${suggestion.priority} priority)`,
         '',
@@ -877,6 +976,7 @@ function generateSuggestionsMarkdown(suggestions: z.infer<typeof SuggestionItem>
         `<!-- file: ${location} -->`,
         suggestion.context,
         '```',
+        appmapLinks,
       ].join('\n');
     })
     .join('\n\n');
