@@ -88,13 +88,10 @@ export default class FileIndex {
   get schemaVersion(): string | undefined {
     try {
       const version = this.database
-        .prepare<
-          [],
-          { version?: string }
-        >("SELECT value FROM metadata WHERE key = 'schema_version'")
+        .prepare<[], { value?: string }>("SELECT value FROM metadata WHERE key = 'schema_version'")
         .get();
-      if (!version?.version) return undefined;
-      return String(version.version);
+      if (!version?.value) return undefined;
+      return String(version.value);
     } catch (error) {
       debug('Error retrieving schema version: %s', error);
       return;

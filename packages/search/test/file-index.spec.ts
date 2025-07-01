@@ -153,4 +153,23 @@ describe('FileIndex', () => {
       newIndex.close();
     });
   });
+
+  describe('schemaVersion', () => {
+    it('returns the schema version when set', () => {
+      const db = new sqlite3(':memory:');
+      db.exec(`
+        CREATE TABLE metadata (key TEXT PRIMARY KEY, value TEXT);
+        INSERT INTO metadata (key, value) VALUES ('schema_version', '1');
+      `);
+      const index = new FileIndex(db);
+      expect(index.schemaVersion).toBe('1');
+    });
+
+    it('returns undefined when schema version is not set', () => {
+      const db = new sqlite3(':memory:');
+      const index = new FileIndex(db);
+      db.exec('DELETE FROM metadata');
+      expect(index.schemaVersion).toBeUndefined();
+    });
+  });
 });
