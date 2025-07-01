@@ -62,7 +62,7 @@ class ReviewBackend {
     }
 
     const explain = this.rpc.explain();
-    let prompt = `@review /review2 /format=jsonl`;
+    let prompt = `@review /review2 /format=jsonl /nolabels /nofeatures`;
     if (baseRef) prompt += ` /base=${baseRef}`;
     console.log('Starting explain with prompt:', prompt);
     explain.explain(prompt);
