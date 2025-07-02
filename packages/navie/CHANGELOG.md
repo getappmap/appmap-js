@@ -1,3 +1,11 @@
+# [@appland/navie-v1.47.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.46.0...@appland/navie-v1.47.0) (2025-07-02)
+
+
+### Features
+
+* Add AppMap references to suggestions ([13b6f03](https://github.com/getappmap/appmap-js/commit/13b6f0315154c16aea9195452c43b8344d907896))
+* Add JSONL output format and integrate ReviewRpc types ([3ea0da0](https://github.com/getappmap/appmap-js/commit/3ea0da0fdbcd8f8c8f6f929b50f0eda67d543066))
+
 # [@appland/navie-v1.46.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.45.0...@appland/navie-v1.46.0) (2025-05-28)
 
 
