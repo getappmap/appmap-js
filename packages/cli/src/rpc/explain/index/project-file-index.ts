@@ -25,7 +25,7 @@ function fileFilter(
 ): FilterFn {
   return async (path: string) => {
     debug('Filtering: %s', path);
-    if (isBinaryFile(path)) {
+    if (await isBinaryFile(path)) {
       debug('Skipping binary file: %s', path);
       return false;
     }

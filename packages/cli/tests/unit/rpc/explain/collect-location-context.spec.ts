@@ -74,7 +74,7 @@ describe('collectLocationContext', () => {
     });
 
     it('includes explicitly named files even if outside source directories', async () => {
-      jest.mocked(isBinaryFile).mockReturnValue(false);
+      jest.mocked(isBinaryFile).mockResolvedValue(false);
 
       expect(await collect()).toMatchInlineSnapshot(`
         [
@@ -152,7 +152,7 @@ describe('collectLocationContext', () => {
       const collectNonExplicit = async () =>
         collectLocationContext(sourceDirectories, nonExplicitLocations, explicitFiles);
 
-      jest.mocked(isBinaryFile).mockReturnValue(false);
+      jest.mocked(isBinaryFile).mockResolvedValue(false);
 
       expect(await collectNonExplicit()).toMatchInlineSnapshot(`
         [
@@ -202,7 +202,7 @@ describe('collectLocationContext', () => {
     });
 
     it('skips binary files', async () => {
-      jest.mocked(isBinaryFile).mockReturnValue(true);
+      jest.mocked(isBinaryFile).mockResolvedValue(true);
 
       const result = await collect();
       expect(result).toEqual([]);
