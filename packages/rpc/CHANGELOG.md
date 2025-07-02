@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.21.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.20.0...@appland/rpc-v1.21.0) (2025-07-02)
+
+
+### Features
+
+* Define ReviewRpc types ([8bbf145](https://github.com/getappmap/appmap-js/commit/8bbf145b23bd6cc9e4bcf370b9019eade2c0d024))
+
 # [@appland/rpc-v1.20.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.19.0...@appland/rpc-v1.20.0) (2025-05-28)
 
 
