@@ -1,3 +1,12 @@
+# [@appland/search-v1.2.3](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.2...@appland/search-v1.2.3) (2025-07-07)
+
+
+### Bug Fixes
+
+* Improve worst case performance of file indexing ([3a8baa1](https://github.com/getappmap/appmap-js/commit/3a8baa18f7fdb7b4ecf8df91ce2f4ff27ea13d18))
+* Optimize file indexing by caching binary content by file extension ([e402f68](https://github.com/getappmap/appmap-js/commit/e402f6872ce041bab0e5b4124ff9fa059bc5b321))
+* Prevent file index from being re-created ([d59717f](https://github.com/getappmap/appmap-js/commit/d59717fd7b09d60608625d0b3ecd14cbe82b975f))
+
 # [@appland/search-v1.2.2](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.1...@appland/search-v1.2.2) (2025-05-01)
 
 
