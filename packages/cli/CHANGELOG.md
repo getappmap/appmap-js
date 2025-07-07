@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.191.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.191.1...@appland/appmap-v3.191.2) (2025-07-07)
+
+
+### Bug Fixes
+
+* Improve worst case performance of file indexing ([3a8baa1](https://github.com/getappmap/appmap-js/commit/3a8baa18f7fdb7b4ecf8df91ce2f4ff27ea13d18))
+
 # [@appland/appmap-v3.191.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.191.0...@appland/appmap-v3.191.1) (2025-06-04)
 
 
