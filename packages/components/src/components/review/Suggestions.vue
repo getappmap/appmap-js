@@ -5,18 +5,25 @@
         <CategoryStats :items="suggestions" />
       </SectionHeading>
 
-      <div v-if="!loading && !includesRuntimeReferences">
-        <p class="mt-0">
-          AppMap's code review works whether or not you've recorded any runtime data, but you'll get
-          the deepest insights if you first record AppMap trace data by exercising the changes in
-          your application.
-        </p>
-        <p>
-          <a href="#" @click.stop.prevent="viewRecordingInstructions">
-            Click here to view instructions for recording AppMap data.
-          </a>
-        </p>
-      </div>
+      <template v-if="!loading">
+        <v-alert-box level="info" v-if="!includesRuntimeReferences">
+          <p class="mt-0">
+            AppMap's code review works whether or not you've recorded any runtime data, but you'll
+            get the deepest insights if you first record AppMap trace data by exercising the changes
+            in your application.
+          </p>
+          <p>
+            <a href="#" @click.stop.prevent="viewRecordingInstructions">
+              Click here to view instructions for recording AppMap data.
+            </a>
+          </p>
+        </v-alert-box>
+        <div v-if="!suggestions.length">
+          <check class="inline-icon success" :size="18" />
+          No issues, recommendations, or findings were identified. Everything looks clean and
+          well-structured.
+        </div>
+      </template>
 
       <!-- Suggestions by category -->
       <div
@@ -60,6 +67,7 @@
 <script lang="ts">
 import Vue, { Component, PropType } from 'vue';
 import VSuggestionCard from './SuggestionCard.vue';
+import VAlertBox from '@/components/AlertBox.vue';
 import mermaid from 'mermaid';
 import {
   TriangleAlert,
@@ -111,6 +119,7 @@ export default Vue.extend({
     VDismissModal,
     VSkeletonLoader,
     CategoryStats,
+    VAlertBox,
   },
   props: {
     loading: {
@@ -349,6 +358,18 @@ export default Vue.extend({
   /* Common icon styling can be added here as needed */
   display: inline-block;
 }
+
+.inline-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.success {
+  stroke: $color-success;
+}
+
 .suggestions-loader,
 .card-loader {
   width: 100%;
