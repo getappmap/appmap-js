@@ -1,60 +1,58 @@
 <template>
   <section id="suggestions" class="suggestions-section">
-    <div class="container">
-      <SectionHeading title="Suggestions" :loading="loading">
-        <CategoryStats :items="suggestions" />
-      </SectionHeading>
+    <SectionHeading title="Suggestions" :loading="loading">
+      <CategoryStats :items="suggestions" />
+    </SectionHeading>
 
-      <template v-if="!loading">
-        <v-alert-box level="info" v-if="!includesRuntimeReferences">
-          <p class="mt-0">
-            AppMap's code review works whether or not you've recorded any runtime data, but you'll
-            get the deepest insights if you first record AppMap trace data by exercising the changes
-            in your application.
-          </p>
-          <p>
-            <a href="#" @click.stop.prevent="viewRecordingInstructions">
-              Click here to view instructions for recording AppMap data.
-            </a>
-          </p>
-        </v-alert-box>
-        <div v-if="!suggestions.length">
-          <check class="inline-icon success" :size="18" />
-          No issues, recommendations, or findings were identified. Everything looks clean and
-          well-structured.
-        </div>
-      </template>
+    <template v-if="!loading">
+      <v-alert-box level="info" v-if="!includesRuntimeReferences">
+        <p class="mt-0">
+          AppMap's code review works whether or not you've recorded any runtime data, but you'll get
+          the deepest insights if you first record AppMap trace data by exercising the changes in
+          your application.
+        </p>
+        <p>
+          <a href="#" @click.stop.prevent="viewRecordingInstructions">
+            Click here to view instructions for recording AppMap data.
+          </a>
+        </p>
+      </v-alert-box>
+      <div v-if="!suggestions.length">
+        <check class="inline-icon success" :size="18" />
+        No issues, recommendations, or findings were identified. Everything looks clean and
+        well-structured.
+      </div>
+    </template>
 
-      <!-- Suggestions by category -->
-      <div
-        v-for="(items, category) in categorizedSuggestions"
-        :key="category"
-        :id="`${category}-suggestions`"
-        class="category-section mb-12"
-      >
-        <div class="category-header">
-          <component :is="getCategoryIconComponent(category)" :size="24" class="icon" />
-          <h3 class="category-title">
-            {{ category.replace('http', 'HTTP').replace('sql', 'SQL') }}
-          </h3>
-          <CategoryStats :items="items" />
-        </div>
+    <!-- Suggestions by category -->
+    <div
+      v-for="(items, category) in categorizedSuggestions"
+      :key="category"
+      :id="`${category}-suggestions`"
+      class="category-section mb-12"
+    >
+      <div class="category-header">
+        <component :is="getCategoryIconComponent(category)" :size="24" class="icon" />
+        <h3 class="category-title">
+          {{ category.replace('http', 'HTTP').replace('sql', 'SQL') }}
+        </h3>
+        <CategoryStats :items="items" />
+      </div>
 
-        <div class="suggestions-grid">
-          <div v-for="suggestion in items" :key="suggestion.id">
-            <v-suggestion-card
-              v-bind="suggestion"
-              @fix="handleFix(suggestion)"
-              @dismiss="openDismissDialog(suggestion.id)"
-              @reopen="reopenSuggestion(suggestion.id)"
-              @done="markAsDone(suggestion.id)"
-              :status="getSuggestionStatus(suggestion.id)"
-            />
-          </div>
+      <div class="suggestions-grid">
+        <div v-for="suggestion in items" :key="suggestion.id">
+          <v-suggestion-card
+            v-bind="suggestion"
+            @fix="handleFix(suggestion)"
+            @dismiss="openDismissDialog(suggestion.id)"
+            @reopen="reopenSuggestion(suggestion.id)"
+            @done="markAsDone(suggestion.id)"
+            :status="getSuggestionStatus(suggestion.id)"
+          />
         </div>
       </div>
-      <v-skeleton-loader class="card-loader" v-if="loading" />
     </div>
+    <v-skeleton-loader class="card-loader" v-if="loading" />
 
     <v-dismiss-modal
       @close="closeDismissDialog"
@@ -321,11 +319,6 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .container {
-  max-width: $max-width;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem; // Tailwind px-4
-  padding-right: 1rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;

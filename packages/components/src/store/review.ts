@@ -8,6 +8,7 @@ export interface ReviewState {
   loading: boolean;
   features: Feature[] | undefined;
   suggestions: Suggestion[] | undefined;
+  summary: string | undefined;
   dismissedFeatures: number[];
   suggestionStatuses: Record<string, SuggestionStatus>;
 }
@@ -17,6 +18,7 @@ export default new Vuex.Store<ReviewState>({
     loading: true,
     features: undefined,
     suggestions: undefined,
+    summary: undefined,
     dismissedFeatures: [],
     suggestionStatuses: {},
   },

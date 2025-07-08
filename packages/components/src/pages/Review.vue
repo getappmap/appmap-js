@@ -1,12 +1,18 @@
 <template>
   <div class="review-page">
     <v-header />
+    <v-markdown
+      :class="{ md: 1, 'md--loading': loading, container: 1 }"
+      v-if="summary"
+      :content="summary"
+    />
     <div class="toast-container" v-if="showToast">
       <v-flash-message :type="toastType" @click.native="toastAction">
         <p class="toast-message">{{ toastMessage }}</p>
       </v-flash-message>
     </div>
     <v-suggestions
+      class="container"
       :suggestions="suggestions"
       :loading="loading"
       :includes-runtime-references="includesRuntimeReferences"
@@ -18,6 +24,7 @@
 import Vue from 'vue';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
+import VMarkdown from '@/components/Markdown.vue';
 import VHeader from '@/components/review/Header.vue';
 import VSuggestions from '@/components/review/Suggestions.vue';
 import VFlashMessage from '@/components/FlashMessage.vue';
@@ -31,6 +38,7 @@ export default Vue.extend({
     VHeader,
     VSuggestions,
     VFlashMessage,
+    VMarkdown,
   },
   data() {
     return {
@@ -43,7 +51,7 @@ export default Vue.extend({
     };
   },
   computed: {
-    ...mapState(['features', 'dismissedFeatures', 'suggestions', 'loading']),
+    ...mapState(['features', 'dismissedFeatures', 'suggestions', 'loading', 'summary']),
     ...mapGetters(['totalFeatures', 'featuresNeedingTests', 'suggestionsSummary']),
     currentYear(): number {
       return new Date().getFullYear();
@@ -132,6 +140,63 @@ a {
 </style>
 
 <style scoped lang="scss">
+.md {
+  @keyframes skeleton {
+    0% {
+      background-position: -100% 0%;
+    }
+    100% {
+      background-position: 100% 0%;
+    }
+  }
+
+  &::v-deep {
+    h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: bold;
+      color: $color-foreground-light;
+      &::after {
+        display: block;
+        content: ' ';
+        background-color: $color-highlight;
+        width: 5rem !important;
+        height: 0.25rem !important;
+        border-radius: 0.5rem;
+        margin-top: 0.5rem;
+      }
+    }
+  }
+
+  &--loading {
+    &::v-deep {
+      h1::after {
+        $alpha: 0.075;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(black, 0.1);
+        background: linear-gradient(
+          90deg,
+          rgba(black, $alpha) 0%,
+          rgba(white, $alpha) 50%,
+          rgba(black, $alpha) 100%
+        );
+        background-size: 200% 100%;
+        animation: skeleton 3s linear infinite;
+      }
+    }
+  }
+}
+
+.container {
+  max-width: $max-width;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .review-page {
   min-height: 100vh;
   background-color: $color-background;
