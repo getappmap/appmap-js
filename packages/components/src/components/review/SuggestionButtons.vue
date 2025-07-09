@@ -2,6 +2,7 @@
 import { Wrench, CircleCheck, Trash, RotateCcw } from 'lucide-vue';
 import { defineComponent, type PropType } from 'vue';
 import { SuggestionStatus } from '.';
+import VButton from '@/components/Button.vue';
 
 export default defineComponent({
   components: {
@@ -9,6 +10,7 @@ export default defineComponent({
     CircleCheck,
     Trash,
     RotateCcw,
+    VButton,
   },
   props: {
     status: {
@@ -26,7 +28,6 @@ export default defineComponent({
       return ['fixed', 'dismissed'].includes(this.status.status);
     },
     fixThread(): string | undefined {
-      console.log(this.status);
       return this.status.threadId;
     },
   },
@@ -35,40 +36,64 @@ export default defineComponent({
 
 <template>
   <section class="buttons" :class="{ compact, [status.status]: true }">
-    <button
+    <v-button
       v-if="!done && !fixThread"
-      @click.stop="$emit('fix')"
+      size="small"
+      kind="native-ghost"
+      @click.native.stop="$emit('fix')"
       :title="compact ? 'Fix' : undefined"
     >
-      <Wrench :size="16" />
+      <Wrench class="icon" :size="16" />
       <span v-if="!compact">Fix</span>
-    </button>
-    <button
+    </v-button>
+    <v-button
+      size="small"
+      kind="native-ghost"
       v-if="!done && fixThread"
-      @click.stop="$root.$emit('show-navie-thread', fixThread)"
+      @click.native.stop="$root.$emit('show-navie-thread', fixThread)"
       :title="compact ? 'Show fix' : undefined"
     >
-      <Wrench :size="16" class="fix-icon" />
+      <Wrench class="fix-icon icon" :size="16" />
       <span v-if="!compact">Show fix</span>
-    </button>
-    <button v-if="!done" @click.stop="$emit('done')" :title="compact ? 'Mark as done' : undefined">
-      <CircleCheck :size="16" />
+    </v-button>
+    <v-button
+      size="small"
+      kind="native-ghost"
+      v-if="!done"
+      @click.native.stop="$emit('done')"
+      :title="compact ? 'Mark as done' : undefined"
+    >
+      <CircleCheck class="icon" :size="16" />
       <span v-if="!compact">Mark as done</span>
-    </button>
-    <button v-if="!done" @click.stop="$emit('dismiss')" :title="compact ? 'Dismiss' : undefined">
-      <Trash :size="16" />
+    </v-button>
+    <v-button
+      size="small"
+      kind="native-ghost"
+      v-if="!done"
+      @click.native.stop="$emit('dismiss')"
+      :title="compact ? 'Dismiss' : undefined"
+    >
+      <Trash class="icon" :size="16" />
       <span v-if="!compact">Dismiss</span>
-    </button>
-    <button v-if="done" @click.stop="$emit('reopen')" :title="compact ? 'Reopen' : undefined">
-      <RotateCcw :size="16" />
+    </v-button>
+    <v-button
+      size="small"
+      kind="native-ghost"
+      v-if="done"
+      @click.native.stop="$emit('reopen')"
+      :title="compact ? 'Reopen' : undefined"
+    >
+      <RotateCcw class="icon" :size="16" />
       <span v-if="!compact">Reopen</span>
-    </button>
+    </v-button>
   </section>
 </template>
 
 <style scoped lang="scss">
-.compact svg {
-  stroke: $color-highlight;
+.compact {
+  .icon {
+    margin: 0;
+  }
 }
 
 .fix-in-progress .fix-icon {
@@ -87,5 +112,11 @@ export default defineComponent({
   to {
     transform: rotate(360deg);
   }
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.25rem;
 }
 </style>
