@@ -87,6 +87,9 @@ export default new Vuex.Store<ReviewState>({
     updateLoading({ commit }, loading: boolean) {
       commit('setLoading', loading);
     },
+    updateSummary({ commit }, summary: string | undefined) {
+      commit('setSummary', summary);
+    },
     dismissFeature({ commit }, index: number) {
       commit('dismissFeature', index);
     },

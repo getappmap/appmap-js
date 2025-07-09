@@ -29,6 +29,7 @@ class ReviewBackend {
   update(update: Partial<ReviewRpc.Review>) {
     if (update.suggestions) store.dispatch('updateSuggestions', update.suggestions);
     if (update.features) store.dispatch('updateFeatures', update.features);
+    if (update.summary) store.dispatch('updateSummary', update.summary);
   }
 
   attach(explain: ExplainRequest) {
