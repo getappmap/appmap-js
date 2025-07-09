@@ -228,11 +228,11 @@ export default Vue.extend({
   transition: $transition;
   cursor: pointer;
   border: 1px solid transparent;
+  border-radius: $border-radius-big;
 
   &.is-expanded {
     padding: 1rem;
     background-color: $color-tile-background;
-    border-radius: $border-radius-big;
     border: 1px solid $color-border;
   }
 
@@ -251,19 +251,23 @@ export default Vue.extend({
     margin-top: 0.75rem;
     border-top: 1px solid $color-border;
     padding-top: 0.75rem;
-    .appmaps ul {
-      padding: 0;
-      margin-left: 1rem;
-      li {
-        list-style: none;
-        margin: 0;
+    .appmaps {
+      ul {
         padding: 0;
+        margin-left: 1rem;
+        margin-bottom: 1.67em;
 
-        a.appmap-link {
-          color: $color-foreground-light;
-          text-decoration: none;
-          &:hover {
-            text-decoration: underline;
+        li {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+
+          a.appmap-link {
+            color: $color-foreground-light;
+            text-decoration: none;
+            &:hover {
+              text-decoration: underline;
+            }
           }
         }
       }
