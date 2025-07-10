@@ -1,4 +1,4 @@
-import { Database, Globe, TriangleAlert } from 'lucide-vue';
+import { Database, Gauge, Globe, TriangleAlert } from 'lucide-vue';
 import type { Component } from 'vue';
 
 export interface AppMapFindingReference {
@@ -94,6 +94,8 @@ export function getCategoryIconComponent(category: string): Component | undefine
       return Database;
     case 'http':
       return Globe;
+    case 'performance':
+      return Gauge;
     default:
       return undefined;
   }

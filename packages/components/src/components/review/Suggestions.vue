@@ -82,6 +82,7 @@ import {
   Trash,
   EllipsisVertical,
   Maximize2,
+  Gauge,
 } from 'lucide-vue';
 import { mapState, mapActions } from 'vuex';
 
@@ -102,6 +103,7 @@ export default Vue.extend({
     TriangleAlert,
     Database,
     Globe,
+    Gauge,
     X,
     CircleCheck,
     Wrench,

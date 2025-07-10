@@ -49,19 +49,14 @@
         <a
           :href="location"
           :title="location"
-          class="file"
+          class="file-expanded"
           @click.stop.prevent="$root.$emit('open-location', location)"
           >{{ location }}</a
         >
-        <v-code-snippet
-          :clipboard-text="code"
-          :language="language"
-          :show-copy="false"
-          class="code-snippet"
-        />
+        <v-code-snippet :clipboard-text="code" :language="language" :show-copy="false" />
       </p>
       <section class="appmaps" v-if="appMapReferences.length">
-        <h5>Related AppMaps:</h5>
+        <h5>Related AppMaps</h5>
         <ul>
           <li v-for="appmap in appMapReferences" :key="appmap.name">
             <a
@@ -80,6 +75,7 @@
         @done="$emit('done')"
         @dismiss="$emit('dismiss')"
         @reopen="$emit('reopen')"
+        class="expanded-buttons"
       />
     </div>
   </div>
@@ -223,7 +219,7 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .suggestion-card {
-  background-color: $color-tile-background;
+  background-color: $color-background-dark;
   padding: 0.5rem 1rem;
   transition: $transition;
   cursor: pointer;
@@ -232,7 +228,7 @@ export default Vue.extend({
 
   &.is-expanded {
     padding: 1rem;
-    background-color: $color-tile-background;
+    background-color: $color-background-dark;
     border: 1px solid $color-border;
   }
 
@@ -248,14 +244,24 @@ export default Vue.extend({
   }
 
   &__content {
-    margin-top: 0.75rem;
+    margin-top: 1rem;
     border-top: 1px solid $color-border;
-    padding-top: 0.75rem;
+
     .appmaps {
+      font-size: 1rem;
+      h5 {
+        opacity: 0.8;
+        margin-top: 1rem;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
       ul {
         padding: 0;
-        margin-left: 1rem;
-        margin-bottom: 1.67em;
+        margin-top: 0.5rem;
+        margin-left: 0;
+        margin-bottom: 1.25rem;
 
         li {
           list-style: none;
@@ -280,7 +286,6 @@ export default Vue.extend({
 
   &__title-area {
     display: flex;
-    align-items: baseline;
     gap: 0.5rem;
     .icon {
       color: $color-foreground-secondary;
@@ -296,6 +301,7 @@ export default Vue.extend({
   .title {
     color: $color-foreground-light;
     font-weight: 500;
+    font-size: 1rem;
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -331,13 +337,39 @@ a.file {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  align-content: center;
+  margin-top: 0.5rem;
+  font-size: 1rem;
 }
 
-a.appmap-link::before {
-  color: $hotpink;
-  font-weight: 900;
-  content: 'Λ';
-  margin-right: 0.5rem;
+a.file-expanded {
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: -0.25rem;
+}
+
+.expanded-buttons {
+  margin-top: 1rem;
+}
+
+a.appmap-link {
+  min-width: 0;
+  min-height: 0;
+  height: fit-content;
+  width: fit-content;
+  align-self: anchor-center;
+  &::before {
+    color: $hotpink;
+    font-weight: 600;
+    font-size: 0.75rem;
+    content: 'Λ';
+    margin-right: 0.5rem;
+  }
 }
 
 .full {
@@ -347,6 +379,10 @@ a.appmap-link::before {
 .icon-adjust {
   transform: translateY(1px);
   padding-right: 0.15rem;
+}
+
+.status {
+  display: flex;
 }
 
 .status-todo {

@@ -1,3 +1,63 @@
+<template>
+  <section class="buttons" :class="{ compact, [status.status]: true }">
+    <v-button
+      v-if="!done && !fixThread"
+      :size="buttonSize"
+      class="dim"
+      kind="native-ghost"
+      @click.native.stop="$emit('fix')"
+      :title="compact ? 'Fix' : undefined"
+    >
+      <Wrench class="icon" :size="iconSize" />
+      <span v-if="!compact">Fix</span>
+    </v-button>
+    <v-button
+      kind="native-ghost"
+      v-if="!done && fixThread"
+      :size="buttonSize"
+      class="dim"
+      @click.native.stop="$root.$emit('show-navie-thread', fixThread)"
+      :title="compact ? 'Show fix' : undefined"
+    >
+      <Wrench class="fix-icon icon" :size="iconSize" />
+      <span v-if="!compact">Show fix</span>
+    </v-button>
+    <v-button
+      kind="native-ghost"
+      v-if="!done"
+      :size="buttonSize"
+      class="dim"
+      @click.native.stop="$emit('done')"
+      :title="compact ? 'Mark as done' : undefined"
+    >
+      <CircleCheck class="icon" :size="iconSize" />
+      <span v-if="!compact">Mark as done</span>
+    </v-button>
+    <v-button
+      kind="native-ghost"
+      v-if="!done"
+      :size="buttonSize"
+      class="dim"
+      @click.native.stop="$emit('dismiss')"
+      :title="compact ? 'Dismiss' : undefined"
+    >
+      <Trash class="icon" :size="iconSize" />
+      <span v-if="!compact">Dismiss</span>
+    </v-button>
+    <v-button
+      kind="native-ghost"
+      v-if="done"
+      :size="buttonSize"
+      class="dim"
+      @click.native.stop="$emit('reopen')"
+      :title="compact ? 'Reopen' : undefined"
+    >
+      <RotateCcw class="icon" :size="iconSize" />
+      <span v-if="!compact">Reopen</span>
+    </v-button>
+  </section>
+</template>
+
 <script lang="ts">
 import { Wrench, CircleCheck, Trash, RotateCcw } from 'lucide-vue';
 import { defineComponent, type PropType } from 'vue';
@@ -30,64 +90,15 @@ export default defineComponent({
     fixThread(): string | undefined {
       return this.status.threadId;
     },
+    iconSize(): number {
+      return this.compact ? 16 : 18;
+    },
+    buttonSize(): string {
+      return this.compact ? 'small' : 'medium';
+    },
   },
 });
 </script>
-
-<template>
-  <section class="buttons" :class="{ compact, [status.status]: true }">
-    <v-button
-      v-if="!done && !fixThread"
-      size="small"
-      kind="native-ghost"
-      @click.native.stop="$emit('fix')"
-      :title="compact ? 'Fix' : undefined"
-    >
-      <Wrench class="icon" :size="16" />
-      <span v-if="!compact">Fix</span>
-    </v-button>
-    <v-button
-      size="small"
-      kind="native-ghost"
-      v-if="!done && fixThread"
-      @click.native.stop="$root.$emit('show-navie-thread', fixThread)"
-      :title="compact ? 'Show fix' : undefined"
-    >
-      <Wrench class="fix-icon icon" :size="16" />
-      <span v-if="!compact">Show fix</span>
-    </v-button>
-    <v-button
-      size="small"
-      kind="native-ghost"
-      v-if="!done"
-      @click.native.stop="$emit('done')"
-      :title="compact ? 'Mark as done' : undefined"
-    >
-      <CircleCheck class="icon" :size="16" />
-      <span v-if="!compact">Mark as done</span>
-    </v-button>
-    <v-button
-      size="small"
-      kind="native-ghost"
-      v-if="!done"
-      @click.native.stop="$emit('dismiss')"
-      :title="compact ? 'Dismiss' : undefined"
-    >
-      <Trash class="icon" :size="16" />
-      <span v-if="!compact">Dismiss</span>
-    </v-button>
-    <v-button
-      size="small"
-      kind="native-ghost"
-      v-if="done"
-      @click.native.stop="$emit('reopen')"
-      :title="compact ? 'Reopen' : undefined"
-    >
-      <RotateCcw class="icon" :size="16" />
-      <span v-if="!compact">Reopen</span>
-    </v-button>
-  </section>
-</template>
 
 <style scoped lang="scss">
 .compact {
@@ -117,6 +128,13 @@ export default defineComponent({
 .icon {
   display: inline-block;
   vertical-align: middle;
-  margin-right: 0.25rem;
+  margin-right: 0.5rem;
+}
+
+.dim {
+  opacity: 0.85;
+  &:hover {
+    opacity: 1;
+  }
 }
 </style>
