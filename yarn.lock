@@ -335,6 +335,7 @@ __metadata:
     jest-extended: ^4.0.2
     js-base64: ^3.7.7
     lint-staged: ^10.5.3
+    lucide-vue: ^0.511.0
     marked: ^10.0.0
     marked-highlight: ^2.0.7
     mathjs: ^9.0.0
@@ -30784,6 +30785,15 @@ __metadata:
   version: 10.1.0
   resolution: "lru-cache@npm:10.1.0"
   checksum: 58056d33e2500fbedce92f8c542e7c11b50d7d086578f14b7074d8c241422004af0718e08a6eaae8705cee09c77e39a61c1c79e9370ba689b7010c152e6a76ab
+  languageName: node
+  linkType: hard
+
+"lucide-vue@npm:^0.511.0":
+  version: 0.511.0
+  resolution: "lucide-vue@npm:0.511.0"
+  peerDependencies:
+    vue: ^2.6.12
+  checksum: a7093425391be810c3a9a0ebb27e1b4db358f4b1964c798d35cc6c4ff45800f01e7d948bda7fdc6c1bcc6809ad83719d646d6733932512e00cf52dc4c21d135b
   languageName: node
   linkType: hard
 

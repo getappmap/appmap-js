@@ -46,13 +46,16 @@ export default {
 
   data() {
     return {
-      currentlyDisabled: this.disabled,
+      timeoutActive: false,
     };
   },
 
   computed: {
+    currentlyDisabled() {
+      return this.timeoutActive || this.disabled;
+    },
     isTimedOut() {
-      return !this.disabled && this.currentlyDisabled;
+      return this.timeout && this.timeoutActive;
     },
     classes() {
       return {
@@ -67,11 +70,14 @@ export default {
   methods: {
     onClick() {
       if (this.disabled) return;
-      if (!this.timeout) return;
 
-      this.currentlyDisabled = true;
+      this.$emit('click');
+
+      if (this.timeout <= 0) return;
+
+      this.timeoutActive = true;
       setTimeout(() => {
-        this.currentlyDisabled = false;
+        this.timeoutActive = false;
       }, this.timeout);
     },
   },

@@ -10,3 +10,4 @@ export { default as VSequenceDiagram } from '@/pages/SequenceDiagram.vue';
 export { default as VChat } from '@/pages/Chat.vue';
 export { default as VChatSearch } from '@/pages/ChatSearch.vue';
 export { default as VInstallGuide } from '@/pages/install-guide/ProjectPicker.vue';
+export { default as VReview } from '@/pages/Review.vue';
