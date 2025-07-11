@@ -15,6 +15,7 @@ import CompletionService, {
   mergeSystemMessages,
   Usage,
   CompletionServiceOptions,
+  PaymentRequiredError,
 } from './completion-service';
 import Trajectory from '../lib/trajectory';
 import Message, { CHARACTERS_PER_TOKEN } from '../message';
@@ -458,6 +459,8 @@ export default class OpenAICompletionService extends CompletionService {
 
   private async checkError(messages: readonly Message[], error: unknown) {
     if (!(error instanceof APIError)) throw error; // only retry on server errors
+    if (error.status === 402 /* payment required */)
+      throw new PaymentRequiredError({ cause: error });
     if (error.type === 'invalid_request_error' && error.code === 'context_length_exceeded') {
       const message = error.message;
       // messages are like "This model's maximum context length is 16385 tokens. However, your messages resulted in 40007 tokens"

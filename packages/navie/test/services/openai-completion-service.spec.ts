@@ -7,7 +7,7 @@ import { z } from 'zod';
 import Message from '../../src/message';
 import { PromptType } from '../../src/prompt';
 import { APIError } from 'openai';
-import { PromptTooLongError } from '../../src/services/completion-service';
+import { PaymentRequiredError, PromptTooLongError } from '../../src/services/completion-service';
 
 jest.mock('@langchain/openai');
 
@@ -100,6 +100,18 @@ describe('OpenAICompletionService', () => {
 
       expect(result).toEqual(['Hello']);
       expect(completionWithRetry).toHaveBeenCalledTimes(2);
+    });
+
+    it('throws immediately on quota exceeded error', async () => {
+      const quotaError = new APIError(402, undefined, undefined, undefined);
+
+      responseMock.mockImplementationOnce(() => {
+        throw quotaError;
+      });
+
+      const messages = [{ role: 'user', content: 'Hello' }] as const;
+      await expect(service.complete(messages).next()).rejects.toThrow(PaymentRequiredError);
+      expect(completionWithRetry).toHaveBeenCalledTimes(1);
     });
 
     it('throws if token count exceeds limit and onContextOverflow is set to throw', async () => {
@@ -292,6 +304,14 @@ describe('OpenAICompletionService', () => {
       const maxRetries = 5;
       await service.json([], schema, { maxRetries });
       expect(completionWithRetry).toHaveBeenCalledTimes(maxRetries);
+    });
+
+    it('throws immediately on quota exceeded error', async () => {
+      const quotaError = new APIError(402, undefined, undefined, undefined);
+      completionWithRetry.mockRejectedValue(quotaError);
+
+      await expect(service.json([], z.object({}))).rejects.toThrow(PaymentRequiredError);
+      expect(completionWithRetry).toHaveBeenCalledTimes(1);
     });
 
     describe('context length handling', () => {

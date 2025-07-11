@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/require-await */
-import CompletionService, { Usage, type Completion } from '../../src/services/completion-service';
+import CompletionService, {
+  PaymentRequiredError,
+  Usage,
+  type Completion,
+} from '../../src/services/completion-service';
 import Message from '../../src/message';
 import { PromptTooLongError } from '../../src/services/completion-service';
 import Trajectory from '../../src/lib/trajectory';
-import type { ZodType, TypeOf } from 'zod';
+import { type ZodType, type TypeOf, z } from 'zod';
 
 class TestCompletionService extends CompletionService {
   async *_complete(): Completion {
@@ -25,6 +29,28 @@ describe('CompletionService', () => {
 
   beforeEach(() => {
     service = new TestCompletionService(modelName, temperature, trajectory);
+  });
+
+  describe('payment required error handling', () => {
+    it('throws from complete when payment is required', async () => {
+      const complete = jest.spyOn(service, '_complete').mockImplementationOnce(async function* () {
+        throw new PaymentRequiredError();
+      });
+      const messages: Message[] = [{ role: 'user', content: 'test' }];
+
+      const generator = service.complete(messages);
+      await expect(generator.next()).rejects.toThrow(PaymentRequiredError);
+      expect(complete).toHaveBeenCalledTimes(1);
+    });
+
+    it('throws from json when payment is required', async () => {
+      const json = jest.spyOn(service, '_json').mockRejectedValue(new PaymentRequiredError());
+      const messages: Message[] = [{ role: 'user', content: 'test' }];
+
+      const result = service.json(messages, z.object({}));
+      await expect(result).rejects.toThrow(PaymentRequiredError);
+      expect(json).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('prompt too long handling', () => {

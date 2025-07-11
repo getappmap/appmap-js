@@ -40,6 +40,17 @@ export class PromptTooLongError extends Error {
   readonly name = 'PromptTooLongError';
 }
 
+export class PaymentRequiredError extends Error {
+  constructor(options?: ErrorOptions) {
+    super(
+      'This service requires additional payment to use. Please check your subscription or billing status.',
+      options
+    );
+  }
+
+  readonly name = 'PaymentRequiredError';
+}
+
 export default abstract class CompletionService {
   constructor(
     public modelName: string,
@@ -136,6 +147,8 @@ export default abstract class CompletionService {
           const truncated = truncateMessages(conversation, error.promptTokens, this.maxTokens);
           if (truncated) return this.json(truncated, schema, options);
         }
+        throw error;
+      } else if (error instanceof PaymentRequiredError) {
         throw error;
       }
     }
