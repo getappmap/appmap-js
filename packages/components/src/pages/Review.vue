@@ -57,7 +57,7 @@ export default Vue.extend({
       return new Date().getFullYear();
     },
     includesRuntimeReferences(): boolean {
-      return this.$store.state.suggestions.some((s: Suggestion) => Boolean(s.runtime));
+      return this.$store.state.suggestions?.some((s: Suggestion) => Boolean(s.runtime));
     },
   },
   mounted() {
