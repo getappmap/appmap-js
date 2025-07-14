@@ -1,3 +1,10 @@
+# [@appland/navie-v1.47.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.47.0...@appland/navie-v1.47.1) (2025-07-14)
+
+
+### Bug Fixes
+
+* 402 errors returned from OpenAI endpoints are no longer ignored ([0e8c5fa](https://github.com/getappmap/appmap-js/commit/0e8c5fa1f74e1b0a4947300c9cc2c2f9889d474a))
+
 # [@appland/navie-v1.47.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.46.0...@appland/navie-v1.47.0) (2025-07-02)
 
 
