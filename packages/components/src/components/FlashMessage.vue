@@ -5,15 +5,15 @@
 </template>
 
 <script lang="ts">
-//@ts-nocheck
+import { defineComponent, type PropType } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'FlashMessage',
   props: {
     type: {
-      type: String,
+      type: String as PropType<'success' | 'error' | 'info'>,
       default: 'info',
-      validator: (value) => ['success', 'error', 'info'].includes(value),
+      validator: (value: string) => ['success', 'error', 'info'].includes(value),
     },
   },
   computed: {
@@ -24,7 +24,7 @@ export default {
       };
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -33,12 +33,14 @@ export default {
   border-radius: $border-radius;
 
   &--success {
-    background: linear-gradient(90deg, rgba($success-from, 0.1) 0%, rgba($success-to, 0.05) 100%);
+    background: linear-gradient(90deg, rgba($success-from, 0.1) 0%, rgba($success-to, 0.05) 100%),
+      $color-background;
     border: 1px solid rgba($success-from, 0.1);
     color: $alert-success;
   }
   &--error {
-    background: linear-gradient(90deg, rgba($danger-from, 0.1) 0%, rgba($danger-to, 0.05) 100%);
+    background: linear-gradient(90deg, rgba($danger-from, 0.1) 0%, rgba($danger-to, 0.05) 100%),
+      $color-background;
     border: 1px solid rgba($danger-from, 0.1);
     color: $bad-status;
 
@@ -48,7 +50,8 @@ export default {
     }
   }
   &--info {
-    background: linear-gradient(90deg, rgba($general-from, 0.1) 0%, rgba($general-to, 0.05) 100%);
+    background: linear-gradient(90deg, rgba($general-from, 0.1) 0%, rgba($general-to, 0.05) 100%),
+      $color-background;
     border: 1px solid rgba($general-from, 0.1);
     color: $lightblue;
 

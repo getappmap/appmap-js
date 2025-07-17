@@ -24,8 +24,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-$fg: #ececec;
-
 @keyframes pulse {
   0%,
   100% {
@@ -42,7 +40,6 @@ $fg: #ececec;
   grid-template-columns: 1rem 1fr;
   gap: 1rem;
   align-items: center;
-  color: $fg;
   padding: 1rem;
   transition: background-color 0.2s;
   border: 1px solid rgba(255, 255, 255, 0.1);

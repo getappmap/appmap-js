@@ -16,6 +16,8 @@ export default Vue.extend({
     handleKeydown(e: KeyboardEvent) {
       if (e.key === 'Escape') {
         this.$emit('close');
+      } else if (e.key === 'Enter' && e.ctrlKey) {
+        this.$emit('submit');
       }
     },
   },
