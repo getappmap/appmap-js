@@ -41,6 +41,7 @@ import ReviewCommand from './commands/review-command';
 import WelcomeCommand from './commands/welcome-command';
 import InvokeTestsService from './services/invoke-tests-service';
 import { TestInvocationProvider } from './test-invocation';
+import FixCommand from './commands/fix-command';
 
 export type ChatHistory = Message[];
 
@@ -207,6 +208,8 @@ export default function navie(
 
   const buildWelcomeCommand = () => new WelcomeCommand(completionService);
 
+  const buildFixCommand = () => new FixCommand(buildExplainCommand());
+
   const commandBuilders: Record<CommandMode, () => Command> = {
     [CommandMode.Explain]: buildExplainCommand,
     [CommandMode.Classify]: buildClassifyCommand,
@@ -218,6 +221,7 @@ export default function navie(
     [CommandMode.Observe]: buildObserveCommand,
     [CommandMode.Review]: buildReviewCommand,
     [CommandMode.Welcome]: buildWelcomeCommand,
+    [CommandMode.Fix]: buildFixCommand,
   };
 
   let { question } = clientRequest;
@@ -296,3 +300,4 @@ function cleanHistory(chatHistory?: ChatHistory): ChatHistory | undefined {
     content: parseOptions(message.content).question,
   }));
 }
+

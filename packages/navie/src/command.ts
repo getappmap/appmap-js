@@ -13,6 +13,7 @@ export enum CommandMode {
   Observe = 'observe',
   Review = 'review',
   Welcome = 'welcome',
+  Fix = 'fix',
 }
 
 export interface CommandRequest extends ClientRequest {

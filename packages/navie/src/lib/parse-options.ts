@@ -3,6 +3,35 @@ import { ContextV2 } from '../context';
 export class UserOptions {
   constructor(private options: Map<string, string | boolean>) {}
 
+  /**
+   * @returns A new instance of UserOptions with the same options.
+   * This is useful for creating a copy of the options without modifying the original.
+   */
+  clone(): UserOptions {
+    return new UserOptions(new Map(this.options));
+  }
+
+  /**
+   * Sets an option with the given key and value.
+   * If the value is a string, it is stored as is.
+   * If the value is a boolean, it is stored as a boolean.
+   * @param key The option key.
+   * @param value The option value, either a string or a boolean.
+   */
+  set(key: string, value: string | boolean): UserOptions {
+    this.options.set(key.toLowerCase(), value);
+    return this;
+  }
+
+  /**
+   * Removes an option with the given key.
+   * @param key The option key to remove.
+   */
+  delete(key: string): UserOptions {
+    this.options.delete(key.toLowerCase());
+    return this;
+  }
+
   has(key: string): boolean {
     return this.options.has(key);
   }
