@@ -6,11 +6,6 @@ export default {
   title: 'Pages/Chat/User Message',
   component: VUserMessage,
   argTypes: {},
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-  },
 };
 
 export const CodeSnippet = (args, { argTypes }) => ({

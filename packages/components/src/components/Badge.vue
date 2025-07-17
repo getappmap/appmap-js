@@ -13,7 +13,7 @@ export default {
 <style lang="scss" scoped>
 .badge {
   background-color: $color-highlight;
-  color: $color-foreground-light;
+  color: $color-highlight-dark;
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   font-size: 0.65rem;

@@ -139,34 +139,31 @@ $base19: #292929;
 $alert-success: #7fc14a;
 
 // Editor common
-$color-background: var(--appmap-color-background, #292c39);
+$color-background: var(--appmap-color-background, #282a36);
 $color-background-light: var(--appmap-color-background-light, rgba(white, 0.1));
 $color-background-dark: var(--appmap-color-background-dark, rgba(black, 0.1));
-$color-highlight: var(--appmap-color-highlight, #3794ff);
-$color-highlight-light: var(--appmap-color-highlight-light, #97c8ff);
-$color-highlight-dark: var(--appmap-color-highlight-dark, #292c39);
-$color-input-bg: var(--appmap-color-input-bg, #171b25);
-$color-input-fg: var(--appmap-color-input-fg, #cecece);
-$color-button-fg: var(--appmap-color-button-fg, $white);
-$color-button-bg: var(--appmap-color-button-bg, $brightblue);
-$color-button-bg-hover: var(
-  --appmap-color-button-bg-hover,
-  darken(desaturate($brightblue, 50%), 20%)
-);
+$color-highlight: var(--appmap-color-highlight, #2aaaff);
+$color-highlight-light: var(--appmap-color-highlight-light, #007fd4);
+$color-highlight-dark: var(--appmap-color-highlight-dark, #062f4a);
+$color-input-bg: var(--appmap-color-input-bg, #3c3c3c);
+$color-input-fg: var(--appmap-color-input-fg, #eff0eb);
+$color-button-fg: var(--appmap-color-button-fg, #ffffff);
+$color-button-bg: var(--appmap-color-button-bg, #0e639c);
+$color-button-bg-hover: var(--appmap-color-button-bg-hover, #1177bb);
 $color-selection: var(--appmap-color-selection, #264f78);
-$color-border: var(--appmap-color-border, rgba(255, 255, 255, 0.1));
-$color-foreground: var(--appmap-color-foreground, $base07);
-$color-foreground-secondary: var(--appmap-color-foreground-secondary, rgba(white, 0.6));
+$color-border: var(--appmap-color-border, #3c3c3c);
+$color-foreground: var(--appmap-color-foreground, #eff0eb);
+$color-foreground-secondary: var(--appmap-color-foreground-secondary, white);
 $color-foreground-light: var(--appmap-color-foreground-light, white);
-$color-foreground-dark: var(--appmap-color-foreground-dark, #cecece);
+$color-foreground-dark: var(--appmap-color-foreground-dark, #eff0eb);
 $font-family: var(--appmap-font-family, $appland-text-font-family);
 $font-size: var(--appmap-font-size, 14px);
 $font-weight: var(--appmap-font-weight, normal);
-$color-success: var(--appmap-color-success, #44cf6c);
-$color-error: var(--appmap-color-error, #cd1414);
-$color-warning: var(--appmap-color-warning, #ecc30b);
-$color-link: var(--appmap-color-link, #2a84ef);
-$color-link-hover: var(--appmap-color-link-hover, #2a84ef);
+$color-success: var(--appmap-color-success, #5af78e);
+$color-error: var(--appmap-color-error, #ff5c57);
+$color-warning: var(--appmap-color-warning, #f3f99d);
+$color-link: var(--appmap-color-link, #3794ff);
+$color-link-hover: var(--appmap-color-link-hover, #3794ff);
 $color-tile-background: var(--appmap-color-tile-background, #252526);
 $color-tile-shadow: var(--appmap-color-tile-shadow, rgba(0, 0, 0, 0.36));
 $shadow-tile: drop-shadow(2px 2px 2px $color-tile-shadow);

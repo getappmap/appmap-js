@@ -69,5 +69,6 @@ export namespace ReviewRpc {
     features: Feature[];
     dismissedFeatures: DismissedFeature[];
     codeLabels: CodeLabelItem[];
+    summary: string;
   }
 }
