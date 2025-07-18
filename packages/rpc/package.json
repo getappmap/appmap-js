@@ -1,6 +1,6 @@
 {
   "name": "@appland/rpc",
-  "version": "1.21.0",
+  "version": "1.22.0",
   "author": "AppLand, Inc.",
   "license": "Commons Clause + MIT",
   "description": "AppMap RPC client and server",

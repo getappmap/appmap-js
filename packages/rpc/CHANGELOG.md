@@ -1,3 +1,10 @@
+# [@appland/rpc-v1.22.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.21.0...@appland/rpc-v1.22.0) (2025-07-18)
+
+
+### Features
+
+* **components:** Implement AppMap code review homepage ([2032c05](https://github.com/getappmap/appmap-js/commit/2032c05b4e46d713bb029799adbd7e2feb6500fd))
+
 # [@appland/rpc-v1.21.0](https://github.com/getappmap/appmap-js/compare/@appland/rpc-v1.20.0...@appland/rpc-v1.21.0) (2025-07-02)
 
 
