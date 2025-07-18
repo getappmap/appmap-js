@@ -1,3 +1,10 @@
+# [@appland/components-v4.47.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.4...@appland/components-v4.47.0) (2025-07-18)
+
+
+### Features
+
+* **components:** Implement AppMap code review homepage ([2032c05](https://github.com/getappmap/appmap-js/commit/2032c05b4e46d713bb029799adbd7e2feb6500fd))
+
 # [@appland/components-v4.46.4](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.3...@appland/components-v4.46.4) (2025-04-30)
 
 
