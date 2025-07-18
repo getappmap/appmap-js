@@ -1,3 +1,10 @@
+# [@appland/navie-v1.48.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.47.1...@appland/navie-v1.48.0) (2025-07-18)
+
+
+### Features
+
+* **navie:** Introduce AI-powered 'fix' command ([3959e21](https://github.com/getappmap/appmap-js/commit/3959e217d1fd40791751226c03c68fd9895f45bc))
+
 # [@appland/navie-v1.47.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.47.0...@appland/navie-v1.47.1) (2025-07-14)
 
 
