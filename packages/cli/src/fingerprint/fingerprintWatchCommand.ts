@@ -5,7 +5,7 @@ import EventAggregator, { PendingEvent } from '../lib/eventAggregator';
 import { verbose } from '../utils';
 import FingerprintQueue from './fingerprintQueue';
 import Globber, { GlobberOptions } from './globber';
-import Telemetry from '../telemetry';
+import { Telemetry } from '@appland/telemetry';
 import writeUsage, { collectUsageData, sendUsageData } from '../lib/emitUsage';
 import { FingerprintEvent } from './fingerprinter';
 import { Metadata } from '@appland/models';

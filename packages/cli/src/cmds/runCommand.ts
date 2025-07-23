@@ -3,7 +3,7 @@ import { verbose } from '../utils';
 import UI from './userInteraction';
 import chalk from 'chalk';
 import { ExitCode } from './record/types/exitCode';
-import Telemetry from '../telemetry';
+import { Telemetry } from '@appland/telemetry';
 
 export default async function runCommand(
   commandPrefix: string,

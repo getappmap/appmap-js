@@ -14,7 +14,7 @@ import {
 } from '@appland/navie';
 
 import INavie from './inavie';
-import Telemetry from '../../../telemetry';
+import { Telemetry } from '@appland/telemetry';
 import {
   AI,
   CreateAgentMessage,

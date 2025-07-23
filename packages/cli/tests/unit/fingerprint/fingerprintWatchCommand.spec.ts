@@ -6,22 +6,20 @@ import { restore, stub } from 'sinon';
 import { dirSync } from 'tmp';
 import FingerprintWatchCommand from '../../../src/fingerprint/fingerprintWatchCommand';
 import { verbose } from '../../../src/utils';
-import OriginalTelemetry from '../../../src/telemetry';
 import * as client from '@appland/client';
 import { mkdir } from 'fs/promises';
 import { FSWatcher } from 'chokidar';
 
-jest.mock('../../../src/telemetry', () => {
-  const originalModule = jest.requireActual('../../../src/telemetry');
+jest.mock('@appland/telemetry', () => {
+  const originalModule = jest.requireActual('@appland/telemetry');
   return {
     __esModule: true,
     ...originalModule,
-    default: {
+    Telemetry: {
       sendEvent: jest.fn(),
     },
   };
 });
-const Telemetry = jest.mocked(OriginalTelemetry);
 
 jest.mock('@appland/client');
 const Usage = jest.mocked(client.Usage);

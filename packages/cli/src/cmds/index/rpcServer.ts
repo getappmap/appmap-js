@@ -13,7 +13,7 @@ import shadowLocalhost from '../../lib/shadowLocalhost';
 import { RpcCallback, RpcHandler, toJaysonRpcError } from '../../rpc/rpc';
 import { WebSocketServer } from 'ws';
 import { bindConnectionHandler } from '../../rpc/navie/thread/handlers/subscribe';
-import Telemetry from '../../telemetry';
+import { Telemetry } from '@appland/telemetry';
 import { events, properties } from '../../lib/telemetryConstants';
 
 const debug = makeDebug('appmap:rpcServer');

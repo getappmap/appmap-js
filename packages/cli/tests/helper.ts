@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import extend from 'sinon/lib/sinon/util/core/extend';
-import Telemetry from '../src/telemetry';
+import { Telemetry } from '@appland/telemetry';
 
 export function withSandbox() {
   // The sinon doc says the default export is a sandbox, but it actually isn't (which is what this
@@ -11,6 +11,7 @@ export function withSandbox() {
 
   return api;
 }
+
 export function withStubbedTelemetry(sandbox: sinon.SinonSandbox = sinon) {
   beforeEach(() => {
     // Stub all Telemetry methods. flush still needs to work, though.
@@ -22,13 +23,6 @@ export function withStubbedTelemetry(sandbox: sinon.SinonSandbox = sinon) {
   });
 
   afterEach(() => {
-    // This bug https://github.com/sinonjs/sinon/issues/2384 acknowledges that
-    // sinon.restore doesn't restore static methods. It suggests
-    // sinon.restoreObject as a workaround, but restoreObject is currently
-    // missing from @types/sinon.
-    //
-    // This hacks around both problems:
-    sandbox['restoreObject'](Telemetry);
     sandbox.restore();
   });
 }

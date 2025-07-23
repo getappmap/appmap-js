@@ -1,9 +1,9 @@
-import path, { join } from 'path';
+import path from 'path';
 import fse from 'fs-extra';
 import tmp from 'tmp';
 import sinon, { SinonStub } from 'sinon';
 import inquirer from 'inquirer';
-import Telemetry from '../../../src/telemetry';
+import { Telemetry } from '@appland/telemetry';
 import yargs from 'yargs';
 import { existsSync } from 'fs';
 
