@@ -22,7 +22,7 @@ import { getTokenizedString, hasCode, hasMessage, hasNestedError, hasStatus } fr
 import INavie from '../../explain/navie/inavie';
 import { normalizePath } from '../../explain/location';
 import { isNativeError } from 'util/types';
-import Telemetry from '../../../telemetry';
+import { Telemetry } from '@appland/telemetry';
 import { events as TelemetryEvents, properties } from '../../../lib/telemetryConstants';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

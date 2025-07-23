@@ -42,6 +42,14 @@ import * as NavieCommand from './cmds/navie';
 import * as ApplyCommand from './cmds/apply';
 import * as RunTestCommand from './cmds/runTest';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
+import { Telemetry } from '@appland/telemetry';
+
+Telemetry.configure({
+  product: {
+    name: '@appland/appmap',
+    version: require('../package.json').version,
+  },
+});
 
 setSQLErrorHandler(sqlErrorLog);
 

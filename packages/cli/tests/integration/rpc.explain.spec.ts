@@ -17,7 +17,7 @@ import RemoteNavie from '../../src/rpc/explain/navie/navie-remote';
 import LocalNavie from '../../src/rpc/explain/navie/navie-local';
 import { INavieProvider } from '../../src/rpc/explain/navie/inavie';
 
-import Telemetry, { Git } from '../../src/telemetry';
+import { Telemetry, Git } from '@appland/telemetry';
 import { verbose } from '../../src/utils';
 
 jest.mock('@appland/navie');
@@ -378,7 +378,7 @@ describe('RPC', () => {
   });
 });
 
-jest.mock('../../src/telemetry');
+jest.mock('@appland/telemetry');
 Object.defineProperty(Telemetry, 'enabled', { get: jest.fn(), configurable: true });
 jest.mocked(Git.state).mockResolvedValue(0);
 jest.mocked(Navie.NavieOptions).mockReturnValue({

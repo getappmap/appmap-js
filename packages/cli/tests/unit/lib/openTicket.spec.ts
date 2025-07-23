@@ -6,7 +6,7 @@ import UI from '../../../src/cmds/userInteraction';
 import openTicket from '../../../src/lib/ticket/openTicket';
 import * as createRequest from '../../../src/lib/ticket/zendesk';
 
-import Telemetry from '../../../src/telemetry';
+import { Telemetry } from '@appland/telemetry';
 import { withSandbox, withStubbedTelemetry } from '../../helper';
 
 import { isValidEmail, isValidName } from '../../../src/lib/ticket/validation';

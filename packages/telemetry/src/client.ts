@@ -102,7 +102,6 @@ export class TelemetryClient implements ITelemetryClient {
     if (config) this.configure(config);
   }
 
-
   public configure(config: Partial<TelemetryConfiguration> = {}): void {
     if (this.telemetryConfig) {
       throw new Error('Telemetry client is already configured');
@@ -126,7 +125,7 @@ export class TelemetryClient implements ITelemetryClient {
         );
         break;
       case 'custom':
-        this.backend = this.telemetryConfig.backend
+        this.backend = this.telemetryConfig.backend;
         break;
     }
 

@@ -12,7 +12,7 @@ import {
 import { endTime, prefixLines, verbose } from '../../utils';
 import AgentInstallerProcedure from './agentInstallerProcedure';
 import chalk from 'chalk';
-import Telemetry from '../../telemetry';
+import { Telemetry } from '@appland/telemetry';
 import { INSTALLERS, INSTALLER_NAMES } from './installers';
 import { getProjects, ProjectConfiguration } from './projectConfiguration';
 import AgentInstaller from './agentInstaller';
