@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { HttpError } from '../../cmds/errors';
 import UI from '../../cmds/userInteraction';
-import Telemetry from '../../telemetry';
+import { Telemetry } from '@appland/telemetry';
 import createZendeskRequest from './zendesk';
 export const DEFAULT_HELP_MSG = ' ';
 import { isValidEmail, isValidName } from './validation';

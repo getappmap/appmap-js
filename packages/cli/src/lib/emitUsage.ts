@@ -5,7 +5,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { Git } from '../telemetry';
+import { Git } from '@appland/telemetry';
 import sanitizeURL from './repositoryInfo';
 
 async function buildMetadata(appmapDir: string, metadata: Metadata): Promise<Metadata> {

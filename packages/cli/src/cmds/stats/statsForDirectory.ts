@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import UI from '../userInteraction';
-import Telemetry from '../../telemetry';
+import { Telemetry } from '@appland/telemetry';
 import { findFiles, verbose } from '../../utils';
 import { Event, buildAppMap } from '@appland/models';
 import { AppMapSizeTable, SortedAppMapSize } from './types/appMapSize';

@@ -8,7 +8,7 @@ import { chdir } from 'node:process';
 import { Usage, UsageUpdateDto } from '@appland/client';
 
 import writeUsageData, { collectUsageData, sendUsageData } from '../../../src/lib/emitUsage';
-import { Git } from '../../../src/telemetry';
+import { Git } from '@appland/telemetry';
 
 // Using graceful-fs should eliminate any risk of EBUSY errors on Windows.
 const readFile = promisify(readFileCb);
