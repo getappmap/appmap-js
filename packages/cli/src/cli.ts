@@ -165,7 +165,7 @@ yargs(process.argv.slice(2))
         console.error(err);
       }
     }
-    process.exit(1);
+    process.exitCode = 1;
   })
   .strict()
   .demandCommand()
