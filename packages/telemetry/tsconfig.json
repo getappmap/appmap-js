@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "noEmit": true,
-    "resolveJsonModule": true
+    "declaration": true,
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "sourceMap": true,
   },
-  "include": ["*.ts", "package.json"]
+  "include": ["src/*.ts"]
 }
