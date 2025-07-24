@@ -35,7 +35,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "node-fetch": "2.6.7",
     "node-gyp": "^10.1.0",
-    "prettier": "^2.7.1",
+    "prettier": "^3.6.2",
     "semantic-release": "^19.0.2",
     "semantic-release-monorepo": "^7.0.5",
     "yarn-changed-workspaces": "^2.0.9"

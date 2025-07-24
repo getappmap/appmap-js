@@ -1,0 +1,216 @@
+import Conf from 'conf';
+import * as os from 'os';
+import { getMachineId } from './identity';
+import { Session } from './session';
+import { sync as readPackageUpSync } from 'read-pkg-up';
+import {
+  FlushCallback,
+  ProductConfiguration,
+  TelemetryBackend,
+  ITelemetryClient,
+  TelemetryConfiguration,
+  TelemetryData,
+  TelemetryOptions,
+} from './types';
+import path from 'path';
+import { ApplicationInsightsBackend } from './backends/application-insights';
+
+/**
+ * Append the prefix to the name of each property and drop undefined values
+ */
+const transformProps = <T>(
+  obj: Record<string, T | undefined>,
+  propPrefix: string
+): Record<string, T> => {
+  const result: Record<string, T> = {};
+
+  for (const [k, v] of Object.entries(obj)) {
+    if (v === undefined) continue;
+    if (k.includes('.')) {
+      result[k] = v;
+      continue;
+    }
+    const prefixedKey = k.startsWith(propPrefix) ? k : `${propPrefix}${k}`;
+    result[prefixedKey] = v;
+  }
+
+  return result;
+};
+
+function resolvePackageJson(): { name: string; version: string } | undefined {
+  try {
+    let myPath = __dirname;
+
+    // If we're in a node_modules directory, go up to the consuming package root
+    const nodeModuleIndex = myPath.indexOf(`${path.sep}node_modules${path.sep}`);
+    if (nodeModuleIndex !== -1) {
+      myPath = myPath.substring(0, nodeModuleIndex);
+    }
+    const result = readPackageUpSync({ cwd: myPath })?.packageJson;
+    if (result) {
+      return {
+        name: result.name,
+        version: result.version,
+      };
+    }
+  } catch (error) {
+    console.error('Error resolving package.json:', error);
+    return undefined;
+  }
+}
+
+function buildDefaultConfiguration(
+  base: Partial<TelemetryConfiguration> = {}
+): TelemetryConfiguration {
+  const product: Required<ProductConfiguration> = { name: '', version: '', ...base.product };
+  if (!product.name || !product.version) {
+    const pkg = resolvePackageJson();
+    product.name ||= pkg?.name || 'unknown';
+    product.version ||= pkg?.version || '0.0.0';
+  }
+
+  // By default, the prop prefix will be the product name with non-word characters replaced by dots.
+  const propPrefix = base.propPrefix || product.name.replace(/\W/g, '.').replace(/^\./, '') + '.';
+
+  return {
+    product,
+    propPrefix,
+    backend: {
+      type: 'application-insights',
+    },
+    ...base,
+  };
+}
+
+export class TelemetryClient implements ITelemetryClient {
+  private telemetryConfig?: TelemetryConfiguration;
+  private backend?: TelemetryBackend;
+  private userConfig?: Conf;
+  private debug = process.env.APPMAP_TELEMETRY_DEBUG !== undefined;
+  private session?: Session;
+
+  public enabled = process.env.APPMAP_TELEMETRY_DISABLED === undefined;
+  public readonly machineId = getMachineId();
+  public get sessionId(): string {
+    if (!this.session) {
+      throw new Error('Session is not initialized');
+    }
+    return this.session.id;
+  }
+
+  constructor(config?: Partial<TelemetryConfiguration>) {
+    if (config) this.configure(config);
+  }
+
+
+  public configure(config: Partial<TelemetryConfiguration> = {}): void {
+    if (this.telemetryConfig) {
+      throw new Error('Telemetry client is already configured');
+    }
+
+    this.telemetryConfig = buildDefaultConfiguration(config);
+    this.userConfig = new Conf({
+      projectName: this.telemetryConfig.product.name,
+      projectVersion: '0.0.1', // note this is actually config version
+    });
+    this.session = new Session(this.userConfig);
+
+    // Construct additional backends here as needed.
+    switch (this.telemetryConfig.backend.type) {
+      case 'application-insights':
+        this.backend = new ApplicationInsightsBackend(
+          this.machineId,
+          this.session.id,
+          this.telemetryConfig.product.name,
+          this.telemetryConfig.backend
+        );
+        break;
+      case 'custom':
+        this.backend = this.telemetryConfig.backend
+        break;
+    }
+
+    if (this.debug) {
+      console.log('Telemetry configuration:', this.telemetryConfig);
+    }
+  }
+
+  sendEvent(data: TelemetryData, options: TelemetryOptions = { includeEnvironment: false }): void {
+    if (!this.backend) this.configure();
+    if (!this.backend || !this.telemetryConfig || !this.session)
+      throw new Error('Telemetry client is not configured');
+
+    try {
+      const { propPrefix } = this.telemetryConfig;
+      const { name, version } = this.telemetryConfig.product;
+      const transformedProperties = transformProps(
+        {
+          version: version,
+          args: process.argv.slice(1).join(' '),
+          ...data.properties,
+        },
+        propPrefix
+      );
+      const transformedMetrics = transformProps(data.metrics || {}, propPrefix);
+      const properties: Record<string, string> = {
+        'common.source': name,
+        'common.os': os.platform(),
+        'common.platformversion': os.release(),
+        'common.arch': os.arch(),
+        'appmap.cli.machineId': this.machineId,
+        'appmap.cli.sessionId': this.session.id,
+        ...transformedProperties,
+      };
+
+      if (options.includeEnvironment) {
+        properties['common.environmentVariables'] = Object.keys(process.env).sort().join(',');
+      }
+
+      const event = {
+        name: `${name}/${data.name}`,
+        measurements: transformedMetrics,
+        properties,
+      };
+
+      if (this.debug) {
+        console.log(JSON.stringify(event, null, 2));
+      }
+
+      if (this.enabled) {
+        this.backend.sendEvent(event);
+        this.session.touch();
+        this.backend.flush();
+      }
+    } catch (e) {
+      // Don't let telemetry fail the entire command
+      // Do nothing other than log for now, we can't do anything about it
+      if (this.debug) {
+        if (e instanceof Error) {
+          console.error(e.stack);
+        } else {
+          console.error(e);
+        }
+      }
+    }
+  }
+
+  flush(callback: FlushCallback): void {
+    if (this.enabled) {
+      // Telemetry.client.flush is broken:
+      // https://github.com/microsoft/ApplicationInsights-node.js/issues/871 .
+      // As a result, we can fail to send telemetry data when exiting.
+      //
+      // If we got passed a callback, flush the data and wait for a second
+      // before calling it.
+      if (callback) {
+        this.backend?.flush(callback);
+        setTimeout(callback, 1000);
+      }
+    } else {
+      callback();
+    }
+  }
+}
+
+const defaultClient = new TelemetryClient();
+export default defaultClient;
