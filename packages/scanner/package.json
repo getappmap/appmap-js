@@ -65,6 +65,7 @@
     "@appland/models": "workspace:^2.10.0",
     "@appland/openapi": "workspace:^1.7.0",
     "@appland/sql-parser": "^1.5.0",
+    "@appland/telemetry": "workspace:^1.0.0",
     "@types/cli-progress": "^3.9.2",
     "ajv": "^8.8.2",
     "applicationinsights": "^2.1.4",

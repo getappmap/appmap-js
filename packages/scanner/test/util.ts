@@ -52,14 +52,15 @@ const scan = async (
 };
 
 const stubTelemetry = (): void => {
-  jest.mock('../src/telemetry', () => {
-    const originalModule = jest.requireActual('../src/telemetry');
+  jest.mock('@appland/telemetry', () => {
+    const originalModule = jest.requireActual('@appland/telemetry');
 
     //Mock the default export and named export 'foo'
     return {
       __esModule: true,
       ...originalModule,
-      default: {
+      Telemetry: {
+        configure: jest.fn(),
         sendEvent: jest.fn(),
       },
     };
@@ -67,7 +68,7 @@ const stubTelemetry = (): void => {
 };
 
 const unstubTelemetry = (): void => {
-  jest.unmock('../src/telemetry');
+  jest.unmock('@appland/telemetry');
 };
 
 export { fixtureAppMap, fixtureAppMapFileName, scan, stubTelemetry, unstubTelemetry };

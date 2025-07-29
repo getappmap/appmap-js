@@ -5,8 +5,7 @@ import ScanCommand from './cli/scan/command';
 import { verbose } from './rules/lib/util';
 import { AbortError, ValidationError } from './errors';
 import { ExitCode } from './cli/exitCode';
-import Telemetry from './telemetry';
-import { TelemetryData } from './telemetry';
+import { Telemetry, TelemetryData } from '@appland/telemetry';
 import { setSQLErrorHandler } from '@appland/models';
 import sqlWarning from './sqlWarning';
 
@@ -30,6 +29,15 @@ function handleError(err: Error) {
 
   Telemetry.sendEvent(telemetry);
 }
+
+Telemetry.configure({
+  product: {
+    name: '@appland/scanner',
+    // Importing this would change the directory structure of our build, so we use require
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    version: require('../package.json').version,
+  },
+});
 
 setSQLErrorHandler(sqlWarning);
 
