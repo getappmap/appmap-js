@@ -11,7 +11,7 @@ import {
   parseConfigFile,
   TimestampedConfiguration,
 } from '../../configuration/configurationProvider';
-import Telemetry from '../../telemetry';
+import { Telemetry } from '@appland/telemetry';
 import EventEmitter from 'events';
 import isAncestorPath from '../../util/isAncestorPath';
 import { debuglog } from 'util';
