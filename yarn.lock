@@ -119,6 +119,7 @@ __metadata:
     "@appland/scanner": "workspace:^1.86.0"
     "@appland/search": "workspace:^1.1.0"
     "@appland/sequence-diagram": "workspace:^1.12.0"
+    "@appland/telemetry": "workspace:^1.0.0"
     "@craftamap/esbuild-plugin-html": ^0.4.0
     "@eslint/js": ~8.57.0
     "@octokit/rest": ^20.0.1
@@ -505,6 +506,7 @@ __metadata:
     "@appland/models": "workspace:^2.10.0"
     "@appland/openapi": "workspace:^1.7.0"
     "@appland/sql-parser": ^1.5.0
+    "@appland/telemetry": "workspace:^1.0.0"
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@types/async": ^3.2.12
@@ -628,7 +630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appland/telemetry@workspace:packages/telemetry":
+"@appland/telemetry@workspace:^1.0.0, @appland/telemetry@workspace:packages/telemetry":
   version: 0.0.0-use.local
   resolution: "@appland/telemetry@workspace:packages/telemetry"
   dependencies:
