@@ -1,4 +1,5 @@
 .appmap
+global-config.json
 built
 tests/output
 tests/unit/fixtures/compare/.appmap/change-report/testBase-testHead/report.md
