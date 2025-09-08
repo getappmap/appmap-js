@@ -1,8 +1,10 @@
+
 import Conf from 'conf';
 import { name as appName, version } from '../package.json';
 import { Contracts } from 'applicationinsights';
 import assert from 'node:assert';
 import { TelemetryClient } from '../src';
+import { createMockServer } from './helpers/mockServer';
 
 describe('TelemetryClient', () => {
   beforeEach(() => {
@@ -110,6 +112,40 @@ describe('TelemetryClient', () => {
       expect(() => {
         client.configure({ product: { name: 'test', version: '1.0.0' } });
       }).toThrow('Telemetry client is already configured');
+    });
+  });
+
+  describe('Backend Configuration', () => {
+    const mockServer = createMockServer();
+
+    beforeEach((done) => {
+      mockServer.clear();
+      mockServer.start(done);
+    });
+
+    afterEach((done) => {
+      mockServer.stop(done);
+      delete process.env.APPMAP_TELEMETRY_BACKEND;
+      delete process.env.SPLUNK_TOKEN;
+      delete process.env.SPLUNK_URL;
+    });
+
+    it('configures SplunkBackend from environment variables', (done) => {
+      const port = mockServer.getServerPort();
+      process.env.APPMAP_TELEMETRY_BACKEND = 'splunk';
+      process.env.SPLUNK_TOKEN = 'client-env-token';
+      process.env.SPLUNK_URL = `http://127.0.0.1:${port}`;
+
+      const client = new TelemetryClient();
+      client.enabled = true;
+      client.sendEvent({ name: 'clientEnvTest' });
+
+      client.flush(() => {
+        expect(mockServer.receivedRequests).toHaveLength(1);
+        const [request] = mockServer.receivedRequests;
+        expect(request.headers.authorization).toBe('Splunk client-env-token');
+        done();
+      });
     });
   });
 });

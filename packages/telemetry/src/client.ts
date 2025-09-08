@@ -3,7 +3,9 @@ import * as os from 'os';
 import { getMachineId } from './identity';
 import { Session } from './session';
 import { sync as readPackageUpSync } from 'read-pkg-up';
-import {
+
+import type {
+  BackendConfiguration,
   FlushCallback,
   ProductConfiguration,
   TelemetryBackend,
@@ -14,6 +16,7 @@ import {
 } from './types';
 import path from 'path';
 import { ApplicationInsightsBackend } from './backends/application-insights';
+import { SplunkBackend } from './backends/splunk';
 
 /**
  * Append the prefix to the name of each property and drop undefined values
@@ -59,6 +62,20 @@ function resolvePackageJson(): { name: string; version: string } | undefined {
   }
 }
 
+function defaultBackend(): BackendConfiguration {
+  switch (process.env.APPMAP_TELEMETRY_BACKEND) {
+    case 'application-insights':
+    case 'splunk':
+      return {
+        type: process.env.APPMAP_TELEMETRY_BACKEND
+      };
+  }
+  // Default to application insights if no backend is specified
+  // or if the specified backend is not recognized.
+  // This is to maintain backward compatibility.
+  return { type: 'application-insights' };
+}
+
 function buildDefaultConfiguration(
   base: Partial<TelemetryConfiguration> = {}
 ): TelemetryConfiguration {
@@ -75,9 +92,7 @@ function buildDefaultConfiguration(
   return {
     product,
     propPrefix,
-    backend: {
-      type: 'application-insights',
-    },
+    backend: defaultBackend(),
     ...base,
   };
 }
@@ -148,6 +163,9 @@ export class TelemetryClient implements ITelemetryClient {
         break;
       case 'custom':
         this.backend = this.telemetryConfig.backend;
+        break;
+      case 'splunk':
+        this.backend = new SplunkBackend(this.telemetryConfig.backend);
         break;
     }
 
