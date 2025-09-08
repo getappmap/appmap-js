@@ -14,6 +14,7 @@ import {
 } from './types';
 import path from 'path';
 import { ApplicationInsightsBackend } from './backends/application-insights';
+import { SplunkBackend } from './backends/splunk';
 
 /**
  * Append the prefix to the name of each property and drop undefined values
@@ -126,6 +127,9 @@ export class TelemetryClient implements ITelemetryClient {
         break;
       case 'custom':
         this.backend = this.telemetryConfig.backend;
+        break;
+      case 'splunk':
+        this.backend = new SplunkBackend(this.telemetryConfig.backend);
         break;
     }
 

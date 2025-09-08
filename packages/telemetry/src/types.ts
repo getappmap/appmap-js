@@ -39,6 +39,12 @@ export interface TelemetryConfiguration {
   backend: BackendConfiguration;
 }
 
+export interface SplunkBackendConfiguration extends BaseBackendConfiguration {
+  type: 'splunk';
+  token: string;
+  url: string;
+}
+
 export interface ApplicationInsightsBackendConfiguration extends BaseBackendConfiguration {
   type: 'application-insights';
   instrumentationKey?: string;
@@ -53,4 +59,5 @@ export interface CustomBackendConfiguration extends BaseBackendConfiguration, Te
 // Add additional backend configurations here as needed.
 export type BackendConfiguration =
   | CustomBackendConfiguration
-  | ApplicationInsightsBackendConfiguration;
+  | ApplicationInsightsBackendConfiguration
+  | SplunkBackendConfiguration;
