@@ -3,7 +3,9 @@ import * as os from 'os';
 import { getMachineId } from './identity';
 import { Session } from './session';
 import { sync as readPackageUpSync } from 'read-pkg-up';
-import {
+
+import type {
+  BackendConfiguration,
   FlushCallback,
   ProductConfiguration,
   TelemetryBackend,
@@ -60,6 +62,20 @@ function resolvePackageJson(): { name: string; version: string } | undefined {
   }
 }
 
+function defaultBackend(): BackendConfiguration {
+  switch (process.env.APPMAP_TELEMETRY_BACKEND) {
+    case 'application-insights':
+    case 'splunk':
+      return {
+        type: process.env.APPMAP_TELEMETRY_BACKEND
+      };
+  }
+  // Default to application insights if no backend is specified
+  // or if the specified backend is not recognized.
+  // This is to maintain backward compatibility.
+  return { type: 'application-insights' };
+}
+
 function buildDefaultConfiguration(
   base: Partial<TelemetryConfiguration> = {}
 ): TelemetryConfiguration {
@@ -76,9 +92,7 @@ function buildDefaultConfiguration(
   return {
     product,
     propPrefix,
-    backend: {
-      type: 'application-insights',
-    },
+    backend: defaultBackend(),
     ...base,
   };
 }
