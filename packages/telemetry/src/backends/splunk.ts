@@ -1,6 +1,11 @@
 import { Logger, type Config } from 'splunk-logging';
 
-import type { SplunkBackendConfiguration, TelemetryBackend, TelemetryData, FlushCallback } from '../types';
+import type {
+  SplunkBackendConfiguration,
+  TelemetryBackend,
+  TelemetryData,
+  FlushCallback,
+} from '../types';
 
 export class SplunkBackend implements TelemetryBackend {
   private readonly logger: Logger;
@@ -14,7 +19,10 @@ export class SplunkBackend implements TelemetryBackend {
   }
 
   flush(callback?: FlushCallback): void {
-    if (this.logger.serializedContextQueue.length > 0) {
+    if (
+      this.logger.serializedContextQueue &&
+      (this.logger.serializedContextQueue.length || 0) > 0
+    ) {
       // this errors if there is nothing to flush
       this.logger.flush(callback);
     } else {
@@ -25,8 +33,18 @@ export class SplunkBackend implements TelemetryBackend {
 
 function makeConfig(config: Partial<SplunkBackendConfiguration>): Config {
   return {
-    token: config.token ?? process.env.SPLUNK_TOKEN ?? (() => { throw new Error('SPLUNK_TOKEN is required') })(),
-    url: config.url ?? process.env.SPLUNK_URL ?? (() => { throw new Error('SPLUNK_URL is required') })(),
-    ...config
+    token:
+      config.token ??
+      process.env.SPLUNK_TOKEN ??
+      (() => {
+        throw new Error('SPLUNK_TOKEN is required');
+      })(),
+    url:
+      config.url ??
+      process.env.SPLUNK_URL ??
+      (() => {
+        throw new Error('SPLUNK_URL is required');
+      })(),
+    ...config,
   };
 }
