@@ -11,7 +11,9 @@ export class SplunkBackend implements TelemetryBackend {
   private readonly logger: Logger;
 
   constructor(config: Partial<SplunkBackendConfiguration> = {}) {
-    this.logger = new Logger(makeConfig(config));
+    const fullConfig = makeConfig(config);
+    this.logger = new Logger(fullConfig);
+    config.url = fullConfig.url; // expose url for debugging
   }
 
   sendEvent(event: TelemetryData): void {
