@@ -82,14 +82,36 @@ function buildDefaultConfiguration(
   };
 }
 
+/** Interpret a boolean as coming from an environment variable.
+ * If the value is undefined, return the defaultValue.
+ * If the value is '1', 'true', or 'yes' (case insensitive), return true.
+ * If the value is '0', 'false', or 'no' (case insensitive), return false.
+ * Otherwise, return the defaultValue.
+ */
+function stringToBool(value: string | undefined, defaultValue = false): boolean {
+  if (value === undefined) return defaultValue;
+  switch (value.toLowerCase()) {
+    case '1':
+    case 'true':
+    case 'yes':
+      return true;
+    case '0':
+    case 'false':
+    case 'no':
+      return false;
+    default:
+      return defaultValue;
+  }
+}
+
 export class TelemetryClient implements ITelemetryClient {
   private telemetryConfig?: TelemetryConfiguration;
   private backend?: TelemetryBackend;
   private userConfig?: Conf;
-  private debug = process.env.APPMAP_TELEMETRY_DEBUG !== undefined;
+  public debug = stringToBool(process.env.APPMAP_TELEMETRY_DEBUG);
   private session?: Session;
 
-  public enabled = process.env.APPMAP_TELEMETRY_DISABLED === undefined;
+  public enabled = !stringToBool(process.env.APPMAP_TELEMETRY_DISABLED);
   public readonly machineId = getMachineId();
   public get sessionId(): string {
     if (!this.session) {
@@ -130,7 +152,7 @@ export class TelemetryClient implements ITelemetryClient {
     }
 
     if (this.debug) {
-      console.log('Telemetry configuration:', this.telemetryConfig);
+      console.warn('Telemetry configuration:', this.telemetryConfig);
     }
   }
 
@@ -172,7 +194,7 @@ export class TelemetryClient implements ITelemetryClient {
       };
 
       if (this.debug) {
-        console.log(JSON.stringify(event, null, 2));
+        console.warn(JSON.stringify(event, null, 2));
       }
 
       if (this.enabled) {
@@ -193,20 +215,11 @@ export class TelemetryClient implements ITelemetryClient {
     }
   }
 
-  flush(callback: FlushCallback): void {
+  flush(callback?: FlushCallback): void {
     if (this.enabled) {
-      // Telemetry.client.flush is broken:
-      // https://github.com/microsoft/ApplicationInsights-node.js/issues/871 .
-      // As a result, we can fail to send telemetry data when exiting.
-      //
-      // If we got passed a callback, flush the data and wait for a second
-      // before calling it.
-      if (callback) {
-        this.backend?.flush(callback);
-        setTimeout(callback, 1000);
-      }
+      this.backend?.flush(callback);
     } else {
-      callback();
+      if (callback) callback();
     }
   }
 }
