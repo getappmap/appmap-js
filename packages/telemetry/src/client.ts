@@ -123,7 +123,7 @@ export class TelemetryClient implements ITelemetryClient {
   private telemetryConfig?: TelemetryConfiguration;
   private backend?: TelemetryBackend;
   private userConfig?: Conf;
-  private debug = stringToBool(process.env.APPMAP_TELEMETRY_DEBUG);
+  public debug = stringToBool(process.env.APPMAP_TELEMETRY_DEBUG);
   private session?: Session;
 
   public enabled = !stringToBool(process.env.APPMAP_TELEMETRY_DISABLED);
@@ -233,20 +233,11 @@ export class TelemetryClient implements ITelemetryClient {
     }
   }
 
-  flush(callback: FlushCallback): void {
+  flush(callback?: FlushCallback): void {
     if (this.enabled) {
-      // Telemetry.client.flush is broken:
-      // https://github.com/microsoft/ApplicationInsights-node.js/issues/871 .
-      // As a result, we can fail to send telemetry data when exiting.
-      //
-      // If we got passed a callback, flush the data and wait for a second
-      // before calling it.
-      if (callback) {
-        this.backend?.flush(callback);
-        setTimeout(callback, 1000);
-      }
+      this.backend?.flush(callback);
     } else {
-      callback();
+      if (callback) callback();
     }
   }
 }
