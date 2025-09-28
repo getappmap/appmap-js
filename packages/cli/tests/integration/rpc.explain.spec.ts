@@ -1,4 +1,4 @@
-import assert from 'assert';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { ExplainRpc } from '@appland/rpc';
 import {
   ContextV2,
@@ -9,7 +9,6 @@ import {
   Navie,
   TestInvocation,
 } from '@appland/navie';
-import { AI, AIClient, AICallbacks, AIInputPromptOptions, AIUserInput } from '@appland/client';
 
 import { waitFor } from './waitFor';
 import { DEFAULT_WORKING_DIR, default as RPCTest, SingleDirectoryRPCTest } from './RPCTest';
@@ -24,8 +23,6 @@ jest.mock('@appland/navie');
 if (process.env.VERBOSE === 'true') verbose(true);
 
 describe('RPC', () => {
-  const enrollmentDate = new Date();
-
   describe('explain', () => {
     let navieProvider: INavieProvider;
     let rpcTest: RPCTest;
@@ -112,8 +109,25 @@ describe('RPC', () => {
         const statusResult = await queryStatus();
         expect(statusResult.explanation).toEqual([answer]);
         expect(Telemetry.sendEvent).toBeCalledWith({
-          name: 'navie-local',
-          properties: { modelName: 'test-model' },
+          name: 'navie:start-conversation',
+          properties: expect.objectContaining({
+            'appmap.navie.thread_id': explainResponse.threadId,
+          }),
+          metrics: expect.objectContaining({
+            directoryCount: 1,
+          }),
+        });
+        expect(Telemetry.sendEvent).toBeCalledWith({
+          name: 'navie:response',
+          properties: expect.objectContaining({
+            'appmap.navie.thread_id': explainResponse.threadId,
+            'appmap.navie.model.id': 'test-model',
+          }),
+          metrics: expect.objectContaining({
+            'appmap.navie.question_length': 28,
+            'appmap.navie.completion_length': 44,
+            'appmap.navie.completion_end_ms': expect.any(Number),
+          }),
         });
       });
     });

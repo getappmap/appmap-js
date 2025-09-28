@@ -1,11 +1,7 @@
 import makeDebug from 'debug';
 
 import {
-  AI,
-  ConversationThread,
-  ModelParameters,
-  ProjectDirectory,
-  ProjectParameters,
+  type ConversationThread,
 } from '@appland/client';
 import { ContextV2, Help, ProjectInfo, TestInvocation, UserContext } from '@appland/navie';
 import { ExplainRpc } from '@appland/rpc';
@@ -14,15 +10,13 @@ import EventEmitter from 'events';
 import { basename } from 'path';
 
 import { LRUCache } from 'lru-cache';
-import detectAIEnvVar from '../../cmds/index/aiEnvVar';
 import collectHelp from '../../cmds/navie/help';
 import collectProjectInfos from '../../cmds/navie/projectInfo';
+import createConversationThread from '../../lib/createConversationThread';
 import configuration, { AppMapDirectory } from '../configuration';
-import { getLLMConfiguration } from '../llmConfiguration';
 import { RpcError, RpcHandler } from '../rpc';
 import collectContext, { buildContextRequest } from './collect-context';
 import INavie, { INavieProvider } from './navie/inavie';
-import reportFetchError from './navie/report-fetch-error';
 import handleReview from './review';
 import { normalizePath } from './location';
 import invokeTests from '../../cmds/navie/invokeTests';
@@ -94,20 +88,7 @@ export class Explain extends EventEmitter {
       this.emit('error', err);
     });
 
-    if (!this.status.threadId) {
-      const thread = await reportFetchError('enrollConversationThread', () =>
-        this.enrollConversationThread(navie)
-      );
-      if (thread) {
-        this.conversationThread = thread;
-        this.status.threadId = thread.id;
-        if (!thread.permissions.useNavieAIProxy) {
-          warn(
-            `Use of Navie AI proxy is forbidden by your organization policy.\nYou can ignore this message if you're using your own AI API key or connecting to your own model.`
-          );
-        }
-      }
-    }
+    this.status.threadId ??= await createConversationThread(this.codeEditor);
 
     await navie.ask(this.status.threadId, this.question, this.codeSelection, this.prompt);
   }
@@ -197,40 +178,6 @@ export class Explain extends EventEmitter {
     data: TestInvocation.TestInvocationRequest
   ): Promise<TestInvocation.TestInvocationResponse> {
     return invokeTests(getInvocationStrategy(), data);
-  }
-
-  async enrollConversationThread(navie: INavie): Promise<ConversationThread | undefined> {
-    const modelParameters = {
-      ...getLLMConfiguration(),
-      provider: navie.providerName,
-    } as ModelParameters;
-    const aiKeyName = detectAIEnvVar();
-    if (aiKeyName) modelParameters.aiKeyName = aiKeyName;
-
-    const configurationDirectories = await configuration().appmapDirectories();
-    const directories = configurationDirectories.map((dir) => {
-      const result: ProjectDirectory = {
-        hasAppMapConfig: dir.appmapConfig !== undefined,
-      };
-      if (dir.appmapConfig?.language) {
-        result.language = dir.appmapConfig.language;
-      }
-      return result;
-    });
-
-    const projectParameters: ProjectParameters = {
-      directoryCount: configurationDirectories.length,
-      directories,
-    };
-    if (this.codeEditor) projectParameters.codeEditor = this.codeEditor;
-
-    try {
-      return await AI.createConversationThread({ modelParameters, projectParameters });
-    } catch (err) {
-      warn(`Failed to create conversation thread`);
-      warn(err);
-      return undefined;
-    }
   }
 }
 
