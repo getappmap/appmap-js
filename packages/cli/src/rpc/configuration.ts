@@ -78,7 +78,6 @@ export function setConfigurationV2(): RpcHandler<
   return {
     name: ConfigurationRpc.V2.Set.Method,
     handler: async (params) => {
-      warn(`Setting RPC configuration: ${JSON.stringify(params)}`);
       config = await Configuration.buildFromRpcParams(params);
       return undefined;
     },
