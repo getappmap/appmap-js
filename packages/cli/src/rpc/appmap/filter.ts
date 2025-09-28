@@ -11,6 +11,10 @@ import { isAbsolute, join } from 'path';
 export async function appmapFilterHandler(
   args: AppMapRpc.FilterOptions
 ): Promise<AppMapRpc.FilterResponse> {
+  warn(
+    `RPC handler ${AppMapRpc.FilterFunctionName} is deprecated, use ${AppMapRpc.DataFunctionName} instead`
+  );
+
   let { appmap: appmapId } = args;
   const { filter: filterArg } = args;
 
@@ -35,8 +39,5 @@ export default function appmapFilter(): RpcHandler<
   AppMapRpc.FilterOptions,
   AppMapRpc.FilterResponse
 > {
-  warn(
-    `RPC handler ${AppMapRpc.FilterFunctionName} is deprecated, use ${AppMapRpc.DataFunctionName} instead`
-  );
   return { name: AppMapRpc.FilterFunctionName, handler: appmapFilterHandler };
 }
