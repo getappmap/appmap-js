@@ -12,18 +12,9 @@ import {
   UserContext,
   InteractionHistory,
 } from '@appland/navie';
+import { Telemetry } from '@appland/telemetry';
 
 import INavie from './inavie';
-import { Telemetry } from '@appland/telemetry';
-import {
-  AI,
-  CreateAgentMessage,
-  CreateUserMessage,
-  UpdateAgentMessage,
-  UpdateUserMessage,
-} from '@appland/client';
-import reportFetchError from './report-fetch-error';
-import assert from 'assert';
 import Trajectory from './trajectory';
 import ModelRegistry from '../../navie/models/registry';
 import { verbose } from '../../../utils';
@@ -112,36 +103,9 @@ export default class LocalNavie extends EventEmitter implements INavie {
       }
     }
 
-    let userMessageId: string;
-    {
-      const userMessage: CreateUserMessage = {
-        questionLength: question.length,
-      };
-      if (codeSelection) userMessage.codeSelectionLength = codeSelection.length;
+    const userMessageId = randomUUID();
+    const agentMessageId = randomUUID();
 
-      userMessageId =
-        (
-          await reportFetchError(
-            'createUserMessage',
-            () => (assert(threadId), AI.createUserMessage(threadId, userMessage))
-          )
-        )?.id ?? randomUUID();
-    }
-
-    let agentMessageId: string;
-    {
-      const agentMessage: CreateAgentMessage = {};
-
-      agentMessageId =
-        (
-          await reportFetchError(
-            'createAgentMessage',
-            () => (assert(threadId), AI.createAgentMessage(threadId, agentMessage))
-          )
-        )?.id ?? randomUUID();
-    }
-
-    this.#reportConfigTelemetry();
     log(`[local-navie] Processing question ${userMessageId} in thread ${threadId}`);
 
     try {
@@ -245,35 +209,20 @@ export default class LocalNavie extends EventEmitter implements INavie {
         properties: {
           [properties.NavieModelId]: selectedModel?.id ?? this.navieOptions.modelName,
           [properties.NavieModelProvider]: selectedModel?.provider,
+          [properties.NavieAgent]: agentName,
+          [properties.NavieThreadId]: threadId,
           ...debugProperties,
         },
         metrics: {
           [metrics.NavieCompletionEndMs]: duration,
           [metrics.NavieCompletionLength]: response.join('').length,
+          [metrics.NavieQuestionLength]: question.length,
+          [metrics.NavieCodeSelectionLength]: codeSelection?.length,
           ...debugMetrics,
         },
       });
 
       warn(`[local-navie] Completed question ${userMessageId} in ${duration}ms`);
-
-      {
-        const userMessage: UpdateUserMessage = {
-          agentName,
-          classification,
-        };
-        await reportFetchError('updateUserMessage', () =>
-          AI.updateUserMessage(userMessageId, userMessage)
-        );
-      }
-      {
-        const agentMessage: UpdateAgentMessage = {
-          responseLength: response.join('').length,
-          responseTime: duration,
-        };
-        await reportFetchError('updateAgentMessage', () =>
-          AI.updateAgentMessage(agentMessageId, agentMessage)
-        );
-      }
 
       this.emit('complete');
     } catch (e) {
@@ -282,20 +231,6 @@ export default class LocalNavie extends EventEmitter implements INavie {
     } finally {
       this.activeNavie = undefined;
     }
-  }
-
-  #skipTelemetry = !Telemetry.enabled;
-
-  #reportConfigTelemetry() {
-    if (this.#skipTelemetry) return;
-    Telemetry.sendEvent({
-      name: 'navie-local',
-      properties: {
-        modelName: this.navieOptions.modelName,
-        azureVersion: process.env.AZURE_OPENAI_API_VERSION,
-      },
-    });
-    this.#skipTelemetry = true;
   }
 
   terminate() {

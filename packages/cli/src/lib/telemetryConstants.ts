@@ -33,6 +33,12 @@ const telemetryConstants = {
 
     // The length of the final response, in characters
     NavieCompletionLength: 'appmap.navie.completion_length',
+
+    // The length of the user's question, in characters
+    NavieQuestionLength: 'appmap.navie.question_length',
+
+    // The length of the user's code selection, in characters
+    NavieCodeSelectionLength: 'appmap.navie.code_selection_length',
   },
   properties: {
     // Indicates a specific type or location of error
@@ -47,6 +53,9 @@ const telemetryConstants = {
     // The name of the Navie model used for the response
     NavieModelId: 'appmap.navie.model.id',
 
+    // The base URL for the Navie model used for the response
+    NavieModelBaseUrl: 'appmap.navie.model.base_url',
+
     // The provider of the Navie model used for the response (e.g., OpenAI, Anthropic)
     NavieModelProvider: 'appmap.navie.model.provider',
 
@@ -55,6 +64,15 @@ const telemetryConstants = {
 
     // The classification generated for a given inquiry, to be mapped to weight
     NavieClassification: (label: string) => `appmap.navie.classification.${label}`,
+
+    // The conversation or thread ID for the Navie interaction
+    NavieThreadId: 'appmap.navie.thread_id',
+
+    // The AI key environment variable name used for the response
+    NavieAIKeyName: 'appmap.navie.ai_key_name',
+
+    // The code editor in use, if known
+    CommonCodeEditor: 'common.code_editor',
   },
 } as const;
 

@@ -1,6 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { container } from 'tsyringe';
+
+import { Telemetry } from '@appland/telemetry';
+
+import { events, properties, metrics } from '../../../../src/lib/telemetryConstants';
 import LocalNavie from '../../../../src/rpc/explain/navie/navie-local';
 import LegacyHistory from '../../../../src/rpc/navie/legacy/history';
-import { container } from 'tsyringe';
 import ThreadService from '../../../../src/rpc/navie/services/threadService';
 
 jest.mock('@appland/navie', () => ({
@@ -10,12 +15,8 @@ jest.mock('@appland/navie', () => ({
     execute: jest.fn().mockImplementation(function* () {}),
   }),
 }));
-jest.mock('@appland/client', () => ({
-  AI: {
-    createUserMessage: jest.fn().mockResolvedValue({ id: 'user-message' }),
-    createAgentMessage: jest.fn().mockResolvedValue({ id: 'assistant-message' }),
-  },
-}));
+jest.mock('@appland/telemetry');
+
 
 describe('LocalNavie', () => {
   let navie: LocalNavie;
@@ -54,6 +55,27 @@ describe('LocalNavie', () => {
       expect(() => navie.setOption('unsupported', 'value')).toThrowError(
         "LocalNavie does not support option 'unsupported'"
       );
+    });
+  });
+
+  describe('telemetry', () => {
+    it('sends telemetry on ask', async () => {
+      await navie.ask('threadId', 'question');
+      expect(Telemetry.sendEvent).toHaveBeenCalledWith({
+        name: events.NavieResponse,
+        properties: {
+          [properties.NavieModelId]: 'gpt-4o',
+          [properties.NavieModelProvider]: undefined,
+          [properties.NavieAgent]: undefined,
+          [properties.NavieThreadId]: 'threadId',
+        },
+        metrics: {
+          [metrics.NavieCompletionEndMs]: expect.any(Number),
+          [metrics.NavieCompletionLength]: 0,
+          [metrics.NavieQuestionLength]: 8,
+          [metrics.NavieCodeSelectionLength]: undefined,
+        },
+      });
     });
   });
 

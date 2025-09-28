@@ -9,7 +9,7 @@ const azureVariables = [
 const azureBasePath = 'AZURE_OPENAI_BASE_PATH';
 const azureInstanceName = 'AZURE_OPENAI_INSTANCE_NAME';
 
-type LLMConfiguration = {
+export type LLMConfiguration = {
   baseUrl?: string;
   model?: string;
   provider: string;
