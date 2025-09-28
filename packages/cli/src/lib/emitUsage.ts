@@ -1,12 +1,18 @@
 import { Metadata } from '@appland/models';
-import { Usage, type UsageUpdateDto } from '@appland/client';
 import { warn } from 'node:console';
 import { existsSync, mkdirSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { Git } from '@appland/telemetry';
+import { Git, Telemetry } from '@appland/telemetry';
 import sanitizeURL from './repositoryInfo';
+
+export type UsageUpdateDto = {
+  events?: number;
+  appmaps?: number;
+  metadata?: Metadata;
+  ci: boolean;
+};
 
 async function buildMetadata(appmapDir: string, metadata: Metadata): Promise<Metadata> {
   const repository = await Git.repository(appmapDir);
@@ -97,7 +103,42 @@ export async function sendUsageData(
   appmapDir: string
 ): Promise<UsageDataResponse> {
   try {
-    await Usage.update(usageData);
+    const { events, appmaps, metadata, ci } = usageData;
+    const properties: Record<string, string | undefined> = {
+      ci: String(ci),
+    };
+    const metrics = {
+      events,
+      appmaps,
+    };
+
+    if (metadata) {
+      properties.name = metadata.name;
+      properties.app = metadata.app;
+      if (metadata.language) properties.language = metadata.language.name;
+      if (metadata.client) {
+        properties.client_name = metadata.client.name;
+        properties.client_url = metadata.client.url;
+        properties.client_version = metadata.client.version;
+      }
+      if (metadata.frameworks)
+        properties.frameworks = JSON.stringify(metadata.frameworks.map((f) => f.name).sort());
+      if (metadata.recorder) {
+        properties.recorder_name = metadata.recorder.name;
+        properties.recorder_type = metadata.recorder.type;
+      }
+      if (metadata.git) {
+        properties.git_repository = metadata.git.repository;
+        properties.git_branch = metadata.git.branch;
+        properties.git_commit = metadata.git.commit;
+      }
+    }
+
+    Telemetry.sendEvent({
+      name: 'appmap:processed',
+      properties,
+      metrics,
+    });
     return { sent: true };
   } catch (err) {
     warn(`Failed to send usage data: ${String(err)}`);
