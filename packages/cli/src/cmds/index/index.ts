@@ -23,8 +23,6 @@ import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
 import LocalNavie from '../../rpc/explain/navie/navie-local';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 import { update } from '../../rpc/file/update';
-import { AI_KEY_ENV_VARS } from './aiEnvVar';
-import NopNavie from '../../rpc/explain/navie/navie-nop';
 import NavieService from '../../rpc/navie/services/navieService';
 import { ThreadIndexService } from '../../rpc/navie/services/threadIndexService';
 
@@ -57,6 +55,7 @@ export const builder = (args: yargs.Argv) => {
     describe: 'navie provider to use',
     type: 'string',
     choices: ['local', 'remote'],
+    deprecated: "only local provider is supported",
   });
   args.option('log-navie', {
     describe: 'Log Navie events to stderr',
@@ -68,6 +67,8 @@ export const builder = (args: yargs.Argv) => {
 };
 
 export const handler = async (argv) => {
+  if (argv.navieProvider) warn(`--navie-provider option is no longer supported`);
+
   verbose(argv.verbose);
   handleWorkingDirectory(argv.directory);
   const appmapDir = await locateAppMapDir(argv.appmapDir);
@@ -85,31 +86,6 @@ export const handler = async (argv) => {
     await cmd.execute();
 
     if (port !== undefined) {
-      const useLocalNavie = () => {
-        if (argv.navieProvider === 'local') {
-          log(`Using local Navie provider due to explicit --navie-provider=local option`);
-          return true;
-        }
-
-        if (argv.navieProvider === 'remote') {
-          log(`Using remote Navie provider due to explicit --navie-provider=remote option`);
-          return false;
-        }
-
-        const aiEnvVar = Object.keys(process.env).find((key) => AI_KEY_ENV_VARS.includes(key));
-        if (aiEnvVar) {
-          log(`Using local Navie provider due to presence of environment variable ${aiEnvVar}`);
-          return true;
-        }
-
-        log(
-          `--navie-provider option not provided, and none of ${AI_KEY_ENV_VARS.join(
-            ' '
-          )} are available. Using remote Navie provider.`
-        );
-        return false;
-      };
-
       const buildLocalNavie = (
         contextProvider: ContextV2.ContextProvider,
         projectInfoProvider: ProjectInfo.ProjectInfoProvider,
@@ -139,9 +115,8 @@ export const handler = async (argv) => {
         navie.on('event', logEvent);
         return navie;
       };
-      const buildRemoteNavie = () => new NopNavie();
 
-      const navieProvider = useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
+      const navieProvider = buildLocalNavie;
       await ThreadIndexService.useDefault();
       NavieService.bindNavieProvider(navieProvider);
 
