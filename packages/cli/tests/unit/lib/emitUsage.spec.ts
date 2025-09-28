@@ -5,10 +5,10 @@ import { promisify } from 'node:util';
 import { readFile as readFileCb, rm as rmCb } from 'graceful-fs';
 import { chdir } from 'node:process';
 
-import { Usage, UsageUpdateDto } from '@appland/client';
+import writeUsageData, { collectUsageData, sendUsageData, UsageUpdateDto } from '../../../src/lib/emitUsage';
+import { Git, Telemetry } from '@appland/telemetry';
 
-import writeUsageData, { collectUsageData, sendUsageData } from '../../../src/lib/emitUsage';
-import { Git } from '@appland/telemetry';
+jest.mock('@appland/telemetry');
 
 // Using graceful-fs should eliminate any risk of EBUSY errors on Windows.
 const readFile = promisify(readFileCb);
@@ -105,16 +105,22 @@ describe('emitUsage', () => {
     });
 
     it('the usage data can be sent successfully', async () => {
-      jest.spyOn(Usage, 'update').mockResolvedValue(undefined);
+      const sendEventSpy = jest.spyOn(Telemetry, 'sendEvent').mockImplementation(() => {});
 
       const response = await sendUsageData(usageData, appmapDir);
       expect(response.sent).toBe(true);
       expect(response.filePath).toBeUndefined();
+      expect(sendEventSpy).toHaveBeenCalledTimes(1);
+      expect(sendEventSpy).toHaveBeenCalledWith({
+        name: 'appmap:processed',
+        properties: expect.any(Object),
+        metrics: expect.any(Object),
+      });
     });
 
     describe('when the usage data is not sent successfully', () => {
       it('falls back to writing data to file on failure', async () => {
-        jest.spyOn(Usage, 'update').mockImplementationOnce(() => {
+        jest.spyOn(Telemetry, 'sendEvent').mockImplementationOnce(() => {
           throw new Error('Mock API failure');
         });
 
