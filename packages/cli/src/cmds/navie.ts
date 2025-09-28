@@ -16,8 +16,6 @@ import observePerformance from '../lib/observePerformance';
 import { explainHandler } from '../rpc/explain/explain';
 import INavie, { INavieProvider } from '../rpc/explain/navie/inavie';
 import LocalNavie from '../rpc/explain/navie/navie-local';
-import type RemoteNavie from '../rpc/explain/navie/navie-remote';
-import detectAIEnvVar, { AI_KEY_ENV_VARS } from './index/aiEnvVar';
 import detectCodeEditor from '../lib/detectCodeEditor';
 import { verbose } from '../utils';
 import Trajectory from '../rpc/explain/navie/trajectory';
@@ -61,6 +59,7 @@ export function commonNavieArgsBuilder<T>(args: yargs.Argv<T>): yargs.Argv<T & N
       describe: 'navie provider to use',
       type: 'string',
       choices: ['local', 'remote'],
+      deprecated: "only local provider is supported",
     })
     .option('log-navie', {
       describe: 'Log Navie events to stderr',
@@ -113,32 +112,7 @@ export function buildNavieProvider(argv: ExplainArgs) {
   let agentMode: Agents | undefined;
   if (agentModeStr) agentMode = agentModeStr as Agents;
 
-  const useLocalNavie = () => {
-    if (argv.navieProvider === 'local') {
-      warn(`Using local Navie provider due to explicit --navie-provider=local option`);
-      return true;
-    }
-
-    if (argv.navieProvider === 'remote') {
-      warn(`Using remote Navie provider due to explicit --navie-provider=remote option`);
-      return false;
-    }
-
-    const aiEnvVar = detectAIEnvVar();
-    if (aiEnvVar) {
-      warn(`Using local Navie provider due to presence of environment variable ${aiEnvVar}`);
-      return true;
-    }
-
-    warn(
-      `--navie-provider option not provided, and none of ${AI_KEY_ENV_VARS.join(
-        ' '
-      )} are available. Using remote Navie provider.`
-    );
-    return false;
-  };
-
-  const applyAIOptions = (navie: LocalNavie | RemoteNavie | NopNavie) => {
+  const applyAIOptions = (navie: LocalNavie | NopNavie) => {
     if (aiOptions) {
       for (const option of aiOptions) {
         const [key, value] = option.split('=');
@@ -186,19 +160,7 @@ export function buildNavieProvider(argv: ExplainArgs) {
     return navie;
   };
 
-  const buildRemoteNavie = () => {
-    loadConfiguration(true);
-    const navie = new NopNavie();
-    applyAIOptions(navie);
-
-    if (argv.threadId) {
-      warn(`Ignoring --thread-id option for remote Navie provider`);
-    }
-
-    return navie;
-  };
-
-  return useLocalNavie() ? buildLocalNavie : buildRemoteNavie;
+  return buildLocalNavie;
 }
 
 export const command = 'navie [question..]';
@@ -233,6 +195,8 @@ type HandlerArguments = yargs.ArgumentsCamelCase<
 >;
 
 export async function handler(argv: HandlerArguments) {
+  if (argv.navieProvider) warn(`--navie-provider option is no longer supported`);
+
   observePerformance();
   verbose(argv.verbose);
   await configureRpcDirectories(argv.directory);
