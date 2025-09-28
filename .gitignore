@@ -26,6 +26,8 @@ settings.json
 *.eslintcache
 *.log
 
+.env
+
 
 # Yarn files
 .yarn/*
