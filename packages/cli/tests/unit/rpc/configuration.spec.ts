@@ -37,6 +37,7 @@ describe('v2.configuration.get', () => {
           model: 'my-deployment',
           projectDirectories: [],
           appmapConfigFiles: [],
+          provider: 'openai',
         });
       });
     });
@@ -55,6 +56,7 @@ describe('v2.configuration.get', () => {
           model: 'my-deployment',
           projectDirectories: [],
           appmapConfigFiles: [],
+          provider: 'openai',
         });
       });
     });
@@ -72,6 +74,7 @@ describe('v2.configuration.get', () => {
         model: undefined,
         projectDirectories: [],
         appmapConfigFiles: [],
+        provider: 'openai',
       });
     });
   });
@@ -89,6 +92,7 @@ describe('v2.configuration.get', () => {
         model: undefined,
         projectDirectories: [],
         appmapConfigFiles: [],
+        provider: 'openai',
       });
     });
   });
@@ -102,6 +106,7 @@ describe('v2.configuration.get', () => {
         model: undefined,
         projectDirectories: [],
         appmapConfigFiles: [],
+        provider: 'openai',
       });
     });
   });
