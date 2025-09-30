@@ -235,7 +235,7 @@ export default class AnthropicCompletionService extends CompletionService {
       }
     }
 
-    warn(usage.toString());
+    if (usage.totalTokens > 0) warn(usage.toString());
     return usage;
   }
 }

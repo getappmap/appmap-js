@@ -183,7 +183,7 @@ export default class GoogleVertexAICompletionService extends CompletionService {
     }
 
     debug(`Completion finished with ${tokens.length} tokens`);
-    warn(usage.toString());
+    if (usage.totalTokens > 0) warn(usage.toString());
     return usage;
   }
 }
