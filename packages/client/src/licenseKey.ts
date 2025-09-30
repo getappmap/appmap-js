@@ -32,6 +32,10 @@ export default {
       if (verbose())
         console.log(`${commandDescription}: statusCode=${response.statusCode || '<none>'}`);
 
+      // drain the response to avoid hanging sockets
+      response.on('data', () => {});
+      response.on('end', () => {});
+
       if (!response.statusCode) {
         throw new Error('No status code was provided by the server');
       }
