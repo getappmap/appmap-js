@@ -55,9 +55,24 @@ export default function loadConfiguration(requireApiKey = true): Configuration {
   }
 
   configuration = { baseURL: settings.baseURL, apiURL: settings.apiURL, apiKey: settings.apiKey };
+  if (settings.apiKey) {
+    const username = usernameFromKey(settings.apiKey);
+    if (username) {
+      configuration.username = username;
+    }
+  }
   return configuration;
 }
 
 export function getConfiguration(): Configuration {
   return configuration;
+}
+
+/** Extract the username from the API key.
+ * The API key is of the form base64(username:random).
+ */
+function usernameFromKey(apiKey: string): string | undefined {
+  const decoded = Buffer.from(apiKey, 'base64').toString('utf-8');
+  const match = decoded.match(/^(.+?):/);
+  return match ? match[1] : undefined;
 }

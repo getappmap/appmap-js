@@ -1,11 +1,11 @@
 import readline from 'readline';
 import yargs from 'yargs';
 import chalk from 'chalk';
-import { loadConfiguration } from '@appland/client';
 import { ContextV2, Help, ProjectInfo, TestInvocation } from '@appland/navie';
 
 import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
 import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
+import checkLicense from '../../lib/checkLicense';
 import { configureRpcDirectories, handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { verbose } from '../../utils';
@@ -79,7 +79,7 @@ export const handler = async (argv) => {
   if (port && !watch) warn(`Note: --port option implies --watch`);
 
   if (runServer) {
-    loadConfiguration(false);
+    void checkLicense(false);
 
     log(`Running indexer in watch mode`);
     const cmd = new FingerprintWatchCommand(appmapDir);
