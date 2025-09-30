@@ -7,10 +7,10 @@ import { text } from 'node:stream/consumers';
 import chalk from 'chalk';
 import yargs from 'yargs';
 
-import { loadConfiguration } from '@appland/client';
 import { Agents, ContextV2, Help, ProjectInfo, TestInvocation } from '@appland/navie';
 import { InteractionEvent } from '@appland/navie/dist/interaction-history';
 
+import checkLicense from '../lib/checkLicense';
 import { configureRpcDirectories } from '../lib/handleWorkingDirectory';
 import observePerformance from '../lib/observePerformance';
 import { explainHandler } from '../rpc/explain/explain';
@@ -132,7 +132,6 @@ export function buildNavieProvider(argv: ExplainArgs) {
     helpProvider: Help.HelpProvider,
     testInvocationProvider: TestInvocation.TestInvocationProvider
   ) => {
-    loadConfiguration(false);
     const navie = new LocalNavie(contextProvider, projectInfoProvider, helpProvider, testInvocationProvider);
 
     if (argv.threadId) navie.setThreadId(argv.threadId);
@@ -197,6 +196,7 @@ type HandlerArguments = yargs.ArgumentsCamelCase<
 export async function handler(argv: HandlerArguments) {
   if (argv.navieProvider) warn(`--navie-provider option is no longer supported`);
 
+  void checkLicense();
   observePerformance();
   verbose(argv.verbose);
   await configureRpcDirectories(argv.directory);

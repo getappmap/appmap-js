@@ -2,8 +2,7 @@ import { warn } from 'node:console';
 
 import yargs from 'yargs';
 
-import { loadConfiguration } from '@appland/client';
-
+import checkLicense from '../../lib/checkLicense';
 import { verbose } from '../../utils';
 import { search } from '../../rpc/search/search';
 import appmapFilter from '../../rpc/appmap/filter';
@@ -129,7 +128,7 @@ export const handler = async (argv: HandlerArguments) => {
     if (codeEditor) warn(`Detected code editor: ${codeEditor}`);
   }
 
-  loadConfiguration(false);
+  void checkLicense();
   await configureRpcDirectories(argv.directory);
 
   const rpcServer = new RPCServer(argv.port, rpcMethods(navie, codeEditor));
