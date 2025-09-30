@@ -1,5 +1,7 @@
 import { NavieRpc } from '@appland/rpc';
 import { verbose } from '../../../utils';
+import { getLLMConfiguration } from '../../llmConfiguration';
+
 import { fetchAnthropicModels } from './providers/anthropic';
 import { fetchOllamaModels } from './providers/ollama';
 import { fetchOpenAIModels } from './providers/openai';
@@ -23,13 +25,27 @@ export default class ModelRegistry {
   private readonly notRecommendedModels = [/^o1-?.*$/, /^o3-?.*$/, /^claude-3[-.]7-sonnet-?.*$/];
   private clientModels = new Map<string, NavieRpc.V1.Models.ClientModel>();
   private apiModels: NavieRpc.V1.Models.Model[] = [];
-  private _selectedModel?: NavieRpc.V1.Models.Model;
+  private _selectedModel?: NavieRpc.V1.Models.ClientModel;
   private _selectedModelId?: string;
 
   static readonly instance = new ModelRegistry();
 
   private constructor() {
     // no-op
+  }
+
+  private defaultModel() {
+    // Initialize the model registry with the default configuration from the environment.
+    const defaultConfig = getLLMConfiguration();
+    if (defaultConfig.model) {
+      return {
+        id: defaultConfig.model,
+        provider: defaultConfig.provider,
+        name: defaultConfig.model,
+        baseUrl: defaultConfig.baseUrl,
+        createdAt: new Date().toISOString(),
+      };
+    }
   }
 
   select(modelId: string | undefined) {
@@ -62,8 +78,8 @@ export default class ModelRegistry {
     this._selectedModel = model;
   }
 
-  get selectedModel(): NavieRpc.V1.Models.Model | undefined {
-    return this._selectedModel;
+  get selectedModel(): NavieRpc.V1.Models.ClientModel | undefined {
+    return this._selectedModel ?? this.defaultModel();
   }
 
   add(model: NavieRpc.V1.Models.ClientModel) {

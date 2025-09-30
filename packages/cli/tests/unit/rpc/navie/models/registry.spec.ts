@@ -240,4 +240,12 @@ describe(ModelRegistry, () => {
       expect(modelRegistry.selectedModel?.id).toEqual('example');
     });
   });
+
+  it('uses the default model from the environment if none is selected', () => {
+    const originalEnv = process.env;
+    process.env = { ...originalEnv, APPMAP_NAVIE_MODEL: 'test-model', APPMAP_NAVIE_COMPLETION_BACKEND: 'ollama' };
+    const modelRegistry = ModelRegistry.instance;
+    expect(modelRegistry.selectedModel).toMatchObject({ id: 'test-model', provider: 'ollama' });
+    process.env = originalEnv;
+  });
 });

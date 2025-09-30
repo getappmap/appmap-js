@@ -12,6 +12,7 @@ const azureInstanceName = 'AZURE_OPENAI_INSTANCE_NAME';
 type LLMConfiguration = {
   baseUrl?: string;
   model?: string;
+  provider: string;
 };
 
 function openAIBaseURL(): string | undefined {
@@ -47,17 +48,33 @@ function openAIBaseURL(): string | undefined {
   return baseUrl;
 }
 
-const DEFAULT_BASE_URLS = {
-  anthropic: 'https://api.anthropic.com/v1/',
-  'vertex-ai': 'https://googleapis.com',
-  openai: undefined,
-} as const;
+function defaultBaseUrlForProvider(provider: string): string | undefined {
+  switch (provider) {
+    case 'azure':
+    case 'openai':
+      return openAIBaseURL();
+    case 'anthropic':
+      return 'https://api.anthropic.com/v1/';
+    case 'vertex-ai':
+      return 'https://googleapis.com';
+    case 'ollama':
+      return 'http://localhost:11434';
+    default:
+      return undefined;
+  }
+}
 
+/**
+ * Gets the default LLM configuration from the environment.
+ * This does not include any dynamic changes made by the user.
+ */
 export function getLLMConfiguration(): LLMConfiguration {
-  const baseUrl = (SELECTED_BACKEND && DEFAULT_BASE_URLS[SELECTED_BACKEND]) ?? openAIBaseURL();
+  const provider = process.env.APPMAP_NAVIE_COMPLETION_BACKEND ?? SELECTED_BACKEND ?? 'openai';
+  const baseUrl = defaultBaseUrlForProvider(provider);
 
   return {
     baseUrl,
     model: process.env.APPMAP_NAVIE_MODEL ?? process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME,
+    provider,
   };
 }
