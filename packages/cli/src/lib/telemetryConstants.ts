@@ -68,9 +68,6 @@ const telemetryConstants = {
     // The conversation or thread ID for the Navie interaction
     NavieThreadId: 'appmap.navie.thread_id',
 
-    // The AI key environment variable name used for the response
-    NavieAIKeyName: 'appmap.navie.ai_key_name',
-
     // The code editor in use, if known
     CommonCodeEditor: 'common.code_editor',
   },

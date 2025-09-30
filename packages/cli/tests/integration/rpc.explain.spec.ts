@@ -113,9 +113,6 @@ describe('RPC', () => {
           properties: expect.objectContaining({
             'appmap.navie.thread_id': explainResponse.threadId,
           }),
-          metrics: expect.objectContaining({
-            directoryCount: 1,
-          }),
         });
         expect(Telemetry.sendEvent).toBeCalledWith({
           name: 'navie:response',

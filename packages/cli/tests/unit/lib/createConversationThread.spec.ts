@@ -19,7 +19,7 @@ describe('createConversationThread', () => {
       jest.spyOn(Config, 'default').mockReturnValue({
         appmapDirectories: jest.fn().mockResolvedValue([]),
       } as unknown as Config.Configuration);
-      jest.spyOn(LLMConfiguration, 'getLLMConfiguration').mockReturnValue({});
+      jest.spyOn(LLMConfiguration, 'getLLMConfiguration').mockReturnValue({provider: 'openai'});
       jest.spyOn(AIEnvVar, 'default').mockReturnValue(undefined);
 
       await createConversationThread();
@@ -27,13 +27,9 @@ describe('createConversationThread', () => {
       expect(sendEvent).toHaveBeenCalledTimes(1);
       expect(sendEvent.mock.calls[0][0]).toMatchObject(
         {
-          "metrics": {
-            "directoryCount": 0,
-          },
           "name": "navie:start-conversation",
           "properties": {
             "common.code_editor": undefined,
-            "directories": "[]",
             "appmap.navie.thread_id": expect.any(String),
           },
         });
@@ -57,9 +53,8 @@ describe('createConversationThread', () => {
       jest.spyOn(LLMConfiguration, 'getLLMConfiguration').mockReturnValue({
         baseUrl: 'the-base-url',
         model: 'the-model',
+        provider: 'the-provider',
       });
-
-      jest.spyOn(AIEnvVar, 'default').mockReturnValue('THE_AI_KEY');
 
       await createConversationThread('vscode');
 
@@ -67,20 +62,12 @@ describe('createConversationThread', () => {
       expect(sendEvent.mock.calls[0][0]).toMatchObject({
         name: 'navie:start-conversation',
         properties: {
-          'appmap.navie.ai_key_name': 'THE_AI_KEY',
           'appmap.navie.model.base_url': 'the-base-url',
           'appmap.navie.model.id': 'the-model',
-          directories: JSON.stringify([
-            {
-              hasAppMapConfig: true,
-              language: 'java',
-            },
-          ]),
+          'appmap.navie.model.provider': 'the-provider',
+          languages: 'java',
           'common.code_editor': 'vscode',
           'appmap.navie.thread_id': expect.any(String),
-        },
-        metrics: {
-          directoryCount: 1,
         },
       });
     });
