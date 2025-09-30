@@ -453,7 +453,7 @@ export default class OpenAICompletionService extends CompletionService {
 
     this.trajectory.logReceivedMessage({ role: 'assistant', content: tokens.join('') });
 
-    warn(usage.toString());
+    if (usage.totalTokens > 0) warn(usage.toString());
     return usage;
   }
 
