@@ -1,6 +1,7 @@
 import * as http from 'node:http';
 import * as https from 'node:https';
 import { URL } from 'node:url';
+import * as fs from 'node:fs';
 
 import type {
   SplunkBackendConfiguration,
@@ -38,9 +39,30 @@ export class SplunkBackend implements TelemetryBackend {
     const isHttps = parsedUrl.protocol === 'https:';
 
     if (isHttps) {
-      this.httpAgent = new https.Agent({
+      const splunkCaCert = process.env.SPLUNK_CA_CERT;
+      let httpsAgentOptions: https.AgentOptions = {
         rejectUnauthorized: false, // Self-signed certs are common in Splunk
-      });
+      };
+
+      if (splunkCaCert) {
+        if (splunkCaCert === 'system') {
+          httpsAgentOptions = {
+            rejectUnauthorized: true,
+          };
+        } else if (splunkCaCert.startsWith('@')) {
+          const caPath = splunkCaCert.substring(1);
+          httpsAgentOptions = {
+            rejectUnauthorized: true,
+            ca: fs.readFileSync(caPath),
+          };
+        } else {
+          httpsAgentOptions = {
+            rejectUnauthorized: true,
+            ca: splunkCaCert,
+          };
+        }
+      }
+      this.httpAgent = new https.Agent(httpsAgentOptions);
     } else {
       this.httpAgent = new http.Agent();
     }

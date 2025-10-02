@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import * as https from 'https';
+import * as path from 'path';
 import { SplunkBackend } from '../../src/backends/splunk';
 import { TelemetryData } from '../../src/types';
 
@@ -159,5 +162,63 @@ describe('SplunkBackend', () => {
     expect(consoleWarnSpy).toHaveBeenCalledWith('SplunkBackend: Flush timed out after 5000ms');
     jest.useRealTimers();
     done();
+  });
+
+  describe('SPLUNK_CA_CERT handling', () => {
+    const caCert = '-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----';
+    const caPath = path.join(__dirname, 'test-ca.crt');
+
+    beforeEach(() => {
+      delete process.env.SPLUNK_CA_CERT;
+    });
+
+    afterAll(() => {
+      if (fs.existsSync(caPath)) {
+        fs.unlinkSync(caPath);
+      }
+    });
+
+    it('uses rejectUnauthorized: false when SPLUNK_CA_CERT is not set for https', () => {
+      const splunk = new SplunkBackend({
+        token: 'test-token',
+        url: `https://127.0.0.1:${port}`,
+      });
+      const agent = splunk['httpAgent'] as https.Agent;
+      expect(agent.options.rejectUnauthorized).toBe(false);
+    });
+
+    it('uses system CA when SPLUNK_CA_CERT is "system"', () => {
+      process.env.SPLUNK_CA_CERT = 'system';
+      const splunk = new SplunkBackend({
+        token: 'test-token',
+        url: `https://127.0.0.1:${port}`,
+      });
+      const agent = splunk['httpAgent'] as https.Agent;
+      expect(agent.options.rejectUnauthorized).toBe(true);
+      expect(agent.options.ca).toBeUndefined();
+    });
+
+    it('loads CA from a file when SPLUNK_CA_CERT starts with @', () => {
+      fs.writeFileSync(caPath, caCert);
+      process.env.SPLUNK_CA_CERT = `@${caPath}`;
+      const splunk = new SplunkBackend({
+        token: 'test-token',
+        url: `https://127.0.0.1:${port}`,
+      });
+      const agent = splunk['httpAgent'] as https.Agent;
+      expect(agent.options.rejectUnauthorized).toBe(true);
+      expect(agent.options.ca?.toString()).toBe(caCert);
+    });
+
+    it('uses CA from the environment variable value directly', () => {
+      process.env.SPLUNK_CA_CERT = caCert;
+      const splunk = new SplunkBackend({
+        token: 'test-token',
+        url: `https://127.0.0.1:${port}`,
+      });
+      const agent = splunk['httpAgent'] as https.Agent;
+      expect(agent.options.rejectUnauthorized).toBe(true);
+      expect(agent.options.ca).toBe(caCert);
+    });
   });
 });
