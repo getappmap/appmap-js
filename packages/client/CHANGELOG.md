@@ -1,3 +1,10 @@
+# [@appland/client-v1.23.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.23.0...@appland/client-v1.23.1) (2025-10-07)
+
+
+### Bug Fixes
+
+* Ensure response is fully drained to prevent hanging sockets ([9c20215](https://github.com/getappmap/appmap-js/commit/9c20215fbeb2bdb13ebeff6f7b7347eb483f8894))
+
 # [@appland/client-v1.23.0](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.22.0...@appland/client-v1.23.0) (2024-10-15)
 
 
