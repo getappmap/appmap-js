@@ -1,3 +1,10 @@
+# [@appland/navie-v1.48.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.48.0...@appland/navie-v1.48.1) (2025-10-07)
+
+
+### Bug Fixes
+
+* Prevent logging usage when total tokens are zero (actually indicating unknown) ([aaa2e3b](https://github.com/getappmap/appmap-js/commit/aaa2e3b21ffcc823588d1c022525b98a5410693a))
+
 # [@appland/navie-v1.48.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.47.1...@appland/navie-v1.48.0) (2025-07-18)
 
 
