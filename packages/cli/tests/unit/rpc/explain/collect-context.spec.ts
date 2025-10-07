@@ -40,6 +40,38 @@ describe('collect-context', () => {
         },
       });
     });
+
+    it('deduplicates location patterns', () => {
+      const request = buildContextRequest(
+        ['appmap-dir'],
+        ['src'],
+        undefined,
+        ['login', 'the', 'user'],
+        5000,
+        {
+          locations: [
+            'file1.js:10',
+            'file1.js:10',
+            'file2.js:20',
+          ],
+        }
+      );
+      expect(request).toEqual({
+        vectorTerms: ['login', 'user'],
+        request: {
+          excludePatterns: [
+            /(^|[/\\])\.appmap([/\\]|$)/,
+            /(^|[/\\])\.navie([/\\]|$)/,
+            /(^|[/\\])\.yarn([/\\]|$)/,
+            /(^|[/\\])venv([/\\]|$)/,
+            /(^|[/\\])\.venv([/\\]|$)/,
+            /(^|[/\\])node_modules([/\\]|$)/,
+            /(^|[/\\])vendor([/\\]|$)/,
+          ],
+          locations: [Location.parse('file1.js:10'), Location.parse('file2.js:20')],
+        },
+      });
+    });
   });
 
   describe('collectContext', () => {

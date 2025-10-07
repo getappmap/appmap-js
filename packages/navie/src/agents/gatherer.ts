@@ -53,8 +53,10 @@ export default class Gatherer {
   }
 
   async executeCommands(commands: string[]) {
-    const locations: string[] = [],
-      terms: string[] = [];
+    // Use sets to deduplicate locations and search terms.
+    // Sometimes models get confused and ask for the same file multiple times.
+    const locations = new Set<string>();
+    const terms = new Set<string>();
     let obtainDiff = false;
     let badCommand = false;
 
@@ -62,11 +64,11 @@ export default class Gatherer {
       if (cmd.startsWith('!!find') || cmd.startsWith('!!cat')) {
         const location = locationOfCommand(cmd);
         if (!location) badCommand = true;
-        else locations.push(location);
+        else locations.add(location);
       } else if (cmd.startsWith('!!search')) {
         const searchTerms = searchTermsOfCommand(cmd);
         if (!searchTerms) badCommand = true;
-        else terms.push(...searchTerms);
+        else searchTerms.forEach(term => terms.add(term));
       } else if (cmd === '!!diff') {
         obtainDiff = true;
       } else if (cmd === '!!finish') continue;
@@ -97,11 +99,11 @@ export default class Gatherer {
       }
     }
 
-    if (locations.length > 0 || terms.length > 0) {
+    if (locations.size > 0 || terms.size > 0) {
       for (const event of await this.context.searchContextWithLocations(
         ContextItemRequestor.Gatherer,
-        terms,
-        locations
+        Array.from(terms),
+        Array.from(locations)
       )) {
         const location = event.location?.startsWith(event.directory ?? '')
           ? event.location

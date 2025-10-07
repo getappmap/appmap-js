@@ -54,6 +54,10 @@ export function buildContextRequest(
 
   const request: ContextRequest = {};
 
+  // Use a set to deduplicate location patterns in case the model requests the
+  // same file multiple times, which can lead to long wait times and context stuffing.
+  const locations = filters.locations ? new Set(filters.locations) : undefined;
+
   const contextParameters: Record<string, string | number | boolean> = {
     sourceDirectories: sourceDirectories.join(', '),
     charLimit,
@@ -63,7 +67,7 @@ export function buildContextRequest(
   if (vectorTerms.length > 0) contextParameters.keywords = vectorTerms.join(', ');
   if (appmaps && appmaps.length > 0) contextParameters.appmaps = appmaps.join(', ');
   if (filters.recent) contextParameters.recent = filters.recent;
-  if (filters.locations) contextParameters.locations = filters.locations.join(', ');
+  if (locations) contextParameters.locations = Array.from(locations).join(', ');
   if (filters.itemTypes) contextParameters.itemTypes = filters.itemTypes.join(', ');
   if (filters.labels && filters.labels.length > 0)
     contextParameters.labels = filters.labels
@@ -85,9 +89,9 @@ export function buildContextRequest(
   if (filters?.include)
     request.includePatterns = filters.include.map((pattern) => new RegExp(pattern));
   if (filters?.itemTypes) request.includeTypes = filters.itemTypes.map((type) => type);
-  if (filters?.locations) {
+  if (locations) {
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    request.locations = filters.locations.map(Location.parse);
+    request.locations = Array.from(locations).map(Location.parse);
     warn(`Parsed locations: ${request.locations.map((loc) => loc.toString()).join(', ')}`);
   }
 
