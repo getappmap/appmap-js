@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: '0 0 * * 0'
 
+env:
+  PUPPETEER_SKIP_DOWNLOAD: 'true'
+
 jobs:
   yarn_install:
     runs-on: ubuntu-latest
