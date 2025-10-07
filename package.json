@@ -14,7 +14,7 @@
     "smoketest": "./smoketest.sh",
     "chromatic": "yarn workspaces foreach --exclude root -v run chromatic",
     "watch": "yarn workspaces foreach -t --exclude root -v -p -i run watch",
-    "semantic-release": "yarn workspaces foreach -t --exclude '{root,@appland/telemetry}' -v exec semantic-release"
+    "semantic-release": "yarn workspaces foreach -t --exclude root -v exec semantic-release"
   },
   "devDependencies": {
     "@google/semantic-release-replace-plugin": "^1.0.2",
