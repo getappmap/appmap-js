@@ -158,6 +158,7 @@ const STATUS_NO_RETRY = [
   407, // Proxy Authentication Required
   409, // Conflict
   422, // Unprocessable Entity
+  429, // Too Many Requests
 ];
 
 // based on https://github.com/langchain-ai/langchainjs/blob/5d63f397c02f232d2a3729ed34461e209cfb0350/langchain-core/src/utils/async_caller.ts#L17
