@@ -1,3 +1,17 @@
+# [@appland/appmap-v3.193.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.192.0...@appland/appmap-v3.193.0) (2025-10-07)
+
+
+### Bug Fixes
+
+* **cli:** Allow the event loop to drain when exiting ([2428411](https://github.com/getappmap/appmap-js/commit/2428411bf267adff9a6909c8ddfea8ca328da03a))
+* **cli:** Remove unnecessary warning log in setConfigurationV2 handler ([97b503b](https://github.com/getappmap/appmap-js/commit/97b503b146ca3be6ba826d61c6b9e75f914ef087))
+
+
+### Features
+
+* **cli:** Add hidden command for testing telemetry events ([1f8d165](https://github.com/getappmap/appmap-js/commit/1f8d165dcacfa52530b998e4cf151dcab024efb4))
+* **cli:** Use a configurable telemetry endpoint ([3de5d9f](https://github.com/getappmap/appmap-js/commit/3de5d9f1a322e6414d80d41f124f2e1d8995cc06))
+
 # [@appland/appmap-v3.192.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.191.2...@appland/appmap-v3.192.0) (2025-07-18)
 
 
