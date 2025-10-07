@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.88.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.88.1...@appland/scanner-v1.88.2) (2025-10-07)
+
+
+### Bug Fixes
+
+* **scanner:** Update to @appland/telemetry ([1672e65](https://github.com/getappmap/appmap-js/commit/1672e651d5119d5779c797f8013b079d9087fc81))
+
 # [@appland/scanner-v1.88.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.88.0...@appland/scanner-v1.88.1) (2025-05-22)
 
 
