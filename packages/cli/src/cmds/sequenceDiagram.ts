@@ -12,6 +12,7 @@ import {
   Formatters,
   FormatType,
 } from '@appland/sequence-diagram';
+import { Telemetry } from '@appland/telemetry';
 import { serveAndOpenSequenceDiagram } from '../lib/serveAndOpen';
 import assert from 'assert';
 import BrowserRenderer from './sequenceDiagram/browserRenderer';
@@ -84,6 +85,20 @@ export const handler = async (argv: any) => {
   const { filter, expand } = argv;
 
   let browserRender: BrowserRenderer | undefined;
+
+  // Record telemetry — this command is a bit niche, so we want to track
+  // whether it's being used.
+  Telemetry.sendEvent({
+    name: 'command',
+    properties: {
+      command: 'sequence-diagram',
+      format: argv.format,
+      loops: argv.loops ? 'true' : 'false',
+      filter: filter ? 'true' : 'false',
+      expand: expand ? (Array.isArray(expand) ? 'multiple' : 'single') : 'false',
+      exclude: argv.exclude ? (Array.isArray(argv.exclude) ? 'multiple' : 'single') : 'false',
+    },
+  });
   if (argv.format === 'png') {
     browserRender = new BrowserRenderer(argv.showBrowser);
   }
