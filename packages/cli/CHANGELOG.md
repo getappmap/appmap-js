@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.194.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.193.1...@appland/appmap-v3.194.0) (2025-10-09)
+
+
+### Features
+
+* Deduplicate location patterns in buildContextRequest and gatherer commands ([dc338bb](https://github.com/getappmap/appmap-js/commit/dc338bb6762a4a05ea3aaee187efa1354432f964))
+
 # [@appland/appmap-v3.193.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.193.0...@appland/appmap-v3.193.1) (2025-10-09)
 
 
