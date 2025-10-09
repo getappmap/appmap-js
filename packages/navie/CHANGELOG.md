@@ -1,3 +1,15 @@
+# [@appland/navie-v1.49.0](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.48.1...@appland/navie-v1.49.0) (2025-10-09)
+
+
+### Bug Fixes
+
+* Add 429 status code to no-retry list in OpenAICompletionService ([8d3511c](https://github.com/getappmap/appmap-js/commit/8d3511c7105e07b05517145c82010323252bc96b))
+
+
+### Features
+
+* Deduplicate location patterns in buildContextRequest and gatherer commands ([dc338bb](https://github.com/getappmap/appmap-js/commit/dc338bb6762a4a05ea3aaee187efa1354432f964))
+
 # [@appland/navie-v1.48.1](https://github.com/getappmap/appmap-js/compare/@appland/navie-v1.48.0...@appland/navie-v1.48.1) (2025-10-07)
 
 
