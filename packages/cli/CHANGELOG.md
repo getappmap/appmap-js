@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.193.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.193.0...@appland/appmap-v3.193.1) (2025-10-09)
+
+
+### Bug Fixes
+
+* Make sure application insights telemetry quits gracefully ([a5ffd12](https://github.com/getappmap/appmap-js/commit/a5ffd12333561be117254587ace8f32553e00983))
+
 # [@appland/appmap-v3.193.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.192.0...@appland/appmap-v3.193.0) (2025-10-07)
 
 
