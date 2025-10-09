@@ -1,7 +1,6 @@
 
 import Conf from 'conf';
 import { name as appName, version } from '../package.json';
-import { Contracts } from 'applicationinsights';
 import assert from 'node:assert';
 import { TelemetryClient } from '../src';
 import { createMockServer } from './helpers/mockServer';
@@ -17,7 +16,7 @@ describe('TelemetryClient', () => {
   });
 
   describe('Telemetry', () => {
-    let sendEvent: jest.MockedFunction<(data: Contracts.EventTelemetry) => void>;
+    let sendEvent: jest.MockedFunction<(data: EventTelemetry) => void>;
     let flush: jest.MockedFunction<() => void>;
     let client: TelemetryClient;
     const sessionId = 'the-session-id';
@@ -102,7 +101,7 @@ describe('TelemetryClient', () => {
       const [[{ properties }]] = sendEvent.mock.calls;
       assert(properties);
 
-      const envVars: string = properties['common.environmentVariables'];
+      const envVars: string = properties['common.environmentVariables'] || '';
       expect(envVars.split(',')).toBeInstanceOf(Array);
       expect(envVars).toMatch(/\bNODE_ENV\b/);
     });
@@ -149,3 +148,10 @@ describe('TelemetryClient', () => {
     });
   });
 });
+
+
+interface EventTelemetry {
+  name: string;
+  properties?: { [key: string]: string | undefined };
+  measurements?: { [key: string]: number | undefined };
+}

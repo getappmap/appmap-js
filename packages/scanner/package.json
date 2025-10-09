@@ -68,7 +68,6 @@
     "@appland/telemetry": "workspace:^",
     "@types/cli-progress": "^3.9.2",
     "ajv": "^8.8.2",
-    "applicationinsights": "^2.1.4",
     "async": "^3.2.4",
     "boxen": "^5.0.1",
     "chalk": "^4.1.2",

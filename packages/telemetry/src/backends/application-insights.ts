@@ -1,10 +1,12 @@
-import {
+import * as https from 'node:https';
+import os from 'node:os';
+
+import type {
   ApplicationInsightsBackendConfiguration,
   FlushCallback,
   TelemetryBackend,
   TelemetryData,
 } from '../types';
-import { TelemetryClient as Client, setup as AppInsights } from 'applicationinsights';
 
 // This key is meant to be publically shared. However, I'm adding a simple
 // obfuscation to mitigate key scraping bots on GitHub. The key is split on
@@ -14,8 +16,16 @@ const INSTRUMENTATION_KEY = ['NTBjMWE1YzI', 'NDliNA', 'NDkxMw', 'YjdjYw', 'ODZhN
   .map((x) => Buffer.from(x, 'base64').toString('utf8'))
   .join('-');
 
+const AI_ENDPOINT = 'dc.services.visualstudio.com';
+const AI_PATH = '/v2/track';
+
 export class ApplicationInsightsBackend implements TelemetryBackend {
-  private readonly client: Client;
+  private readonly instrumentationKey: string;
+  private readonly userId: string;
+  private readonly sessionId: string;
+  private readonly productName: string;
+  private readonly hostname: string;
+  private readonly uname: string;
 
   constructor(
     userId: string,
@@ -23,38 +33,64 @@ export class ApplicationInsightsBackend implements TelemetryBackend {
     productName: string,
     private readonly config: ApplicationInsightsBackendConfiguration
   ) {
-    process.env.APPLICATION_INSIGHTS_NO_STATSBEAT = '1';
-
-    const instrumentationKey = this.config.instrumentationKey || INSTRUMENTATION_KEY;
-    // Disable everything we can, we don't any additional collection from Application Insights.
-    AppInsights(instrumentationKey)
-      .setAutoCollectRequests(false)
-      .setAutoCollectPerformance(false)
-      .setAutoCollectExceptions(false)
-      .setAutoCollectDependencies(false)
-      .setAutoCollectHeartbeat(false)
-      .setAutoDependencyCorrelation(false)
-      .setAutoCollectConsole(false)
-      .setInternalLogging(false, false)
-      .setSendLiveMetrics(false)
-      .setUseDiskRetryCaching(true);
-
-    const client = new Client(instrumentationKey);
-    client.context.tags[client.context.keys.userId] = userId;
-    client.context.tags[client.context.keys.sessionId] = sessionId;
-    client.context.tags[client.context.keys.cloudRole] = productName;
-    client.setAutoPopulateAzureProperties(false);
-
-    this.client = client;
+    this.instrumentationKey = this.config.instrumentationKey || INSTRUMENTATION_KEY;
+    this.userId = userId;
+    this.sessionId = sessionId;
+    this.productName = productName;
+    this.hostname = os.hostname();
+    this.uname = os.type() + ' ' + os.release();
   }
 
   sendEvent(event: TelemetryData): void {
-    this.client.trackEvent(event);
-    this.client.flush();
+    const envelope = {
+      name: 'Microsoft.ApplicationInsights.Event',
+      time: new Date().toISOString(),
+      iKey: this.instrumentationKey,
+      tags: {
+        'ai.user.id': this.userId,
+        'ai.session.id': this.sessionId,
+        'ai.cloud.role': this.productName,
+        'ai.cloud.roleInstance': this.hostname,
+        'ai.device.osVersion': this.uname
+      },
+      data: {
+        baseType: 'EventData',
+        baseData: event,
+      },
+    };
+    this._post([envelope]);
   }
 
   flush(callback?: FlushCallback): void {
-    this.client.flush();
+    // No batching, so nothing to flush. Just call callback.
     callback?.();
+  }
+
+  private _post(envelopes: unknown[]): void {
+    const body = JSON.stringify(envelopes);
+    const options = {
+      hostname: AI_ENDPOINT,
+      path: AI_PATH,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+      },
+    };
+    const req = https.request(options, (res) => {
+      // drain response to avoid memory leak
+      res
+        .on('data', () => { })
+        .on('end', () => {
+          if (res.statusCode && (res.statusCode < 200 || res.statusCode >= 300)) {
+            console.warn(`ApplicationInsightsBackend: Failed to send telemetry event. Status: ${res.statusCode}`);
+          }
+        });
+    });
+    req.on('error', (e) => {
+      console.warn('Error sending telemetry data to Application Insights', e);
+    });
+    req.write(body);
+    req.end();
   }
 }
