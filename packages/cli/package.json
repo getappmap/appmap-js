@@ -104,7 +104,6 @@
     "@sidvind/better-ajv-errors": "^0.9.1",
     "JSONStream": "^1.3.5",
     "ajv": "^8.6.3",
-    "applicationinsights": "^2.1.4",
     "async": "^3.2.4",
     "axios": "^0.27.2",
     "better-sqlite3": "^11.5.0",
