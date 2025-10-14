@@ -1,3 +1,10 @@
+# [@appland/client-v1.23.2](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.23.1...@appland/client-v1.23.2) (2025-10-14)
+
+
+### Bug Fixes
+
+* Don't crash on licence check errors ([9f69776](https://github.com/getappmap/appmap-js/commit/9f697765496c890c8f3cd1f50e58d30ca4adb642))
+
 # [@appland/client-v1.23.1](https://github.com/getappmap/appmap-js/compare/@appland/client-v1.23.0...@appland/client-v1.23.1) (2025-10-07)
 
 
