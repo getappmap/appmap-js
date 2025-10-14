@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.194.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.194.0...@appland/appmap-v3.194.1) (2025-10-14)
+
+
+### Bug Fixes
+
+* Don't crash on licence check errors ([9f69776](https://github.com/getappmap/appmap-js/commit/9f697765496c890c8f3cd1f50e58d30ca4adb642))
+
 # [@appland/appmap-v3.194.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.193.1...@appland/appmap-v3.194.0) (2025-10-09)
 
 
