@@ -14,10 +14,16 @@ export default async function checkLicense(required = false): Promise<void> {
     return;
   }
 
-  if (await LicenseKey.check(config.apiKey)) {
-    warn(`Valid license for ${config.username ?? 'unknown user'} at machine id ${Telemetry.machineId}.`);
-  } else {
-    warn('Warning: The provided license key is not valid.');
-    if (required) throw new Error('The provided license key is not valid');
+  try {
+    if (await LicenseKey.check(config.apiKey)) {
+      warn(`Valid license for ${config.username ?? 'unknown user'} at machine id ${Telemetry.machineId}.`);
+    } else {
+      warn('Warning: The provided license key is not valid.');
+      if (required) throw new Error('The provided license key is not valid');
+    }
+  } catch (e) {
+    warn('Warning: Failed to check license key:');
+    warn(e);
+    if (required) throw e;
   }
 }
