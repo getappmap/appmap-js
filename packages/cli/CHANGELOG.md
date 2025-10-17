@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.195.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.194.1...@appland/appmap-v3.195.0) (2025-10-17)
+
+
+### Features
+
+* **navie:** Display environment-configured models in selector ([122bb11](https://github.com/getappmap/appmap-js/commit/122bb116be5aa94a3827d28480abe2b69bb9b7fd))
+
 # [@appland/appmap-v3.194.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.194.0...@appland/appmap-v3.194.1) (2025-10-14)
 
 
