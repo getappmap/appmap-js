@@ -147,6 +147,52 @@ describe(ModelRegistry, () => {
       modelRegistry.select(model.id);
       expect(modelRegistry.list()).toStrictEqual([{ ...model, tags: ['recommended', 'primary'] }]);
     });
+
+    describe('with a default model from the environment', () => {
+      const originalEnv = process.env;
+      const env = {
+        APPMAP_NAVIE_MODEL: 'test-model',
+        OPENAI_API_KEY: 'test-key',
+        OPENAI_BASE_URL: 'http://localhost:1234',
+      };
+
+      beforeEach(() => {
+        process.env = { ...originalEnv, ...env };
+      });
+
+      afterEach(() => {
+        process.env = originalEnv;
+      });
+
+      it('includes the model in the list', async () => {
+        await modelRegistry.refresh();
+        const models = modelRegistry.list();
+        expect(models).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ id: 'test-model', provider: 'localhost' }),
+          ])
+        );
+      });
+
+      it('removes the default model if a client model with the same baseUrl is added', async () => {
+        await modelRegistry.refresh();
+        const clientModel = {
+          id: 'client-model',
+          name: 'Client Model',
+          provider: 'test-provider',
+          createdAt: new Date().toISOString(),
+          baseUrl: env.OPENAI_BASE_URL,
+        };
+        modelRegistry.add(clientModel);
+        const models = modelRegistry.list();
+        expect(models).not.toEqual(
+          expect.arrayContaining([expect.objectContaining({ id: 'test-model' })])
+        );
+        expect(models).toEqual(
+          expect.arrayContaining([expect.objectContaining({ id: 'client-model' })])
+        );
+      });
+    });
   });
 
   describe('refresh', () => {
