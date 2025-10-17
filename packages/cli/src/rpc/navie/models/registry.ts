@@ -38,9 +38,21 @@ export default class ModelRegistry {
     // Initialize the model registry with the default configuration from the environment.
     const defaultConfig = getLLMConfiguration();
     if (defaultConfig.model) {
+      const { baseUrl } = defaultConfig;
+      let provider = defaultConfig.provider;
+      // The provider should only reflect the base URL's hostname for OpenAI endpoints.
+      // This works because `determineCompletionBackend()` in `completion-service-factory.ts`
+      // defaults to 'openai' if no other backend is explicitly configured.
+      if (baseUrl && defaultConfig.provider === 'openai') {
+        try {
+          provider = new URL(baseUrl).hostname;
+        } catch {
+          // If URL parsing fails, fall back to the original provider value.
+        }
+      }
       return {
         id: defaultConfig.model,
-        provider: defaultConfig.provider,
+        provider,
         name: defaultConfig.model,
         baseUrl: defaultConfig.baseUrl,
         createdAt: new Date().toISOString(),
@@ -85,6 +97,17 @@ export default class ModelRegistry {
   add(model: NavieRpc.V1.Models.ClientModel) {
     const key = `${model.provider.toLowerCase()}:${model.id.toLowerCase()}`;
     this.clientModels.set(key, model);
+
+    const envModel = this.defaultModel();
+    if (envModel?.baseUrl && envModel.baseUrl === model.baseUrl) {
+      // If the newly added model has the same baseUrl as the default model from the environment,
+      // we can assume they are the same and remove the default model from the apiModels list to
+      // avoid duplicates.
+      this.apiModels = this.apiModels.filter(
+        (m) => m.id !== envModel.id || m.provider !== envModel.provider
+      );
+    }
+
     this.onUpdateModels();
   }
 
@@ -146,6 +169,11 @@ export default class ModelRegistry {
           result.status === 'fulfilled'
       )
       .flatMap((result) => result.value); // eslint-disable-line @typescript-eslint/no-unsafe-return
+
+    const envModel = this.defaultModel();
+    if (envModel) {
+      this.apiModels.push(envModel);
+    }
 
     this.onUpdateModels();
   }
