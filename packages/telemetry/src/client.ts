@@ -218,7 +218,6 @@ export class TelemetryClient implements ITelemetryClient {
       if (this.enabled) {
         this.backend.sendEvent(event);
         this.session.touch();
-        this.backend.flush();
       }
     } catch (e) {
       // Don't let telemetry fail the entire command
