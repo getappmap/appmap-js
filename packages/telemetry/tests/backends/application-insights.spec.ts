@@ -41,13 +41,14 @@ describe('ApplicationInsightsBackend', () => {
       const interval = setInterval(() => {
         if (scope.isDone()) {
           clearInterval(interval);
+          if (timeout) clearTimeout(timeout);
           resolve();
         }
       }, 10);
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         clearInterval(interval);
         reject(new Error('waitForRequest timed out'));
-      }, 1000);
+      }, 1000).unref();
     });
   };
 

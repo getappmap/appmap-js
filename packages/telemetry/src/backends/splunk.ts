@@ -16,7 +16,7 @@ const MaxFlushTime = 5000; // 5 seconds
 export class SplunkBackend implements TelemetryBackend {
   private readonly config: Required<SplunkBackendConfiguration>;
   private readonly httpAgent: http.Agent | https.Agent;
-  private pendingRequests = 0;
+  private pendingRequests = new Set<http.ClientRequest>();
 
   constructor(config: Partial<SplunkBackendConfiguration> = {}) {
     const token = config.token ?? process.env.SPLUNK_TOKEN;
@@ -69,7 +69,6 @@ export class SplunkBackend implements TelemetryBackend {
   }
 
   sendEvent(event: TelemetryData): void {
-    this.pendingRequests++;
     const parsedUrl = new URL(this.config.url);
     const path = parsedUrl.pathname === '/' ? DefaultSplunkPath : parsedUrl.pathname;
 
@@ -94,7 +93,7 @@ export class SplunkBackend implements TelemetryBackend {
         responseBody += chunk;
       });
       res.on('end', () => {
-        this.pendingRequests--;
+        this.pendingRequests.delete(req);
         if (res.statusCode && (res.statusCode < 200 || res.statusCode >= 300)) {
           console.warn(
             `SplunkBackend: Failed to send telemetry event. Status: ${res.statusCode}, Response: ${responseBody}`
@@ -102,9 +101,10 @@ export class SplunkBackend implements TelemetryBackend {
         }
       });
     });
+    this.pendingRequests.add(req);
 
     req.on('error', (e) => {
-      this.pendingRequests--;
+      this.pendingRequests.delete(req);
       console.warn(`SplunkBackend: Connectivity error sending telemetry event: ${e.message}`);
     });
 
@@ -116,7 +116,7 @@ export class SplunkBackend implements TelemetryBackend {
     const startTime = process.hrtime.bigint();
 
     const checkPending = () => {
-      if (this.pendingRequests === 0) {
+      if (this.pendingRequests.size === 0) {
         if (callback) {
           callback();
         }
@@ -128,6 +128,7 @@ export class SplunkBackend implements TelemetryBackend {
 
       if (elapsedMs > MaxFlushTime) {
         console.warn(`SplunkBackend: Flush timed out after ${MaxFlushTime}ms`);
+        this.pendingRequests.forEach((req) => req.destroy());
         if (callback) {
           callback();
         }
