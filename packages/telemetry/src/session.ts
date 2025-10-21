@@ -51,12 +51,26 @@ export class Session {
   renew(): void {
     this._id = Session.newSessionId();
     this._expiration = Session.expirationFromNow();
-    this.config.set('sessionId', this._id);
-    this.config.set('sessionExpiration', this._expiration);
+    try {
+      this.config.set({
+        sessionId: this._id,
+        sessionExpiration: this._expiration,
+      });
+    } catch (e) {
+      const err = e as Error;
+      // This can happen if the config file is not writable.
+      console.warn(`Could not renew session: ${err.message}`);
+    }
   }
 
   touch(): void {
     this._expiration = Session.expirationFromNow();
-    this.config.set('sessionExpiration', this.expiration);
+    try {
+      this.config.set('sessionExpiration', this.expiration);
+    } catch (e) {
+      const err = e as Error;
+      // This can happen if the config file is not writable.
+      console.warn(`Could not update session: ${err.message}`);
+    }
   }
 }

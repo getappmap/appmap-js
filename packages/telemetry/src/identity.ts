@@ -32,7 +32,13 @@ export function getMachineId(config?: Conf): string {
     .update(machineIdSource as BinaryLike)
     .digest('hex');
 
-  config?.set('machineId', machineIdHash);
+  try {
+    config?.set('machineId', machineIdHash);
+  } catch (e) {
+    const err = e as Error;
+    // This can happen if the config file is not writable.
+    console.warn(`Could not save machine ID: ${err.message}`);
+  }
 
   return machineIdHash;
 }
