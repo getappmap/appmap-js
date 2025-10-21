@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import Conf from 'conf';
 import { Session } from '../src/session';
 
@@ -22,14 +23,16 @@ describe('Session', () => {
   describe('renew', () => {
     it('writes persistent session data', () => {
       session.renew();
-      expect(conf.set).toHaveBeenCalledWith('sessionId', session.id);
-      expect(conf.set).toHaveBeenCalledWith('sessionExpiration', session.expiration);
+      expect(conf.set).toHaveBeenCalledWith({
+        sessionId: session.id,
+        sessionExpiration: session.expiration,
+      });
     });
   });
 
   describe('load', () => {
-    let sessionId = 'existingSessionId';
-    let sessionExpiration = Session.expirationFromNow();
+    const sessionId = 'existingSessionId';
+    const sessionExpiration = Session.expirationFromNow();
 
     beforeEach(() => {
       conf.get.mockImplementation((key: string) => {
@@ -127,6 +130,28 @@ describe('Session', () => {
     it('returns the expected session ID and expiration', () => {
       expect(session.id).toStrictEqual(sessionId);
       expect(session.expiration).toStrictEqual(sessionExpiration);
+    });
+  });
+
+  describe('when saving the configuration fails', () => {
+    const error = new Error('EPERM: operation not permitted');
+    let consoleWarnSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      conf.set.mockImplementation(() => {
+        throw error;
+      });
+    });
+
+    it('does not throw and warns when renewing the session fails', () => {
+      expect(() => session.renew()).not.toThrow();
+      expect(consoleWarnSpy).toHaveBeenCalledWith(`Could not renew session: ${error.message}`);
+    });
+
+    it('does not throw and warns when touching the session fails', () => {
+      expect(() => session.touch()).not.toThrow();
+      expect(consoleWarnSpy).toHaveBeenCalledWith(`Could not update session: ${error.message}`);
     });
   });
 });
