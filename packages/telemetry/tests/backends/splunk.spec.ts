@@ -1,10 +1,14 @@
 import * as fs from 'fs';
 import * as https from 'https';
 import * as path from 'path';
+import * as os from 'node:os';
+
 import { SplunkBackend } from '../../src/backends/splunk';
 import { TelemetryData } from '../../src/types';
 
 import { createMockServer } from '../helpers/mockServer';
+
+jest.mock('node:os');
 
 describe('SplunkBackend', () => {
   const mockServer = createMockServer();
@@ -18,11 +22,13 @@ describe('SplunkBackend', () => {
       port = mockServer.getServerPort();
       done();
     });
+    jest.spyOn(os, 'userInfo').mockReturnValue({ username: 'test-user' } as os.UserInfo<string>);
   });
 
   afterEach((done) => {
     mockServer.stop(done);
     consoleWarnSpy.mockRestore();
+    jest.restoreAllMocks();
     delete process.env.SPLUNK_TOKEN;
     delete process.env.SPLUNK_URL;
   });
@@ -41,7 +47,7 @@ describe('SplunkBackend', () => {
       const [request] = mockServer.receivedRequests;
       expect(request.url).toBe('/services/collector/event');
       expect(request.headers.authorization).toBe('Splunk test-token');
-      expect(JSON.parse(request.body)).toEqual({ event });
+      expect(JSON.parse(request.body)).toEqual({ event: { ...event, username: 'test-user' } });
       done();
     });
   });
@@ -92,8 +98,8 @@ describe('SplunkBackend', () => {
 
     splunk.flush(() => {
       expect(mockServer.receivedRequests).toHaveLength(2);
-      expect(JSON.parse(mockServer.receivedRequests[0].body)).toEqual({ event: event1 });
-      expect(JSON.parse(mockServer.receivedRequests[1].body)).toEqual({ event: event2 });
+      expect(JSON.parse(mockServer.receivedRequests[0].body)).toEqual({ event: { ...event1, username: 'test-user' } });
+      expect(JSON.parse(mockServer.receivedRequests[1].body)).toEqual({ event: { ...event2, username: 'test-user' } });
       done();
     });
   });

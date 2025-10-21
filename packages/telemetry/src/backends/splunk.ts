@@ -1,5 +1,6 @@
 import * as http from 'node:http';
 import * as https from 'node:https';
+import * as os from 'node:os';
 import { URL } from 'node:url';
 import * as fs from 'node:fs';
 
@@ -17,6 +18,7 @@ export class SplunkBackend implements TelemetryBackend {
   private readonly config: Required<SplunkBackendConfiguration>;
   private readonly httpAgent: http.Agent | https.Agent;
   private pendingRequests = 0;
+  private username = os.userInfo().username;
 
   constructor(config: Partial<SplunkBackendConfiguration> = {}) {
     const token = config.token ?? process.env.SPLUNK_TOKEN;
@@ -73,7 +75,12 @@ export class SplunkBackend implements TelemetryBackend {
     const parsedUrl = new URL(this.config.url);
     const path = parsedUrl.pathname === '/' ? DefaultSplunkPath : parsedUrl.pathname;
 
-    const payload = JSON.stringify({ event });
+    const payload = JSON.stringify({
+      event: {
+        ...event,
+        username: this.username,
+      },
+    });
 
     const options: http.RequestOptions = {
       hostname: parsedUrl.hostname,
