@@ -1,12 +1,15 @@
+import os from 'node:os';
 
 import Conf from 'conf';
 import { name as appName, version } from '../package.json';
 import assert from 'node:assert';
-import { TelemetryClient } from '../src';
+import { TelemetryClient, type BackendConfiguration } from '../src';
 import { createMockServer } from './helpers/mockServer';
 
 describe('TelemetryClient', () => {
   beforeEach(() => {
+    jest.spyOn(os, 'userInfo').mockReturnValue({ username: 'test-user' } as os.UserInfo<string>);
+
     // Don't persist data locally
     jest.spyOn(Conf.prototype, 'set').mockImplementation(() => {});
   });
@@ -19,6 +22,7 @@ describe('TelemetryClient', () => {
     let sendEvent: jest.MockedFunction<(data: EventTelemetry) => void>;
     let flush: jest.MockedFunction<() => void>;
     let client: TelemetryClient;
+    let backend: BackendConfiguration;
     const sessionId = 'the-session-id';
 
     beforeEach(() => {
@@ -29,7 +33,8 @@ describe('TelemetryClient', () => {
         if (key === 'sessionExpiration') return Date.now() + 120_000;
         return undefined;
       });
-      client = new TelemetryClient({ backend: { type: 'custom', sendEvent, flush } });
+      backend = { type: 'custom', sendEvent, flush };
+      client = new TelemetryClient({ backend });
       client.enabled = true;
     });
 
@@ -62,6 +67,9 @@ describe('TelemetryClient', () => {
       expect(typeof properties['appland.telemetry.args']).toBe('string');
       expect(properties['appland.telemetry.prop']).toBe('value');
       expect(measurements['appland.telemetry.metric']).toBe(1);
+
+      // this should only get added by default for splunk backend
+      expect(properties).not.toHaveProperty('common.username');
     });
 
     it('does not send undefined properties', () => {
@@ -106,6 +114,36 @@ describe('TelemetryClient', () => {
       expect(envVars).toMatch(/\bNODE_ENV\b/);
     });
 
+    it('sends client info from the environment', () => {
+      process.env.APPMAP_TELEMETRY_PROPERTIES = JSON.stringify({
+        ide: 'vscode',
+        ideversion: '2.3.4',
+        extname: 'appland.appmap',
+        extversion: '1.2.3',
+      });
+      try {
+        const client = new TelemetryClient({ backend });
+        client.enabled = true;
+        client.sendEvent({
+          name: 'test',
+        });
+
+        const [[{ properties }]] = sendEvent.mock.calls;
+        assert(properties);
+
+        expect(properties).toEqual(
+          expect.objectContaining({
+            'common.ide': 'vscode',
+            'common.ideversion': '2.3.4',
+            'common.extname': 'appland.appmap',
+            'common.extversion': '1.2.3',
+          })
+        );
+      } finally {
+        delete process.env.APPMAP_TELEMETRY_PROPERTIES;
+      }
+    });
+
     it('cannot be configured twice', () => {
       // It's already been configured once in the constructor
       expect(() => {
@@ -143,12 +181,14 @@ describe('TelemetryClient', () => {
         expect(mockServer.receivedRequests).toHaveLength(1);
         const [request] = mockServer.receivedRequests;
         expect(request.headers.authorization).toBe('Splunk client-env-token');
+        // check that the username is included by default for splunk backend
+        const body = JSON.parse(request.body) as { event: { properties: Record<string, string> } };
+        expect(body.event.properties['common.username']).toBe('test-user');
         done();
       });
     });
   });
 });
-
 
 interface EventTelemetry {
   name: string;

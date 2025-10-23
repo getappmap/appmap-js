@@ -88,11 +88,41 @@ function buildDefaultConfiguration(
 
   // By default, the prop prefix will be the product name with non-word characters replaced by dots.
   const propPrefix = base.propPrefix || product.name.replace(/\W/g, '.').replace(/^\./, '') + '.';
+  const backend = base.backend || defaultBackend();
+  const properties: Record<string, string> = {
+    'common.source': product.name,
+    'common.os': os.platform(),
+    'common.platformversion': os.release(),
+    'common.arch': os.arch(),
+    'common.hostname': os.hostname(),
+    ...base.properties,
+  };
+
+  // include username automatically for splunk backend
+  if (backend.type === 'splunk')
+    try {
+      properties['common.username'] ??= os.userInfo().username;
+    } catch {
+      // ignore
+    }
+
+  if (process.env.APPMAP_TELEMETRY_PROPERTIES) {
+    try {
+      const clientInfo = JSON.parse(process.env.APPMAP_TELEMETRY_PROPERTIES) as Record<
+        string,
+        string
+      >;
+      Object.assign(properties, transformProps(clientInfo, 'common.'));
+    } catch {
+      // ignore
+    }
+  }
 
   return {
     product,
     propPrefix,
-    backend: defaultBackend(),
+    backend,
+    properties,
     ...base,
   };
 }
@@ -192,12 +222,9 @@ export class TelemetryClient implements ITelemetryClient {
       );
       const transformedMetrics = transformProps(data.metrics || {}, propPrefix);
       const properties: Record<string, string> = {
-        'common.source': name,
-        'common.os': os.platform(),
-        'common.platformversion': os.release(),
-        'common.arch': os.arch(),
         'appmap.cli.machineId': this.machineId,
         'appmap.cli.sessionId': this.session.id,
+        ...this.telemetryConfig.properties,
         ...transformedProperties,
       };
 
