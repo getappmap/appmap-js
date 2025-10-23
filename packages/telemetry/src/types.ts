@@ -37,6 +37,7 @@ export interface TelemetryConfiguration {
   product: ProductConfiguration;
   propPrefix: string;
   backend: BackendConfiguration;
+  properties?: Record<string, string>;
 }
 
 export interface SplunkBackendConfiguration extends BaseBackendConfiguration {
