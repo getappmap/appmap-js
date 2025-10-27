@@ -1,3 +1,10 @@
+# [@appland/telemetry-v1.1.2](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.1.1...@appland/telemetry-v1.1.2) (2025-10-27)
+
+
+### Bug Fixes
+
+* Handle configuration save errors in session management ([566f907](https://github.com/getappmap/appmap-js/commit/566f907242598c54045cf6f2b77f7d784147d7b1))
+
 # [@appland/telemetry-v1.1.1](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.1.0...@appland/telemetry-v1.1.1) (2025-10-09)
 
 
