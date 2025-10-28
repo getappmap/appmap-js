@@ -1,3 +1,10 @@
+# [@appland/telemetry-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.1.2...@appland/telemetry-v1.2.0) (2025-10-28)
+
+
+### Features
+
+* **telemetry:** Enhance telemetry configuration with dynamic properties ([df7c960](https://github.com/getappmap/appmap-js/commit/df7c96028211a42d49bf4f0cc5410c90a35dc848))
+
 # [@appland/telemetry-v1.1.2](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.1.1...@appland/telemetry-v1.1.2) (2025-10-27)
 
 
