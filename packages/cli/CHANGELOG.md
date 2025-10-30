@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.196.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.195.0...@appland/appmap-v3.196.0) (2025-10-30)
+
+
+### Features
+
+* Add new telemetry properties to CLI and scanner ([a66ef1e](https://github.com/getappmap/appmap-js/commit/a66ef1ecdc4ca993d7440795f8ae20e0343cde17))
+
 # [@appland/appmap-v3.195.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.194.1...@appland/appmap-v3.195.0) (2025-10-17)
 
 
