@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.196.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.196.0...@appland/appmap-v3.196.1) (2025-11-25)
+
+
+### Bug Fixes
+
+* **cli:** move pkg dependency to devDependencies ([50e1737](https://github.com/getappmap/appmap-js/commit/50e1737bcfd823de6f6559832b85149166669db9))
+
 # [@appland/appmap-v3.196.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.195.0...@appland/appmap-v3.196.0) (2025-10-30)
 
 
