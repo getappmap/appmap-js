@@ -10,6 +10,12 @@ const { schema: schema_1_5_1 } = require('../schema/1-5-1.js');
 const { schema: schema_1_6_0 } = require('../schema/1-6-0.js');
 const { schema: schema_1_7_0 } = require('../schema/1-7-0.js');
 const { schema: schema_1_8_0 } = require('../schema/1-8-0.js');
+const { schema: schema_1_9_0 } = require('../schema/1-9-0.js');
+const { schema: schema_1_10_0 } = require('../schema/1-10-0.js');
+const { schema: schema_1_11_0 } = require('../schema/1-11-0.js');
+const { schema: schema_1_12_0 } = require('../schema/1-12-0.js');
+const { schema: schema_1_13_0 } = require('../schema/1-13-0.js');
+const { schema: schema_1_13_1 } = require('../schema/1-13-1.js');
 
 const ajv = new Ajv({
   // jsPropertySyntax: true
@@ -25,6 +31,12 @@ const versions = new Map([
   ['1.6.0', ajv.compile(schema_1_6_0)],
   ['1.7.0', ajv.compile(schema_1_7_0)],
   ['1.8.0', ajv.compile(schema_1_8_0)],
+  ['1.9.0', ajv.compile(schema_1_9_0)],
+  ['1.10.0', ajv.compile(schema_1_10_0)],
+  ['1.11.0', ajv.compile(schema_1_11_0)],
+  ['1.12.0', ajv.compile(schema_1_12_0)],
+  ['1.13.0', ajv.compile(schema_1_13_0)],
+  ['1.13.1', ajv.compile(schema_1_13_1)],
 ]);
 
 const keys = Array.from(versions.keys());

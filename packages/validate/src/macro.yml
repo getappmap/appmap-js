@@ -8,6 +8,17 @@ required:
 properties:
   version:
     enum:
+      - "1.13.1" #! = 1.13.1
+      - "1.13.0" #! = 1.13.0
+      - "1.13"   #! = 1.13.0
+      - "1.12.0" #! = 1.12.0
+      - "1.12"   #! = 1.12.0
+      - "1.11.0" #! = 1.11.0
+      - "1.11"   #! = 1.11.0
+      - "1.10.0" #! = 1.10.0
+      - "1.10"   #! = 1.10.0
+      - "1.9.0"  #! = 1.9.0
+      - "1.9"    #! = 1.9.0
       - "1.8.0" #! = 1.8.0
       - "1.7.0" #! = 1.7.0
       - "1.6.0" #! = 1.6.0
@@ -103,9 +114,17 @@ definitions:
         type: object
         required:
           - name
+          - type  #! >= 1.9.0
         properties:
           name:
             type: string
+          type:                                      #! >= 1.9.0
+            enum:                                    #! >= 1.9.0
+              - code                                 #! >= 1.9.0
+              - process                              #! >= 1.9.0
+              - requests                             #! >= 1.9.0
+              - remote                               #! >= 1.9.0
+              - tests                                #! >= 1.9.0
       recording:
         type: object
         nullable: true
@@ -150,22 +169,47 @@ definitions:
             type: integer
             nullable: true
             minimum: 0
-          test_status:    #! >= 1.6.0
-            enum:         #! >= 1.6.0
-              - null      #! >= 1.6.0
-              - succeeded #! >= 1.6.0
-              - failed    #! >= 1.6.0
-          exception:           #! >= 1.6.0
-            type: object       #! >= 1.6.0
-            nullable: true     #! >= 1.6.0
-            required:          #! >= 1.6.0
-              - class          #! >= 1.6.0
-            properties:        #! >= 1.6.0
-              class:           #! >= 1.6.0
-                type: string   #! >= 1.6.0
-              message:         #! >= 1.6.0
-                type: string   #! >= 1.6.0
-                nullable: true #! >= 1.6.0
+          user_name:         #! >= 1.12.0
+            type: string     #! >= 1.12.0
+            nullable: true   #! >= 1.12.0
+          user_email:        #! >= 1.12.0
+            type: string     #! >= 1.12.0
+            nullable: true   #! >= 1.12.0
+          test_status:    #! >= 1.6.0 && < 1.12.0
+            enum:         #! >= 1.6.0 && < 1.12.0
+              - null      #! >= 1.6.0 && < 1.12.0
+              - succeeded #! >= 1.6.0 && < 1.12.0
+              - failed    #! >= 1.6.0 && < 1.12.0
+      test_status:        #! >= 1.12.0
+        enum:             #! >= 1.12.0
+          - null          #! >= 1.12.0
+          - succeeded     #! >= 1.12.0
+          - failed        #! >= 1.12.0
+      exception:             #! >= 1.6.0
+        type: object         #! >= 1.6.0
+        nullable: true       #! >= 1.6.0
+        required:            #! >= 1.6.0
+          - class            #! >= 1.6.0
+        properties:          #! >= 1.6.0
+          class:             #! >= 1.6.0
+            type: string     #! >= 1.6.0
+          message:           #! >= 1.6.0
+            type: string     #! >= 1.6.0
+            nullable: true   #! >= 1.6.0
+      test_failure:          #! >= 1.12.0
+        type: object         #! >= 1.12.0
+        nullable: true       #! >= 1.12.0
+        required:            #! >= 1.12.0
+          - message          #! >= 1.12.0
+        properties:          #! >= 1.12.0
+          message:           #! >= 1.12.0
+            type: string     #! >= 1.12.0
+          location:          #! >= 1.12.0
+            type: string     #! >= 1.12.0
+            nullable: true   #! >= 1.12.0
+      source_location:       #! >= 1.12.0
+        type: string         #! >= 1.12.0
+        nullable: true       #! >= 1.12.0
 
   #############
   # Class Map #
@@ -270,6 +314,10 @@ definitions:
         minimum: 0
       parent_id: false
       elapsed: false
+      timestamp:             #! >= 1.13.0
+        type: number         #! >= 1.13.0
+        nullable: true       #! >= 1.13.0
+        minimum: 0           #! >= 1.13.0
 
   return:
     type: object
@@ -294,6 +342,10 @@ definitions:
         type: number
         nullable: true
         minimum: 0
+      timestamp:             #! >= 1.13.0
+        type: number         #! >= 1.13.0
+        nullable: true       #! >= 1.13.0
+        minimum: 0           #! >= 1.13.0
 
   headers:
     type: object
@@ -341,19 +393,50 @@ definitions:
         nullable: true #! >= 1.7.0
         type: integer  #! >= 1.7.0
         minimum: 0     #! >= 1.7.0
-      properties:          #! >= 1.7.0
-        type: array        #! >= 1.7.0
-        nullable: true     #! >= 1.7.0
-        items:             #! >= 1.7.0
-          type: object     #! >= 1.7.0
-          required:        #! >= 1.7.0
-            - name         #! >= 1.7.0
-            - class        #! >= 1.7.0
-          properties:      #! >= 1.7.0
-            name:          #! >= 1.7.0
-              type: string #! >= 1.7.0
-            class:         #! >= 1.7.0
-              type: string #! >= 1.7.0
+      properties:                      #! >= 1.7.0 && < 1.10.0
+        type: array                    #! >= 1.7.0 && < 1.10.0
+        nullable: true                 #! >= 1.7.0 && < 1.10.0
+        items:                         #! >= 1.7.0 && < 1.10.0
+          type: object                 #! >= 1.7.0 && < 1.10.0
+          required:                    #! >= 1.7.0 && < 1.10.0
+            - name                     #! >= 1.7.0 && < 1.10.0
+            - class                    #! >= 1.7.0 && < 1.10.0
+          properties:                  #! >= 1.7.0 && < 1.10.0
+            name:                      #! >= 1.7.0 && < 1.10.0
+              type: string             #! >= 1.7.0 && < 1.10.0
+            class:                     #! >= 1.7.0 && < 1.10.0
+              type: string             #! >= 1.7.0 && < 1.10.0
+      properties:                      #! >= 1.10.0
+        type: array                    #! >= 1.10.0
+        nullable: true                 #! >= 1.10.0
+        items:                         #! >= 1.10.0
+          $ref: "#/definitions/parameter-property"  #! >= 1.10.0
+      items:                           #! >= 1.11.0
+        type: array                    #! >= 1.11.0
+        nullable: true                 #! >= 1.11.0
+        items:                         #! >= 1.11.0
+          $ref: "#/definitions/parameter-property"  #! >= 1.11.0
+
+  parameter-property:                               #! >= 1.10.0
+    type: object                                    #! >= 1.10.0
+    required:                                       #! >= 1.10.0
+      - name                                        #! >= 1.10.0
+      - class                                       #! >= 1.10.0
+    properties:                                     #! >= 1.10.0
+      name:                                         #! >= 1.10.0
+        type: string                                #! >= 1.10.0
+      class:                                        #! >= 1.10.0
+        type: string                                #! >= 1.10.0
+      properties:                                   #! >= 1.10.0
+        type: array                                 #! >= 1.10.0
+        nullable: true                              #! >= 1.10.0
+        items:                                      #! >= 1.10.0
+          $ref: "#/definitions/parameter-property"  #! >= 1.10.0
+      items:                                        #! >= 1.11.0
+        type: array                                 #! >= 1.11.0
+        nullable: true                              #! >= 1.11.0
+        items:                                      #! >= 1.11.0
+          $ref: "#/definitions/parameter-property"  #! >= 1.11.0
 
   exception:
     type: object

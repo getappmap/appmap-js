@@ -4,7 +4,7 @@ const YAML = require('yaml');
 
 const lines = FileSystem.readFileSync(`${__dirname}/macro.yml`, 'utf8').split('\n');
 
-const versions = ['1.8.0', '1.7.0', '1.6.0', '1.5.1', '1.5.0', '1.4.1', '1.4.0', '1.3.0', '1.2.0'];
+const versions = ['1.13.1', '1.13.0', '1.12.0', '1.11.0', '1.10.0', '1.9.0', '1.8.0', '1.7.0', '1.6.0', '1.5.1', '1.5.0', '1.4.1', '1.4.0', '1.3.0', '1.2.0'];
 
 for (const version of versions) {
   const yaml = lines
