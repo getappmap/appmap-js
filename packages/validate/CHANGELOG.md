@@ -1,3 +1,10 @@
+# [@appland/appmap-validate-v2.5.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-validate-v2.4.0...@appland/appmap-validate-v2.5.0) (2025-12-05)
+
+
+### Features
+
+* update AppMap schema from v1.8.0 to v1.13.1 ([e7b86f6](https://github.com/getappmap/appmap-js/commit/e7b86f692e47b8c746b2b5944ccd894f687b5f43))
+
 # [@appland/appmap-validate-v2.4.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-validate-v2.3.0...@appland/appmap-validate-v2.4.0) (2023-08-07)
 
 
