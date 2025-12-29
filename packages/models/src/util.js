@@ -350,7 +350,86 @@ export function buildLabels(classMap, events) {
 // sizeof returns a naive byte count for an object when serialized.
 // I was using an external library for this (object-sizeof), but getting results off by a factor of
 // ~2. This is awfully wasteful, slow and inaccurate but it works for now. -DB
-export const sizeof = (obj) => JSON.stringify(obj).length;
+export const sizeof = (obj) => {
+  try {
+    return JSON.stringify(obj).length;
+  } catch (e) {
+    // In case of large objects (e.g. ~500MB), JSON.stringify might fail with RangeError: Invalid string length.
+    // In that case, we fall back to a recursive calculation.
+    if (e instanceof RangeError) {
+      const seen = new WeakSet();
+
+      const recursiveSize = (value) => {
+        try {
+          const s = JSON.stringify(value);
+          // undefined returns undefined. The loops shouldn't pass undefined, but if they do, handling it is safe.
+          if (s === undefined) return 0;
+          return s.length;
+        } catch (err) {
+          if (!(err instanceof RangeError)) throw err;
+        }
+
+        if (value === null) return 4;
+        if (typeof value !== 'object') {
+          // Fallback for huge strings that failed stringify
+          if (typeof value === 'string') {
+            return value.length + 2; // +2 for quotes
+          }
+          return String(value).length;
+        }
+
+        if (seen.has(value)) {
+          throw new TypeError('Converting circular structure to JSON');
+        }
+        seen.add(value);
+
+        if (Array.isArray(value)) {
+          let size = 2; // []
+          if (value.length > 0) {
+            size += value.length - 1; // commas
+            for (let i = 0; i < value.length; i += 1) {
+              const item = value[i];
+              // In arrays, undefined, functions, and symbols are converted to null
+              if (item === undefined || typeof item === 'function' || typeof item === 'symbol') {
+                size += 4; // "null"
+              } else {
+                size += recursiveSize(item);
+              }
+            }
+          }
+          return size;
+        }
+
+        // Generic Object
+        let size = 2; // {}
+        const keys = Object.keys(value);
+        let addedProps = 0;
+        for (let i = 0; i < keys.length; i += 1) {
+          const k = keys[i];
+          const v = value[k];
+
+          // In objects, properties with undefined, function, or symbol values are omitted
+          if (v === undefined || typeof v === 'function' || typeof v === 'symbol') {
+            continue;
+          }
+
+          if (addedProps > 0) {
+            size += 1; // comma
+          }
+
+          size += JSON.stringify(k).length; // "key"
+          size += 1; // :
+          size += recursiveSize(v);
+          addedProps += 1;
+        }
+        return size;
+      };
+
+      return recursiveSize(obj);
+    }
+    throw e;
+  }
+};
 
 // Returns a unique 'hash' (or really, a key) tied to the event's core identity: SQL, HTTP, or a
 // specific method on a specific class. This is _really_ naive. The idea is that this better finds
