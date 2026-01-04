@@ -1,3 +1,10 @@
+# [@appland/appmap-validate-v2.5.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-validate-v2.5.0...@appland/appmap-validate-v2.5.1) (2026-01-04)
+
+
+### Bug Fixes
+
+* **validate:** handle Windows line endings in build script ([8ea29cb](https://github.com/getappmap/appmap-js/commit/8ea29cb177b8d52156dd4bf194f4618fb9eddf7a))
+
 # [@appland/appmap-validate-v2.5.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-validate-v2.4.0...@appland/appmap-validate-v2.5.0) (2025-12-05)
 
 
