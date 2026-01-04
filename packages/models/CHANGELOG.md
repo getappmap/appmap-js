@@ -1,3 +1,10 @@
+# [@appland/models-v2.10.4](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.10.3...@appland/models-v2.10.4) (2026-01-04)
+
+
+### Bug Fixes
+
+* **models:** Handle RangeError in sizeof for large objects ([d3bfa6f](https://github.com/getappmap/appmap-js/commit/d3bfa6f0583129899d2501b955c16165862cee01))
+
 # [@appland/models-v2.10.3](https://github.com/getappmap/appmap-js/compare/@appland/models-v2.10.2...@appland/models-v2.10.3) (2024-06-08)
 
 
