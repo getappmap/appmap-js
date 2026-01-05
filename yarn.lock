@@ -112,7 +112,7 @@ __metadata:
     "@appland/client": "workspace:^1.17.0"
     "@appland/components": "workspace:^4.12.0"
     "@appland/diagrams": "workspace:^1.8.0"
-    "@appland/models": "workspace:^2.10.2"
+    "@appland/models": "workspace:^2.10.4"
     "@appland/navie": ^1.48.0
     "@appland/openapi": "workspace:^1.8.0"
     "@appland/rpc": "workspace:^1.22.0"
@@ -403,7 +403,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/models@workspace:^2.10.0, @appland/models@workspace:^2.10.2, @appland/models@workspace:packages/models":
+"@appland/models@workspace:^2.10.0, @appland/models@workspace:^2.10.2, @appland/models@workspace:^2.10.4, @appland/models@workspace:packages/models":
   version: 0.0.0-use.local
   resolution: "@appland/models@workspace:packages/models"
   dependencies:
