@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.196.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.196.1...@appland/appmap-v3.196.2) (2026-01-05)
+
+
+### Bug Fixes
+
+* Handle pruning of AppMap files > 500 MiB ([7f772a0](https://github.com/getappmap/appmap-js/commit/7f772a0ee5d5fec0311906232f90ad3f5fb59fd6))
+
 # [@appland/appmap-v3.196.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.196.0...@appland/appmap-v3.196.1) (2025-11-25)
 
 
