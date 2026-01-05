@@ -11,6 +11,9 @@ interface OpenAiModelResponse {
   }[];
 }
 
+const EXCLUDED_MODELS_REGEX =
+  /preview|embedding|tts|moderation|dall-e|chatgpt|transcribe|image|\d{3,}/g;
+
 export async function fetchOpenAIModels(apiKey: string): Promise<NavieRpc.V1.Models.Model[]> {
   const models: NavieRpc.V1.Models.Model[] = [];
   try {
@@ -29,8 +32,7 @@ export async function fetchOpenAIModels(apiKey: string): Promise<NavieRpc.V1.Mod
       !['openai-internal', 'openai'].includes(model.owned_by);
 
     const isRelevantModel = (model: OpenAiModelResponse['data'][number]) =>
-      model.owned_by !== 'system' ||
-      !model.id.match(/preview|embedding|tts|moderation|dall-e|chatgpt|transcribe|\d{3,}/g);
+      model.owned_by !== 'system' || !model.id.match(EXCLUDED_MODELS_REGEX);
 
     const json = (await res.json()) as OpenAiModelResponse;
     models.push(

@@ -514,6 +514,116 @@ describe('Thread', () => {
         },
       ]);
     });
+    it('ignores whitespace leading file comment directives', () => {
+      const listener = jest.fn();
+      thread.on('event', 'test-client', listener);
+      thread.onToken('   <!-- file: test-file.md -->', 'test-message-id');
+      expect(listener.mock.calls.flat()).toStrictEqual([
+        {
+          type: 'token-metadata',
+          codeBlockUri: expect.any(String),
+          metadata: {
+            location: 'test-file.md',
+          },
+          time: expect.any(Number),
+        },
+      ]);
+    });
+    it('ignores whitespace leading code fences', () => {
+      const listener = jest.fn();
+      const token = `1. Python
+    \`\`\`python
+    for i in range(1, 11):
+        print(i)
+    \`\`\`
+2. JavaScript
+    \`\`\`js
+    for (let i = 1; i <= 10; i++) {
+      console.log(i);
+    }
+    \`\`\`
+`;
+      thread.on('event', 'test-client', listener);
+      thread.onToken(token, 'test-message-id');
+      expect(listener.mock.calls.flat()).toStrictEqual([
+        {
+          type: 'token',
+          token: '1. Python\n',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+        },
+        {
+          type: 'token',
+          token: '    ```',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+          codeBlockUri: expect.any(String),
+        },
+        {
+          type: 'token-metadata',
+          codeBlockUri: expect.any(String),
+          metadata: {
+            language: 'python',
+          },
+          time: expect.any(Number),
+        },
+        {
+          type: 'token',
+          token: 'python\n    for i in range(1, 11):\n        print(i)\n',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+          codeBlockUri: expect.any(String),
+        },
+        {
+          type: 'token',
+          token: '    ```',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+          codeBlockUri: expect.any(String),
+        },
+        {
+          type: 'token',
+          token: '\n2. JavaScript\n',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+        },
+        {
+          type: 'token',
+          token: '    ```',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+          codeBlockUri: expect.any(String),
+        },
+        {
+          type: 'token-metadata',
+          codeBlockUri: expect.any(String),
+          metadata: {
+            language: 'js',
+          },
+          time: expect.any(Number),
+        },
+        {
+          type: 'token',
+          token: 'js\n    for (let i = 1; i <= 10; i++) {\n      console.log(i);\n    }\n',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+          codeBlockUri: expect.any(String),
+        },
+        {
+          type: 'token',
+          token: '    ```',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+          codeBlockUri: expect.any(String),
+        },
+        {
+          type: 'token',
+          token: '\n',
+          messageId: 'test-message-id',
+          time: expect.any(Number),
+        },
+      ]);
+    });
   });
 
   describe('sendMessage', () => {
