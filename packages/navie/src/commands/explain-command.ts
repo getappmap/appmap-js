@@ -34,8 +34,11 @@ export default class ExplainCommand implements Command {
     private readonly options: ExplainOptions,
     public readonly interactionHistory: InteractionHistory,
     private readonly completionService: CompletionService,
-    private readonly classifierService: ClassificationService,
-    private readonly agentSelectionService: AgentSelectionService,
+    private readonly classifierService: ClassificationService | undefined,
+    private readonly agentSelectionService: Pick<
+      AgentSelectionService,
+      'selectAgent' | 'contextService'
+    >,
     private readonly codeSelectionService: CodeSelectionService,
     private readonly projectInfoService: ProjectInfoService,
     private readonly memoryService: MemoryService
@@ -52,7 +55,7 @@ export default class ExplainCommand implements Command {
     let contextLabelsFn: Promise<ContextV2.ContextLabel[]> | undefined;
 
     performance.mark('classifyStart');
-    if (classifyEnabled)
+    if (classifyEnabled && this.classifierService)
       contextLabelsFn = this.classifierService
         .classifyQuestion(baseQuestion, chatHistory)
         .catch((err) => {

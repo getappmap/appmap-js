@@ -316,6 +316,21 @@ class InteractionHistory extends EventEmitter {
     this.events.push(event);
   }
 
+  /**
+   * Clone the interaction history.
+   * This is useful for creating a copy of the interaction history
+   * that can be modified without affecting the original.
+   * @note this is a shallow copy, so the events are not cloned.
+   * This means that modifying the events in the clone will also modify the events in the original.
+   * @returns a shallow copy of the interaction history
+   */
+  clone(): InteractionHistory {
+    const clone = new InteractionHistory();
+    clone.events.push(...this.events);
+    clone.acceptPinnedFileContext = this.acceptPinnedFileContext;
+    return clone;
+  }
+
   stopAcceptingPinnedFileContext() {
     this.acceptPinnedFileContext = false;
   }
