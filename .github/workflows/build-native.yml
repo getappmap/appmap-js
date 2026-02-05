@@ -321,6 +321,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - run: yarn npm tag add `echo ${{ github.ref_name }} | sed -e s/-v/@/` latest
+      - name: Tag npm package as latest
+        run: yarn npm tag add `echo ${{ github.ref_name }} | sed -e s/-v/@/` latest
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
+
+      - name: Publish draft release
+        run: gh release edit ${{ github.ref_name }} --draft=false
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
