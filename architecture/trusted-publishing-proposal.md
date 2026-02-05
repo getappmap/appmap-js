@@ -16,7 +16,7 @@ This approach is clean, robust, and leverages a battle-tested pattern for separa
 
 For each successful release of a tool (e.g., `appmap`), the CI process will generate and publish two distinct manifest files to the `release-manifests` branch:
 
-1.  **Versioned Manifest:** An immutable, permanent manifest named after the full version tag (e.g., `@appland/appmap-v1.2.3.json`). This creates a complete, browsable history of all release metadata.
+1.  **Versioned Manifest:** An immutable, permanent manifest named after the full version tag (e.g., `appmap-v1.2.3.json`). This creates a complete, browsable history of all release metadata.
 2.  **"Latest" Pointer Manifest:** A "floating" manifest (e.g., `appmap-latest.json`) which is an exact copy of the latest versioned manifest. This file acts as a stable pointer for clients to discover the most recent version.
 
 ---
@@ -26,15 +26,22 @@ For each successful release of a tool (e.g., `appmap`), the CI process will gene
 ##### **Part 1: CI/CD Workflow Modifications**
 
 1.  **`release.yml` (JavaScript Publishing Workflow):**
+    *   Extracted from current `main.yml` workflow for clarity and better permission scoping; trigerred on successful build on the main branch.
     *   This workflow will be configured for **trusted publishing**.
-    *   **Action:** Add `permissions: id-token: write` to the `release` job and remove the `YARN_NPM_AUTH_TOKEN` environment variable.
+    *   **Action:** Configure the `release` job with an explicit `permissions` block for OIDC, and remove the `YARN_NPM_AUTH_TOKEN` environment variable. For example:
+
+        ```yaml
+        permissions:
+          id-token: write
+          contents: read
+        ```
     *   **Action:** Remove the `verifyConditionsCmd` from `.releaserc.js` that previously checked for `YARN_NPM_AUTH_TOKEN`.
 
 2.  **`build-native.yml` & `build-native-scanner.yml` (Native Binaries Workflows):**
     *   The `finalize-release` job will be responsible for generating and publishing the manifests *after* all binaries have been successfully uploaded to the GitHub Release.
     *   **Action:** Remove steps that generate and upload `.sha256` files. The digest will now be verified via the manifest.
     *   **Action:** Remove the step that runs `yarn npm tag add ...`.
-    *   **Action:** Add new steps to generate and publish the manifest files.
+    *   **Action:** Add new steps to generate and publish the manifest files. (Note: `contents: write` permission required.)
 
     ```yaml
     - name: Generate Release Manifests
@@ -55,24 +62,22 @@ For each successful release of a tool (e.g., `appmap`), the CI process will gene
         VERSIONED_MANIFEST_FILENAME="${BASE_TAG}.json"
 
         echo "Generating manifest for ${VERSION_TAG}"
-        # Pseudocode for manifest generation:
-        # MANIFEST_CONTENT=$(gh api repos/{owner}/{repo}/releases/tags/${VERSION_TAG} | jq '{...}')
+        MANIFEST_CONTENT=$(gh api repos/:owner/:repo/releases/tags/${VERSION_TAG} | jq '{tag_name, assets: [.assets[] | {name, browser_download_url, digest}]}')
         
         mkdir -p "${MANIFEST_DIR}"
         echo "${MANIFEST_CONTENT}" > "${MANIFEST_DIR}/${VERSIONED_MANIFEST_FILENAME}"
         cp "${MANIFEST_DIR}/${VERSIONED_MANIFEST_FILENAME}" "${MANIFEST_DIR}/${LATEST_MANIFEST_FILENAME}"
         
-- name: Publish Manifests to release-manifests branch
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: release-manifests
-        publish_dir: ./dist
-        keep_files: true
-        user_name: 'appland-release'
-        user_email: 'release@app.land'
-        commit_message: 'Update manifest for ${{ github.ref_name }}'
-
+    - name: Publish Manifests to release-manifests branch
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+        with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_branch: release-manifests
+            publish_dir: ./dist
+            keep_files: true
+            user_name: 'appland-release'
+            user_email: 'release@app.land'
+            commit_message: 'Update manifest for ${{ github.ref_name }}'
     ```
 
 ##### **Part 2: Client-Side Extension Modifications**
@@ -85,7 +90,7 @@ The client logic becomes dramatically simpler and more powerful.
 
 2.  **Advanced Discovery (Version Pinning):**
     *   To get a specific version, the client can now construct a URL to its permanent manifest:
-        `https://raw.githubusercontent.com/getappmap/appmap-js/release-manifests/@appland/appmap-v1.2.3.json`
+        `https://raw.githubusercontent.com/getappmap/appmap-js/release-manifests/appmap-v1.2.3.json`
 
 3.  **Verification:**
     *   The client will parse the manifest, download the appropriate asset from the `browser_download_url`, and verify its integrity using the SHA256 `digest`.
