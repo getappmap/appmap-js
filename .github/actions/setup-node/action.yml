@@ -4,20 +4,20 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: 18
     - name: Detect Yarn cache dir
       id: yarn-cache-dir-path
       shell: bash
-      run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
     - name: Restore Yarn packages
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v5
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
         key: ${{ github.job }}-yarn-${{ hashFiles('yarn.lock') }}
     - name: Restore node_modules
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       with:
         path: ./node_modules
         key: ${{ github.job }}-node-modules-${{ hashFiles('yarn.lock') }}
