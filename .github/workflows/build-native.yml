@@ -273,7 +273,36 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish draft release
+      - name: Generate Release Manifests
+        id: generate_manifest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p dist
+
+          VERSION_TAG="${{ github.ref_name }}"
+          BASE_TAG="${VERSION_TAG#@appland/}"
+          TOOL_NAME="${BASE_TAG%%-v*}"
+
+          echo "Fetching release data for $VERSION_TAG..."
+          gh release view "$VERSION_TAG" --json tagName,assets > release.json
+
+          echo "Generating manifest..."
+          jq '{tag_name: .tagName, assets: [.assets[] | {name, url: .url, digest}]}' release.json > "dist/${BASE_TAG}.json"
+          cp "dist/${BASE_TAG}.json" "dist/${TOOL_NAME}-latest.json"
+
+          echo "Verifying checksums..."
+          jq -r '.assets[] | .digest + "  " + .name' release.json > checksums.txt
+
+          if grep -v '^sha256:' checksums.txt; then
+            echo "::error::Invalid digest format found. Expected sha256:<hex>"
+            exit 1
+          fi
+
+          cd artifacts
+          cut -c8- ../checksums.txt | sha256sum --check
+
+      - name: Publish GitHub Release
         run: gh release edit ${{ github.ref_name }} --draft=false
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -282,3 +311,14 @@ jobs:
         run: yarn npm tag add `echo ${{ github.ref_name }} | sed -e s/-v/@/` latest
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
+
+      - name: Publish Manifests to release-manifests branch
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: release-manifests
+          publish_dir: ./dist
+          keep_files: true
+          user_name: 'appland-release'
+          user_email: 'release@app.land'
+          commit_message: 'Update manifest for ${{ github.ref_name }}'
