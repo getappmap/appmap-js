@@ -5,6 +5,7 @@ export { default as Message } from './message';
 export { default as InteractionState } from './interaction-state';
 export { default as navie } from './navie';
 export { AgentMode as Agents } from './agent';
+export { CommandMode } from './command';
 export { ContextV1, ContextV2 } from './context';
 export { UserContext } from './user-context';
 export { FileUpdate } from './file-update';
