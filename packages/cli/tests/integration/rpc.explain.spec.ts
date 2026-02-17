@@ -6,6 +6,7 @@ import {
   Help,
   navie,
   applyContext,
+  CommandMode,
   Navie,
   TestInvocation,
 } from '@appland/navie';
@@ -71,7 +72,7 @@ describe('RPC', () => {
 
       it('answers the question', async () => {
         jest.spyOn(Telemetry, 'enabled', 'get').mockReturnValue(true);
-        const navieImpl = {
+        const navieImpl: Navie.INavie = {
           on(_event: any, _listener: any) {},
           execute(): AsyncIterable<string> {
             return (async function* () {
@@ -79,6 +80,7 @@ describe('RPC', () => {
             })();
           },
           terminate: () => false,
+          commandMode: CommandMode.Explain,
         };
 
         jest.mocked(navie).mockReturnValue(navieImpl);
