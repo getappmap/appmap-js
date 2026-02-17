@@ -69,9 +69,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
     this.trajectory = trajectory;
   }
 
-  get providerName() {
-    return 'local';
-  }
+  readonly providerName = 'local';
 
   setOption(key: keyof typeof OPTION_SETTERS, value: string | number) {
     const setter = OPTION_SETTERS[key];
@@ -125,6 +123,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
           chatHistory = thread.getChatHistory();
         } catch (e) {
           if (verbose()) {
+            // eslint-disable-next-line no-console
             console.warn(`Failed to load thread ${threadId}: ${e}`);
           }
           // If the thread failed to load, history will be empty.
@@ -136,6 +135,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
           const thread = await history.load(threadId);
           chatHistory = thread.messages;
         } catch (e) {
+          // eslint-disable-next-line no-console
           if (verbose()) console.warn(`Failed to load legacy thread ${threadId}: ${e}`);
         }
         history?.question(threadId, userMessageId, question, codeSelection, prompt);
@@ -156,7 +156,6 @@ export default class LocalNavie extends EventEmitter implements INavie {
       );
 
       let agentName: string | undefined;
-      let classification: ContextV2.ContextLabel[] | undefined;
       const debugProperties: Record<string, string> = {};
       const debugMetrics: Record<string, number> = {};
       this.activeNavie.on('event', (event) => {
@@ -189,7 +188,6 @@ export default class LocalNavie extends EventEmitter implements INavie {
         });
         debugMetrics[metrics.NavieClassificationCount] = labels.length;
         debugMetrics[metrics.NavieClassificationMs] = performance.now() - startTime;
-        classification = labels;
       });
       if (this.trajectory)
         this.activeNavie.on('trajectory', this.trajectory.logMessage.bind(this.trajectory));
