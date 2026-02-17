@@ -3,6 +3,12 @@ const telemetryConstants = {
     // Indicates a Navie response has been completed successfully
     NavieResponse: 'navie:response',
 
+    // Indicates a Navie welcome response has been completed successfully
+    NavieWelcomeResponse: 'navie:response:welcome',
+
+    // Indicates a Navie suggest response has been completed successfully
+    NavieSuggestResponse: 'navie:response:suggest',
+
     // Indicates an error occurred during the processing of a Navie request
     DebugException: 'navie:exception',
   },
@@ -61,6 +67,9 @@ const telemetryConstants = {
 
     // The name of the Navie agent used for the response
     NavieAgent: 'appmap.navie.agent',
+
+    // The command mode used for the Navie interaction (explain, welcome, suggest, etc.)
+    NavieCommandMode: 'appmap.navie.command_mode',
 
     // The classification generated for a given inquiry, to be mapped to weight
     NavieClassification: (label: string) => `appmap.navie.classification.${label}`,
