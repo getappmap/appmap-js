@@ -209,7 +209,7 @@ export default class LocalNavie extends EventEmitter implements INavie {
       // - Separating these prevents pollution of user behavior analytics
       // - All other commands (explain, fix, review, etc.) use the standard navie:response event
       let eventName: string = events.NavieResponse;
-      const commandMode = this.activeNavie?.commandMode;
+      const commandMode = this.activeNavie.commandMode;
       if (commandMode === CommandMode.Welcome) {
         eventName = events.NavieWelcomeResponse;
       } else if (commandMode === CommandMode.Suggest) {
