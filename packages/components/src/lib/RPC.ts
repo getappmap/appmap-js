@@ -13,7 +13,7 @@ export function reportError(callback: any, err: any, error: any) {
   }
 }
 
-export function browserClient(port: number) {
+export function browserClient(httpUrl: string) {
   const callServer = function (request: any, callback: (err: Error | null, result?: any) => void) {
     const options = {
       method: 'POST',
@@ -24,7 +24,7 @@ export function browserClient(port: number) {
     };
 
     window
-      .fetch(`http://localhost:${port}`, options)
+      .fetch(httpUrl, options)
       .then(function (res) {
         return res.text();
       })
