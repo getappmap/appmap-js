@@ -1,8 +1,10 @@
 import { AppMapRpc, ConfigurationRpc, ExplainRpc, NavieRpc, URI } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
 import type ClientBrowser from 'jayson/lib/client/browser';
+import { parseRpcUrl } from './RPCUrlUtils';
 
 import { EventEmitter } from 'events';
+import assert from 'assert';
 
 // From jayson Server.errors
 // This is defined here to avoid pulling in node dependencies
@@ -169,13 +171,44 @@ export class SubscribeListener {
 
 export default class AppMapRPC {
   private readonly client: ClientBrowser;
-  private readonly port?: number;
 
-  constructor(portOrClient: number | ClientBrowser) {
-    if (typeof portOrClient === 'number') {
-      this.port = portOrClient;
+  // these are mostly for reference and debugging purposes
+  public readonly wsUrl?: string;
+  public readonly httpUrl?: string;
+
+  /**
+   * Creates an AppMap RPC client.
+   *
+   * @param urlPortOrClient - RPC server configuration:
+   *   - Port number (e.g., 3000) - connects to http://localhost:port
+   *   - Full URL (e.g., "http://remote:8080", "https://api.example.com/rpc")
+   *   - ClientBrowser instance - for custom client injection (mostly used for testing)
+   *
+   * @example
+   * // Port number (backward compatible)
+   * new AppMapRPC(3000)
+   *
+   * // Full URLs
+   * new AppMapRPC('http://localhost:3000')
+   * new AppMapRPC('http://remote-server:8080')
+   * new AppMapRPC('https://api.example.com/rpc')
+   *
+   * // Custom client
+   * new AppMapRPC(myBrowserClient)
+   */
+  constructor(urlPortOrClient: string | number | ClientBrowser) {
+    if (typeof urlPortOrClient === 'number' || typeof urlPortOrClient === 'string') {
+      const parsed = parseRpcUrl(urlPortOrClient);
+      this.wsUrl = parsed.wsUrl;
+      this.httpUrl = parsed.httpUrl;
+      this.client = browserClient(this.httpUrl);
+    } else {
+      // ClientBrowser was provided directly
+      this.client = urlPortOrClient;
+      // wsUrl and httpUrl are not set since we don't know how the client is configured,
+      // but that's acceptable since they're only used for connection management which
+      // is handled by the caller when providing a custom client.
     }
-    this.client = typeof portOrClient === 'number' ? browserClient(portOrClient) : portOrClient;
   }
 
   listMethods(): Promise<string[]> {
@@ -409,18 +442,21 @@ export default class AppMapRPC {
 
   public readonly thread = {
     subscribe: async (threadId?: string, replay?: boolean, nonce?: number) => {
-      if (!this.port) throw new Error('RPC client is not connected');
+      if (!this.wsUrl) throw new Error('RPC client is not connected');
 
       let lastAckedNonce = nonce ?? 0;
       const listener = new SubscribeListener();
 
       const connect = async (nonce?: number): Promise<void> => {
-        const params = new URLSearchParams();
+        assert(this.wsUrl, 'WebSocket URL is not defined'); // This should never happen due to the check above
+        const wsUrlObj = new URL(this.wsUrl);
+
+        const params = wsUrlObj.searchParams;
         if (threadId) params.append('threadId', threadId);
         if (replay) params.append('replay', 'true');
         if (nonce) params.append('nonce', nonce.toString());
 
-        const ws = new WebSocket(`ws://localhost:${this.port}/?${params.toString()}`);
+        const ws = new WebSocket(wsUrlObj);
         const historicalEvents: Record<string, unknown>[] = [];
         let streaming = false;
         ws.addEventListener('message', ({ data }) => {

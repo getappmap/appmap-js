@@ -153,6 +153,9 @@ export default {
     appmapRpcPort: {
       type: Number,
     },
+    appmapRpcUrl: {
+      type: String,
+    },
     // Provide a custom search function, e.g. for mocking
     appmapRpcFn: {
       type: Function,
@@ -259,7 +262,7 @@ export default {
       selectedModel: undefined as undefined | NavieRpc.V1.Models.ListModel,
       activeThreadId: undefined,
       threadListener: undefined,
-      rpcClient: new AppMapRPC(this.appmapRpcPort ?? 30101),
+      rpcClient: new AppMapRPC(this.appmapRpcUrl ?? this.appmapRpcPort ?? 30101),
     };
   },
   provide() {

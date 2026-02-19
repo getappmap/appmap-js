@@ -1,6 +1,44 @@
 import AppMapRpc from '@/lib/AppMapRPC';
 
 describe('AppMapRPC', () => {
+  describe('constructor', () => {
+    it('accepts a port number (backward compatibility)', () => {
+      const rpc = new AppMapRpc(3000);
+      expect(rpc).toBeDefined();
+      expect(rpc.httpUrl).toBe('http://localhost:3000');
+      expect(rpc.wsUrl).toBe('ws://localhost:3000');
+    });
+
+    it('accepts a full HTTP URL', () => {
+      const rpc = new AppMapRpc('http://remote-server:8080');
+      expect(rpc).toBeDefined();
+      expect(rpc.httpUrl).toBe('http://remote-server:8080/');
+      expect(rpc.wsUrl).toBe('ws://remote-server:8080/');
+    });
+
+    it('accepts a full HTTPS URL and converts to WSS', () => {
+      const rpc = new AppMapRpc('https://secure.example.com:8443/rpc');
+      expect(rpc).toBeDefined();
+      expect(rpc.httpUrl).toBe('https://secure.example.com:8443/rpc');
+      expect(rpc.wsUrl).toBe('wss://secure.example.com:8443/rpc');
+    });
+
+    it('does not accept a protocol-less URL', () => {
+      expect(() => new AppMapRpc('remote-server:8080')).toThrow();
+    });
+
+    it('accepts a ClientBrowser instance', () => {
+      const mockClient = {
+        request: jest.fn(),
+      };
+      const rpc = new AppMapRpc(mockClient);
+      expect(rpc).toBeDefined();
+      // Should have no URLs when given a custom client
+      expect(rpc.httpUrl).toBeUndefined();
+      expect(rpc.wsUrl).toBeUndefined();
+    });
+  });
+
   describe('explain', () => {
     it('stops polling for status once it gets a 404 error', () => {
       let client = {
