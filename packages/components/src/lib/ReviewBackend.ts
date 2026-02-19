@@ -8,7 +8,8 @@ import type { ExplainRequest } from './AppMapRPC';
 import AppMapRPC from './AppMapRPC';
 
 type Options = Partial<Pick<ReviewRpc.Review, 'suggestions' | 'features'>> & {
-  rpcPort: number;
+  rpcPort?: number;
+  rpcUrl?: string;
 };
 
 class ReviewBackend {
@@ -20,8 +21,9 @@ class ReviewBackend {
     store.dispatch('updateSuggestions', options.suggestions);
     store.dispatch('updateFeatures', options.features);
     store.dispatch('updateLoading', options.suggestions ? false : true);
-    if (options.rpcPort) {
-      this.rpc = new AppMapRPC(options.rpcPort);
+    const rpcConfig = options.rpcUrl ?? options.rpcPort;
+    if (rpcConfig) {
+      this.rpc = new AppMapRPC(rpcConfig);
       review.$root.$on('fix', (suggestion: Suggestion) => this.startFix(suggestion));
     }
   }

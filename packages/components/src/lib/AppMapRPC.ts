@@ -1,6 +1,7 @@
 import { AppMapRpc, ConfigurationRpc, ExplainRpc, NavieRpc, URI } from '@appland/rpc';
 import { browserClient, reportError } from './RPC';
 import type ClientBrowser from 'jayson/lib/client/browser';
+import { parseRpcUrl } from './RPCUrlUtils';
 
 import { EventEmitter } from 'events';
 
@@ -169,13 +170,52 @@ export class SubscribeListener {
 
 export default class AppMapRPC {
   private readonly client: ClientBrowser;
+  private readonly httpUrl: string;
+  private readonly wsUrl: string;
+  /** @deprecated Use httpUrl instead. Kept for backward compatibility. */
   private readonly port?: number;
 
-  constructor(portOrClient: number | ClientBrowser) {
-    if (typeof portOrClient === 'number') {
-      this.port = portOrClient;
+  /**
+   * Creates an AppMap RPC client.
+   *
+   * @param urlPortOrClient - RPC server configuration:
+   *   - Port number (e.g., 3000) - connects to http://localhost:port
+   *   - Full URL (e.g., "http://remote:8080", "https://api.example.com/rpc")
+   *   - Protocol-less URL (e.g., "remote:8080") - http:// is added automatically
+   *   - ClientBrowser instance - for custom client injection
+   *
+   * @example
+   * // Port number (backward compatible)
+   * new AppMapRPC(3000)
+   *
+   * // Full URLs
+   * new AppMapRPC('http://localhost:3000')
+   * new AppMapRPC('http://remote-server:8080')
+   * new AppMapRPC('https://api.example.com/rpc')
+   *
+   * // Custom client
+   * new AppMapRPC(myBrowserClient)
+   */
+  constructor(urlPortOrClient: string | number | ClientBrowser) {
+    if (typeof urlPortOrClient === 'number' || typeof urlPortOrClient === 'string') {
+      const parsed = parseRpcUrl(urlPortOrClient);
+      this.httpUrl = parsed.httpUrl;
+      this.wsUrl = parsed.wsUrl;
+      // Keep port for backward compatibility
+      if (typeof urlPortOrClient === 'number') {
+        this.port = urlPortOrClient;
+      }
+    } else {
+      // ClientBrowser was provided directly
+      // Set default URLs for backward compatibility
+      const parsed = parseRpcUrl(undefined);
+      this.httpUrl = parsed.httpUrl;
+      this.wsUrl = parsed.wsUrl;
     }
-    this.client = typeof portOrClient === 'number' ? browserClient(portOrClient) : portOrClient;
+    this.client =
+      typeof urlPortOrClient === 'number' || typeof urlPortOrClient === 'string'
+        ? browserClient(urlPortOrClient)
+        : urlPortOrClient;
   }
 
   listMethods(): Promise<string[]> {
@@ -409,7 +449,7 @@ export default class AppMapRPC {
 
   public readonly thread = {
     subscribe: async (threadId?: string, replay?: boolean, nonce?: number) => {
-      if (!this.port) throw new Error('RPC client is not connected');
+      if (!this.wsUrl) throw new Error('RPC client is not connected');
 
       let lastAckedNonce = nonce ?? 0;
       const listener = new SubscribeListener();
@@ -420,7 +460,8 @@ export default class AppMapRPC {
         if (replay) params.append('replay', 'true');
         if (nonce) params.append('nonce', nonce.toString());
 
-        const ws = new WebSocket(`ws://localhost:${this.port}/?${params.toString()}`);
+        const wsUrlWithParams = `${this.wsUrl}/?${params.toString()}`;
+        const ws = new WebSocket(wsUrlWithParams);
         const historicalEvents: Record<string, unknown>[] = [];
         let streaming = false;
         ws.addEventListener('message', ({ data }) => {
