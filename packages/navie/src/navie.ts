@@ -52,6 +52,10 @@ export interface ClientRequest {
 }
 
 export interface INavie {
+  // Exposes the command mode (explain, welcome, suggest, etc.) for telemetry differentiation.
+  // This allows consumers to distinguish user-initiated queries from auto-generated content.
+  readonly commandMode: CommandMode;
+
   on(event: 'event', listener: (event: InteractionEvent) => void): void;
 
   on(event: 'agent', listener: (agent: string) => void): void;
@@ -245,6 +249,9 @@ export default function navie(
   clientRequest.question = stringOrDefault(questionText, commandName);
 
   class Navie extends EventEmitter implements INavie {
+    // Exposed for telemetry to differentiate user-initiated vs auto-generated interactions
+    public readonly commandMode: CommandMode = commandName;
+
     private terminated = false;
 
     constructor() {
