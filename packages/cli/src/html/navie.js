@@ -9,12 +9,17 @@ Vue.use(plugin);
 
 async function initializeApp() {
   const params = new URL(document.location).searchParams;
+  const rpcUrl = params.get('rpcUrl');
   const rpcPort = params.get('rpcPort');
   const question = params.get('question');
 
   const props = {};
 
-  if (rpcPort) props.appmapRpcPort = parseInt(rpcPort);
+  if (rpcUrl) {
+    props.appmapRpcUrl = rpcUrl;
+  } else if (rpcPort) {
+    props.appmapRpcPort = parseInt(rpcPort);
+  }
   if (question) props.question = question;
 
   return new Vue({
