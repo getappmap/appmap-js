@@ -251,7 +251,7 @@ jobs:
       - macos-arm64
       - windows
     if: github.ref_type == 'tag'
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
@@ -268,8 +268,17 @@ jobs:
           path: artifacts
           merge-multiple: true
 
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION_TAG="${{ github.ref_name }}"
+          BASE_TAG="${VERSION_TAG#@appland/}"
+          NOTES=$(git log -1 --format='%b' "${VERSION_TAG}")
+          gh release create "${VERSION_TAG}" --draft --title "${BASE_TAG}" --notes "${NOTES}"
+
       - name: Publish binaries to GitHub release
-        run: gh release upload ${{ github.ref_name }} artifacts/* --clobber
+        run: gh release upload ${{ github.ref_name }} artifacts/*
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

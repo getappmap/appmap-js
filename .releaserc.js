@@ -1,7 +1,8 @@
-let commitMessage = 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}';
-let publishArgs = '';
 const packageName = process.env.npm_package_name;
 const hasNativeBinaries = packageName === '@appland/appmap' || packageName === '@appland/scanner';
+
+let commitMessage = `chore(release): ${packageName} \${nextRelease.version} [skip ci]\n\n\${nextRelease.notes}`;
+let publishArgs = '';
 
 if (hasNativeBinaries) {
   // Don't publish @appland/{appmap,scanner} as latest. This is done in a follow-up step.
@@ -62,18 +63,9 @@ const plugins = [
   ],
 ];
 
-// Only create GitHub releases for packages with native binaries.
-// Other packages only need git tags, which are created automatically.
-if (hasNativeBinaries) {
-  // Create draft releases to avoid race condition where clients see the release before binaries are attached.
-  // The build-native workflows will publish the draft after all binaries are uploaded.
-  plugins.push([
-    '@semantic-release/github',
-    {
-      draftRelease: true,
-    },
-  ]);
-}
+// Note: GitHub releases for native packages are created by the build-native workflow,
+// after all binaries are attached, to avoid a race condition where clients see the
+// release without binaries. Semantic-release only creates the git tag.
 
 plugins.push([
   '@semantic-release/exec',
