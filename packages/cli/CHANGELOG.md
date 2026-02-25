@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.197.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.196.2...@appland/appmap-v3.197.0) (2026-02-25)
+
+
+### Features
+
+* **navie:** differentiate telemetry events by command mode ([a72e140](https://github.com/getappmap/appmap-js/commit/a72e140827b549d9749745c9435804977e0b247b))
+
 # [@appland/appmap-v3.196.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.196.1...@appland/appmap-v3.196.2) (2026-01-05)
 
 
