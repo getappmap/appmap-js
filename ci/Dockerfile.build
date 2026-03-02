@@ -1,0 +1,23 @@
+FROM registry.access.redhat.com/ubi8/nodejs-18:1-140
+
+# Use OCI labels so the GHCR page looks professional and links to your repo
+LABEL org.opencontainers.image.title="RHEL 8 Builder" \
+      org.opencontainers.image.description="Node 18 + GCC 13 for RHEL 8 native builds" \
+      org.opencontainers.image.source="https://github.com/getappmap/appmap-js"
+
+USER root
+
+# 1. Install GCC Toolset 13 (provides modern g++ on RHEL 8)
+# 2. Clean cache to keep image small
+RUN dnf install -y gcc-toolset-13-gcc-c++ && \
+    dnf clean all
+
+# 3. Enable Corepack for Yarn/PNPM support
+RUN corepack enable
+
+# 4. Set PATH so 'gcc' and 'g++' point to the Toolset version automatically
+ENV PATH=/opt/rh/gcc-toolset-13/root/usr/bin:$PATH
+
+# Standard UBI user
+USER 1001
+WORKDIR /opt/app-root/src

@@ -1,19 +1,48 @@
 #!/bin/bash
-set -ex
+set -e
 
 # Optionally pass a desired OS as the first argument, followed by an optional architecture.
 # e.g. ./build-native macos arm64
 #
 # Otherwise every target will be built.
-# Note that if a desired OS is provided, the output will simply be named 'appmap' or 'appmap.exe'.
-# OS and ARCH are only used to name the output when multiple targets are being built at once.
 OS="${1}"
+ARCH="${2:-x64}"
 ARGS="--config package.json --compress GZip"
+PKG_NAME=$(node -p "require('./package.json').name.split('/').pop()")
+
+# check if OS is set and OS/ARCH is the same as the current system.
+is_native() {
+  [ -z "${OS}" ] && return 1
+  # Check if the current system matches the specified OS and ARCH.
+  case "$(uname -s)" in
+    Linux*)   current_os="linux" ;;
+    Darwin*)  current_os="macos" ;;
+    CYGWIN*)  current_os="windows" ;;
+    MINGW*)   current_os="windows" ;;
+    *)        current_os="unknown" ;;
+  esac
+  current_arch="$(uname -m)"
+  case "${current_arch}" in
+    x86_64)  current_arch="x64" ;;
+    arm64)   current_arch="arm64" ;;
+    aarch64) current_arch="arm64" ;;
+    *)       current_arch="unknown" ;;
+  esac
+  [ "${OS}" = "${current_os}" ] && [ "${ARCH}" = "${current_arch}" ]
+}
+
+# Do not rebuild native binary addons if the architecture and system match. 
+# These should be built by yarn install beforehand.
+# Having pkg try to rebuild them risks downloading pre-built versions that do not work
+# correctly on the target machine.
+if is_native; then
+  echo "Building native binary for current system ${OS} ${ARCH} - skipping native build step."
+  ARGS="${ARGS} --no-native-build"
+fi
 
 if [ -n "${OS}" ]; then
-  ARCH="${2:-x64}"
   echo "Building native binaries for ${OS} ${ARCH}..."
-  ARGS="${ARGS} -o release/appmap-${OS}-${ARCH} -t node18-${OS}-${ARCH}"
+  ARGS="${ARGS} -o release/${PKG_NAME}-${OS}-${ARCH} -t node18-${OS}-${ARCH}"
 else
   echo "Building native binaries for each target..."
 fi
