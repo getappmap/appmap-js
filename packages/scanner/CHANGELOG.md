@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.89.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.89.0...@appland/scanner-v1.89.1) (2026-03-04)
+
+
+### Bug Fixes
+
+* **native:** build Linux binaries against GLIBC 2.28 for RHEL 8 compatibility ([3da2b87](https://github.com/getappmap/appmap-js/commit/3da2b8766d12f6ccd4bb6631c7f2918e042efd3a))
+
 # [@appland/scanner-v1.89.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.88.3...@appland/scanner-v1.89.0) (2025-10-30)
 
 
