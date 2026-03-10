@@ -1,0 +1,82 @@
+name: Manifests & NPM
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag to process'
+        required: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-slim
+    outputs:
+      release_tag: ${{ steps.determine.outputs.release_tag }}
+      npm_version: ${{ steps.determine.outputs.npm_version }}
+    steps:
+      - id: determine
+        run: |
+          RELEASE_TAG="${{ github.event.release.tag_name || inputs.tag_name }}"
+          NPM_VERSION=$(echo "$RELEASE_TAG" | sed -e 's/-v/@/')
+          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "npm_version=$NPM_VERSION" >> $GITHUB_OUTPUT
+  npm:
+    runs-on: ubuntu-latest
+    needs: [setup]
+    steps:
+      - name: setup npm auth
+        uses: actions/setup-node@v6
+        with:
+          registry-url: 'https://registry.npmjs.org'
+      - name: Tag npm package as latest
+        run: |
+          VERSION_LABEL="${{ needs.setup.outputs.npm_version }}"
+          TARGET_LABEL=latest
+          echo "Labeling $VERSION_LABEL as $TARGET_LABEL"
+          npm dist-tag add "$VERSION_LABEL" "$TARGET_LABEL"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
+
+  manifests:
+    runs-on: ubuntu-latest
+    needs: [setup]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Generate Release Manifests
+        run: |
+          mkdir -p dist
+
+          VERSION_TAG="${{ needs.setup.outputs.release_tag }}"
+          BASE_TAG="${VERSION_TAG#@appland/}"
+          TOOL_NAME="${BASE_TAG%%-v*}"
+
+          echo "Fetching release data for $VERSION_TAG..."
+          gh release view "$VERSION_TAG" --json tagName,assets > release.json
+
+          echo "Generating manifest..."
+          jq '{tag_name: .tagName, assets: [.assets[] | {name, url: .url, digest}]}' release.json > "dist/${BASE_TAG}.json"
+          cp "dist/${BASE_TAG}.json" "dist/${TOOL_NAME}-latest.json"
+
+      - name: Store as artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: manifests
+          path: ./dist
+
+      - name: Publish Manifests to release-manifests branch
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: release-manifests
+          publish_dir: ./dist
+          keep_files: true
+          user_name: 'appland-release'
+          user_email: 'release@app.land'
+          commit_message: 'Update manifest for ${{ needs.setup.outputs.release_tag }}'
