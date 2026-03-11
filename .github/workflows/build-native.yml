@@ -378,14 +378,18 @@ jobs:
           cd artifacts
           cut -c8- ../checksums.txt | sha256sum --check
 
+      # this step will NOT automatically trigger workflows associated with release publication event,
+      # see https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow#triggering-a-workflow-from-a-workflow
       - name: Publish GitHub Release
         run: gh release edit ${{ github.ref_name }} --draft=false
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # previous step will NOT automatically trigger workflows associated with release publication event,
-      # see https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow#triggering-a-workflow-from-a-workflow
-      - name: Dispatch manifests workflow
-        run: gh workflow run manifests.yml -f tag_name="${{ github.ref_name }}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish:
+    needs: ["finalize-release"]
+    uses: ./.github/workflows/manifests.yml
+    secrets: inherit
+    with:
+      tag_name: ${{ github.ref_name }}
+    permissions:
+      contents: write

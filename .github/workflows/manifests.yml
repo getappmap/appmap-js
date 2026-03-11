@@ -8,6 +8,12 @@ on:
       tag_name:
         description: 'Release tag to process'
         required: true
+  workflow_call:
+    inputs:
+      tag_name:
+        type: string
+        description: 'Release tag to process'
+        required: true
 
 jobs:
   setup:
