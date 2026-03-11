@@ -3,27 +3,27 @@
   "assets": [
     {
       "name": "scanner-linux-arm64",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/untagged-c7541543443fb3e17694/scanner-linux-arm64",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.89.1/scanner-linux-arm64",
       "digest": "sha256:c520b9c50408e0a9efe4d9528b0e218d82e4b5100f8537b84f6c426a930ab532"
     },
     {
       "name": "scanner-linux-x64",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/untagged-c7541543443fb3e17694/scanner-linux-x64",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.89.1/scanner-linux-x64",
       "digest": "sha256:7388e27768c0459291625c588078cb556ad7f05d40baac5e280c6938d4b288c4"
     },
     {
       "name": "scanner-macos-arm64",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/untagged-c7541543443fb3e17694/scanner-macos-arm64",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.89.1/scanner-macos-arm64",
       "digest": "sha256:fdf89a0e89a89542e6556ef8fec9c00be68551be36b8a0cd6c9cd5b39b6629e4"
     },
     {
       "name": "scanner-macos-x64",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/untagged-c7541543443fb3e17694/scanner-macos-x64",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.89.1/scanner-macos-x64",
       "digest": "sha256:426ce96be815bc862855ebe3fa87f800e222f1e94459376648faff078a199c5b"
     },
     {
       "name": "scanner-win-x64.exe",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/untagged-c7541543443fb3e17694/scanner-win-x64.exe",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.89.1/scanner-win-x64.exe",
       "digest": "sha256:8cacff7487ed9a4c85dc3dd75b28a5bfede38c170338277ffc71a9712ea7538b"
     }
   ]
