@@ -1,4 +1,5 @@
 const jaysonBrowserClient = require('jayson/lib/client/browser');
+import { parseRpcUrl } from './RPCUrlUtils';
 
 export function reportError(callback: any, err: any, error: any) {
   if (err) {
@@ -13,7 +14,9 @@ export function reportError(callback: any, err: any, error: any) {
   }
 }
 
-export function browserClient(port: number) {
+export function browserClient(urlOrPort: string | number) {
+  const { httpUrl } = parseRpcUrl(urlOrPort);
+
   const callServer = function (request: any, callback: (err: Error | null, result?: any) => void) {
     const options = {
       method: 'POST',
@@ -24,7 +27,7 @@ export function browserClient(port: number) {
     };
 
     window
-      .fetch(`http://localhost:${port}`, options)
+      .fetch(httpUrl, options)
       .then(function (res) {
         return res.text();
       })

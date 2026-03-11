@@ -1,6 +1,55 @@
 import AppMapRpc from '@/lib/AppMapRPC';
 
 describe('AppMapRPC', () => {
+  describe('constructor', () => {
+    it('accepts a port number (backward compatibility)', () => {
+      const rpc = new AppMapRpc(3000);
+      expect(rpc).toBeDefined();
+      expect(rpc.port).toBe(3000);
+    });
+
+    it('accepts a full HTTP URL', () => {
+      const rpc = new AppMapRpc('http://remote-server:8080');
+      expect(rpc).toBeDefined();
+      expect(rpc.httpUrl).toBe('http://remote-server:8080');
+      expect(rpc.wsUrl).toBe('ws://remote-server:8080');
+    });
+
+    it('accepts a full HTTPS URL and converts to WSS', () => {
+      const rpc = new AppMapRpc('https://secure.example.com/rpc');
+      expect(rpc).toBeDefined();
+      expect(rpc.httpUrl).toBe('https://secure.example.com/rpc');
+      expect(rpc.wsUrl).toBe('wss://secure.example.com/rpc');
+    });
+
+    it('accepts a protocol-less URL', () => {
+      const rpc = new AppMapRpc('remote-server:8080');
+      expect(rpc).toBeDefined();
+      expect(rpc.httpUrl).toBe('http://remote-server:8080');
+      expect(rpc.wsUrl).toBe('ws://remote-server:8080');
+    });
+
+    it('accepts a ClientBrowser instance', () => {
+      const mockClient = {
+        request: jest.fn(),
+      };
+      const rpc = new AppMapRpc(mockClient);
+      expect(rpc).toBeDefined();
+      // Should have default URLs when client is provided
+      expect(rpc.httpUrl).toBe('http://localhost:30101');
+      expect(rpc.wsUrl).toBe('ws://localhost:30101');
+    });
+
+    it('uses default port when undefined is passed', () => {
+      const mockClient = {
+        request: jest.fn(),
+      };
+      const rpc = new AppMapRpc(mockClient);
+      expect(rpc.httpUrl).toBe('http://localhost:30101');
+      expect(rpc.wsUrl).toBe('ws://localhost:30101');
+    });
+  });
+
   describe('explain', () => {
     it('stops polling for status once it gets a 404 error', () => {
       let client = {
