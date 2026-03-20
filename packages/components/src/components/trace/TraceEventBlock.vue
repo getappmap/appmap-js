@@ -277,7 +277,9 @@ export default {
 
 .event-block
   .trace
-  .event-block:not(.event-block--one-child):not(.event-block--first-child):not(.event-block--last-child) {
+  .event-block:not(.event-block--one-child):not(.event-block--first-child):not(
+    .event-block--last-child
+  ) {
   position: relative;
 
   &::before {
