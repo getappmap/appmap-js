@@ -134,7 +134,7 @@
     "langchain": "^0.2.12",
     "lru-cache": "^10.2.2",
     "lunr": "^2.3.9",
-    "minimatch": "^5.1.2",
+    "minimatch": "^5.1.9",
     "moo": "^0.5.1",
     "open": "^8.2.1",
     "openapi-diff": "^0.23.6",
