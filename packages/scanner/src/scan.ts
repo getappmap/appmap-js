@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import LRUCache from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 import assert from 'assert';
 import { readFile } from 'fs/promises';
 import { warn } from 'console';

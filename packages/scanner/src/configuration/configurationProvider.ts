@@ -93,7 +93,7 @@ async function buildBuiltinCheck(config: CheckConfig): Promise<Check> {
     console.log(`Loaded rule: ${rule}`);
   }
 
-  let options: typeof rule['Options'];
+  let options: (typeof rule)['Options'];
   if (rule.Options) {
     options = new rule.Options();
   } else {
