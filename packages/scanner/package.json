@@ -78,7 +78,7 @@
     "inquirer": "^8.1.2",
     "js-yaml": "^4.1.0",
     "lru-cache": "^10",
-    "minimatch": "^5.1.2",
+    "minimatch": "^5.1.9",
     "octokit": "^2.0.19",
     "openapi-diff": "^0.23.6",
     "ora": "~5",
