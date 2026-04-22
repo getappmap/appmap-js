@@ -20,6 +20,7 @@
 import VBadge from '@/components/Badge.vue';
 import VButton from '@/components/Button.vue';
 import VAiIcon from '@/assets/compass-icon.svg';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-ai-help',
@@ -30,7 +31,7 @@ export default {
   },
   methods: {
     onClick() {
-      this.$root.$emit('ai-help');
+      eventBus.emit('ai-help');
     },
   },
 };

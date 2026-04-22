@@ -5,6 +5,7 @@ import navieContext from '../data/navie_context.json';
 import savedFilters from '../data/saved_filters.js';
 import orderData from '../data/scenario.json';
 import '../scss/vscode.scss';
+import eventBus from '@/lib/eventBus';
 
 function wait(msec) {
   return new Promise((resolve) => setTimeout(resolve, msec));
@@ -69,7 +70,7 @@ export const ChatSearch = (args, { argTypes }) => ({
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
     this.$refs.chatSearch.setAppMapStats(appmapStats);
-    this.$root.$on('on-thread-subscription', () => {
+    eventBus.on('on-thread-subscription', () => {
       // this.$refs.chatSearch.includeCodeSelection(codeSelection);
     });
   },
@@ -92,7 +93,7 @@ export const ChatSearchWithCodeSelection = (args, { argTypes }) => ({
   components: { VChatSearch },
   template: `<v-chat-search v-bind="$props" ref="chatSearch"></v-chat-search>`,
   mounted() {
-    this.$root.$on('on-thread-subscription', () => {
+    eventBus.on('on-thread-subscription', () => {
       this.$refs.chatSearch.includeCodeSelection(codeSelection);
     });
   },

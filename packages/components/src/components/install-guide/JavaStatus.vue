@@ -26,7 +26,7 @@
               them again,
               <a
                 href="#"
-                @click.stop.prevent="$root.$emit('add-java-configs', projectPath)"
+                @click.stop.prevent="addJavaConfigs()"
                 data-cy="add-java-configs"
               >
                 click here.
@@ -43,7 +43,7 @@
             <v-button
               kind="ghost"
               class="button"
-              @click.native="$root.$emit('add-java-configs', projectPath)"
+              @click.native="addJavaConfigs()"
             >
               Add them now
             </v-button>
@@ -56,6 +56,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
+import eventBus from '@/lib/eventBus';
 import VFlashMessage from '@/components/FlashMessage.vue';
 import VSpinner from '@/components/Spinner.vue';
 import VLoaderIcon from '@/assets/eva_loader-outline.svg';
@@ -95,6 +96,12 @@ export default Vue.extend({
         default:
           return 'requesting';
       }
+    },
+  },
+
+  methods: {
+    addJavaConfigs() {
+      eventBus.emit('add-java-configs', this.projectPath);
     },
   },
 });

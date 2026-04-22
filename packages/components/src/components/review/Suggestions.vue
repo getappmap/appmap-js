@@ -93,6 +93,7 @@ import VDismissModal from './DismissModal.vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 import CategoryStats from './CategoryStats.vue';
 import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   name: 'SuggestionsList',
@@ -251,7 +252,7 @@ export default Vue.extend({
       this.selectedSuggestion = undefined;
     },
     handleFix(suggestion: Suggestion) {
-      this.$root.$emit('fix', suggestion);
+      eventBus.emit('fix', suggestion);
       // set fix status immediately to prevent the user from clicking multiple times
       this.$store.dispatch('fixInProgress', suggestion.id);
     },
@@ -313,7 +314,7 @@ export default Vue.extend({
       this.openActionMenu = undefined;
     },
     viewRecordingInstructions() {
-      this.$root.$emit('view-recording-instructions');
+      eventBus.emit('view-recording-instructions');
     },
   },
 });

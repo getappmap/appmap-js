@@ -152,6 +152,7 @@ import VPopper from '@/components/Popper.vue';
 import VPopperMenu from '@/components/PopperMenu.vue';
 import Vue, { PropType } from 'vue';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   components: {
@@ -246,7 +247,7 @@ export default Vue.extend({
     onClickHeader() {
       if (!this.isCollapsable) {
         if (this.isFile) {
-          this.$root.$emit('open-location', this.location, this.directory);
+          eventBus.emit('open-location', this.location, this.directory);
         }
         return;
       }
@@ -254,11 +255,11 @@ export default Vue.extend({
     },
     onJumpTo() {
       if (!this.isReference) return;
-      this.$root.$emit('jump-to', this.valueUri);
+      eventBus.emit('jump-to', this.valueUri);
     },
     onOpen() {
       if (!this.isFile) return;
-      this.$root.$emit('open-location', this.location, this.directory);
+      eventBus.emit('open-location', this.location, this.directory);
     },
     onApply() {
       if (!this.isFile || !this.isPinnable || this.pendingState) return;

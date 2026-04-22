@@ -22,6 +22,7 @@
 <script>
 import VExternalLinkIcon from '@/assets/external-link.svg';
 import VWarningIcon from '@/assets/warning.svg';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-source-code-link',
@@ -82,7 +83,7 @@ export default {
   methods: {
     viewSource() {
       if (this.$data.sourceLocation) {
-        this.$root.$emit('viewSource', {
+        eventBus.emit('viewSource', {
           location: this.$data.sourceLocation,
           error: this.$data.sourceLocationError,
           externalUrl: this.$data.externalUrl,
@@ -99,18 +100,18 @@ export default {
     requestLocation() {
       this.sourceLocation = undefined;
       if (this.defaultLocation) {
-        this.$root.$emit('request-resolve-location', this.defaultLocation);
+        eventBus.emit('request-resolve-location', this.defaultLocation);
       }
     },
   },
 
   beforeMount() {
-    this.$root.$on('response-resolve-location', this.onResolveLocation);
+    eventBus.on('response-resolve-location', this.onResolveLocation);
     this.requestLocation();
   },
 
   beforeDestroy() {
-    this.$root.$off('response-resolve-location', this.onResolveLocation);
+    eventBus.off('response-resolve-location', this.onResolveLocation);
   },
 };
 </script>

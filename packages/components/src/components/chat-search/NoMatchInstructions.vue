@@ -17,6 +17,8 @@
   </div>
 </template>
 <script>
+import eventBus from '@/lib/eventBus';
+
 export default {
   name: 'v-no-match-instructions',
 
@@ -35,7 +37,7 @@ export default {
 
   methods: {
     openRecordInstructions() {
-      this.$root.$emit('open-record-instructions');
+      eventBus.emit('open-record-instructions');
     },
   },
 };

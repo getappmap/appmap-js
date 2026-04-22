@@ -62,6 +62,7 @@ import StatsIconLg from '@/assets/stats-icon-lg.svg';
 import HiddenIcon from '@/assets/hidden-icon.svg';
 import ScissorsIcon from '@/assets/scissors-icon.svg';
 import { SET_FOCUSED_EVENT, SET_VIEW, VIEW_SEQUENCE, SELECT_CODE_OBJECT } from '@/store/vsCode';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-stats-panel',
@@ -167,7 +168,7 @@ export default {
     },
 
     openLocation(location) {
-      this.$root.$emit('viewSource', { location });
+      eventBus.emit('viewSource', { location });
     },
 
     openFunction(fqid) {

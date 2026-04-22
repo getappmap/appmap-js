@@ -4,7 +4,7 @@
       label="Back"
       kind="ghost"
       data-cy="back-button"
-      @click.native="$root.$emit('page-previous')"
+      @click.native="pagePrevious()"
       v-if="!first"
     />
     <v-button
@@ -12,7 +12,7 @@
       :kind="nextButtonType"
       label="Next"
       data-cy="next-button"
-      @click.native="$root.$emit('page-next')"
+      @click.native="pageNext()"
       v-if="!last"
     />
   </div>
@@ -20,6 +20,7 @@
 
 <script>
 import VButton from '@/components/Button.vue';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'navigation-buttons',
@@ -50,6 +51,15 @@ export default {
     },
     nextButtonType() {
       return this.complete ? 'primary' : 'ghost';
+    },
+  },
+
+  methods: {
+    pagePrevious() {
+      eventBus.emit('page-previous');
+    },
+    pageNext() {
+      eventBus.emit('page-next');
     },
   },
 };

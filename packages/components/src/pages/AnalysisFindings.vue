@@ -104,6 +104,7 @@
 
 <script>
 import VQuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'analysis-findings',
@@ -176,11 +177,11 @@ export default {
     },
 
     openFindingInfo(hash) {
-      this.$root.$emit('open-finding-info', hash);
+      eventBus.emit('open-finding-info', hash);
     },
 
     openProblemsTab() {
-      this.$root.$emit('open-problems-tab');
+      eventBus.emit('open-problems-tab');
     },
   },
 

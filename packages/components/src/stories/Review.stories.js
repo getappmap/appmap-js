@@ -5,6 +5,7 @@ import store from '@/store/review';
 import { features, suggestions } from './data/review.json';
 import './scss/fullscreen.scss';
 import './scss/vscode.scss';
+import eventBus from '@/lib/eventBus';
 
 // Initialize the store with our test data
 store.dispatch('updateFeatures', features);
@@ -22,8 +23,8 @@ export const Review = (args, { argTypes }) => ({
   template: '<v-review ref="vsCode" />',
   created() {
     for (const event of ['open-location', 'show-navie-thread'])
-      this.$root.$on(event, action(event));
-    this.$root.$on('fix', (suggestion) => {
+      eventBus.on(event, action(event));
+    eventBus.on('fix', (suggestion) => {
       action('fix')(suggestion);
       store.dispatch('setFixThread', { id: suggestion.id, threadId: `navie-fix-${suggestion.id}` });
       setTimeout(() => store.dispatch('fixReady', suggestion.id), 5000);

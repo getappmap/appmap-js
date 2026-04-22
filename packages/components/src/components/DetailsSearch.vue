@@ -81,6 +81,7 @@ import toListItem from '@/lib/finding';
 import { SELECT_CODE_OBJECT, SELECT_LABEL } from '../store/vsCode';
 import SortDownIcon from '@/assets/sort-down.svg';
 import SortUpIcon from '@/assets/sort-up.svg';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-details-search',
@@ -258,7 +259,7 @@ export default {
 
   methods: {
     selectObject(type, object) {
-      this.$root.$emit('selectObjectInSidebar', type);
+      eventBus.emit('selectObjectInSidebar', type);
       if (type === 'labels') {
         this.$store.commit(SELECT_LABEL, object);
       } else {
@@ -291,7 +292,7 @@ export default {
     },
 
     searchFocused() {
-      this.$root.$emit('sidebarSearchFocused');
+      eventBus.emit('sidebarSearchFocused');
     },
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;

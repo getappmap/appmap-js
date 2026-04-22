@@ -3,6 +3,7 @@ import VCodeFencedContent from '@/components/chat/CodeFencedContent.vue';
 import VNextPromptButton from '@/components/chat/NextPromptButton.vue';
 import VInlineRecommendation from '@/components/chat/InlineRecommendation.vue';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
+import eventBus from '@/lib/eventBus';
 
 function getAttributeRecord(attrs: NamedNodeMap): Record<string, string> {
   return Array.from(attrs).reduce((memo, attr) => {
@@ -11,13 +12,13 @@ function getAttributeRecord(attrs: NamedNodeMap): Record<string, string> {
   }, {} as Record<string, string>);
 }
 
-function buildNode(h: Vue.CreateElement, src: Element, $root: Vue): Vue.VNode | undefined {
+function buildNode(h: Vue.CreateElement, src: Element): Vue.VNode | undefined {
   const children = [];
   for (let i = 0; i < src.childNodes.length; i++) {
     const srcChild = src.childNodes[i];
     let vnode;
     if (srcChild instanceof Element) {
-      vnode = buildNode(h, srcChild as Element, $root);
+      vnode = buildNode(h, srcChild as Element);
     } else if (srcChild instanceof Text) {
       vnode = srcChild.textContent;
     }
@@ -55,7 +56,7 @@ function buildNode(h: Vue.CreateElement, src: Element, $root: Vue): Vue.VNode | 
                 if (!href) return;
 
                 e.preventDefault();
-                $root.$emit('click-link', href);
+                eventBus.emit('click-link', href);
               }
             : () => {},
       },
@@ -90,7 +91,7 @@ export default Vue.extend({
 
     const children = [];
     for (let i = 0; i < dom.body.childNodes.length; i++) {
-      const vnode = buildNode(h, dom.body.childNodes[i] as Element, this.$root);
+      const vnode = buildNode(h, dom.body.childNodes[i] as Element);
       if (vnode) {
         children.push(vnode);
       }

@@ -20,7 +20,7 @@
           class="file"
           :href="location"
           :title="location"
-          @click.stop.prevent="$root.$emit('open-location', location)"
+          @click.stop.prevent="openLocation(location)"
           >{{ location.replace(/^.*\//, '') }}</a
         >
         <a
@@ -29,7 +29,7 @@
           :key="appmap.name"
           :href="appmap.path"
           :title="appmap.name"
-          @click.stop.prevent="$root.$emit('open-location', appmap.path)"
+          @click.stop.prevent="openLocation(appmap.path)"
         />
 
         <SuggestionButtons
@@ -50,7 +50,7 @@
           :href="location"
           :title="location"
           class="file-expanded"
-          @click.stop.prevent="$root.$emit('open-location', location)"
+          @click.stop.prevent="openLocation(location)"
           >{{ location }}</a
         >
         <v-code-snippet :clipboard-text="code" :language="language" :show-copy="false" />
@@ -63,7 +63,7 @@
               class="appmap-link"
               :href="appmap.path"
               :title="appmap.path"
-              @click.stop.prevent="$root.$emit('open-location', appmap.path)"
+              @click.stop.prevent="openLocation(appmap.path)"
               >{{ appmap.name }}</a
             >
           </li>
@@ -83,6 +83,7 @@
 
 <script lang="ts">
 import Vue, { Component, PropType } from 'vue';
+import eventBus from '@/lib/eventBus';
 import {
   Wrench,
   RotateCcw,
@@ -197,6 +198,7 @@ export default Vue.extend({
       return this.status.status === 'fixed' || this.status.status === 'dismissed';
     },
     statusTitle(): string {
+
       const { reason, status } = this.status;
       switch (status) {
         case 'todo':
@@ -212,6 +214,12 @@ export default Vue.extend({
         default:
           return 'Unknown status';
       }
+    },
+  },
+
+  methods: {
+    openLocation(location: string) {
+      eventBus.emit('open-location', location);
     },
   },
 });

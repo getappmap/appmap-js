@@ -6,6 +6,7 @@
 import { ComponentDiagram } from '@appland/diagrams';
 import { CodeObject, Event, ClassMap, CodeObjectType } from '@appland/models';
 import { SELECT_CODE_OBJECT } from '@/store/vsCode';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-diagram-component',
@@ -155,7 +156,7 @@ export default {
           .on('collapse', () => this.highlightSelectedCodeObject(false))
           .on('expand', () => this.highlightSelectedCodeObject(false))
           .on('makeRoot', (codeObject) => {
-            this.$root.$emit('makeRoot', codeObject);
+            eventBus.emit('makeRoot', codeObject);
           });
         if (this.selectedObject) {
           this.highlightSelectedCodeObject();

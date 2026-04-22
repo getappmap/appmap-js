@@ -116,7 +116,7 @@
             label="Next: Chat with Navie"
             data-cy="next-button"
             class="next-button"
-            @click.native="$root.$emit('open-navie')"
+            @click.native="openNavie()"
           />
         </template>
         <template v-else>
@@ -357,7 +357,7 @@
           label="Next: Chat with Navie"
           data-cy="end-button"
           class="next-button"
-          @click.native="$root.$emit('open-navie')"
+          @click.native="openNavie()"
         />
       </div>
     </v-accordion>
@@ -507,6 +507,10 @@ export default Vue.extend({
   },
 
   methods: {
+    openNavie() {
+      eventBus.emit('open-navie');
+    },
+
     onClickSection(section: Section) {
       if (section === 'project' && this.projects.length === 1) {
         return;

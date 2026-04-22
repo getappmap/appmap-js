@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import eventBus from '@/lib/eventBus';
 
 type Data = {
   ownedElements: Set<HTMLAnchorElement>;
@@ -45,7 +46,7 @@ export default Vue.extend({
         return;
       }
 
-      this.$root.$emit('click-link', href);
+      eventBus.emit('click-link', href);
     },
 
     // If we own the element, remove the click handler and drop references.

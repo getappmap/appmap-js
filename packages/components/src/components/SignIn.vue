@@ -123,6 +123,7 @@ import GitHubLogo from '@/assets/github-logo.svg';
 import GitLabLogo from '@/assets/gitlab-logo.svg';
 import EmailIcon from '@/assets/email.svg';
 import ExternalLinkIcon from '@/assets/external-link.svg';
+import eventBus from '@/lib/eventBus';
 
 const GENERIC_ERROR_MSG = 'Something went wrong, please try again later.';
 
@@ -166,7 +167,7 @@ export default {
       }
     },
     signIn(target) {
-      this.$root.$emit('sign-in', target);
+      eventBus.emit('sign-in', target);
     },
     reset() {
       this.email = '';
@@ -215,7 +216,7 @@ export default {
         const response = await this.pendingRequest;
         if (response.status === 200) {
           const data = await response.json();
-          this.$root.$emit('activate', data.api_key);
+          eventBus.emit('activate', data.api_key);
         } else {
           this.verificationCode = '';
           this.error =

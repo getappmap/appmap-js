@@ -15,6 +15,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import VPopper from '@/components/Popper.vue';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   components: { VPopper },
@@ -42,7 +43,7 @@ export default Vue.extend({
   methods: {
     onClick() {
       if (this.prompt) {
-        this.$root.$emit('inline-recommendation', { prompt: this.prompt });
+        eventBus.emit('inline-recommendation', { prompt: this.prompt });
       }
     },
   },

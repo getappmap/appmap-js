@@ -64,6 +64,7 @@ import VExternalLinkIcon from '@/assets/external-link.svg';
 import VPopperMenu from '@/components/PopperMenu.vue';
 import VButton from '@/components/Button.vue';
 import type { NaviePromptSuggestion } from '@/lib/buildPrompts';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   props: {
@@ -105,7 +106,7 @@ export default Vue.extend({
   },
   methods: {
     onPromptSuggestionClick(suggestion: NaviePromptSuggestion) {
-      this.$root.$emit('submit-to-navie', suggestion);
+      eventBus.emit('submit-to-navie', suggestion);
       const { promptSuggestionsMenu } = this.$refs;
       if (promptSuggestionsMenu instanceof Vue) {
         (promptSuggestionsMenu as unknown as { close: () => void }).close();

@@ -11,6 +11,7 @@
 //@ts-nocheck
 import VAddFileButton from '@/components/AddFileButton.vue';
 import VPinIcon from '@/assets/pin.svg';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-intellij-notice',
@@ -21,7 +22,7 @@ export default {
   },
   methods: {
     addFiles() {
-      this.$root.$emit('choose-files-to-pin');
+      eventBus.emit('choose-files-to-pin');
     },
   },
 };

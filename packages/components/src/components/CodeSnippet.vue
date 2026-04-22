@@ -36,6 +36,7 @@ import ClipboardIcon from '@/assets/copy-icon.svg';
 import VPopper from './Popper.vue';
 
 import hljs from 'highlight.js';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'VCodeSnippet',
@@ -96,7 +97,7 @@ export default {
     },
     onCopy() {
       const text = this.transformedText.trim();
-      this.$root.$emit('clipboard', text);
+      eventBus.emit('clipboard', text);
     },
   },
 };

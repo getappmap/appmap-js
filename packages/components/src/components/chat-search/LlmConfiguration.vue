@@ -144,6 +144,7 @@ import VModal from '@/components/Modal.vue';
 import VCloseIcon from '@/assets/x-icon.svg';
 import VCopilotNotice from '@/components/chat-search/CopilotNotice.vue';
 import VSubscriptionStatus from '@/components/chat-search/SubscriptionStatus.vue';
+import eventBus from '@/lib/eventBus';
 
 type LLMConfigOption = 'default' | 'own-key' | 'own-model' | 'copilot';
 
@@ -246,7 +247,7 @@ export default Vue.extend({
       this.modalVisible = false;
     },
     selectOption(option: LLMConfigOption) {
-      this.$root.$emit('select-llm-option', option);
+      eventBus.emit('select-llm-option', option);
       this.hideModal();
     },
   },

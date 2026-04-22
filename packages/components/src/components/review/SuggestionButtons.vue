@@ -16,7 +16,7 @@
       v-if="!done && fixThread"
       :size="buttonSize"
       class="dim"
-      @click.native.stop="$root.$emit('show-navie-thread', fixThread)"
+      @click.native.stop="showNavieThread(fixThread)"
       :title="compact ? 'Show fix' : undefined"
     >
       <Wrench class="fix-icon icon" :size="iconSize" />
@@ -63,6 +63,7 @@ import { Wrench, CircleCheck, Trash, RotateCcw } from 'lucide-vue';
 import { defineComponent, type PropType } from 'vue';
 import { SuggestionStatus } from '.';
 import VButton from '@/components/Button.vue';
+import eventBus from '@/lib/eventBus';
 
 export default defineComponent({
   components: {
@@ -83,6 +84,11 @@ export default defineComponent({
     },
   },
   emits: ['fix', 'done', 'dismiss', 'reopen'],
+  methods: {
+    showNavieThread(thread: string) {
+      eventBus.emit('show-navie-thread', thread);
+    },
+  },
   computed: {
     done(): boolean {
       return ['fixed', 'dismissed'].includes(this.status.status);

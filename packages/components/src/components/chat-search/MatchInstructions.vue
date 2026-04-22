@@ -24,6 +24,7 @@
 
 <script>
 import VButton from '@/components/Button.vue';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-instructions',
@@ -51,7 +52,7 @@ export default {
 
   methods: {
     openRecordInstructions() {
-      this.$root.$emit('open-record-instructions');
+      eventBus.emit('open-record-instructions');
     },
   },
 };

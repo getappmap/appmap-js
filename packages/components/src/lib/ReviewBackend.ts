@@ -6,6 +6,7 @@ import store from '../store/review';
 
 import type { ExplainRequest } from './AppMapRPC';
 import AppMapRPC from './AppMapRPC';
+import eventBus from './eventBus';
 
 type Options = Partial<Pick<ReviewRpc.Review, 'suggestions' | 'features'>> & {
   rpcPort: number;
@@ -22,7 +23,7 @@ class ReviewBackend {
     store.dispatch('updateLoading', options.suggestions ? false : true);
     if (options.rpcPort) {
       this.rpc = new AppMapRPC(options.rpcPort);
-      review.$root.$on('fix', (suggestion: Suggestion) => this.startFix(suggestion));
+      eventBus.on('fix', (suggestion: Suggestion) => this.startFix(suggestion));
     }
   }
 

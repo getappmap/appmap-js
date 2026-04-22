@@ -30,6 +30,7 @@ import VSuggestions from '@/components/review/Suggestions.vue';
 import VFlashMessage from '@/components/FlashMessage.vue';
 import store from '@/store/review';
 import { Suggestion } from '@/components/review';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   name: 'ReviewPage',
@@ -94,7 +95,7 @@ export default Vue.extend({
     ...mapActions(['dismissFeature']),
     onToastClick(suggestionId: string) {
       const thread = this.$store.state.suggestionStatuses[suggestionId]?.threadId;
-      if (thread) this.$root.$emit('show-navie-thread', thread);
+      if (thread) eventBus.emit('show-navie-thread', thread);
       this.hideToast();
     },
     showToastNotification(

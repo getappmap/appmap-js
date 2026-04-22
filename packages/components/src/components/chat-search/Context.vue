@@ -37,6 +37,7 @@
 <script lang="ts">
 //@ts-nocheck
 import VContextItem from '@/components/chat-search/ContextItem.vue';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-context',
@@ -83,7 +84,7 @@ export default {
       return this.contextItems(type).length;
     },
     openInstallInstructions() {
-      this.$root.$emit('open-install-instructions');
+      eventBus.emit('open-install-instructions');
     },
   },
 };

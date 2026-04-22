@@ -1,6 +1,7 @@
 import { default as VUserMessage } from '@/components/chat/UserMessage.vue';
 import { tokenize } from '@/lib/tokenize';
 import './scss/vscode.scss';
+import eventBus from '@/lib/eventBus';
 
 export default {
   title: 'Pages/Chat/User Message',
@@ -174,7 +175,7 @@ export const Links = (args, { argTypes }) => ({
   template: `<v-user-message v-bind="$props"></v-user-message>`,
   mounted() {
     this.$nextTick(() => {
-      this.$root.$on('click-link', (href) => {
+      eventBus.on('click-link', (href) => {
         console.log('click-link', href);
       });
     });
@@ -198,7 +199,7 @@ export const InlineRecommendations = (args, { argTypes }) => ({
   template: `<v-user-message v-bind="$props"></v-user-message>`,
   mounted() {
     this.$nextTick(() => {
-      this.$root.$on('click-link', (href) => {
+      eventBus.on('click-link', (href) => {
         console.log('click-link', href);
       });
     });

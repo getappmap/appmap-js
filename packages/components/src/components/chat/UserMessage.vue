@@ -113,6 +113,7 @@ import markedChangeExtension from '@/components/chat/markedChangeExtension.ts';
 
 import { Marked, Renderer } from 'marked';
 import DOMPurify from 'dompurify';
+import eventBus from '@/lib/eventBus';
 
 const customRenderer = new Renderer();
 const linkRenderer = customRenderer.link;
@@ -304,7 +305,7 @@ export default {
       }
     },
     saveMessage() {
-      this.$root.$emit('save-message', {
+      eventBus.emit('save-message', {
         messageId: this.id,
         threadId: this.threadId,
         content: this.renderRawMessage(),

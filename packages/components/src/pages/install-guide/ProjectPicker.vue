@@ -41,6 +41,7 @@
 import QuickstartLayout from '@/components/quickstart/QuickstartLayout.vue';
 import EmptyIcon from '@/assets/patch-question.svg';
 import VProjectConfiguration from '@/components/install-guide/ProjectConfiguration.vue';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'ProjectPicker',
@@ -77,7 +78,7 @@ export default {
   methods: {
     onSelectProject(project) {
       this.selectedProject = this.projects.find((p) => p.path === project.path);
-      this.$root.$emit('select-project', project);
+      eventBus.emit('select-project', project);
     },
     onSelectLanguage(language) {
       this.selectedLanguage = language.toLowerCase();

@@ -28,6 +28,7 @@ import Vue, { PropType } from 'vue';
 import hljs from 'highlight.js';
 import stripCodeFences from '@/lib/stripCodeFences';
 import { URI } from '@appland/rpc';
+import eventBus from '@/lib/eventBus';
 
 hljs.registerAliases(['rake', 'Gemfile'], { languageName: 'ruby' });
 hljs.registerAliases(['vue'], { languageName: 'xml' });
@@ -146,13 +147,13 @@ export default Vue.extend({
       navigator.clipboard.writeText(code);
     },
     onPin({ pinned, uri }: { pinned: boolean; uri: string }): void {
-      this.$root.$emit('pin', { pinned, uri });
+      eventBus.emit('pin', { pinned, uri });
     },
     async onApply(resultCallback: (result: 'success' | 'failure') => void): Promise<void> {
       if (this.pendingApply) return;
       if (!this.decodedLocation) return;
 
-      this.$root.$emit('apply', this.decodedLocation, this.code);
+      eventBus.emit('apply', this.decodedLocation, this.code);
 
       const { rpcClient } = this as unknown as Injected;
       this.pendingApply = true;

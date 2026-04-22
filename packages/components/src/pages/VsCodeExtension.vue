@@ -439,6 +439,7 @@ import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
 import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
 import VCompassIcon from '@/assets/compass-simpler.svg';
+import eventBus from '@/lib/eventBus';
 
 const browserPrefixes = ['', 'webkit', 'moz'];
 
@@ -558,7 +559,7 @@ export default {
     '$store.state.currentView': {
       handler(view) {
         this.$refs.tabs.activateTab(this.$refs[view]);
-        this.$root.$emit('stateChanged', 'currentView');
+        eventBus.emit('stateChanged', 'currentView');
       },
     },
     '$store.getters.selectedObject': {
@@ -576,13 +577,13 @@ export default {
           this.eventFilterMatchIndex = undefined;
         }
 
-        this.$root.$emit('stateChanged', 'selectedObject');
+        eventBus.emit('stateChanged', 'selectedObject');
         if (this.autoExpandDetailsPanel) this.revealDetailsPanel();
       },
     },
     '$store.state.selectedLabel': {
       handler() {
-        this.$root.$emit('stateChanged', 'selectedObject');
+        eventBus.emit('stateChanged', 'selectedObject');
       },
     },
     '$store.state.focusedEvent': {
@@ -934,19 +935,19 @@ export default {
     },
     showInstructions() {
       this.$refs.instructions.open();
-      this.$root.$emit('showInstructions');
+      eventBus.emit('showInstructions');
     },
     showVersionNotification(version, versionText = '') {
       this.version = version;
       this.versionText = versionText;
     },
     onNotificationOpen() {
-      this.$root.$emit('notificationOpen');
+      eventBus.emit('notificationOpen');
     },
     onNotificationClose() {
       this.version = null;
       this.versionText = '';
-      this.$root.$emit('notificationClose');
+      eventBus.emit('notificationClose');
     },
     onChangeTab(tab) {
       // 'tab' can be the tab name or the actual tab.
@@ -959,7 +960,7 @@ export default {
 
       const viewKey = Object.keys(this.$refs)[index];
       this.setView(viewKey);
-      this.$root.$emit('changeTab', viewKey);
+      eventBus.emit('changeTab', viewKey);
 
       if (viewKey === VIEW_SEQUENCE) {
         this.startSeqDiagramTimer();
@@ -970,7 +971,7 @@ export default {
     startSeqDiagramTimer() {
       // prompt for feedback after viewing a sequence diagram for 1 minute
       this.seqDiagramTimeoutId = setTimeout(() => {
-        this.$root.$emit('seq-diagram-feedback');
+        eventBus.emit('seq-diagram-feedback');
       }, 60 * 1000);
     },
     setView(view) {
@@ -1024,7 +1025,7 @@ export default {
       return base64UrlEncode(JSON.stringify(state));
     },
     openFilterModal() {
-      this.$root.$emit('clickFilterButton');
+      eventBus.emit('clickFilterButton');
     },
     setSelectedObject(fqid) {
       const matchResult = fqid.match(/^([a-z\-]+):(.+)/);
@@ -1158,7 +1159,7 @@ export default {
     clearSelection() {
       this.eventFilterMatchIndex = undefined;
       this.$store.commit(CLEAR_SELECTION_STACK);
-      this.$root.$emit('clearSelection');
+      eventBus.emit('clearSelection');
     },
     resetDiagram() {
       this.$store.commit(SET_COLLAPSED_ACTION_STATE, []);
@@ -1169,7 +1170,7 @@ export default {
       this.$store.commit(CLEAR_EXPANDED_PACKAGES);
       this.clearSelection();
       this.$store.commit(RESET_FILTERS);
-      this.$root.$emit('resetDiagram');
+      eventBus.emit('resetDiagram');
 
       this.renderKey += 1;
       this.eventFilterText = '';
@@ -1334,7 +1335,7 @@ export default {
           default: true,
         };
 
-        this.$root.$emit('saveFilter', filterObject);
+        eventBus.emit('saveFilter', filterObject);
         savedFilters.push(filterObject);
       }
 
@@ -1432,14 +1433,14 @@ export default {
       this.isFullscreen = fullscreenElement === this.$el;
     },
     askNavie() {
-      this.$root.$emit('ask-navie-about-map', this.appmapFsPath);
+      eventBus.emit('ask-navie-about-map', this.appmapFsPath);
     },
   },
   mounted() {
-    this.$root.$on('makeRoot', (codeObject) => {
+    eventBus.on('makeRoot', (codeObject) => {
       this.$store.commit(ADD_ROOT_OBJECT, codeObject.fqid);
     });
-    this.$root.$on('removeRoot', (fqid) => {
+    eventBus.on('removeRoot', (fqid) => {
       this.$store.commit(REMOVE_ROOT_OBJECT, this.filters.rootObjects.indexOf(fqid));
     });
     this.resetDetailsPanel();

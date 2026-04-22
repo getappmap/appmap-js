@@ -40,6 +40,7 @@ import { fromUint8Array } from 'js-base64';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
 import type { PinEvent } from './PinEvent';
 import stripCodeFences from '@/lib/stripCodeFences';
+import eventBus from '@/lib/eventBus';
 
 mermaid.initialize({
   startOnLoad: false,
@@ -164,7 +165,7 @@ export default Vue.extend({
       navigator.clipboard.writeText(this.definition);
     },
     onPin({ pinned, uri }: PinEvent) {
-      this.$root.$emit('pin', { pinned, uri });
+      eventBus.emit('pin', { pinned, uri });
     },
   },
   updated() {

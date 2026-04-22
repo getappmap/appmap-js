@@ -27,6 +27,7 @@ import Vue from 'vue';
 import VCodeIcon from '@/assets/code-icon.svg';
 import VWhiteAppmapLogo from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   name: 'v-context-item',
@@ -94,7 +95,7 @@ export default Vue.extend({
     },
     openLocation() {
       if (this.contextItem.location) {
-        this.$root.$emit('open-location', this.contextItem.location, this.contextItem.directory);
+        eventBus.emit('open-location', this.contextItem.location, this.contextItem.directory);
       }
     },
   },

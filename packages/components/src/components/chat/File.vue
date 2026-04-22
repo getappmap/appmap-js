@@ -15,6 +15,7 @@ import ContextItemMixin from '@/components/mixins/contextItem';
 import Vue from 'vue';
 import type { PinEvent } from './PinEvent';
 import { URI } from '@appland/rpc';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   name: 'v-file',
@@ -44,7 +45,7 @@ export default Vue.extend({
     onPin(evt: PinEvent) {
       // Receiving a "pin" here means that the user is unpinning the file, so evt.pinned is always
       // false.
-      this.$root.$emit('pin', evt);
+      eventBus.emit('pin', evt);
     },
   },
 });

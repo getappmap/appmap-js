@@ -136,6 +136,7 @@ import VChevronDown from '@/assets/fa-solid_chevron-down.svg';
 import VCogSolid from '@/assets/cog-solid.svg';
 import VBadge from '@/components/Badge.vue';
 import type { NavieRpc } from '@appland/rpc';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   components: {
@@ -265,7 +266,7 @@ export default Vue.extend({
 
       const isSecret = input.getAttribute('data-secret') !== null;
 
-      this.$root.$emit('change-model-config', {
+      eventBus.emit('change-model-config', {
         key,
         value: input.value,
         secret: isSecret,

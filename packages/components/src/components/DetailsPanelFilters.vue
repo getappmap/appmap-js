@@ -25,6 +25,7 @@ import FilterIcon from '@/assets/filter.svg';
 import ResetIcon from '@/assets/reset.svg';
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { ADD_HIDDEN_NAME } from '@/store/vsCode';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-details-panel-filters',
@@ -94,9 +95,9 @@ export default {
     toggleFilter(key) {
       if (key === 'setAsRoot') {
         if (this.isRootObject) {
-          this.$root.$emit('removeRoot', this.object.fqid);
+          eventBus.emit('removeRoot', this.object.fqid);
         } else {
-          this.$root.$emit('makeRoot', this.object);
+          eventBus.emit('makeRoot', this.object);
         }
       }
       if (key === 'hide') {
@@ -104,7 +105,7 @@ export default {
       }
     },
     resetFilters() {
-      this.$root.$emit('removeRoot', this.object.fqid);
+      eventBus.emit('removeRoot', this.object.fqid);
     },
   },
 };

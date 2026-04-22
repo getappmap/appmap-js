@@ -36,6 +36,7 @@ import HelpIcon from '@/assets/quickstart/help.svg';
 import AppMapLogo from '@/assets/appmap-full-logo.svg';
 import VAiHelpButton from '@/components/install-guide/AiHelp.vue';
 import VBadge from '@/components/Badge.vue';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'QuickstartLayout',
@@ -60,7 +61,7 @@ export default {
 
   methods: {
     onClickHelp() {
-      this.$root.$emit('ai-help');
+      eventBus.emit('ai-help');
     },
   },
 };

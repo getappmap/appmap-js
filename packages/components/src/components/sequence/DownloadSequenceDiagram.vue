@@ -4,6 +4,7 @@
 
 <script>
 import { elementToSVG, inlineResources } from 'dom-to-svg';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-download-sequence-diagram',
@@ -22,7 +23,7 @@ export default {
 
       // Get SVG string
       const svgString = new XMLSerializer().serializeToString(svgDocument);
-      this.$root.$emit('exportSVG', svgString);
+      eventBus.emit('exportSVG', svgString);
       this.restoreDOM(node);
     },
 

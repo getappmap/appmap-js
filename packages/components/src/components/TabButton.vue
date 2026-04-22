@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import eventBus from '@/lib/eventBus';
+
 export default {
   name: 'v-tab-button',
 
@@ -34,7 +36,7 @@ export default {
 
   methods: {
     clickTab() {
-      this.$root.$emit('clickTab', this.tabName);
+      eventBus.emit('clickTab', this.tabName);
     },
   },
 };

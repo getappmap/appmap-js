@@ -13,6 +13,7 @@ import VIconRecordProcess from '@/assets/record-process.svg';
 import VIconRecordRemote from '@/assets/record-remote.svg';
 import VIconRecordRequest from '@/assets/record-request.svg';
 import VIconRecordTest from '@/assets/record-test.svg';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   name: 'v-appmap-list-item',
@@ -58,7 +59,7 @@ export default Vue.extend({
   },
   methods: {
     openAppMap() {
-      this.$root.$emit('open-appmap', this.path);
+      eventBus.emit('open-appmap', this.path);
     },
   },
 });

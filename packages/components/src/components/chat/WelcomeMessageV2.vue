@@ -30,6 +30,7 @@ import Vue from 'vue';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   name: 'v-welcome-message-v2',
@@ -75,7 +76,7 @@ export default Vue.extend({
       return DOMPurify.sanitize(marked.parse(markdown));
     },
     onSuggestionClick(suggestion: string) {
-      this.$root.$emit('change-input', this.stripBackticks(suggestion));
+      eventBus.emit('change-input', this.stripBackticks(suggestion));
     },
   },
 });

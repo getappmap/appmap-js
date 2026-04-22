@@ -175,6 +175,7 @@ import {
   SET_SAVED_FILTERS,
 } from '@/store/vsCode';
 import { serializeFilter, base64UrlEncode } from '@appland/models';
+import eventBus from '@/lib/eventBus';
 
 export const SAVED_FILTERS_STORAGE_ID = 'savedFilters';
 
@@ -409,7 +410,7 @@ export default {
         this.updateFilters(updatedFilters);
       }
 
-      this.$root.$emit('saveFilter', filterToSave);
+      eventBus.emit('saveFilter', filterToSave);
       this.newFilterName = '';
     },
 
@@ -428,7 +429,7 @@ export default {
         this.updateFilters(updatedFilters);
       }
 
-      this.$root.$emit('deleteFilter', this.selectedSavedFilter);
+      eventBus.emit('deleteFilter', this.selectedSavedFilter);
     },
 
     setAsDefault() {
@@ -441,7 +442,7 @@ export default {
         this.updateFilters(savedFilters);
       }
 
-      this.$root.$emit('defaultFilter', this.selectedSavedFilter);
+      eventBus.emit('defaultFilter', this.selectedSavedFilter);
     },
 
     copyFilterState() {

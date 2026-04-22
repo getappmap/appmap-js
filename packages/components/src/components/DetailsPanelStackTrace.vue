@@ -22,6 +22,7 @@
 <script>
 import VPopper from '@/components/Popper.vue';
 import VDetailsPanelListHeader from '@/components/DetailsPanelListHeader.vue';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-details-panel-stack-trace',
@@ -55,7 +56,7 @@ export default {
         locationStr += `:${lineNumber}`;
       }
 
-      this.$root.$emit('viewSource', {
+      eventBus.emit('viewSource', {
         location: locationStr,
       });
     },

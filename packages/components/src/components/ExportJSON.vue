@@ -2,6 +2,8 @@
   <div><slot /></div>
 </template>
 <script>
+import eventBus from '@/lib/eventBus';
+
 export default {
   name: 'v-export-json',
   props: {
@@ -25,7 +27,7 @@ export default {
       if (viewState) {
         appmapData.viewState = { ...viewState };
       }
-      this.$root.$emit('exportJSON', appmapData);
+      eventBus.emit('exportJSON', appmapData);
     },
   },
 };

@@ -128,6 +128,7 @@ import InfoIcon from '../assets/info.svg';
 import VModelSelector from '@/components/chat-search/ModelSelector.vue';
 import { NavieRpc, URI } from '@appland/rpc';
 import { pinnedItemRegistry } from '@/lib/pinnedItems';
+import eventBus from '@/lib/eventBus';
 
 export default {
   name: 'v-chat-search',
@@ -414,7 +415,7 @@ export default {
         .on('connected', () => {
           console.log('Listening to thread', threadId);
           this.activeThreadId = threadId;
-          this.$root.$emit('on-thread-subscription', threadId);
+          eventBus.emit('on-thread-subscription', threadId);
         });
     },
     unsubscribeFromThread() {
@@ -727,10 +728,10 @@ export default {
           if (r.file && !r.uri) {
             r.file.text().then((text) => {
               r.content = text;
-              this.$root.$emit('fetch-pinned-files', [new PinFileRequest(r)]);
+              eventBus.emit('fetch-pinned-files', [new PinFileRequest(r)]);
             });
           } else {
-            this.$root.$emit('fetch-pinned-files', [new PinFileRequest(r)]);
+            eventBus.emit('fetch-pinned-files', [new PinFileRequest(r)]);
           }
         });
       });
@@ -742,7 +743,7 @@ export default {
       this.$refs.infoPopper.hide();
     },
     addFiles() {
-      this.$root.$emit('choose-files-to-pin');
+      eventBus.emit('choose-files-to-pin');
     },
 
     /**
@@ -793,7 +794,7 @@ export default {
           (!provider || model.provider.toLowerCase() === lowerProvider)
       );
 
-      this.$root.$emit('select-model', this.selectedModel);
+      eventBus.emit('select-model', this.selectedModel);
     },
     async onModelSelect(provider: string | undefined, id: string) {
       this.selectModel(provider, id);
@@ -1023,7 +1024,7 @@ export default {
     await this.initialize();
 
     this.$nextTick(() => {
-      this.$root.$emit('chat-search-loaded');
+      eventBus.emit('chat-search-loaded');
     });
   },
 };

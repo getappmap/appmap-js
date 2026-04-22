@@ -13,6 +13,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import VButton from '../Button.vue';
+import eventBus from '@/lib/eventBus';
 
 export default Vue.extend({
   name: 'v-event-button',
@@ -49,10 +50,10 @@ export default Vue.extend({
   },
   methods: {
     onSubmit(): void {
-      this.$root.$emit('submit-prompt', this.formattedPrompt);
+      eventBus.emit('submit-prompt', this.formattedPrompt);
     },
     onChangeInput(): void {
-      this.$root.$emit('change-input', this.formattedPrompt);
+      eventBus.emit('change-input', this.formattedPrompt);
     },
   },
 });

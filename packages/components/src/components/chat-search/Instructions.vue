@@ -42,6 +42,7 @@
 // @ts-nocheck
 import Vue, { PropType } from 'vue';
 import VAppmapListItem from '@/components/AppmapListItem.vue';
+import eventBus from '@/lib/eventBus';
 
 type AppMapMetadata = {
   recordingMethod: string;
@@ -63,10 +64,10 @@ export default Vue.extend({
 
   methods: {
     showAppMapTree(): void {
-      this.$root.$emit('show-appmap-tree');
+      eventBus.emit('show-appmap-tree');
     },
     openAppMap(path: string): void {
-      this.$root.$emit('open-appmap', path);
+      eventBus.emit('open-appmap', path);
     },
   },
 });
