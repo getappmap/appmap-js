@@ -6,9 +6,9 @@
           v-for="tab in tabs"
           :key="tab.name"
           :label="tab.name"
-          :is-active="activeTab === tab"
+          :is-active="activeTabName === tab.name"
           :tabName="tab.tabName"
-          @click.native="activateTab(tab)"
+          @click.native="activateByName(tab.name)"
         >
         </v-tab-button>
       </div>
@@ -39,42 +39,39 @@ export default {
     },
   },
 
+  provide() {
+    return { tabsContext: this };
+  },
+
   data() {
     return {
-      activeTab: null,
-      tabs: [],
+      activeTabName: null,
+      tabs: [], // array of { name, tabName }
     };
   },
 
   methods: {
-    activateTab(tab) {
-      if (tab === this.activeTab) {
-        return;
+    registerTab(tabInfo) {
+      this.tabs.push(tabInfo);
+      if (!this.activeTabName) {
+        const initial = this.initialTab
+          ? this.tabs.find((t) => t.tabName === this.initialTab)
+          : this.tabs[0];
+        if (initial) this.activateByName(initial.name);
       }
+    },
 
-      if (this.activeTab) {
-        this.activeTab.setActive(false);
-      }
+    unregisterTab(name) {
+      const idx = this.tabs.findIndex((t) => t.name === name);
+      if (idx !== -1) this.tabs.splice(idx, 1);
+    },
 
-      if (tab) {
-        tab.setActive(true);
-      }
-
-      this.activeTab = tab;
+    activateByName(name) {
+      const tab = this.tabs.find((t) => t.name === name);
+      if (!tab || tab.name === this.activeTabName) return;
+      this.activeTabName = name;
       this.$emit('activateTab', tab);
     },
-  },
-
-  mounted() {
-    this.$nextTick(() => {
-      this.tabs = this.$children.filter((c) => c.$options.name === 'v-tab');
-
-      let tab;
-      if (this.initialTab) tab = this.tabs.find((t) => t.tabName === this.initialTab);
-      else tab = this.tabs[0];
-
-      if (tab) this.activateTab(tab);
-    });
   },
 };
 </script>

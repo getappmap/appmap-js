@@ -16,6 +16,8 @@ export default {
     VTabContent,
   },
 
+  inject: ['tabsContext'],
+
   props: {
     name: {
       type: String,
@@ -29,17 +31,21 @@ export default {
     tabName: String,
   },
 
-  data() {
-    return {
-      isActive: false,
-      classes: this.allowScroll ? 'tab-content-scroll' : '',
-    };
+  computed: {
+    isActive() {
+      return this.tabsContext.activeTabName === this.name;
+    },
+    classes() {
+      return this.allowScroll ? 'tab-content-scroll' : '';
+    },
   },
 
-  methods: {
-    setActive(value) {
-      this.isActive = value;
-    },
+  mounted() {
+    this.tabsContext.registerTab({ name: this.name, tabName: this.tabName });
+  },
+
+  beforeDestroy() {
+    this.tabsContext.unregisterTab(this.name);
   },
 };
 </script>
