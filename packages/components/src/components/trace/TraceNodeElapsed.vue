@@ -1,8 +1,8 @@
-<template functional>
+<template>
   <div class="trace-node__elapsed">
     <span class="trace-node__elapsed-time">
       <slot />
-      {{ String((props.time * 1000).toFixed(0)) + 'ms' }}
+      {{ String((time * 1000).toFixed(0)) + 'ms' }}
     </span>
   </div>
 </template>

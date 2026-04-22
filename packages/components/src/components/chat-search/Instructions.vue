@@ -40,7 +40,7 @@
 
 <script lang="ts">
 // @ts-nocheck
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import VAppmapListItem from '@/components/AppmapListItem.vue';
 import eventBus from '@/lib/eventBus';
 
@@ -51,7 +51,7 @@ type AppMapMetadata = {
   path: string;
 };
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-instructions',
 
   components: {

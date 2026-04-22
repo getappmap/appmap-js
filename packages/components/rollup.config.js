@@ -8,6 +8,7 @@ import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
 import svg from './build/rollup-vue-svg';
+import cssInject from './build/rollup-css-inject';
 import pkg from './package.json';
 
 const argv = minimist(process.argv.slice(2));
@@ -29,30 +30,12 @@ const baseConfig = {
       'process.env.ES_BUILD': JSON.stringify('false'),
     },
     vue: {
-      css: true,
-      data: {
-        scss: () => '@import "src/scss/vue";',
-      },
-      style: {
-        preprocessOptions: {
-          scss: {
-            importer: [
-              (url) => ({
-                file: url
-                  .replace(/^~/, `${path.resolve(__dirname, 'node_modules')}/`)
-                  .replace(/^@/, `${path.resolve(__dirname, 'src')}/`),
-              }),
-            ],
-          },
+      preprocessStyles: true,
+      preprocessOptions: {
+        scss: {
+          additionalData: `@import "${path.resolve(__dirname, 'src/scss/vue')}";`,
         },
       },
-      template: {
-        isProduction: true,
-      },
-    },
-    babel: {
-      exclude: 'node_modules/**',
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
     },
   },
 };
@@ -77,8 +60,10 @@ if (!argv.format || argv.format === 'es') {
       svg(),
       typescript({
         tsconfig: 'tsconfig.json',
+        check: false,
       }),
       vue(baseConfig.plugins.vue),
+      cssInject(),
       image({ exclude: ['**/*.svg'] }),
       commonjs(),
       terser(),

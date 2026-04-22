@@ -30,7 +30,7 @@ describe('AutoComplete', () => {
   it('only shows if the input caret is on a completable command', async () => {
     const input = '@ hello world';
     caretPosition = input.length;
-    const wrapper = mount(VAutoComplete, { propsData: { input, commands } });
+    const wrapper = mount(VAutoComplete, { props: { input, commands } });
     expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(false);
 
     caretPosition = 1;
@@ -41,7 +41,7 @@ describe('AutoComplete', () => {
 
   it('only appears in valid cases', async () => {
     const input = '@thre hello world';
-    const wrapper = mount(VAutoComplete, { propsData: { input, commands } });
+    const wrapper = mount(VAutoComplete, { props: { input, commands } });
     expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(false);
 
     for (let i = 0; i < input.length; i++) {
@@ -54,7 +54,7 @@ describe('AutoComplete', () => {
 
   it('does not autocomplete in the middle of an input', async () => {
     const input = 'hello world @';
-    const wrapper = mount(VAutoComplete, { propsData: { input, commands } });
+    const wrapper = mount(VAutoComplete, { props: { input, commands } });
     expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(false);
 
     caretPosition = input.length;
@@ -65,7 +65,7 @@ describe('AutoComplete', () => {
 
   it('considers the full token as completable text', async () => {
     const input = '@three hello world';
-    const wrapper = mount(VAutoComplete, { propsData: { input, commands } });
+    const wrapper = mount(VAutoComplete, { props: { input, commands } });
     expect(wrapper.find('[data-cy="autocomplete"]').exists()).toBe(false);
 
     caretPosition = 1;
@@ -80,7 +80,7 @@ describe('AutoComplete', () => {
 
     beforeEach(async () => {
       caretPosition = 1;
-      wrapper = mount(VAutoComplete, { propsData: { input: '', commands } });
+      wrapper = mount(VAutoComplete, { props: { input: '', commands } });
       await wrapper.setProps({ input: '@' });
       expect(wrapper.find('[data-cy="autocomplete"]').isVisible()).toBe(true);
     });

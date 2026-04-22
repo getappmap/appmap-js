@@ -9,7 +9,7 @@
           class="create-more-appmaps"
           size="small"
           kind="ghost"
-          @click.native="openRecordInstructions"
+          @click="openRecordInstructions"
         >
           Create more
         </v-button>

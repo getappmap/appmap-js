@@ -1,7 +1,7 @@
-<template functional>
+<template>
   <div class="label">
-    <span class="name">{{ props.label }}</span>
-    <span :class="[props.returnValue ? 'tooltip' : 'hidden']">{{ props.returnValue }}</span>
+    <span class="name">{{ label }}</span>
+    <span :class="[returnValue ? 'tooltip' : 'hidden']">{{ returnValue }}</span>
   </div>
 </template>
 

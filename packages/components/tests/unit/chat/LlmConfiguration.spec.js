@@ -1,10 +1,11 @@
 import LlmConfiguration from '@/components/chat-search/LlmConfiguration.vue';
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import eventBus from '@/lib/eventBus';
 
 describe('components/LlmConfiguration.vue', () => {
   it('it renders a modal', async () => {
     const wrapper = mount(LlmConfiguration, {
-      propsData: {},
+      props: {},
     });
 
     wrapper.find('[data-cy="llm-config-button"]').trigger('click');
@@ -17,7 +18,7 @@ describe('components/LlmConfiguration.vue', () => {
 
   it('shows the default option when using a custom model', async () => {
     const wrapper = mount(LlmConfiguration, {
-      propsData: {
+      props: {
         model: 'mistral',
         baseUrl: 'http://localhost:11434',
       },
@@ -33,7 +34,7 @@ describe('components/LlmConfiguration.vue', () => {
 
   it('closes the modal when the escape key is pressed', async () => {
     const wrapper = mount(LlmConfiguration, {
-      propsData: {},
+      props: {},
     });
 
     wrapper.find('[data-cy="llm-config-button"]').trigger('click');
@@ -62,7 +63,7 @@ describe('components/LlmConfiguration.vue', () => {
 
   it('enables the default option if it is not selected', async () => {
     const wrapper = mount(LlmConfiguration, {
-      propsData: {
+      props: {
         model: 'mistral',
         baseUrl: 'http://localhost:11434',
       },
@@ -80,7 +81,7 @@ describe('components/LlmConfiguration.vue', () => {
 
   it('shows the copilot option when selected', async () => {
     const wrapper = mount(LlmConfiguration, {
-      propsData: {
+      props: {
         model: 'gpt-4o',
         baseUrl: 'http://localhost:11434/vscode/copilot',
       },
@@ -99,12 +100,13 @@ describe('components/LlmConfiguration.vue', () => {
 
   it('emits the expected events', async () => {
     const wrapper = mount(LlmConfiguration, {
-      propsData: {
+      props: {
         model: 'mistral',
         baseUrl: 'http://localhost:11434',
       },
     });
-    const rootWrapper = createWrapper(wrapper.vm.$root);
+    const spy = jest.fn();
+    eventBus.on('select-llm-option', spy);
 
     async function selectOption(option) {
       wrapper.find('[data-cy="llm-config-button"]').trigger('click');
@@ -114,19 +116,19 @@ describe('components/LlmConfiguration.vue', () => {
         .find(`[data-cy="llm-modal-option"][data-option="${option}"] [data-cy="llm-select"]`)
         .trigger('click');
 
-      const events = rootWrapper.emitted()['select-llm-option'];
-      return events[events.length - 1][0];
+      return spy.mock.calls[spy.mock.calls.length - 1][0];
     }
 
     expect(await selectOption('byom')).toEqual('own-model');
     expect(await selectOption('byok')).toEqual('own-key');
     expect(await selectOption('default')).toEqual('default');
     expect(await selectOption('copilot')).toEqual('copilot');
+    eventBus.off('select-llm-option', spy);
   });
 
   it('renders a loading state', async () => {
     const wrapper = mount(LlmConfiguration, {
-      propsData: { isLoading: true },
+      props: { isLoading: true },
     });
 
     expect(wrapper.find('[data-cy="loading"]').exists()).toBe(true);
@@ -140,19 +142,17 @@ describe('components/LlmConfiguration.vue', () => {
     describe('default', () => {
       it('is not displayed when displaySubscription feature flag is false', async () => {
         const wrapper = mount(LlmConfiguration, {
-          propsData: {
+          props: {
             subscription: {},
           },
-          provide: {
-            displaySubscription: false,
-          },
+          global: { provide: { displaySubscription: false } },
         });
         expect(wrapper.find('[data-cy="plan-status-free"]').exists()).toBeFalsy();
       });
 
       it('shows the free plan', async () => {
         const wrapper = mount(LlmConfiguration, {
-          propsData: {
+          props: {
             subscription: {
               subscriptions: [],
             },
@@ -163,7 +163,7 @@ describe('components/LlmConfiguration.vue', () => {
 
       it('shows the pro plan', async () => {
         const wrapper = mount(LlmConfiguration, {
-          propsData: {
+          props: {
             subscription: {
               subscriptions: [{ productName: 'AppMap Pro' }],
             },
@@ -176,23 +176,21 @@ describe('components/LlmConfiguration.vue', () => {
     describe('copilot', () => {
       it('is not displayed when displaySubscription feature flag is false', async () => {
         const wrapper = mount(LlmConfiguration, {
-          propsData: {
+          props: {
             model: 'gpt-4o',
             baseUrl: 'http://localhost:11434/vscode/copilot',
             subscription: {
               subscriptions: [],
             },
           },
-          provide: {
-            displaySubscription: false,
-          },
+          global: { provide: { displaySubscription: false } },
         });
         expect(wrapper.find('[data-cy="plan-status-free"]').exists()).toBeFalsy();
       });
 
       it('shows the free plan', async () => {
         const wrapper = mount(LlmConfiguration, {
-          propsData: {
+          props: {
             model: 'gpt-4o',
             baseUrl: 'http://localhost:11434/vscode/copilot',
             subscription: {
@@ -207,7 +205,7 @@ describe('components/LlmConfiguration.vue', () => {
 
       it('shows the pro plan', async () => {
         const wrapper = mount(LlmConfiguration, {
-          propsData: {
+          props: {
             model: 'gpt-4o',
             baseUrl: 'http://localhost:11434/vscode/copilot',
             subscription: {

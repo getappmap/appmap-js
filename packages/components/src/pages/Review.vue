@@ -7,7 +7,7 @@
       :content="summary"
     />
     <div class="toast-container" v-if="showToast">
-      <v-flash-message :type="toastType" @click.native="toastAction">
+      <v-flash-message :type="toastType" @click="toastAction">
         <p class="toast-message">{{ toastMessage }}</p>
       </v-flash-message>
     </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 import VMarkdown from '@/components/Markdown.vue';
@@ -32,9 +32,8 @@ import store from '@/store/review';
 import { Suggestion } from '@/components/review';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ReviewPage',
-  store,
   components: {
     VHeader,
     VSuggestions,
@@ -58,7 +57,7 @@ export default Vue.extend({
       return new Date().getFullYear();
     },
     includesRuntimeReferences(): boolean {
-      return this.$store.state.suggestions?.some((s: Suggestion) => Boolean(s.runtime));
+      return store.state.suggestions?.some((s: Suggestion) => Boolean(s.runtime)) ?? false;
     },
   },
   mounted() {
@@ -80,7 +79,7 @@ export default Vue.extend({
       },
     });
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // Clean up the store watcher
     if (this.storeWatcher) {
       this.storeWatcher();
@@ -94,7 +93,7 @@ export default Vue.extend({
   methods: {
     ...mapActions(['dismissFeature']),
     onToastClick(suggestionId: string) {
-      const thread = this.$store.state.suggestionStatuses[suggestionId]?.threadId;
+      const thread = store.state.suggestionStatuses[suggestionId]?.threadId;
       if (thread) eventBus.emit('show-navie-thread', thread);
       this.hideToast();
     },

@@ -4,7 +4,7 @@
     kind="secondary"
     class="ask-ai"
     data-cy="ai-help-primary"
-    @click.native="onClick"
+    @click="onClick"
   >
     <span class="ask-ai--content">
       <v-ai-icon class="icon" />

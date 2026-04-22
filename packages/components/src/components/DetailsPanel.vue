@@ -1,7 +1,7 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <v-ask-navie-button v-if="showAskNavie" @click.native="$emit('askNavieAboutMap')" />
+      <v-ask-navie-button v-if="showAskNavie" @click="$emit('askNavieAboutMap')" />
       <AppMapLogo v-else width="70" />
       <ChevronDownIcon
         class="details-panel__hide-panel-icon"

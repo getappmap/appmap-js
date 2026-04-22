@@ -7,7 +7,7 @@
         :key="button"
         :class="{ button: 1, 'button--active': selectedButton === button }"
         size="small"
-        @click.native="onClickButton(button)"
+        @click="onClickButton(button)"
       >
         {{ button }}
       </v-button>
@@ -16,10 +16,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VButton from '@/components/Button.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VButton,
   },

@@ -23,7 +23,7 @@
 import VContextContainer from '@/components/chat/ContextContainer.vue';
 import ContextItemMixin from '@/components/mixins/contextItem';
 import AppMapRPC from '@/lib/AppMapRPC';
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType, type VNode } from 'vue';
 
 import hljs from 'highlight.js';
 import stripCodeFences from '@/lib/stripCodeFences';
@@ -38,7 +38,7 @@ interface Injected {
   projectDirectories: string[];
 }
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     language: String,
     location: String as PropType<string | undefined>,
@@ -126,7 +126,7 @@ export default Vue.extend({
 
       return undefined;
     },
-    change: function (): Vue.VNode | undefined {
+    change: function (): VNode | undefined {
       return this.$slots.default?.find(({ tag }) => tag === 'change');
     },
     original: function (): string | undefined {

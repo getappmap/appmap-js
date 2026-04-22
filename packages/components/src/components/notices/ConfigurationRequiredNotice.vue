@@ -23,12 +23,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
 import VAppmapLogo from '@/assets/appmap-full-logo.svg';
 import EmitLinkMixin from '@/components/mixins/emitLink';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-configuration-required-notice',
   components: {
     VAppmapLogo,

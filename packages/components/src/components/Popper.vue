@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-popper',
 
   props: {
@@ -88,7 +88,7 @@ export default Vue.extend({
       return explicitlyVisible || isHovered || isFlashed;
     },
     textValue(): string {
-      return this.flashText || this.text;
+      return this.flashText || this.text || '';
     },
     classes(): Record<string, boolean> {
       return {

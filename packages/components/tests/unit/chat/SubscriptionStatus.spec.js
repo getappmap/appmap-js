@@ -4,14 +4,14 @@ import SubscriptionStatus from '@/components/chat-search/SubscriptionStatus.vue'
 describe('components/SubscriptionStatus.vue', () => {
   it('shows loading state', () => {
     const wrapper = mount(SubscriptionStatus, {
-      propsData: { subscription: undefined },
+      props: { subscription: undefined },
     });
     expect(wrapper.find('[data-cy="plan-status-loading"]').exists()).toBe(true);
   });
 
   it('shows not subscribed state', () => {
     const wrapper = mount(SubscriptionStatus, {
-      propsData: { subscription: { subscriptions: [] } },
+      props: { subscription: { subscriptions: [] } },
     });
     expect(wrapper.find('[data-cy="plan-status-free"]').text()).toContain('Limited free plan');
     expect(wrapper.find('[data-cy="plan-status-free"] a').text()).toStrictEqual('Subscribe now');
@@ -19,7 +19,7 @@ describe('components/SubscriptionStatus.vue', () => {
 
   it('shows subscribed state when enrolled', () => {
     const wrapper = mount(SubscriptionStatus, {
-      propsData: {
+      props: {
         subscription: {
           subscriptions: [{ productName: 'AppMap Pro' }],
         },
@@ -33,7 +33,7 @@ describe('components/SubscriptionStatus.vue', () => {
 
   it('includes the email in the subscribe url', () => {
     const wrapper = mount(SubscriptionStatus, {
-      propsData: {
+      props: {
         subscription: {
           subscriptions: [{ productName: 'AppMap Pro' }],
         },
@@ -47,7 +47,7 @@ describe('components/SubscriptionStatus.vue', () => {
 
   it('omits the email in the subscribe url when not provided', () => {
     const wrapper = mount(SubscriptionStatus, {
-      propsData: {
+      props: {
         subscription: {
           subscriptions: [{ productName: 'AppMap Pro' }],
         },

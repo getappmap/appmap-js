@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-modal',
   methods: {
     handleKeydown(e: KeyboardEvent) {
@@ -24,7 +24,7 @@ export default Vue.extend({
   mounted() {
     window.addEventListener('keydown', this.handleKeydown);
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener('keydown', this.handleKeydown);
   },
 });

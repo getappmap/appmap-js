@@ -1,18 +1,12 @@
 import * as components from '@/componentExports';
 import ReviewBackend from '@/lib/ReviewBackend';
 
-// install function executed by Vue.use()
-const install = function installComponents(Vue) {
-  if (install.installed) return;
-  install.installed = true;
-  Object.entries(components).forEach(([componentName, component]) => {
-    Vue.component(componentName, component);
-  });
-};
-
-// Create module definition for Vue.use()
 const plugin = {
-  install,
+  install(app) {
+    Object.entries(components).forEach(([componentName, component]) => {
+      app.component(componentName, component);
+    });
+  },
 };
 
 export default plugin;

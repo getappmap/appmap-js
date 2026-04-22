@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { reactive } from 'vue';
 
 interface ObservableContent {
   content: string;
@@ -12,12 +12,10 @@ interface ObservableContent {
 class PinnedItemRegistry {
   private pinnedContent = new Map<string, ObservableContent>();
 
-  constructor() {}
-
   private getOrCreate(id: string): ObservableContent {
     let obj = this.pinnedContent.get(id);
     if (!obj) {
-      obj = Vue.observable({ content: '', metadata: {} });
+      obj = reactive({ content: '', metadata: {} });
       this.pinnedContent.set(id, obj);
     }
     return obj;
@@ -25,12 +23,12 @@ class PinnedItemRegistry {
 
   setMetadata(id: string, key: string, value: string) {
     const obj = this.getOrCreate(id);
-    Vue.set(obj.metadata, key, value);
+    obj.metadata[key] = value;
   }
 
   appendContent(id: string, content: string) {
     const obj = this.getOrCreate(id);
-    Vue.set(obj, 'content', obj.content + content);
+    obj.content = obj.content + content;
   }
 
   get(id: string): ObservableContent | undefined {

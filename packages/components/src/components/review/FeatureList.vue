@@ -167,7 +167,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import VSectionHeading from '@/components/review/SectionHeading.vue';
 import VDismissModal from '@/components/review/DismissModal.vue';
 import VButton from '@/components/Button.vue';
@@ -177,10 +177,10 @@ import {
   TriangleAlert as VTriangleAlert,
   Play as VPlay,
   RotateCw as VRotateCw,
-} from 'lucide-vue';
+} from 'lucide-vue-next';
 import type { Test, Feature, DismissedFeature } from '.';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FeatureList',
   components: {
     VSectionHeading,
@@ -280,7 +280,7 @@ export default Vue.extend({
               status: 'pass' as 'pass' | 'fail',
               message: undefined,
             };
-            this.$set(this.features[index].testDetails!.tests, testIdx, updatedTest);
+            this.features[index].testDetails!.tests[testIdx] = updatedTest;
           }
         }
       }

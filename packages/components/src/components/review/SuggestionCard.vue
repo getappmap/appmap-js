@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { Component, PropType } from 'vue';
+import { defineComponent, type Component, type PropType } from 'vue';
 import eventBus from '@/lib/eventBus';
 import {
   Wrench,
@@ -92,7 +92,7 @@ import {
   CircleEllipsis,
   CircleAlert,
   Zap,
-} from 'lucide-vue';
+} from 'lucide-vue-next';
 import VButton from '@/components/Button.vue';
 import VPriorityBadge from '@/components/review/PriorityBadge.vue';
 import VBadge from '@/components/Badge.vue';
@@ -102,7 +102,7 @@ import { getCategoryIconComponent, SuggestionStatus } from '.';
 import { ReviewRpc } from '@appland/rpc';
 import SuggestionButtons from './SuggestionButtons.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VButton,
     VCodeSnippet,

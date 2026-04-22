@@ -6,8 +6,8 @@
 </template>
 
 <script lang="ts">
-import Vue, { Component } from 'vue';
-import { Shield, Gauge, PencilLine, Shapes } from 'lucide-vue';
+import { defineComponent, type Component } from 'vue';
+import { Shield, Gauge, PencilLine, Shapes } from 'lucide-vue-next';
 import VBadge from '@/components/Badge.vue';
 
 type IconInfo = {
@@ -33,7 +33,7 @@ const TypeIcons: Record<string, IconInfo> = {
   },
 };
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VBadge,
     Shield,

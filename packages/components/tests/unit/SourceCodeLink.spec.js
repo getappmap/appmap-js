@@ -1,14 +1,15 @@
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import SourceCodeLink from '@/components/SourceCodeLink.vue';
 import scenario from '@/stories/data/scenario.json';
 import { buildAppMap } from '@appland/models';
+import eventBus from '@/lib/eventBus';
 
 describe('SourceCodeLink.vue', () => {
   it('view source emits an event from root', async () => {
     const appMap = buildAppMap(scenario).normalize().build();
     const event = appMap.events.find((e) => e.isCall() && e.path);
     const wrapper = mount(SourceCodeLink, {
-      propsData: {
+      props: {
         object: event,
       },
     });
@@ -18,20 +19,24 @@ describe('SourceCodeLink.vue', () => {
       externalUrl: 'https://example.com',
     };
 
-    wrapper.vm.$root.$emit('response-resolve-location', expected);
+    const requestSpy = jest.fn();
+    const viewSourceSpy = jest.fn();
+    eventBus.on('request-resolve-location', requestSpy);
+    eventBus.on('viewSource', viewSourceSpy);
+
+    eventBus.emit('response-resolve-location', expected);
 
     await new Promise((resolve) => wrapper.vm.$nextTick(() => resolve()));
 
     wrapper.find('[data-cy="external-link"]').trigger('click');
 
-    const rootWrapper = createWrapper(wrapper.vm.$root);
-    const events = rootWrapper.emitted();
-    const [[requestLocation]] = events['request-resolve-location'];
-    expect(requestLocation).toBe(`${event.path}:${event.lineno}`);
-
-    const [[{ location, externalUrl, error }]] = events.viewSource;
+    expect(requestSpy).toHaveBeenCalledWith(`${event.path}:${event.lineno}`);
+    const [[{ location, externalUrl, error }]] = viewSourceSpy.mock.calls;
     expect(location).toBe(expected.location);
     expect(externalUrl).toBe(expected.externalUrl);
     expect(error).toBe(expected.error);
+
+    eventBus.off('request-resolve-location', requestSpy);
+    eventBus.off('viewSource', viewSourceSpy);
   });
 });

@@ -1,8 +1,8 @@
 <template>
   <v-button
     class="event-button"
-    @click.shift.native="onSubmit"
-    @click.exact.native="onChangeInput"
+    @click.shift="onSubmit"
+    @click.exact="onChangeInput"
     size="small"
     kind="native-ghost"
   >
@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VButton from '../Button.vue';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-event-button',
   components: {
     VButton,

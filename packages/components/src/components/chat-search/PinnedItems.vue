@@ -29,6 +29,7 @@
 
 <script lang="ts">
 //@ts-nocheck
+import { defineComponent, type Component } from 'vue';
 import VFile from '@/components/chat/File.vue';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
@@ -41,7 +42,7 @@ const EditorNoticeComponents = {
   intellij: VIntelliJNotice,
 };
 
-export default {
+export default defineComponent({
   name: 'v-pinned-items',
 
   components: {
@@ -70,10 +71,10 @@ export default {
   },
 
   methods: {
-    getNoticeComponent(): Vue.Component {
+    getNoticeComponent(): Component {
       return EditorNoticeComponents[this.editorType];
     },
-    getPinnedComponent(uri: string): Vue.Component | undefined {
+    getPinnedComponent(uri: string): Component | undefined {
       const pinnedItem = pinnedItemRegistry.get(uri);
 
       // If it's not registered, it's an external file.
@@ -94,7 +95,7 @@ export default {
       this.$emit('pin', { uri, pinned: false });
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -105,10 +106,8 @@ export default {
   &__pinned-item {
     box-shadow: none;
     margin: 0;
-    &::v-deep {
-      .context-container {
-        margin: 0;
-      }
+    :deep(.context-container) {
+      margin: 0;
     }
   }
 

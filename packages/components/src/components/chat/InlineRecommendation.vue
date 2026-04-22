@@ -13,11 +13,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import VPopper from '@/components/Popper.vue';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   components: { VPopper },
   props: {
     reasoning: {

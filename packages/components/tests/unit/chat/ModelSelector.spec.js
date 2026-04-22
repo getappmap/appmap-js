@@ -10,7 +10,7 @@ describe('ModelSelector.vue', () => {
   ];
   beforeEach(() => {
     wrapper = mount(VModelSelector, {
-      propsData: {
+      props: {
         models,
         selectedModel: models[0],
       },

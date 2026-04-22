@@ -5,7 +5,7 @@
       :size="buttonSize"
       class="dim"
       kind="native-ghost"
-      @click.native.stop="$emit('fix')"
+      @click.stop="$emit('fix')"
       :title="compact ? 'Fix' : undefined"
     >
       <Wrench class="icon" :size="iconSize" />
@@ -16,7 +16,7 @@
       v-if="!done && fixThread"
       :size="buttonSize"
       class="dim"
-      @click.native.stop="showNavieThread(fixThread)"
+      @click.stop="showNavieThread(fixThread)"
       :title="compact ? 'Show fix' : undefined"
     >
       <Wrench class="fix-icon icon" :size="iconSize" />
@@ -27,7 +27,7 @@
       v-if="!done"
       :size="buttonSize"
       class="dim"
-      @click.native.stop="$emit('done')"
+      @click.stop="$emit('done')"
       :title="compact ? 'Mark as done' : undefined"
     >
       <CircleCheck class="icon" :size="iconSize" />
@@ -38,7 +38,7 @@
       v-if="!done"
       :size="buttonSize"
       class="dim"
-      @click.native.stop="$emit('dismiss')"
+      @click.stop="$emit('dismiss')"
       :title="compact ? 'Dismiss' : undefined"
     >
       <Trash class="icon" :size="iconSize" />
@@ -49,7 +49,7 @@
       v-if="done"
       :size="buttonSize"
       class="dim"
-      @click.native.stop="$emit('reopen')"
+      @click.stop="$emit('reopen')"
       :title="compact ? 'Reopen' : undefined"
     >
       <RotateCcw class="icon" :size="iconSize" />
@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { Wrench, CircleCheck, Trash, RotateCcw } from 'lucide-vue';
+import { Wrench, CircleCheck, Trash, RotateCcw } from 'lucide-vue-next';
 import { defineComponent, type PropType } from 'vue';
 import { SuggestionStatus } from '.';
 import VButton from '@/components/Button.vue';

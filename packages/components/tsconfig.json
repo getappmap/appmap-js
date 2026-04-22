@@ -15,7 +15,8 @@
     "baseUrl": ".",
     "types": ["webpack-env", "jest"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@appland/rpc": ["../../packages/rpc/built/index.d.ts"]
     },
     "declaration": true,
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]

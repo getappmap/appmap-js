@@ -1,12 +1,15 @@
 module.exports = {
-  presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
+  presets: [
+    ['@babel/preset-env', { targets: { node: 'current' } }],
+    '@babel/preset-typescript',
+  ],
   plugins: [
     [
       require.resolve('babel-plugin-module-resolver'),
       {
         root: ['node_modules'],
         alias: {
-          '^vue$': 'vue/dist/vue.common.dev.js', // This must match the alias in packages/components/.storybook/main.js
+          '^@/(.+)': './src/\\1',
         },
       },
     ],

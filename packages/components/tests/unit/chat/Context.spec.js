@@ -10,7 +10,7 @@ describe('components/chat-search/Context.vue', () => {
 
   it("doesn't show Navie help when there's something in the context", () => {
     const wrapper = mount(VContext, {
-      propsData: {
+      props: {
         contextResponse: [
           {
             type: 'sequence-diagram',

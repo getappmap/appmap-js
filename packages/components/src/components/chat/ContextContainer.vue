@@ -150,11 +150,11 @@ import VCloseIcon from '@/assets/x-icon.svg';
 import VLoader from '@/components/chat/Loader.vue';
 import VPopper from '@/components/Popper.vue';
 import VPopperMenu from '@/components/PopperMenu.vue';
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import type ContextContainerMenuItem from './ContextContainerMenuItem';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VPinIcon,
     VHamburgerMenuIcon,

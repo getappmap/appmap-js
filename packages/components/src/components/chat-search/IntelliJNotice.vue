@@ -1,6 +1,6 @@
 <template>
   <div class="intellij-notice">
-    <v-add-file-button class="button" @click.native="addFiles" />
+    <v-add-file-button class="button" @click="addFiles" />
     <p>
       or click the <span class="pin"><v-pin-icon /></span> pin icon in a Navie response
     </p>

@@ -264,7 +264,7 @@ export default {
     window.addEventListener('keydown', this.onWindowKeyDown, true);
   },
 
-  destroyed() {
+  unmounted() {
     window.removeEventListener('click', this.onWindowClick);
     window.removeEventListener('keyup', this.onWindowKeyUp, true);
     window.removeEventListener('keydown', this.onWindowKeyDown, true);

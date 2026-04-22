@@ -94,7 +94,7 @@ describe('components/Chat.vue', () => {
       expect.assertions(2);
 
       const openNewChat = jest.fn();
-      const wrapper = mount(VChat, { propsData: { openNewChat } });
+      const wrapper = mount(VChat, { props: { openNewChat } });
 
       // doesn't show when no messages
       expect(wrapper.find('[data-cy="new-chat-btn"]').exists()).toBe(false);
@@ -158,7 +158,7 @@ describe('components/Chat.vue', () => {
     });
 
     it('flushes pending code snippets from the input area when the user sends a message', async () => {
-      const wrapper = mount(VChat, { propsData: { sendMessage: jest.fn() } });
+      const wrapper = mount(VChat, { props: { sendMessage: jest.fn() } });
       const selector = '[data-cy="input-attachments"] [data-cy="code-selection"]';
 
       wrapper.vm.includeMessageAttachment(codeSelection);
@@ -179,7 +179,7 @@ describe('components/Chat.vue', () => {
         content: '...',
       }));
       const wrapper = mount(VChat, {
-        propsData: { sendMessage: jest.fn() },
+        props: { sendMessage: jest.fn() },
         data: () => ({ messageAttachments }),
       });
 
@@ -196,7 +196,7 @@ describe('components/Chat.vue', () => {
   describe('Stop button', () => {
     it('visible while system message in progress', async () => {
       const wrapper = mount(VChat, {
-        propsData: {
+        props: {
           question: 'Initial question?',
         },
       });
@@ -216,7 +216,7 @@ describe('components/Chat.vue', () => {
     stopButtonHidingEvents.forEach((event) => {
       it('hidden after ' + event.name, async () => {
         const wrapper = mount(VChat, {
-          propsData: {
+          props: {
             question: 'Initial question?',
           },
         });

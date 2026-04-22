@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { Component, PropType } from 'vue';
+import { defineComponent, type Component, type PropType } from 'vue';
 import VSuggestionCard from './SuggestionCard.vue';
 import VAlertBox from '@/components/AlertBox.vue';
 import mermaid from 'mermaid';
@@ -83,7 +83,7 @@ import {
   EllipsisVertical,
   Maximize2,
   Gauge,
-} from 'lucide-vue';
+} from 'lucide-vue-next';
 import { mapState, mapActions } from 'vuex';
 
 import SectionHeading from './SectionHeading.vue';
@@ -95,7 +95,7 @@ import CategoryStats from './CategoryStats.vue';
 import { type Suggestion, type SuggestionStatus, getCategoryIconComponent } from '.';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SuggestionsList',
   components: {
     SectionHeading,
@@ -207,7 +207,7 @@ export default Vue.extend({
     });
     document.addEventListener('mousedown', this.handleClickOutsideActionMenu);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutsideActionMenu);
   },
   methods: {

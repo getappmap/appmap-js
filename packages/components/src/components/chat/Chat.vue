@@ -11,7 +11,7 @@
         class="clear"
         size="small"
         kind="native-ghost"
-        @click.native="openNewChat"
+        @click="openNewChat"
       >
         New chat
       </v-button>
@@ -78,7 +78,7 @@
 
 <script lang="ts">
 //@ts-nocheck
-import Vue, { PropType } from 'vue';
+import { defineComponent, reactive, type PropType } from 'vue';
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import VChatInput from '@/components/chat/ChatInput.vue';
 import VAppMapNavieLogo from '@/assets/appmap-full-logo.svg';
@@ -174,7 +174,7 @@ class AssistantMessage implements IMessage {
   }
 
   setPromptSuggestions(suggestions: NavieRpc.V1.Suggest.NextStep[]) {
-    Vue.set(this, 'promptSuggestions', suggestions);
+    this.promptSuggestions = suggestions;
   }
 }
 
@@ -296,7 +296,7 @@ export default {
 
       let assistantMessage = this.getMessage({ messageId });
       if (!assistantMessage) {
-        assistantMessage = Vue.observable(new AssistantMessage(messageId));
+        assistantMessage = reactive(new AssistantMessage(messageId));
         this.messages.push(assistantMessage);
       }
 
@@ -309,7 +309,7 @@ export default {
     addUserMessage(content: string) {
       const userMessage = new UserMessage(content, this.messageAttachments);
       this.messages.push(userMessage);
-      this.$set(this, 'messageAttachments', []);
+      this.messageAttachments = [];
       // Ensure that for the first user message, the auto-scroll position is reset to the top.
       // This is to account for the fact that there may be an auto-scroll applied when the
       // placeholder content is show during the chat initialization or when the user clears the chat.
@@ -320,7 +320,7 @@ export default {
       return userMessage;
     },
     addSystemMessage() {
-      const message = Vue.observable(new AssistantMessage());
+      const message = reactive(new AssistantMessage());
       this.messages.push(message);
       return message;
     },
@@ -404,11 +404,7 @@ export default {
       this.messageAttachments.push(attachment);
     },
     removeMessageAttachment(uri: string) {
-      this.$set(
-        this,
-        'messageAttachments',
-        this.messageAttachments.filter((c) => c.uri !== uri)
-      );
+      this.messageAttachments = this.messageAttachments.filter((c) => c.uri !== uri);
     },
     includeAppMap(appmap: string) {
       this.appmaps.push(appmap);
@@ -421,7 +417,7 @@ export default {
       this.$refs.input.moveCursorToEnd();
     },
     clear() {
-      this.$set(this, 'messages', []);
+      this.messages = [];
     },
   },
   watch: {

@@ -1,8 +1,5 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
 import type { Feature, Suggestion, SuggestionStatus } from '@/components/review';
-
-Vue.use(Vuex);
 
 export interface ReviewState {
   loading: boolean;
@@ -65,19 +62,18 @@ export default new Vuex.Store<ReviewState>({
       }
     },
     setSuggestionStatus(state, { id, status }: { id: string; status: SuggestionStatus }) {
-      Vue.set(state.suggestionStatuses, id, status);
+      state.suggestionStatuses[id] = status;
     },
-    setStatus(state, { id, status }: { id: string; status: string }) {
-      // Update the status of a suggestion, keeping the existing threadId if it exists
+    setStatus(state, { id, status }: { id: string; status: SuggestionStatus['status'] }) {
       const currentStatus = state.suggestionStatuses[id];
       if (currentStatus) {
-        Vue.set(state.suggestionStatuses, id, { ...currentStatus, status });
+        state.suggestionStatuses[id] = { ...currentStatus, status };
       } else {
-        Vue.set(state.suggestionStatuses, id, { status });
+        state.suggestionStatuses[id] = { status };
       }
     },
     removeSuggestionStatus(state, id: string) {
-      Vue.delete(state.suggestionStatuses, id);
+      delete state.suggestionStatuses[id];
     },
   },
   actions: {

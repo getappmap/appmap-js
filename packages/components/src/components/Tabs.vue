@@ -8,7 +8,7 @@
           :label="tab.name"
           :is-active="activeTabName === tab.name"
           :tabName="tab.tabName"
-          @click.native="activateByName(tab.name)"
+          @click="activateByName(tab.name)"
         >
         </v-tab-button>
       </div>

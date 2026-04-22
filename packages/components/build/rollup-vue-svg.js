@@ -1,10 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 import { extname } from 'path';
-import { createFilter } from 'rollup-pluginutils';
-import svgToVue from 'svg-to-vue';
+import { createFilter } from '@rollup/pluginutils';
+import { compileTemplate } from '@vue/compiler-sfc';
+import { createHash } from 'crypto';
 
-// Transform an SVG to a Vue component
+// Transform an SVG to a Vue 3 component using @vue/compiler-sfc
 export default function plugin(options = {}) {
   const filter = createFilter(options.include, options.exclude);
   return {
@@ -13,11 +12,23 @@ export default function plugin(options = {}) {
         return null;
       }
 
-      const code = await (await svgToVue(content))
-        .toString()
-        .replace(/^\s+module.exports\s+=/, 'export default');
+      const scopeId = createHash('md5').update(id).digest('hex').slice(0, 8);
+      const { code, errors } = compileTemplate({
+        source: content,
+        filename: id,
+        id: scopeId,
+        transformAssetUrls: false,
+      });
 
-      return { code };
+      if (errors.length) {
+        this.error(errors[0]);
+        return null;
+      }
+
+      return {
+        code: code + '\nexport default { render };',
+        map: null,
+      };
     },
   };
 }

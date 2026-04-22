@@ -1,13 +1,13 @@
-<template functional>
+<template>
   <div
-    :class="props.classes"
-    :style="props.itemStyle"
-    @mousedown="() => listeners['mousedown']()"
-    @mouseup="() => listeners['mouseup']()"
-    @mouseenter="() => listeners['hover']({ type: 'enter', target: props.event })"
-    @mouseleave="() => listeners['hover']({ type: 'leave', target: props.event })"
+    :class="classes"
+    :style="itemStyle"
+    @mousedown="$emit('mousedown')"
+    @mouseup="$emit('mouseup')"
+    @mouseenter="$emit('hover', { type: 'enter', target: event })"
+    @mouseleave="$emit('hover', { type: 'leave', target: event })"
   >
-    {{ props.content }}
+    {{ content }}
   </div>
 </template>
 

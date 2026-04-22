@@ -82,7 +82,7 @@
           </h2>
           <v-add-file-button
             v-if="hasPinnedItems || showAddFilesWhenEmpty"
-            @click.native="addFiles"
+            @click="addFiles"
           />
         </div>
         <div class="search-container">
@@ -815,7 +815,7 @@ export default {
             chatApi.addUserMessage(event.content);
 
             // Clear the context after a new user message is sent
-            this.$set(this, 'contextItems', []);
+            this.contextItems = [];
           }
           break;
         }
@@ -851,7 +851,7 @@ export default {
 
         case 'complete-context-search': {
           if (!Array.isArray(this.contextItems)) {
-            this.$set(this, 'contextItems', []);
+            this.contextItems = [];
           }
 
           if (event.result.length) {

@@ -1,4 +1,5 @@
-import { createWrapper, mount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import eventBus from '@/lib/eventBus';
 import appMapData from './fixtures/user_page_scenario.appmap.json';
 import { AppMapFilter, buildAppMap, serializeFilter } from '@appland/models';
 
@@ -26,15 +27,16 @@ describe('ExportJSON.vue', () => {
     const appMap = buildAppMap().source(appMapData).build();
     const filteredAppMap = rubyFilter.filter(appMap);
     const wrapper = mount(WrapperComponent, {
-      propsData: { appMap: filteredAppMap, viewState: defaultViewState },
+      props: { appMap: filteredAppMap, viewState: defaultViewState },
     });
-    const rootWrapper = createWrapper(wrapper.vm.$root);
+    const spy = jest.fn();
+    eventBus.on('exportJSON', spy);
 
     wrapper.vm.$refs.export.download();
 
-    const exportJSONEventParameters = rootWrapper.emitted()['exportJSON'];
-    expect(exportJSONEventParameters).toBeArrayOfSize(1);
-    const exportedData = exportJSONEventParameters[0][0];
+    expect(spy).toHaveBeenCalledTimes(1);
+    const exportedData = spy.mock.calls[0][0];
+    eventBus.off('exportJSON', spy);
     expect(Object.keys(exportedData).sort()).toStrictEqual([
       'classMap',
       'events',

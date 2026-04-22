@@ -1,4 +1,4 @@
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import DetailsPanelEvent from '@/components/DetailsPanelEvent.vue';
 import scenario from '@/stories/data/scenario.json';
 import { store, SET_APPMAP_DATA } from '@/store/vsCode';
@@ -22,13 +22,13 @@ function sqlEvent(sql, database) {
 describe('DetailsPanelEvent.vue', () => {
   it('formats SQL using the database hints', () => {
     const wrapper = mount(DetailsPanelEvent, {
-      propsData: {
+      props: {
         object: sqlEvent(
           'INSERT INTO "misago_themes_css" ("theme_id", "name", "url", "source_file", "source_hash", "source_needs_building", "build_file", "build_hash", "size", "order", "modified_on") VALUES (279, \'test\', \'https://cdn.example.com/style.css\', \'\', NULL, false, \'\', NULL, 0, 0, \'2021-11-18T04:32:10.691674+00:00\'::timestamptz) RETURNING "misago_themes_css"."id"',
           'postgresql'
         ),
       },
-      store,
+      global: { plugins: [store] },
     });
 
     expect(wrapper.text()).toContain('    "theme_id"');
@@ -38,10 +38,10 @@ describe('DetailsPanelEvent.vue', () => {
     const expectedText =
       'INSERT INTO "misago_themes_css" ("theme_id", "name", "url", "source_file", "source_hash", "source_needs_building", "build_file", "build_hash", "size", "order", "modified_on") VALUES (279, \'test\', \'https://cdn.example.com/style.css\', \'\', NULL, false, \'\', NULL, 0, 0, \'2021-11-18T04:32:10.691674+00:00\'::timestamptz) RETURNING "misago_themes_css"."id"';
     const wrapper = mount(DetailsPanelEvent, {
-      propsData: {
+      props: {
         object: sqlEvent(expectedText, 'sql'),
       },
-      store,
+      global: { plugins: [store] },
     });
 
     expect(wrapper.text()).toContain(expectedText);
@@ -53,10 +53,10 @@ describe('DetailsPanelEvent.vue', () => {
     ).callEvent;
 
     const wrapper = mount(DetailsPanelEvent, {
-      propsData: {
+      props: {
         object: event,
       },
-      store,
+      global: { plugins: [store] },
     });
 
     /* eslint-disable camelcase */

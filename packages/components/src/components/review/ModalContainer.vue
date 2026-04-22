@@ -1,5 +1,5 @@
 <template>
-  <v-modal v-on="$listeners">
+  <v-modal v-bind="$attrs">
     <div class="modal-outer details-dialog">
       <div class="modal-content">
         <slot />
@@ -12,10 +12,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VModal from '@/components/Modal.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { VModal },
 });
 </script>

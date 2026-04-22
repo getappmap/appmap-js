@@ -1,5 +1,5 @@
 <template v-slot:diagram>
-  <v-container @click.native="clearSelection" :zoomControls="zoomControls" ref="container">
+  <v-container @click="clearSelection" :zoomControls="zoomControls" ref="container">
     <v-trace
       :events="events"
       :selected-events-for-diff="selectedEventsForDiff"

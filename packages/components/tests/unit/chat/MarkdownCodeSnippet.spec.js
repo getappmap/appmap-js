@@ -3,7 +3,8 @@
 // the expand button expands the diagram
 
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import eventBus from '@/lib/eventBus';
 
 describe('components/MarkdownCodeSnippet.vue', () => {
   const code = 'console.log("Hello world!");';
@@ -24,7 +25,7 @@ describe('components/MarkdownCodeSnippet.vue', () => {
     });
 
     const wrapper = mount(VMarkdownCodeSnippet, {
-      propsData: {
+      props: {
         language: 'javascript',
       },
       slots: {
@@ -41,16 +42,14 @@ describe('components/MarkdownCodeSnippet.vue', () => {
     const update = jest.fn().mockResolvedValue(undefined);
     const location = '/home/user/my-project/app/models/user.rb';
     const wrapper = mount(VMarkdownCodeSnippet, {
-      propsData: {
+      props: {
         language: 'javascript',
         location,
       },
       slots: {
         default: [code],
       },
-      provide: {
-        rpcClient: { update },
-      },
+      global: { provide: { rpcClient: { update } } },
     });
 
     await wrapper.find('[data-cy="apply"]').trigger('click');
@@ -61,7 +60,7 @@ describe('components/MarkdownCodeSnippet.vue', () => {
     const directory = '/home/user/my-project';
     const location = 'app/models/user.rb';
     const wrapper = mount(VMarkdownCodeSnippet, {
-      propsData: {
+      props: {
         language: 'javascript',
         location,
         directory,
@@ -70,22 +69,24 @@ describe('components/MarkdownCodeSnippet.vue', () => {
         default: [code],
       },
     });
-    const rootWrapper = createWrapper(wrapper.vm.$root);
+    const spy = jest.fn();
+    eventBus.on('open-location', spy);
 
     await wrapper.find('[data-cy="open"]').trigger('click');
-    expect(rootWrapper.emitted()['open-location']).toEqual([[location, directory]]);
+    expect(spy).toHaveBeenCalledWith(location, directory);
+    eventBus.off('open-location', spy);
   });
 
   it('displays relative file names', async () => {
     const wrapper = mount(VMarkdownCodeSnippet, {
-      propsData: {
+      props: {
         language: 'javascript',
         location: '/home/user/my-project/app/models/user.rb',
       },
       slots: {
         default: [code],
       },
-      provide: { projectDirectories: ['/home/user/my-project'] },
+      global: { provide: { projectDirectories: ['/home/user/my-project'] } },
     });
 
     expect(wrapper.find('[data-cy="context-title"]').text()).toContain('app/models/user.rb');
@@ -93,7 +94,7 @@ describe('components/MarkdownCodeSnippet.vue', () => {
 
   it('displays file names with urn uri', () => {
     const wrapper = mount(VMarkdownCodeSnippet, {
-      propsData: {
+      props: {
         language: 'javascript',
         location: '/home/user/my-project/app/models/user.rb',
         uri: 'urn:uuid:12345678-1234-5678-1234-123456789012',
@@ -101,7 +102,7 @@ describe('components/MarkdownCodeSnippet.vue', () => {
       slots: {
         default: [code],
       },
-      provide: { projectDirectories: ['/home/user/my-project'] },
+      global: { provide: { projectDirectories: ['/home/user/my-project'] } },
     });
 
     expect(wrapper.vm.decodedLocation).toStrictEqual('/home/user/my-project/app/models/user.rb');
@@ -111,7 +112,7 @@ describe('components/MarkdownCodeSnippet.vue', () => {
 
   it('does not leak URIs', () => {
     const wrapper = mount(VMarkdownCodeSnippet, {
-      propsData: {
+      props: {
         language: 'javascript',
         uri: 'urn:uuid:12345678-1234-5678-1234-123456789012',
       },

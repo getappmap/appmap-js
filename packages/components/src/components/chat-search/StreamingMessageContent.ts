@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { defineComponent, h, type VNode } from 'vue';
 import VCodeFencedContent from '@/components/chat/CodeFencedContent.vue';
 import VNextPromptButton from '@/components/chat/NextPromptButton.vue';
 import VInlineRecommendation from '@/components/chat/InlineRecommendation.vue';
@@ -12,15 +12,15 @@ function getAttributeRecord(attrs: NamedNodeMap): Record<string, string> {
   }, {} as Record<string, string>);
 }
 
-function buildNode(h: Vue.CreateElement, src: Element): Vue.VNode | undefined {
-  const children = [];
+function buildNode(src: Element): VNode | string | undefined {
+  const children: (VNode | string)[] = [];
   for (let i = 0; i < src.childNodes.length; i++) {
     const srcChild = src.childNodes[i];
-    let vnode;
+    let vnode: VNode | string | undefined;
     if (srcChild instanceof Element) {
-      vnode = buildNode(h, srcChild as Element);
+      vnode = buildNode(srcChild as Element);
     } else if (srcChild instanceof Text) {
-      vnode = srcChild.textContent;
+      vnode = srcChild.textContent ?? undefined;
     }
 
     if (vnode) children.push(vnode);
@@ -38,28 +38,26 @@ function buildNode(h: Vue.CreateElement, src: Element): Vue.VNode | undefined {
       memo[attr.name] = attr.value;
       return memo;
     }, {} as Record<string, string>);
-    // HACK: Attributes are converted to props
-    // This isn't a big deal now, but worth keeping in mind as a potential issue
-    // in the future.
-    return h(tag, { props }, children);
+    // HACK: Attributes are converted to props (flat in Vue 3)
+    return h(tag, props, children);
   }
+
+  const clickHandler =
+    tag === 'a' && src.attributes.getNamedItem('emit-event')
+      ? (e: MouseEvent) => {
+          const href = src.attributes.getNamedItem('href')?.value;
+          if (!href) return;
+          e.preventDefault();
+          eventBus.emit('click-link', href);
+        }
+      : undefined;
+
   return h(
     tag,
     {
       class: src.className.length ? src.className : undefined,
-      attrs: getAttributeRecord(src.attributes),
-      on: {
-        click:
-          tag === 'a' && src.attributes.getNamedItem('emit-event')
-            ? (e: MouseEvent) => {
-                const href = src.attributes.getNamedItem('href')?.value;
-                if (!href) return;
-
-                e.preventDefault();
-                eventBus.emit('click-link', href);
-              }
-            : () => {},
-      },
+      ...getAttributeRecord(src.attributes),
+      ...(clickHandler ? { onClick: clickHandler } : {}),
     },
     children
   );
@@ -68,7 +66,7 @@ function buildNode(h: Vue.CreateElement, src: Element): Vue.VNode | undefined {
 /**
  * This component is responsible for dynamically rendering HTML content containing Vue components.
  */
-export default Vue.extend({
+export default defineComponent({
   name: 'v-streaming-message-content',
   props: {
     content: String,
@@ -82,16 +80,15 @@ export default Vue.extend({
   },
   data() {
     return {
-      elementIndex: {} as Record<string, Vue.VNode>,
       parser: new DOMParser(),
     };
   },
-  render(h): Vue.VNode {
-    const dom = this.parser.parseFromString(this.content.trim(), 'text/html');
+  render(): VNode {
+    const dom = this.parser.parseFromString(this.content!.trim(), 'text/html');
 
-    const children = [];
+    const children: (VNode | string)[] = [];
     for (let i = 0; i < dom.body.childNodes.length; i++) {
-      const vnode = buildNode(h, dom.body.childNodes[i] as Element);
+      const vnode = buildNode(dom.body.childNodes[i] as Element);
       if (vnode) {
         children.push(vnode);
       }

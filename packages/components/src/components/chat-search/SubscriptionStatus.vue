@@ -15,11 +15,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 import { getSubscribeUrl } from '@/lib/subscribe';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-subscription-status',
   components: { VSkeletonLoader },
   props: {

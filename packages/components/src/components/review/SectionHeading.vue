@@ -13,11 +13,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import VLoader from '@/components/chat/Loader.vue';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'SectionHeading',
   components: {
     VLoader,

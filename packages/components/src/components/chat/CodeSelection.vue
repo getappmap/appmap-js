@@ -20,13 +20,13 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import hljs from 'highlight.js';
 import VAccordion from '@/components/Accordion.vue';
 import VDocument from '@/assets/document.svg';
 import { URI } from '@appland/rpc';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-code-selection',
   components: {
     VAccordion,

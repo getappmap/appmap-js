@@ -16,7 +16,8 @@ class ReviewBackend {
   rpc?: AppMapRPC | undefined;
 
   constructor(public review: InstanceType<typeof Review>, options: Options) {
-    review.$store = store; // Set the Vuex store on the review component
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (review as any).$store = store; // Set the Vuex store on the review component
     // Initialize store instead of directly setting props
     store.dispatch('updateSuggestions', options.suggestions);
     store.dispatch('updateFeatures', options.features);

@@ -109,7 +109,7 @@ export default {
     };
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('click', this.closeDropdownWhenClickedOutside);
   },
 

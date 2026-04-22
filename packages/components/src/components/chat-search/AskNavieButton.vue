@@ -8,10 +8,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VCompassIcon from '@/assets/compass-simpler.svg';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-ask-navie-button',
   components: { VCompassIcon },
 });

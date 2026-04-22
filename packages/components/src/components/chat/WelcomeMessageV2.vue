@@ -26,13 +26,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import VSkeletonLoader from '@/components/SkeletonLoader.vue';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-welcome-message-v2',
 
   components: {

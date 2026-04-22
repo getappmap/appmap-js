@@ -1,5 +1,6 @@
-import { createWrapper, mount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import VContextItem from '@/components/chat-search/ContextItem.vue';
+import eventBus from '@/lib/eventBus';
 
 describe('ContextItem', () => {
   it('does not render content for sequence diagrams', () => {
@@ -9,7 +10,7 @@ describe('ContextItem', () => {
       content: '@plantuml',
     };
     const wrapper = mount(VContextItem, {
-      propsData: {
+      props: {
         contextItem,
       },
     });
@@ -23,14 +24,14 @@ describe('ContextItem', () => {
       content,
     };
     const wrapper = mount(VContextItem, {
-      propsData: {
+      props: {
         contextItem,
       },
     });
     await wrapper.find('[data-cy="context-header"]').trigger('click');
     expect(wrapper.text()).toContain(content);
   });
-  it('emits an event when the user clicks to open the location', () => {
+  it('emits an event when the user clicks to open the location', async () => {
     const location = 'app/models/user.rb:10';
     const directory = '/home/user/land-of-apps/sample_app_6th_ed';
     const contextItem = {
@@ -40,21 +41,22 @@ describe('ContextItem', () => {
       content: '# frozen_string_literal: true\n',
     };
     const wrapper = mount(VContextItem, {
-      propsData: {
+      props: {
         contextItem,
       },
     });
 
-    wrapper.find('[data-cy="context-item"] [data-cy="open"]').trigger('click');
+    const spy = jest.fn();
+    eventBus.on('open-location', spy);
+    await wrapper.find('[data-cy="context-item"] [data-cy="open"]').trigger('click');
 
-    const rootWrapper = createWrapper(wrapper.vm.$root);
-    const events = rootWrapper.emitted('open-location');
-    expect(events).toHaveLength(1);
-    expect(events[0]).toStrictEqual([location, directory]);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(location, directory);
+    eventBus.off('open-location', spy);
   });
   it('renders Windows paths correctly', () => {
     const wrapper = mount(VContextItem, {
-      propsData: {
+      props: {
         contextItem: {
           type: 'data-request',
           location: 'C:\\Users\\Me\\Projects\\AppMap\\app\\controllers\\users_controller.rb:43',

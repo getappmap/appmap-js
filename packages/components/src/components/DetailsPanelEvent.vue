@@ -9,7 +9,7 @@
       <template v-slot:links>
         <v-details-button
           v-if="shouldDisplayViewInSequence"
-          @click.native="viewEventInSequence"
+          @click="viewEventInSequence"
           :class="classes"
           :disabled="isDisabled"
         >
@@ -17,7 +17,7 @@
         </v-details-button>
         <v-details-button
           v-if="shouldDisplayViewInTrace"
-          @click.native="viewEventInTrace"
+          @click="viewEventInTrace"
           :class="classes"
           :disabled="isDisabled"
         >
@@ -25,7 +25,7 @@
         </v-details-button>
         <v-details-button
           v-if="shouldDisplayViewInFlamegraph"
-          @click.native="viewEventInFlamegraph"
+          @click="viewEventInFlamegraph"
           :class="classes"
           :disabled="isDisabled"
         >

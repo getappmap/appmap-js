@@ -1,10 +1,10 @@
-<template functional>
+<template>
   <ul class="trace-node__labels">
     <li
       class="trace-node__label"
-      v-for="label in props.labels"
+      v-for="label in labels"
       :key="label"
-      @click.stop="listeners['selectLabel'](label)"
+      @click.stop="$emit('selectLabel', label)"
     >
       {{ label }}
     </li>
@@ -14,6 +14,7 @@
 <script>
 export default {
   name: 'v-trace-node-labels',
+  emits: ['selectLabel'],
   props: {
     labels: {
       type: Array,

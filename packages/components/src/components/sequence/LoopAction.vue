@@ -1,17 +1,17 @@
-<template functional>
+<template>
   <div
-    :class="$options.loopClasses(props.isCollapsed)"
+    :class="loopClasses"
     :style="{
-      'grid-column': $options.gridColumns(props.actionSpec),
-      'grid-row': $options.gridRows(props.actionSpec),
+      'grid-column': gridColumns,
+      'grid-row': gridRows,
     }"
   >
     <div class="label-container">
       <div class="label">Loop</div>
       <div class="description">
         [
-        <div class="count">{{ props.actionSpec.action.count }} times</div>
-        <div class="elapsed">{{ props.actionSpec.elapsedTimeMs }}ms</div>
+        <div class="count">{{ actionSpec.action.count }} times</div>
+        <div class="elapsed">{{ actionSpec.elapsedTimeMs }}ms</div>
         ]
       </div>
     </div>
@@ -36,17 +36,19 @@ export default {
       readonly: true,
     },
   },
-  loopClasses(isCollapsed: boolean): string[] {
-    const result = ['loop'];
-    if (isCollapsed) result.push('loop-collapsed');
-    return result;
-  },
-  gridRows(actionSpec: ActionSpec): string {
-    return [actionSpec.index + 2, actionSpec.returnIndex! + 2].join(' / ');
-  },
-  gridColumns(actionSpec: ActionSpec): string {
-    const [min, max] = actionSpec.descendantsActorIndexSpan;
-    return [min + 2, max + 2].join(' / ');
+  computed: {
+    loopClasses(): string[] {
+      const result = ['loop'];
+      if (this.isCollapsed) result.push('loop-collapsed');
+      return result;
+    },
+    gridRows(): string {
+      return [this.actionSpec.index + 2, this.actionSpec.returnIndex! + 2].join(' / ');
+    },
+    gridColumns(): string {
+      const [min, max] = this.actionSpec.descendantsActorIndexSpan;
+      return [min + 2, max + 2].join(' / ');
+    },
   },
 };
 </script>

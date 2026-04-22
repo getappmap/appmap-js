@@ -130,7 +130,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import VPopper from '@/components/Popper.vue';
 import VChevronDown from '@/assets/fa-solid_chevron-down.svg';
 import VCogSolid from '@/assets/cog-solid.svg';
@@ -138,7 +138,7 @@ import VBadge from '@/components/Badge.vue';
 import type { NavieRpc } from '@appland/rpc';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VPopper,
     VChevronDown,

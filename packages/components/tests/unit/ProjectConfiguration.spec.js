@@ -1,4 +1,5 @@
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import eventBus from '@/lib/eventBus';
 import ProjectConfiguration from '@/components/install-guide/ProjectConfiguration.vue';
 
 describe('ProjectConfiguration.vue', () => {
@@ -10,7 +11,7 @@ describe('ProjectConfiguration.vue', () => {
       it('automatically selects the first project', async () => {
         const project = { name, path };
         const wrapper = mount(ProjectConfiguration, {
-          propsData: { projects: [project] },
+          props: { projects: [project] },
         });
 
         // There's a one tick delay
@@ -22,7 +23,7 @@ describe('ProjectConfiguration.vue', () => {
     });
 
     describe('many projects', () => {
-      let wrapper, root;
+      let wrapper;
       const name = 'my-project';
       const path = '/home/user/my-project';
       const projects = [
@@ -32,9 +33,8 @@ describe('ProjectConfiguration.vue', () => {
 
       beforeEach(() => {
         wrapper = mount(ProjectConfiguration, {
-          propsData: { projects },
+          props: { projects },
         });
-        root = createWrapper(wrapper.vm.$root);
       });
 
       it('lists the available projects', () => {
@@ -68,15 +68,14 @@ describe('ProjectConfiguration.vue', () => {
   });
 
   describe('', () => {
-    let wrapper, root;
+    let wrapper;
     const name = 'my-project';
     const path = '/home/user/my-project';
     const project = { name, path };
     beforeEach(() => {
       wrapper = mount(ProjectConfiguration, {
-        propsData: { projects: [project] },
+        props: { projects: [project] },
       });
-      root = createWrapper(wrapper.vm.$root);
     });
 
     describe('language selection', () => {
@@ -119,8 +118,11 @@ describe('ProjectConfiguration.vue', () => {
         expect(nextButton.text()).toBe('Next: Chat with Navie');
 
         // The next button should emit a specific event
-        nextButton.trigger('click');
-        expect(root.emitted()['open-navie']).toEqual([[]]);
+        const spy = jest.fn();
+        eventBus.on('open-navie', spy);
+        await nextButton.trigger('click');
+        expect(spy).toHaveBeenCalledTimes(1);
+        eventBus.off('open-navie', spy);
       });
 
       it('does not present additional options if the language is other', async () => {
@@ -205,8 +207,11 @@ describe('ProjectConfiguration.vue', () => {
       it('presents a button to open navie', async () => {
         const nextButton = wrapper.find('[data-cy="end-button"]');
         expect(nextButton.text()).toBe('Next: Chat with Navie');
-        nextButton.trigger('click');
-        expect(root.emitted()['open-navie']).toEqual([[]]);
+        const spy = jest.fn();
+        eventBus.on('open-navie', spy);
+        await nextButton.trigger('click');
+        expect(spy).toHaveBeenCalledTimes(1);
+        eventBus.off('open-navie', spy);
       });
     });
   });

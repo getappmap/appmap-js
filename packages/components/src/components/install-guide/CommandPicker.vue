@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VTabContent from '@/components/install-guide/TabbedContent.vue';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 
@@ -16,7 +16,7 @@ interface CommandTab {
   command: string;
 }
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VTabContent,
     VCodeSnippet,

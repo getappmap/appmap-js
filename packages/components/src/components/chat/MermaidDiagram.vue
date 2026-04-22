@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import mermaid from 'mermaid';
 import VModal from '@/components/Modal.vue';
 import VCloseIcon from '@/assets/x-icon.svg';
@@ -57,7 +57,7 @@ mermaid.initialize({
 
 let diagramId = 0;
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VModal,
     VCloseIcon,

@@ -37,11 +37,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import SectionHeading from '@/components/review/SectionHeading.vue';
 import { TestCoverageItem } from '.';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'TestAnalysis',
   components: {
     SectionHeading,

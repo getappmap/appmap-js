@@ -6,10 +6,9 @@
     </template>
     <template v-else>
       <div class="sequence-diagram" id="sequence-diagram-ui">
-        <template v-for="(actor, index) in visuallyReachableActors">
+        <template v-for="(actor, index) in visuallyReachableActors" :key="actor.id">
           <VActor
             :actor="actor"
-            :key="actor.id"
             :row="1"
             :index="index"
             :height="actions.length"
@@ -17,11 +16,10 @@
             :appMap="appMap"
           />
         </template>
-        <template v-for="action in actions">
+        <template v-for="action in actions" :key="actionKey(action)">
           <template v-if="action.nodeType === 'call'">
             <VCallAction
               :actionSpec="action"
-              :key="actionKey(action)"
               :interactive="interactive"
               :appMap="appMap"
               :highlighted-event-index="highlightedEventIndex"
@@ -30,17 +28,15 @@
           <template v-if="action.nodeType === 'return'">
             <VReturnAction
               :actionSpec="action"
-              :key="actionKey(action)"
               :return-value="returnValue(action)"
             />
           </template>
         </template>
-        <template v-for="action in actions">
+        <template v-for="action in actions" :key="`loop-${actionKey(action)}`">
           <template v-if="action.nodeType === 'loop'"
             ><VLoopAction
               :actionSpec="action"
               :isCollapsed="isCollapsed(action)"
-              :key="actionKey(action)"
           /></template>
         </template>
       </div>
@@ -272,7 +268,7 @@ export default {
             actionSpec?.ancestorIndexes.length >= collapseDepth &&
             !descendantPreventingCollapseFound;
           if (this.collapsedActionState[actionSpec?.index] != shouldCollapse)
-            this.$set(this.$store.state.collapsedActionState, actionSpec?.index, shouldCollapse);
+            this.$store.state.collapsedActionState[actionSpec?.index] = shouldCollapse;
         }
 
         return descendantPreventingCollapseFound;
@@ -308,7 +304,7 @@ export default {
         }
 
         collapsedAncestorIndexes.forEach((index) => {
-          this.$set(this.collapsedActionState, index, false);
+          this.collapsedActionState[index] = false;
         });
       }
     },

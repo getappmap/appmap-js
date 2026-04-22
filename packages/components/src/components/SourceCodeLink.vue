@@ -110,7 +110,7 @@ export default {
     this.requestLocation();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     eventBus.off('response-resolve-location', this.onResolveLocation);
   },
 };

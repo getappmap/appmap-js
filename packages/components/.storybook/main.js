@@ -8,10 +8,9 @@ module.exports = {
     getAbsolutePath('@storybook/addon-essentials'),
   ],
 
-  webpackFinal: async (config, { configType }) => {
+  webpackFinal: async (config) => {
     config.resolve.alias = {
       '@': path.resolve(__dirname, '..', 'src'),
-      vue$: 'vue/dist/vue.common.dev.js', // This must match the alias in packages/components/babel.config.js
     };
 
     config.resolve.fallback = {
@@ -37,8 +36,15 @@ module.exports = {
       include: path.resolve(__dirname, '../'),
     });
 
-    let rule = config.module.rules.find((r) => r.test && r.test.toString().includes('svg'));
-    rule.test = new RegExp(rule.test.toString().replace(/(^\/)|(\|svg|svg\|)|(\/$)/g, ''));
+    // Remove SVG from the default file/asset rule
+    const fileRule = config.module.rules.find(
+      (r) => r.test && r.test.toString().includes('svg')
+    );
+    if (fileRule) {
+      fileRule.test = new RegExp(
+        fileRule.test.toString().replace(/(^\/)|(\|svg|svg\|)|(\/$)/g, '')
+      );
+    }
 
     config.module.rules.push({
       test: /\.svg$/,
@@ -49,7 +55,7 @@ module.exports = {
   },
 
   framework: {
-    name: getAbsolutePath('@storybook/vue-webpack5'),
+    name: getAbsolutePath('@storybook/vue3-webpack5'),
     options: {},
   },
 

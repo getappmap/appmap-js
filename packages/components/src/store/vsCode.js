@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
 import {
   AppMap,
@@ -8,8 +7,6 @@ import {
   deserializeFilter,
   base64UrlDecode,
 } from '@appland/models';
-
-Vue.use(Vuex);
 
 export const SELECT_CODE_OBJECT = 'selectCodeObject';
 export const SELECT_LABEL = 'selectLabel';

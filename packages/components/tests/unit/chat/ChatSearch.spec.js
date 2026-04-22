@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils';
 import { randomUUID } from 'crypto';
 import EventEmitter from 'events';
 import { threadId } from 'worker_threads';
+import eventBus from '@/lib/eventBus';
 
 describe('pages/ChatSearch.vue', () => {
   let rpcClient;
@@ -65,7 +66,7 @@ describe('pages/ChatSearch.vue', () => {
   // It now takes a couple of event loops to get into a finalized state. This event will be
   // most reliable.
   const waitForInitialized = (wrapper) =>
-    new Promise((resolve) => wrapper.vm.$root.$on('chat-search-loaded', resolve));
+    new Promise((resolve) => eventBus.once('chat-search-loaded', resolve));
 
   afterEach(jest.clearAllMocks);
 
@@ -201,7 +202,7 @@ describe('pages/ChatSearch.vue', () => {
       // `provide` is not reactive unless the value provided is observed.
       // Just remount the component to test the prop.
       const wrapper = mount(VChatSearch, {
-        propsData: { displaySubscription },
+        props: { displaySubscription },
         data: () => ({ rpcClient }),
       });
       // eslint-disable-next-line no-underscore-dangle

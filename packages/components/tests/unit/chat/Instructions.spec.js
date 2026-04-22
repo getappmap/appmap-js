@@ -1,5 +1,6 @@
 import VInstructions from '@/components/chat-search/Instructions.vue';
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import eventBus from '@/lib/eventBus';
 
 describe('components/chat-search/Instructions.vue', () => {
   const appmaps = Array.from({ length: 3 }).map((_, i) => ({
@@ -12,7 +13,7 @@ describe('components/chat-search/Instructions.vue', () => {
   describe('Most recent AppMap recordings', () => {
     it('displays a list of the most recent AppMap recordings', () => {
       const wrapper = mount(VInstructions, {
-        propsData: {
+        props: {
           appmaps,
         },
       });
@@ -25,24 +26,24 @@ describe('components/chat-search/Instructions.vue', () => {
       });
     });
 
-    it('emits an event when clicking an AppMap', () => {
+    it('emits an event when clicking an AppMap', async () => {
       const wrapper = mount(VInstructions, {
-        propsData: {
+        props: {
           appmaps,
         },
       });
 
-      const listItems = wrapper.findAll('[data-cy="appmap-list-item"]');
-      listItems.wrappers.forEach((item, i) => {
-        item.trigger('click');
-      });
+      const spy = jest.fn();
+      eventBus.on('open-appmap', spy);
 
-      const rootWrapper = createWrapper(wrapper.vm.$root);
-      const emitted = rootWrapper.emitted('open-appmap');
-      expect(emitted).toHaveLength(appmaps.length);
-      emitted.forEach((path, i) => {
-        expect(path).toStrictEqual([`path${i}`]);
+      const listItems = wrapper.findAll('[data-cy="appmap-list-item"]');
+      await Promise.all(listItems.map((item) => item.trigger('click')));
+
+      expect(spy).toHaveBeenCalledTimes(appmaps.length);
+      spy.mock.calls.forEach(([path], i) => {
+        expect(path).toBe(`path${i}`);
       });
+      eventBus.off('open-appmap', spy);
     });
   });
 });

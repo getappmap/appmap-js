@@ -2,7 +2,8 @@
 
 import VUserMessage from '@/components/chat/UserMessage.vue';
 import { URI } from '@appland/rpc';
-import { createWrapper, mount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import eventBus from '@/lib/eventBus';
 import { pinnedItemRegistry } from '../../../src/lib/pinnedItems';
 
 const snippets = {
@@ -45,7 +46,7 @@ describe('components/UserMessage.vue', () => {
       pinnedItemRegistry.appendContent(uri, snippets.tsCode);
       pinnedItemRegistry.setMetadata(uri, 'language', 'typescript');
       wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [{ type: 'code-block', uri }],
         },
       });
@@ -75,7 +76,7 @@ describe('components/UserMessage.vue', () => {
   describe('DOM sanitization', () => {
     it('allows html-like elements in preformatted blocks', () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [snippets.htmlTag],
         },
       });
@@ -86,7 +87,7 @@ describe('components/UserMessage.vue', () => {
 
     it('does not allow script injection', () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [snippets.xss],
         },
       });
@@ -95,7 +96,7 @@ describe('components/UserMessage.vue', () => {
 
     it('renders the user message as plain text', () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [snippets.xss],
           isUser: true,
         },
@@ -105,7 +106,7 @@ describe('components/UserMessage.vue', () => {
 
     it('renders change blocks', () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [
             `<change>
 <file change-number-for-this-file="1">/home/db/dev/applandinc/vscode-appland/package.json</file>
@@ -152,19 +153,19 @@ describe('components/UserMessage.vue', () => {
         complete: true,
       };
 
-      const wrapper = mount(VUserMessage, { propsData: props });
+      const spy = jest.fn();
+      eventBus.on('save-message', spy);
+      const wrapper = mount(VUserMessage, { props: props });
       const saveButton = wrapper.find('[data-cy="save-message"]');
       await saveButton.trigger('click');
 
-      const rootWrapper = createWrapper(wrapper.vm.$root);
-      expect(rootWrapper.emitted()['save-message']).toBeTruthy();
-      expect(rootWrapper.emitted()['save-message'][0]).toEqual([
-        {
-          messageId: props.id,
-          threadId: props.threadId,
-          content: props.tokens[0],
-        },
-      ]);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith({
+        messageId: props.id,
+        threadId: props.threadId,
+        content: props.tokens[0],
+      });
+      eventBus.off('save-message', spy);
     });
   });
 
@@ -185,7 +186,7 @@ describe('components/UserMessage.vue', () => {
         },
       });
       wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [snippets.tsCode],
           id: 'id',
           complete: true,
@@ -226,7 +227,7 @@ describe('components/UserMessage.vue', () => {
       );
       pinnedItemRegistry.setMetadata(uri, 'language', 'mermaid');
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [{ type: 'code-block', uri }],
         },
       });
@@ -239,7 +240,7 @@ describe('components/UserMessage.vue', () => {
     it('renders code snippets with Windows paths', async () => {
       const uri = URI.file('C:\\Users\\me\\My Documents\\other-project\\src\\main.cpp');
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [{ type: 'code-block', uri: uri.toString() }],
         },
       });
@@ -251,7 +252,7 @@ describe('components/UserMessage.vue', () => {
     it('renders code snippets with Unix paths', async () => {
       const uri = URI.file('/home/user/dev/blog/src/index.js');
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [{ type: 'code-block', uri: uri.toString() }],
         },
       });
@@ -264,7 +265,7 @@ describe('components/UserMessage.vue', () => {
   describe('next steps', () => {
     it('shows a skeleton loader if next steps are pending', () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: ['Hello world!'],
           complete: true,
         },
@@ -277,7 +278,7 @@ describe('components/UserMessage.vue', () => {
 
     it('displays next steps once they are fetched', async () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: ['Hello world!'],
           complete: true,
           promptSuggestions: [
@@ -293,7 +294,7 @@ describe('components/UserMessage.vue', () => {
 
     it('automatically fetches next steps once the message is complete', async () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: ['Hello world!'],
           threadId: '00000000-0000-0000-0000-000000000000',
           isUser: false,
@@ -312,7 +313,7 @@ describe('components/UserMessage.vue', () => {
   describe('links', () => {
     it('should open links to websites in a new tab', () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: ['[AppMap](https://appmap.io)'],
           complete: true,
           isUser: false,
@@ -324,25 +325,26 @@ describe('components/UserMessage.vue', () => {
 
     it('emits a click-link event when a non-http(s) link is clicked', async () => {
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: ['[my-file.md](my-file.md)'],
           complete: true,
           isUser: false,
         },
       });
-      const rootWrapper = createWrapper(wrapper.vm.$root);
+      const spy = jest.fn();
+      eventBus.on('click-link', spy);
 
       await wrapper.find('a[emit-event]').trigger('click');
 
-      const events = rootWrapper.emitted()['click-link'];
-      expect(events).toBeArrayOfSize(1);
-      expect(events[0]).toEqual(['my-file.md']);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith('my-file.md');
+      eventBus.off('click-link', spy);
     });
 
     it('allows the file protocol', () => {
       const uri = 'file:///home/user/my-file.md';
       const wrapper = mount(VUserMessage, {
-        propsData: {
+        props: {
           tokens: [
             `- [\`my-file.md\`](${uri})
                     - [my-file.md](${uri})`,

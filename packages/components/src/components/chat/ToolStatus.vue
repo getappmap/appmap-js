@@ -17,12 +17,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, type Component } from 'vue';
 import VLoader from '@/components/chat/Loader.vue';
 import VCheck from '@/assets/check.svg';
 import VDocument from '@/assets/document.svg';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-tool-status',
   components: {
     VLoader,
@@ -47,7 +47,7 @@ export default Vue.extend({
     },
   },
   computed: {
-    completeIconComponent(): Vue.Component {
+    completeIconComponent(): Component {
       return this.completeIcon === 'check' ? VCheck : VDocument;
     },
   },

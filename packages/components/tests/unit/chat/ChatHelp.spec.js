@@ -25,7 +25,7 @@ describe('pages/Chat.vue', () => {
 
   async function simulateInteraction(question, messages) {
     const wrapper = mount(VChatHelp, {
-      propsData: {
+      props: {
         aiClientFn: aiClientBuilder(() => wrapper.vm, question, messages),
       },
     });

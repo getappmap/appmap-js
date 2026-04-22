@@ -169,7 +169,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import RemoteRecordingIcon from '@/assets/remote-recording-icon.svg';
 import RequestsIcon from '@/assets/request-arrows-icon.svg';
 import TestsIcon from '@/assets/record-test.svg';
@@ -179,7 +179,7 @@ import VRecordingMethodGrid from './RecordingMethodGrid.vue';
 import buildPrompts from '@/lib/buildPrompts';
 import VCodeSnippet from '@/components/CodeSnippet.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     TestsIcon,
     RequestsIcon,

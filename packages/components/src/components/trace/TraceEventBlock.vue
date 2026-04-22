@@ -14,7 +14,7 @@
       :highlight-index="event === eventFilterMatch ? eventFilterMatchIndex : 0"
       :focused="focusedEvent && event && focusedEvent.id === event.id"
       @expandChildren="toggleVisibility()"
-      @click.native.stop="$emit('clickEvent', event)"
+      @click.stop="$emit('clickEvent', event)"
       ref="node"
     />
 
@@ -38,7 +38,7 @@
     <v-trace-summary
       v-if="!isExpanded && event.children.length > 0"
       :event="event"
-      @click.native.stop="toggleVisibility()"
+      @click.stop="toggleVisibility()"
       ref="summary"
     />
   </div>

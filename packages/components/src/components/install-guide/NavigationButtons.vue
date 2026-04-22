@@ -4,7 +4,7 @@
       label="Back"
       kind="ghost"
       data-cy="back-button"
-      @click.native="pagePrevious()"
+      @click="pagePrevious()"
       v-if="!first"
     />
     <v-button
@@ -12,7 +12,7 @@
       :kind="nextButtonType"
       label="Next"
       data-cy="next-button"
-      @click.native="pageNext()"
+      @click="pageNext()"
       v-if="!last"
     />
   </div>

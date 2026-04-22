@@ -34,7 +34,7 @@ describe('Authentication', () => {
 
   it('authenticates Chat', async () => {
     const wrapper = mount(VChat, {
-      propsData: { apiKey, apiUrl },
+      props: { apiKey, apiUrl },
       data: () => ({ rpcClient }),
     });
     await wrapper.vm.$nextTick();
@@ -47,7 +47,7 @@ describe('Authentication', () => {
 
   it('authenticates ChatSearch', async () => {
     const wrapper = mount(VChatSearch, {
-      propsData: { apiKey, apiUrl },
+      props: { apiKey, apiUrl },
       data: () => ({ rpcClient }),
     });
     await wrapper.vm.$nextTick();

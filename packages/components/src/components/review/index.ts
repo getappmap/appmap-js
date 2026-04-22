@@ -1,4 +1,4 @@
-import { Database, Gauge, Globe, TriangleAlert } from 'lucide-vue';
+import { Database, Gauge, Globe, TriangleAlert } from 'lucide-vue-next';
 import type { Component } from 'vue';
 
 export interface AppMapFindingReference {

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import eventBus from '@/lib/eventBus';
 
 type Data = {
@@ -14,7 +14,7 @@ const listeningElements = new Set<HTMLAnchorElement>();
 //
 // This mixin is safe to use within nested components. It guarantees that only
 // one click handler is registered per link.
-export default Vue.extend({
+export default defineComponent({
   data(): Data {
     return {
       // This is the collection of elements that we've added a click handler to.
@@ -78,7 +78,7 @@ export default Vue.extend({
     // elements.
     rebindClickHandlers() {
       this.ownedElements.forEach((el) => this.dropOwnership(el));
-      this.$el.querySelectorAll('a').forEach((el) => this.takeOwnership(el));
+      this.$el.querySelectorAll('a').forEach((el: HTMLAnchorElement) => this.takeOwnership(el));
     },
   },
 

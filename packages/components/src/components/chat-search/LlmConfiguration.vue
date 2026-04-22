@@ -25,7 +25,7 @@
               <v-button
                 size="medium"
                 kind="native"
-                @click.native="selectOption('copilot')"
+                @click="selectOption('copilot')"
                 :disabled="selectedOption === 'copilot'"
                 data-cy="llm-select"
               >
@@ -42,7 +42,7 @@
               <v-button
                 size="medium"
                 kind="native"
-                @click.native="selectOption('default')"
+                @click="selectOption('default')"
                 :disabled="selectedOption === 'default'"
                 data-cy="llm-select"
               >
@@ -59,7 +59,7 @@
               <v-button
                 size="medium"
                 kind="native"
-                @click.native="selectOption('own-key')"
+                @click="selectOption('own-key')"
                 data-cy="llm-select"
               >
                 Select
@@ -85,7 +85,7 @@
                 <v-button
                   size="medium"
                   kind="native"
-                  @click.native="selectOption('own-model')"
+                  @click="selectOption('own-model')"
                   data-cy="llm-select"
                 >
                   Select
@@ -120,7 +120,7 @@
             v-if="!vsCodeLMVendor"
             kind="native-ghost"
             class="button"
-            @click.native="showModal"
+            @click="showModal"
             data-cy="llm-config-button"
           >
             <v-cog-solid class="icon" />
@@ -137,7 +137,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import VButton from '@/components/Button.vue';
 import VCogSolid from '@/assets/cog-solid.svg';
 import VModal from '@/components/Modal.vue';
@@ -148,7 +148,7 @@ import eventBus from '@/lib/eventBus';
 
 type LLMConfigOption = 'default' | 'own-key' | 'own-model' | 'copilot';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VButton,
     VCogSolid,

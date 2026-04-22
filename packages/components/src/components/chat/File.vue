@@ -12,12 +12,12 @@
 <script lang="ts">
 import VContextContainer from '@/components/chat/ContextContainer.vue';
 import ContextItemMixin from '@/components/mixins/contextItem';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import type { PinEvent } from './PinEvent';
 import { URI } from '@appland/rpc';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-file',
 
   props: {

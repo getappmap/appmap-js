@@ -28,13 +28,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, type ComponentPublicInstance } from 'vue';
 import VPopper from '@/components/Popper.vue';
 import { NavieRpc } from '@appland/rpc';
 
-type PopperRef = Vue & { show: () => void; hide: () => void; isVisible: Readonly<boolean> };
+type PopperRef = ComponentPublicInstance & { show: () => void; hide: () => void; isVisible: Readonly<boolean> };
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-auto-complete',
 
   components: {
@@ -174,7 +174,7 @@ export default Vue.extend({
     document.addEventListener('selectionchange', this.onCaretChange);
   },
 
-  destroyed() {
+  unmounted() {
     document.removeEventListener('selectionchange', this.onCaretChange);
   },
 });

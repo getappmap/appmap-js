@@ -46,7 +46,7 @@
                 class="recording-method__prompt-suggestion"
                 v-for="(p, i) in promptSuggestions"
                 :key="i"
-                @click.native="onPromptSuggestionClick(p)"
+                @click="onPromptSuggestionClick(p)"
               >
                 {{ p.label }}
               </v-button>
@@ -59,14 +59,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VExternalLinkIcon from '@/assets/external-link.svg';
 import VPopperMenu from '@/components/PopperMenu.vue';
 import VButton from '@/components/Button.vue';
 import type { NaviePromptSuggestion } from '@/lib/buildPrompts';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     title: {
       type: String,

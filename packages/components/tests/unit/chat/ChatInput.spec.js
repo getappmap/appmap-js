@@ -8,7 +8,7 @@ describe('ChatInput', () => {
   beforeEach(() => {
     document.getSelection = jest.fn().mockImplementation(() => ({ focusOffset: caretPosition }));
     wrapper = mount(VChatInput, {
-      propsData: {
+      props: {
         commands: [
           {
             name: '@example',
@@ -130,20 +130,18 @@ describe('ChatInput', () => {
 
     it('is not displayed when displaySubscription feature flag is false', async () => {
       const wrapper = mount(VChatInput, {
-        propsData: {
+        props: {
           usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
           subscription: {},
         },
-        provide: {
-          displaySubscription: false,
-        },
+        global: { provide: { displaySubscription: false } },
       });
       expect(wrapper.find('[data-cy="usage-message"]').exists()).toBeFalsy();
     });
 
     it('includes the email in the subscribe url', async () => {
       const wrapper = mount(VChatInput, {
-        propsData: {
+        props: {
           usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
           email: 'test@example.com',
         },
@@ -155,7 +153,7 @@ describe('ChatInput', () => {
 
     it('omits the email in the subscribe url when not provided', async () => {
       const wrapper = mount(VChatInput, {
-        propsData: {
+        props: {
           usage: { conversationCounts: [{ daysAgo: 7, count: 7 }] },
         },
       });

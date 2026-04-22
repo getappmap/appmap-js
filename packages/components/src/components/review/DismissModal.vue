@@ -14,8 +14,8 @@
       >
       </textarea>
       <div class="dismiss-modal__actions">
-        <v-button @click.native="closeDismissDialog" kind="native-ghost">Cancel</v-button>
-        <v-button @click.native="submitDismissReason" :disabled="isInputEmpty" kind="native">
+        <v-button @click="closeDismissDialog" kind="native-ghost">Cancel</v-button>
+        <v-button @click="submitDismissReason" :disabled="isInputEmpty" kind="native">
           Submit
         </v-button>
       </div>
@@ -24,11 +24,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VModalContainer from '@/components/review/ModalContainer.vue';
 import VButton from '@/components/Button.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VModalContainer,
     VButton,

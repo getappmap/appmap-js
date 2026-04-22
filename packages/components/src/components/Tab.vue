@@ -44,7 +44,7 @@ export default {
     this.tabsContext.registerTab({ name: this.name, tabName: this.tabName });
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.tabsContext.unregisterTab(this.name);
   },
 };

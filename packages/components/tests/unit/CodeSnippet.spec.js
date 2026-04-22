@@ -18,8 +18,8 @@ describe('CodeSnippet.vue', () => {
   it('copies text when clicked', async () => {
     const clipboardText = 'This text will be copied to the clipboard';
     const wrapper = mount(CodeSnippet, {
-      propsData: { clipboardText },
-      mocks: { navigator },
+      props: { clipboardText },
+      global: { mocks: { navigator } },
     });
 
     const btn = wrapper.get('[data-cy="code-snippet-button"]');

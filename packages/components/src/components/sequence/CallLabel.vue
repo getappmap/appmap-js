@@ -11,9 +11,8 @@
       </div>
     </template>
     <div :class="nameClasses">
-      <template v-for="text in name">
+      <template v-for="text in name" :key="actionSpec.index + text.text">
         <div
-          :key="actionSpec.index + text.text"
           :style="{
             overflow: 'hidden',
             // Text baseline changes when overflow: hidden, so we need next two properties
@@ -195,7 +194,7 @@ export default {
   },
   methods: {
     collapseOrExpand() {
-      this.$set(this.$store.state.collapsedActionState, this.actionSpec.index, !this.isCollapsed);
+      this.$store.state.collapsedActionState[this.actionSpec.index] = !this.isCollapsed;
     },
     selectEvent() {
       if (this.appMap) {

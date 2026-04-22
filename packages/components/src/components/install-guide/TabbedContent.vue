@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   data() {
     return {
       selectedTab: 0,
@@ -39,7 +39,7 @@ export default Vue.extend({
   async updated() {
     if (this.justUpdated) return;
 
-    this.$set(this, 'tabNames', Object.keys(this.$slots));
+    this.tabNames = Object.keys(this.$slots);
     this.justUpdated = true;
 
     await this.$nextTick();

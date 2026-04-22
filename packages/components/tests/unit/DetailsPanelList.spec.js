@@ -9,7 +9,7 @@ describe('DetailsPanelList.vue', () => {
     };
 
     const wrapper = mount(DetailsPanelList, {
-      propsData: {
+      props: {
         items: [items.a, items.a, items.a, items.b],
         uniqueItems: true,
         nameKey: 'name',

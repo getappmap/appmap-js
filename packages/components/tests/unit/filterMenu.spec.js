@@ -1,4 +1,5 @@
-import { mount, createWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import eventBus from '@/lib/eventBus';
 import FilterMenu from '@/components/FilterMenu.vue';
 import {
   store,
@@ -51,37 +52,40 @@ describe('FilterMenu.vue', () => {
     },
   });
 
-  let wrapper; // Wrapper<Vue>
-  let rootWrapper; // Wrapper<Vue>
+  let wrapper;
 
   beforeEach(() => {
     const filter = new AppMapFilter();
     const appMap = buildAppMap().source(data).normalize().build();
-    const propsData = { filteredAppMap: filter.filter(appMap) };
-    const mocks = { navigator };
     store.commit(SET_SELECTED_SAVED_FILTER, defaultFilter);
-    wrapper = mount(FilterMenu, { propsData, store, mocks });
-    rootWrapper = createWrapper(wrapper.vm.$root);
+    wrapper = mount(FilterMenu, {
+      props: { filteredAppMap: filter.filter(appMap) },
+      global: { plugins: [store], mocks: { navigator } },
+    });
   });
 
-  it('emits the correct event when deleting', () => {
-    expect(rootWrapper.emitted()['deleteFilter']).toBeUndefined();
+  it('emits the correct event when deleting', async () => {
+    const spy = jest.fn();
+    eventBus.on('deleteFilter', spy);
     expect(wrapper.find('option:checked').text()).toBe('AppMap default');
     wrapper.find('select.filters__select').findAll('option').at(1).setSelected();
     expect(wrapper.find('option:checked').text()).toBe('another test');
-    wrapper.find('[data-cy="delete-filter-button"]').trigger('click');
-    expect(rootWrapper.emitted()['deleteFilter']).toBeArrayOfSize(1);
-    expect(rootWrapper.emitted()['deleteFilter']).toMatchObject([[savedFilters[1]]]);
+    await wrapper.find('[data-cy="delete-filter-button"]').trigger('click');
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(savedFilters[1]);
+    eventBus.off('deleteFilter', spy);
   });
 
-  it('emits the correct event when setting as default', () => {
-    expect(rootWrapper.emitted()['defaultFilter']).toBeUndefined();
+  it('emits the correct event when setting as default', async () => {
+    const spy = jest.fn();
+    eventBus.on('defaultFilter', spy);
     expect(wrapper.find('option:checked').text()).toBe('AppMap default');
     wrapper.find('select.filters__select').findAll('option').at(1).setSelected();
     expect(wrapper.find('option:checked').text()).toBe('another test');
-    wrapper.find('[data-cy="default-filter-button"]').trigger('click');
-    expect(rootWrapper.emitted()['defaultFilter']).toBeArrayOfSize(1);
-    expect(rootWrapper.emitted()['defaultFilter']).toMatchObject([[savedFilters[1]]]);
+    await wrapper.find('[data-cy="default-filter-button"]').trigger('click');
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(savedFilters[1]);
+    eventBus.off('defaultFilter', spy);
   });
 
   it('copies the state to the clipboard', async () => {
@@ -91,13 +95,15 @@ describe('FilterMenu.vue', () => {
     expect(actualClipboardText).toBe(defaultFilter.state);
   });
 
-  it('emits the correct event when saving', () => {
-    expect(rootWrapper.emitted()['saveFilter']).toBeUndefined();
+  it('emits the correct event when saving', async () => {
+    const spy = jest.fn();
+    eventBus.on('saveFilter', spy);
     wrapper.findAll('label.filters__checkbox').at(2).trigger('click');
     wrapper.find('input.filters__input').setValue('test');
     expect(wrapper.find('input.filters__input').element.value).toBe('test');
-    wrapper.find('[data-cy="save-filter-button"]').trigger('click');
-    expect(rootWrapper.emitted()['saveFilter']).toBeArrayOfSize(1);
-    expect(rootWrapper.emitted()['saveFilter']).toMatchObject([[filterToSave]]);
+    await wrapper.find('[data-cy="save-filter-button"]').trigger('click');
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(filterToSave);
+    eventBus.off('saveFilter', spy);
   });
 });

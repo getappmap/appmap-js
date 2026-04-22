@@ -23,13 +23,13 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VCodeIcon from '@/assets/code-icon.svg';
 import VWhiteAppmapLogo from '@/assets/jetbrains_run_config_execute_dark.svg';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-context-item',
 
   components: {

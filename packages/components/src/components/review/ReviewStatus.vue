@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import SectionHeading from './SectionHeading.vue';
 import VLoader from '@/components/chat/Loader.vue';
 
@@ -81,7 +81,7 @@ interface Suggestions {
   low: number;
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ReviewStatus',
   components: {
     SectionHeading,

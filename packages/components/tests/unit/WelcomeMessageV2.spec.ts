@@ -6,7 +6,7 @@ describe('VWelcomeMessageV2', () => {
 
   beforeEach(() => {
     wrapper = mount(VWelcomeMessageV2, {
-      propsData: {
+      props: {
         welcomeMessage: '',
         activityName: '',
         suggestions: [],

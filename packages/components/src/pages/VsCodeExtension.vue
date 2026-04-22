@@ -1457,7 +1457,7 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     browserPrefixes.forEach((prefix) => {
       document.removeEventListener(prefix + 'fullscreenchange', this.checkFullscreen);
     });

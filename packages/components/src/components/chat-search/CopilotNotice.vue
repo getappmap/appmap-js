@@ -34,11 +34,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VShieldIcon from '@/assets/shield.svg';
 import VSubscriptionStatus from '@/components/chat-search/SubscriptionStatus.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { VShieldIcon, VSubscriptionStatus },
   props: {
     subscription: {

@@ -1,17 +1,20 @@
 module.exports = {
-  setupFilesAfterEnv: ['jest-extended'],
-  preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
-  transformIgnorePatterns: ['../../node_modules/(?!dom-to-svg)'],
+  testEnvironment: 'jsdom',
   transform: {
+    '^.+\\.vue$': '@vue/vue3-jest',
     '^.+\\.svg$': '<rootDir>/tests/unit/support/svgTransform.js',
+    '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest',
   },
-  // d3's entry file is native module which jest doesn't support.
-  // So we map it instead to bundled version.
-  // https://github.com/jestjs/jest/issues/12036
   moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    // d3's entry file is native module which jest doesn't support.
+    // So we map it instead to bundled version.
+    // https://github.com/jestjs/jest/issues/12036
     'd3-flame-graph': 'd3-flame-graph',
     '^d3-(.*)$': 'd3-$1/dist/d3-$1',
     mermaid: '<rootDir>/tests/unit/support/mockMermaid.js',
   },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'vue', 'json'],
+  transformIgnorePatterns: ['../../node_modules/(?!dom-to-svg)'],
   setupFilesAfterEnv: ['<rootDir>/tests/unit/support/polyfills.js', 'jest-extended/all'],
 };

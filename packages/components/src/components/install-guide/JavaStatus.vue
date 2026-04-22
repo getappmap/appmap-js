@@ -43,7 +43,7 @@
             <v-button
               kind="ghost"
               class="button"
-              @click.native="addJavaConfigs()"
+              @click="addJavaConfigs()"
             >
               Add them now
             </v-button>
@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import eventBus from '@/lib/eventBus';
 import VFlashMessage from '@/components/FlashMessage.vue';
 import VSpinner from '@/components/Spinner.vue';
@@ -64,7 +64,7 @@ import VFailureIcon from '@/assets/exclamation-circle.svg';
 import VSuccessIcon from '@/assets/check.svg';
 import VButton from '@/components/Button.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VFlashMessage,
     VSpinner,

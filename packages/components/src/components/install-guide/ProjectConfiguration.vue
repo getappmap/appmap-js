@@ -75,7 +75,7 @@
             v-for="[language, icon] of Object.entries(languages)"
             :key="language"
             :language="language"
-            @click.native="onSelectLanguage(language)"
+            @click="onSelectLanguage(language)"
           >
             <component :is="icon" />
           </v-language-button>
@@ -116,7 +116,7 @@
             label="Next: Chat with Navie"
             data-cy="next-button"
             class="next-button"
-            @click.native="openNavie()"
+            @click="openNavie()"
           />
         </template>
         <template v-else>
@@ -322,7 +322,7 @@
             label="Next: Collect AppMap trace data"
             data-cy="next-button"
             class="next-button"
-            @click.native="onClickSection('record')"
+            @click="onClickSection('record')"
           />
         </template>
       </div>
@@ -357,7 +357,7 @@
           label="Next: Chat with Navie"
           data-cy="end-button"
           class="next-button"
-          @click.native="openNavie()"
+          @click="openNavie()"
         />
       </div>
     </v-accordion>
@@ -365,7 +365,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VAccordion from '@/components/Accordion.vue';
 import VCheckIcon from '@/assets/check-circle-solid.svg';
 import VLanguageButton from '@/components/install-guide/LanguageButton.vue';
@@ -405,7 +405,7 @@ const Commands: Record<string, Array<{ name: string; command: string }>> = {
   ],
 };
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     VAccordion,
     VCheckIcon,

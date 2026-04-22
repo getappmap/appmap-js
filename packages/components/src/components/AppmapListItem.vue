@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VIconRecordCodeBlock from '@/assets/record-code-block.svg';
 import VIconRecordProcess from '@/assets/record-process.svg';
 import VIconRecordRemote from '@/assets/record-remote.svg';
@@ -15,7 +15,7 @@ import VIconRecordRequest from '@/assets/record-request.svg';
 import VIconRecordTest from '@/assets/record-test.svg';
 import eventBus from '@/lib/eventBus';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-appmap-list-item',
   components: {
     VIconRecordCodeBlock,

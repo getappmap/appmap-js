@@ -1,12 +1,13 @@
 import VContextContainer from '@/components/chat/ContextContainer.vue';
-import { createWrapper, mount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import eventBus from '@/lib/eventBus';
 
 describe('components/chat/ContextContainer.vue', () => {
   it('renders pinned state', async () => {
     const uri = 'urn:uuid:0';
     let wrapper = mount(VContextContainer, {
-      propsData: { uri },
-      provide: { pinnedItems: [{ uri }] },
+      props: { uri },
+      global: { provide: { pinnedItems: [{ uri }] } },
     });
     expect(wrapper.find('[data-cy="pin"][data-pinned]').exists()).toBe(true);
 
@@ -15,7 +16,7 @@ describe('components/chat/ContextContainer.vue', () => {
   });
 
   it('emits pin event', async () => {
-    const wrapper = mount(VContextContainer, { propsData: { uri: 'urn:uuid:0' } });
+    const wrapper = mount(VContextContainer, { props: { uri: 'urn:uuid:0' } });
     await wrapper.find('[data-cy="pin"]').trigger('click');
 
     const events = wrapper.emitted().pin;
@@ -25,7 +26,7 @@ describe('components/chat/ContextContainer.vue', () => {
   it('opens a non-collapsible file item', async () => {
     const location = '/home/user/my-project/app/models/user.rb';
     const wrapper = mount(VContextContainer, {
-      propsData: {
+      props: {
         language: 'javascript',
         location,
         isFile: true,
@@ -33,11 +34,12 @@ describe('components/chat/ContextContainer.vue', () => {
       },
     });
 
-    const rootWrapper = createWrapper(wrapper.vm.$root);
+    const spy = jest.fn();
+    eventBus.on('open-location', spy);
     await wrapper.find('[data-cy="open"]').trigger('click');
 
-    const actual = rootWrapper.emitted()['open-location'];
-    expect(actual).toHaveLength(1);
-    expect(actual[0][0]).toStrictEqual(location);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(location);
+    eventBus.off('open-location', spy);
   });
 });

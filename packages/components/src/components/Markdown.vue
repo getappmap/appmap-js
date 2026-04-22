@@ -3,11 +3,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'v-markdown',
   props: {
     content: {
