@@ -21,7 +21,9 @@ describe('components/chat-search/Instructions.vue', () => {
       expect(listItems.length).toBe(appmaps.length);
       listItems.wrappers.forEach((item, i) => {
         expect(item.find('[data-cy="name"]').text()).toBe('appmap' + i);
-        expect(item.find('[data-cy="time"]').text()).toBe(`1/${i + 1}/2020, 12:00:00 AM`);
+        expect(item.find('[data-cy="time"]').text()).toBe(
+          new Date(appmaps[i].createdAt).toLocaleString()
+        );
       });
     });
 
