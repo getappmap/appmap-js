@@ -1,3 +1,10 @@
+# [@appland/components-v4.48.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.47.0...@appland/components-v4.48.0) (2026-04-26)
+
+
+### Features
+
+* **components:** support remote RPC server connections via full URL configuration ([4b8fbd2](https://github.com/getappmap/appmap-js/commit/4b8fbd2a3fc90db730ad7374abb3d104f138ddab))
+
 # [@appland/components-v4.47.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.46.4...@appland/components-v4.47.0) (2025-07-18)
 
 
