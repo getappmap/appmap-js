@@ -50,6 +50,7 @@
     "pkg@5.8.1-patched": "patch:pkg@npm:5.8.1#.yarn/patches/pkg-npm-5.8.1-db9700609f.patch",
     "tar": "7.5.11",
     "json5@^0.5.0": "npm:json5@^1.0.2",
-    "json5@^0.5.1": "npm:json5@^1.0.2"
+    "json5@^0.5.1": "npm:json5@^1.0.2",
+    "loader-utils@^0.2.16": "npm:loader-utils@^1.4.2"
   }
 }
