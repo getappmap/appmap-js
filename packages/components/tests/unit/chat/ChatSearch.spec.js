@@ -1,8 +1,7 @@
 import VChatSearch from '@/pages/ChatSearch.vue';
-import { mount } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
 import { randomUUID } from 'crypto';
 import EventEmitter from 'events';
-import { threadId } from 'worker_threads';
 import eventBus from '@/lib/eventBus';
 
 describe('pages/ChatSearch.vue', () => {
@@ -13,7 +12,9 @@ describe('pages/ChatSearch.vue', () => {
 
   beforeEach(async () => {
     threadListener = new EventEmitter();
+    threadListener.close = jest.fn();
     rpcClient = {
+      client: {},
       listMethods: jest.fn().mockResolvedValue(['v1.navie.suggest', 'v1.navie.metadata']),
       appmapStats: jest.fn().mockResolvedValue(),
       appmapData: jest.fn().mockResolvedValue(),
@@ -61,12 +62,8 @@ describe('pages/ChatSearch.vue', () => {
     };
     wrapper = mount(VChatSearch, { data: () => ({ rpcClient }) });
     await wrapper.setData({ rpcClient, activeThreadId });
+    await flushPromises();
   });
-
-  // It now takes a couple of event loops to get into a finalized state. This event will be
-  // most reliable.
-  const waitForInitialized = (wrapper) =>
-    new Promise((resolve) => eventBus.once('chat-search-loaded', resolve));
 
   afterEach(jest.clearAllMocks);
 
@@ -205,8 +202,7 @@ describe('pages/ChatSearch.vue', () => {
         props: { displaySubscription },
         data: () => ({ rpcClient }),
       });
-      // eslint-disable-next-line no-underscore-dangle
-      expect(wrapper.vm._provided.displaySubscription).toBe(displaySubscription);
+      expect(wrapper.vm.$.provides.displaySubscription).toBe(displaySubscription);
     }
   });
 
@@ -239,7 +235,7 @@ describe('pages/ChatSearch.vue', () => {
   });
 
   it('calls expected RPC methods upon initialization', async () => {
-    await waitForInitialized(wrapper);
+    await flushPromises();
 
     const collectNumberOfCalls = (mockObject) => {
       return Object.entries(mockObject).reduce((acc, [method, fn]) => {
@@ -492,7 +488,7 @@ describe('pages/ChatSearch.vue', () => {
 
   describe('welcome message versioning', () => {
     it('falls back to v1 if v2 is not available', async () => {
-      await waitForInitialized(wrapper);
+      await flushPromises();
 
       expect(rpcClient.metadataV1).toHaveBeenCalled();
       expect(rpcClient.metadataV2).not.toHaveBeenCalled();

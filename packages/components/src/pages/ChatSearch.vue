@@ -325,6 +325,12 @@ export default {
         }
       }
     },
+    threadId(newVal: string | undefined) {
+      if (newVal) {
+        this.unsubscribeFromThread();
+        this.subscribeToThread(newVal);
+      }
+    },
   },
   computed: {
     isNavieLoading() {
@@ -687,9 +693,9 @@ export default {
       } catch (e) {
         // It's likely the LLM completion failed. Maybe the model is bad. We shouldn't retry this
         // method.
-        this.isWelcomeV2Available = false;
         console.warn('Failed to load dynamic welcome messages. Falling back to static.', e);
-        this.loadStaticMessages().catch(console.error);
+        await this.loadStaticMessages().catch(console.error);
+        this.isWelcomeV2Available = false;
       }
     },
     async onDrop(evt: any) {
@@ -993,39 +999,52 @@ export default {
       await this.$refs.vappmap.loadData(this.targetAppmap);
     }
 
-    this.$root
-      .$on('pin', (pin: PinEvent) => {
-        pin.pinned
-          ? this.rpcClient.thread.pinItem(
-              this.activeThreadId,
-              pin.uri,
-              pinnedItemRegistry.get(pin.uri)?.content
-            )
-          : this.rpcClient.thread.unpinItem(this.activeThreadId, pin.uri);
-      })
-      .$on('jump-to', (handle: number) => {
-        document
-          .querySelector(`[data-handle="${handle}"]:not([data-reference])`)
-          ?.scrollIntoView({ behavior: 'smooth' });
-      })
-      .$on('submit-prompt', (prompt: string) => {
-        this.$refs.vchat.onSend(prompt);
-        this.$refs.vchat.scrollToBottom();
-      })
-      .$on('change-input', (prompt: string) => {
-        this.$refs.vchat.setInput(prompt);
-      })
-      .$on('pin-files', (uris: string[]) => {
-        uris.forEach((uri) => {
-          this.rpcClient.thread.pinItem(this.activeThreadId, uri);
-        });
+    this._onPin = (pin: PinEvent) => {
+      pin.pinned
+        ? this.rpcClient.thread.pinItem(
+            this.activeThreadId,
+            pin.uri,
+            pinnedItemRegistry.get(pin.uri)?.content
+          )
+        : this.rpcClient.thread.unpinItem(this.activeThreadId, pin.uri);
+    };
+    this._onJumpTo = (handle: number) => {
+      document
+        .querySelector(`[data-handle="${handle}"]:not([data-reference])`)
+        ?.scrollIntoView({ behavior: 'smooth' });
+    };
+    this._onSubmitPrompt = (prompt: string) => {
+      this.$refs.vchat.onSend(prompt);
+      this.$refs.vchat.scrollToBottom();
+    };
+    this._onChangeInput = (prompt: string) => {
+      this.$refs.vchat.setInput(prompt);
+    };
+    this._onPinFiles = (uris: string[]) => {
+      uris.forEach((uri) => {
+        this.rpcClient.thread.pinItem(this.activeThreadId, uri);
       });
+    };
+
+    eventBus.on('pin', this._onPin);
+    eventBus.on('jump-to', this._onJumpTo);
+    eventBus.on('submit-prompt', this._onSubmitPrompt);
+    eventBus.on('change-input', this._onChangeInput);
+    eventBus.on('pin-files', this._onPinFiles);
 
     await this.initialize();
 
     this.$nextTick(() => {
       eventBus.emit('chat-search-loaded');
     });
+  },
+
+  beforeUnmount() {
+    eventBus.off('pin', this._onPin);
+    eventBus.off('jump-to', this._onJumpTo);
+    eventBus.off('submit-prompt', this._onSubmitPrompt);
+    eventBus.off('change-input', this._onChangeInput);
+    eventBus.off('pin-files', this._onPinFiles);
   },
 };
 </script>
@@ -1088,16 +1107,14 @@ $border-color: darken($gray4, 10%);
   }
 
   .info-help {
-    &::v-deep {
-      .popper__text {
-        position: absolute;
-        color: $color-foreground;
-        background: $color-background;
-        left: unset;
-        right: 100%;
-        transform: translateX(0.65rem) translateY(+1.65rem);
-        border: 1px solid $color-border;
-      }
+    :deep(.popper__text) {
+      position: absolute;
+      color: $color-foreground;
+      background: $color-background;
+      left: unset;
+      right: 100%;
+      transform: translateX(0.65rem) translateY(+1.65rem);
+      border: 1px solid $color-border;
     }
   }
 
