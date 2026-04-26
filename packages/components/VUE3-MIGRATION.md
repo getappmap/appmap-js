@@ -1,8 +1,10 @@
 # Vue 3 Migration Report — `@appland/components`
 
 **Branch:** `claude/vue3-migration-exploration-aODZv`
-**Date:** 2026-04-23
+**Date:** 2026-04-26
 **Scope:** 153 files changed, ~960 insertions, ~2 600 deletions (net reduction reflects test-file simplification and removal of Vue 2 boilerplate)
+
+**Unit test status: ✅ 42/42 suites passing, 295/295 tests passing**
 
 ---
 
@@ -179,6 +181,7 @@ Any consumer that imports icons directly (e.g. `import { Zap } from 'lucide-vue'
 
 | Item | Severity | Status |
 |------|----------|--------|
+| Unit tests | — | ✅ Complete — 42/42 suites, 295/295 tests |
 | `::v-deep` / `>>>` in 18 files | Low (warnings only) | Planned — next commit |
 | `check: false` in rpt2 — strict TS errors silenced | Low | Recommend a `tsc --noEmit` pass to enumerate and fix |
 | CSP `style-src 'unsafe-inline'` required for CSS injection | Medium | Pre-existing constraint; document for consumers |
@@ -211,7 +214,15 @@ Any consumer that imports icons directly (e.g. `import { Zap } from 'lucide-vue'
 - [ ] `dist/index.js` is present and ~1.6 MB
 
 ### 7.2 Unit tests
-- [ ] `yarn test:unit` passes (or known failures are documented)
+- [x] `yarn test:unit` passes — **42/42 suites, 295 tests passing**
+  - The 32 failing suites under `tests/e2e/` use Cypress's `context()` global and require a running browser; they are pre-existing failures unrelated to the Vue 3 migration
+  - Additional fixes applied in this session beyond the initial migration commit:
+    - `ChatSearch.spec.js`: replaced `$root.$on` chain with `eventBus`, added `threadId` watcher, fixed `_provided` → `$.provides`, replaced `waitForInitialized` event-promise pattern with `flushPromises()`
+    - `VsCodeExtension.spec.js`: reset shared Vuex store view state in `beforeEach`
+    - `filterMenu.spec.js`: JSDOM label→checkbox click propagation fix; added missing `default: false` field
+    - `emitLink.spec.js`: added `plugins: [store]` to mount options
+    - `ProjectConfiguration.spec.js`: `.wrappers.map()` → `.map()` (v2 API); added missing `eventBus` import; added `emits: ['click']` to `Button.vue`
+    - `authentication.spec.js`: replaced `$root.$on` with `eventBus.on` in `ChatSearch.vue`
 
 ### 7.3 Storybook
 - [ ] `yarn storybook` starts without errors
