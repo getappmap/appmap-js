@@ -24,8 +24,6 @@
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^8",
     "@semantic-release/release-notes-generator": "^10",
-    "@storybook/builder-webpack5": "^6.5.14",
-    "@storybook/manager-webpack5": "^6.5.14",
     "@tsconfig/recommended": "^1.0.3",
     "@types/jest": "^29.5.2",
     "@types/node": "^17.0.2",
@@ -52,6 +50,7 @@
     "tough-cookie": "^4.1.4",
     "json5@^0.5.0": "npm:json5@^1.0.2",
     "json5@^0.5.1": "npm:json5@^1.0.2",
-    "loader-utils@^0.2.16": "npm:loader-utils@^1.4.2"
+    "loader-utils@^0.2.16": "npm:loader-utils@^1.4.2",
+    "serialize-javascript": "^7.0.3"
   }
 }
