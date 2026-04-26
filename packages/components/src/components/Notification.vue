@@ -154,12 +154,12 @@ export default {
     background-color: darken($gray6, 15);
   }
 
-  .notification__body >>> ul {
+  .notification__body :deep(ul) {
     margin: 0.5rem 0;
     padding-left: 1rem;
   }
 
-  .notification__body >>> ul li:not(:last-child) {
+  .notification__body :deep(ul li:not(:last-child)) {
     margin-bottom: 0.5rem;
   }
 }

@@ -1,13 +1,20 @@
 import VVsCodeExtension from '@/pages/VsCodeExtension.vue';
 import { mount } from '@vue/test-utils';
 import eventBus from '@/lib/eventBus';
+import { store } from '@/store/vsCode';
 
 describe('UnlicensedNotice.vue', () => {
   it('only binds click handlers once', async () => {
     // The VsCodeExtension component includes this Mixin, and so does
     // the unlicensed notice. Meaning, the click handlers should attempt
     // to bind twice, and we should only bind once.
-    const wrapper = mount(VVsCodeExtension, { props: { isLicensed: false } });
+    const wrapper = mount(VVsCodeExtension, {
+      props: { isLicensed: false },
+      global: {
+        plugins: [store],
+        stubs: { 'v-diagram-component': true, 'v-diagram-trace': true },
+      },
+    });
     const spy = jest.fn();
     eventBus.on('click-link', spy);
 

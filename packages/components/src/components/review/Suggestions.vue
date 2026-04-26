@@ -651,7 +651,7 @@ export default defineComponent({
   overflow-x: auto;
   // height auto, specific height if needed by showFullDiagram
   // min-height: 200px; // Example min height
-  ::v-deep svg {
+  :deep(svg) {
     // Style mermaid SVG if needed
     max-width: none !important; // Allow horizontal scrolling
   }

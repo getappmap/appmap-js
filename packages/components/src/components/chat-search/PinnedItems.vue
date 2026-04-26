@@ -30,6 +30,7 @@
 <script lang="ts">
 //@ts-nocheck
 import { defineComponent, type Component } from 'vue';
+import eventBus from '@/lib/eventBus';
 import VFile from '@/components/chat/File.vue';
 import VMarkdownCodeSnippet from '@/components/chat/MarkdownCodeSnippet.vue';
 import VMermaidDiagram from '@/components/chat/MermaidDiagram.vue';
@@ -92,7 +93,7 @@ export default defineComponent({
       return registryItem?.metadata ?? pinnedItem;
     },
     unpin(uri: string) {
-      this.$emit('pin', { uri, pinned: false });
+      eventBus.emit('pin', { uri, pinned: false });
     },
   },
 });

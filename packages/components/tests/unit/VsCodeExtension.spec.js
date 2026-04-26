@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import VsCodeExtension from '@/pages/VsCodeExtension.vue';
-import { VIEW_FLOW } from '@/store/vsCode';
+import { store, VIEW_FLOW, SET_VIEW, DEFAULT_VIEW } from '@/store/vsCode';
 import data from './fixtures/user_page_scenario.appmap.json';
 import { nextTick } from 'vue';
 import eventBus from '@/lib/eventBus';
@@ -28,6 +28,7 @@ describe('VsCodeExtension.vue', () => {
   beforeEach(async () => {
     wrapper = mount(VsCodeExtension, {
       global: {
+        plugins: [store],
         stubs: {
           'v-diagram-component': true,
           'v-diagram-trace': true,
@@ -39,6 +40,7 @@ describe('VsCodeExtension.vue', () => {
     });
     await wrapper.vm.loadData(data);
     wrapper.vm.$store.commit(RESET_FILTERS);
+    wrapper.vm.$store.commit(SET_VIEW, DEFAULT_VIEW);
   });
 
   it('emits the "ask-navie-about-map" event when the buttons are clicked', async () => {
@@ -53,7 +55,7 @@ describe('VsCodeExtension.vue', () => {
     expect(spy).toHaveBeenCalledTimes(2);
 
     // Open the details panel
-    await wrapper.find('[data-cy="sidebar-hamburger-menu-icon').trigger('click');
+    await wrapper.find('[data-cy="sidebar-hamburger-menu-icon"]').trigger('click');
     await nextTick();
 
     await wrapper.find('[data-cy="ask-navie-button"]').trigger('click');
@@ -186,7 +188,7 @@ describe('VsCodeExtension.vue', () => {
   it('changes views and modifies the search bar after setState', async () => {
     let appState = '{"currentView":"viewFlow","traceFilter":"id:44"}';
     expect(wrapper.vm.isViewingFlow).toBe(false);
-    wrapper.vm.setState(appState);
+    await wrapper.vm.setState(appState);
 
     await nextTick();
     expect(wrapper.vm.isViewingFlow).toBe(true);
@@ -195,7 +197,7 @@ describe('VsCodeExtension.vue', () => {
     expect(wrapper.vm.eventFilterText).toBe('id:44 ');
 
     appState = '{"currentView":"viewSequence","searchBar":"id:42"}';
-    wrapper.vm.setState(appState);
+    await wrapper.vm.setState(appState);
 
     await nextTick();
     expect(wrapper.vm.isViewingSequence).toBe(true);
@@ -332,6 +334,7 @@ describe('VsCodeExtension.vue', () => {
       });
       wrapper = mount(VsCodeExtension, {
         global: {
+          plugins: [store],
           stubs: {
             'v-diagram-component': true,
             'v-diagram-trace': true,

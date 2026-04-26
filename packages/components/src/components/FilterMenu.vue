@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import { toRaw } from 'vue';
 import VFiltersForm from './FiltersForm.vue';
 import CheckIcon from '@/assets/check.svg';
 import CloseThinIcon from '@/assets/close-thin.svg';
@@ -300,7 +301,8 @@ export default {
     },
 
     hideNamesSuggestions() {
-      return this.filteredAppMap.classMap.codeObjects
+      const appMap = toRaw(this.filteredAppMap);
+      return appMap.classMap.codeObjects
         .map((co) => co.fqid)
         .filter((fqid) => !this.filters.declutter.hideName.names.includes(fqid));
     },

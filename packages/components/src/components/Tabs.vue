@@ -72,6 +72,11 @@ export default {
       this.activeTabName = name;
       this.$emit('activateTab', tab);
     },
+
+    activateByTabName(tabName) {
+      const tab = this.tabs.find((t) => t.tabName === tabName);
+      if (tab) this.activateByName(tab.name);
+    },
   },
 };
 </script>

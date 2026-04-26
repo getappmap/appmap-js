@@ -20,7 +20,7 @@ describe('components/chat-search/Instructions.vue', () => {
 
       const listItems = wrapper.findAll('[data-cy="appmap-list-item"]');
       expect(listItems.length).toBe(appmaps.length);
-      listItems.wrappers.forEach((item, i) => {
+      listItems.forEach((item, i) => {
         expect(item.find('[data-cy="name"]').text()).toBe('appmap' + i);
         expect(item.find('[data-cy="time"]').text()).toBe(`1/${i + 1}/2020, 12:00:00 AM`);
       });

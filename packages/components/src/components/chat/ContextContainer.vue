@@ -88,7 +88,7 @@
             }"
             @click.stop="onPin"
             data-cy="pin"
-            :data-pinned="pinned"
+            :data-pinned="pinned ? '' : null"
             v-if="isPinnable && valueUri"
           >
             <v-pin-icon />
@@ -247,7 +247,7 @@ export default defineComponent({
     onClickHeader() {
       if (!this.isCollapsable) {
         if (this.isFile) {
-          eventBus.emit('open-location', this.location, this.directory);
+          eventBus.emit('open-location', ...(this.directory !== undefined ? [this.location, this.directory] : [this.location]));
         }
         return;
       }
@@ -259,7 +259,7 @@ export default defineComponent({
     },
     onOpen() {
       if (!this.isFile) return;
-      eventBus.emit('open-location', this.location, this.directory);
+      eventBus.emit('open-location', ...(this.directory !== undefined ? [this.location, this.directory] : [this.location]));
     },
     onApply() {
       if (!this.isFile || !this.isPinnable || this.pendingState) return;
@@ -361,20 +361,18 @@ export default defineComponent({
       }
     }
 
-    &::v-deep {
-      .popper__text {
-        color: $color-foreground;
-        backdrop-filter: blur(12px);
-        background-color: transparent;
-        border-color: rgba(white, 0.2);
-        border-bottom: 0;
-        border-radius: $border-radius $border-radius 0 0;
-        padding: 0.25rem;
-        margin-top: 0;
+    :deep(.popper__text) {
+      color: $color-foreground;
+      backdrop-filter: blur(12px);
+      background-color: transparent;
+      border-color: rgba(white, 0.2);
+      border-bottom: 0;
+      border-radius: $border-radius $border-radius 0 0;
+      padding: 0.25rem;
+      margin-top: 0;
 
-        &:before {
-          display: none;
-        }
+      &:before {
+        display: none;
       }
     }
 
@@ -401,7 +399,7 @@ export default defineComponent({
         background-color: transparent !important;
       }
 
-      &::v-deep > .loader .dot {
+      :deep(.loader .dot) {
         filter: drop-shadow(0 0 0.25rem rgba(white, 1));
         background-color: $color-foreground !important;
       }

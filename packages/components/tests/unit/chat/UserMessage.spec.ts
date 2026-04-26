@@ -288,7 +288,7 @@ describe('components/UserMessage.vue', () => {
         },
       });
       expect(
-        wrapper.findAll('[data-cy="next-step-button"]').wrappers.map((w) => w.text())
+        wrapper.findAll('[data-cy="next-step-button"]').map((w) => w.text())
       ).toStrictEqual(['@do Do this', '@that Do that']);
     });
 

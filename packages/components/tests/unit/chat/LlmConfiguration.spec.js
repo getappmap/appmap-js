@@ -58,7 +58,7 @@ describe('components/LlmConfiguration.vue', () => {
       wrapper
         .find('[data-cy="llm-modal-option"][data-option="default"] [data-cy="llm-select"]')
         .attributes('disabled')
-    ).toBe('disabled');
+    ).toBe('');
   });
 
   it('enables the default option if it is not selected', async () => {
@@ -94,7 +94,7 @@ describe('components/LlmConfiguration.vue', () => {
       '[data-cy="llm-modal-option"][data-option="copilot"] [data-cy="llm-select"]'
     );
     expect(button.exists()).toBe(true);
-    expect(button.attributes('disabled')).toBe('disabled');
+    expect(button.attributes('disabled')).toBe('');
     expect(button.text()).toBe('Selected');
   });
 

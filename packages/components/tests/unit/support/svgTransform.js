@@ -15,6 +15,24 @@ module.exports = {
       throw errors[0];
     }
 
-    return { code: code + '\nmodule.exports = { render };' };
+    // compileTemplate produces ESM; convert to CJS for Jest.
+    const cjsCode = code
+      // import { foo as _foo, bar } from "vue" → const { foo: _foo, bar } = require('vue')
+      .replace(
+        /^import\s+\{([^}]+)\}\s+from\s+["']vue["'];?/m,
+        (_, imports) => {
+          const specifiers = imports
+            .split(',')
+            .map((s) => s.trim().replace(/\s+as\s+/, ': '))
+            .join(', ');
+          return `const { ${specifiers} } = require('vue');`;
+        }
+      )
+      // export function render → function render
+      .replace(/^export function /m, 'function ')
+      // export { render } → (removed)
+      .replace(/^export\s+\{[^}]*\};?\s*$/m, '');
+
+    return { code: cjsCode + '\nmodule.exports = { render };' };
   },
 };

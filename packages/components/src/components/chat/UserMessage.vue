@@ -42,7 +42,7 @@
         v-if="complete"
         class="next-step-suggestions"
         data-cy="next-step-suggestions"
-        :data-fetched="promptSuggestions !== undefined"
+        :data-fetched="promptSuggestions !== undefined ? '' : null"
       >
         <div class="next-step-suggestions__buttons" v-if="promptSuggestions">
           <v-popper
@@ -447,17 +447,15 @@ export default {
         flex-direction: row;
         gap: 0.5rem;
 
-        &::v-deep {
-          .popper__text {
-            backdrop-filter: blur(12px);
-            background-color: transparent;
-            border-color: rgba(white, 0.2);
-            margin-bottom: 2rem;
-            padding: 0.25rem;
+        :deep(.popper__text) {
+          backdrop-filter: blur(12px);
+          background-color: transparent;
+          border-color: rgba(white, 0.2);
+          margin-bottom: 2rem;
+          padding: 0.25rem;
 
-            &:before {
-              display: none;
-            }
+          &:before {
+            display: none;
           }
         }
       }

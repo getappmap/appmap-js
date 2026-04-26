@@ -15,6 +15,8 @@ import VLoaderIcon from '@/assets/eva_loader-outline.svg';
 export default {
   name: 'v-button',
   components: { VLoaderIcon },
+  emits: ['click'],
+
   props: {
     label: {
       type: String,
@@ -68,10 +70,10 @@ export default {
   },
 
   methods: {
-    onClick() {
+    onClick(event) {
       if (this.disabled) return;
 
-      this.$emit('click');
+      this.$emit('click', event);
 
       if (this.timeout <= 0) return;
 

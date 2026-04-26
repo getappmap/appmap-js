@@ -150,40 +150,36 @@ a {
     }
   }
 
-  &::v-deep {
-    h1 {
-      margin: 0;
-      font-size: 1.75rem;
-      font-weight: bold;
-      color: $color-foreground-light;
-      &::after {
-        display: block;
-        content: ' ';
-        background-color: $color-highlight;
-        width: 5rem !important;
-        height: 0.25rem !important;
-        border-radius: 0.5rem;
-        margin-top: 0.5rem;
-      }
+  :deep(h1) {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: $color-foreground-light;
+    &::after {
+      display: block;
+      content: ' ';
+      background-color: $color-highlight;
+      width: 5rem !important;
+      height: 0.25rem !important;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
     }
   }
 
   &--loading {
-    &::v-deep {
-      h1::after {
-        $alpha: 0.075;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(black, 0.1);
-        background: linear-gradient(
-          90deg,
-          rgba(black, $alpha) 0%,
-          rgba(white, $alpha) 50%,
-          rgba(black, $alpha) 100%
-        );
-        background-size: 200% 100%;
-        animation: skeleton 3s linear infinite;
-      }
+    :deep(h1::after) {
+      $alpha: 0.075;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(black, 0.1);
+      background: linear-gradient(
+        90deg,
+        rgba(black, $alpha) 0%,
+        rgba(white, $alpha) 50%,
+        rgba(black, $alpha) 100%
+      );
+      background-size: 200% 100%;
+      animation: skeleton 3s linear infinite;
     }
   }
 }

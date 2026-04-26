@@ -16,7 +16,7 @@ describe('components/MermaidDiagram.vue', () => {
   beforeEach(() => {
     wrapper = mount(VMermaidDiagram, {
       slots: {
-        default: [graphDefinition],
+        default: () => graphDefinition,
       },
     });
     Object.assign(navigator, {

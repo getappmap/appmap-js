@@ -1,4 +1,4 @@
-import { defineComponent, h, type VNode } from 'vue';
+import { defineComponent, h, resolveComponent, type VNode } from 'vue';
 import VCodeFencedContent from '@/components/chat/CodeFencedContent.vue';
 import VNextPromptButton from '@/components/chat/NextPromptButton.vue';
 import VInlineRecommendation from '@/components/chat/InlineRecommendation.vue';
@@ -38,8 +38,8 @@ function buildNode(src: Element): VNode | string | undefined {
       memo[attr.name] = attr.value;
       return memo;
     }, {} as Record<string, string>);
-    // HACK: Attributes are converted to props (flat in Vue 3)
-    return h(tag, props, children);
+    const resolved = resolveComponent(tag);
+    return h(resolved, props, children);
   }
 
   const clickHandler =

@@ -40,10 +40,10 @@ describe('ProjectConfiguration.vue', () => {
       it('lists the available projects', () => {
         expect(wrapper.findAll('[data-cy="project-list-item"]').length).toBe(2);
         expect(
-          wrapper.findAll('[data-cy="project-name"]').wrappers.map((e) => e.text())
+          wrapper.findAll('[data-cy="project-name"]').map((e) => e.text())
         ).toStrictEqual(projects.map((p) => p.name));
         expect(
-          wrapper.findAll('[data-cy="project-path"]').wrappers.map((e) => e.text())
+          wrapper.findAll('[data-cy="project-path"]').map((e) => e.text())
         ).toStrictEqual(projects.map((p) => p.path));
       });
 

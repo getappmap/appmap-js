@@ -300,7 +300,7 @@ export default {
 }
 </style>
 <style scoped>
-.details-panel-event >>> .sql-code {
+.details-panel-event :deep(.sql-code) {
   margin-bottom: 8px;
   padding: 0;
 }

@@ -1,4 +1,5 @@
 import Vuex from 'vuex';
+import { markRaw } from 'vue';
 import {
   AppMap,
   buildAppMap,
@@ -54,7 +55,7 @@ function savedFiltersSorter(a, b) {
 export function buildStore() {
   return new Vuex.Store({
     state: {
-      appMap: new AppMap(),
+      appMap: markRaw(new AppMap()),
       precomputedSequenceDiagram: null,
       selectionStack: [],
       currentSelection: null,
@@ -81,7 +82,7 @@ export function buildStore() {
       // Stores the initial, complete AppMap.
       [SET_APPMAP_DATA](state, data) {
         state.selectionStack = [];
-        state.appMap = buildAppMap().source(data).normalize().build();
+        state.appMap = markRaw(buildAppMap().source(data).normalize().build());
         if (data.sequenceDiagram) state.precomputedSequenceDiagram = data.sequenceDiagram;
 
         state.appMap.callTree.rootEvent.forEach((e) => {
@@ -110,7 +111,7 @@ export function buildStore() {
         if (existingSelection) {
           state.currentSelection = existingSelection;
         } else {
-          let selectionStack = Array.isArray(selection) ? selection : [selection];
+          let selectionStack = Array.isArray(selection) ? selection.map(markRaw) : [markRaw(selection)];
           state.selectionStack.push(...selectionStack);
           state.currentSelection = null;
         }
@@ -150,7 +151,7 @@ export function buildStore() {
       // so that this event is visible, and an effect can be rendered on the event.
       // This action does not imply that the sidebar display should be changed.
       [SET_FOCUSED_EVENT](state, event) {
-        state.focusedEvent = event;
+        state.focusedEvent = event ? markRaw(event) : event;
       },
 
       [ADD_EXPANDED_PACKAGE](state, packageToAdd) {

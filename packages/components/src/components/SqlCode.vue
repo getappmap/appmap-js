@@ -70,29 +70,29 @@ export default {
 .sql-code {
   color: #e90;
 }
-.sql-code >>> .hljs-keyword,
-.sql-code >>> .hljs-selector-tag,
-.sql-code >>> .hljs-built_in,
-.sql-code >>> .hljs-name,
-.sql-code >>> .hljs-tag {
+.sql-code :deep(.hljs-keyword),
+.sql-code :deep(.hljs-selector-tag),
+.sql-code :deep(.hljs-built_in),
+.sql-code :deep(.hljs-name),
+.sql-code :deep(.hljs-tag) {
   color: #07a;
 }
-.sql-code >>> .hljs-number {
+.sql-code :deep(.hljs-number) {
   color: #905;
 }
-.sql-code >>> .hljs-string,
-.sql-code >>> .hljs-title,
-.sql-code >>> .hljs-section,
-.sql-code >>> .hljs-attribute,
-.sql-code >>> .hljs-template-tag,
-.sql-code >>> .hljs-template-variable,
-.sql-code >>> .hljs-type,
-.sql-code >>> .hljs-addition {
+.sql-code :deep(.hljs-string),
+.sql-code :deep(.hljs-title),
+.sql-code :deep(.hljs-section),
+.sql-code :deep(.hljs-attribute),
+.sql-code :deep(.hljs-template-tag),
+.sql-code :deep(.hljs-template-variable),
+.sql-code :deep(.hljs-type),
+.sql-code :deep(.hljs-addition) {
   color: #690;
 }
-.sql-code >>> .hljs-symbol,
-.sql-code >>> .hljs-bullet,
-.sql-code >>> .hljs-link {
+.sql-code :deep(.hljs-symbol),
+.sql-code :deep(.hljs-bullet),
+.sql-code :deep(.hljs-link) {
   color: #999;
 }
 </style>

@@ -139,16 +139,14 @@ export default {
     position: sticky !important;
     top: 0.5rem;
 
-    &::v-deep {
-      .popper__text {
-        background-color: #040404;
-        border-color: rgba(white, 0.2);
-        margin-right: 0;
-        padding: 0.25rem 0.5rem;
+    :deep(.popper__text) {
+      background-color: #040404;
+      border-color: rgba(white, 0.2);
+      margin-right: 0;
+      padding: 0.25rem 0.5rem;
 
-        &:before {
-          display: none;
-        }
+      &:before {
+        display: none;
       }
     }
   }

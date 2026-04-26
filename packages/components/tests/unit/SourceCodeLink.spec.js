@@ -8,11 +8,6 @@ describe('SourceCodeLink.vue', () => {
   it('view source emits an event from root', async () => {
     const appMap = buildAppMap(scenario).normalize().build();
     const event = appMap.events.find((e) => e.isCall() && e.path);
-    const wrapper = mount(SourceCodeLink, {
-      props: {
-        object: event,
-      },
-    });
     const expected = {
       location: event.path,
       error: 'This is a warning',
@@ -23,6 +18,12 @@ describe('SourceCodeLink.vue', () => {
     const viewSourceSpy = jest.fn();
     eventBus.on('request-resolve-location', requestSpy);
     eventBus.on('viewSource', viewSourceSpy);
+
+    const wrapper = mount(SourceCodeLink, {
+      props: {
+        object: event,
+      },
+    });
 
     eventBus.emit('response-resolve-location', expected);
 

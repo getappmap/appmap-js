@@ -60,18 +60,16 @@ export default defineComponent({
   &__popper {
     display: inline;
 
-    &::v-deep {
-      .popper__text {
-        transform: translateY(calc(-100% - 6px));
+    :deep(.popper__text) {
+      transform: translateY(calc(-100% - 6px));
+      background-color: $color-background;
+      color: $color-foreground;
+      border-color: $color-border;
+      filter: drop-shadow(0 0 0.5em rgba(black, 0.5));
+      &::before {
         background-color: $color-background;
-        color: $color-foreground;
+        transform: translate(0.5em, 0.5em) rotateZ(45deg);
         border-color: $color-border;
-        filter: drop-shadow(0 0 0.5em rgba(black, 0.5));
-        &::before {
-          background-color: $color-background;
-          transform: translate(0.5em, 0.5em) rotateZ(45deg);
-          border-color: $color-border;
-        }
       }
     }
   }

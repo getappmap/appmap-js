@@ -366,6 +366,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import eventBus from '@/lib/eventBus';
 import VAccordion from '@/components/Accordion.vue';
 import VCheckIcon from '@/assets/check-circle-solid.svg';
 import VLanguageButton from '@/components/install-guide/LanguageButton.vue';

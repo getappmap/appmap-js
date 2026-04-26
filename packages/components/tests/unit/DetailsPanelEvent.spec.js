@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+import { markRaw } from 'vue';
 import DetailsPanelEvent from '@/components/DetailsPanelEvent.vue';
 import scenario from '@/stories/data/scenario.json';
 import { store, SET_APPMAP_DATA } from '@/store/vsCode';
@@ -16,7 +17,7 @@ function sqlEvent(sql, database) {
     },
   });
   event.link(new Event({ id: 2, event: 'return' }));
-  return event;
+  return markRaw(event);
 }
 
 describe('DetailsPanelEvent.vue', () => {
@@ -54,7 +55,7 @@ describe('DetailsPanelEvent.vue', () => {
 
     const wrapper = mount(DetailsPanelEvent, {
       props: {
-        object: event,
+        object: markRaw(event),
       },
       global: { plugins: [store] },
     });
@@ -64,7 +65,7 @@ describe('DetailsPanelEvent.vue', () => {
 
     expect(wrapper.text()).toContain('HTTP response');
     expect(wrapper.text()).toContain(mime_type);
-    expect(wrapper.text()).toContain(status);
+    expect(wrapper.text()).toContain(String(status));
     /* eslint-enable camelcase */
   });
 });

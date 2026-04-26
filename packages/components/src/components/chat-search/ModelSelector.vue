@@ -281,20 +281,18 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .popper {
-  ::v-deep {
-    .popper__text {
-      padding: 0;
-      background-color: $color-background;
-      border: none;
-      max-width: unset;
-      border-radius: $border-radius;
-      pointer-events: all;
+  :deep(.popper__text) {
+    padding: 0;
+    background-color: $color-background;
+    border: none;
+    max-width: unset;
+    border-radius: $border-radius;
+    pointer-events: all;
+  }
 
-      &--align-left {
-        left: 0;
-        transform: none;
-      }
-    }
+  :deep(.popper__text--align-left) {
+    left: 0;
+    transform: none;
   }
 }
 

@@ -2,6 +2,7 @@
   <div><slot /></div>
 </template>
 <script>
+import { toRaw } from 'vue';
 import eventBus from '@/lib/eventBus';
 
 export default {
@@ -23,7 +24,7 @@ export default {
 
       // appMap.toJSON() includes other data that we don't want. It's more a dump of the internal
       // state of the AppMap object.
-      const appmapData = JSON.parse(JSON.stringify(appMap));
+      const appmapData = JSON.parse(JSON.stringify(toRaw(appMap)));
       if (viewState) {
         appmapData.viewState = { ...viewState };
       }

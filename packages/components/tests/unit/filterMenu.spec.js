@@ -34,6 +34,7 @@ const savedFilters = [
 const filterToSave = {
   filterName: 'test',
   state: 'eyJmaWx0ZXJzIjp7ImhpZGVFbGFwc2VkVGltZVVuZGVyIjoxfX0',
+  default: false,
 };
 
 store.commit(SET_SAVED_FILTERS, savedFilters);
@@ -98,7 +99,7 @@ describe('FilterMenu.vue', () => {
   it('emits the correct event when saving', async () => {
     const spy = jest.fn();
     eventBus.on('saveFilter', spy);
-    wrapper.findAll('label.filters__checkbox').at(2).trigger('click');
+    await wrapper.findAll('label.filters__checkbox').at(2).find('input[type="checkbox"]').setChecked(true);
     wrapper.find('input.filters__input').setValue('test');
     expect(wrapper.find('input.filters__input').element.value).toBe('test');
     await wrapper.find('[data-cy="save-filter-button"]').trigger('click');

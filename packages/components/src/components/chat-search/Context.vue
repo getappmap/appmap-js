@@ -99,10 +99,8 @@ export default {
   &__pinned-item {
     box-shadow: none;
     margin: 0;
-    &::v-deep {
-      .context-container {
-        margin: 0;
-      }
+    :deep(.context-container) {
+      margin: 0;
     }
   }
 

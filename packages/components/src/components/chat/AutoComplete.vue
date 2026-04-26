@@ -18,7 +18,7 @@
           @mouseover.prevent="selectionIndex = i"
         >
           <div class="command">
-            <b :data-active="selectionIndex === i">{{ command.name }}</b>
+            <b :data-active="selectionIndex === i ? '' : null">{{ command.name }}</b>
           </div>
           <span class="description">{{ command.description }}</span>
         </li>
@@ -187,10 +187,8 @@ export default defineComponent({
   z-index: 100;
   bottom: inherit !important;
 
-  &::v-deep {
-    .popper__text {
-      background-color: $black;
-    }
+  :deep(.popper__text) {
+    background-color: $black;
   }
 
   ul {

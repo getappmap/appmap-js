@@ -69,7 +69,7 @@ export default defineComponent({
   },
   data() {
     return {
-      code: stripCodeFences(this.$slots.default?.[0].text ?? ''),
+      code: stripCodeFences(this._slotText()),
       pendingApply: false,
     };
   },
@@ -127,16 +127,37 @@ export default defineComponent({
       return undefined;
     },
     change: function (): VNode | undefined {
-      return this.$slots.default?.find(({ tag }) => tag === 'change');
+      return this.$slots.default?.().find(({ type }) => type === 'change');
     },
     original: function (): string | undefined {
-      return this.change?.children?.find(({ tag }) => tag === 'original')?.children?.[0]?.text;
+      const children = this.change?.children as VNode[] | undefined;
+      const orig = children?.find(({ type }) => type === 'original');
+      const origChildren = orig?.children as VNode[] | undefined;
+      const textNode = origChildren?.[0];
+      return typeof textNode?.children === 'string' ? textNode.children : undefined;
     },
     modified: function (): string | undefined {
-      return this.change?.children?.find(({ tag }) => tag === 'modified')?.children?.[0]?.text;
+      const children = this.change?.children as VNode[] | undefined;
+      const mod = children?.find(({ type }) => type === 'modified');
+      const modChildren = mod?.children as VNode[] | undefined;
+      const textNode = modChildren?.[0];
+      return typeof textNode?.children === 'string' ? textNode.children : undefined;
     },
   },
   methods: {
+    _slotText(): string {
+      const nodes = this.$slots.default?.();
+      if (!nodes?.length) return '';
+      // Slots may be wrapped in a Fragment vnode; unwrap one level
+      const first = nodes[0];
+      const candidates = Array.isArray(first.children)
+        ? (first.children as any[])
+        : [first];
+      for (const node of candidates) {
+        if (typeof node.children === 'string') return node.children;
+      }
+      return '';
+    },
     copyToClipboard(): void {
       if (!this.code) return;
 
@@ -172,14 +193,14 @@ export default defineComponent({
   updated() {
     // Slots are not reactive unless written directly to the DOM.
     // Luckily for us, this method is called when the content within the slot changes.
-    this.code = stripCodeFences(this.$slots.default?.[0].text ?? '');
+    this.code = stripCodeFences(this._slotText());
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.code-snippet::v-deep {
-  pre {
+.code-snippet {
+  :deep(pre) {
     margin: 0;
     border: 0;
     border-radius: 0 0 $border-radius $border-radius;
@@ -187,7 +208,7 @@ export default defineComponent({
     overflow: auto;
   }
 
-  code {
+  :deep(code) {
     line-height: 1.6;
   }
 }

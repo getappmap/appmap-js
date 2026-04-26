@@ -84,72 +84,70 @@ export default {
   color: $white;
   background-color: $black;
 
-  &::v-deep {
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin-top: 1.25em;
-    }
+  :deep(h2),
+  :deep(h3),
+  :deep(h4),
+  :deep(h5),
+  :deep(h6) {
+    margin-top: 1.25em;
+  }
 
-    p {
-      line-height: 1.75;
-    }
+  :deep(p) {
+    line-height: 1.75;
+  }
 
-    .mb10 {
-      margin-bottom: 10px;
-    }
+  :deep(.mb10) {
+    margin-bottom: 10px;
+  }
 
-    .mb20 {
-      margin-bottom: 20px;
-    }
+  :deep(.mb20) {
+    margin-bottom: 20px;
+  }
 
-    a {
+  :deep(a) {
+    color: $powderblue;
+    text-decoration: none;
+    transition: $transition;
+
+    code.inline {
       color: $powderblue;
-      text-decoration: none;
-      transition: $transition;
-
-      code.inline {
-        color: $powderblue;
-        &:hover {
-          color: #fff;
-        }
-      }
-
       &:hover {
         color: #fff;
       }
     }
 
-    code {
-      margin: 20px 0;
-      display: block;
-      border: 1px solid #454545;
-      border-radius: 8px;
-      color: $highlighted-code;
+    &:hover {
+      color: #fff;
+    }
+  }
 
-      &.inline {
-        display: inline-block;
-        padding: 0 5px 0 5px;
-        margin: 0;
-        line-height: 1;
-        padding: 0.25rem;
-        padding-bottom: 0;
-        border: none;
-        color: $base07;
-        background-color: rgba(0, 0, 0, 0.25);
+  :deep(code) {
+    margin: 20px 0;
+    display: block;
+    border: 1px solid #454545;
+    border-radius: 8px;
+    color: $highlighted-code;
 
-        em {
-          color: $highlighted-code;
-          font-style: inherit;
-        }
+    &.inline {
+      display: inline-block;
+      padding: 0 5px 0 5px;
+      margin: 0;
+      line-height: 1;
+      padding: 0.25rem;
+      padding-bottom: 0;
+      border: none;
+      color: $base07;
+      background-color: rgba(0, 0, 0, 0.25);
+
+      em {
+        color: $highlighted-code;
+        font-style: inherit;
       }
     }
+  }
 
-    ul {
-      padding-left: 10px;
-    }
+  :deep(ul) {
+    padding-left: 10px;
   }
 }
 

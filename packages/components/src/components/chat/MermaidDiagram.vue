@@ -79,7 +79,7 @@ export default defineComponent({
     },
   },
   data() {
-    let definition = stripCodeFences(this.$slots.default?.[0].text ?? '');
+    let definition = stripCodeFences(this._slotText());
     return {
       definition,
       id: `mermaid-${diagramId++}`,
@@ -146,6 +146,16 @@ export default defineComponent({
     },
   },
   methods: {
+    _slotText(): string {
+      const nodes = this.$slots.default?.();
+      if (!nodes?.length) return '';
+      const first = nodes[0];
+      const candidates = Array.isArray(first.children) ? (first.children as any[]) : [first];
+      for (const node of candidates) {
+        if (typeof node.children === 'string') return node.children;
+      }
+      return '';
+    },
     showModal() {
       this.modalVisible = true;
       document.body.style.overflow = 'hidden';
@@ -171,7 +181,7 @@ export default defineComponent({
   updated() {
     // Slots are not reactive unless written directly to the DOM.
     // Luckily for us, this method is called when the content within the slot changes.
-    this.definition = stripCodeFences(this.$slots.default?.[0].text ?? '');
+    this.definition = stripCodeFences(this._slotText());
   },
 });
 </script>
@@ -220,10 +230,8 @@ export default defineComponent({
       display: none;
     }
 
-    ::v-deep {
-      svg {
-        width: 100%;
-      }
+    :deep(svg) {
+      width: 100%;
     }
   }
 

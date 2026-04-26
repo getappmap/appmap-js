@@ -89,24 +89,22 @@ export default defineComponent({
   max-height: 100%;
   overflow-y: auto;
 
-  &::v-deep {
-    code {
-      background-color: rgba(black, 0.1);
-      border-radius: 6px;
-      border: 1px solid rgba(black, 0.05);
-      padding: 0.1rem 0.25rem;
-      padding-top: 0.2rem;
-    }
+  :deep(code) {
+    background-color: rgba(black, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(black, 0.05);
+    padding: 0.1rem 0.25rem;
+    padding-top: 0.2rem;
+  }
 
-    a {
-      text-decoration: none;
-      color: $color-link;
+  :deep(a) {
+    text-decoration: none;
+    color: $color-link;
 
-      &:hover,
-      &:active {
-        color: $color-link-hover;
-        text-decoration: underline;
-      }
+    &:hover,
+    &:active {
+      color: $color-link-hover;
+      text-decoration: underline;
     }
   }
 

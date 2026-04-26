@@ -558,7 +558,7 @@ export default {
   watch: {
     '$store.state.currentView': {
       handler(view) {
-        this.$refs.tabs.activateTab(this.$refs[view]);
+        this.$refs.tabs?.activateByTabName(view);
         eventBus.emit('stateChanged', 'currentView');
       },
     },
