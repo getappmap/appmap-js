@@ -1,11 +1,7 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createApp } from 'vue';
 import plugin, { VSequenceDiagram } from '@appland/components';
 
 import '@appland/diagrams/dist/style.css';
-
-Vue.use(Vuex);
-Vue.use(plugin);
 
 async function initializeApp() {
   const params = new URL(document.location).searchParams;
@@ -13,17 +9,12 @@ async function initializeApp() {
   const res = await fetch(diagram);
   const json = await res.json();
 
-  return new Vue({
-    el: '#app',
-    render: (h) =>
-      h(VSequenceDiagram, {
-        ref: 'ui',
-        props: {
-          interactive: false,
-          serializedDiagram: json || {},
-        },
-      }),
+  const app = createApp(VSequenceDiagram, {
+    interactive: false,
+    serializedDiagram: json || {},
   });
+  app.use(plugin);
+  app.mount('#app');
 }
 
 initializeApp();

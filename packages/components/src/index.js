@@ -1,11 +1,13 @@
 import * as components from '@/componentExports';
 import ReviewBackend from '@/lib/ReviewBackend';
+import { store } from '@/store/vsCode';
 
 const plugin = {
   install(app) {
     Object.entries(components).forEach(([componentName, component]) => {
       app.component(componentName, component);
     });
+    app.use(store);
   },
 };
 

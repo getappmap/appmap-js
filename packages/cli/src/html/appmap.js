@@ -1,32 +1,20 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createApp } from 'vue';
 import plugin, { VVsCodeExtension } from '@appland/components';
 
 import '@appland/diagrams/dist/style.css';
 
-Vue.use(Vuex);
-Vue.use(plugin);
-
 async function initializeApp() {
-  return new Vue({
-    el: '#app',
-    render: (h) =>
-      h(VVsCodeExtension, {
-        ref: 'ui',
-        props: {
-          appMapUploadable: true,
-          flamegraphEnabled: false,
-        },
-      }),
-    async mounted() {
-      const params = new URL(document.location).searchParams;
-      const appmap = params.get('appmap');
-      const res = await fetch(appmap);
-      const { ui } = this.$refs;
-
-      ui.loadData((await res.json()) || {});
-    },
+  const app = createApp(VVsCodeExtension, {
+    appMapUploadable: true,
+    flamegraphEnabled: false,
   });
+  app.use(plugin);
+  const vm = app.mount('#app');
+
+  const params = new URL(document.location).searchParams;
+  const appmap = params.get('appmap');
+  const res = await fetch(appmap);
+  vm.loadData((await res.json()) || {});
 }
 
 initializeApp();
