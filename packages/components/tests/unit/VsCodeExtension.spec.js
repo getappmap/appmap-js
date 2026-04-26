@@ -45,6 +45,12 @@ describe('VsCodeExtension.vue', () => {
     wrapper.vm.$store.commit(RESET_FILTERS);
   });
 
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.destroy();
+    }
+  });
+
   it('emits the "ask-navie-about-map" event when the buttons are clicked', async () => {
     // Sanity check
     expect(rootWrapper.emitted()['ask-navie-about-map']).toBeUndefined();
