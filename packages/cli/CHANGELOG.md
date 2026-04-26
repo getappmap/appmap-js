@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.198.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.197.1...@appland/appmap-v3.198.0) (2026-04-26)
+
+
+### Features
+
+* **components:** support remote RPC server connections via full URL configuration ([4b8fbd2](https://github.com/getappmap/appmap-js/commit/4b8fbd2a3fc90db730ad7374abb3d104f138ddab))
+
 # [@appland/appmap-v3.197.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.197.0...@appland/appmap-v3.197.1) (2026-03-04)
 
 
