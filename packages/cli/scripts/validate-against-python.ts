@@ -24,6 +24,7 @@ import sqlite3 from 'better-sqlite3';
 import { findFiles } from '../src/utils';
 import { openQueryDb } from '../src/cmds/query/db';
 import { importAppmap } from '../src/cmds/query/db/import/importAppmap';
+import { endpoints, EndpointRow } from '../src/cmds/query/queries/endpoints';
 
 const APPMAP_APM_DIR =
   process.env.APPMAP_APM_DIR ?? join(homedir(), 'source', 'appland', 'appmap-apm');
@@ -168,6 +169,81 @@ interface Mismatch {
   details?: { index: number; py: unknown; ts: unknown };
 }
 
+// Python equivalent for endpoints uses get_endpoints (count, avg, max, min,
+// error_count). We emit it sorted on stable keys so output is deterministic.
+const PY_ENDPOINTS_SCRIPT = `
+import json, os, sys
+from server.services.queries import get_endpoints
+rows = get_endpoints(limit=10000)
+rows.sort(key=lambda r: (r['method'], r['endpoint']))
+print(json.dumps(rows, sort_keys=True))
+`;
+
+function pythonEndpoints(dbPath: string): unknown[] {
+  const out = execFileSync(PYTHON, ['-c', PY_ENDPOINTS_SCRIPT], {
+    cwd: APPMAP_APM_DIR,
+    env: { ...process.env, APM_DB_PATH: dbPath },
+    encoding: 'utf8',
+  });
+  return JSON.parse(out) as unknown[];
+}
+
+// Round and project a TS EndpointRow to the same shape as Python's
+// get_endpoints output, so we can diff them directly. min/max aren't tracked
+// by V3's endpoints() — drop them from comparison; they don't affect what
+// the verb shows.
+function tsEndpointsLikePython(rows: readonly EndpointRow[]) {
+  return [...rows]
+    .map((r) => ({
+      method: r.method,
+      endpoint: r.route,
+      request_count: r.count,
+      avg_elapsed_ms: r.avg_ms == null ? null : Math.round(r.avg_ms * 100) / 100,
+      // err_pct (TS) and error_count (Python) are different shapes; reproject:
+      error_count: Math.round((r.err_pct / 100) * r.count),
+    }))
+    .sort((a, b) => (a.method + a.endpoint).localeCompare(b.method + b.endpoint));
+}
+
+function diffQueries(pyDb: string, tsDb: string): void {
+  console.log('\n--- query layer ---');
+
+  // 1) Python get_endpoints on both DBs — proves query layer is portable.
+  const pyOnPy = pythonEndpoints(pyDb);
+  const pyOnTs = pythonEndpoints(tsDb);
+  const portable =
+    JSON.stringify(pyOnPy) === JSON.stringify(pyOnTs) ? 'OK' : 'MISMATCH';
+  console.log(`python.get_endpoints(py.db) vs python.get_endpoints(ts.db):  ${portable}`);
+
+  // 2) TS endpoints() on TS DB, projected to Python's shape, against Python's
+  // get_endpoints on the same DB. Validates that the V3 verb produces results
+  // consistent with the Python query layer for fields they share.
+  const db = sqlite3(tsDb, { readonly: true });
+  const tsOut = endpoints(db);
+  db.close();
+  const tsProjected = tsEndpointsLikePython(tsOut);
+  const pyOnTsAsArray = pyOnTs as Array<Record<string, unknown>>;
+  // Drop fields Python returns that we don't compare (max/min).
+  const pyTrimmed = pyOnTsAsArray
+    .map((r) => ({
+      method: r.method,
+      endpoint: r.endpoint,
+      request_count: r.request_count,
+      avg_elapsed_ms: r.avg_elapsed_ms,
+      error_count: r.error_count,
+    }))
+    .sort((a, b) =>
+      String(a.method + a.endpoint).localeCompare(String(b.method + b.endpoint))
+    );
+  const verbMatch =
+    JSON.stringify(tsProjected) === JSON.stringify(pyTrimmed) ? 'OK' : 'MISMATCH';
+  console.log(`ts endpoints() vs python.get_endpoints (shared fields):      ${verbMatch}`);
+  if (verbMatch !== 'OK') {
+    console.log(`  python: ${JSON.stringify(pyTrimmed[0])}`);
+    console.log(`  ts:     ${JSON.stringify(tsProjected[0])}`);
+  }
+}
+
 function diff(py: Snapshot, ts: Snapshot): Mismatch[] {
   const issues: Mismatch[] = [];
   for (const t of TABLES) {
@@ -237,6 +313,11 @@ async function main(): Promise<void> {
   console.log('\n--- diff ---');
   if (issues.length === 0 && countsOk) {
     console.log('all tables match');
+  } else {
+    // fall through into the report below
+  }
+  if (issues.length === 0 && countsOk) {
+    diffQueries(pyDb, tsDb);
   } else {
     for (const issue of issues) {
       console.log(`\n${issue.table}: ${issue.reason}`);

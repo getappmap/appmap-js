@@ -40,6 +40,7 @@ import * as RpcCommand from './cmds/index/rpc';
 import * as RpcClientCommand from './cmds/rpcClient';
 import * as NavieCommand from './cmds/navie';
 import * as ApplyCommand from './cmds/apply';
+import * as QueryCommand from './cmds/query/query';
 import * as RunTestCommand from './cmds/runTest';
 import TelemetryTestCommand from './cmds/testTelemetry';
 import { default as sqlErrorLog } from './lib/sqlErrorLog';
@@ -156,6 +157,7 @@ yargs(process.argv.slice(2))
   .command(RpcClientCommand)
   .command(NavieCommand)
   .command(ApplyCommand)
+  .command(QueryCommand)
   .command(RunTestCommand)
   .command(TelemetryTestCommand)
   .option('verbose', {
