@@ -2,13 +2,17 @@ import type { Metadata } from '@appland/models';
 import { findFiles, verbose } from '../utils';
 import FingerprintQueue from './fingerprintQueue';
 import writeUsage, { collectUsageData } from '../lib/emitUsage';
+import type { QueryDbIndexer } from '../cmds/query/db/import/QueryDbIndexer';
 
 class FingerprintDirectoryCommand {
   private appmaps = 0;
   private events = 0;
   private metadata?: Metadata;
 
-  constructor(private readonly directory: string) {}
+  constructor(
+    private readonly directory: string,
+    private readonly indexer?: QueryDbIndexer
+  ) {}
 
   async execute() {
     if (verbose()) {
@@ -21,6 +25,7 @@ class FingerprintDirectoryCommand {
       this.events += numEvents;
       this.metadata = metadata;
     });
+    if (this.indexer) this.indexer.attach(fpQueue);
 
     let count = 0;
     await this.files((file) => {
@@ -28,6 +33,8 @@ class FingerprintDirectoryCommand {
       return fpQueue.push(file);
     });
     if (count > 0) await fpQueue.process();
+
+    if (this.indexer) await this.indexer.syncDirectory(this.directory);
 
     const usageData = await collectUsageData(
       this.directory,

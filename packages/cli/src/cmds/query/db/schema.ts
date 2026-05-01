@@ -116,25 +116,6 @@ CREATE TABLE IF NOT EXISTS labels (
     UNIQUE(code_object_id, label)
 );
 
--- Scanner findings (security, performance, stability issues)
-CREATE TABLE IF NOT EXISTS findings (
-    id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    appmap_id       INTEGER NOT NULL REFERENCES appmaps(id) ON DELETE CASCADE,
-    rule_id         TEXT NOT NULL,
-    rule_title      TEXT NOT NULL,
-    impact_domain   TEXT,      -- Security, Performance, Stability, Maintainability
-    message         TEXT,
-    hash            TEXT NOT NULL,
-    event_class     TEXT,      -- defined_class from the triggering event
-    event_method    TEXT,      -- method_id from the triggering event
-    event_path      TEXT,      -- source file path
-    event_lineno    INTEGER,
-    scope_method    TEXT,      -- HTTP method of the request scope
-    scope_path      TEXT,      -- HTTP path of the request scope
-    stack_json      TEXT,      -- JSON array of stack frames
-    UNIQUE(appmap_id, hash)
-);
-
 -- Indexes for common APM queries
 CREATE INDEX IF NOT EXISTS idx_http_requests_appmap ON http_requests(appmap_id);
 CREATE INDEX IF NOT EXISTS idx_http_requests_path ON http_requests(normalized_path, method);
@@ -156,9 +137,6 @@ CREATE INDEX IF NOT EXISTS idx_labels_label ON labels(label);
 CREATE INDEX IF NOT EXISTS idx_labels_code_object ON labels(code_object_id);
 CREATE INDEX IF NOT EXISTS idx_appmaps_timestamp ON appmaps(timestamp);
 CREATE INDEX IF NOT EXISTS idx_appmaps_branch ON appmaps(git_branch);
-CREATE INDEX IF NOT EXISTS idx_findings_appmap ON findings(appmap_id);
-CREATE INDEX IF NOT EXISTS idx_findings_rule ON findings(rule_id);
-CREATE INDEX IF NOT EXISTS idx_findings_domain ON findings(impact_domain);
 `;
 
 // Names of all schema tables (used by the version-mismatch teardown path).
@@ -171,5 +149,4 @@ export const SCHEMA_TABLES = [
   'function_calls',
   'exceptions',
   'labels',
-  'findings',
 ];
