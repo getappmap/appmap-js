@@ -75,6 +75,16 @@ run query find exceptions --query-db "$DB" --limit 5 || true
 run query hotspots --query-db "$DB" --limit 5
 run query hotspots --query-db "$DB" --type=sql --limit 3
 
+# related: find passing baselines for a recording (with whatever data exists)
+RELATED_SOURCE="$(node -e "
+  const db = require('better-sqlite3')('$DB', { readonly: true });
+  const r = db.prepare(\"SELECT name FROM appmaps WHERE name LIKE '%oups%' LIMIT 1\").get();
+  process.stdout.write(r ? r.name : '');
+")"
+if [ -n "$RELATED_SOURCE" ]; then
+  run query related "$RELATED_SOURCE" --query-db "$DB" --limit 5
+fi
+
 # Pick the recording with the most events for the tree demos.
 APPMAP="$(node -e "
   const db = require('better-sqlite3')('$DB', { readonly: true });
