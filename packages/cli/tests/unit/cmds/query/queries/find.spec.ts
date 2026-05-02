@@ -28,6 +28,7 @@ interface Recording {
   }>;
   queries?: Array<{
     event_id: number;
+    parent_event_id?: number;
     sql: string;
     caller_class?: string;
     caller_method?: string;
@@ -58,8 +59,9 @@ function seed(db: sqlite3.Database, recs: Recording[]): void {
      VALUES (?, ?, ?, ?, ?, ?, ?)`
   );
   const insQ = db.prepare(
-    `INSERT INTO sql_queries (appmap_id, event_id, sql_text, caller_class, caller_method, elapsed_ms)
-     VALUES (?, ?, ?, ?, ?, ?)`
+    `INSERT INTO sql_queries (appmap_id, event_id, parent_event_id, sql_text,
+       caller_class, caller_method, elapsed_ms)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
   );
   // Test seed: derive package + class chain from defined_class so call
   // sites don't have to specify them. defined_class may be Java dot-form
@@ -109,6 +111,7 @@ function seed(db: sqlite3.Database, recs: Recording[]): void {
       insQ.run(
         aid,
         q.event_id,
+        q.parent_event_id ?? null,
         q.sql,
         q.caller_class ?? null,
         q.caller_method ?? null,
@@ -319,6 +322,222 @@ describe('findQueries', () => {
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('a');
       expect(rows[0].sql_text).toContain('INSERT INTO orders');
+    } finally {
+      db.close();
+    }
+  });
+});
+
+describe('find filters: --commit, --since/--until, --duration', () => {
+  it('--commit on findRequests', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          commit: 'abc123',
+          requests: [{ event_id: 1, method: 'GET', path: '/x', status: 200 }],
+        },
+        {
+          name: 'b',
+          commit: 'def456',
+          requests: [{ event_id: 1, method: 'GET', path: '/y', status: 200 }],
+        },
+      ]);
+      const rows = findRequests(db, { commit: 'abc123' });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].appmap_name).toBe('a');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--commit on findAppmaps', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        { name: 'a', commit: 'abc' },
+        { name: 'b', commit: 'def' },
+      ]);
+      expect(findAppmaps(db, { commit: 'abc' })).toHaveLength(1);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--since / --until on findRequests filter via the appmap timestamp', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          timestamp: '2026-04-01T00:00:00.000Z',
+          requests: [{ event_id: 1, method: 'GET', path: '/x', status: 200 }],
+        },
+        {
+          name: 'b',
+          timestamp: '2026-04-15T00:00:00.000Z',
+          requests: [{ event_id: 1, method: 'GET', path: '/x', status: 200 }],
+        },
+        {
+          name: 'c',
+          timestamp: '2026-04-30T00:00:00.000Z',
+          requests: [{ event_id: 1, method: 'GET', path: '/x', status: 200 }],
+        },
+      ]);
+      const rows = findRequests(db, {
+        since: '2026-04-10T00:00:00.000Z',
+        until: '2026-04-20T00:00:00.000Z',
+      });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].appmap_name).toBe('b');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--since on findCalls scopes via the recording', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'old',
+          timestamp: '2026-04-01T00:00:00.000Z',
+          calls: [{ event_id: 1, defined_class: 'X', method_id: 'm' }],
+        },
+        {
+          name: 'new',
+          timestamp: '2026-04-30T00:00:00.000Z',
+          calls: [{ event_id: 1, defined_class: 'X', method_id: 'm' }],
+        },
+      ]);
+      const rows = findCalls(db, { since: '2026-04-15T00:00:00.000Z' });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].appmap_name).toBe('new');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--duration on findCalls filters per-row elapsed_ms', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            { event_id: 1, defined_class: 'X', method_id: 'fast', elapsed_ms: 5 },
+            { event_id: 2, defined_class: 'X', method_id: 'slow', elapsed_ms: 500 },
+          ],
+        },
+      ]);
+      const rows = findCalls(db, { duration: { op: '>', value: 100 } });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].method_id).toBe('slow');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--duration on findQueries filters per-row elapsed_ms', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          queries: [
+            { event_id: 1, sql: 'SELECT 1', elapsed_ms: 1 },
+            { event_id: 2, sql: 'SELECT 2', elapsed_ms: 50 },
+          ],
+        },
+      ]);
+      const rows = findQueries(db, { duration: { op: '>=', value: 10 } });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].sql_text).toBe('SELECT 2');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('findQueries --class matches via the parent function_call code_object when the linked parent has the right class', () => {
+    const db = freshDb();
+    try {
+      // Seed a function_call with a code_object link, then a sql_query
+      // whose parent_event_id references that call. caller_class is set
+      // to a deliberately mismatching raw string so we can prove the
+      // code_object path (not the fallback) is matching.
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 10,
+              defined_class: 'org.example.UserRepository',
+              method_id: 'findById',
+              fqid: 'org/example/UserRepository#findById',
+            },
+          ],
+          queries: [
+            {
+              event_id: 11,
+              parent_event_id: 10,
+              sql: 'SELECT 1',
+              caller_class: 'WrongClassName',
+              caller_method: 'wrong',
+            },
+          ],
+        },
+      ]);
+      // Class part is read from code_objects (UserRepository), not from
+      // the WrongClassName caller_class string.
+      expect(findQueries(db, { className: 'UserRepository' })).toHaveLength(1);
+      // Full chain match also works.
+      expect(findQueries(db, { className: 'org/example/UserRepository' })).toHaveLength(
+        1
+      );
+      // Misspelled — no match.
+      expect(findQueries(db, { className: 'OtherRepository' })).toHaveLength(0);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('findQueries --class matches caller_class via the suffix-aware helper', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          queries: [
+            {
+              event_id: 1,
+              sql: 'SELECT 1',
+              caller_class: 'org.example.UserRepository',
+              caller_method: 'findById',
+            },
+            {
+              event_id: 2,
+              sql: 'SELECT 2',
+              caller_class: 'OpenSSL::Cipher',
+              caller_method: 'decrypt',
+            },
+            {
+              event_id: 3,
+              sql: 'SELECT 3',
+              caller_class: 'Other',
+              caller_method: 'm',
+            },
+          ],
+        },
+      ]);
+      // Java dot-suffix
+      expect(findQueries(db, { className: 'UserRepository' })).toHaveLength(1);
+      // Ruby ::-suffix
+      expect(findQueries(db, { className: 'Cipher' })).toHaveLength(1);
+      // Exact match also works
+      expect(findQueries(db, { className: 'OpenSSL::Cipher' })).toHaveLength(1);
+      // Top-level
+      expect(findQueries(db, { className: 'Other' })).toHaveLength(1);
     } finally {
       db.close();
     }

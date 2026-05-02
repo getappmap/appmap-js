@@ -245,6 +245,91 @@ export function methodFilterClauses(input: string, fcAlias: string): Clauses {
   };
 }
 
+// Match a --class input against a sql_query by following its
+// parent_event_id back to the function_call that issued the query, then
+// looking up that call's code_object — same canonical path as
+// classFilterClauses uses for direct function_calls. Falls back to the
+// row's denormalized caller_class string when the parent function_call
+// has no code_object link.
+//
+// When the user supplies --package, only the code_object path is used
+// (the caller_class string has no package component to match against).
+export function sqlCallerClassClauses(input: string, qAlias: string): Clauses {
+  const parts = parseClassRef(input);
+  if (!parts.class) {
+    return { where: ['1 = 0'], params: [] };
+  }
+
+  const coWhere: string[] = [];
+  const coParams: (string | number)[] = [];
+  if (parts.class.includes('::')) {
+    coWhere.push('classes = ?');
+    coParams.push(JSON.stringify(parts.class.split('::')));
+  } else {
+    coWhere.push('leaf_class = ?');
+    coParams.push(parts.class);
+  }
+  if (parts.package) {
+    coWhere.push('package = ?');
+    coParams.push(parts.package);
+  }
+  if (parts.method) {
+    coWhere.push('method = ?');
+    coParams.push(parts.method);
+  }
+
+  const coClause = `${qAlias}.parent_event_id IN (
+    SELECT fc.event_id FROM function_calls fc
+    WHERE fc.appmap_id = ${qAlias}.appmap_id
+      AND fc.code_object_id IN (
+        SELECT id FROM code_objects WHERE ${coWhere.join(' AND ')}
+      )
+  )`;
+
+  // If the user gave an explicit package, only the code_object path can
+  // honor it (caller_class has no package column to match).
+  if (parts.package) {
+    return { where: [coClause], params: coParams };
+  }
+
+  // Fallback: match the row's raw caller_class with suffix-aware logic.
+  const fbConditions: string[] = [
+    `${qAlias}.caller_class = ?`,
+    `${qAlias}.caller_class LIKE '%.' || ?`,
+    `${qAlias}.caller_class LIKE '%::' || ?`,
+  ];
+  const fbParams: (string | number)[] = [parts.class, parts.class, parts.class];
+  const fbParts: string[] = [`(${fbConditions.join(' OR ')})`];
+  if (parts.method) {
+    fbParts.push(`${qAlias}.caller_method = ?`);
+    fbParams.push(parts.method);
+  }
+
+  return {
+    where: [`(${coClause} OR (${fbParts.join(' AND ')}))`],
+    params: [...coParams, ...fbParams],
+  };
+}
+
+// Match a --method input against a sql_query via its parent function_call's
+// code_object.method, with a fallback to caller_method for unlinked
+// parents.
+export function sqlCallerMethodClauses(input: string, qAlias: string): Clauses {
+  return {
+    where: [
+      `(${qAlias}.parent_event_id IN (
+          SELECT fc.event_id FROM function_calls fc
+          WHERE fc.appmap_id = ${qAlias}.appmap_id
+            AND fc.code_object_id IN (
+              SELECT id FROM code_objects WHERE method = ?
+            )
+        )
+        OR ${qAlias}.caller_method = ?)`,
+    ],
+    params: [input, input],
+  };
+}
+
 // Build "<row>.appmap_id IN (SELECT a.id …)" for tables where filtering at
 // the appmap-id level is the right shape (sql_queries, function_calls,
 // exceptions, http_client_requests). Returns null if no recording-level

@@ -44,7 +44,12 @@ export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<voi
   handleWorkingDirectory(argv.directory);
   const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
 
-  const filter: HotspotsFilter = { type: argv.type as HotspotType };
+  const type = argv.type as HotspotType;
+  if (type === 'sql' && argv.class) {
+    throw new Error('hotspots --type=sql does not accept --class (only function-mode supports class filtering)');
+  }
+
+  const filter: HotspotsFilter = { type };
   if (argv.route) filter.route = argv.route;
   if (argv.class) filter.className = argv.class;
   if (argv.branch) filter.branch = argv.branch;

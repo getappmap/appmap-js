@@ -8,6 +8,8 @@ import {
   httpScopeClauses,
   methodFilterClauses,
   parseRoute,
+  sqlCallerClassClauses,
+  sqlCallerMethodClauses,
 } from '../lib/scope';
 
 export type FindType = 'appmaps' | 'requests' | 'queries' | 'calls' | 'exceptions';
@@ -212,12 +214,18 @@ export function findQueries(db: sqlite3.Database, filter: FindFilter): FindQuery
     params.push(`%${filter.table}%`);
   }
   if (filter.className) {
-    where.push(`q.caller_class = ?`);
-    params.push(filter.className);
+    // The caller of a sql_query is the function_call referenced by
+    // q.parent_event_id, which has its own code_object link. Use that
+    // canonical path; fall back to the denormalized caller_class string
+    // when the parent function_call has no code_object link.
+    const c = sqlCallerClassClauses(filter.className, 'q');
+    where.push(...c.where);
+    params.push(...c.params);
   }
   if (filter.method) {
-    where.push(`q.caller_method = ?`);
-    params.push(filter.method);
+    const m = sqlCallerMethodClauses(filter.method, 'q');
+    where.push(...m.where);
+    params.push(...m.params);
   }
   const dur = durationClause(filter, 'q.elapsed_ms');
   where.push(...dur.where);

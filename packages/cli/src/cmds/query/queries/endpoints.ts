@@ -1,6 +1,6 @@
 import sqlite3 from 'better-sqlite3';
 
-import type { NumberFilter } from '../lib/parseFilter';
+import type { Comparator, NumberFilter } from '../lib/parseFilter';
 
 export interface EndpointRow {
   method: string;
@@ -30,13 +30,26 @@ export interface EndpointsFilter {
 // independent of any --status filter.
 const ERR_THRESHOLD = 500;
 
-interface RawRow {
-  method: string;
-  route: string;
-  elapsed_ms: number | null;
-  status_code: number;
-}
+const SORT_COLUMNS: Record<EndpointSort, string> = {
+  count: 'count',
+  avg: 'avg_ms',
+  p95: 'p95_ms',
+  err: 'err_pct',
+};
 
+const VALID_OPS = new Set<Comparator>(['=', '>=', '<=', '>', '<']);
+
+// Aggregation runs entirely in SQL. Per route:
+//   count         COUNT(*) over the partition
+//   avg_ms        AVG(elapsed_ms) over non-null values
+//   p95_ms        elapsed_ms at rank ceil(0.95 * measured_count) within
+//                 the partition (computed with a ROW_NUMBER() window).
+//   err_pct       100 * SUM(status >= 500) / COUNT(*)
+// --status acts as a HAVING filter: route is shown iff ≥1 of its rows
+// matches; aggregates remain over all rows.
+//
+// SQL injection surface: filter.sort and filter.status.op are validated
+// against fixed allow-lists before being interpolated.
 export function endpoints(
   db: sqlite3.Database,
   filter: EndpointsFilter = {}
@@ -48,10 +61,9 @@ export function endpoints(
     where.push('a.git_branch = ?');
     params.push(filter.branch);
   }
-  // --since/--until filter on the recording's timestamp (a.timestamp) for
-  // consistency with `find`. The importer copies that value into
-  // http_requests.timestamp too, but treating it as a recording-level
-  // attribute makes the dependency on that copy explicit.
+  // --since/--until filter on the recording's timestamp (a.timestamp) —
+  // the canonical recording-level attribute. find verbs use the same
+  // column.
   if (filter.since) {
     where.push('a.timestamp >= ?');
     params.push(filter.since);
@@ -60,94 +72,78 @@ export function endpoints(
     where.push('a.timestamp <= ?');
     params.push(filter.until);
   }
-
   const whereSql = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';
 
-  const rows = db
-    .prepare(
-      `SELECT
-         hr.method                                AS method,
-         COALESCE(hr.normalized_path, hr.path)    AS route,
-         hr.elapsed_ms                            AS elapsed_ms,
-         hr.status_code                           AS status_code
-       FROM http_requests hr
-       JOIN appmaps a ON a.id = hr.appmap_id
-       ${whereSql}`
-    )
-    .all(...params) as RawRow[];
+  let havingSql = '';
+  if (filter.status) {
+    if (!VALID_OPS.has(filter.status.op)) {
+      throw new Error(`invalid status op: ${filter.status.op}`);
+    }
+    havingSql = `HAVING SUM(CASE WHEN status_code ${filter.status.op} ? THEN 1 ELSE 0 END) > 0`;
+    params.push(filter.status.value);
+  }
 
-  interface Group {
+  const sortKey = filter.sort ?? 'count';
+  if (!(sortKey in SORT_COLUMNS)) {
+    throw new Error(`invalid sort key: ${sortKey}`);
+  }
+  const sortColumn = SORT_COLUMNS[sortKey];
+
+  let sql = `
+    WITH ranked AS (
+      SELECT
+        h.method                              AS method,
+        COALESCE(h.normalized_path, h.path)   AS route,
+        h.elapsed_ms                          AS elapsed_ms,
+        h.status_code                         AS status_code,
+        ROW_NUMBER() OVER (
+          PARTITION BY h.method, COALESCE(h.normalized_path, h.path)
+          ORDER BY h.elapsed_ms NULLS LAST
+        ) AS rn,
+        SUM(CASE WHEN h.elapsed_ms IS NOT NULL THEN 1 ELSE 0 END) OVER (
+          PARTITION BY h.method, COALESCE(h.normalized_path, h.path)
+        ) AS measured_count
+      FROM http_requests h
+      JOIN appmaps a ON a.id = h.appmap_id
+      ${whereSql}
+    )
+    SELECT
+      method,
+      route,
+      COUNT(*)                                                    AS count,
+      AVG(CASE WHEN elapsed_ms IS NOT NULL THEN elapsed_ms END)   AS avg_ms,
+      MAX(CASE
+        WHEN measured_count > 0
+          AND rn = (measured_count * 19 + 19) / 20
+        THEN elapsed_ms
+      END)                                                        AS p95_ms,
+      CAST(SUM(CASE WHEN status_code >= ${ERR_THRESHOLD} THEN 1 ELSE 0 END) AS REAL)
+        * 100.0 / COUNT(*)                                        AS err_pct
+    FROM ranked
+    GROUP BY method, route
+    ${havingSql}
+    ORDER BY ${sortColumn} DESC NULLS LAST, method, route
+  `;
+  if (filter.limit !== undefined) {
+    sql += ' LIMIT ?';
+    params.push(filter.limit);
+  }
+
+  const rows = db.prepare(sql).all(...params) as Array<{
     method: string;
     route: string;
-    elapsed: number[];
-    err: number;
-    matched: number;
-    total: number;
-  }
-  const groups = new Map<string, Group>();
-  const matchPredicate = (s: number): boolean => {
-    if (!filter.status) return true;
-    const { op, value } = filter.status;
-    return (
-      (op === '=' && s === value) ||
-      (op === '>=' && s >= value) ||
-      (op === '<=' && s <= value) ||
-      (op === '>' && s > value) ||
-      (op === '<' && s < value)
-    );
-  };
+    count: number;
+    avg_ms: number | null;
+    p95_ms: number | null;
+    err_pct: number | null;
+  }>;
 
-  for (const r of rows) {
-    const key = `${r.method}\t${r.route}`;
-    let g = groups.get(key);
-    if (!g) {
-      g = { method: r.method, route: r.route, elapsed: [], err: 0, matched: 0, total: 0 };
-      groups.set(key, g);
-    }
-    g.total += 1;
-    if (typeof r.elapsed_ms === 'number') g.elapsed.push(r.elapsed_ms);
-    if (r.status_code >= ERR_THRESHOLD) g.err += 1;
-    if (matchPredicate(r.status_code)) g.matched += 1;
-  }
-
-  const result: EndpointRow[] = [];
-  for (const g of groups.values()) {
-    if (filter.status && g.matched === 0) continue;
-    const sorted = [...g.elapsed].sort((a, b) => a - b);
-    result.push({
-      method: g.method,
-      route: g.route,
-      count: g.total,
-      avg_ms: sorted.length === 0 ? null : sorted.reduce((s, v) => s + v, 0) / sorted.length,
-      p95_ms: percentile(sorted, 0.95),
-      err_pct: g.total > 0 ? (g.err / g.total) * 100 : 0,
-    });
-  }
-
-  const sortKey: EndpointSort = filter.sort ?? 'count';
-  result.sort(comparators[sortKey]);
-
-  return filter.limit !== undefined ? result.slice(0, filter.limit) : result;
+  return rows.map((r) => ({
+    method: r.method,
+    route: r.route,
+    count: r.count,
+    avg_ms: r.avg_ms,
+    p95_ms: r.p95_ms,
+    err_pct: r.err_pct ?? 0,
+  }));
 }
-
-function percentile(sorted: readonly number[], p: number): number | null {
-  if (sorted.length === 0) return null;
-  const idx = Math.max(0, Math.ceil(sorted.length * p) - 1);
-  return sorted[idx];
-}
-
-// Descending sort, nulls last (so a route with no measured durations doesn't
-// rank alongside a genuinely 0 ms route).
-function descNullsLast(a: number | null, b: number | null): number {
-  if (a == null && b == null) return 0;
-  if (a == null) return 1;
-  if (b == null) return -1;
-  return b - a;
-}
-
-const comparators: Record<EndpointSort, (a: EndpointRow, b: EndpointRow) => number> = {
-  count: (a, b) => b.count - a.count,
-  avg: (a, b) => descNullsLast(a.avg_ms, b.avg_ms),
-  p95: (a, b) => descNullsLast(a.p95_ms, b.p95_ms),
-  err: (a, b) => b.err_pct - a.err_pct,
-};

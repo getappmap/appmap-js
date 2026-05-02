@@ -43,6 +43,14 @@ export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<voi
   const db = openReadOnly(appmapDir, argv.queryDb);
   try {
     if (argv.format === 'summary') {
+      // The summary aggregates over all event types; combining with
+      // --filter would be ambiguous, so reject rather than silently drop.
+      const f = argv.filter as 'all' | 'http' | 'sql';
+      if (f !== 'all') {
+        throw new Error(
+          'tree --format=summary does not accept --filter; remove one of them'
+        );
+      }
       const s = treeSummary(db, ref);
       if (argv.json) log(JSON.stringify(s, null, 2));
       else log(renderSummary(s));
