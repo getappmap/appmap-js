@@ -40,7 +40,9 @@ export const builder = <T>(args: yargs.Argv<T>) => {
 
 type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 
-export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {
+// Widened at the export so this module is assignable to CommandModule<T, any>.
+export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promise<void> => {
+  const argv = argvIn as yargs.ArgumentsCamelCase<Argv>;
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
   // When --query-db is supplied, the appmap dir is irrelevant — the user has

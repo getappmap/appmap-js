@@ -140,7 +140,9 @@ export function buildFindFilter(argv: Record<string, unknown>): ParsedFind {
   return { type, filter };
 }
 
-export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {
+// Widened at the export so this module is assignable to CommandModule<T, any>.
+export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promise<void> => {
+  const argv = argvIn as yargs.ArgumentsCamelCase<Argv>;
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
   const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
