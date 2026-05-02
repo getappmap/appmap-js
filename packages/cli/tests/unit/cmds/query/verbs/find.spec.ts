@@ -46,13 +46,19 @@ describe('find verb flag validation', () => {
     expect(() => validateFlags('exceptions', { label: 'log' })).toThrow(/--label/);
   });
 
-  it('rejects --duration on appmaps and exceptions', () => {
-    expect(() => validateFlags('appmaps', { duration: '>1s' })).toThrow(/--duration/);
+  it('rejects --duration on exceptions; accepts elsewhere', () => {
     expect(() => validateFlags('exceptions', { duration: '>1s' })).toThrow(/--duration/);
-    // calls/queries/requests all accept duration
+    // appmaps (recording-level), calls, queries, requests all accept duration
+    expect(() => validateFlags('appmaps', { duration: '>1s' })).not.toThrow();
     expect(() => validateFlags('calls', { duration: '>1s' })).not.toThrow();
     expect(() => validateFlags('queries', { duration: '>1s' })).not.toThrow();
     expect(() => validateFlags('requests', { duration: '>1s' })).not.toThrow();
+  });
+
+  it('hint message guides --method users on find requests', () => {
+    expect(() => validateFlags('requests', { method: 'findById' })).toThrow(
+      /--route/
+    );
   });
 
   it('lists multiple incompatible flags in a single error', () => {

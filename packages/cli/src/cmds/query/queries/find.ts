@@ -117,49 +117,43 @@ function appendLimitOffset(sql: string, filter: FindFilter, params: (string | nu
 
 export function findAppmaps(db: sqlite3.Database, filter: FindFilter): FindAppmapRow[] {
   const a = appmapWhere(filter, 'a');
-  const h = httpScopeClauses(filter);
+  const h = httpScopeClauses(filter, 'h2');
+  const requireHttpMatch = h.where.length > 0;
 
-  let sql: string;
-  const params: (string | number)[] = [];
+  // Pick a deterministic "sample" request per appmap via a correlated
+  // subquery: the http_request with the smallest event_id among those
+  // matching --route / --status (or any request if no http filter). This
+  // avoids the non-determinism of GROUP BY a.id with non-aggregated h.*.
+  const innerHttpFilter = requireHttpMatch ? ` AND ${h.where.join(' AND ')}` : '';
 
-  // Show one row per appmap, joining its first matching (or any) HTTP request.
-  if (h.where.length > 0) {
-    const where = [...a.where, ...h.where].filter(Boolean).join(' AND ');
-    sql = `
-      SELECT a.name                              AS appmap_name,
-             COALESCE(h.normalized_path, h.path) AS route,
-             h.status_code                       AS status_code,
-             h.elapsed_ms                        AS elapsed_ms,
-             a.sql_query_count                   AS sql_count,
-             a.git_branch                        AS branch,
-             a.timestamp                         AS timestamp
-      FROM appmaps a
-      JOIN http_requests h ON h.appmap_id = a.id
-      ${where ? `WHERE ${where}` : ''}
-      GROUP BY a.id
-      ORDER BY a.timestamp, a.name
-    `;
-    params.push(...a.params, ...h.params);
-  } else {
-    const where = a.where.join(' AND ');
-    sql = `
-      SELECT a.name AS appmap_name,
-             (SELECT COALESCE(h.normalized_path, h.path)
-                FROM http_requests h WHERE h.appmap_id = a.id
-                ORDER BY h.event_id LIMIT 1)               AS route,
-             (SELECT h.status_code FROM http_requests h
-                WHERE h.appmap_id = a.id ORDER BY h.event_id LIMIT 1) AS status_code,
-             a.elapsed_ms,
-             a.sql_query_count AS sql_count,
-             a.git_branch AS branch,
-             a.timestamp AS timestamp
-      FROM appmaps a
-      ${where ? `WHERE ${where}` : ''}
-      ORDER BY a.timestamp, a.name
-    `;
-    params.push(...a.params);
+  const whereParts: string[] = [...a.where];
+  if (requireHttpMatch) whereParts.push('h.id IS NOT NULL');
+  if (filter.duration) {
+    whereParts.push(`a.elapsed_ms ${filter.duration.op} ?`);
   }
+  const whereSql = whereParts.length > 0 ? `WHERE ${whereParts.join(' AND ')}` : '';
 
+  // Param order: inner subquery http filters → outer WHERE (appmap, then duration).
+  const params: (string | number)[] = [...h.params, ...a.params];
+  if (filter.duration) params.push(filter.duration.value);
+
+  let sql = `
+    SELECT a.name                                     AS appmap_name,
+           COALESCE(h.normalized_path, h.path)        AS route,
+           h.status_code                              AS status_code,
+           COALESCE(h.elapsed_ms, a.elapsed_ms)       AS elapsed_ms,
+           a.sql_query_count                          AS sql_count,
+           a.git_branch                               AS branch,
+           a.timestamp                                AS timestamp
+    FROM appmaps a
+    LEFT JOIN http_requests h ON h.id = (
+      SELECT h2.id FROM http_requests h2
+      WHERE h2.appmap_id = a.id${innerHttpFilter}
+      ORDER BY h2.event_id LIMIT 1
+    )
+    ${whereSql}
+    ORDER BY a.timestamp, a.name
+  `;
   sql = appendLimitOffset(sql, filter, params);
   return db.prepare(sql).all(...params) as FindAppmapRow[];
 }

@@ -2,14 +2,98 @@ import sqlite3 from 'better-sqlite3';
 
 import { openQueryDb } from '../../../../../src/cmds/query/db/openQueryDb';
 import {
+  appmapRefClause,
   classFilterClauses,
   methodFilterClauses,
   parseClassRef,
+  parseRoute,
 } from '../../../../../src/cmds/query/lib/scope';
 
 function freshDb(): sqlite3.Database {
   return openQueryDb('/tmp/ignored', ':memory:').db;
 }
+
+describe('parseRoute', () => {
+  it('parses an HTTP method case-insensitively and uppercases it', () => {
+    expect(parseRoute('post /orders')).toEqual({ method: 'POST', path: '/orders' });
+    expect(parseRoute('Get /reports')).toEqual({ method: 'GET', path: '/reports' });
+    expect(parseRoute('DELETE /orders/:id')).toEqual({
+      method: 'DELETE',
+      path: '/orders/:id',
+    });
+  });
+
+  it('treats an unrecognised prefix as part of the path', () => {
+    expect(parseRoute('FOO /bar')).toEqual({ path: 'FOO /bar' });
+    expect(parseRoute('/orders')).toEqual({ path: '/orders' });
+  });
+});
+
+describe('appmapRefClause (basename matching)', () => {
+  it('matches Unix-style source_path with .appmap.json suffix', () => {
+    const db = freshDb();
+    try {
+      db.prepare(
+        `INSERT INTO appmaps (name, source_path) VALUES ('rec1', '/tmp/path/rec1.appmap.json')`
+      ).run();
+      const m = appmapRefClause('rec1', 'a');
+      const row = db
+        .prepare(`SELECT a.name FROM appmaps a WHERE ${m.sql}`)
+        .get(...m.params) as { name: string } | undefined;
+      expect(row?.name).toBe('rec1');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('matches Windows-style source_path with backslash separator', () => {
+    const db = freshDb();
+    try {
+      db.prepare(
+        `INSERT INTO appmaps (name, source_path) VALUES ('rec1', 'C:\\Users\\me\\rec1.appmap.json')`
+      ).run();
+      const m = appmapRefClause('rec1', 'a');
+      const row = db
+        .prepare(`SELECT a.name FROM appmaps a WHERE ${m.sql}`)
+        .get(...m.params) as { name: string } | undefined;
+      expect(row?.name).toBe('rec1');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('matches source_path without the .appmap.json suffix', () => {
+    const db = freshDb();
+    try {
+      db.prepare(
+        `INSERT INTO appmaps (name, source_path) VALUES ('odd', '/store/abc/odd')`
+      ).run();
+      const m = appmapRefClause('odd', 'a');
+      const row = db
+        .prepare(`SELECT a.name FROM appmaps a WHERE ${m.sql}`)
+        .get(...m.params) as { name: string } | undefined;
+      expect(row?.name).toBe('odd');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('matches by appmap.name when source_path differs', () => {
+    const db = freshDb();
+    try {
+      db.prepare(
+        `INSERT INTO appmaps (name, source_path) VALUES ('Friendly Name', '/x/foo.appmap.json')`
+      ).run();
+      const m = appmapRefClause('Friendly Name', 'a');
+      const row = db
+        .prepare(`SELECT a.name FROM appmaps a WHERE ${m.sql}`)
+        .get(...m.params) as { name: string } | undefined;
+      expect(row?.name).toBe('Friendly Name');
+    } finally {
+      db.close();
+    }
+  });
+});
 
 describe('parseClassRef', () => {
   it('short form is just a class', () => {

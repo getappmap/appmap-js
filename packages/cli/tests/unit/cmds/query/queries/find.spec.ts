@@ -228,6 +228,49 @@ describe('findAppmaps', () => {
     }
   });
 
+  it('is deterministic when route filtering — picks the lowest event_id matching request', () => {
+    const db = freshDb();
+    try {
+      // Two POST /orders requests in one recording with different elapsed.
+      // The query must consistently pick event_id=1 (the smaller).
+      seed(db, [
+        {
+          name: 'a',
+          requests: [
+            { event_id: 1, method: 'POST', path: '/orders', status: 500, elapsed_ms: 100 },
+            { event_id: 2, method: 'POST', path: '/orders', status: 500, elapsed_ms: 999 },
+          ],
+        },
+      ]);
+      const rows = findAppmaps(db, { route: 'POST /orders' });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].elapsed_ms).toBe(100); // event_id=1 wins, not 2
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--duration filters on the appmap row (a.elapsed_ms)', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'fast',
+          requests: [{ event_id: 1, method: 'GET', path: '/x', status: 200, elapsed_ms: 50 }],
+        },
+        {
+          name: 'slow',
+          requests: [{ event_id: 1, method: 'GET', path: '/x', status: 200, elapsed_ms: 5000 }],
+        },
+      ]);
+      const rows = findAppmaps(db, { duration: { op: '>', value: 1000 } });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].appmap_name).toBe('slow');
+    } finally {
+      db.close();
+    }
+  });
+
   it('--route narrows to recordings with a matching request and reports that request', () => {
     const db = freshDb();
     try {

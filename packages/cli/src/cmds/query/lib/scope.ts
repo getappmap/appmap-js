@@ -23,12 +23,30 @@ export interface RouteSpec {
   path: string;
 }
 
-const HTTP_METHODS = /^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)$/;
+const HTTP_METHODS = /^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)$/i;
 
 export function parseRoute(s: string): RouteSpec {
   const m = s.match(HTTP_METHODS);
-  if (m) return { method: m[1], path: m[2] };
+  if (m) return { method: m[1].toUpperCase(), path: m[2] };
   return { path: s };
+}
+
+// Returns SQL clauses (and params) that match an --appmap reference against
+// the appmaps table, accepting any of:
+//   - exact appmap.name
+//   - source_path ending in `<sep><ref>.appmap.json`  (Unix or Windows sep)
+//   - source_path ending in `<sep><ref>`              (non-`.appmap.json` stores)
+// Used by find / tree / hotspots so the lookup behaves the same everywhere.
+export function appmapRefClause(
+  ref: string,
+  alias: string
+): { sql: string; params: string[] } {
+  return {
+    sql: `(${alias}.name = ?
+        OR ${alias}.source_path GLOB '*[/\\\\]' || ? || '.appmap.json'
+        OR ${alias}.source_path GLOB '*[/\\\\]' || ?)`,
+    params: [ref, ref, ref],
+  };
 }
 
 export interface Clauses {
@@ -57,28 +75,31 @@ export function appmapWhere(filter: RecordingScope, alias: string): Clauses {
     params.push(filter.until);
   }
   if (filter.appmap) {
-    where.push(`(${alias}.name = ? OR ${alias}.source_path LIKE ?)`);
-    params.push(filter.appmap, `%/${filter.appmap}.appmap.json`);
+    const ref = appmapRefClause(filter.appmap, alias);
+    where.push(ref.sql);
+    params.push(...ref.params);
   }
   return { where, params };
 }
 
 // HTTP-level filters that scope to "the recording must contain ≥1 matching
-// server request." Used as a subquery for non-request finds.
-export function httpScopeClauses(filter: RecordingScope): Clauses {
+// server request." Used as a subquery for non-request finds. The alias
+// defaults to `h`; override when emitting clauses inside a nested subquery
+// where the outer alias is taken.
+export function httpScopeClauses(filter: RecordingScope, alias = 'h'): Clauses {
   const where: string[] = [];
   const params: (string | number)[] = [];
   if (filter.route) {
     const route = parseRoute(filter.route);
-    where.push(`COALESCE(h.normalized_path, h.path) = ?`);
+    where.push(`COALESCE(${alias}.normalized_path, ${alias}.path) = ?`);
     params.push(route.path);
     if (route.method) {
-      where.push(`h.method = ?`);
+      where.push(`${alias}.method = ?`);
       params.push(route.method);
     }
   }
   if (filter.status) {
-    where.push(`h.status_code ${filter.status.op} ?`);
+    where.push(`${alias}.status_code ${filter.status.op} ?`);
     params.push(filter.status.value);
   }
   return { where, params };

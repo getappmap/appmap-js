@@ -55,26 +55,39 @@ type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 // types where they make sense; flagging them on the wrong type is an
 // error rather than a silent no-op.
 const REJECTED_FLAGS: Record<FindType, readonly string[]> = {
-  appmaps: ['class', 'method', 'label', 'duration', 'table', 'exception'],
+  appmaps: ['class', 'method', 'label', 'table', 'exception'],
   requests: ['class', 'method', 'label', 'table', 'exception'],
   queries: ['label', 'exception'],
   calls: ['table', 'exception'],
   exceptions: ['class', 'method', 'label', 'duration', 'table'],
 };
 
+// Per-flag hints, attached to error messages when a rejected flag is used.
+// Useful for nudging users toward the right flag (e.g., HTTP method
+// belongs in --route, not --method, which is a function-method-name flag).
+const REJECTED_HINTS: Partial<Record<FindType, Partial<Record<string, string>>>> = {
+  requests: {
+    method: 'to filter by HTTP method, use --route "METHOD /path"',
+  },
+};
+
 // Exported for tests. Operates on a generic flag map so unit tests don't
 // need a full yargs argv.
 export function validateFlags(type: FindType, flags: Record<string, unknown>): void {
   const used: string[] = [];
+  const hints: string[] = [];
   for (const flag of REJECTED_FLAGS[type]) {
-    if (flags[flag] != null) used.push(`--${flag}`);
+    if (flags[flag] != null) {
+      used.push(`--${flag}`);
+      const hint = REJECTED_HINTS[type]?.[flag];
+      if (hint) hints.push(`  --${flag}: ${hint}`);
+    }
   }
-  if (used.length > 0) {
-    const verb = used.length === 1 ? 'is' : 'are';
-    throw new Error(
-      `find ${type}: ${used.join(', ')} ${verb} not supported for this type`
-    );
-  }
+  if (used.length === 0) return;
+  const verb = used.length === 1 ? 'is' : 'are';
+  let message = `find ${type}: ${used.join(', ')} ${verb} not supported for this type`;
+  if (hints.length > 0) message += `\n${hints.join('\n')}`;
+  throw new Error(message);
 }
 
 export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {

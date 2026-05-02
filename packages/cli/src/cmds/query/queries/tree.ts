@@ -1,5 +1,7 @@
 import sqlite3 from 'better-sqlite3';
 
+import { appmapRefClause } from '../lib/scope';
+
 // Discriminated union of tree nodes. Each node corresponds to one row in
 // one of the per-event tables; `depth` is computed from parent_event_id
 // chains within the same recording.
@@ -70,13 +72,14 @@ export interface AppmapInfo {
 // the row in `appmaps`. Throws on miss or ambiguity (returns candidates in
 // the message so the user can disambiguate).
 export function resolveAppmap(db: sqlite3.Database, ref: string): AppmapInfo {
+  const m = appmapRefClause(ref, 'a');
   const rows = db
     .prepare(
-      `SELECT id, name, source_path FROM appmaps
-       WHERE name = ? OR source_path LIKE ?
-       ORDER BY source_path`
+      `SELECT a.id, a.name, a.source_path FROM appmaps a
+       WHERE ${m.sql}
+       ORDER BY a.source_path`
     )
-    .all(ref, `%/${ref}.appmap.json`) as AppmapInfo[];
+    .all(...m.params) as AppmapInfo[];
   if (rows.length === 0) throw new Error(`appmap not found: ${ref}`);
   if (rows.length > 1) {
     const list = rows.map((r) => `  - ${r.source_path}`).join('\n');
