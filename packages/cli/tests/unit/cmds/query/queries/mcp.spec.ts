@@ -1,0 +1,242 @@
+import sqlite3 from 'better-sqlite3';
+
+import { openQueryDb } from '../../../../../src/cmds/query/db/openQueryDb';
+import {
+  buildMcpHandler,
+  JsonRpcRequest,
+  listResources,
+  listTools,
+} from '../../../../../src/cmds/query/queries/mcp';
+
+function freshDb(): sqlite3.Database {
+  return openQueryDb('/tmp/ignored', ':memory:').db;
+}
+
+function seedMinimal(db: sqlite3.Database): void {
+  // One recording with a request, a SQL query, an exception, and a labelled
+  // function call — enough to exercise most tools.
+  const am = db
+    .prepare(
+      `INSERT INTO appmaps (name, source_path, git_branch, sql_query_count, elapsed_ms, timestamp)
+       VALUES ('rec', '/tmp/rec.appmap.json', 'main', 1, 100, '2026-04-29T12:00:00.000Z')`
+    )
+    .run();
+  const id = am.lastInsertRowid;
+  db.prepare(
+    `INSERT INTO http_requests (appmap_id, event_id, parent_event_id, method, path, status_code, elapsed_ms)
+     VALUES (?, 1, NULL, 'POST', '/orders', 500, 100)`
+  ).run(id);
+  db.prepare(
+    `INSERT OR IGNORE INTO code_objects (fqid, package, classes, leaf_class, method, is_static)
+     VALUES ('app/Logger#error', 'app', '["Logger"]', 'Logger', 'error', 0)`
+  ).run();
+  const co = (db
+    .prepare(`SELECT id FROM code_objects WHERE fqid = 'app/Logger#error'`)
+    .get() as { id: number }).id;
+  db.prepare(`INSERT OR IGNORE INTO labels (code_object_id, label) VALUES (?, 'log')`).run(co);
+  db.prepare(
+    `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, code_object_id, defined_class, method_id, elapsed_ms)
+     VALUES (?, 2, 1, ?, 'Logger', 'error', 0.1)`
+  ).run(id, co);
+  db.prepare(
+    `INSERT INTO sql_queries (appmap_id, event_id, parent_event_id, sql_text, elapsed_ms)
+     VALUES (?, 3, 2, 'INSERT INTO orders (id) VALUES (?)', 14)`
+  ).run(id);
+  db.prepare(
+    `INSERT INTO exceptions (appmap_id, event_id, parent_event_id, exception_class, message)
+     VALUES (?, 2, 1, 'IntegrityError', 'duplicate key')`
+  ).run(id);
+}
+
+function call(handler: ReturnType<typeof buildMcpHandler>, msg: JsonRpcRequest) {
+  const r = handler(msg);
+  return r;
+}
+
+describe('MCP handler', () => {
+  it('initialize returns server info and capabilities', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), { jsonrpc: '2.0', id: 1, method: 'initialize' });
+      expect(r).not.toBeNull();
+      expect((r!.result as any).serverInfo.name).toBe('appmap-query');
+      expect((r!.result as any).protocolVersion).toBeDefined();
+      expect((r!.result as any).capabilities.tools).toBeDefined();
+      expect((r!.result as any).capabilities.resources).toBeDefined();
+    } finally {
+      db.close();
+    }
+  });
+
+  it('notifications/initialized returns null (notification, no response)', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        method: 'notifications/initialized',
+      });
+      expect(r).toBeNull();
+    } finally {
+      db.close();
+    }
+  });
+
+  it('tools/list returns the V3 tool surface', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), { jsonrpc: '2.0', id: 2, method: 'tools/list' });
+      const names = ((r!.result as any).tools as Array<{ name: string }>).map((t) => t.name);
+      expect(names).toEqual(
+        expect.arrayContaining([
+          'get_endpoint_detail',
+          'get_slow_queries',
+          'get_function_hotspots',
+          'get_exceptions',
+          'get_log_events',
+          'get_labeled_events',
+          'compare_branches',
+          'get_request_trace',
+          'get_related',
+        ])
+      );
+    } finally {
+      db.close();
+    }
+  });
+
+  it('resources/list returns the appmap://endpoints resource', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), { jsonrpc: '2.0', id: 3, method: 'resources/list' });
+      const uris = ((r!.result as any).resources as Array<{ uri: string }>).map((x) => x.uri);
+      expect(uris).toContain('appmap://endpoints');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('unknown method → -32601 method-not-found', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), { jsonrpc: '2.0', id: 4, method: 'no/such/method' });
+      expect(r!.error?.code).toBe(-32601);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('tools/call to an unknown tool → -32601', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 5,
+        method: 'tools/call',
+        params: { name: 'no_such_tool', arguments: {} },
+      });
+      expect(r!.error?.code).toBe(-32601);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('tools/call wraps the result as a content block of type=text', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 6,
+        method: 'tools/call',
+        params: { name: 'get_exceptions', arguments: { limit: 10 } },
+      });
+      const content = (r!.result as any).content;
+      expect(Array.isArray(content)).toBe(true);
+      expect(content[0].type).toBe('text');
+      const parsed = JSON.parse(content[0].text);
+      expect(parsed).toHaveLength(1);
+      expect(parsed[0].exception_class).toBe('IntegrityError');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('get_request_trace resolves appmap_id (numeric or name) and applies focus_type', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      const handler = buildMcpHandler(db);
+
+      // Numeric id.
+      const byId = call(handler, {
+        jsonrpc: '2.0',
+        id: 7,
+        method: 'tools/call',
+        params: {
+          name: 'get_request_trace',
+          arguments: { appmap_id: 1, focus_type: 'sql_query', focus_value: 'INSERT INTO orders' },
+        },
+      });
+      const idRows = JSON.parse((byId!.result as any).content[0].text);
+      expect(Array.isArray(idRows)).toBe(true);
+      expect(idRows.some((n: any) => n.kind === 'sql')).toBe(true);
+
+      // Name-based ref.
+      const byName = call(handler, {
+        jsonrpc: '2.0',
+        id: 8,
+        method: 'tools/call',
+        params: {
+          name: 'get_request_trace',
+          arguments: { appmap_id: 'rec' },
+        },
+      });
+      const nameRows = JSON.parse((byName!.result as any).content[0].text);
+      expect(Array.isArray(nameRows)).toBe(true);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('get_log_events filters function_calls by the log label', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 9,
+        method: 'tools/call',
+        params: { name: 'get_log_events', arguments: {} },
+      });
+      const rows = JSON.parse((r!.result as any).content[0].text);
+      expect(rows).toHaveLength(1);
+      expect(rows[0].method_id).toBe('error');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('resources/read returns the endpoints summary as JSON', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 10,
+        method: 'resources/read',
+        params: { uri: 'appmap://endpoints' },
+      });
+      const contents = (r!.result as any).contents;
+      expect(contents[0].uri).toBe('appmap://endpoints');
+      const parsed = JSON.parse(contents[0].text);
+      expect(parsed[0].route).toBe('/orders');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('listTools / listResources are stable for documentation use', () => {
+    expect(listTools().length).toBeGreaterThan(0);
+    expect(listResources().length).toBeGreaterThan(0);
+  });
+});
