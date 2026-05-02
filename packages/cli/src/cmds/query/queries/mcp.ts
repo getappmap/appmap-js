@@ -1,6 +1,11 @@
 // MCP (Model Context Protocol) handler. Exposes the V3 query surface as
-// MCP tools and resources, using the Python prototype's tool names so
-// existing clients work unchanged.
+// MCP tools and resources.
+//
+// Tool names are LLM-readable and uniquely identify what each tool
+// returns: `find_*` returns row-level matches, `function_hotspots` /
+// `sql_hotspots` return rankings, `get_call_tree` returns one recording's
+// tree, etc. Mirrors V3's CLI verbs but with descriptive names rather
+// than the terse single-noun forms the CLI uses.
 //
 // Wire format: newline-delimited JSON-RPC 2.0 over stdio. This module
 // implements the message dispatch logic only; the stdio loop lives in
@@ -8,8 +13,8 @@
 
 import sqlite3 from 'better-sqlite3';
 
-import { compare } from './compare';
-import { endpoints } from './endpoints';
+import { compare, type CompareSort } from './compare';
+import { endpoints, EndpointSort, EndpointsFilter } from './endpoints';
 import {
   FindCallRow,
   FindExceptionRow,
@@ -20,8 +25,8 @@ import {
 } from './find';
 import { hotspots } from './hotspots';
 import { related, RelatedFilter } from './related';
-import { resolveAppmap, tree, treeSummary, AppmapInfo, TreeOptions } from './tree';
-import { parseTime } from '../lib/parseFilter';
+import { resolveAppmap, tree, AppmapInfo, TreeOptions } from './tree';
+import { parseDuration, parseStatus, parseTime } from '../lib/parseFilter';
 
 export interface JsonRpcRequest {
   jsonrpc: '2.0';
@@ -69,9 +74,7 @@ const PROTOCOL_VERSION = '2024-11-05';
 
 // --- helpers ------------------------------------------------------------
 
-// Accept either a numeric appmap.id or a name/basename ref. Resolves to
-// the appmaps row; throws if missing or ambiguous (the underlying
-// resolveAppmap surfaces both messages).
+// Accept either a numeric appmap.id or a name/basename ref.
 function resolveByIdOrRef(db: sqlite3.Database, idOrRef: unknown): AppmapInfo {
   const s = String(idOrRef);
   if (/^\d+$/.test(s)) {
@@ -79,15 +82,12 @@ function resolveByIdOrRef(db: sqlite3.Database, idOrRef: unknown): AppmapInfo {
       .prepare(`SELECT id, name, source_path FROM appmaps WHERE id = ?`)
       .get(Number(s)) as AppmapInfo | undefined;
     if (row) return row;
-    // Fall through to name match if the numeric id doesn't exist —
-    // surfaces a clearer error from resolveAppmap.
   }
   return resolveAppmap(db, s);
 }
 
 function maybeTime(s: unknown): string | undefined {
-  if (typeof s !== 'string' || s.length === 0) return undefined;
-  return parseTime(s);
+  return typeof s === 'string' && s.length > 0 ? parseTime(s) : undefined;
 }
 
 function maybeNumber(n: unknown): number | undefined {
@@ -100,84 +100,110 @@ function maybeString(s: unknown): string | undefined {
   return typeof s === 'string' && s.length > 0 ? s : undefined;
 }
 
+class ParameterValidationError extends TypeError {}
+
+function maybeCompareSort(s: unknown): CompareSort | undefined {
+  if (s === 'delta' || s === 'p95-a' || s === 'p95-b') return s;
+  if (s === undefined) return undefined;
+  throw new ParameterValidationError(`invalid compare sort: ${String(s)}`);
+}
+
+// Common filter shape shared by the find_* tools and the hotspots tools.
+const COMMON_FILTER_PROPERTIES: Record<string, unknown> = {
+  route: { type: 'string', description: 'e.g. "POST /orders" or "/orders".' },
+  status: { type: 'string', description: 'e.g. "500", ">=500", "<400".' },
+  duration: { type: 'string', description: 'e.g. ">1s", ">=500ms".' },
+  branch: { type: 'string' },
+  commit: { type: 'string' },
+  since: { type: 'string', description: 'ISO timestamp lower bound.' },
+  until: { type: 'string', description: 'ISO timestamp upper bound.' },
+  appmap: { type: 'string', description: 'Restrict to one recording (name or basename).' },
+  limit: { type: 'integer' },
+  offset: { type: 'integer' },
+};
+
+// Build a FindFilter from MCP tool args, parsing structured fields.
+function buildFindFilter(args: Record<string, unknown>): FindFilter {
+  const f: FindFilter = {};
+  if (typeof args.route === 'string') f.route = args.route;
+  if (typeof args.class === 'string') f.className = args.class;
+  if (typeof args.method === 'string') f.method = args.method;
+  if (typeof args.label === 'string') f.label = args.label;
+  if (typeof args.branch === 'string') f.branch = args.branch;
+  if (typeof args.commit === 'string') f.commit = args.commit;
+  if (typeof args.status === 'string') f.status = parseStatus(args.status);
+  if (typeof args.duration === 'string') f.duration = parseDuration(args.duration);
+  if (typeof args.appmap === 'string') f.appmap = args.appmap;
+  if (typeof args.table === 'string') f.table = args.table;
+  if (typeof args.exception === 'string') f.exception = args.exception;
+  f.since = maybeTime(args.since);
+  f.until = maybeTime(args.until);
+  f.limit = maybeNumber(args.limit);
+  f.offset = maybeNumber(args.offset);
+  return f;
+}
+
 // --- tools --------------------------------------------------------------
 
-// Tool name + description + JSON Schema + handler. Names match the
-// Python prototype's MCP surface so existing clients work unchanged.
 const TOOLS: ToolImpl[] = [
+  // ----- aggregations ----------------------------------------------------
+
   {
     spec: {
-      name: 'get_endpoint_detail',
+      name: 'list_endpoints',
       description:
-        'Individual HTTP request rows for a (method, path), with status, elapsed, branch, and the recording each came from.',
+        'Per-route summary table. Returns count, average latency, p95, and error-rate columns for each (method, normalized_path). The first thing to call when orienting against an unfamiliar query database.',
       inputSchema: {
         type: 'object',
         properties: {
-          method: { type: 'string', description: 'HTTP method (GET, POST, …).' },
-          path: { type: 'string', description: 'Endpoint path (exact normalized_path or path).' },
-          since: { type: 'string', description: 'ISO timestamp lower bound.' },
-          until: { type: 'string', description: 'ISO timestamp upper bound.' },
+          branch: { type: 'string' },
+          since: { type: 'string' },
+          until: { type: 'string' },
+          status: {
+            type: 'string',
+            description:
+              'Route filter — e.g. ">=500". A route is shown if any request matches; aggregates remain over all of that route\'s requests.',
+          },
+          sort: { type: 'string', enum: ['count', 'avg', 'p95', 'err'] },
           limit: { type: 'integer' },
         },
-        required: ['method', 'path'],
       },
     },
     handler: (args, db) => {
-      const filter: FindFilter = {
-        route: `${String(args.method)} ${String(args.path)}`,
-      };
-      filter.since = maybeTime(args.since);
-      filter.until = maybeTime(args.until);
-      filter.limit = maybeNumber(args.limit);
-      return find(db, 'requests', filter) as FindRequestRow[];
+      const f: EndpointsFilter = {};
+      f.branch = maybeString(args.branch);
+      f.since = maybeTime(args.since);
+      f.until = maybeTime(args.until);
+      if (typeof args.status === 'string') f.status = parseStatus(args.status);
+      if (typeof args.sort === 'string') f.sort = args.sort as EndpointSort;
+      f.limit = maybeNumber(args.limit);
+      return endpoints(db, f);
     },
   },
 
   {
     spec: {
-      name: 'get_slow_queries',
+      name: 'function_hotspots',
       description:
-        'SQL query rows ordered by elapsed time, slowest first. Use to find performance bottlenecks at the database layer.',
+        'Functions ranked by total elapsed time across recordings. Returns calls / total_ms / self_ms per function. Filter by route to scope to a specific entry point or by class to focus on one component.',
       inputSchema: {
         type: 'object',
         properties: {
-          limit: { type: 'integer', description: 'Maximum rows (default 20).' },
+          route: { type: 'string' },
+          class: { type: 'string', description: 'class identifier; accepts short or canonical fqid form.' },
+          branch: { type: 'string' },
           since: { type: 'string' },
           until: { type: 'string' },
-        },
-      },
-    },
-    handler: (args, db) => {
-      const filter: FindFilter = {};
-      filter.since = maybeTime(args.since);
-      filter.until = maybeTime(args.until);
-      // Sort happens client-side after fetch so we don't pull the entire
-      // sql_queries table for large corpora; for now we rely on the
-      // implicit caller LIMIT to bound the work.
-      const rows = find(db, 'queries', filter) as FindQueryRow[];
-      rows.sort((a, b) => (b.elapsed_ms ?? 0) - (a.elapsed_ms ?? 0));
-      const limit = maybeNumber(args.limit) ?? 20;
-      return rows.slice(0, limit);
-    },
-  },
-
-  {
-    spec: {
-      name: 'get_function_hotspots',
-      description:
-        'Functions ranked by total elapsed time across recordings, with calls / total_ms / self_ms columns.',
-      inputSchema: {
-        type: 'object',
-        properties: {
           limit: { type: 'integer' },
-          since: { type: 'string' },
-          until: { type: 'string' },
         },
       },
     },
     handler: (args, db) =>
       hotspots(db, {
         type: 'function',
+        route: maybeString(args.route),
+        className: maybeString(args.class),
+        branch: maybeString(args.branch),
         since: maybeTime(args.since),
         until: maybeTime(args.until),
         limit: maybeNumber(args.limit) ?? 20,
@@ -186,131 +212,189 @@ const TOOLS: ToolImpl[] = [
 
   {
     spec: {
-      name: 'get_exceptions',
+      name: 'sql_hotspots',
       description:
-        'Recent exception rows with class, message, source location, and the appmap they were captured in.',
+        'SQL queries ranked by total elapsed time, deduplicated by text. Returns count / avg_ms / total_ms / sql_text per distinct query.',
       inputSchema: {
         type: 'object',
         properties: {
-          limit: { type: 'integer' },
-          offset: { type: 'integer' },
-          since: { type: 'string' },
-          until: { type: 'string' },
-        },
-      },
-    },
-    handler: (args, db) => {
-      const filter: FindFilter = {};
-      filter.since = maybeTime(args.since);
-      filter.until = maybeTime(args.until);
-      filter.limit = maybeNumber(args.limit) ?? 50;
-      filter.offset = maybeNumber(args.offset);
-      return find(db, 'exceptions', filter) as FindExceptionRow[];
-    },
-  },
-
-  {
-    spec: {
-      name: 'get_log_events',
-      description:
-        'Function calls labeled "log" — the application log output captured during recording, with parameter values.',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          appmap_id: { description: 'Optional — filter to one recording (id or name).' },
-          limit: { type: 'integer' },
-          since: { type: 'string' },
-          until: { type: 'string' },
-        },
-      },
-    },
-    handler: (args, db) => {
-      const filter: FindFilter = { label: 'log' };
-      if (args.appmap_id !== undefined && args.appmap_id !== null) {
-        filter.appmap = resolveByIdOrRef(db, args.appmap_id).name;
-      }
-      filter.since = maybeTime(args.since);
-      filter.until = maybeTime(args.until);
-      filter.limit = maybeNumber(args.limit) ?? 200;
-      return find(db, 'calls', filter) as FindCallRow[];
-    },
-  },
-
-  {
-    spec: {
-      name: 'get_labeled_events',
-      description:
-        'Function calls carrying an AppMap label. Common labels: log, security.authentication, security.authorization, dao, secret. Pass an exact label name.',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          label: { type: 'string' },
-          appmap_id: {},
-          limit: { type: 'integer' },
-        },
-        required: ['label'],
-      },
-    },
-    handler: (args, db) => {
-      const filter: FindFilter = { label: String(args.label) };
-      if (args.appmap_id !== undefined && args.appmap_id !== null) {
-        filter.appmap = resolveByIdOrRef(db, args.appmap_id).name;
-      }
-      filter.limit = maybeNumber(args.limit) ?? 200;
-      return find(db, 'calls', filter) as FindCallRow[];
-    },
-  },
-
-  {
-    spec: {
-      name: 'compare_branches',
-      description:
-        'Per-route p95 latency for two branches with a delta column. Use to surface performance regressions introduced on a feature branch.',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          branch_a: { type: 'string', description: 'Baseline branch.' },
-          branch_b: { type: 'string', description: 'Comparison branch.' },
+          route: { type: 'string' },
+          branch: { type: 'string' },
           since: { type: 'string' },
           until: { type: 'string' },
           limit: { type: 'integer' },
         },
-        required: ['branch_a', 'branch_b'],
       },
     },
     handler: (args, db) =>
-      compare(db, {
-        branch_a: String(args.branch_a),
-        branch_b: String(args.branch_b),
+      hotspots(db, {
+        type: 'sql',
+        route: maybeString(args.route),
+        branch: maybeString(args.branch),
         since: maybeTime(args.since),
         until: maybeTime(args.until),
-        limit: maybeNumber(args.limit),
+        limit: maybeNumber(args.limit) ?? 20,
       }),
+  },
+
+  // ----- row-level finders ----------------------------------------------
+
+  {
+    spec: {
+      name: 'find_recordings',
+      description:
+        'Recording-level rows matching filters. Each row is one .appmap.json file with its sample request, branch, and counts. Use to identify which recordings exercised a route, returned a particular status, or were taken on a branch.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          route: COMMON_FILTER_PROPERTIES.route,
+          status: COMMON_FILTER_PROPERTIES.status,
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          commit: COMMON_FILTER_PROPERTIES.commit,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          duration: COMMON_FILTER_PROPERTIES.duration,
+          appmap: COMMON_FILTER_PROPERTIES.appmap,
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
+        },
+      },
+    },
+    handler: (args, db) => find(db, 'appmaps', buildFindFilter(args)),
   },
 
   {
     spec: {
-      name: 'get_request_trace',
+      name: 'find_requests',
       description:
-        'Call tree for one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events. focus_type is one of: function (focus_value = code_object fqid), sql_query (focus_value = SQL substring), http_server_request (focus_value = normalized_path), http_client_request (focus_value = URL substring).',
+        'Individual HTTP request rows with status, elapsed time, and the recording each came from. Filter by route, status, duration, branch, time window.',
       inputSchema: {
         type: 'object',
         properties: {
-          appmap_id: { description: 'Recording id or name.' },
+          route: COMMON_FILTER_PROPERTIES.route,
+          status: COMMON_FILTER_PROPERTIES.status,
+          duration: COMMON_FILTER_PROPERTIES.duration,
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          commit: COMMON_FILTER_PROPERTIES.commit,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          appmap: COMMON_FILTER_PROPERTIES.appmap,
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
+        },
+      },
+    },
+    handler: (args, db) =>
+      find(db, 'requests', buildFindFilter(args)) as FindRequestRow[],
+  },
+
+  {
+    spec: {
+      name: 'find_queries',
+      description:
+        'SQL query rows. Filter by table (matches sql_text substring), caller class/method, duration, route, branch. Use duration:">100ms" to find slow queries; use route to scope to a specific request.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          table: { type: 'string', description: 'SQL table name (matches sql_text substring).' },
+          class: { type: 'string', description: 'Caller class identifier.' },
+          method: { type: 'string', description: 'Caller method name.' },
+          duration: COMMON_FILTER_PROPERTIES.duration,
+          route: COMMON_FILTER_PROPERTIES.route,
+          status: COMMON_FILTER_PROPERTIES.status,
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          commit: COMMON_FILTER_PROPERTIES.commit,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          appmap: COMMON_FILTER_PROPERTIES.appmap,
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
+        },
+      },
+    },
+    handler: (args, db) => find(db, 'queries', buildFindFilter(args)) as FindQueryRow[],
+  },
+
+  {
+    spec: {
+      name: 'find_calls',
+      description:
+        'Function-call rows. Filter by class, method, label (e.g. "log", "security.authorization"), duration. Use --label=log to retrieve application log output, or --label=security.authorization to find authorization checks.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          class: {
+            type: 'string',
+            description: 'Class identifier; accepts short ("UserRepository") or canonical fqid form ("app/services/UserRepository") or with method ("UserRepository#findById").',
+          },
+          method: { type: 'string' },
+          label: { type: 'string', description: 'AppMap label name (exact match).' },
+          duration: COMMON_FILTER_PROPERTIES.duration,
+          route: COMMON_FILTER_PROPERTIES.route,
+          status: COMMON_FILTER_PROPERTIES.status,
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          commit: COMMON_FILTER_PROPERTIES.commit,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          appmap: COMMON_FILTER_PROPERTIES.appmap,
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
+        },
+      },
+    },
+    handler: (args, db) => find(db, 'calls', buildFindFilter(args)) as FindCallRow[],
+  },
+
+  {
+    spec: {
+      name: 'find_exceptions',
+      description:
+        'Exception rows with class, message, source location. Filter by exception class name, the request that owns the exception (via route/status), branch, or time window.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          exception: { type: 'string', description: 'Exception class name (exact match).' },
+          route: COMMON_FILTER_PROPERTIES.route,
+          status: COMMON_FILTER_PROPERTIES.status,
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          commit: COMMON_FILTER_PROPERTIES.commit,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          appmap: COMMON_FILTER_PROPERTIES.appmap,
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
+        },
+      },
+    },
+    handler: (args, db) =>
+      find(db, 'exceptions', buildFindFilter(args)) as FindExceptionRow[],
+  },
+
+  // ----- per-recording / cross-recording --------------------------------
+
+  {
+    spec: {
+      name: 'get_call_tree',
+      description:
+        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          appmap: { type: 'string', description: 'Recording id (numeric) or name.' },
           focus_type: {
             type: 'string',
             enum: ['function', 'sql_query', 'http_server_request', 'http_client_request'],
           },
           focus_value: { type: 'string' },
-          parent_depth: { type: 'integer', description: 'Ancestor levels to keep (default 5).' },
-          child_depth: { type: 'integer', description: 'Descendant levels to keep (default 3).' },
+          parent_depth: { type: 'integer', description: 'Ancestor levels (default 5).' },
+          child_depth: { type: 'integer', description: 'Descendant levels (default 3).' },
           min_elapsed_ms: { type: 'number' },
         },
-        required: ['appmap_id'],
+        required: ['appmap'],
       },
     },
     handler: (args, db) => {
-      const am = resolveByIdOrRef(db, args.appmap_id);
+      const am = resolveByIdOrRef(db, args.appmap);
       const opts: TreeOptions = {};
       const focusType = maybeString(args.focus_type);
       const focusValue = maybeString(args.focus_value);
@@ -329,32 +413,27 @@ const TOOLS: ToolImpl[] = [
 
   {
     spec: {
-      name: 'get_related',
+      name: 'find_related',
       description:
-        'Recordings ranked by similarity to a source recording. Score combines: same HTTP route (×5), shared SQL tables (×3 each), shared classes (×2 each). Primary use: find passing baselines for a failing recording with --status filter.',
+        'Recordings ranked by similarity to a source recording. Score combines: same HTTP route (×5), shared SQL tables (×3 each), shared classes (×2 each). Primary use: pass a failing recording with status:succeeded to find a passing baseline for side-by-side comparison.',
       inputSchema: {
         type: 'object',
         properties: {
-          appmap_id: { description: 'Source recording (id or name).' },
-          status: { type: 'string', description: 'e.g. "200", ">=500".' },
-          route: { type: 'string' },
-          branch: { type: 'string' },
-          since: { type: 'string' },
-          until: { type: 'string' },
-          limit: { type: 'integer' },
+          appmap: { type: 'string', description: 'Source recording (id or name).' },
+          status: COMMON_FILTER_PROPERTIES.status,
+          route: COMMON_FILTER_PROPERTIES.route,
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          limit: COMMON_FILTER_PROPERTIES.limit,
         },
-        required: ['appmap_id'],
+        required: ['appmap'],
       },
     },
     handler: (args, db) => {
-      const am = resolveByIdOrRef(db, args.appmap_id);
+      const am = resolveByIdOrRef(db, args.appmap);
       const filter: RelatedFilter = {};
-      if (args.status !== undefined && args.status !== null) {
-        // parseStatus is in lib/parseFilter; import lazily to avoid a cycle
-        // (mcp.ts → queries/related → lib/scope → lib/parseFilter is fine).
-        const { parseStatus } = require('../lib/parseFilter');
-        filter.status = parseStatus(String(args.status));
-      }
+      if (typeof args.status === 'string') filter.status = parseStatus(args.status);
       filter.route = maybeString(args.route);
       filter.branch = maybeString(args.branch);
       filter.since = maybeTime(args.since);
@@ -362,6 +441,35 @@ const TOOLS: ToolImpl[] = [
       filter.limit = maybeNumber(args.limit);
       return related(db, am.name, filter);
     },
+  },
+
+  {
+    spec: {
+      name: 'compare_branches',
+      description:
+        'Per-route p95 latency for two branches with a delta column. Use to surface regressions a feature branch introduces relative to a baseline.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          branch_a: { type: 'string', description: 'Baseline branch.' },
+          branch_b: { type: 'string', description: 'Comparison branch.' },
+          since: { type: 'string' },
+          until: { type: 'string' },
+          sort: { type: 'string', enum: ['delta', 'p95-a', 'p95-b'] },
+          limit: { type: 'integer' },
+        },
+        required: ['branch_a', 'branch_b'],
+      },
+    },
+    handler: (args, db) =>
+      compare(db, {
+        branch_a: String(args.branch_a),
+        branch_b: String(args.branch_b),
+        since: maybeTime(args.since),
+        until: maybeTime(args.until),
+        sort: maybeCompareSort(args.sort),
+        limit: maybeNumber(args.limit),
+      }),
   },
 ];
 
@@ -386,8 +494,6 @@ export interface McpHandler {
   (msg: JsonRpcRequest): JsonRpcResponse | null;
 }
 
-// Build a JSON-RPC dispatcher backed by the given DB. Returns null for
-// notifications (no response expected).
 export function buildMcpHandler(db: sqlite3.Database): McpHandler {
   return (msg: JsonRpcRequest): JsonRpcResponse | null => {
     const id = (msg.id ?? null) as string | number | null;
@@ -431,7 +537,8 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
           },
         };
       } catch (e) {
-        return errorResponse(id, -32000, (e as Error).message);
+        const code = e instanceof ParameterValidationError ? -32602 : -32000;
+        return errorResponse(id, code, (e as Error).message);
       }
     }
 
@@ -479,8 +586,6 @@ function errorResponse(
   return { jsonrpc: '2.0', id, error: { code, message } };
 }
 
-// Exposed for the demo / docs; keeps the tool list discoverable without
-// going through the protocol.
 export function listTools(): readonly ToolSpec[] {
   return TOOLS.map((t) => t.spec);
 }

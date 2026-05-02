@@ -88,15 +88,17 @@ describe('MCP handler', () => {
       const names = ((r!.result as any).tools as Array<{ name: string }>).map((t) => t.name);
       expect(names).toEqual(
         expect.arrayContaining([
-          'get_endpoint_detail',
-          'get_slow_queries',
-          'get_function_hotspots',
-          'get_exceptions',
-          'get_log_events',
-          'get_labeled_events',
+          'list_endpoints',
+          'function_hotspots',
+          'sql_hotspots',
+          'find_recordings',
+          'find_requests',
+          'find_queries',
+          'find_calls',
+          'find_exceptions',
+          'get_call_tree',
+          'find_related',
           'compare_branches',
-          'get_request_trace',
-          'get_related',
         ])
       );
     } finally {
@@ -140,6 +142,26 @@ describe('MCP handler', () => {
     }
   });
 
+  it('tools/call with missing arguments object → -32602 invalid params', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 6,
+        method: 'tools/call',
+        params: {
+          name: 'compare_branches',
+          arguments: {
+            sort: 'invalid_sort_value', // invalid value for an enum-typed argument
+          },
+        },
+      });
+      expect(r!.error?.code).toBe(-32602);
+    } finally {
+      db.close();
+    }
+  });
+
   it('tools/call wraps the result as a content block of type=text', () => {
     const db = freshDb();
     try {
@@ -148,7 +170,7 @@ describe('MCP handler', () => {
         jsonrpc: '2.0',
         id: 6,
         method: 'tools/call',
-        params: { name: 'get_exceptions', arguments: { limit: 10 } },
+        params: { name: 'find_exceptions', arguments: { limit: 10 } },
       });
       const content = (r!.result as any).content;
       expect(Array.isArray(content)).toBe(true);
@@ -161,7 +183,7 @@ describe('MCP handler', () => {
     }
   });
 
-  it('get_request_trace resolves appmap_id (numeric or name) and applies focus_type', () => {
+  it('get_call_tree resolves appmap (numeric id or name) and applies focus_type', () => {
     const db = freshDb();
     try {
       seedMinimal(db);
@@ -173,8 +195,8 @@ describe('MCP handler', () => {
         id: 7,
         method: 'tools/call',
         params: {
-          name: 'get_request_trace',
-          arguments: { appmap_id: 1, focus_type: 'sql_query', focus_value: 'INSERT INTO orders' },
+          name: 'get_call_tree',
+          arguments: { appmap: 1, focus_type: 'sql_query', focus_value: 'INSERT INTO orders' },
         },
       });
       const idRows = JSON.parse((byId!.result as any).content[0].text);
@@ -187,8 +209,8 @@ describe('MCP handler', () => {
         id: 8,
         method: 'tools/call',
         params: {
-          name: 'get_request_trace',
-          arguments: { appmap_id: 'rec' },
+          name: 'get_call_tree',
+          arguments: { appmap: 'rec' },
         },
       });
       const nameRows = JSON.parse((byName!.result as any).content[0].text);
@@ -198,7 +220,7 @@ describe('MCP handler', () => {
     }
   });
 
-  it('get_log_events filters function_calls by the log label', () => {
+  it('find_calls --label filters by the AppMap label', () => {
     const db = freshDb();
     try {
       seedMinimal(db);
@@ -206,11 +228,46 @@ describe('MCP handler', () => {
         jsonrpc: '2.0',
         id: 9,
         method: 'tools/call',
-        params: { name: 'get_log_events', arguments: {} },
+        params: { name: 'find_calls', arguments: { label: 'log' } },
       });
       const rows = JSON.parse((r!.result as any).content[0].text);
       expect(rows).toHaveLength(1);
       expect(rows[0].method_id).toBe('error');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('list_endpoints / function_hotspots / sql_hotspots produce expected rows', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      const handler = buildMcpHandler(db);
+
+      const ep = call(handler, {
+        jsonrpc: '2.0',
+        id: 11,
+        method: 'tools/call',
+        params: { name: 'list_endpoints', arguments: {} },
+      });
+      const epRows = JSON.parse((ep!.result as any).content[0].text);
+      expect(epRows[0].route).toBe('/orders');
+
+      const fh = call(handler, {
+        jsonrpc: '2.0',
+        id: 12,
+        method: 'tools/call',
+        params: { name: 'function_hotspots', arguments: { limit: 5 } },
+      });
+      expect(JSON.parse((fh!.result as any).content[0].text).length).toBeGreaterThan(0);
+
+      const sh = call(handler, {
+        jsonrpc: '2.0',
+        id: 13,
+        method: 'tools/call',
+        params: { name: 'sql_hotspots', arguments: { limit: 5 } },
+      });
+      expect(JSON.parse((sh!.result as any).content[0].text).length).toBeGreaterThan(0);
     } finally {
       db.close();
     }
