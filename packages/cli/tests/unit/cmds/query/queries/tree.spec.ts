@@ -190,6 +190,33 @@ describe('tree', () => {
   });
 });
 
+describe('tree --filter', () => {
+  it('returns only http events when filter=http', () => {
+    const db = freshDb();
+    try {
+      seed(db, { addOutbound: true });
+      const nodes = tree(db, 'orders_create_42').filter(
+        (n) => n.kind === 'http_server' || n.kind === 'http_client'
+      );
+      expect(nodes.map((n) => n.kind).sort()).toEqual(['http_client', 'http_server']);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('returns only sql events when filter=sql', () => {
+    const db = freshDb();
+    try {
+      seed(db);
+      const nodes = tree(db, 'orders_create_42').filter((n) => n.kind === 'sql');
+      expect(nodes).toHaveLength(1);
+      expect(nodes[0].kind).toBe('sql');
+    } finally {
+      db.close();
+    }
+  });
+});
+
 describe('treeSummary', () => {
   it('counts SQL, surfaces entry/exception, and tallies labels', () => {
     const db = freshDb();

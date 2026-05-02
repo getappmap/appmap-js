@@ -46,7 +46,11 @@ export function importFunctionCalls(
     const evPath = ev.path;
     const evLineno = ev.lineno;
     if (evPath != null && evLineno != null) {
-      coId = codeObjectLookup.get(`${evPath}:${evLineno}`) ?? null;
+      // Lookup key matches the importer's: "<path>:<lineno>|<method_id>".
+      // The method component disambiguates classMap entries that share
+      // a path:lineno, so two events at the same source location bind to
+      // their own code_object rather than colliding.
+      coId = codeObjectLookup.get(`${evPath}:${evLineno}|${ev.method_id}`) ?? null;
     }
 
     let paramsJson: string | null = null;

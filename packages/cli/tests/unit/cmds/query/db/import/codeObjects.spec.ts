@@ -56,7 +56,7 @@ describe('importCodeObjects', () => {
       expect(row.leaf_class).toBe('User');
       expect(row.method).toBe('save');
       expect(row.is_static).toBe(0);
-      expect(lookup.get('app/models/user.rb:10')).toBe(1);
+      expect(lookup.get('app/models/user.rb:10|save')).toBe(1);
     } finally {
       db.close();
     }
@@ -283,6 +283,45 @@ describe('importCodeObjects', () => {
       importCodeObjects(db, tree);
       const fqid = (db.prepare('SELECT fqid FROM code_objects').get() as any).fqid;
       expect(fqid).toBe('lib/Outer::Inner.parse');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('disambiguates two functions sharing the same path:lineno by method name', () => {
+    const db = freshDb();
+    try {
+      // Spring Data proxy-style: two distinct methods at the same
+      // synthetic source location.
+      const tree: ClassMapNode[] = [
+        {
+          type: 'package',
+          name: 'org/example',
+          children: [
+            {
+              type: 'class',
+              name: 'OwnerRepository',
+              children: [
+                { type: 'function', name: 'findById', location: 'Proxy.java:0' },
+                { type: 'function', name: 'findPetTypes', location: 'Proxy.java:0' },
+              ],
+            },
+          ],
+        },
+      ];
+      const lookup = importCodeObjects(db, tree);
+
+      // Both code_objects exist...
+      expect(
+        (db.prepare('SELECT COUNT(*) AS n FROM code_objects').get() as any).n
+      ).toBe(2);
+
+      // ...and the lookup keys disambiguate them by method.
+      const findByIdId = lookup.get('Proxy.java:0|findById');
+      const findPetTypesId = lookup.get('Proxy.java:0|findPetTypes');
+      expect(findByIdId).toBeDefined();
+      expect(findPetTypesId).toBeDefined();
+      expect(findByIdId).not.toBe(findPetTypesId);
     } finally {
       db.close();
     }

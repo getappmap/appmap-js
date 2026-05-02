@@ -251,6 +251,38 @@ describe('sqlHotspots', () => {
     }
   });
 
+  it('--since / --until scope to recordings within the time range', () => {
+    const db = freshDb();
+    try {
+      const oldId = (db
+        .prepare(
+          `INSERT INTO appmaps (name, source_path, timestamp) VALUES ('old', '/o', '2026-04-01T00:00:00.000Z')`
+        )
+        .run().lastInsertRowid as number);
+      const newId = (db
+        .prepare(
+          `INSERT INTO appmaps (name, source_path, timestamp) VALUES ('new', '/n', '2026-04-30T00:00:00.000Z')`
+        )
+        .run().lastInsertRowid as number);
+      db.prepare(
+        `INSERT INTO sql_queries (appmap_id, event_id, sql_text, elapsed_ms) VALUES (?, 1, 'SELECT a', 1)`
+      ).run(oldId);
+      db.prepare(
+        `INSERT INTO sql_queries (appmap_id, event_id, sql_text, elapsed_ms) VALUES (?, 1, 'SELECT b', 2)`
+      ).run(newId);
+
+      const since = sqlHotspots(db, { since: '2026-04-15T00:00:00.000Z' });
+      expect(since).toHaveLength(1);
+      expect(since[0].sql_text).toBe('SELECT b');
+
+      const until = sqlHotspots(db, { until: '2026-04-15T00:00:00.000Z' });
+      expect(until).toHaveLength(1);
+      expect(until[0].sql_text).toBe('SELECT a');
+    } finally {
+      db.close();
+    }
+  });
+
   it('--branch filter applies', () => {
     const db = freshDb();
     try {

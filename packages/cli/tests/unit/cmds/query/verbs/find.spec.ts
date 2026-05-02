@@ -1,4 +1,4 @@
-import { validateFlags } from '../../../../../src/cmds/query/verbs/find';
+import { buildFindFilter, validateFlags } from '../../../../../src/cmds/query/verbs/find';
 
 describe('find verb flag validation', () => {
   it('accepts the universal flags on every type', () => {
@@ -71,5 +71,38 @@ describe('find verb flag validation', () => {
     expect(() =>
       validateFlags('appmaps', { class: undefined, table: null })
     ).not.toThrow();
+  });
+});
+
+describe('buildFindFilter', () => {
+  it('splits Class#method off of --class so the method composes via filter.method', () => {
+    const { filter } = buildFindFilter({
+      type: 'queries',
+      class: 'org.example.UserRepo#findById',
+    });
+    expect(filter.className).toBe('org.example.UserRepo#findById');
+    expect(filter.method).toBe('findById');
+  });
+
+  it('explicit --method wins over a method embedded in --class', () => {
+    const { filter } = buildFindFilter({
+      type: 'calls',
+      class: 'X#fromClass',
+      method: 'fromMethod',
+    });
+    expect(filter.method).toBe('fromMethod');
+  });
+
+  it('--class without # leaves filter.method undefined', () => {
+    const { filter } = buildFindFilter({
+      type: 'calls',
+      class: 'OpenSSL::Cipher',
+    });
+    expect(filter.className).toBe('OpenSSL::Cipher');
+    expect(filter.method).toBeUndefined();
+  });
+
+  it('returns the parsed type', () => {
+    expect(buildFindFilter({ type: 'appmaps' }).type).toBe('appmaps');
   });
 });

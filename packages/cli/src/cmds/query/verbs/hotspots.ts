@@ -28,8 +28,11 @@ export const builder = <T>(args: yargs.Argv<T>) => {
       choices: ['function', 'sql'] as const,
       default: 'function',
     })
-    .option('route', { type: 'string', describe: 'e.g. "GET /reports"' })
-    .option('class', { type: 'string', describe: 'defined_class (function mode)' })
+    .option('route', {
+      type: 'string',
+      describe: 'e.g. "GET /reports" (path is exact match; method case-insensitive)',
+    })
+    .option('class', { type: 'string', describe: 'class filter (function mode only)' })
     .option('branch', { type: 'string' })
     .option('since', { type: 'string' })
     .option('until', { type: 'string' })
@@ -39,15 +42,35 @@ export const builder = <T>(args: yargs.Argv<T>) => {
 
 type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 
+// Per-type flag rejection list. Same shape as find's: a small allow-list
+// surfaces user mistakes (e.g. --class on --type=sql) instead of silently
+// dropping them, and pre-empts future filter additions that only one
+// type can honor.
+const REJECTED_FLAGS: Record<HotspotType, readonly string[]> = {
+  function: [],
+  sql: ['class'],
+};
+
+// Exported for tests.
+export function validateFlags(type: HotspotType, flags: Record<string, unknown>): void {
+  const used: string[] = [];
+  for (const flag of REJECTED_FLAGS[type]) {
+    if (flags[flag] != null) used.push(`--${flag}`);
+  }
+  if (used.length === 0) return;
+  const verb = used.length === 1 ? 'is' : 'are';
+  throw new Error(
+    `hotspots --type=${type}: ${used.join(', ')} ${verb} not supported for this type`
+  );
+}
+
 export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
   const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
 
   const type = argv.type as HotspotType;
-  if (type === 'sql' && argv.class) {
-    throw new Error('hotspots --type=sql does not accept --class (only function-mode supports class filtering)');
-  }
+  validateFlags(type, argv as Record<string, unknown>);
 
   const filter: HotspotsFilter = { type };
   if (argv.route) filter.route = argv.route;

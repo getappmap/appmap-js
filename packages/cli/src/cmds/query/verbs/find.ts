@@ -6,6 +6,7 @@ import { locateAppMapDir } from '../../../lib/locateAppMapDir';
 import { verbose } from '../../../utils';
 import { openReadOnly } from '../lib/openReadOnly';
 import { parseDuration, parseStatus, parseTime } from '../lib/parseFilter';
+import { parseClassRef } from '../lib/scope';
 import {
   find,
   FindFilter,
@@ -29,7 +30,11 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     .option('directory', { type: 'string', alias: 'd' })
     .option('appmap-dir', { type: 'string' })
     .option('query-db', { type: 'string', describe: 'path to query.db (overrides default)' })
-    .option('route', { type: 'string', describe: 'e.g. "POST /orders" or "/orders"' })
+    .option('route', {
+      type: 'string',
+      describe:
+        'e.g. "POST /orders" or "/orders" (path is exact match; method case-insensitive)',
+    })
     .option('class', { type: 'string', describe: 'defined_class or fqid Class part' })
     .option('method', { type: 'string', describe: 'method_id (not HTTP method)' })
     .option('label', { type: 'string' })
@@ -90,30 +95,57 @@ export function validateFlags(type: FindType, flags: Record<string, unknown>): v
   throw new Error(message);
 }
 
+// Build a FindFilter from a yargs argv. Exported for testing — also makes
+// the verb-layer transformations (e.g. splitting Class#method off of
+// --class so the method composes via filter.method) directly assertable.
+export interface ParsedFind {
+  type: FindType;
+  filter: FindFilter;
+}
+
+export function buildFindFilter(argv: Record<string, unknown>): ParsedFind {
+  const type = argv.type as FindType;
+  validateFlags(type, argv);
+
+  const filter: FindFilter = {};
+  if (typeof argv.route === 'string') filter.route = argv.route;
+  if (typeof argv.label === 'string') filter.label = argv.label;
+  if (typeof argv.branch === 'string') filter.branch = argv.branch;
+  if (typeof argv.commit === 'string') filter.commit = argv.commit;
+  if (typeof argv.status === 'string') filter.status = parseStatus(argv.status);
+  if (typeof argv.duration === 'string') filter.duration = parseDuration(argv.duration);
+  if (typeof argv.since === 'string') filter.since = parseTime(argv.since);
+  if (typeof argv.until === 'string') filter.until = parseTime(argv.until);
+  if (typeof argv.appmap === 'string') filter.appmap = argv.appmap;
+  if (typeof argv.table === 'string') filter.table = argv.table;
+  if (typeof argv.exception === 'string') filter.exception = argv.exception;
+  if (typeof argv.limit === 'number') filter.limit = argv.limit;
+  if (typeof argv.offset === 'number') filter.offset = argv.offset;
+
+  // The documented --class form is "[pkg/]Class[#method]". Split the
+  // method off here so it composes through filter.method even when the
+  // user only supplied --class. Internal helpers (classFilterClauses /
+  // sqlCallerClassClauses) also re-parse, but doing it at the verb gives
+  // us a uniform contract: filter.className is "[pkg/]Class" only;
+  // method, if any, lives on filter.method (and an explicit --method
+  // wins over a method embedded in --class).
+  let methodFilter = typeof argv.method === 'string' ? argv.method : undefined;
+  if (typeof argv.class === 'string') {
+    const parsed = parseClassRef(argv.class);
+    if (parsed.method && !methodFilter) methodFilter = parsed.method;
+    filter.className = argv.class;
+  }
+  if (methodFilter) filter.method = methodFilter;
+
+  return { type, filter };
+}
+
 export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
   const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
 
-  const type = argv.type as FindType;
-  validateFlags(type, argv);
-
-  const filter: FindFilter = {};
-  if (argv.route) filter.route = argv.route;
-  if (argv.class) filter.className = argv.class;
-  if (argv.method) filter.method = argv.method;
-  if (argv.label) filter.label = argv.label;
-  if (argv.branch) filter.branch = argv.branch;
-  if (argv.commit) filter.commit = argv.commit;
-  if (argv.status) filter.status = parseStatus(argv.status);
-  if (argv.duration) filter.duration = parseDuration(argv.duration);
-  if (argv.since) filter.since = parseTime(argv.since);
-  if (argv.until) filter.until = parseTime(argv.until);
-  if (argv.appmap) filter.appmap = argv.appmap;
-  if (argv.table) filter.table = argv.table;
-  if (argv.exception) filter.exception = argv.exception;
-  if (argv.limit !== undefined) filter.limit = argv.limit;
-  if (argv.offset !== undefined) filter.offset = argv.offset;
+  const { type, filter } = buildFindFilter(argv as Record<string, unknown>);
 
   const db = openReadOnly(appmapDir, argv.queryDb);
   try {

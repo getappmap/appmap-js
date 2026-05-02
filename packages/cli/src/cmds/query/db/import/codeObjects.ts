@@ -15,8 +15,10 @@ export interface ClassMapNode {
 }
 
 // Walk the classMap tree, insert one code_objects row per function node,
-// insert its labels, and return a map of classMap location → code_object_id
-// (used by function_calls to link events to code objects via path:lineno).
+// insert its labels, and return a map of "{location}|{method}" →
+// code_object_id. The method component disambiguates classMap entries
+// that share a path:lineno (e.g. Spring Data proxy methods), preventing
+// the function_calls linker from binding events to the wrong code_object.
 //
 // Each function is decomposed into:
 //   - package : slash-joined package path  (e.g. "app/services/idempotency")
@@ -92,7 +94,10 @@ export function importCodeObjects(
         isStatic ? 1 : 0
       );
       const row = selectCodeObjectId.get(fqid) as { id: number };
-      lookup.set(location, row.id);
+      // Key includes the method name so multiple functions sharing a
+      // path:lineno (e.g. Spring Data proxy methods) each map to their
+      // own code_object instead of clobbering one another.
+      lookup.set(`${location}|${methodName}`, row.id);
 
       const labels = node.labels ?? [];
       for (const label of labels) insertLabel.run(row.id, label);
