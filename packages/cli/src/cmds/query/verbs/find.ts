@@ -20,13 +20,20 @@ import {
 import { formatMs, formatTable } from '../lib/format';
 
 const TYPES: readonly FindType[] = ['appmaps', 'requests', 'queries', 'calls', 'exceptions'];
+// 'recordings' is accepted as an alias for 'appmaps' to match the MCP
+// naming (find_recordings) and the user-facing concept of a "recording".
+const TYPE_CHOICES: readonly string[] = ['appmaps', 'recordings', ...TYPES.filter((t) => t !== 'appmaps')];
+
+function normalizeType(input: string): FindType {
+  return (input === 'recordings' ? 'appmaps' : input) as FindType;
+}
 
 export const command = 'find <type>';
 export const describe = 'Row-level search across recordings';
 
 export const builder = <T>(args: yargs.Argv<T>) => {
   return args
-    .positional('type', { type: 'string', choices: TYPES })
+    .positional('type', { type: 'string', choices: TYPE_CHOICES })
     .option('directory', { type: 'string', alias: 'd' })
     .option('appmap-dir', { type: 'string' })
     .option('query-db', { type: 'string', describe: 'path to query.db (overrides default)' })
@@ -104,7 +111,7 @@ export interface ParsedFind {
 }
 
 export function buildFindFilter(argv: Record<string, unknown>): ParsedFind {
-  const type = argv.type as FindType;
+  const type = normalizeType(argv.type as string);
   validateFlags(type, argv);
 
   const filter: FindFilter = {};

@@ -152,7 +152,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'list_endpoints',
       description:
-        'Per-route summary table. Returns count, average latency, p95, and error-rate columns for each (method, normalized_path). The first thing to call when orienting against an unfamiliar query database.',
+        'Per-route summary table; the first call when orienting against an unfamiliar query database. Returns: method, route, count, avg_ms, p95_ms, err_pct.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -185,7 +185,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'function_hotspots',
       description:
-        'Functions ranked by total elapsed time across recordings. Returns calls / total_ms / self_ms per function. Filter by route to scope to a specific entry point or by class to focus on one component.',
+        'Functions ranked by total elapsed time across recordings. Filter by route to scope to a specific entry point or by class to focus on one component. Returns: fqid, defined_class, method_id, calls, total_ms, self_ms. fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static), "src/cmds/query/db/openQueryDb.openQueryDb" (module-level), "app/Outer::Inner#method" (nested classes).',
       inputSchema: {
         type: 'object',
         properties: {
@@ -214,7 +214,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'sql_hotspots',
       description:
-        'SQL queries ranked by total elapsed time, deduplicated by text. Returns count / avg_ms / total_ms / sql_text per distinct query.',
+        'SQL queries ranked by total elapsed time, deduplicated by text. Returns: count, avg_ms, total_ms, sql_text.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -243,7 +243,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_recordings',
       description:
-        'Recording-level rows matching filters. Each row is one .appmap.json file with its sample request, branch, and counts. Use to identify which recordings exercised a route, returned a particular status, or were taken on a branch.',
+        'Recording-level rows matching filters. Each row is one .appmap.json file with its sample request, branch, and counts. Use to identify which recordings exercised a route, returned a particular status, or were taken on a branch. Returns: appmap_id, appmap_name, route, status_code, elapsed_ms, sql_count, branch, timestamp. Pass appmap_id (numeric) or appmap_name to get_call_tree / find_related.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -267,7 +267,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_requests',
       description:
-        'Individual HTTP request rows with status, elapsed time, and the recording each came from. Filter by route, status, duration, branch, time window.',
+        'Individual HTTP request rows with status, elapsed time, and the recording each came from. Filter by route, status, duration, branch, time window. Returns: appmap_name, event_id, method, route, status_code, elapsed_ms, branch.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -292,7 +292,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_queries',
       description:
-        'SQL query rows. Filter by table (matches sql_text substring), caller class/method, duration, route, branch. Use duration:">100ms" to find slow queries; use route to scope to a specific request.',
+        'SQL query rows. Filter by table (matches sql_text substring), caller class/method, duration, route, branch. Use duration:">100ms" to find slow queries; use route to scope to a specific request. Returns: appmap_name, event_id, sql_text, elapsed_ms, caller_class, caller_method.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -319,7 +319,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_calls',
       description:
-        'Function-call rows. Filter by class, method, label (e.g. "log", "security.authorization"), duration. Use --label=log to retrieve application log output, or --label=security.authorization to find authorization checks.',
+        'Function-call rows. Filter by class, method, label (e.g. "log", "security.authorization"), duration. Use --label=log to retrieve application log output, or --label=security.authorization to find authorization checks. Returns: appmap_name, event_id, fqid, defined_class, method_id, elapsed_ms, parameters_json, return_value.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -349,7 +349,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_exceptions',
       description:
-        'Exception rows with class, message, source location. Filter by exception class name, the request that owns the exception (via route/status), branch, or time window.',
+        'Exception rows with class, message, source location. Filter by exception class name, the request that owns the exception (via route/status), branch, or time window. Returns: appmap_name, event_id, exception_class, message, path, lineno.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -376,7 +376,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'get_call_tree',
       description:
-        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves.',
+        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves. The appmap argument accepts a numeric appmap_id or an appmap_name (both surfaced by find_recordings). Returns ordered nodes: each has depth, kind ∈ {function, sql, http_server, http_client, exception}, event_id, parent_event_id, elapsed_ms, plus kind-specific fields (function: fqid/defined_class/method_id; sql: sql_text; http_server: method/route/status_code; http_client: method/url/status_code; exception: exception_class/message). fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static).',
       inputSchema: {
         type: 'object',
         properties: {
@@ -415,7 +415,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_related',
       description:
-        'Recordings ranked by similarity to a source recording. Score combines: same HTTP route (×5), shared SQL tables (×3 each), shared classes (×2 each). Primary use: pass a failing recording with status:succeeded to find a passing baseline for side-by-side comparison.',
+        'Recordings ranked by similarity to a source recording. Score combines: same HTTP route (×5), shared SQL tables (×3 each), shared classes (×2 each). Primary use: pass a failing recording with status:succeeded to find a passing baseline for side-by-side comparison. Returns: appmap_name, score, method, route, status_code, elapsed_ms, shared (string array of contributing signals).',
       inputSchema: {
         type: 'object',
         properties: {
@@ -447,7 +447,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'compare_branches',
       description:
-        'Per-route p95 latency for two branches with a delta column. Use to surface regressions a feature branch introduces relative to a baseline.',
+        'Per-route p95 latency for two branches with a delta column. Use to surface regressions a feature branch introduces relative to a baseline. Returns: method, route, a_count, a_p95_ms, b_count, b_p95_ms, delta (b_p95/a_p95; null when either side has no measured durations).',
       inputSchema: {
         type: 'object',
         properties: {

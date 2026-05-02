@@ -33,6 +33,7 @@ export interface FindFilter {
 }
 
 export interface FindAppmapRow {
+  appmap_id: number;
   appmap_name: string;
   route: string | null;
   status_code: number | null;
@@ -140,7 +141,8 @@ export function findAppmaps(db: sqlite3.Database, filter: FindFilter): FindAppma
   if (filter.duration) params.push(filter.duration.value);
 
   let sql = `
-    SELECT a.name                                     AS appmap_name,
+    SELECT a.id                                       AS appmap_id,
+           a.name                                     AS appmap_name,
            COALESCE(h.normalized_path, h.path)        AS route,
            h.status_code                              AS status_code,
            COALESCE(h.elapsed_ms, a.elapsed_ms)       AS elapsed_ms,
