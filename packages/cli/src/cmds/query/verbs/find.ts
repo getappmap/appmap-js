@@ -226,7 +226,7 @@ function renderTable(type: FindType, rows: unknown[]): string {
 function formatParams(json: string | null): string {
   if (!json) return '';
   try {
-    const parsed = JSON.parse(json) as Array<{ name?: string; value?: unknown }>;
+    const parsed = JSON.parse(json) as { name?: string; value?: unknown }[];
     return parsed
       .map((p) => `${p.name ?? '?'}=${typeof p.value === 'string' ? p.value : JSON.stringify(p.value)}`)
       .join(', ');

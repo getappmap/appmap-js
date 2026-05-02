@@ -212,7 +212,7 @@ describe('classFilterClauses', () => {
 
       const c = classFilterClauses('Cipher', 'fc');
       const sql = `SELECT fc.event_id FROM function_calls fc WHERE ${c.where.join(' AND ')} ORDER BY fc.event_id`;
-      const eids = (db.prepare(sql).all(...c.params) as Array<{ event_id: number }>).map((r) => r.event_id);
+      const eids = (db.prepare(sql).all(...c.params) as { event_id: number }[]).map((r) => r.event_id);
       // Both co1 (nested) and co2 (top-level) should match; co3 should not.
       expect(eids).toEqual([1, 2]);
     } finally {
@@ -243,7 +243,7 @@ describe('classFilterClauses', () => {
 
       const c = classFilterClauses('org/example/UserRepository#findById', 'fc');
       const sql = `SELECT fc.event_id FROM function_calls fc WHERE ${c.where.join(' AND ')}`;
-      const eids = (db.prepare(sql).all(...c.params) as Array<{ event_id: number }>).map((r) => r.event_id);
+      const eids = (db.prepare(sql).all(...c.params) as { event_id: number }[]).map((r) => r.event_id);
       expect(eids).toEqual([1]);
     } finally {
       db.close();
@@ -260,7 +260,7 @@ describe('classFilterClauses', () => {
 
       const c = classFilterClauses('Cipher', 'fc');
       const sql = `SELECT fc.event_id FROM function_calls fc WHERE ${c.where.join(' AND ')}`;
-      const eids = (db.prepare(sql).all(...c.params) as Array<{ event_id: number }>).map((r) => r.event_id);
+      const eids = (db.prepare(sql).all(...c.params) as { event_id: number }[]).map((r) => r.event_id);
       expect(eids).toEqual([1]);
     } finally {
       db.close();
@@ -276,7 +276,7 @@ describe('classFilterClauses', () => {
 
       const c = classFilterClauses('org.example.Foo', 'fc');
       const sql = `SELECT fc.event_id FROM function_calls fc WHERE ${c.where.join(' AND ')}`;
-      const eids = (db.prepare(sql).all(...c.params) as Array<{ event_id: number }>).map((r) => r.event_id);
+      const eids = (db.prepare(sql).all(...c.params) as { event_id: number }[]).map((r) => r.event_id);
       expect(eids).toEqual([1]);
     } finally {
       db.close();
@@ -296,7 +296,7 @@ describe('methodFilterClauses', () => {
 
       const m = methodFilterClauses('findById', 'fc');
       const sql = `SELECT fc.event_id FROM function_calls fc WHERE ${m.where.join(' AND ')}`;
-      const eids = (db.prepare(sql).all(...m.params) as Array<{ event_id: number }>).map((r) => r.event_id);
+      const eids = (db.prepare(sql).all(...m.params) as { event_id: number }[]).map((r) => r.event_id);
       expect(eids).toEqual([1]);
     } finally {
       db.close();
@@ -312,7 +312,7 @@ describe('methodFilterClauses', () => {
 
       const m = methodFilterClauses('findById', 'fc');
       const sql = `SELECT fc.event_id FROM function_calls fc WHERE ${m.where.join(' AND ')}`;
-      const eids = (db.prepare(sql).all(...m.params) as Array<{ event_id: number }>).map((r) => r.event_id);
+      const eids = (db.prepare(sql).all(...m.params) as { event_id: number }[]).map((r) => r.event_id);
       expect(eids).toEqual([1]);
     } finally {
       db.close();

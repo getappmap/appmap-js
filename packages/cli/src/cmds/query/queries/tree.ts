@@ -100,7 +100,7 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
               COALESCE(normalized_path, path) AS route, status_code, elapsed_ms
        FROM http_requests WHERE appmap_id = ?`
     )
-    .all(am.id) as Array<{
+    .all(am.id) as {
     event_id: number;
     parent_event_id: number | null;
     thread_id: number | null;
@@ -108,7 +108,7 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
     route: string;
     status_code: number;
     elapsed_ms: number | null;
-  }>) {
+  }[]) {
     events.push({
       kind: 'http_server',
       event_id: r.event_id,
@@ -127,7 +127,7 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
       `SELECT event_id, parent_event_id, thread_id, method, url, status_code, elapsed_ms
        FROM http_client_requests WHERE appmap_id = ?`
     )
-    .all(am.id) as Array<{
+    .all(am.id) as {
     event_id: number;
     parent_event_id: number | null;
     thread_id: number | null;
@@ -135,7 +135,7 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
     url: string;
     status_code: number | null;
     elapsed_ms: number | null;
-  }>) {
+  }[]) {
     events.push({
       kind: 'http_client',
       event_id: r.event_id,
@@ -154,14 +154,14 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
       `SELECT event_id, parent_event_id, thread_id, sql_text, database_type, elapsed_ms
        FROM sql_queries WHERE appmap_id = ?`
     )
-    .all(am.id) as Array<{
+    .all(am.id) as {
     event_id: number;
     parent_event_id: number | null;
     thread_id: number | null;
     sql_text: string;
     database_type: string | null;
     elapsed_ms: number | null;
-  }>) {
+  }[]) {
     events.push({
       kind: 'sql',
       event_id: r.event_id,
@@ -183,7 +183,7 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
        LEFT JOIN code_objects co ON co.id = fc.code_object_id
        WHERE fc.appmap_id = ?`
     )
-    .all(am.id) as Array<{
+    .all(am.id) as {
     event_id: number;
     parent_event_id: number | null;
     thread_id: number | null;
@@ -194,7 +194,7 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
     elapsed_ms: number | null;
     parameters_json: string | null;
     return_value: string | null;
-  }>) {
+  }[]) {
     events.push({
       kind: 'function',
       event_id: r.event_id,
@@ -217,7 +217,7 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
               path, lineno
        FROM exceptions WHERE appmap_id = ?`
     )
-    .all(am.id) as Array<{
+    .all(am.id) as {
     event_id: number;
     parent_event_id: number | null;
     thread_id: number | null;
@@ -225,7 +225,7 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
     message: string | null;
     path: string | null;
     lineno: number | null;
-  }>) {
+  }[]) {
     events.push({
       kind: 'exception',
       event_id: r.event_id,
@@ -263,13 +263,13 @@ export interface TreeSummary {
   entry: { method: string; route: string; status_code: number; elapsed_ms: number | null } | null;
   sql: { count: number; total_ms: number };
   http_client: { count: number; total_ms: number };
-  exceptions: Array<{
+  exceptions: {
     exception_class: string;
     message: string | null;
     path: string | null;
     lineno: number | null;
-  }>;
-  labels: Array<{ label: string; count: number }>;
+  }[];
+  labels: { label: string; count: number }[];
 }
 
 export function treeSummary(db: sqlite3.Database, appmapRef: string): TreeSummary {
@@ -290,7 +290,7 @@ export function treeSummary(db: sqlite3.Database, appmapRef: string): TreeSummar
        GROUP BY l.label
        ORDER BY n DESC, l.label`
     )
-    .all(am.id) as Array<{ label: string; n: number }>;
+    .all(am.id) as { label: string; n: number }[];
 
   return {
     appmap_name: am.name,

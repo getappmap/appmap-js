@@ -26,7 +26,7 @@ function seedRecording(
     branch?: string;
     request?: { event_id: number; method: string; path: string; status: number };
     calls?: CallSeed[];
-    queries?: Array<{ event_id: number; parent_event_id?: number; sql: string; elapsed_ms: number }>;
+    queries?: { event_id: number; parent_event_id?: number; sql: string; elapsed_ms: number }[];
   }
 ): number {
   const am = db

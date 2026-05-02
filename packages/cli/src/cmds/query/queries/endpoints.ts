@@ -129,14 +129,14 @@ export function endpoints(
     params.push(filter.limit);
   }
 
-  const rows = db.prepare(sql).all(...params) as Array<{
+  const rows = db.prepare(sql).all(...params) as {
     method: string;
     route: string;
     count: number;
     avg_ms: number | null;
     p95_ms: number | null;
     err_pct: number | null;
-  }>;
+  }[];
 
   return rows.map((r) => ({
     method: r.method,

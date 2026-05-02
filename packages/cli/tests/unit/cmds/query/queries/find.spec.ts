@@ -18,35 +18,35 @@ interface Recording {
   branch?: string;
   commit?: string;
   timestamp?: string;
-  requests?: Array<{
+  requests?: {
     event_id: number;
     method: string;
     path: string;
     normalized_path?: string;
     status: number;
     elapsed_ms?: number;
-  }>;
-  queries?: Array<{
+  }[];
+  queries?: {
     event_id: number;
     parent_event_id?: number;
     sql: string;
     caller_class?: string;
     caller_method?: string;
     elapsed_ms?: number;
-  }>;
-  calls?: Array<{
+  }[];
+  calls?: {
     event_id: number;
     defined_class: string;
     method_id: string;
     elapsed_ms?: number;
     fqid?: string;
     labels?: string[];
-  }>;
-  exceptions?: Array<{
+  }[];
+  exceptions?: {
     event_id: number;
     exception_class: string;
     message?: string;
-  }>;
+  }[];
 }
 
 function seed(db: sqlite3.Database, recs: Recording[]): void {
