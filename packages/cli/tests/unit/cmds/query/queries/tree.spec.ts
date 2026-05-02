@@ -73,8 +73,9 @@ function seed(
   // event_id 4: exception, owned by call 2 (carried by its return event)
   db.prepare(
     `INSERT INTO exceptions (appmap_id, event_id, parent_event_id, thread_id,
-       exception_class, message)
-     VALUES (?, 2, 1, 1, 'IntegrityError', 'duplicate key')`
+       exception_class, message, path, lineno)
+     VALUES (?, 2, 1, 1, 'IntegrityError', 'duplicate key',
+             'app/models/order.rb', 42)`
   ).run(id);
 
   if (opts.addOutbound) {
@@ -155,6 +156,21 @@ describe('tree', () => {
       // event 3: SQL under the function call.
       const sql = nodes.find((n) => n.kind === 'sql')!;
       expect(sql.depth).toBe(2);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('exception nodes carry path and lineno', () => {
+    const db = freshDb();
+    try {
+      seed(db);
+      const exc = tree(db, 'orders_create_42').find((n) => n.kind === 'exception');
+      expect(exc).toBeDefined();
+      if (exc?.kind === 'exception') {
+        expect(exc.path).toBe('app/models/order.rb');
+        expect(exc.lineno).toBe(42);
+      }
     } finally {
       db.close();
     }

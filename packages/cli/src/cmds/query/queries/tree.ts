@@ -49,6 +49,8 @@ export interface ExceptionNode extends BaseNode {
   kind: 'exception';
   exception_class: string;
   message: string | null;
+  path: string | null;
+  lineno: number | null;
 }
 
 export type TreeNode =
@@ -208,7 +210,8 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
 
   for (const r of db
     .prepare(
-      `SELECT event_id, parent_event_id, thread_id, exception_class, message
+      `SELECT event_id, parent_event_id, thread_id, exception_class, message,
+              path, lineno
        FROM exceptions WHERE appmap_id = ?`
     )
     .all(am.id) as Array<{
@@ -217,6 +220,8 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
     thread_id: number | null;
     exception_class: string;
     message: string | null;
+    path: string | null;
+    lineno: number | null;
   }>) {
     events.push({
       kind: 'exception',
@@ -226,6 +231,8 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
       depth: 0,
       exception_class: r.exception_class,
       message: r.message,
+      path: r.path,
+      lineno: r.lineno,
     });
   }
 
@@ -253,7 +260,12 @@ export interface TreeSummary {
   entry: { method: string; route: string; status_code: number; elapsed_ms: number | null } | null;
   sql: { count: number; total_ms: number };
   http_client: { count: number; total_ms: number };
-  exceptions: Array<{ exception_class: string; message: string | null }>;
+  exceptions: Array<{
+    exception_class: string;
+    message: string | null;
+    path: string | null;
+    lineno: number | null;
+  }>;
   labels: Array<{ label: string; count: number }>;
 }
 
@@ -299,6 +311,8 @@ export function treeSummary(db: sqlite3.Database, appmapRef: string): TreeSummar
     exceptions: excs.map((e) => ({
       exception_class: e.exception_class,
       message: e.message,
+      path: e.path,
+      lineno: e.lineno,
     })),
     labels: labelRows.map((r) => ({ label: r.label, count: r.n })),
   };

@@ -1,4 +1,5 @@
 import {
+  ExceptionNode,
   FunctionNode,
   HttpClientNode,
   HttpServerNode,
@@ -33,10 +34,13 @@ function renderTreeLine(node: TreeNode): string {
     case 'sql':
       return `${indent}SQL    ${renderSql(node)}`;
     case 'exception':
-      return `${indent}EXC    ${node.exception_class}${
-        node.message ? `: ${node.message}` : ''
-      }`;
+      return `${indent}EXC    ${renderException(node)}`;
   }
+}
+
+function renderException(n: ExceptionNode): string {
+  const where = n.path ? ` @ ${n.path}${n.lineno != null ? `:${n.lineno}` : ''}` : '';
+  return `${n.exception_class}${n.message ? `: ${n.message}` : ''}${where}`;
 }
 
 function renderHttpServer(n: HttpServerNode): string {
@@ -81,7 +85,7 @@ export function renderFlat(nodes: readonly TreeNode[]): string {
         case 'function':
           return `CALL   ${renderFunction(n)}`;
         case 'exception':
-          return `EXC    ${n.exception_class}${n.message ? `: ${n.message}` : ''}`;
+          return `EXC    ${renderException(n)}`;
       }
     })
     .join('\n');
@@ -117,7 +121,11 @@ export function renderSummary(s: TreeSummary): string {
   }
 
   for (const e of s.exceptions) {
-    rows.push(['EXCEPTION', e.exception_class + (e.message ? `: ${e.message}` : '')]);
+    const where = e.path ? ` @ ${e.path}${e.lineno != null ? `:${e.lineno}` : ''}` : '';
+    rows.push([
+      'EXCEPTION',
+      e.exception_class + (e.message ? `: ${e.message}` : '') + where,
+    ]);
   }
 
   if (s.labels.length > 0) {
