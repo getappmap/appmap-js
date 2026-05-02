@@ -49,10 +49,41 @@ export const builder = <T>(args: yargs.Argv<T>) => {
 
 type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 
+// Per-type flag rejection list. Universal flags (--branch, --commit,
+// --since, --until, --appmap) are accepted everywhere, as are output flags
+// (--limit, --offset, --json). Other filter flags are accepted only on
+// types where they make sense; flagging them on the wrong type is an
+// error rather than a silent no-op.
+const REJECTED_FLAGS: Record<FindType, readonly string[]> = {
+  appmaps: ['class', 'method', 'label', 'duration', 'table', 'exception'],
+  requests: ['class', 'method', 'label', 'table', 'exception'],
+  queries: ['label', 'exception'],
+  calls: ['table', 'exception'],
+  exceptions: ['class', 'method', 'label', 'duration', 'table'],
+};
+
+// Exported for tests. Operates on a generic flag map so unit tests don't
+// need a full yargs argv.
+export function validateFlags(type: FindType, flags: Record<string, unknown>): void {
+  const used: string[] = [];
+  for (const flag of REJECTED_FLAGS[type]) {
+    if (flags[flag] != null) used.push(`--${flag}`);
+  }
+  if (used.length > 0) {
+    const verb = used.length === 1 ? 'is' : 'are';
+    throw new Error(
+      `find ${type}: ${used.join(', ')} ${verb} not supported for this type`
+    );
+  }
+}
+
 export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
   const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
+
+  const type = argv.type as FindType;
+  validateFlags(type, argv);
 
   const filter: FindFilter = {};
   if (argv.route) filter.route = argv.route;
@@ -70,8 +101,6 @@ export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<voi
   if (argv.exception) filter.exception = argv.exception;
   if (argv.limit !== undefined) filter.limit = argv.limit;
   if (argv.offset !== undefined) filter.offset = argv.offset;
-
-  const type = argv.type as FindType;
 
   const db = openReadOnly(appmapDir, argv.queryDb);
   try {
