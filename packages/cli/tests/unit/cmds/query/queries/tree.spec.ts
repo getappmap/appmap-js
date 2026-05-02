@@ -190,6 +190,205 @@ describe('tree', () => {
   });
 });
 
+describe('tree focus', () => {
+  // Build a richer recording: HTTP root → controller → 3 sibling calls
+  // (one of which calls a deeper helper) → SQL + EXC under controller.
+  function seedRich(db: sqlite3.Database): void {
+    const am = db
+      .prepare(
+        `INSERT INTO appmaps (name, source_path, sql_query_count) VALUES ('rich', '/tmp/rich.appmap.json', 1)`
+      )
+      .run();
+    const id = am.lastInsertRowid;
+    db.prepare(
+      `INSERT INTO http_requests (appmap_id, event_id, parent_event_id, method, path, status_code, elapsed_ms)
+       VALUES (?, 1, NULL, 'POST', '/orders', 500, 520.0)`
+    ).run(id);
+    db.prepare(
+      `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, defined_class, method_id, elapsed_ms)
+       VALUES (?, 2, 1, 'OrdersController', 'create', 519.0)`
+    ).run(id);
+    db.prepare(
+      `INSERT OR IGNORE INTO code_objects (fqid, package, classes, leaf_class, method, is_static)
+       VALUES ('app/IdempotencyKey.generate', 'app', '["IdempotencyKey"]', 'IdempotencyKey', 'generate', 1)`
+    ).run();
+    const co = (db
+      .prepare(`SELECT id FROM code_objects WHERE fqid = 'app/IdempotencyKey.generate'`)
+      .get() as { id: number }).id;
+    db.prepare(
+      `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, code_object_id, defined_class, method_id, elapsed_ms)
+       VALUES (?, 3, 2, ?, 'IdempotencyKey', 'generate', 0.2)`
+    ).run(id, co);
+    db.prepare(
+      `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, defined_class, method_id, elapsed_ms)
+       VALUES (?, 4, 2, 'Order', 'new', 0.4)`
+    ).run(id);
+    db.prepare(
+      `INSERT INTO sql_queries (appmap_id, event_id, parent_event_id, sql_text, elapsed_ms)
+       VALUES (?, 5, 2, 'INSERT INTO orders (id, name) VALUES (?, ?)', 14.0)`
+    ).run(id);
+    db.prepare(
+      `INSERT INTO exceptions (appmap_id, event_id, parent_event_id, exception_class, message)
+       VALUES (?, 2, 1, 'IntegrityError', 'duplicate key')`
+    ).run(id);
+    // Add an outbound HTTP call as a separate child of controller
+    db.prepare(
+      `INSERT INTO http_client_requests (appmap_id, event_id, parent_event_id, method, url, status_code, elapsed_ms)
+       VALUES (?, 6, 2, 'GET', 'https://api.example/v1', 200, 40.0)`
+    ).run(id);
+    // A deeper descendant under IdempotencyKey.generate (event_id 3)
+    db.prepare(
+      `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, defined_class, method_id, elapsed_ms)
+       VALUES (?, 7, 3, 'Digest', 'sha256', 0.05)`
+    ).run(id);
+  }
+
+  it('--focus-sql narrows to the matching SQL plus its ancestors and their children', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      const nodes = tree(db, 'rich', { focusSql: 'INSERT INTO orders' });
+      const ids = new Set(nodes.map((n) => n.event_id));
+      // Includes: HTTP (1), controller (2), SQL (5), and the controller's
+      // direct children (3, 4, 5, 6, 7? No — children of controller are
+      // 3, 4, 5, 6 only; 7 is a descendant of 3, not a sibling of focus).
+      expect(ids.has(1)).toBe(true);
+      expect(ids.has(2)).toBe(true);
+      expect(ids.has(5)).toBe(true);
+      expect(ids.has(3)).toBe(true); // sibling
+      expect(ids.has(4)).toBe(true); // sibling
+      expect(ids.has(6)).toBe(true); // sibling
+      // 7 is a child of 3, not of an ancestor of the focus.
+      expect(ids.has(7)).toBe(false);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--focus-fn matches by canonical fqid', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      const nodes = tree(db, 'rich', { focusFn: 'app/IdempotencyKey.generate' });
+      const ids = new Set(nodes.map((n) => n.event_id));
+      // Focus event_id 3; ancestors 2, 1; children of ancestors include
+      // siblings 4, 5, 6 (children of 2). Descendants of 3: 7.
+      expect(ids.has(1)).toBe(true);
+      expect(ids.has(2)).toBe(true);
+      expect(ids.has(3)).toBe(true);
+      expect(ids.has(4)).toBe(true);
+      expect(ids.has(5)).toBe(true);
+      expect(ids.has(6)).toBe(true);
+      expect(ids.has(7)).toBe(true); // descendant
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--focus-route matches a server request', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      const nodes = tree(db, 'rich', { focusRoute: '/orders' });
+      // The HTTP request matches; ancestors of HTTP = none; descendants
+      // of the focus drill down. With descendants=3 we get the full tree
+      // up to depth 3 from the request.
+      expect(nodes.find((n) => n.kind === 'http_server')).toBeDefined();
+      expect(nodes.find((n) => n.kind === 'function' && n.method_id === 'create')).toBeDefined();
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--focus-url matches an outbound call', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      const nodes = tree(db, 'rich', { focusUrl: 'api.example' });
+      const ids = new Set(nodes.map((n) => n.event_id));
+      expect(ids.has(6)).toBe(true);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--ancestors=1 trims the path to root', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      const nodes = tree(db, 'rich', { focusFn: 'app/IdempotencyKey.generate', ancestors: 1 });
+      const ids = new Set(nodes.map((n) => n.event_id));
+      // Only controller (1 ancestor) — not HTTP.
+      expect(ids.has(2)).toBe(true);
+      expect(ids.has(1)).toBe(false);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--descendants=0 drops the subtree below focus', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      const nodes = tree(db, 'rich', {
+        focusFn: 'app/IdempotencyKey.generate',
+        descendants: 0,
+      });
+      const ids = new Set(nodes.map((n) => n.event_id));
+      // 7 (descendant of focus) excluded.
+      expect(ids.has(3)).toBe(true);
+      expect(ids.has(7)).toBe(false);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--min-elapsed-ms prunes fast subtrees', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      const nodes = tree(db, 'rich', { minElapsedMs: 10 });
+      const ids = new Set(nodes.map((n) => n.event_id));
+      // SQL (14ms) and outbound HTTP (40ms) survive; IdempotencyKey
+      // (0.2ms with no fast descendant) and Order.new (0.4ms) are pruned.
+      expect(ids.has(5)).toBe(true);
+      expect(ids.has(6)).toBe(true);
+      expect(ids.has(3)).toBe(false);
+      expect(ids.has(4)).toBe(false);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('focus with no matches returns no events', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      const nodes = tree(db, 'rich', { focusFn: 'app/Nope.nothing' });
+      expect(nodes).toEqual([]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('depths are recomputed relative to the highest included ancestor', () => {
+    const db = freshDb();
+    try {
+      seedRich(db);
+      // Without focus, HTTP is depth 0, controller 1, IdempotencyKey 2.
+      const focused = tree(db, 'rich', { focusFn: 'app/IdempotencyKey.generate', ancestors: 1 });
+      // Highest included is controller (event_id=2). It should now be
+      // depth 0; its child IdempotencyKey (focus) should be depth 1.
+      const controller = focused.find((n) => n.kind === 'function' && n.method_id === 'create');
+      const idem = focused.find((n) => n.kind === 'function' && n.method_id === 'generate');
+      expect(controller?.depth).toBe(0);
+      expect(idem?.depth).toBe(1);
+    } finally {
+      db.close();
+    }
+  });
+});
+
 describe('tree --filter', () => {
   it('returns only http events when filter=http', () => {
     const db = freshDb();

@@ -88,9 +88,33 @@ export function resolveAppmap(db: sqlite3.Database, ref: string): AppmapInfo {
   return rows[0];
 }
 
+export interface TreeOptions {
+  // Focus criteria — multiple may be supplied; results are the union of
+  // matches' neighborhoods. Without any focus, the full tree is returned.
+  focusFn?: string;       // exact code_object fqid
+  focusSql?: string;      // case-insensitive substring of sql_text
+  focusRoute?: string;    // normalized_path (or raw path) of a server request
+  focusUrl?: string;      // case-insensitive substring of an outbound URL
+
+  // Depth budgets, in effect only when focus is active.
+  ancestors?: number;     // ancestor levels to keep above each match (default 5)
+  descendants?: number;   // descendant levels below each match (default 3)
+
+  // Prune subtrees whose maximum elapsed time is below this threshold —
+  // useful for trimming traces dominated by fast leaf calls.
+  minElapsedMs?: number;
+}
+
+const DEFAULT_ANCESTORS = 5;
+const DEFAULT_DESCENDANTS = 3;
+
 // Build the flat-but-depth-annotated tree for a recording. Events are
 // returned in event_id order; consumers can render with indentation.
-export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
+export function tree(
+  db: sqlite3.Database,
+  appmapRef: string,
+  options: TreeOptions = {}
+): TreeNode[] {
   const am = resolveAppmap(db, appmapRef);
   const events: TreeNode[] = [];
 
@@ -240,9 +264,26 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
   }
 
   events.sort((a, b) => a.event_id - b.event_id);
+  computeDepths(events);
 
-  // Compute depths in event_id order. Parents come before children, so
-  // each node's depth is parent's depth + 1 (or 0 if no parent / orphan).
+  let result = events;
+  if (hasFocus(options)) {
+    result = applyFocus(result, options);
+  }
+  if (options.minElapsedMs && options.minElapsedMs > 0) {
+    result = pruneByElapsed(result, options.minElapsedMs);
+  }
+  // Re-anchor depth to the highest included ancestor in the surviving
+  // set, so the rendered indentation starts at column 0 instead of
+  // floating wherever the original absolute depth happened to be.
+  if (result !== events) recomputeDepthsRelative(result);
+
+  return result;
+}
+
+function computeDepths(events: TreeNode[]): void {
+  // Events are sorted by event_id; parents always precede children, so a
+  // single forward pass suffices.
   const depthByEventId = new Map<number, number>();
   for (const ev of events) {
     let depth = 0;
@@ -253,8 +294,158 @@ export function tree(db: sqlite3.Database, appmapRef: string): TreeNode[] {
     ev.depth = depth;
     depthByEventId.set(ev.event_id, depth);
   }
+}
 
-  return events;
+function recomputeDepthsRelative(events: readonly TreeNode[]): void {
+  const includedIds = new Set(events.map((e) => e.event_id));
+  const eventsByEventId = new Map<number, TreeNode>();
+  for (const e of events) {
+    if (!eventsByEventId.has(e.event_id)) eventsByEventId.set(e.event_id, e);
+  }
+  for (const e of events) {
+    let d = 0;
+    let pid = e.parent_event_id;
+    while (pid !== null && includedIds.has(pid)) {
+      d += 1;
+      const parent = eventsByEventId.get(pid);
+      if (!parent) break;
+      pid = parent.parent_event_id;
+    }
+    e.depth = d;
+  }
+}
+
+function hasFocus(options: TreeOptions): boolean {
+  return !!(options.focusFn || options.focusSql || options.focusRoute || options.focusUrl);
+}
+
+function matchesFocus(node: TreeNode, options: TreeOptions): boolean {
+  if (options.focusFn && node.kind === 'function') {
+    return node.fqid === options.focusFn;
+  }
+  if (options.focusSql && node.kind === 'sql') {
+    return node.sql_text.toLowerCase().includes(options.focusSql.toLowerCase());
+  }
+  if (options.focusRoute && node.kind === 'http_server') {
+    return node.route === options.focusRoute;
+  }
+  if (options.focusUrl && node.kind === 'http_client') {
+    return node.url.toLowerCase().includes(options.focusUrl.toLowerCase());
+  }
+  return false;
+}
+
+// Filter `events` to a neighborhood around the focus matches:
+//   - the matches themselves
+//   - up to `ancestors` parent levels above each match
+//   - the direct children of each ancestor (so siblings of the match are visible)
+//   - up to `descendants` levels below each match
+function applyFocus(events: readonly TreeNode[], options: TreeOptions): TreeNode[] {
+  const ancestorBudget = options.ancestors ?? DEFAULT_ANCESTORS;
+  const descendantBudget = options.descendants ?? DEFAULT_DESCENDANTS;
+
+  // Build helpers. Multiple TreeNodes can share an event_id (e.g. a call
+  // event can also have an exception attached), so children are keyed
+  // by event_id and we dedupe.
+  const nodeByEventId = new Map<number, TreeNode>();
+  for (const e of events) {
+    if (!nodeByEventId.has(e.event_id)) nodeByEventId.set(e.event_id, e);
+  }
+  const childrenByParent = new Map<number, Set<number>>();
+  for (const e of events) {
+    if (e.parent_event_id !== null) {
+      let bucket = childrenByParent.get(e.parent_event_id);
+      if (!bucket) {
+        bucket = new Set();
+        childrenByParent.set(e.parent_event_id, bucket);
+      }
+      bucket.add(e.event_id);
+    }
+  }
+
+  const focusIds = new Set<number>();
+  for (const e of events) {
+    if (matchesFocus(e, options)) focusIds.add(e.event_id);
+  }
+  if (focusIds.size === 0) return [];
+
+  const included = new Set<number>();
+  for (const fid of focusIds) {
+    included.add(fid);
+
+    // Walk up to `ancestorBudget` ancestors; record them and remember the
+    // path so we can include their direct children.
+    const ancestorIds: number[] = [];
+    let cur = fid;
+    for (let i = 0; i < ancestorBudget; i++) {
+      const node = nodeByEventId.get(cur);
+      if (!node || node.parent_event_id === null) break;
+      const parentId = node.parent_event_id;
+      if (!nodeByEventId.has(parentId)) break;
+      ancestorIds.push(parentId);
+      included.add(parentId);
+      cur = parentId;
+    }
+    // Direct children of every ancestor (so the focus's siblings — and
+    // siblings of every node on the path to root — are visible).
+    for (const aid of ancestorIds) {
+      const kids = childrenByParent.get(aid);
+      if (kids) for (const k of kids) included.add(k);
+    }
+
+    // Descendants up to `descendantBudget` levels (BFS).
+    const queue: { id: number; depth: number }[] = [{ id: fid, depth: 0 }];
+    while (queue.length > 0) {
+      const next = queue.shift();
+      if (!next) break;
+      if (next.depth >= descendantBudget) continue;
+      const kids = childrenByParent.get(next.id);
+      if (!kids) continue;
+      for (const k of kids) {
+        if (!included.has(k)) {
+          included.add(k);
+          queue.push({ id: k, depth: next.depth + 1 });
+        }
+      }
+    }
+  }
+
+  return events.filter((e) => included.has(e.event_id));
+}
+
+// Prune subtrees whose entire branch's maximum elapsed_ms is below the
+// threshold. A node is kept iff it (or any of its descendants) has an
+// elapsed_ms ≥ threshold. Events without elapsed (exceptions, http
+// requests with no return) are kept iff their owning subtree qualifies.
+function pruneByElapsed(events: readonly TreeNode[], minMs: number): TreeNode[] {
+  const childrenByParent = new Map<number, Set<number>>();
+  for (const e of events) {
+    if (e.parent_event_id !== null) {
+      let bucket = childrenByParent.get(e.parent_event_id);
+      if (!bucket) {
+        bucket = new Set();
+        childrenByParent.set(e.parent_event_id, bucket);
+      }
+      bucket.add(e.event_id);
+    }
+  }
+  const elapsedById = new Map<number, number>();
+  for (const e of events) {
+    const cur = elapsedById.get(e.event_id) ?? 0;
+    const here = 'elapsed_ms' in e && typeof e.elapsed_ms === 'number' ? e.elapsed_ms : 0;
+    if (here > cur) elapsedById.set(e.event_id, here);
+  }
+  const maxByEventId = new Map<number, number>();
+  function maxFor(id: number): number {
+    const cached = maxByEventId.get(id);
+    if (cached !== undefined) return cached;
+    let m = elapsedById.get(id) ?? 0;
+    const kids = childrenByParent.get(id);
+    if (kids) for (const k of kids) m = Math.max(m, maxFor(k));
+    maxByEventId.set(id, m);
+    return m;
+  }
+  return events.filter((e) => maxFor(e.event_id) >= minMs);
 }
 
 export interface TreeSummary {

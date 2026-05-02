@@ -5,7 +5,7 @@ import { handleWorkingDirectory } from '../../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../../lib/locateAppMapDir';
 import { verbose } from '../../../utils';
 import { openReadOnly } from '../lib/openReadOnly';
-import { tree, treeSummary, TreeNode } from '../queries/tree';
+import { tree, treeSummary, TreeNode, TreeOptions } from '../queries/tree';
 import { renderFlat, renderSummary, renderTree } from '../lib/treeRender';
 
 export const command = 'tree <appmap>';
@@ -26,6 +26,34 @@ export const builder = <T>(args: yargs.Argv<T>) => {
       type: 'string',
       choices: ['all', 'http', 'sql'] as const,
       default: 'all',
+    })
+    .option('focus-fn', {
+      type: 'string',
+      describe: 'centre on function calls matching this fqid',
+    })
+    .option('focus-sql', {
+      type: 'string',
+      describe: 'centre on SQL queries containing this substring',
+    })
+    .option('focus-route', {
+      type: 'string',
+      describe: 'centre on a server request matching this normalized path',
+    })
+    .option('focus-url', {
+      type: 'string',
+      describe: 'centre on an outbound HTTP call whose URL contains this substring',
+    })
+    .option('ancestors', {
+      type: 'number',
+      describe: 'ancestor levels to keep above each focus match (default 5)',
+    })
+    .option('descendants', {
+      type: 'number',
+      describe: 'descendant levels below each focus match (default 3)',
+    })
+    .option('min-elapsed-ms', {
+      type: 'number',
+      describe: 'prune subtrees whose max elapsed is below this threshold',
     })
     .option('json', { type: 'boolean', default: false });
 };
@@ -59,7 +87,16 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
       return;
     }
 
-    const nodes = tree(db, ref);
+    const treeOptions: TreeOptions = {};
+    if (argv.focusFn) treeOptions.focusFn = argv.focusFn as string;
+    if (argv.focusSql) treeOptions.focusSql = argv.focusSql as string;
+    if (argv.focusRoute) treeOptions.focusRoute = argv.focusRoute as string;
+    if (argv.focusUrl) treeOptions.focusUrl = argv.focusUrl as string;
+    if (argv.ancestors !== undefined) treeOptions.ancestors = argv.ancestors as number;
+    if (argv.descendants !== undefined) treeOptions.descendants = argv.descendants as number;
+    if (argv.minElapsedMs !== undefined) treeOptions.minElapsedMs = argv.minElapsedMs as number;
+
+    const nodes = tree(db, ref, treeOptions);
     const filtered = applyFilter(nodes, argv.filter as 'all' | 'http' | 'sql');
     if (argv.json) {
       log(JSON.stringify(filtered, null, 2));
