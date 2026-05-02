@@ -63,7 +63,7 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
     } catch (err) {
       response = {
         jsonrpc: '2.0',
-        id: (msg.id ?? null) as string | number | null,
+        id: msg.id ?? null,
         error: { code: -32603, message: (err as Error).message },
       };
     }

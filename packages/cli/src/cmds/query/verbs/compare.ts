@@ -44,8 +44,8 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
   handleWorkingDirectory(argv.directory);
   const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
 
-  const branchA = argv.branchA as string | undefined;
-  const branchB = argv.branchB as string | undefined;
+  const branchA = argv.branchA;
+  const branchB = argv.branchB;
   if (!branchA || !branchB) throw new Error('<branch-a> and <branch-b> are required');
 
   const filter: CompareFilter = {

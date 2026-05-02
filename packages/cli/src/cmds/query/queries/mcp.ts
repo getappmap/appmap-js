@@ -490,13 +490,11 @@ const RESOURCES: ResourceImpl[] = [
 
 // --- handler -------------------------------------------------------------
 
-export interface McpHandler {
-  (msg: JsonRpcRequest): JsonRpcResponse | null;
-}
+export type McpHandler = (msg: JsonRpcRequest) => JsonRpcResponse | null;
 
 export function buildMcpHandler(db: sqlite3.Database): McpHandler {
   return (msg: JsonRpcRequest): JsonRpcResponse | null => {
-    const id = (msg.id ?? null) as string | number | null;
+    const id = msg.id ?? null;
     const method = msg.method;
 
     if (method.startsWith('notifications/')) return null;

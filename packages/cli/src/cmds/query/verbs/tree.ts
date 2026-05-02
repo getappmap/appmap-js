@@ -88,13 +88,13 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
     }
 
     const treeOptions: TreeOptions = {};
-    if (argv.focusFn) treeOptions.focusFn = argv.focusFn as string;
-    if (argv.focusSql) treeOptions.focusSql = argv.focusSql as string;
-    if (argv.focusRoute) treeOptions.focusRoute = argv.focusRoute as string;
-    if (argv.focusUrl) treeOptions.focusUrl = argv.focusUrl as string;
-    if (argv.ancestors !== undefined) treeOptions.ancestors = argv.ancestors as number;
-    if (argv.descendants !== undefined) treeOptions.descendants = argv.descendants as number;
-    if (argv.minElapsedMs !== undefined) treeOptions.minElapsedMs = argv.minElapsedMs as number;
+    if (argv.focusFn) treeOptions.focusFn = argv.focusFn;
+    if (argv.focusSql) treeOptions.focusSql = argv.focusSql;
+    if (argv.focusRoute) treeOptions.focusRoute = argv.focusRoute;
+    if (argv.focusUrl) treeOptions.focusUrl = argv.focusUrl;
+    if (argv.ancestors !== undefined) treeOptions.ancestors = argv.ancestors;
+    if (argv.descendants !== undefined) treeOptions.descendants = argv.descendants;
+    if (argv.minElapsedMs !== undefined) treeOptions.minElapsedMs = argv.minElapsedMs;
 
     const nodes = tree(db, ref, treeOptions);
     const filtered = applyFilter(nodes, argv.filter as 'all' | 'http' | 'sql');

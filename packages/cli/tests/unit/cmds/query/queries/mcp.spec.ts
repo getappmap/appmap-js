@@ -85,7 +85,7 @@ describe('MCP handler', () => {
     const db = freshDb();
     try {
       const r = call(buildMcpHandler(db), { jsonrpc: '2.0', id: 2, method: 'tools/list' });
-      const names = ((r!.result as any).tools as Array<{ name: string }>).map((t) => t.name);
+      const names = ((r!.result as any).tools as { name: string }[]).map((t) => t.name);
       expect(names).toEqual(
         expect.arrayContaining([
           'list_endpoints',
@@ -110,7 +110,7 @@ describe('MCP handler', () => {
     const db = freshDb();
     try {
       const r = call(buildMcpHandler(db), { jsonrpc: '2.0', id: 3, method: 'resources/list' });
-      const uris = ((r!.result as any).resources as Array<{ uri: string }>).map((x) => x.uri);
+      const uris = ((r!.result as any).resources as { uri: string }[]).map((x) => x.uri);
       expect(uris).toContain('appmap://endpoints');
     } finally {
       db.close();

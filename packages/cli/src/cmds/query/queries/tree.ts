@@ -379,7 +379,7 @@ function applyFocus(events: readonly TreeNode[], options: TreeOptions): TreeNode
     let cur = fid;
     for (let i = 0; i < ancestorBudget; i++) {
       const node = nodeByEventId.get(cur);
-      if (!node || node.parent_event_id === null) break;
+      if (node?.parent_event_id == null) break;
       const parentId = node.parent_event_id;
       if (!nodeByEventId.has(parentId)) break;
       ancestorIds.push(parentId);
