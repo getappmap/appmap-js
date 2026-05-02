@@ -20,7 +20,7 @@ export const builder = <T>(args: yargs.Argv<T>) => {
   return args
     .option('directory', { type: 'string', alias: 'd', describe: 'program working directory' })
     .option('appmap-dir', { type: 'string', describe: 'directory of recordings' })
-    .option('db', { type: 'string', describe: 'path to query.db (overrides default)' })
+    .option('query-db', { type: 'string', describe: 'path to query.db (overrides default)' })
     .option('since', { type: 'string', describe: 'ISO timestamp or "Nd ago"' })
     .option('until', { type: 'string', describe: 'ISO timestamp or "Nd ago"' })
     .option('branch', { type: 'string' })
@@ -39,9 +39,9 @@ type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
-  // When --db is supplied, the appmap dir is irrelevant — the user has
+  // When --query-db is supplied, the appmap dir is irrelevant — the user has
   // already named a query.db. Otherwise, derive it from the appmap dir.
-  const appmapDir = argv.db ? '' : await locateAppMapDir(argv.appmapDir);
+  const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
 
   const filter: EndpointsFilter = { sort: argv.sort as EndpointSort };
   if (argv.since) filter.since = parseTime(argv.since);
@@ -50,7 +50,7 @@ export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<voi
   if (argv.status) filter.status = parseStatus(argv.status);
   if (argv.limit !== undefined) filter.limit = argv.limit;
 
-  const db = openReadOnly(appmapDir, argv.db);
+  const db = openReadOnly(appmapDir, argv.queryDb);
   try {
     const rows = endpoints(db, filter);
     if (argv.json) {

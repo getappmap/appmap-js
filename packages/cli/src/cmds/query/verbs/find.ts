@@ -28,7 +28,7 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     .positional('type', { type: 'string', choices: TYPES })
     .option('directory', { type: 'string', alias: 'd' })
     .option('appmap-dir', { type: 'string' })
-    .option('db', { type: 'string', describe: 'path to query.db (overrides default)' })
+    .option('query-db', { type: 'string', describe: 'path to query.db (overrides default)' })
     .option('route', { type: 'string', describe: 'e.g. "POST /orders" or "/orders"' })
     .option('class', { type: 'string', describe: 'defined_class or fqid Class part' })
     .option('method', { type: 'string', describe: 'method_id (not HTTP method)' })
@@ -52,7 +52,7 @@ type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
-  const appmapDir = argv.db ? '' : await locateAppMapDir(argv.appmapDir);
+  const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
 
   const filter: FindFilter = {};
   if (argv.route) filter.route = argv.route;
@@ -73,7 +73,7 @@ export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<voi
 
   const type = argv.type as FindType;
 
-  const db = openReadOnly(appmapDir, argv.db);
+  const db = openReadOnly(appmapDir, argv.queryDb);
   try {
     const rows = find(db, type, filter);
     if (argv.json) {

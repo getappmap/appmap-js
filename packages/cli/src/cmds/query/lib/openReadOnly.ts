@@ -6,7 +6,7 @@ import { queryDbPath } from '../db/path';
 
 // Open the query DB read-only for the given appmap directory.
 // Errors if the DB doesn't exist, prompting the user to run `appmap index`.
-// `dbPath` overrides path derivation (used by tests and the --db flag).
+// `dbPath` overrides path derivation (used by tests and the --query-db flag).
 export function openReadOnly(appmapDir: string, dbPath?: string): sqlite3.Database {
   const path = dbPath ?? queryDbPath(appmapDir);
   if (!existsSync(path)) {

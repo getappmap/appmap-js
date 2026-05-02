@@ -16,7 +16,7 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     .positional('appmap', { type: 'string', describe: 'appmap name (or basename of source path)' })
     .option('directory', { type: 'string', alias: 'd' })
     .option('appmap-dir', { type: 'string' })
-    .option('db', { type: 'string', describe: 'path to query.db' })
+    .option('query-db', { type: 'string', describe: 'path to query.db' })
     .option('format', {
       type: 'string',
       choices: ['tree', 'summary'] as const,
@@ -35,12 +35,12 @@ type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 export const handler = async (argv: yargs.ArgumentsCamelCase<Argv>): Promise<void> => {
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
-  const appmapDir = argv.db ? '' : await locateAppMapDir(argv.appmapDir);
+  const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
 
   const ref = argv.appmap;
   if (!ref) throw new Error('<appmap> is required');
 
-  const db = openReadOnly(appmapDir, argv.db);
+  const db = openReadOnly(appmapDir, argv.queryDb);
   try {
     if (argv.format === 'summary') {
       const s = treeSummary(db, ref);
