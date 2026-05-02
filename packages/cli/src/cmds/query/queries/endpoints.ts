@@ -48,12 +48,16 @@ export function endpoints(
     where.push('a.git_branch = ?');
     params.push(filter.branch);
   }
+  // --since/--until filter on the recording's timestamp (a.timestamp) for
+  // consistency with `find`. The importer copies that value into
+  // http_requests.timestamp too, but treating it as a recording-level
+  // attribute makes the dependency on that copy explicit.
   if (filter.since) {
-    where.push('hr.timestamp >= ?');
+    where.push('a.timestamp >= ?');
     params.push(filter.since);
   }
   if (filter.until) {
-    where.push('hr.timestamp <= ?');
+    where.push('a.timestamp <= ?');
     params.push(filter.until);
   }
 
@@ -132,9 +136,18 @@ function percentile(sorted: readonly number[], p: number): number | null {
   return sorted[idx];
 }
 
+// Descending sort, nulls last (so a route with no measured durations doesn't
+// rank alongside a genuinely 0 ms route).
+function descNullsLast(a: number | null, b: number | null): number {
+  if (a == null && b == null) return 0;
+  if (a == null) return 1;
+  if (b == null) return -1;
+  return b - a;
+}
+
 const comparators: Record<EndpointSort, (a: EndpointRow, b: EndpointRow) => number> = {
   count: (a, b) => b.count - a.count,
-  avg: (a, b) => (b.avg_ms ?? 0) - (a.avg_ms ?? 0),
-  p95: (a, b) => (b.p95_ms ?? 0) - (a.p95_ms ?? 0),
+  avg: (a, b) => descNullsLast(a.avg_ms, b.avg_ms),
+  p95: (a, b) => descNullsLast(a.p95_ms, b.p95_ms),
   err: (a, b) => b.err_pct - a.err_pct,
 };

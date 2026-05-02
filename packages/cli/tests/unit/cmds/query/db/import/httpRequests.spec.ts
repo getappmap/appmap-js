@@ -51,8 +51,7 @@ describe('importHttpRequests', () => {
         appmapId,
         events,
         buildReturnEventMap(events),
-        buildParentEventMap(events),
-        '2026-04-29T14:21:08.000Z'
+        buildParentEventMap(events)
       );
 
       const row = db.prepare('SELECT * FROM http_requests').get() as any;
@@ -64,7 +63,6 @@ describe('importHttpRequests', () => {
       expect(row.mime_type).toBe('application/json');
       expect(row.elapsed_ms).toBeCloseTo(520);
       expect(row.thread_id).toBe(99);
-      expect(row.timestamp).toBe('2026-04-29T14:21:08.000Z');
       expect(row.parent_event_id).toBeNull();
     } finally {
       db.close();
@@ -87,8 +85,7 @@ describe('importHttpRequests', () => {
         appmapId,
         events,
         buildReturnEventMap(events),
-        buildParentEventMap(events),
-        '2026-04-29T14:21:08.000Z'
+        buildParentEventMap(events)
       );
       const row = db.prepare('SELECT status_code, elapsed_ms FROM http_requests').get() as any;
       expect(row.status_code).toBe(0);

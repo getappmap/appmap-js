@@ -18,14 +18,13 @@ export function importHttpRequests(
   appmapId: number,
   events: readonly Record<string, any>[],
   returnEvents: Map<number, ReturnEventLike>,
-  parentEventMap: Map<number, number>,
-  timestampIso: string
+  parentEventMap: Map<number, number>
 ): void {
   const stmt = db.prepare(
     `INSERT INTO http_requests (appmap_id, event_id, thread_id, parent_event_id,
       method, path, normalized_path, protocol, status_code, mime_type,
-      elapsed_ms, timestamp)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      elapsed_ms)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
 
   for (const ev of events) {
@@ -46,8 +45,7 @@ export function importHttpRequests(
       req.protocol ?? null,
       resp.status_code ?? 0,
       resp.mime_type ?? null,
-      typeof elapsed === 'number' ? elapsed * 1000 : null,
-      timestampIso
+      typeof elapsed === 'number' ? elapsed * 1000 : null
     );
   }
 }

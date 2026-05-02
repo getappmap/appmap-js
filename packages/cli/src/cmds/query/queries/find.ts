@@ -1,6 +1,14 @@
 import sqlite3 from 'better-sqlite3';
 
 import type { NumberFilter } from '../lib/parseFilter';
+import {
+  appmapIdScope,
+  appmapWhere,
+  classFilterClauses,
+  httpScopeClauses,
+  methodFilterClauses,
+  parseRoute,
+} from '../lib/scope';
 
 export type FindType = 'appmaps' | 'requests' | 'queries' | 'calls' | 'exceptions';
 
@@ -71,99 +79,11 @@ export interface FindExceptionRow {
   lineno: number | null;
 }
 
-// --- internal helpers ---
-
-interface RouteSpec {
-  method?: string;
-  path: string;
-}
-
-function parseRoute(s: string): RouteSpec {
-  const m = s.match(/^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)$/);
-  if (m) return { method: m[1], path: m[2] };
-  return { path: s };
-}
+// --- internal helpers (find-specific) ---
 
 interface Clauses {
   where: string[];
   params: (string | number)[];
-}
-
-// Recording-level filters that go on the appmaps row directly.
-function appmapWhere(filter: FindFilter, alias: string): Clauses {
-  const where: string[] = [];
-  const params: (string | number)[] = [];
-  if (filter.branch) {
-    where.push(`${alias}.git_branch = ?`);
-    params.push(filter.branch);
-  }
-  if (filter.commit) {
-    where.push(`${alias}.git_commit = ?`);
-    params.push(filter.commit);
-  }
-  if (filter.since) {
-    where.push(`${alias}.timestamp >= ?`);
-    params.push(filter.since);
-  }
-  if (filter.until) {
-    where.push(`${alias}.timestamp <= ?`);
-    params.push(filter.until);
-  }
-  if (filter.appmap) {
-    where.push(`(${alias}.name = ? OR ${alias}.source_path LIKE ?)`);
-    params.push(filter.appmap, `%/${filter.appmap}.appmap.json`);
-  }
-  return { where, params };
-}
-
-// HTTP-level filters that scope to "the recording must contain ≥1 matching
-// request." Used as a subquery for non-request finds.
-function httpScopeClauses(filter: FindFilter): Clauses {
-  const where: string[] = [];
-  const params: (string | number)[] = [];
-  if (filter.route) {
-    const route = parseRoute(filter.route);
-    where.push(`COALESCE(h.normalized_path, h.path) = ?`);
-    params.push(route.path);
-    if (route.method) {
-      where.push(`h.method = ?`);
-      params.push(route.method);
-    }
-  }
-  if (filter.status) {
-    where.push(`h.status_code ${filter.status.op} ?`);
-    params.push(filter.status.value);
-  }
-  return { where, params };
-}
-
-// Build "<row>.appmap_id IN (SELECT a.id ...)" for non-appmap finds.
-// Returns null if no recording-level filtering is needed.
-function appmapIdScope(
-  filter: FindFilter,
-  rowAlias: string
-): { sql: string; params: (string | number)[] } | null {
-  const a = appmapWhere(filter, 'a');
-  const h = httpScopeClauses(filter);
-  if (a.where.length === 0 && h.where.length === 0) return null;
-
-  if (h.where.length > 0) {
-    const all = [...a.where, ...h.where].join(' AND ');
-    return {
-      sql: `${rowAlias}.appmap_id IN (
-        SELECT DISTINCT a.id FROM appmaps a
-        JOIN http_requests h ON h.appmap_id = a.id
-        WHERE ${all}
-      )`,
-      params: [...a.params, ...h.params],
-    };
-  }
-  return {
-    sql: `${rowAlias}.appmap_id IN (
-      SELECT a.id FROM appmaps a WHERE ${a.where.join(' AND ')}
-    )`,
-    params: a.params,
-  };
 }
 
 function durationClause(filter: FindFilter, column: string): Clauses {
@@ -336,12 +256,14 @@ export function findCalls(db: sqlite3.Database, filter: FindFilter): FindCallRow
   }
 
   if (filter.className) {
-    where.push(`fc.defined_class = ?`);
-    params.push(filter.className);
+    const c = classFilterClauses(filter.className, 'fc');
+    where.push(...c.where);
+    params.push(...c.params);
   }
   if (filter.method) {
-    where.push(`fc.method_id = ?`);
-    params.push(filter.method);
+    const m = methodFilterClauses(filter.method, 'fc');
+    where.push(...m.where);
+    params.push(...m.params);
   }
   if (filter.label) {
     where.push(

@@ -18,18 +18,22 @@ export interface ClassMapNode {
 // insert its labels, and return a map of classMap location → code_object_id
 // (used by function_calls to link events to code objects via path:lineno).
 //
-// fqid construction mirrors @appland/models' codeObjectId.js exactly:
-//   - between package and child:  '/'
-//   - between class and child:    '::'
-//   - between any node and a function child:  '.' (static) or '#' (instance)
+// Each function is decomposed into:
+//   - package : slash-joined package path  (e.g. "app/services/idempotency")
+//   - class   : ::-joined class chain      (e.g. "Outer::Inner")
+//   - method  : leaf method name           (e.g. "generate")
+//   - is_static : 1 for static, 0 for instance
 //
-// The defined_class column keeps the prototype's dot-form (resets to bare
-// package name on package descent, accumulates on nested classes) — it is
-// independent of fqid and pinned by existing tests.
+// fqid is derived from these and matches @appland/models' codeObjectId.js:
+//   - between package and class:           '/'
+//   - between class and child class:       '::'
+//   - between class and function method:   '.' (static) or '#' (instance)
 //
 // Behavior preserved from the Python prototype:
 //   - Function node names with an auxtype suffix like " (get)" are trimmed.
 //   - Functions without a location are skipped (e.g., C-extensions).
+//   - When descending from a package, the class chain resets (a class
+//     directly under a package starts a fresh chain).
 export function importCodeObjects(
   db: sqlite3.Database,
   classMap: readonly ClassMapNode[]
@@ -37,33 +41,33 @@ export function importCodeObjects(
   const lookup = new Map<string, number>();
 
   const insertCodeObject = db.prepare(
-    `INSERT OR IGNORE INTO code_objects (fqid, defined_class, method_id) VALUES (?, ?, ?)`
+    `INSERT OR IGNORE INTO code_objects (fqid, package, classes, leaf_class, method, is_static)
+     VALUES (?, ?, ?, ?, ?, ?)`
   );
   const selectCodeObjectId = db.prepare(`SELECT id FROM code_objects WHERE fqid = ?`);
   const insertLabel = db.prepare(
     `INSERT OR IGNORE INTO labels (code_object_id, label) VALUES (?, ?)`
   );
 
-  function appendToken(
-    parentTokens: readonly string[],
-    name: string,
-    parentType: CodeObjectType | undefined,
-    nodeType: CodeObjectType,
+  function buildFqid(
+    packageTokens: readonly string[],
+    classTokens: readonly string[],
+    method: string,
     isStatic: boolean
-  ): readonly string[] {
-    if (parentTokens.length === 0) return [name];
-    let separator = '';
-    if (parentType === 'package') separator = '/';
-    else if (parentType === 'class') separator = '::';
-    if (nodeType === 'function') separator = isStatic ? '.' : '#';
-    return [...parentTokens, separator, name];
+  ): string {
+    const pkg = packageTokens.join('/');
+    const cls = classTokens.join('::');
+    const methodSep = isStatic ? '.' : '#';
+    if (pkg && cls) return `${pkg}/${cls}${methodSep}${method}`;
+    if (pkg) return `${pkg}${methodSep}${method}`;
+    if (cls) return `${cls}${methodSep}${method}`;
+    return `${methodSep}${method}`;
   }
 
   function walk(
     node: ClassMapNode,
-    classPath: string,
-    fqidTokens: readonly string[],
-    parentType: CodeObjectType | undefined
+    packageTokens: readonly string[],
+    classTokens: readonly string[]
   ): void {
     const nodeType = node.type;
     const name = node.name ?? '';
@@ -76,10 +80,17 @@ export function importCodeObjects(
       const methodName = parenIdx >= 0 ? name.slice(0, parenIdx) : name;
       const isStatic = !!node.static;
 
-      const tokens = appendToken(fqidTokens, methodName, parentType, 'function', isStatic);
-      const fqid = tokens.join('');
+      const fqid = buildFqid(packageTokens, classTokens, methodName, isStatic);
 
-      insertCodeObject.run(fqid, classPath, methodName);
+      const leafClass = classTokens.length > 0 ? classTokens[classTokens.length - 1] : '';
+      insertCodeObject.run(
+        fqid,
+        packageTokens.join('/'),
+        JSON.stringify([...classTokens]),
+        leafClass,
+        methodName,
+        isStatic ? 1 : 0
+      );
       const row = selectCodeObjectId.get(fqid) as { id: number };
       lookup.set(location, row.id);
 
@@ -88,24 +99,20 @@ export function importCodeObjects(
       return;
     }
 
-    let nextClassPath: string;
-    let nextFqidTokens: readonly string[];
+    let nextPackageTokens = packageTokens;
+    let nextClassTokens = classTokens;
     if (nodeType === 'package') {
-      nextClassPath = name;
-      nextFqidTokens = appendToken(fqidTokens, name, parentType, 'package', false);
+      nextPackageTokens = [...packageTokens, name];
+      nextClassTokens = []; // package descent resets the class chain
     } else if (nodeType === 'class') {
-      nextClassPath = classPath ? `${classPath}.${name}` : name;
-      nextFqidTokens = appendToken(fqidTokens, name, parentType, 'class', false);
-    } else {
-      nextClassPath = classPath;
-      nextFqidTokens = fqidTokens;
+      nextClassTokens = [...classTokens, name];
     }
 
     const children = node.children ?? [];
-    for (const child of children) walk(child, nextClassPath, nextFqidTokens, nodeType ?? parentType);
+    for (const child of children) walk(child, nextPackageTokens, nextClassTokens);
   }
 
-  for (const root of classMap) walk(root, '', [], undefined);
+  for (const root of classMap) walk(root, [], []);
 
   return lookup;
 }

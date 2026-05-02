@@ -24,12 +24,11 @@ export interface AppmapRecordResult {
   timestampIso: string;
 }
 
-// Insert the top-level appmaps row and return its id + the resolved
-// timestamp (used by http_requests for the per-row timestamp column).
+// Insert the top-level appmaps row and return its id and resolved timestamp.
 //
 // Total elapsed is taken from the first return event carrying an
 // http_server_response. If metadata.timestamp is missing, falls back to the
-// file's mtime so time-series queries still work.
+// file's mtime so time-range queries still work.
 export function insertAppmapRecord(
   db: sqlite3.Database,
   absolutePath: string,

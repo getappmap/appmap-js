@@ -54,15 +54,20 @@ function seed(db: sqlite3.Database, recs: Recording[]): void {
      VALUES (?, ?, ?, ?, ?, ?, ?)`
   );
   const insReq = db.prepare(
-    `INSERT INTO http_requests (appmap_id, event_id, method, path, normalized_path, status_code, elapsed_ms, timestamp)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO http_requests (appmap_id, event_id, method, path, normalized_path, status_code, elapsed_ms)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
   );
   const insQ = db.prepare(
     `INSERT INTO sql_queries (appmap_id, event_id, sql_text, caller_class, caller_method, elapsed_ms)
      VALUES (?, ?, ?, ?, ?, ?)`
   );
+  // Test seed: derive package + class chain from defined_class so call
+  // sites don't have to specify them. defined_class may be Java dot-form
+  // ("org.example.Foo"), in which case we treat the trailing segment as
+  // the leaf class and the rest as a slash-form package.
   const insCo = db.prepare(
-    `INSERT OR IGNORE INTO code_objects (fqid, defined_class, method_id) VALUES (?, ?, ?)`
+    `INSERT OR IGNORE INTO code_objects (fqid, package, classes, leaf_class, method, is_static)
+     VALUES (?, ?, ?, ?, ?, ?)`
   );
   const selCoId = db.prepare(`SELECT id FROM code_objects WHERE fqid = ?`);
   const insLabel = db.prepare(
@@ -97,8 +102,7 @@ function seed(db: sqlite3.Database, recs: Recording[]): void {
         req.path,
         req.normalized_path ?? null,
         req.status,
-        req.elapsed_ms ?? null,
-        r.timestamp ?? '2026-04-29T12:00:00.000Z'
+        req.elapsed_ms ?? null
       );
     }
     for (const q of r.queries ?? []) {
@@ -113,7 +117,10 @@ function seed(db: sqlite3.Database, recs: Recording[]): void {
     }
     for (const c of r.calls ?? []) {
       const fqid = c.fqid ?? `${c.defined_class}#${c.method_id}`;
-      insCo.run(fqid, c.defined_class, c.method_id);
+      const dotIdx = c.defined_class.lastIndexOf('.');
+      const pkg = dotIdx >= 0 ? c.defined_class.slice(0, dotIdx).replace(/\./g, '/') : '';
+      const leaf = dotIdx >= 0 ? c.defined_class.slice(dotIdx + 1) : c.defined_class;
+      insCo.run(fqid, pkg, JSON.stringify([leaf]), leaf, c.method_id, 0);
       const coId = (selCoId.get(fqid) as { id: number }).id;
       for (const label of c.labels ?? []) insLabel.run(coId, label);
       insCall.run(
@@ -322,6 +329,118 @@ describe('findCalls', () => {
       const rows = findCalls(db, { label: 'log' });
       expect(rows).toHaveLength(1);
       expect(rows[0].defined_class).toBe('Logger');
+    } finally {
+      db.close();
+    }
+  });
+});
+
+describe('findCalls --class / --method (fqid-aware)', () => {
+  it('matches the canonical fqid prefix', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'org.example.UserRepository',
+              method_id: 'findById',
+              fqid: 'org/example/UserRepository#findById',
+            },
+          ],
+        },
+      ]);
+      // Canonical V3 fqid prefix (slash form, sans method)
+      const rows = findCalls(db, { className: 'org/example/UserRepository' });
+      expect(rows).toHaveLength(1);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('matches a short class name as the trailing fqid segment', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'org.example.UserRepository',
+              method_id: 'findById',
+              fqid: 'org/example/UserRepository#findById',
+            },
+            {
+              event_id: 2,
+              defined_class: 'org.other.OrdersController',
+              method_id: 'create',
+              fqid: 'org/other/OrdersController#create',
+            },
+          ],
+        },
+      ]);
+      const rows = findCalls(db, { className: 'UserRepository' });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].method_id).toBe('findById');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('matches the trailing dot-segment of a Java-style defined_class even without code_object', () => {
+    const db = freshDb();
+    try {
+      // Insert a function_call that has NO code_object (code_object_id NULL)
+      // but has a Java dot-form defined_class.
+      const am = db
+        .prepare(`INSERT INTO appmaps (name, source_path) VALUES ('a', '/tmp/a.appmap.json')`)
+        .run();
+      db.prepare(
+        `INSERT INTO function_calls (appmap_id, event_id, defined_class, method_id)
+         VALUES (?, 1, 'org.example.UserRepository', 'findById')`
+      ).run(am.lastInsertRowid);
+
+      const rows = findCalls(db, { className: 'UserRepository' });
+      expect(rows).toHaveLength(1);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--method matches via fqid suffix', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'org.example.UserRepository',
+              method_id: 'findById',
+              fqid: 'org/example/UserRepository#findById',
+            },
+            {
+              event_id: 2,
+              defined_class: 'org.example.OrderRepository',
+              method_id: 'findById',
+              fqid: 'org/example/OrderRepository#findById',
+            },
+            {
+              event_id: 3,
+              defined_class: 'org.example.UserRepository',
+              method_id: 'save',
+              fqid: 'org/example/UserRepository#save',
+            },
+          ],
+        },
+      ]);
+      const rows = findCalls(db, { method: 'findById' });
+      expect(rows).toHaveLength(2);
+      expect(rows.every((r) => r.method_id === 'findById')).toBe(true);
     } finally {
       db.close();
     }

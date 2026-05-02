@@ -72,6 +72,8 @@ echo "indexed $COUNT recordings"
 run query endpoints --query-db "$DB" --sort p95 --limit 5
 run query find queries --query-db "$DB" --table users --limit 3 || true
 run query find exceptions --query-db "$DB" --limit 5 || true
+run query hotspots --query-db "$DB" --limit 5
+run query hotspots --query-db "$DB" --type=sql --limit 3
 
 # Pick the recording with the most events for the tree demos.
 APPMAP="$(node -e "

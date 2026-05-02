@@ -46,8 +46,8 @@ function seed(
   // event_id 2: controller call, parent = 1
   let coId = 1;
   db.prepare(
-    `INSERT OR IGNORE INTO code_objects (fqid, defined_class, method_id)
-     VALUES ('app/OrdersController#create', 'OrdersController', 'create')`
+    `INSERT OR IGNORE INTO code_objects (fqid, package, classes, leaf_class, method, is_static)
+     VALUES ('app/OrdersController#create', 'app', '["OrdersController"]', 'OrdersController', 'create', 0)`
   ).run();
   coId = (db
     .prepare(`SELECT id FROM code_objects WHERE fqid = 'app/OrdersController#create'`)

@@ -20,19 +20,21 @@ interface SeedReq {
 let nextEvent = 1;
 function seed(db: sqlite3.Database, reqs: SeedReq[]): void {
   const insertAppmap = db.prepare(
-    `INSERT INTO appmaps (name, source_path, git_branch) VALUES (?, ?, ?)`
+    `INSERT INTO appmaps (name, source_path, git_branch, timestamp) VALUES (?, ?, ?, ?)`
   );
   const insertReq = db.prepare(
     `INSERT INTO http_requests (appmap_id, event_id, method, path, normalized_path,
-       status_code, elapsed_ms, timestamp)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+       status_code, elapsed_ms)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
   );
   for (let i = 0; i < reqs.length; i++) {
     const r = reqs[i];
+    const ts = r.timestamp ?? '2026-04-29T12:00:00.000Z';
     const am = insertAppmap.run(
       `rec-${i}`,
       `/tmp/rec-${i}.appmap.json`,
-      r.branch ?? null
+      r.branch ?? null,
+      ts
     );
     insertReq.run(
       am.lastInsertRowid,
@@ -41,8 +43,7 @@ function seed(db: sqlite3.Database, reqs: SeedReq[]): void {
       r.path,
       r.normalized_path ?? null,
       r.status,
-      r.elapsed_ms,
-      r.timestamp ?? '2026-04-29T12:00:00.000Z'
+      r.elapsed_ms
     );
   }
 }
@@ -183,13 +184,30 @@ describe('endpoints', () => {
         { method: 'GET', path: '/b', status: 200, elapsed_ms: 50 },
         { method: 'GET', path: '/b', status: 200, elapsed_ms: 50 },
         { method: 'GET', path: '/c', status: 500, elapsed_ms: 20 },
+        { method: 'GET', path: '/d', status: 200, elapsed_ms: 200 },
       ]);
       const byCount = endpoints(db, { sort: 'count' }).map((r) => r.route);
       expect(byCount[0]).toBe('/b'); // count 2
       const byErr = endpoints(db, { sort: 'err' }).map((r) => r.route);
       expect(byErr[0]).toBe('/c'); // 100% err
       const byAvg = endpoints(db, { sort: 'avg' }).map((r) => r.route);
-      expect(byAvg[0]).toBe('/a'); // 100ms avg
+      expect(byAvg[0]).toBe('/d'); // 200ms avg
+      const byP95 = endpoints(db, { sort: 'p95' }).map((r) => r.route);
+      expect(byP95[0]).toBe('/d'); // 200ms p95
+    } finally {
+      db.close();
+    }
+  });
+
+  it('sorts nulls last (a route with no measured duration ranks below a real 0)', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        { method: 'GET', path: '/measured', status: 200, elapsed_ms: 0 },
+        { method: 'GET', path: '/unmeasured', status: 200, elapsed_ms: null },
+      ]);
+      const byP95 = endpoints(db, { sort: 'p95' }).map((r) => r.route);
+      expect(byP95).toEqual(['/measured', '/unmeasured']);
     } finally {
       db.close();
     }

@@ -24,7 +24,11 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     .option('since', { type: 'string', describe: 'ISO timestamp or "Nd ago"' })
     .option('until', { type: 'string', describe: 'ISO timestamp or "Nd ago"' })
     .option('branch', { type: 'string' })
-    .option('status', { type: 'string', describe: 'e.g. 500, ">=500"' })
+    .option('status', {
+      type: 'string',
+      describe:
+        'route filter — e.g. 500, ">=500" (route is shown if any request matches; aggregates still cover all of that route\'s requests)',
+    })
     .option('sort', {
       type: 'string',
       choices: ['count', 'avg', 'p95', 'err'] as const,

@@ -2,6 +2,7 @@ import yargs from 'yargs';
 
 import * as EndpointsVerb from './verbs/endpoints';
 import * as FindVerb from './verbs/find';
+import * as HotspotsVerb from './verbs/hotspots';
 import * as TreeVerb from './verbs/tree';
 
 export const command = 'query';
@@ -11,6 +12,7 @@ export const builder = <T>(args: yargs.Argv<T>) =>
   args
     .command(EndpointsVerb)
     .command(FindVerb)
+    .command(HotspotsVerb)
     .command(TreeVerb)
     .demandCommand(1, 'specify a query verb')
     .strict();

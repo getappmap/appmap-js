@@ -33,13 +33,13 @@ export function importAppmap(db: sqlite3.Database, filePath: string): ImportResu
   const tx = db.transaction((): ImportResult => {
     db.prepare('DELETE FROM appmaps WHERE source_path = ?').run(absolutePath);
 
-    const { appmapId, timestampIso } = insertAppmapRecord(db, absolutePath, parsed);
+    const { appmapId } = insertAppmapRecord(db, absolutePath, parsed);
     const codeObjectLookup = importCodeObjects(db, classMap);
 
     const returnEvents = buildReturnEventMap(events);
     const parentEventMap = buildParentEventMap(events);
 
-    importHttpRequests(db, appmapId, events, returnEvents, parentEventMap, timestampIso);
+    importHttpRequests(db, appmapId, events, returnEvents, parentEventMap);
     importHttpClientRequests(db, appmapId, events, returnEvents, parentEventMap);
     importSqlQueries(db, appmapId, events, returnEvents, parentEventMap);
     importFunctionCalls(db, appmapId, events, returnEvents, parentEventMap, codeObjectLookup);

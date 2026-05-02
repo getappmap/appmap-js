@@ -48,11 +48,14 @@ describe('importCodeObjects', () => {
       const lookup = importCodeObjects(db, tree);
 
       const row = db
-        .prepare('SELECT fqid, defined_class, method_id FROM code_objects')
+        .prepare('SELECT fqid, package, classes, leaf_class, method, is_static FROM code_objects')
         .get() as any;
       expect(row.fqid).toBe('app/User#save');
-      expect(row.method_id).toBe('save');
-      expect(row.defined_class).toBe('app.User');
+      expect(row.package).toBe('app');
+      expect(JSON.parse(row.classes)).toEqual(['User']);
+      expect(row.leaf_class).toBe('User');
+      expect(row.method).toBe('save');
+      expect(row.is_static).toBe(0);
       expect(lookup.get('app/models/user.rb:10')).toBe(1);
     } finally {
       db.close();
@@ -113,8 +116,8 @@ describe('importCodeObjects', () => {
         },
       ];
       importCodeObjects(db, tree);
-      const row = db.prepare('SELECT fqid, method_id FROM code_objects').get() as any;
-      expect(row.method_id).toBe('is_authenticated');
+      const row = db.prepare('SELECT fqid, method FROM code_objects').get() as any;
+      expect(row.method).toBe('is_authenticated');
       expect(row.fqid).toBe('app/User#is_authenticated');
     } finally {
       db.close();

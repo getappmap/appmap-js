@@ -4,7 +4,7 @@
 // queries an APM dashboard or LLM agent needs. Ported from appmap-apm
 // (server/db/schema.py); shape preserved unchanged.
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 4;
 
 export const SCHEMA = `
 CREATE TABLE IF NOT EXISTS appmaps (
@@ -26,15 +26,30 @@ CREATE TABLE IF NOT EXISTS appmaps (
 );
 
 -- Code objects from classMap entries (one per unique instrumented function).
--- This is a lookup table for stable fqids — it intentionally does NOT store
--- path, lineno, or location because those can vary across appmaps (e.g. when
--- the same function is recorded from different branches or revisions).
--- Per-recording location data lives on function_calls instead.
+-- A lookup table for stable fqids. Components are stored separately so
+-- filters can match exactly without parsing the fqid string:
+--   package     slash-joined package path  ('' for top-level fn)
+--   classes     JSON array of class names  ('[]' for package-level fn)
+--   leaf_class  last element of classes, denormalized for fast lookup
+--               on short-form filters like --class Cipher (matches both
+--               top-level Cipher and OpenSSL::Cipher).
+--   method      leaf method name
+--   is_static   1 for static / class methods, 0 for instance methods
+-- The fqid is always derivable from these (package + cls-chain + (#|.) +
+-- method); we keep it as a stored column for output ergonomics and
+-- uniqueness enforcement.
+--
+-- This table intentionally does NOT store path/lineno/location, because
+-- those vary across recordings of the same code (different branches or
+-- revisions). Per-recording location data lives on function_calls.
 CREATE TABLE IF NOT EXISTS code_objects (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    fqid            TEXT NOT NULL UNIQUE,  -- stable ID: package/Class#method or package/Class.method
-    defined_class   TEXT NOT NULL,
-    method_id       TEXT NOT NULL
+    fqid            TEXT NOT NULL UNIQUE,
+    package         TEXT NOT NULL,
+    classes         TEXT NOT NULL,
+    leaf_class      TEXT NOT NULL,
+    method          TEXT NOT NULL,
+    is_static       INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS http_requests (
@@ -49,8 +64,9 @@ CREATE TABLE IF NOT EXISTS http_requests (
     protocol        TEXT,
     status_code     INTEGER NOT NULL,
     mime_type       TEXT,
-    elapsed_ms      REAL,
-    timestamp       TEXT
+    elapsed_ms      REAL
+    -- Note: no per-row timestamp. Time range queries JOIN to appmaps and
+    -- filter on appmaps.timestamp (the recording-level value).
 );
 
 CREATE TABLE IF NOT EXISTS http_client_requests (
@@ -120,7 +136,6 @@ CREATE TABLE IF NOT EXISTS labels (
 CREATE INDEX IF NOT EXISTS idx_http_requests_appmap ON http_requests(appmap_id);
 CREATE INDEX IF NOT EXISTS idx_http_requests_path ON http_requests(normalized_path, method);
 CREATE INDEX IF NOT EXISTS idx_http_requests_status ON http_requests(status_code);
-CREATE INDEX IF NOT EXISTS idx_http_requests_timestamp ON http_requests(timestamp);
 CREATE INDEX IF NOT EXISTS idx_http_client_requests_appmap ON http_client_requests(appmap_id);
 CREATE INDEX IF NOT EXISTS idx_sql_queries_appmap ON sql_queries(appmap_id);
 CREATE INDEX IF NOT EXISTS idx_sql_queries_elapsed ON sql_queries(elapsed_ms DESC);
@@ -132,7 +147,9 @@ CREATE INDEX IF NOT EXISTS idx_function_calls_parent ON function_calls(appmap_id
 CREATE INDEX IF NOT EXISTS idx_exceptions_appmap ON exceptions(appmap_id);
 CREATE INDEX IF NOT EXISTS idx_exceptions_class ON exceptions(exception_class);
 CREATE INDEX IF NOT EXISTS idx_code_objects_fqid ON code_objects(fqid);
-CREATE INDEX IF NOT EXISTS idx_code_objects_class_method ON code_objects(defined_class, method_id);
+CREATE INDEX IF NOT EXISTS idx_code_objects_leaf_class ON code_objects(leaf_class);
+CREATE INDEX IF NOT EXISTS idx_code_objects_method ON code_objects(method);
+CREATE INDEX IF NOT EXISTS idx_code_objects_leaf_method ON code_objects(leaf_class, method);
 CREATE INDEX IF NOT EXISTS idx_labels_label ON labels(label);
 CREATE INDEX IF NOT EXISTS idx_labels_code_object ON labels(code_object_id);
 CREATE INDEX IF NOT EXISTS idx_appmaps_timestamp ON appmaps(timestamp);
