@@ -70,6 +70,23 @@ interface ResourceImpl {
   read: (db: sqlite3.Database) => unknown;
 }
 
+// Template-based resources expose a parameterized URI. The agent
+// discovers them via resources/templates/list, then reads a concrete
+// instance with resources/read by substituting the placeholder.
+interface ResourceTemplateSpec {
+  uriTemplate: string;       // RFC 6570 template
+  name: string;
+  description: string;
+  mimeType: string;
+}
+
+interface ResourceTemplateImpl {
+  spec: ResourceTemplateSpec;
+  // Returns the args object if the URI matches the template, else null.
+  match: (uri: string) => Record<string, string> | null;
+  read: (args: Record<string, string>, db: sqlite3.Database) => unknown;
+}
+
 const SERVER_INFO = { name: 'appmap-query', version: '1.0.0' };
 const PROTOCOL_VERSION = '2024-11-05';
 
@@ -549,6 +566,29 @@ const RESOURCES: ResourceImpl[] = [
   },
 ];
 
+const RESOURCE_TEMPLATES: ResourceTemplateImpl[] = [
+  {
+    spec: {
+      uriTemplate: 'appmap://recording/{ref}/logs',
+      name: 'recording_logs',
+      description:
+        'All log lines (functions labeled `log`) for one recording, ordered by event_id. {ref} is either the numeric appmap_id or the recording name/basename — same forms find_recordings returns. Each entry has the find_logs row shape.',
+      mimeType: 'application/json',
+    },
+    match: (uri) => {
+      const m = /^appmap:\/\/recording\/([^/]+)\/logs$/.exec(uri);
+      if (!m) return null;
+      // The {ref} segment may be percent-encoded (recording names can
+      // contain spaces, em-dashes, etc.).
+      return { ref: decodeURIComponent(m[1]) };
+    },
+    read: (args, db) => {
+      const info = resolveByIdOrRef(db, args.ref);
+      return find(db, 'logs', { appmap: info.name }) as FindLogRow[];
+    },
+  },
+];
+
 // --- handler -------------------------------------------------------------
 
 export type McpHandler = (msg: JsonRpcRequest) => JsonRpcResponse | null;
@@ -609,28 +649,38 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
       };
     }
 
+    if (method === 'resources/templates/list') {
+      return {
+        jsonrpc: '2.0',
+        id,
+        result: { resourceTemplates: RESOURCE_TEMPLATES.map((t) => t.spec) },
+      };
+    }
+
     if (method === 'resources/read') {
       const params = (msg.params ?? {}) as { uri?: string };
-      const resource = RESOURCES.find((r) => r.spec.uri === params.uri);
-      if (!resource) return errorResponse(id, -32602, `unknown resource: ${params.uri}`);
-      try {
-        const result = resource.read(db);
-        return {
-          jsonrpc: '2.0',
-          id,
-          result: {
-            contents: [
-              {
-                uri: resource.spec.uri,
-                mimeType: resource.spec.mimeType,
-                text: JSON.stringify(result, null, 2),
-              },
-            ],
-          },
-        };
-      } catch (e) {
-        return errorResponse(id, -32000, (e as Error).message);
+      const uri = params.uri ?? '';
+      const resource = RESOURCES.find((r) => r.spec.uri === uri);
+      if (resource) {
+        try {
+          const result = resource.read(db);
+          return readResponse(id, uri, resource.spec.mimeType, result);
+        } catch (e) {
+          return errorResponse(id, -32000, (e as Error).message);
+        }
       }
+      for (const tmpl of RESOURCE_TEMPLATES) {
+        const matched = tmpl.match(uri);
+        if (matched) {
+          try {
+            const result = tmpl.read(matched, db);
+            return readResponse(id, uri, tmpl.spec.mimeType, result);
+          } catch (e) {
+            return errorResponse(id, -32000, (e as Error).message);
+          }
+        }
+      }
+      return errorResponse(id, -32602, `unknown resource: ${uri}`);
     }
 
     return errorResponse(id, -32601, `method not found: ${method}`);
@@ -645,10 +695,35 @@ function errorResponse(
   return { jsonrpc: '2.0', id, error: { code, message } };
 }
 
+function readResponse(
+  id: string | number | null,
+  uri: string,
+  mimeType: string,
+  result: unknown
+): JsonRpcResponse {
+  return {
+    jsonrpc: '2.0',
+    id,
+    result: {
+      contents: [
+        {
+          uri,
+          mimeType,
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    },
+  };
+}
+
 export function listTools(): readonly ToolSpec[] {
   return TOOLS.map((t) => t.spec);
 }
 
 export function listResources(): readonly ResourceSpec[] {
   return RESOURCES.map((r) => r.spec);
+}
+
+export function listResourceTemplates(): readonly ResourceTemplateSpec[] {
+  return RESOURCE_TEMPLATES.map((t) => t.spec);
 }

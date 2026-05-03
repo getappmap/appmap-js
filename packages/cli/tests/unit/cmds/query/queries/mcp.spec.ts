@@ -5,6 +5,7 @@ import {
   buildMcpHandler,
   JsonRpcRequest,
   listResources,
+  listResourceTemplates,
   listTools,
 } from '../../../../../src/cmds/query/queries/mcp';
 
@@ -405,8 +406,88 @@ describe('MCP handler', () => {
     }
   });
 
-  it('listTools / listResources are stable for documentation use', () => {
+  it('listTools / listResources / listResourceTemplates are stable for documentation use', () => {
     expect(listTools().length).toBeGreaterThan(0);
     expect(listResources().length).toBeGreaterThan(0);
+    expect(listResourceTemplates().length).toBeGreaterThan(0);
+  });
+
+  it('resources/templates/list advertises the per-recording logs template', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 300,
+        method: 'resources/templates/list',
+      });
+      const templates = (r!.result as any).resourceTemplates as { uriTemplate: string }[];
+      expect(templates.some((t) => t.uriTemplate === 'appmap://recording/{ref}/logs')).toBe(
+        true
+      );
+    } finally {
+      db.close();
+    }
+  });
+
+  it('resources/read on appmap://recording/<name>/logs returns the recording\'s log rows', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      // Give the seeded log call a captured message.
+      db.prepare(
+        `UPDATE function_calls
+            SET parameters_json = ?
+            WHERE method_id = 'error'`
+      ).run(
+        JSON.stringify([{ name: 'message', class: 'String', value: 'connection refused' }])
+      );
+
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 301,
+        method: 'resources/read',
+        params: { uri: 'appmap://recording/rec/logs' },
+      });
+      const contents = (r!.result as any).contents;
+      expect(contents[0].uri).toBe('appmap://recording/rec/logs');
+      const rows = JSON.parse(contents[0].text);
+      expect(rows).toHaveLength(1);
+      expect(rows[0].logger).toBe('Logger');
+      expect(rows[0].method_id).toBe('error');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('resources/read on a recording-logs URI with an unknown ref returns an error', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 302,
+        method: 'resources/read',
+        params: { uri: 'appmap://recording/no-such-recording/logs' },
+      });
+      expect(r!.error).toBeDefined();
+      expect(r!.error!.message).toMatch(/appmap not found/);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('resources/read on a URI that matches no resource or template returns an error', () => {
+    const db = freshDb();
+    try {
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 303,
+        method: 'resources/read',
+        params: { uri: 'appmap://nope' },
+      });
+      expect(r!.error).toBeDefined();
+      expect(r!.error!.message).toMatch(/unknown resource/);
+    } finally {
+      db.close();
+    }
   });
 });
