@@ -6,6 +6,8 @@
   ],
   "scripts": {
     "lint": "yarn workspaces foreach --exclude root -v run lint",
+    "verify": "node scripts/verify.mjs",
+    "verify:staged": "node scripts/verify.mjs --staged",
     "test": "yarn workspaces foreach --exclude '{root}' -v run test",
     "build": "yarn workspaces foreach -t --exclude root -v run build",
     "build-native": "yarn workspaces foreach -t --exclude root -v run build-native",
