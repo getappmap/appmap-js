@@ -392,7 +392,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_logs',
       description:
-        'Application log lines captured from functions labeled `log`. Filter by message substring (matches across the call\'s parameters and return value), logger class, recording, branch, or time window. Returns: appmap_name, event_id, parent_event_id, logger, method_id, path, lineno, parameters_json, return_value. The message is in parameters_json (a [{name, class, value}, ...] blob) — read the value of the parameter named `message`/`msg`, or the first string-typed parameter, or parse return_value as JSON if the recorder returns a structured `{level, message, ...}`. Use path:lineno to read the call site of the log statement.',
+        'Application log lines captured from functions labeled `log`. Filter by message substring (matches across the call\'s parameters and return value), logger class, recording, branch, or time window. Returns: appmap_name, event_id, parent_event_id, logger, method_id, path, lineno, message, parameters_json, return_value. `message` is the display-projected log text (extracted from a structured return_value or from the parameter named message/msg, falling back to the first string parameter); use it directly. parameters_json and return_value remain available for the underlying captured values. Use path:lineno to read the call site of the log statement.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -423,7 +423,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_exceptions',
       description:
-        'Exception rows with class, message, source location. Filter by exception class name, the request that owns the exception (via route/status), branch, or time window. Returns: appmap_id, appmap_name, event_id, exception_class, message, path, lineno. Pass with_logs=N to attach the last N log lines preceding each exception (chronological order) under recent_logs — usually the fastest way to see what the app reported before the failure.',
+        'Exception rows with class, message, source location. Filter by exception class name, the request that owns the exception (via route/status), branch, or time window. Returns: appmap_id, appmap_name, event_id (the throwing call\'s entry id), return_event_id (the throw point in the event stream), exception_class, message, path, lineno. Pass with_logs=N to attach the last N log lines preceding the throw (chronological order) under recent_logs — usually the fastest way to see what the app reported before the failure. recent_logs uses return_event_id as the upper bound, so logs that fired *inside* the throwing call are included.',
       inputSchema: {
         type: 'object',
         properties: {

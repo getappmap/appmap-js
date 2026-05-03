@@ -14,6 +14,7 @@ function logNode(overrides: Partial<LogNode> = {}): LogNode {
     path: 'app/log.rb',
     lineno: 12,
     elapsed_ms: 0.1,
+    message: 'connection refused',
     parameters_json: JSON.stringify([
       { name: 'message', class: 'String', value: 'connection refused' },
     ]),

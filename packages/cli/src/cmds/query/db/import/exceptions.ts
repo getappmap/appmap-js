@@ -24,9 +24,9 @@ export function importExceptions(
   parentEventMap: Map<number, number>
 ): void {
   const stmt = db.prepare(
-    `INSERT INTO exceptions (appmap_id, event_id, thread_id, parent_event_id,
-      exception_class, message, path, lineno)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO exceptions (appmap_id, event_id, return_event_id, thread_id,
+      parent_event_id, exception_class, message, path, lineno)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
 
   const seenCallIds = new Set<number>();
@@ -39,6 +39,7 @@ export function importExceptions(
     if (typeof ev.parent_id !== 'number') continue;
 
     const callEventId = ev.parent_id;
+    const returnEventId = typeof ev.id === 'number' ? ev.id : null;
     seenCallIds.add(callEventId);
     const parentEventId = parentEventMap.get(callEventId) ?? null;
 
@@ -46,6 +47,7 @@ export function importExceptions(
       stmt.run(
         appmapId,
         callEventId,
+        returnEventId,
         ev.thread_id ?? null,
         parentEventId,
         exc.class,
@@ -57,6 +59,7 @@ export function importExceptions(
   }
 
   // Pass 2: legacy shape — exceptions on a call event we didn't already cover.
+  // No paired return event in this shape, so return_event_id stays null.
   for (const ev of events) {
     if (ev.event !== 'call') continue;
     const excs = ev.exceptions as ExceptionObject[] | undefined;
@@ -69,6 +72,7 @@ export function importExceptions(
       stmt.run(
         appmapId,
         ev.id,
+        null,
         ev.thread_id ?? null,
         parentEventId,
         exc.class,

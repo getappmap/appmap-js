@@ -36,16 +36,22 @@ function seedMinimal(db: sqlite3.Database): void {
     .get() as { id: number }).id;
   db.prepare(`INSERT OR IGNORE INTO labels (code_object_id, label) VALUES (?, 'log')`).run(co);
   db.prepare(
-    `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, code_object_id, defined_class, method_id, elapsed_ms)
-     VALUES (?, 2, 1, ?, 'Logger', 'error', 0.1)`
+    `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, code_object_id,
+       defined_class, method_id, elapsed_ms, parameters_json, return_value)
+     VALUES (?, 2, 1, ?, 'Logger', 'error', 0.1,
+       '[{"name":"message","class":"String","value":"connection refused"}]', NULL)`
   ).run(id, co);
   db.prepare(
     `INSERT INTO sql_queries (appmap_id, event_id, parent_event_id, sql_text, elapsed_ms)
      VALUES (?, 3, 2, 'INSERT INTO orders (id) VALUES (?)', 14)`
   ).run(id);
+  // Exception's call entry is event_id=2 (the Logger.error call), and the
+  // throw materialised at the return event id=4. with_logs uses event_id=2
+  // as the call boundary and event_id=4 as the throw boundary.
   db.prepare(
-    `INSERT INTO exceptions (appmap_id, event_id, parent_event_id, exception_class, message)
-     VALUES (?, 2, 1, 'IntegrityError', 'duplicate key')`
+    `INSERT INTO exceptions (appmap_id, event_id, return_event_id, parent_event_id,
+      exception_class, message)
+     VALUES (?, 2, 4, 1, 'IntegrityError', 'duplicate key')`
   ).run(id);
 }
 
@@ -329,6 +335,51 @@ describe('MCP handler', () => {
       });
       const withLogsRows = JSON.parse((withLogsRes!.result as any).content[0].text);
       expect(Array.isArray(withLogsRows[0].recent_logs)).toBe(true);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('find_logs row carries a derived message field', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 91,
+        method: 'tools/call',
+        params: { name: 'find_logs', arguments: {} },
+      });
+      const rows = JSON.parse((r!.result as any).content[0].text);
+      expect(rows).toHaveLength(1);
+      expect(rows[0].message).toBe('connection refused');
+      expect(rows[0].logger).toBe('Logger');
+      expect(rows[0].parameters_json).toContain('connection refused');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('find_exceptions with_logs uses return_event_id for ordering (regression)', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 92,
+        method: 'tools/call',
+        params: { name: 'find_exceptions', arguments: { with_logs: 5 } },
+      });
+      const rows = JSON.parse((r!.result as any).content[0].text);
+      expect(rows).toHaveLength(1);
+      expect(rows[0].return_event_id).toBe(4);
+      // Pre-fix the with_logs SQL filtered by `event_id < exception.event_id`
+      // (=2), which excluded the Logger.error log call at event_id=2 entirely.
+      // With return_event_id (=4) as the upper bound, the log call (event 2)
+      // is included — that's the regression we're guarding against.
+      expect(rows[0].recent_logs).toHaveLength(1);
+      expect(rows[0].recent_logs[0].event_id).toBe(2);
+      expect(rows[0].recent_logs[0].message).toBe('connection refused');
     } finally {
       db.close();
     }

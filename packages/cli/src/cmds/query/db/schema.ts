@@ -4,7 +4,7 @@
 // queries an APM dashboard or LLM agent needs. Ported from appmap-apm
 // (server/db/schema.py); shape preserved unchanged.
 
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 5;
 
 export const SCHEMA = `
 CREATE TABLE IF NOT EXISTS appmaps (
@@ -115,7 +115,14 @@ CREATE TABLE IF NOT EXISTS function_calls (
 CREATE TABLE IF NOT EXISTS exceptions (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     appmap_id       INTEGER NOT NULL REFERENCES appmaps(id) ON DELETE CASCADE,
+    -- event_id is the call event id (the call this exception belongs to);
+    -- return_event_id is the return event id (where the throw materialized in
+    -- the event stream). Use return_event_id for ordering — e.g. the
+    -- with_logs neighborhood query (what did the app log before the throw?)
+    -- needs to include logs that fired *inside* the throwing call, which all
+    -- have event_id greater than the call entry id but less than the return.
     event_id        INTEGER,
+    return_event_id INTEGER,
     thread_id       INTEGER,
     parent_event_id INTEGER,
     exception_class TEXT NOT NULL,

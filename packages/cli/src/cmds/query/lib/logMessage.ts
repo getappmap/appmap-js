@@ -26,9 +26,9 @@ export function projectLogMessage(
     try {
       const params = JSON.parse(parametersJson) as { name?: string; class?: string; value?: unknown }[];
       const named = params.find((p) => p.name === 'message' || p.name === 'msg');
-      if (named?.value != null) return String(named.value);
+      if (named?.value != null) return stripWrappingQuotes(String(named.value));
       const firstString = params.find((p) => typeof p.value === 'string');
-      if (firstString) return String(firstString.value);
+      if (firstString) return stripWrappingQuotes(String(firstString.value));
       if (params.length > 0) return JSON.stringify(params.map((p) => p.value));
     } catch {
       return parametersJson;
@@ -37,4 +37,17 @@ export function projectLogMessage(
   // No structured message available. Return blank rather than the raw
   // `return_value` (which is often noise like "true" / "None").
   return '';
+}
+
+// Some recorders stringify String parameter values with the source-code
+// quote characters preserved (e.g. `'hello'`). Strip a single matched
+// pair of leading+trailing single or double quotes so the display text
+// is the raw message.
+function stripWrappingQuotes(s: string): string {
+  if (s.length >= 2) {
+    const first = s[0];
+    const last = s[s.length - 1];
+    if ((first === "'" || first === '"') && first === last) return s.slice(1, -1);
+  }
+  return s;
 }

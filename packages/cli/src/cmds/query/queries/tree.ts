@@ -1,5 +1,6 @@
 import sqlite3 from 'better-sqlite3';
 
+import { projectLogMessage } from '../lib/logMessage';
 import { appmapRefClause } from '../lib/scope';
 
 // Discriminated union of tree nodes. Each node corresponds to one row in
@@ -69,6 +70,10 @@ export interface LogNode extends BaseNode {
   path: string | null;
   lineno: number | null;
   elapsed_ms: number | null;
+  // Display-projected message derived from parameters_json / return_value
+  // (see lib/logMessage.projectLogMessage). '' when nothing usable was
+  // captured.
+  message: string;
   parameters_json: string | null;
   return_value: string | null;
 }
@@ -259,6 +264,7 @@ export function tree(
         path: r.path,
         lineno: r.lineno,
         elapsed_ms: r.elapsed_ms,
+        message: projectLogMessage(r.parameters_json, r.return_value),
         parameters_json: r.parameters_json,
         return_value: r.return_value,
       });

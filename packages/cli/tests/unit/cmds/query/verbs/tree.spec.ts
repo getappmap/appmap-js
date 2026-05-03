@@ -41,6 +41,7 @@ const lg: LogNode = {
   kind: 'log', event_id: 6, ...baseFields,
   fqid: 'app/Logger#info', logger: 'Logger', method_id: 'info',
   path: null, lineno: null, elapsed_ms: 0.1,
+  message: 'hi',
   parameters_json: '[{"name":"message","value":"hi"}]', return_value: null,
 };
 

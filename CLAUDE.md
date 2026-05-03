@@ -29,3 +29,11 @@ If you touch a package that doesn't yet participate, add a `typecheck` script (`
 
 - ESLint errors that CI rejects: `array-type` (use `T[]` not `Array<T>`), `no-unnecessary-type-assertion`, `prefer-function-type`, `prefer-optional-chain`, etc. Warnings (e.g. `no-unsafe-*`, `prefer-nullish-coalescing`) are suppressed by `--quiet`.
 - Type errors that `tsc --noEmit` finds, including yargs `CommandModule<T, any>` assignability issues that require widening exported handler argv types.
+
+# Driving the MCP after MCP-side changes
+
+The `appmap query mcp` server lives in `built/cli.js`. If you change anything under `packages/cli/src/cmds/query/queries/mcp.ts` (or anywhere it transitively imports), you must run `npx tsc` (or `yarn build`) inside `packages/cli` before launching `mcp` for ad-hoc testing. A stale binary will respond to `tools/list` with the old surface — symptom is usually `unknown tool: …` from a client driving a tool the source defines.
+
+# Recording with appmap-node from a monorepo
+
+`npx appmap-node@latest npx jest …` invoked from the repo root can fail to parse `.ts` test files with a babel SyntaxError, because the inner jest doesn't pick up `packages/<name>/jest.config.js`'s `ts-jest` preset. Run from the package directory whose preset matters — e.g. `cd packages/cli && npx appmap-node@latest npx jest …`.

@@ -1,5 +1,6 @@
 import sqlite3 from 'better-sqlite3';
 
+import { projectLogMessage } from '../lib/logMessage';
 import type { NumberFilter } from '../lib/parseFilter';
 import {
   appmapIdScope,
@@ -86,6 +87,10 @@ export interface FindLogRow {
   method_id: string;
   path: string | null;
   lineno: number | null;
+  // Display-projected message derived from parameters_json / return_value
+  // (see lib/logMessage.projectLogMessage). '' when nothing usable was
+  // captured; the raw JSON columns remain for callers who need them.
+  message: string;
   parameters_json: string | null;
   return_value: string | null;
 }
@@ -94,13 +99,19 @@ export interface FindExceptionRow {
   appmap_id: number;
   appmap_name: string;
   event_id: number;
+  // Return event id where the throw materialized. with_logs uses this as
+  // the upper bound so logs that fired *inside* the throwing call are
+  // included. Null only for the legacy "exceptions on a call event"
+  // recorder shape.
+  return_event_id: number | null;
   exception_class: string;
   message: string | null;
   path: string | null;
   lineno: number | null;
   // Populated only when filter.withLogs > 0. Ordered chronologically
   // (oldest first), capped at filter.withLogs entries. Each row has
-  // event_id < this exception's event_id.
+  // event_id < the exception's return_event_id (or event_id if
+  // return_event_id is null).
   recent_logs?: FindLogRow[];
 }
 
@@ -369,7 +380,8 @@ export function findLogs(db: sqlite3.Database, filter: FindFilter): FindLogRow[]
     ORDER BY a.source_path, fc.event_id
   `;
   sql = appendLimitOffset(sql, filter, params);
-  return db.prepare(sql).all(...params) as FindLogRow[];
+  const rows = db.prepare(sql).all(...params) as Omit<FindLogRow, 'message'>[];
+  return rows.map((r) => ({ ...r, message: projectLogMessage(r.parameters_json, r.return_value) }));
 }
 
 export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindExceptionRow[] {
@@ -391,6 +403,7 @@ export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindEx
     SELECT e.appmap_id AS appmap_id,
            a.name AS appmap_name,
            e.event_id AS event_id,
+           e.return_event_id AS return_event_id,
            e.exception_class AS exception_class,
            e.message AS message,
            e.path AS path,
@@ -404,12 +417,14 @@ export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindEx
   const rows = db.prepare(sql).all(...params) as FindExceptionRow[];
 
   // Enrichment: for each exception, attach the last N log calls in the
-  // same recording with event_id strictly less than the exception's. We
-  // use event order rather than parent_event_id subtree walking — it's
-  // a strict subset of the call-tree relevant to most debugging
-  // questions ("what did the app log before it crashed?") and avoids a
-  // recursive CTE per row. Exceptions whose event_id is NULL (synthetic)
-  // can't be ordered, so they don't get logs attached.
+  // same recording with event_id strictly less than the exception's
+  // return_event_id (the throw point in the event stream). Falling back
+  // to event_id (the call entry) only handles the legacy recorder shape
+  // — which produces no preceding logs anyway, since logs inside the
+  // call have event_id > the call entry. We use event order rather than
+  // parent_event_id subtree walking to avoid recursive CTEs; this picks
+  // up logs that ran in the same thread before the throw, which is
+  // what "what did the app log before it crashed?" asks.
   if (filter.withLogs && filter.withLogs > 0) {
     const logStmt = db.prepare(`
       SELECT a.name AS appmap_name,
@@ -432,12 +447,15 @@ export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindEx
        LIMIT ?
     `);
     for (const row of rows) {
-      if (row.event_id == null) {
+      const upperBound = row.return_event_id ?? row.event_id;
+      if (upperBound == null) {
         row.recent_logs = [];
         continue;
       }
-      const logs = logStmt.all(row.appmap_id, row.event_id, filter.withLogs) as FindLogRow[];
-      row.recent_logs = logs.reverse(); // chronological
+      const logs = logStmt.all(row.appmap_id, upperBound, filter.withLogs) as Omit<FindLogRow, 'message'>[];
+      row.recent_logs = logs
+        .reverse() // chronological
+        .map((l) => ({ ...l, message: projectLogMessage(l.parameters_json, l.return_value) }));
     }
   }
 
