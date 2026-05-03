@@ -208,10 +208,11 @@ function renderTable(type: FindType, rows: unknown[]): string {
       );
     case 'calls':
       return formatTable(
-        ['APPMAP', 'FQID', 'ELAPSED', 'PARAMS', 'RETURN'],
+        ['APPMAP', 'FQID', 'LOCATION', 'ELAPSED', 'PARAMS', 'RETURN'],
         (rows as FindCallRow[]).map((r) => [
           r.appmap_name,
           r.fqid ?? `${r.defined_class}#${r.method_id}`,
+          r.path != null ? `${r.path}${r.lineno != null ? `:${r.lineno}` : ''}` : '',
           formatMs(r.elapsed_ms),
           formatParams(r.parameters_json),
           r.return_value ?? '',

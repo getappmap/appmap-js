@@ -68,6 +68,8 @@ export interface FindCallRow {
   fqid: string | null;
   defined_class: string;
   method_id: string;
+  path: string | null;
+  lineno: number | null;
   elapsed_ms: number | null;
   parameters_json: string | null;
   return_value: string | null;
@@ -285,6 +287,8 @@ export function findCalls(db: sqlite3.Database, filter: FindFilter): FindCallRow
            co.fqid AS fqid,
            fc.defined_class AS defined_class,
            fc.method_id AS method_id,
+           fc.path AS path,
+           fc.lineno AS lineno,
            fc.elapsed_ms AS elapsed_ms,
            fc.parameters_json AS parameters_json,
            fc.return_value AS return_value

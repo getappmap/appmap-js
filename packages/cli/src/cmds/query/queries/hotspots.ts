@@ -14,6 +14,11 @@ export interface FunctionHotspotRow {
   fqid: string | null;
   defined_class: string;
   method_id: string;
+  // Representative source location: one call's path/lineno from the
+  // aggregated set. Useful for "show me the source of this hotspot"
+  // without a follow-up lookup.
+  path: string | null;
+  lineno: number | null;
   calls: number;
   total_ms: number;
   self_ms: number;
@@ -72,6 +77,8 @@ export function functionHotspots(
       co.fqid                                        AS fqid,
       fc.defined_class                               AS defined_class,
       fc.method_id                                   AS method_id,
+      MIN(fc.path)                                   AS path,
+      MIN(fc.lineno)                                 AS lineno,
       COUNT(*)                                       AS calls,
       SUM(COALESCE(fc.elapsed_ms, 0))                AS total_ms,
       SUM(COALESCE(fc.elapsed_ms, 0)

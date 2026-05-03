@@ -41,6 +41,8 @@ export interface FunctionNode extends BaseNode {
   fqid: string | null;
   defined_class: string;
   method_id: string;
+  path: string | null;
+  lineno: number | null;
   is_static: boolean;
   elapsed_ms: number | null;
   parameters_json: string | null;
@@ -202,6 +204,7 @@ export function tree(
     .prepare(
       `SELECT fc.event_id, fc.parent_event_id, fc.thread_id,
               co.fqid AS fqid, fc.defined_class, fc.method_id,
+              fc.path, fc.lineno,
               fc.is_static, fc.elapsed_ms, fc.parameters_json, fc.return_value
        FROM function_calls fc
        LEFT JOIN code_objects co ON co.id = fc.code_object_id
@@ -214,6 +217,8 @@ export function tree(
     fqid: string | null;
     defined_class: string;
     method_id: string;
+    path: string | null;
+    lineno: number | null;
     is_static: number;
     elapsed_ms: number | null;
     parameters_json: string | null;
@@ -228,6 +233,8 @@ export function tree(
       fqid: r.fqid,
       defined_class: r.defined_class,
       method_id: r.method_id,
+      path: r.path,
+      lineno: r.lineno,
       is_static: r.is_static === 1,
       elapsed_ms: r.elapsed_ms,
       parameters_json: r.parameters_json,

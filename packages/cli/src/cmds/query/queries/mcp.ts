@@ -185,7 +185,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'function_hotspots',
       description:
-        'Functions ranked by total elapsed time across recordings. Filter by route to scope to a specific entry point or by class to focus on one component. Returns: fqid, defined_class, method_id, calls, total_ms, self_ms. fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static), "src/cmds/query/db/openQueryDb.openQueryDb" (module-level), "app/Outer::Inner#method" (nested classes).',
+        'Functions ranked by total elapsed time across recordings. Filter by route to scope to a specific entry point or by class to focus on one component. Returns: fqid, defined_class, method_id, path, lineno, calls, total_ms, self_ms. path/lineno are one representative call\'s source location — read directly to see the function. fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static), "src/cmds/query/db/openQueryDb.openQueryDb" (module-level), "app/Outer::Inner#method" (nested classes).',
       inputSchema: {
         type: 'object',
         properties: {
@@ -235,6 +235,27 @@ const TOOLS: ToolImpl[] = [
         until: maybeTime(args.until),
         limit: maybeNumber(args.limit) ?? 20,
       }),
+  },
+
+  {
+    spec: {
+      name: 'list_labels',
+      description:
+        'AppMap labels present in the database, ranked by usage. Use to discover what semantic anchors exist (canonical: "log", "secret", "security.authentication", "security.authorization", "deserialize", "system.exec", "job.create", "http.session.clear") and any project-specific or investigation labels (e.g. "bug.<id>", "repro"). Pass a returned label to find_calls --label to retrieve its calls. Returns: label, count (distinct code objects bearing it), sample_fqid (one representative function).',
+      inputSchema: { type: 'object', properties: {} },
+    },
+    handler: (_args, db) =>
+      db
+        .prepare(
+          `SELECT l.label                  AS label,
+                  COUNT(DISTINCT co.id)    AS count,
+                  MIN(co.fqid)             AS sample_fqid
+           FROM labels l
+           JOIN code_objects co ON co.id = l.code_object_id
+           GROUP BY l.label
+           ORDER BY count DESC, l.label`
+        )
+        .all(),
   },
 
   // ----- row-level finders ----------------------------------------------
@@ -319,7 +340,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_calls',
       description:
-        'Function-call rows. Filter by class, method, label (e.g. "log", "security.authorization"), duration. Use --label=log to retrieve application log output, or --label=security.authorization to find authorization checks. Returns: appmap_name, event_id, fqid, defined_class, method_id, elapsed_ms, parameters_json, return_value.',
+        'Function-call rows. Filter by class, method, label (e.g. "log", "security.authorization"), duration. Use --label=log to retrieve application log output, or --label=security.authorization to find authorization checks. Returns: appmap_name, event_id, fqid, defined_class, method_id, path, lineno, elapsed_ms, parameters_json, return_value. parameters_json and return_value are populated only for labeled functions; unlabeled rows return null. Use path:lineno to read the source.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -376,7 +397,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'get_call_tree',
       description:
-        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves. The appmap argument accepts a numeric appmap_id or an appmap_name (both surfaced by find_recordings). Returns ordered nodes: each has depth, kind ∈ {function, sql, http_server, http_client, exception}, event_id, parent_event_id, elapsed_ms, plus kind-specific fields (function: fqid/defined_class/method_id; sql: sql_text; http_server: method/route/status_code; http_client: method/url/status_code; exception: exception_class/message). fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static).',
+        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves. The appmap argument accepts a numeric appmap_id or an appmap_name (both surfaced by find_recordings). Returns ordered nodes: each has depth, kind ∈ {function, sql, http_server, http_client, exception}, event_id, parent_event_id, elapsed_ms, plus kind-specific fields (function: fqid/defined_class/method_id/path/lineno/parameters_json/return_value; sql: sql_text; http_server: method/route/status_code; http_client: method/url/status_code; exception: exception_class/message/path/lineno). function nodes\' parameters_json and return_value are populated only for labeled functions. Use path:lineno on function and exception nodes to read the source. fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static).',
       inputSchema: {
         type: 'object',
         properties: {

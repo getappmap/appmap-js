@@ -91,6 +91,7 @@ describe('MCP handler', () => {
           'list_endpoints',
           'function_hotspots',
           'sql_hotspots',
+          'list_labels',
           'find_recordings',
           'find_requests',
           'find_queries',
@@ -215,6 +216,23 @@ describe('MCP handler', () => {
       });
       const nameRows = JSON.parse((byName!.result as any).content[0].text);
       expect(Array.isArray(nameRows)).toBe(true);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('list_labels returns labels with counts and a sample fqid', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      const r = call(buildMcpHandler(db), {
+        jsonrpc: '2.0',
+        id: 90,
+        method: 'tools/call',
+        params: { name: 'list_labels', arguments: {} },
+      });
+      const rows = JSON.parse((r!.result as any).content[0].text);
+      expect(rows).toEqual([{ label: 'log', count: 1, sample_fqid: 'app/Logger#error' }]);
     } finally {
       db.close();
     }
