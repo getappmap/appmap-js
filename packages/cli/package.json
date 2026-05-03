@@ -16,6 +16,8 @@
   "scripts": {
     "lint": "eslint src tests",
     "lint:fix": "eslint src tests --fix",
+    "typecheck": "tsc --noEmit",
+    "verify": "yarn lint && yarn typecheck",
     "pre-commit": "lint-staged",
     "test": "jest --filter=./tests/testFilter.js",
     "test:binary": "jest -c tests/binary/jest.config.js",
