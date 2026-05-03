@@ -290,6 +290,49 @@ describe('MCP handler', () => {
     }
   });
 
+  it('find_exceptions with_logs attaches recent_logs', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      // Give the seeded log call a message so recent_logs has content.
+      db.prepare(
+        `UPDATE function_calls
+            SET parameters_json = ?
+            WHERE method_id = 'error'`
+      ).run(
+        JSON.stringify([{ name: 'message', class: 'String', value: 'connection refused' }])
+      );
+      const handler = buildMcpHandler(db);
+
+      // No with_logs: recent_logs is absent.
+      const noLogs = call(handler, {
+        jsonrpc: '2.0',
+        id: 200,
+        method: 'tools/call',
+        params: { name: 'find_exceptions', arguments: {} },
+      });
+      const noLogsRows = JSON.parse((noLogs!.result as any).content[0].text);
+      expect(noLogsRows[0].recent_logs).toBeUndefined();
+      // appmap_id is now exposed.
+      expect(typeof noLogsRows[0].appmap_id).toBe('number');
+
+      // with_logs=5: recent_logs is present and non-empty (the seed has
+      // a log call at event 2, exception at event 2 — the log shares the
+      // event_id with the exception so it doesn't qualify; verify the
+      // shape regardless).
+      const withLogsRes = call(handler, {
+        jsonrpc: '2.0',
+        id: 201,
+        method: 'tools/call',
+        params: { name: 'find_exceptions', arguments: { with_logs: 5 } },
+      });
+      const withLogsRows = JSON.parse((withLogsRes!.result as any).content[0].text);
+      expect(Array.isArray(withLogsRows[0].recent_logs)).toBe(true);
+    } finally {
+      db.close();
+    }
+  });
+
   it('find_calls --label filters by the AppMap label', () => {
     const db = freshDb();
     try {

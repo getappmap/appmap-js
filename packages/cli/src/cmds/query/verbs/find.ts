@@ -57,6 +57,10 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     .option('exception', { type: 'string', describe: 'exception class (exceptions)' })
     .option('logger', { type: 'string', describe: 'logger class (logs)' })
     .option('message', { type: 'string', describe: 'log message substring (logs)' })
+    .option('with-logs', {
+      type: 'number',
+      describe: 'attach the last N log lines preceding each row (exceptions)',
+    })
     .option('limit', { type: 'number' })
     .option('offset', { type: 'number' })
     .option('json', { type: 'boolean', default: false });
@@ -70,12 +74,12 @@ type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 // types where they make sense; flagging them on the wrong type is an
 // error rather than a silent no-op.
 const REJECTED_FLAGS: Record<FindType, readonly string[]> = {
-  appmaps: ['class', 'method', 'label', 'table', 'exception', 'logger', 'message'],
-  requests: ['class', 'method', 'label', 'table', 'exception', 'logger', 'message'],
-  queries: ['label', 'exception', 'logger', 'message'],
-  calls: ['table', 'exception', 'logger', 'message'],
+  appmaps: ['class', 'method', 'label', 'table', 'exception', 'logger', 'message', 'with-logs'],
+  requests: ['class', 'method', 'label', 'table', 'exception', 'logger', 'message', 'with-logs'],
+  queries: ['label', 'exception', 'logger', 'message', 'with-logs'],
+  calls: ['table', 'exception', 'logger', 'message', 'with-logs'],
   exceptions: ['class', 'method', 'label', 'duration', 'table', 'logger', 'message'],
-  logs: ['class', 'method', 'label', 'route', 'status', 'duration', 'table', 'exception'],
+  logs: ['class', 'method', 'label', 'route', 'status', 'duration', 'table', 'exception', 'with-logs'],
 };
 
 // Per-flag hints, attached to error messages when a rejected flag is used.
@@ -136,6 +140,11 @@ export function buildFindFilter(argv: Record<string, unknown>): ParsedFind {
   if (typeof argv.exception === 'string') filter.exception = argv.exception;
   if (typeof argv.logger === 'string') filter.logger = argv.logger;
   if (typeof argv.message === 'string') filter.message = argv.message;
+  // yargs camelCases --with-logs into argv.withLogs and also keeps the
+  // kebab-case key. Read both so direct test invocations don't have to
+  // depend on yargs's coercion.
+  const withLogs = argv.withLogs ?? argv['with-logs'];
+  if (typeof withLogs === 'number') filter.withLogs = withLogs;
   if (typeof argv.limit === 'number') filter.limit = argv.limit;
   if (typeof argv.offset === 'number') filter.offset = argv.offset;
 
@@ -228,16 +237,21 @@ function renderTable(type: FindType, rows: unknown[]): string {
           r.return_value ?? '',
         ])
       );
-    case 'exceptions':
+    case 'exceptions': {
+      const exRows = rows as FindExceptionRow[];
+      const withLogs = exRows.some((r) => r.recent_logs !== undefined);
+      const headers = withLogs
+        ? ['APPMAP', 'CLASS', 'MESSAGE', 'EVENT', 'LOGS']
+        : ['APPMAP', 'CLASS', 'MESSAGE', 'EVENT'];
       return formatTable(
-        ['APPMAP', 'CLASS', 'MESSAGE', 'EVENT'],
-        (rows as FindExceptionRow[]).map((r) => [
-          r.appmap_name,
-          r.exception_class,
-          r.message ?? '',
-          String(r.event_id),
-        ])
+        headers,
+        exRows.map((r) => {
+          const base = [r.appmap_name, r.exception_class, r.message ?? '', String(r.event_id)];
+          if (withLogs) base.push(String(r.recent_logs?.length ?? 0));
+          return base;
+        })
       );
+    }
     case 'logs':
       return formatTable(
         ['APPMAP', 'LOGGER', 'METHOD', 'MESSAGE', 'EVENT'],

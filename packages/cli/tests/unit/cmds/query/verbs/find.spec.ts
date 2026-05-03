@@ -98,6 +98,13 @@ describe('find verb flag validation', () => {
       expect(() => validateFlags(type, { message: 'x' })).toThrow(/--message/);
     }
   });
+
+  it('--with-logs is accepted only on find exceptions', () => {
+    expect(() => validateFlags('exceptions', { 'with-logs': 5 })).not.toThrow();
+    for (const type of ['appmaps', 'requests', 'queries', 'calls', 'logs'] as const) {
+      expect(() => validateFlags(type, { 'with-logs': 5 })).toThrow(/--with-logs/);
+    }
+  });
 });
 
 describe('buildFindFilter', () => {
@@ -130,6 +137,12 @@ describe('buildFindFilter', () => {
 
   it('returns the parsed type', () => {
     expect(buildFindFilter({ type: 'appmaps' }).type).toBe('appmaps');
+  });
+
+  it('plumbs --with-logs into filter.withLogs from either kebab or camel keys', () => {
+    expect(buildFindFilter({ type: 'exceptions', withLogs: 5 }).filter.withLogs).toBe(5);
+    expect(buildFindFilter({ type: 'exceptions', 'with-logs': 7 }).filter.withLogs).toBe(7);
+    expect(buildFindFilter({ type: 'exceptions' }).filter.withLogs).toBeUndefined();
   });
 
   it('plumbs --logger and --message into the filter for logs', () => {

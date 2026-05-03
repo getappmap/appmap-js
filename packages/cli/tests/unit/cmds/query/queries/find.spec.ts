@@ -940,4 +940,135 @@ describe('findExceptions', () => {
       db.close();
     }
   });
+
+  it('--with-logs attaches the last N preceding logs in chronological order', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'starting up' }],
+            },
+            {
+              event_id: 2,
+              defined_class: 'Logger',
+              method_id: 'warn',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'connection slow' }],
+            },
+            {
+              event_id: 3,
+              defined_class: 'Logger',
+              method_id: 'error',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'connection refused' }],
+            },
+          ],
+          // Exception lands at event 4, after the three logs.
+          exceptions: [{ event_id: 4, exception_class: 'IOError', message: 'broken pipe' }],
+        },
+      ]);
+      const rows = findExceptions(db, { withLogs: 2 });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].recent_logs).toBeDefined();
+      // Last 2 in chronological order: the warn at event 2, then error at event 3.
+      const logs = rows[0].recent_logs!;
+      expect(logs).toHaveLength(2);
+      expect(logs[0].event_id).toBe(2);
+      expect(logs[1].event_id).toBe(3);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--with-logs is omitted when not requested (recent_logs undefined)', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'hi' }],
+            },
+          ],
+          exceptions: [{ event_id: 2, exception_class: 'IOError' }],
+        },
+      ]);
+      const rows = findExceptions(db, {});
+      expect(rows[0].recent_logs).toBeUndefined();
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--with-logs with no preceding logs returns an empty array', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          // Exception at event 1; no logs at all.
+          exceptions: [{ event_id: 1, exception_class: 'IOError' }],
+        },
+      ]);
+      const rows = findExceptions(db, { withLogs: 5 });
+      expect(rows[0].recent_logs).toEqual([]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--with-logs only includes logs from the same recording', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'recording-a log' }],
+            },
+          ],
+          exceptions: [{ event_id: 2, exception_class: 'IOError' }],
+        },
+        {
+          name: 'b',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'recording-b log' }],
+            },
+          ],
+          exceptions: [{ event_id: 2, exception_class: 'IOError' }],
+        },
+      ]);
+      const rows = findExceptions(db, { withLogs: 5 });
+      expect(rows).toHaveLength(2);
+      // Each exception's recent_logs is scoped to its own recording.
+      for (const row of rows) {
+        expect(row.recent_logs).toHaveLength(1);
+        expect(row.recent_logs![0].appmap_name).toBe(row.appmap_name);
+      }
+    } finally {
+      db.close();
+    }
+  });
 });

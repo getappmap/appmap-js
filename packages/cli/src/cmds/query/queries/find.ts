@@ -30,6 +30,7 @@ export interface FindFilter {
   exception?: string;      // exception class (find exceptions)
   logger?: string;         // --logger (find logs); class of the logging fn
   message?: string;        // --message (find logs); substring of the log line
+  withLogs?: number;       // --with-logs N (find exceptions); attach N preceding logs
   limit?: number;
   offset?: number;
 }
@@ -90,12 +91,17 @@ export interface FindLogRow {
 }
 
 export interface FindExceptionRow {
+  appmap_id: number;
   appmap_name: string;
   event_id: number;
   exception_class: string;
   message: string | null;
   path: string | null;
   lineno: number | null;
+  // Populated only when filter.withLogs > 0. Ordered chronologically
+  // (oldest first), capped at filter.withLogs entries. Each row has
+  // event_id < this exception's event_id.
+  recent_logs?: FindLogRow[];
 }
 
 // --- internal helpers (find-specific) ---
@@ -382,7 +388,8 @@ export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindEx
   }
 
   let sql = `
-    SELECT a.name AS appmap_name,
+    SELECT e.appmap_id AS appmap_id,
+           a.name AS appmap_name,
            e.event_id AS event_id,
            e.exception_class AS exception_class,
            e.message AS message,
@@ -394,7 +401,47 @@ export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindEx
     ORDER BY a.source_path, e.event_id, e.exception_class
   `;
   sql = appendLimitOffset(sql, filter, params);
-  return db.prepare(sql).all(...params) as FindExceptionRow[];
+  const rows = db.prepare(sql).all(...params) as FindExceptionRow[];
+
+  // Enrichment: for each exception, attach the last N log calls in the
+  // same recording with event_id strictly less than the exception's. We
+  // use event order rather than parent_event_id subtree walking — it's
+  // a strict subset of the call-tree relevant to most debugging
+  // questions ("what did the app log before it crashed?") and avoids a
+  // recursive CTE per row. Exceptions whose event_id is NULL (synthetic)
+  // can't be ordered, so they don't get logs attached.
+  if (filter.withLogs && filter.withLogs > 0) {
+    const logStmt = db.prepare(`
+      SELECT a.name AS appmap_name,
+             fc.event_id AS event_id,
+             fc.parent_event_id AS parent_event_id,
+             fc.defined_class AS logger,
+             fc.method_id AS method_id,
+             fc.path AS path,
+             fc.lineno AS lineno,
+             fc.parameters_json AS parameters_json,
+             fc.return_value AS return_value
+        FROM function_calls fc
+        JOIN appmaps a ON a.id = fc.appmap_id
+       WHERE fc.appmap_id = ?
+         AND fc.event_id < ?
+         AND fc.code_object_id IN (
+               SELECT l.code_object_id FROM labels l WHERE l.label = 'log'
+             )
+       ORDER BY fc.event_id DESC
+       LIMIT ?
+    `);
+    for (const row of rows) {
+      if (row.event_id == null) {
+        row.recent_logs = [];
+        continue;
+      }
+      const logs = logStmt.all(row.appmap_id, row.event_id, filter.withLogs) as FindLogRow[];
+      row.recent_logs = logs.reverse(); // chronological
+    }
+  }
+
+  return rows;
 }
 
 // Dispatcher.

@@ -139,6 +139,8 @@ function buildFindFilter(args: Record<string, unknown>): FindFilter {
   if (typeof args.exception === 'string') f.exception = args.exception;
   if (typeof args.logger === 'string') f.logger = args.logger;
   if (typeof args.message === 'string') f.message = args.message;
+  const withLogs = maybeNumber(args.with_logs);
+  if (withLogs !== undefined) f.withLogs = withLogs;
   f.since = maybeTime(args.since);
   f.until = maybeTime(args.until);
   f.limit = maybeNumber(args.limit);
@@ -404,11 +406,15 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_exceptions',
       description:
-        'Exception rows with class, message, source location. Filter by exception class name, the request that owns the exception (via route/status), branch, or time window. Returns: appmap_name, event_id, exception_class, message, path, lineno.',
+        'Exception rows with class, message, source location. Filter by exception class name, the request that owns the exception (via route/status), branch, or time window. Returns: appmap_id, appmap_name, event_id, exception_class, message, path, lineno. Pass with_logs=N to attach the last N log lines preceding each exception (chronological order) under recent_logs — usually the fastest way to see what the app reported before the failure.',
       inputSchema: {
         type: 'object',
         properties: {
           exception: { type: 'string', description: 'Exception class name (exact match).' },
+          with_logs: {
+            type: 'integer',
+            description: 'Attach up to N preceding log lines per exception under recent_logs (chronological). Each entry has the same shape as a find_logs row.',
+          },
           route: COMMON_FILTER_PROPERTIES.route,
           status: COMMON_FILTER_PROPERTIES.status,
           branch: COMMON_FILTER_PROPERTIES.branch,
