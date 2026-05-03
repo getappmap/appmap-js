@@ -57,12 +57,29 @@ export interface ExceptionNode extends BaseNode {
   lineno: number | null;
 }
 
+// Logging calls are function calls whose linked code_object carries the
+// canonical `log` label. They share the function-call shape (same row in
+// `function_calls`) but get their own kind so renderers can format the
+// message inline rather than the bare call signature.
+export interface LogNode extends BaseNode {
+  kind: 'log';
+  fqid: string | null;
+  logger: string;          // defined_class
+  method_id: string;       // info / warn / error / etc. — best effort
+  path: string | null;
+  lineno: number | null;
+  elapsed_ms: number | null;
+  parameters_json: string | null;
+  return_value: string | null;
+}
+
 export type TreeNode =
   | HttpServerNode
   | HttpClientNode
   | SqlNode
   | FunctionNode
-  | ExceptionNode;
+  | ExceptionNode
+  | LogNode;
 
 export interface AppmapInfo {
   id: number;
@@ -205,7 +222,11 @@ export function tree(
       `SELECT fc.event_id, fc.parent_event_id, fc.thread_id,
               co.fqid AS fqid, fc.defined_class, fc.method_id,
               fc.path, fc.lineno,
-              fc.is_static, fc.elapsed_ms, fc.parameters_json, fc.return_value
+              fc.is_static, fc.elapsed_ms, fc.parameters_json, fc.return_value,
+              EXISTS (
+                SELECT 1 FROM labels l
+                WHERE l.code_object_id = fc.code_object_id AND l.label = 'log'
+              ) AS is_log
        FROM function_calls fc
        LEFT JOIN code_objects co ON co.id = fc.code_object_id
        WHERE fc.appmap_id = ?`
@@ -223,23 +244,42 @@ export function tree(
     elapsed_ms: number | null;
     parameters_json: string | null;
     return_value: string | null;
+    is_log: number;
   }[]) {
-    events.push({
-      kind: 'function',
-      event_id: r.event_id,
-      parent_event_id: r.parent_event_id,
-      thread_id: r.thread_id,
-      depth: 0,
-      fqid: r.fqid,
-      defined_class: r.defined_class,
-      method_id: r.method_id,
-      path: r.path,
-      lineno: r.lineno,
-      is_static: r.is_static === 1,
-      elapsed_ms: r.elapsed_ms,
-      parameters_json: r.parameters_json,
-      return_value: r.return_value,
-    });
+    if (r.is_log === 1) {
+      events.push({
+        kind: 'log',
+        event_id: r.event_id,
+        parent_event_id: r.parent_event_id,
+        thread_id: r.thread_id,
+        depth: 0,
+        fqid: r.fqid,
+        logger: r.defined_class,
+        method_id: r.method_id,
+        path: r.path,
+        lineno: r.lineno,
+        elapsed_ms: r.elapsed_ms,
+        parameters_json: r.parameters_json,
+        return_value: r.return_value,
+      });
+    } else {
+      events.push({
+        kind: 'function',
+        event_id: r.event_id,
+        parent_event_id: r.parent_event_id,
+        thread_id: r.thread_id,
+        depth: 0,
+        fqid: r.fqid,
+        defined_class: r.defined_class,
+        method_id: r.method_id,
+        path: r.path,
+        lineno: r.lineno,
+        is_static: r.is_static === 1,
+        elapsed_ms: r.elapsed_ms,
+        parameters_json: r.parameters_json,
+        return_value: r.return_value,
+      });
+    }
   }
 
   for (const r of db

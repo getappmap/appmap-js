@@ -24,7 +24,7 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     })
     .option('filter', {
       type: 'string',
-      choices: ['all', 'http', 'sql'] as const,
+      choices: ['all', 'http', 'sql', 'logs'] as const,
       default: 'all',
     })
     .option('focus-fn', {
@@ -75,7 +75,7 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
     if (argv.format === 'summary') {
       // The summary aggregates over all event types; combining with
       // --filter would be ambiguous, so reject rather than silently drop.
-      const f = argv.filter as 'all' | 'http' | 'sql';
+      const f = argv.filter as TreeFilter;
       if (f !== 'all') {
         throw new Error(
           'tree --format=summary does not accept --filter; remove one of them'
@@ -97,11 +97,11 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
     if (argv.minElapsedMs !== undefined) treeOptions.minElapsedMs = argv.minElapsedMs;
 
     const nodes = tree(db, ref, treeOptions);
-    const filtered = applyFilter(nodes, argv.filter as 'all' | 'http' | 'sql');
+    const filtered = applyFilter(nodes, argv.filter as TreeFilter);
     if (argv.json) {
       log(JSON.stringify(filtered, null, 2));
     } else {
-      const f = argv.filter as 'all' | 'http' | 'sql';
+      const f = argv.filter as TreeFilter;
       log(f === 'all' ? renderTree(filtered) : renderFlat(filtered));
     }
   } finally {
@@ -109,9 +109,17 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
   }
 };
 
-function applyFilter(nodes: readonly TreeNode[], filter: 'all' | 'http' | 'sql'): TreeNode[] {
-  if (filter === 'all') return [...nodes];
-  if (filter === 'sql') return nodes.filter((n) => n.kind === 'sql');
-  // 'http' — both inbound and outbound
-  return nodes.filter((n) => n.kind === 'http_server' || n.kind === 'http_client');
+type TreeFilter = 'all' | 'http' | 'sql' | 'logs';
+
+export function applyFilter(nodes: readonly TreeNode[], filter: TreeFilter): TreeNode[] {
+  switch (filter) {
+    case 'all':
+      return [...nodes];
+    case 'sql':
+      return nodes.filter((n) => n.kind === 'sql');
+    case 'logs':
+      return nodes.filter((n) => n.kind === 'log');
+    case 'http':
+      return nodes.filter((n) => n.kind === 'http_server' || n.kind === 'http_client');
+  }
 }

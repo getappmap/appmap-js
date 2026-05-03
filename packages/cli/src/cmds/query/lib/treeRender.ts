@@ -3,11 +3,13 @@ import {
   FunctionNode,
   HttpClientNode,
   HttpServerNode,
+  LogNode,
   SqlNode,
   TreeNode,
   TreeSummary,
 } from '../queries/tree';
 import { formatCount, formatMs, formatTable } from './format';
+import { projectLogMessage } from './logMessage';
 
 const INDENT = '  ';
 
@@ -35,6 +37,8 @@ function renderTreeLine(node: TreeNode): string {
       return `${indent}SQL    ${renderSql(node)}`;
     case 'exception':
       return `${indent}EXC    ${renderException(node)}`;
+    case 'log':
+      return `${indent}LOG    ${renderLog(node)}`;
   }
 }
 
@@ -62,6 +66,12 @@ function renderSql(n: SqlNode): string {
   return `${truncate(n.sql_text, 120)} ${bracket(n.elapsed_ms)}`.trim();
 }
 
+function renderLog(n: LogNode): string {
+  const message = projectLogMessage(n.parameters_json, n.return_value);
+  const prefix = `${n.logger}.${n.method_id}`;
+  return message ? `${prefix}: ${truncate(message, 120)}` : prefix;
+}
+
 function bracket(ms: number | null): string {
   return ms == null ? '' : `[${formatMs(ms)}]`;
 }
@@ -86,6 +96,8 @@ export function renderFlat(nodes: readonly TreeNode[]): string {
           return `CALL   ${renderFunction(n)}`;
         case 'exception':
           return `EXC    ${renderException(n)}`;
+        case 'log':
+          return `LOG    ${renderLog(n)}`;
       }
     })
     .join('\n');

@@ -19,6 +19,9 @@ import {
   FindRequestRow,
 } from '../queries/find';
 import { formatMs, formatTable } from '../lib/format';
+import { projectLogMessage } from '../lib/logMessage';
+
+export { projectLogMessage };
 
 const TYPES: readonly FindType[] = ['appmaps', 'requests', 'queries', 'calls', 'exceptions', 'logs'];
 // 'recordings' is accepted as an alias for 'appmaps' to match the MCP
@@ -266,46 +269,6 @@ function renderTable(type: FindType, rows: unknown[]): string {
   }
 }
 
-// Pick a displayable message from a log row's captured fields.
-//   1. If return_value parses as JSON with a `message` field, use it
-//      (this is the structured-return contract).
-//   2. Otherwise, look in parameters_json for a parameter whose `name`
-//      is `message` or `msg`; fall back to the first string-typed value.
-//   3. Otherwise, stringify whatever's available so the row isn't blank.
-// Display-only — does not affect filtering. The `--message` SQL LIKE
-// runs against the raw columns and may return rows whose projected
-// message doesn't contain the substring (e.g., matched a class name);
-// that's the documented FP-tolerant behavior.
-export function projectLogMessage(
-  parametersJson: string | null,
-  returnValue: string | null
-): string {
-  if (returnValue) {
-    try {
-      const parsed = JSON.parse(returnValue) as Record<string, unknown>;
-      if (parsed && typeof parsed === 'object' && typeof parsed.message === 'string') {
-        return parsed.message;
-      }
-    } catch {
-      // not structured — fall through
-    }
-  }
-  if (parametersJson) {
-    try {
-      const params = JSON.parse(parametersJson) as { name?: string; class?: string; value?: unknown }[];
-      const named = params.find((p) => p.name === 'message' || p.name === 'msg');
-      if (named?.value != null) return String(named.value);
-      const firstString = params.find((p) => typeof p.value === 'string');
-      if (firstString) return String(firstString.value);
-      if (params.length > 0) return JSON.stringify(params.map((p) => p.value));
-    } catch {
-      return parametersJson;
-    }
-  }
-  // No structured message available. Return blank rather than the raw
-  // `return_value` (which is often noise like "true" / "None").
-  return '';
-}
 
 function formatParams(json: string | null): string {
   if (!json) return '';

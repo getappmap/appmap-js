@@ -416,6 +416,63 @@ describe('tree --filter', () => {
   });
 });
 
+describe('log nodes in tree', () => {
+  function seedWithLogger(db: sqlite3.Database): number {
+    const am = db
+      .prepare(
+        `INSERT INTO appmaps (name, source_path) VALUES ('with_logger', '/tmp/with_logger.appmap.json')`
+      )
+      .run();
+    const id = am.lastInsertRowid;
+    db.prepare(
+      `INSERT INTO http_requests (appmap_id, event_id, parent_event_id, method, path, status_code, elapsed_ms)
+       VALUES (?, 1, NULL, 'POST', '/orders', 500, 100)`
+    ).run(id);
+    db.prepare(
+      `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, defined_class, method_id, elapsed_ms)
+       VALUES (?, 2, 1, 'OrdersController', 'create', 90)`
+    ).run(id);
+    db.prepare(
+      `INSERT OR IGNORE INTO code_objects (fqid, package, classes, leaf_class, method, is_static)
+       VALUES ('app/AppLogger#error', 'app', '["AppLogger"]', 'AppLogger', 'error', 0)`
+    ).run();
+    const logCo = (db
+      .prepare(`SELECT id FROM code_objects WHERE fqid = 'app/AppLogger#error'`)
+      .get() as { id: number }).id;
+    db.prepare(`INSERT OR IGNORE INTO labels (code_object_id, label) VALUES (?, 'log')`).run(logCo);
+    db.prepare(
+      `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, code_object_id,
+         defined_class, method_id, elapsed_ms, parameters_json)
+       VALUES (?, 3, 2, ?, 'AppLogger', 'error', 0.05, ?)`
+    ).run(
+      id,
+      logCo,
+      JSON.stringify([{ name: 'message', class: 'String', value: 'connection refused' }])
+    );
+    return Number(id);
+  }
+
+  it('promotes function calls with the `log` label to a log node kind', () => {
+    const db = freshDb();
+    try {
+      seedWithLogger(db);
+      const nodes = tree(db, 'with_logger');
+      const log = nodes.find((n) => n.kind === 'log');
+      expect(log).toBeDefined();
+      if (log?.kind !== 'log') throw new Error('expected log');
+      expect(log.logger).toBe('AppLogger');
+      expect(log.method_id).toBe('error');
+      expect(log.event_id).toBe(3);
+      // The same function_call should NOT also appear as a function node.
+      expect(nodes.filter((n) => n.event_id === 3 && n.kind === 'function')).toEqual([]);
+      // Other function_calls remain function nodes.
+      expect(nodes.find((n) => n.kind === 'function' && n.method_id === 'create')).toBeDefined();
+    } finally {
+      db.close();
+    }
+  });
+});
+
 describe('treeSummary', () => {
   it('counts SQL, surfaces entry/exception, and tallies labels', () => {
     const db = freshDb();
