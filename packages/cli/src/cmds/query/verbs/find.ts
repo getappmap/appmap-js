@@ -14,12 +14,13 @@ import {
   FindAppmapRow,
   FindCallRow,
   FindExceptionRow,
+  FindLogRow,
   FindQueryRow,
   FindRequestRow,
 } from '../queries/find';
 import { formatMs, formatTable } from '../lib/format';
 
-const TYPES: readonly FindType[] = ['appmaps', 'requests', 'queries', 'calls', 'exceptions'];
+const TYPES: readonly FindType[] = ['appmaps', 'requests', 'queries', 'calls', 'exceptions', 'logs'];
 // 'recordings' is accepted as an alias for 'appmaps' to match the MCP
 // naming (find_recordings) and the user-facing concept of a "recording".
 const TYPE_CHOICES: readonly string[] = ['appmaps', 'recordings', ...TYPES.filter((t) => t !== 'appmaps')];
@@ -54,6 +55,8 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     .option('appmap', { type: 'string', describe: 'appmap name' })
     .option('table', { type: 'string', describe: 'SQL table name (queries)' })
     .option('exception', { type: 'string', describe: 'exception class (exceptions)' })
+    .option('logger', { type: 'string', describe: 'logger class (logs)' })
+    .option('message', { type: 'string', describe: 'log message substring (logs)' })
     .option('limit', { type: 'number' })
     .option('offset', { type: 'number' })
     .option('json', { type: 'boolean', default: false });
@@ -67,11 +70,12 @@ type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 // types where they make sense; flagging them on the wrong type is an
 // error rather than a silent no-op.
 const REJECTED_FLAGS: Record<FindType, readonly string[]> = {
-  appmaps: ['class', 'method', 'label', 'table', 'exception'],
-  requests: ['class', 'method', 'label', 'table', 'exception'],
-  queries: ['label', 'exception'],
-  calls: ['table', 'exception'],
-  exceptions: ['class', 'method', 'label', 'duration', 'table'],
+  appmaps: ['class', 'method', 'label', 'table', 'exception', 'logger', 'message'],
+  requests: ['class', 'method', 'label', 'table', 'exception', 'logger', 'message'],
+  queries: ['label', 'exception', 'logger', 'message'],
+  calls: ['table', 'exception', 'logger', 'message'],
+  exceptions: ['class', 'method', 'label', 'duration', 'table', 'logger', 'message'],
+  logs: ['class', 'method', 'label', 'route', 'status', 'duration', 'table', 'exception'],
 };
 
 // Per-flag hints, attached to error messages when a rejected flag is used.
@@ -80,6 +84,10 @@ const REJECTED_FLAGS: Record<FindType, readonly string[]> = {
 const REJECTED_HINTS: Partial<Record<FindType, Partial<Record<string, string>>>> = {
   requests: {
     method: 'to filter by HTTP method, use --route "METHOD /path"',
+  },
+  logs: {
+    class: 'to filter logs by logger class, use --logger',
+    label: '--label is implied (logs always means label=log)',
   },
 };
 
@@ -126,6 +134,8 @@ export function buildFindFilter(argv: Record<string, unknown>): ParsedFind {
   if (typeof argv.appmap === 'string') filter.appmap = argv.appmap;
   if (typeof argv.table === 'string') filter.table = argv.table;
   if (typeof argv.exception === 'string') filter.exception = argv.exception;
+  if (typeof argv.logger === 'string') filter.logger = argv.logger;
+  if (typeof argv.message === 'string') filter.message = argv.message;
   if (typeof argv.limit === 'number') filter.limit = argv.limit;
   if (typeof argv.offset === 'number') filter.offset = argv.offset;
 
@@ -228,7 +238,59 @@ function renderTable(type: FindType, rows: unknown[]): string {
           String(r.event_id),
         ])
       );
+    case 'logs':
+      return formatTable(
+        ['APPMAP', 'LOGGER', 'METHOD', 'MESSAGE', 'EVENT'],
+        (rows as FindLogRow[]).map((r) => [
+          r.appmap_name,
+          r.logger,
+          r.method_id,
+          projectLogMessage(r.parameters_json, r.return_value),
+          String(r.event_id),
+        ])
+      );
   }
+}
+
+// Pick a displayable message from a log row's captured fields.
+//   1. If return_value parses as JSON with a `message` field, use it
+//      (this is the structured-return contract).
+//   2. Otherwise, look in parameters_json for a parameter whose `name`
+//      is `message` or `msg`; fall back to the first string-typed value.
+//   3. Otherwise, stringify whatever's available so the row isn't blank.
+// Display-only — does not affect filtering. The `--message` SQL LIKE
+// runs against the raw columns and may return rows whose projected
+// message doesn't contain the substring (e.g., matched a class name);
+// that's the documented FP-tolerant behavior.
+export function projectLogMessage(
+  parametersJson: string | null,
+  returnValue: string | null
+): string {
+  if (returnValue) {
+    try {
+      const parsed = JSON.parse(returnValue) as Record<string, unknown>;
+      if (parsed && typeof parsed === 'object' && typeof parsed.message === 'string') {
+        return parsed.message;
+      }
+    } catch {
+      // not structured — fall through
+    }
+  }
+  if (parametersJson) {
+    try {
+      const params = JSON.parse(parametersJson) as { name?: string; class?: string; value?: unknown }[];
+      const named = params.find((p) => p.name === 'message' || p.name === 'msg');
+      if (named?.value != null) return String(named.value);
+      const firstString = params.find((p) => typeof p.value === 'string');
+      if (firstString) return String(firstString.value);
+      if (params.length > 0) return JSON.stringify(params.map((p) => p.value));
+    } catch {
+      return parametersJson;
+    }
+  }
+  // No structured message available. Return blank rather than the raw
+  // `return_value` (which is often noise like "true" / "None").
+  return '';
 }
 
 function formatParams(json: string | null): string {

@@ -1,4 +1,8 @@
-import { buildFindFilter, validateFlags } from '../../../../../src/cmds/query/verbs/find';
+import {
+  buildFindFilter,
+  projectLogMessage,
+  validateFlags,
+} from '../../../../../src/cmds/query/verbs/find';
 
 describe('find verb flag validation', () => {
   it('accepts the universal flags on every type', () => {
@@ -13,7 +17,7 @@ describe('find verb flag validation', () => {
       offset: 0,
       json: true,
     };
-    for (const type of ['appmaps', 'requests', 'queries', 'calls', 'exceptions'] as const) {
+    for (const type of ['appmaps', 'requests', 'queries', 'calls', 'exceptions', 'logs'] as const) {
       expect(() => validateFlags(type, universal)).not.toThrow();
     }
   });
@@ -72,6 +76,28 @@ describe('find verb flag validation', () => {
       validateFlags('appmaps', { class: undefined, table: null })
     ).not.toThrow();
   });
+
+  it('logs accepts --logger and --message; rejects --class with a hint', () => {
+    expect(() => validateFlags('logs', { logger: 'AppLogger' })).not.toThrow();
+    expect(() => validateFlags('logs', { message: 'connection refused' })).not.toThrow();
+    expect(() => validateFlags('logs', { class: 'AppLogger' })).toThrow(/--logger/);
+    expect(() => validateFlags('logs', { label: 'log' })).toThrow(/implied/);
+  });
+
+  it('logs rejects row-level filters that don\'t apply', () => {
+    expect(() => validateFlags('logs', { route: '/x' })).toThrow(/--route/);
+    expect(() => validateFlags('logs', { status: '500' })).toThrow(/--status/);
+    expect(() => validateFlags('logs', { duration: '>1s' })).toThrow(/--duration/);
+    expect(() => validateFlags('logs', { table: 'users' })).toThrow(/--table/);
+    expect(() => validateFlags('logs', { exception: 'X' })).toThrow(/--exception/);
+  });
+
+  it('--logger and --message are rejected on non-logs types', () => {
+    for (const type of ['appmaps', 'requests', 'queries', 'calls', 'exceptions'] as const) {
+      expect(() => validateFlags(type, { logger: 'X' })).toThrow(/--logger/);
+      expect(() => validateFlags(type, { message: 'x' })).toThrow(/--message/);
+    }
+  });
 });
 
 describe('buildFindFilter', () => {
@@ -104,5 +130,58 @@ describe('buildFindFilter', () => {
 
   it('returns the parsed type', () => {
     expect(buildFindFilter({ type: 'appmaps' }).type).toBe('appmaps');
+  });
+
+  it('plumbs --logger and --message into the filter for logs', () => {
+    const { type, filter } = buildFindFilter({
+      type: 'logs',
+      logger: 'AppLogger',
+      message: 'connection refused',
+    });
+    expect(type).toBe('logs');
+    expect(filter.logger).toBe('AppLogger');
+    expect(filter.message).toBe('connection refused');
+  });
+});
+
+describe('projectLogMessage', () => {
+  it('prefers a structured-return message field when return_value is JSON', () => {
+    const r = JSON.stringify({ level: 'info', message: 'hello world' });
+    expect(projectLogMessage(null, r)).toBe('hello world');
+  });
+
+  it('uses a parameter named message when return_value lacks a structured message', () => {
+    const params = JSON.stringify([
+      { name: 'tag', class: 'String', value: 'auth' },
+      { name: 'message', class: 'String', value: 'login ok' },
+    ]);
+    expect(projectLogMessage(params, null)).toBe('login ok');
+  });
+
+  it('accepts msg as an alias for message', () => {
+    const params = JSON.stringify([{ name: 'msg', class: 'String', value: 'queued' }]);
+    expect(projectLogMessage(params, null)).toBe('queued');
+  });
+
+  it('falls back to the first string-typed parameter value', () => {
+    const params = JSON.stringify([
+      { name: 'count', class: 'Integer', value: 5 },
+      { name: 'note', class: 'String', value: 'first text' },
+    ]);
+    expect(projectLogMessage(params, null)).toBe('first text');
+  });
+
+  it('returns a non-empty repr even when nothing matches', () => {
+    const params = JSON.stringify([{ name: 'count', class: 'Integer', value: 5 }]);
+    expect(projectLogMessage(params, null)).toBe('[5]');
+  });
+
+  it('returns an empty string when both inputs are null', () => {
+    expect(projectLogMessage(null, null)).toBe('');
+  });
+
+  it('return_value that is not JSON is treated as opaque (not the message)', () => {
+    // Falls through to parameters_json; if that's null, returns ''.
+    expect(projectLogMessage(null, 'true')).toBe('');
   });
 });

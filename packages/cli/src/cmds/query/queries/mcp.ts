@@ -19,6 +19,7 @@ import {
   FindCallRow,
   FindExceptionRow,
   FindFilter,
+  FindLogRow,
   FindQueryRow,
   FindRequestRow,
   find,
@@ -136,6 +137,8 @@ function buildFindFilter(args: Record<string, unknown>): FindFilter {
   if (typeof args.appmap === 'string') f.appmap = args.appmap;
   if (typeof args.table === 'string') f.table = args.table;
   if (typeof args.exception === 'string') f.exception = args.exception;
+  if (typeof args.logger === 'string') f.logger = args.logger;
+  if (typeof args.message === 'string') f.message = args.message;
   f.since = maybeTime(args.since);
   f.until = maybeTime(args.until);
   f.limit = maybeNumber(args.limit);
@@ -364,6 +367,37 @@ const TOOLS: ToolImpl[] = [
       },
     },
     handler: (args, db) => find(db, 'calls', buildFindFilter(args)) as FindCallRow[],
+  },
+
+  {
+    spec: {
+      name: 'find_logs',
+      description:
+        'Application log lines captured from functions labeled `log`. Filter by message substring (matches across the call\'s parameters and return value), logger class, recording, branch, or time window. Returns: appmap_name, event_id, parent_event_id, logger, method_id, path, lineno, parameters_json, return_value. The message is in parameters_json (a [{name, class, value}, ...] blob) — read the value of the parameter named `message`/`msg`, or the first string-typed parameter, or parse return_value as JSON if the recorder returns a structured `{level, message, ...}`. Use path:lineno to read the call site of the log statement.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          message: {
+            type: 'string',
+            description:
+              'Substring to look for inside the captured log call. Matches a SQL LIKE against parameters_json and return_value — false positives (e.g. matching a class or parameter name) are accepted; tighten in post-processing if needed.',
+          },
+          logger: {
+            type: 'string',
+            description:
+              'Class of the logging function (defined_class). Accepts short or canonical fqid form, same as find_calls --class.',
+          },
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          commit: COMMON_FILTER_PROPERTIES.commit,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          appmap: COMMON_FILTER_PROPERTIES.appmap,
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
+        },
+      },
+    },
+    handler: (args, db) => find(db, 'logs', buildFindFilter(args)) as FindLogRow[],
   },
 
   {

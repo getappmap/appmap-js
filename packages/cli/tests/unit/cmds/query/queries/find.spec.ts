@@ -5,6 +5,7 @@ import {
   findAppmaps,
   findCalls,
   findExceptions,
+  findLogs,
   findQueries,
   findRequests,
 } from '../../../../../src/cmds/query/queries/find';
@@ -36,11 +37,14 @@ interface Recording {
   }[];
   calls?: {
     event_id: number;
+    parent_event_id?: number;
     defined_class: string;
     method_id: string;
     elapsed_ms?: number;
     fqid?: string;
     labels?: string[];
+    parameters?: { name: string; class?: string; value: unknown }[];
+    return_value?: unknown;
   }[];
   exceptions?: {
     event_id: number;
@@ -76,8 +80,9 @@ function seed(db: sqlite3.Database, recs: Recording[]): void {
     `INSERT OR IGNORE INTO labels (code_object_id, label) VALUES (?, ?)`
   );
   const insCall = db.prepare(
-    `INSERT INTO function_calls (appmap_id, event_id, defined_class, method_id, code_object_id, elapsed_ms)
-     VALUES (?, ?, ?, ?, ?, ?)`
+    `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, defined_class, method_id,
+       code_object_id, elapsed_ms, parameters_json, return_value)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
   const insExc = db.prepare(
     `INSERT INTO exceptions (appmap_id, event_id, exception_class, message)
@@ -126,13 +131,23 @@ function seed(db: sqlite3.Database, recs: Recording[]): void {
       insCo.run(fqid, pkg, JSON.stringify([leaf]), leaf, c.method_id, 0);
       const coId = (selCoId.get(fqid) as { id: number }).id;
       for (const label of c.labels ?? []) insLabel.run(coId, label);
+      const paramsJson = c.parameters ? JSON.stringify(c.parameters) : null;
+      const returnVal =
+        c.return_value === undefined
+          ? null
+          : typeof c.return_value === 'string'
+            ? c.return_value
+            : JSON.stringify(c.return_value);
       insCall.run(
         aid,
         c.event_id,
+        c.parent_event_id ?? null,
         c.defined_class,
         c.method_id,
         coId,
-        c.elapsed_ms ?? null
+        c.elapsed_ms ?? null,
+        paramsJson,
+        returnVal
       );
     }
     for (const e of r.exceptions ?? []) {
@@ -591,6 +606,199 @@ describe('findCalls', () => {
       const rows = findCalls(db, { label: 'log' });
       expect(rows).toHaveLength(1);
       expect(rows[0].defined_class).toBe('Logger');
+    } finally {
+      db.close();
+    }
+  });
+});
+
+describe('findLogs', () => {
+  it('returns only label=log calls; non-log calls are excluded', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'starting up' }],
+            },
+            { event_id: 2, defined_class: 'OrdersController', method_id: 'create' },
+          ],
+        },
+      ]);
+      const rows = findLogs(db, {});
+      expect(rows).toHaveLength(1);
+      expect(rows[0].logger).toBe('Logger');
+      expect(rows[0].method_id).toBe('info');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--message matches a substring inside parameters_json', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'error',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'connection refused' }],
+            },
+            {
+              event_id: 2,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'started worker' }],
+            },
+          ],
+        },
+      ]);
+      const rows = findLogs(db, { message: 'refused' });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].event_id).toBe(1);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--message also matches against return_value (structured-return contract)', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              // No params; the message lives in a structured return_value.
+              return_value: { level: 'info', message: 'connection refused at host:5432' },
+            },
+            {
+              event_id: 2,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              return_value: { level: 'info', message: 'all systems nominal' },
+            },
+          ],
+        },
+      ]);
+      const rows = findLogs(db, { message: 'refused' });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].event_id).toBe(1);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--logger filters by the logging class (uses classFilterClauses)', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'app.AppLogger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'msg', class: 'String', value: 'hello' }],
+            },
+            {
+              event_id: 2,
+              defined_class: 'lib.AuditLogger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'msg', class: 'String', value: 'audited' }],
+            },
+          ],
+        },
+      ]);
+      // Suffix-aware short-form match: "AppLogger" hits "app.AppLogger".
+      const rows = findLogs(db, { logger: 'AppLogger' });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].event_id).toBe(1);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('combines --message with appmap-scope filters (--branch)', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          branch: 'main',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'connection refused' }],
+            },
+          ],
+        },
+        {
+          name: 'b',
+          branch: 'feature',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'connection refused' }],
+            },
+          ],
+        },
+      ]);
+      const rows = findLogs(db, { message: 'refused', branch: 'feature' });
+      expect(rows).toHaveLength(1);
+      expect(rows[0].appmap_name).toBe('b');
+    } finally {
+      db.close();
+    }
+  });
+
+  it('false positives are accepted: --message matches a parameter name', () => {
+    // Documents the design choice — broad LIKE over the JSON blob means
+    // a search for "message" matches the parameter name, not just the
+    // value. Display-time projection can tighten this if needed.
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            {
+              event_id: 1,
+              defined_class: 'Logger',
+              method_id: 'info',
+              labels: ['log'],
+              parameters: [{ name: 'message', class: 'String', value: 'hi' }],
+            },
+          ],
+        },
+      ]);
+      const rows = findLogs(db, { message: 'message' });
+      expect(rows).toHaveLength(1);
     } finally {
       db.close();
     }

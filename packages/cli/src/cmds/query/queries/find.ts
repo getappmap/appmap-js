@@ -12,7 +12,7 @@ import {
   sqlCallerMethodClauses,
 } from '../lib/scope';
 
-export type FindType = 'appmaps' | 'requests' | 'queries' | 'calls' | 'exceptions';
+export type FindType = 'appmaps' | 'requests' | 'queries' | 'calls' | 'exceptions' | 'logs';
 
 export interface FindFilter {
   route?: string;          // "POST /orders" or "/orders"
@@ -28,6 +28,8 @@ export interface FindFilter {
   appmap?: string;         // appmap name (or basename of source_path)
   table?: string;          // SQL table name (find queries)
   exception?: string;      // exception class (find exceptions)
+  logger?: string;         // --logger (find logs); class of the logging fn
+  message?: string;        // --message (find logs); substring of the log line
   limit?: number;
   offset?: number;
 }
@@ -71,6 +73,18 @@ export interface FindCallRow {
   path: string | null;
   lineno: number | null;
   elapsed_ms: number | null;
+  parameters_json: string | null;
+  return_value: string | null;
+}
+
+export interface FindLogRow {
+  appmap_name: string;
+  event_id: number;
+  parent_event_id: number | null;
+  logger: string;          // defined_class of the logging fn
+  method_id: string;
+  path: string | null;
+  lineno: number | null;
   parameters_json: string | null;
   return_value: string | null;
 }
@@ -302,6 +316,56 @@ export function findCalls(db: sqlite3.Database, filter: FindFilter): FindCallRow
   return db.prepare(sql).all(...params) as FindCallRow[];
 }
 
+// Log rows: function_calls whose linked code_object has the canonical
+// 'log' label. The label is the contract — it tells the importer to
+// capture parameters_json + return_value, and tells us which calls are
+// loggers. --message is a SQL LIKE substring against both columns;
+// false positives (matching a parameter name, a class name, or a JSON
+// punctuation byte) are accepted by design and can be tightened in
+// post-processing.
+export function findLogs(db: sqlite3.Database, filter: FindFilter): FindLogRow[] {
+  const where: string[] = [
+    `fc.code_object_id IN (SELECT l.code_object_id FROM labels l WHERE l.label = 'log')`,
+  ];
+  const params: (string | number)[] = [];
+
+  const scope = appmapIdScope(filter, 'fc');
+  if (scope) {
+    where.push(scope.sql);
+    params.push(...scope.params);
+  }
+
+  if (filter.logger) {
+    const c = classFilterClauses(filter.logger, 'fc');
+    where.push(...c.where);
+    params.push(...c.params);
+  }
+
+  if (filter.message) {
+    where.push(`(fc.parameters_json LIKE ? OR fc.return_value LIKE ?)`);
+    const like = `%${filter.message}%`;
+    params.push(like, like);
+  }
+
+  let sql = `
+    SELECT a.name AS appmap_name,
+           fc.event_id AS event_id,
+           fc.parent_event_id AS parent_event_id,
+           fc.defined_class AS logger,
+           fc.method_id AS method_id,
+           fc.path AS path,
+           fc.lineno AS lineno,
+           fc.parameters_json AS parameters_json,
+           fc.return_value AS return_value
+    FROM function_calls fc
+    JOIN appmaps a ON a.id = fc.appmap_id
+    WHERE ${where.join(' AND ')}
+    ORDER BY a.source_path, fc.event_id
+  `;
+  sql = appendLimitOffset(sql, filter, params);
+  return db.prepare(sql).all(...params) as FindLogRow[];
+}
+
 export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindExceptionRow[] {
   const where: string[] = [];
   const params: (string | number)[] = [];
@@ -350,5 +414,7 @@ export function find(
       return findCalls(db, filter);
     case 'exceptions':
       return findExceptions(db, filter);
+    case 'logs':
+      return findLogs(db, filter);
   }
 }

@@ -96,6 +96,7 @@ describe('MCP handler', () => {
           'find_requests',
           'find_queries',
           'find_calls',
+          'find_logs',
           'find_exceptions',
           'get_call_tree',
           'find_related',
@@ -233,6 +234,57 @@ describe('MCP handler', () => {
       });
       const rows = JSON.parse((r!.result as any).content[0].text);
       expect(rows).toEqual([{ label: 'log', count: 1, sample_fqid: 'app/Logger#error' }]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('find_logs returns label=log calls and filters by --message', () => {
+    const db = freshDb();
+    try {
+      seedMinimal(db);
+      // Add a parameters_json + return_value to the seeded log call so
+      // --message has something to LIKE against.
+      db.prepare(
+        `UPDATE function_calls
+            SET parameters_json = ?, return_value = ?
+            WHERE method_id = 'error'`
+      ).run(
+        JSON.stringify([{ name: 'message', class: 'String', value: 'connection refused' }]),
+        null
+      );
+      const handler = buildMcpHandler(db);
+
+      // No filter: returns the log row.
+      const all = call(handler, {
+        jsonrpc: '2.0',
+        id: 100,
+        method: 'tools/call',
+        params: { name: 'find_logs', arguments: {} },
+      });
+      const allRows = JSON.parse((all!.result as any).content[0].text);
+      expect(allRows).toHaveLength(1);
+      expect(allRows[0].logger).toBe('Logger');
+      expect(allRows[0].method_id).toBe('error');
+      expect(allRows[0].parameters_json).toContain('connection refused');
+
+      // Substring filter against parameters_json.
+      const matched = call(handler, {
+        jsonrpc: '2.0',
+        id: 101,
+        method: 'tools/call',
+        params: { name: 'find_logs', arguments: { message: 'refused' } },
+      });
+      expect(JSON.parse((matched!.result as any).content[0].text)).toHaveLength(1);
+
+      // Substring that doesn't appear: zero rows.
+      const empty = call(handler, {
+        jsonrpc: '2.0',
+        id: 102,
+        method: 'tools/call',
+        params: { name: 'find_logs', arguments: { message: 'this never appears' } },
+      });
+      expect(JSON.parse((empty!.result as any).content[0].text)).toHaveLength(0);
     } finally {
       db.close();
     }
