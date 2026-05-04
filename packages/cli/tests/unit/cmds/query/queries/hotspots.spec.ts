@@ -84,7 +84,7 @@ describe('functionHotspots', () => {
           { event_id: 3, defined_class: 'Y', method_id: 'slow', fqid: 'app/Y#slow', elapsed_ms: 100 },
         ],
       });
-      const rows = functionHotspots(db, {});
+      const rows = functionHotspots(db, {}).rows;
       expect(rows[0].fqid).toBe('app/Y#slow');
       expect(rows[0].calls).toBe(1);
       expect(rows[0].total_ms).toBe(100);
@@ -110,10 +110,10 @@ describe('functionHotspots', () => {
         ],
         queries: [{ event_id: 4, parent_event_id: 1, sql: 'SELECT 1', elapsed_ms: 1 }],
       });
-      const outer = functionHotspots(db, {}).find((r) => r.fqid === 'app/X#outer')!;
+      const outer = functionHotspots(db, {}).rows.find((r) => r.fqid === 'app/X#outer')!;
       expect(outer.total_ms).toBe(10);
       expect(outer.self_ms).toBe(2);
-      const inner1 = functionHotspots(db, {}).find((r) => r.fqid === 'app/X#inner1')!;
+      const inner1 = functionHotspots(db, {}).rows.find((r) => r.fqid === 'app/X#inner1')!;
       expect(inner1.self_ms).toBe(3); // leaf — self equals total
     } finally {
       db.close();
@@ -131,7 +131,7 @@ describe('functionHotspots', () => {
         name: 'b',
         calls: [{ event_id: 1, defined_class: 'X', method_id: 'm', fqid: 'app/X#m', elapsed_ms: 20 }],
       });
-      const rows = functionHotspots(db, {});
+      const rows = functionHotspots(db, {}).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].calls).toBe(2);
       expect(rows[0].total_ms).toBe(30);
@@ -153,7 +153,7 @@ describe('functionHotspots', () => {
         request: { event_id: 0, method: 'POST', path: '/orders', status: 200 },
         calls: [{ event_id: 1, defined_class: 'O', method_id: 'create', fqid: 'app/O#create', elapsed_ms: 50 }],
       });
-      const rows = functionHotspots(db, { route: 'GET /reports' });
+      const rows = functionHotspots(db, { route: 'GET /reports' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].fqid).toBe('app/R#calc');
     } finally {
@@ -172,7 +172,7 @@ describe('functionHotspots', () => {
           { event_id: 3, defined_class: 'UsersController', method_id: 'show', elapsed_ms: 200 },
         ],
       });
-      const rows = functionHotspots(db, { className: 'OrdersController' });
+      const rows = functionHotspots(db, { className: 'OrdersController' }).rows;
       expect(rows.map((r) => r.method_id).sort()).toEqual(['create', 'index']);
     } finally {
       db.close();
@@ -201,7 +201,7 @@ describe('functionHotspots', () => {
           },
         ],
       });
-      const rows = functionHotspots(db, { className: 'UserRepository' });
+      const rows = functionHotspots(db, { className: 'UserRepository' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].fqid).toBe('org/example/UserRepository#findById');
     } finally {
@@ -220,7 +220,7 @@ describe('functionHotspots', () => {
           { event_id: 3, defined_class: 'X', method_id: 'c', elapsed_ms: 25 },
         ],
       });
-      expect(functionHotspots(db, { limit: 2 })).toHaveLength(2);
+      expect(functionHotspots(db, { limit: 2 }).rows).toHaveLength(2);
     } finally {
       db.close();
     }
@@ -239,7 +239,7 @@ describe('sqlHotspots', () => {
           { event_id: 3, sql: 'SELECT * FROM tenants WHERE slug = ?', elapsed_ms: 80 },
         ],
       });
-      const rows = sqlHotspots(db, {});
+      const rows = sqlHotspots(db, {}).rows;
       expect(rows[0].sql_text).toBe('SELECT * FROM tenants WHERE slug = ?');
       expect(rows[0].count).toBe(1);
       expect(rows[0].avg_ms).toBeCloseTo(80);
@@ -271,11 +271,11 @@ describe('sqlHotspots', () => {
         `INSERT INTO sql_queries (appmap_id, event_id, sql_text, elapsed_ms) VALUES (?, 1, 'SELECT b', 2)`
       ).run(newId);
 
-      const since = sqlHotspots(db, { since: '2026-04-15T00:00:00.000Z' });
+      const since = sqlHotspots(db, { since: '2026-04-15T00:00:00.000Z' }).rows;
       expect(since).toHaveLength(1);
       expect(since[0].sql_text).toBe('SELECT b');
 
-      const until = sqlHotspots(db, { until: '2026-04-15T00:00:00.000Z' });
+      const until = sqlHotspots(db, { until: '2026-04-15T00:00:00.000Z' }).rows;
       expect(until).toHaveLength(1);
       expect(until[0].sql_text).toBe('SELECT a');
     } finally {
@@ -296,7 +296,7 @@ describe('sqlHotspots', () => {
         branch: 'feature',
         queries: [{ event_id: 1, sql: 'SELECT 2', elapsed_ms: 2 }],
       });
-      const main = sqlHotspots(db, { branch: 'main' });
+      const main = sqlHotspots(db, { branch: 'main' }).rows;
       expect(main).toHaveLength(1);
       expect(main[0].sql_text).toBe('SELECT 1');
     } finally {

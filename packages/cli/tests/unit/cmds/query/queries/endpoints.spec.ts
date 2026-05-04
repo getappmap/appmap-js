@@ -56,7 +56,7 @@ describe('endpoints', () => {
   it('returns an empty array when there are no requests', () => {
     const db = freshDb();
     try {
-      expect(endpoints(db)).toEqual([]);
+      expect(endpoints(db).rows).toEqual([]);
     } finally {
       db.close();
     }
@@ -70,7 +70,7 @@ describe('endpoints', () => {
         { method: 'GET', path: '/x', status: 200, elapsed_ms: 200 },
         { method: 'POST', path: '/x', status: 201, elapsed_ms: 150 },
       ]);
-      const out = endpoints(db);
+      const out = endpoints(db).rows;
       const get = out.find((r) => r.method === 'GET');
       const post = out.find((r) => r.method === 'POST');
       expect(get?.count).toBe(2);
@@ -89,7 +89,7 @@ describe('endpoints', () => {
         { method: 'GET', path: '/orders/99', normalized_path: '/orders/:id', status: 200, elapsed_ms: 200 },
         { method: 'GET', path: '/raw-only', status: 200, elapsed_ms: 50 },
       ]);
-      const out = endpoints(db);
+      const out = endpoints(db).rows;
       expect(out.find((r) => r.route === '/orders/:id')?.count).toBe(2);
       expect(out.find((r) => r.route === '/raw-only')?.count).toBe(1);
     } finally {
@@ -108,7 +108,7 @@ describe('endpoints', () => {
       reqs.push({ method: 'GET', path: '/x', status: 500, elapsed_ms: 1000 });
       seed(db, reqs);
 
-      const row = endpoints(db).find((r) => r.route === '/x')!;
+      const row = endpoints(db).rows.find((r) => r.route === '/x')!;
       expect(row.count).toBe(10);
       expect(row.err_pct).toBeCloseTo(10);
       expect(row.avg_ms).toBeCloseTo((10 + 20 + 30 + 40 + 50 + 60 + 70 + 80 + 90 + 1000) / 10);
@@ -129,7 +129,7 @@ describe('endpoints', () => {
         { method: 'POST', path: '/orders', status: 201, elapsed_ms: 110 },
         { method: 'POST', path: '/orders', status: 500, elapsed_ms: 520 },
       ]);
-      const out = endpoints(db, { status: { op: '>=', value: 500 } });
+      const out = endpoints(db, { status: { op: '>=', value: 500 } }).rows;
       // /quiet has no 5xx → excluded.
       // /orders has one 5xx → included; count=3, err_pct=33%.
       expect(out).toHaveLength(1);
@@ -149,8 +149,8 @@ describe('endpoints', () => {
         { method: 'GET', path: '/x', status: 200, elapsed_ms: 100, branch: 'main' },
         { method: 'GET', path: '/y', status: 200, elapsed_ms: 100, branch: 'feature' },
       ]);
-      expect(endpoints(db, { branch: 'main' })).toHaveLength(1);
-      expect(endpoints(db, { branch: 'main' })[0].route).toBe('/x');
+      expect(endpoints(db, { branch: 'main' }).rows).toHaveLength(1);
+      expect(endpoints(db, { branch: 'main' }).rows[0].route).toBe('/x');
     } finally {
       db.close();
     }
@@ -164,12 +164,12 @@ describe('endpoints', () => {
         { method: 'GET', path: '/x', status: 200, elapsed_ms: 100, timestamp: '2026-04-15T00:00:00.000Z' },
         { method: 'GET', path: '/x', status: 200, elapsed_ms: 100, timestamp: '2026-04-30T00:00:00.000Z' },
       ]);
-      expect(endpoints(db, { since: '2026-04-10T00:00:00.000Z' })[0].count).toBe(2);
+      expect(endpoints(db, { since: '2026-04-10T00:00:00.000Z' }).rows[0].count).toBe(2);
       expect(
         endpoints(db, {
           since: '2026-04-10T00:00:00.000Z',
           until: '2026-04-20T00:00:00.000Z',
-        })[0].count
+        }).rows[0].count
       ).toBe(1);
     } finally {
       db.close();
@@ -186,13 +186,13 @@ describe('endpoints', () => {
         { method: 'GET', path: '/c', status: 500, elapsed_ms: 20 },
         { method: 'GET', path: '/d', status: 200, elapsed_ms: 200 },
       ]);
-      const byCount = endpoints(db, { sort: 'count' }).map((r) => r.route);
+      const byCount = endpoints(db, { sort: 'count' }).rows.map((r) => r.route);
       expect(byCount[0]).toBe('/b'); // count 2
-      const byErr = endpoints(db, { sort: 'err' }).map((r) => r.route);
+      const byErr = endpoints(db, { sort: 'err' }).rows.map((r) => r.route);
       expect(byErr[0]).toBe('/c'); // 100% err
-      const byAvg = endpoints(db, { sort: 'avg' }).map((r) => r.route);
+      const byAvg = endpoints(db, { sort: 'avg' }).rows.map((r) => r.route);
       expect(byAvg[0]).toBe('/d'); // 200ms avg
-      const byP95 = endpoints(db, { sort: 'p95' }).map((r) => r.route);
+      const byP95 = endpoints(db, { sort: 'p95' }).rows.map((r) => r.route);
       expect(byP95[0]).toBe('/d'); // 200ms p95
     } finally {
       db.close();
@@ -206,7 +206,7 @@ describe('endpoints', () => {
         { method: 'GET', path: '/measured', status: 200, elapsed_ms: 0 },
         { method: 'GET', path: '/unmeasured', status: 200, elapsed_ms: null },
       ]);
-      const byP95 = endpoints(db, { sort: 'p95' }).map((r) => r.route);
+      const byP95 = endpoints(db, { sort: 'p95' }).rows.map((r) => r.route);
       expect(byP95).toEqual(['/measured', '/unmeasured']);
     } finally {
       db.close();
@@ -221,7 +221,7 @@ describe('endpoints', () => {
         { method: 'GET', path: '/b', status: 200, elapsed_ms: 100 },
         { method: 'GET', path: '/c', status: 200, elapsed_ms: 100 },
       ]);
-      expect(endpoints(db, { limit: 2 })).toHaveLength(2);
+      expect(endpoints(db, { limit: 2 }).rows).toHaveLength(2);
     } finally {
       db.close();
     }
@@ -234,7 +234,7 @@ describe('endpoints', () => {
         { method: 'GET', path: '/x', status: 200, elapsed_ms: 100 },
         { method: 'GET', path: '/x', status: 200, elapsed_ms: null },
       ]);
-      const row = endpoints(db)[0];
+      const row = endpoints(db).rows[0];
       expect(row.count).toBe(2);
       expect(row.avg_ms).toBe(100);
       expect(row.p95_ms).toBe(100);

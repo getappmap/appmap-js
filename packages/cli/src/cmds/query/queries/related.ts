@@ -1,5 +1,6 @@
 import sqlite3 from 'better-sqlite3';
 
+import { DEFAULT_PAGE_LIMIT, Page } from '../lib/page';
 import { appmapWhere, httpScopeClauses, RecordingScope } from '../lib/scope';
 import { resolveAppmap } from './tree';
 
@@ -40,6 +41,7 @@ export interface RelatedRow {
 
 export interface RelatedFilter extends RecordingScope {
   limit?: number;
+  offset?: number;
 }
 
 interface AppmapSig {
@@ -117,7 +119,7 @@ export function related(
   db: sqlite3.Database,
   sourceRef: string,
   filter: RelatedFilter = {}
-): RelatedRow[] {
+): Page<RelatedRow> {
   const source = resolveAppmap(db, sourceRef);
   const sourceSig = loadSignature(db, source.id);
 
@@ -190,5 +192,10 @@ export function related(
   }
 
   scored.sort((a, b) => b.score - a.score);
-  return filter.limit !== undefined ? scored.slice(0, filter.limit) : scored;
+
+  const limit = filter.limit ?? DEFAULT_PAGE_LIMIT;
+  const offset = filter.offset ?? 0;
+  const total = scored.length;
+  const sliced = limit > 0 ? scored.slice(offset, offset + limit) : scored.slice(offset);
+  return { rows: sliced, total, limit, offset };
 }

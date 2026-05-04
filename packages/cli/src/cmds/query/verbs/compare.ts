@@ -5,6 +5,7 @@ import { handleWorkingDirectory } from '../../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../../lib/locateAppMapDir';
 import { verbose } from '../../../utils';
 import { openReadOnly } from '../lib/openReadOnly';
+import { truncationFooter } from '../lib/page';
 import { parseTime } from '../lib/parseFilter';
 import {
   compare,
@@ -32,7 +33,8 @@ export const builder = <T>(args: yargs.Argv<T>) => {
       default: 'delta',
     })
     .option('include-counts', { type: 'boolean', default: false })
-    .option('limit', { type: 'number' })
+    .option('limit', { type: 'number', describe: 'default 20; pass 0 for unbounded' })
+    .option('offset', { type: 'number' })
     .option('json', { type: 'boolean', default: false });
 };
 
@@ -56,15 +58,18 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
   if (argv.since) filter.since = parseTime(argv.since);
   if (argv.until) filter.until = parseTime(argv.until);
   if (argv.limit !== undefined) filter.limit = argv.limit;
+  if (argv.offset !== undefined) filter.offset = argv.offset;
 
   const db = openReadOnly(appmapDir, argv.queryDb);
   try {
-    const rows = compare(db, filter);
+    const page = compare(db, filter);
     if (argv.json) {
-      log(JSON.stringify(rows, null, 2));
+      log(JSON.stringify(page, null, 2));
       return;
     }
-    log(renderCompare(rows, branchA, branchB, !!argv.includeCounts));
+    log(renderCompare(page.rows, branchA, branchB, !!argv.includeCounts));
+    const footer = truncationFooter(page);
+    if (footer) log(footer);
   } finally {
     db.close();
   }

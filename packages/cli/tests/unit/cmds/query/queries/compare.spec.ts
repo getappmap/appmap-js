@@ -58,7 +58,7 @@ describe('compare', () => {
         { branch: 'feat', method: 'GET', path: '/reports', status: 200, elapsed_ms: 6000 },
         { branch: 'feat', method: 'GET', path: '/reports', status: 200, elapsed_ms: 6100 },
       ]);
-      const rows = compare(db, { branch_a: 'main', branch_b: 'feat' });
+      const rows = compare(db, { branch_a: 'main', branch_b: 'feat' }).rows;
       expect(rows).toHaveLength(1);
       const r = rows[0];
       expect(r.method).toBe('GET');
@@ -78,7 +78,7 @@ describe('compare', () => {
         { branch: 'main', method: 'GET', path: '/old', status: 200, elapsed_ms: 100 },
         { branch: 'feat', method: 'GET', path: '/new', status: 200, elapsed_ms: 50 },
       ]);
-      const rows = compare(db, { branch_a: 'main', branch_b: 'feat' });
+      const rows = compare(db, { branch_a: 'main', branch_b: 'feat' }).rows;
       const old = rows.find((r) => r.route === '/old')!;
       const fresh = rows.find((r) => r.route === '/new')!;
       expect(old.a_p95_ms).toBe(100);
@@ -106,7 +106,7 @@ describe('compare', () => {
         { branch: 'main', method: 'GET', path: '/c', status: 200, elapsed_ms: 100 },
         { branch: 'feat', method: 'GET', path: '/c', status: 200, elapsed_ms: 105 },
       ]);
-      const rows = compare(db, { branch_a: 'main', branch_b: 'feat', sort: 'delta' });
+      const rows = compare(db, { branch_a: 'main', branch_b: 'feat', sort: 'delta' }).rows;
       // /a (10×) and /b (1/5×) have the largest log-delta; /c last.
       expect(rows[rows.length - 1].route).toBe('/c');
     } finally {
@@ -124,7 +124,7 @@ describe('compare', () => {
         { branch: 'feat', method: 'GET', path: '/b', status: 200, elapsed_ms: 100 },
       ]);
       expect(
-        compare(db, { branch_a: 'main', branch_b: 'feat', limit: 1 })
+        compare(db, { branch_a: 'main', branch_b: 'feat', limit: 1 }).rows
       ).toHaveLength(1);
     } finally {
       db.close();

@@ -1,5 +1,6 @@
 import sqlite3 from 'better-sqlite3';
 
+import { Page, paginate } from '../lib/page';
 import type { Comparator, NumberFilter } from '../lib/parseFilter';
 
 export interface EndpointRow {
@@ -24,6 +25,7 @@ export interface EndpointsFilter {
   status?: NumberFilter;
   sort?: EndpointSort;
   limit?: number;
+  offset?: number;
 }
 
 // err_pct is fixed at "% of requests with status >= 500" (server errors),
@@ -53,7 +55,7 @@ const VALID_OPS = new Set<Comparator>(['=', '>=', '<=', '>', '<']);
 export function endpoints(
   db: sqlite3.Database,
   filter: EndpointsFilter = {}
-): EndpointRow[] {
+): Page<EndpointRow> {
   const where: string[] = [];
   const params: (string | number)[] = [];
 
@@ -89,7 +91,7 @@ export function endpoints(
   }
   const sortColumn = SORT_COLUMNS[sortKey];
 
-  let sql = `
+  const sql = `
     WITH ranked AS (
       SELECT
         h.method                              AS method,
@@ -124,26 +126,25 @@ export function endpoints(
     ${havingSql}
     ORDER BY ${sortColumn} DESC NULLS LAST, method, route
   `;
-  if (filter.limit !== undefined) {
-    sql += ' LIMIT ?';
-    params.push(filter.limit);
-  }
 
-  const rows = db.prepare(sql).all(...params) as {
+  const page = paginate<{
     method: string;
     route: string;
     count: number;
     avg_ms: number | null;
     p95_ms: number | null;
     err_pct: number | null;
-  }[];
+  }>(db, sql, params, { limit: filter.limit, offset: filter.offset });
 
-  return rows.map((r) => ({
-    method: r.method,
-    route: r.route,
-    count: r.count,
-    avg_ms: r.avg_ms,
-    p95_ms: r.p95_ms,
-    err_pct: r.err_pct ?? 0,
-  }));
+  return {
+    ...page,
+    rows: page.rows.map((r) => ({
+      method: r.method,
+      route: r.route,
+      count: r.count,
+      avg_ms: r.avg_ms,
+      p95_ms: r.p95_ms,
+      err_pct: r.err_pct ?? 0,
+    })),
+  };
 }

@@ -5,6 +5,7 @@ import { handleWorkingDirectory } from '../../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../../lib/locateAppMapDir';
 import { verbose } from '../../../utils';
 import { openReadOnly } from '../lib/openReadOnly';
+import { truncationFooter } from '../lib/page';
 import { parseStatus, parseTime } from '../lib/parseFilter';
 import { related, RelatedFilter, RelatedRow } from '../queries/related';
 import { formatCount, formatMs, formatTable } from '../lib/format';
@@ -31,7 +32,8 @@ export const builder = <T>(args: yargs.Argv<T>) => {
       type: 'string',
       describe: 'e.g. "POST /orders" (path is exact match; method case-insensitive)',
     })
-    .option('limit', { type: 'number' })
+    .option('limit', { type: 'number', describe: 'default 20; pass 0 for unbounded' })
+    .option('offset', { type: 'number' })
     .option('json', { type: 'boolean', default: false });
 };
 
@@ -55,15 +57,18 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
   if (argv.status) filter.status = parseStatus(argv.status);
   if (argv.route) filter.route = argv.route;
   if (argv.limit !== undefined) filter.limit = argv.limit;
+  if (argv.offset !== undefined) filter.offset = argv.offset;
 
   const db = openReadOnly(appmapDir, argv.queryDb);
   try {
-    const rows = related(db, ref, filter);
+    const page = related(db, ref, filter);
     if (argv.json) {
-      log(JSON.stringify(rows, null, 2));
+      log(JSON.stringify(page, null, 2));
       return;
     }
-    log(renderRelated(rows));
+    log(renderRelated(page.rows));
+    const footer = truncationFooter(page);
+    if (footer) log(footer);
   } finally {
     db.close();
   }

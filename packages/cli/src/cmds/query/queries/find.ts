@@ -1,6 +1,7 @@
 import sqlite3 from 'better-sqlite3';
 
 import { projectLogMessage } from '../lib/logMessage';
+import { Page, paginate } from '../lib/page';
 import type { NumberFilter } from '../lib/parseFilter';
 import {
   appmapIdScope,
@@ -132,26 +133,13 @@ function durationClause(filter: FindFilter, column: string): Clauses {
   return { where, params };
 }
 
-function appendLimitOffset(sql: string, filter: FindFilter, params: (string | number)[]): string {
-  let result = sql;
-  if (filter.limit !== undefined) {
-    result += ' LIMIT ?';
-    params.push(filter.limit);
-    if (filter.offset !== undefined) {
-      result += ' OFFSET ?';
-      params.push(filter.offset);
-    }
-  } else if (filter.offset !== undefined) {
-    // OFFSET without LIMIT: SQLite requires a LIMIT; use -1 (unbounded).
-    result += ' LIMIT -1 OFFSET ?';
-    params.push(filter.offset);
-  }
-  return result;
+function pageOptions(filter: FindFilter): { limit?: number; offset?: number } {
+  return { limit: filter.limit, offset: filter.offset };
 }
 
 // --- per-type queries ---
 
-export function findAppmaps(db: sqlite3.Database, filter: FindFilter): FindAppmapRow[] {
+export function findAppmaps(db: sqlite3.Database, filter: FindFilter): Page<FindAppmapRow> {
   const a = appmapWhere(filter, 'a');
   const h = httpScopeClauses(filter, 'h2');
   const requireHttpMatch = h.where.length > 0;
@@ -173,7 +161,7 @@ export function findAppmaps(db: sqlite3.Database, filter: FindFilter): FindAppma
   const params: (string | number)[] = [...h.params, ...a.params];
   if (filter.duration) params.push(filter.duration.value);
 
-  let sql = `
+  const sql = `
     SELECT a.id                                       AS appmap_id,
            a.name                                     AS appmap_name,
            COALESCE(h.normalized_path, h.path)        AS route,
@@ -191,19 +179,18 @@ export function findAppmaps(db: sqlite3.Database, filter: FindFilter): FindAppma
     ${whereSql}
     ORDER BY a.timestamp, a.name
   `;
-  sql = appendLimitOffset(sql, filter, params);
-  return db.prepare(sql).all(...params) as FindAppmapRow[];
+  return paginate<FindAppmapRow>(db, sql, params, pageOptions(filter));
 }
 
-export function findRequests(db: sqlite3.Database, filter: FindFilter): FindRequestRow[] {
+export function findRequests(db: sqlite3.Database, filter: FindFilter): Page<FindRequestRow> {
   const a = appmapWhere(filter, 'a');
   const where: string[] = [...a.where];
   const params: (string | number)[] = [...a.params];
 
   if (filter.route) {
     const route = parseRoute(filter.route);
-    where.push(`COALESCE(h.normalized_path, h.path) = ?`);
-    params.push(route.path);
+    where.push(`COALESCE(h.normalized_path, h.path) LIKE ?`);
+    params.push(`%${route.path}%`);
     if (route.method) {
       where.push(`h.method = ?`);
       params.push(route.method);
@@ -217,7 +204,7 @@ export function findRequests(db: sqlite3.Database, filter: FindFilter): FindRequ
   where.push(...dur.where);
   params.push(...dur.params);
 
-  let sql = `
+  const sql = `
     SELECT a.name AS appmap_name,
            h.event_id AS event_id,
            h.method AS method,
@@ -230,11 +217,10 @@ export function findRequests(db: sqlite3.Database, filter: FindFilter): FindRequ
     ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
     ORDER BY a.source_path, h.event_id
   `;
-  sql = appendLimitOffset(sql, filter, params);
-  return db.prepare(sql).all(...params) as FindRequestRow[];
+  return paginate<FindRequestRow>(db, sql, params, pageOptions(filter));
 }
 
-export function findQueries(db: sqlite3.Database, filter: FindFilter): FindQueryRow[] {
+export function findQueries(db: sqlite3.Database, filter: FindFilter): Page<FindQueryRow> {
   const where: string[] = [];
   const params: (string | number)[] = [];
 
@@ -266,7 +252,7 @@ export function findQueries(db: sqlite3.Database, filter: FindFilter): FindQuery
   where.push(...dur.where);
   params.push(...dur.params);
 
-  let sql = `
+  const sql = `
     SELECT a.name AS appmap_name,
            q.event_id AS event_id,
            q.elapsed_ms AS elapsed_ms,
@@ -278,11 +264,10 @@ export function findQueries(db: sqlite3.Database, filter: FindFilter): FindQuery
     ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
     ORDER BY a.source_path, q.event_id
   `;
-  sql = appendLimitOffset(sql, filter, params);
-  return db.prepare(sql).all(...params) as FindQueryRow[];
+  return paginate<FindQueryRow>(db, sql, params, pageOptions(filter));
 }
 
-export function findCalls(db: sqlite3.Database, filter: FindFilter): FindCallRow[] {
+export function findCalls(db: sqlite3.Database, filter: FindFilter): Page<FindCallRow> {
   const where: string[] = [];
   const params: (string | number)[] = [];
 
@@ -304,15 +289,15 @@ export function findCalls(db: sqlite3.Database, filter: FindFilter): FindCallRow
   }
   if (filter.label) {
     where.push(
-      `fc.code_object_id IN (SELECT l.code_object_id FROM labels l WHERE l.label = ?)`
+      `fc.code_object_id IN (SELECT l.code_object_id FROM labels l WHERE l.label LIKE ?)`
     );
-    params.push(filter.label);
+    params.push(`%${filter.label}%`);
   }
   const dur = durationClause(filter, 'fc.elapsed_ms');
   where.push(...dur.where);
   params.push(...dur.params);
 
-  let sql = `
+  const sql = `
     SELECT a.name AS appmap_name,
            fc.event_id AS event_id,
            co.fqid AS fqid,
@@ -329,8 +314,7 @@ export function findCalls(db: sqlite3.Database, filter: FindFilter): FindCallRow
     ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
     ORDER BY a.source_path, fc.event_id
   `;
-  sql = appendLimitOffset(sql, filter, params);
-  return db.prepare(sql).all(...params) as FindCallRow[];
+  return paginate<FindCallRow>(db, sql, params, pageOptions(filter));
 }
 
 // Log rows: function_calls whose linked code_object has the canonical
@@ -340,7 +324,7 @@ export function findCalls(db: sqlite3.Database, filter: FindFilter): FindCallRow
 // false positives (matching a parameter name, a class name, or a JSON
 // punctuation byte) are accepted by design and can be tightened in
 // post-processing.
-export function findLogs(db: sqlite3.Database, filter: FindFilter): FindLogRow[] {
+export function findLogs(db: sqlite3.Database, filter: FindFilter): Page<FindLogRow> {
   const where: string[] = [
     `fc.code_object_id IN (SELECT l.code_object_id FROM labels l WHERE l.label = 'log')`,
   ];
@@ -364,7 +348,7 @@ export function findLogs(db: sqlite3.Database, filter: FindFilter): FindLogRow[]
     params.push(like, like);
   }
 
-  let sql = `
+  const sql = `
     SELECT a.name AS appmap_name,
            fc.event_id AS event_id,
            fc.parent_event_id AS parent_event_id,
@@ -379,12 +363,20 @@ export function findLogs(db: sqlite3.Database, filter: FindFilter): FindLogRow[]
     WHERE ${where.join(' AND ')}
     ORDER BY a.source_path, fc.event_id
   `;
-  sql = appendLimitOffset(sql, filter, params);
-  const rows = db.prepare(sql).all(...params) as Omit<FindLogRow, 'message'>[];
-  return rows.map((r) => ({ ...r, message: projectLogMessage(r.parameters_json, r.return_value) }));
+  const page = paginate<Omit<FindLogRow, 'message'>>(db, sql, params, pageOptions(filter));
+  return {
+    ...page,
+    rows: page.rows.map((r) => ({
+      ...r,
+      message: projectLogMessage(r.parameters_json, r.return_value),
+    })),
+  };
 }
 
-export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindExceptionRow[] {
+export function findExceptions(
+  db: sqlite3.Database,
+  filter: FindFilter
+): Page<FindExceptionRow> {
   const where: string[] = [];
   const params: (string | number)[] = [];
 
@@ -395,11 +387,11 @@ export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindEx
   }
 
   if (filter.exception) {
-    where.push(`e.exception_class = ?`);
-    params.push(filter.exception);
+    where.push(`e.exception_class LIKE ?`);
+    params.push(`%${filter.exception}%`);
   }
 
-  let sql = `
+  const sql = `
     SELECT e.appmap_id AS appmap_id,
            a.name AS appmap_name,
            e.event_id AS event_id,
@@ -413,8 +405,8 @@ export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindEx
     ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
     ORDER BY a.source_path, e.event_id, e.exception_class
   `;
-  sql = appendLimitOffset(sql, filter, params);
-  const rows = db.prepare(sql).all(...params) as FindExceptionRow[];
+  const page = paginate<FindExceptionRow>(db, sql, params, pageOptions(filter));
+  const rows = page.rows;
 
   // Enrichment: for each exception, attach the last N log calls in the
   // same recording with event_id strictly less than the exception's
@@ -459,7 +451,7 @@ export function findExceptions(db: sqlite3.Database, filter: FindFilter): FindEx
     }
   }
 
-  return rows;
+  return page;
 }
 
 // Dispatcher.
@@ -467,7 +459,7 @@ export function find(
   db: sqlite3.Database,
   type: FindType,
   filter: FindFilter
-): unknown[] {
+): Page<unknown> {
   switch (type) {
     case 'appmaps':
       return findAppmaps(db, filter);

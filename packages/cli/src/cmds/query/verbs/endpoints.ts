@@ -5,6 +5,7 @@ import { handleWorkingDirectory } from '../../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../../lib/locateAppMapDir';
 import { verbose } from '../../../utils';
 import { openReadOnly } from '../lib/openReadOnly';
+import { truncationFooter } from '../lib/page';
 import { parseStatus, parseTime } from '../lib/parseFilter';
 import {
   endpoints,
@@ -34,7 +35,8 @@ export const builder = <T>(args: yargs.Argv<T>) => {
       choices: ['count', 'avg', 'p95', 'err'] as const,
       default: 'count',
     })
-    .option('limit', { type: 'number' })
+    .option('limit', { type: 'number', describe: 'default 20; pass 0 for unbounded' })
+    .option('offset', { type: 'number' })
     .option('json', { type: 'boolean', default: false });
 };
 
@@ -55,18 +57,19 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
   if (argv.branch) filter.branch = argv.branch;
   if (argv.status) filter.status = parseStatus(argv.status);
   if (argv.limit !== undefined) filter.limit = argv.limit;
+  if (argv.offset !== undefined) filter.offset = argv.offset;
 
   const db = openReadOnly(appmapDir, argv.queryDb);
   try {
-    const rows = endpoints(db, filter);
+    const page = endpoints(db, filter);
     if (argv.json) {
-      log(JSON.stringify(rows, null, 2));
+      log(JSON.stringify(page, null, 2));
       return;
     }
     log(
       formatTable(
         ['METHOD', 'ROUTE', 'COUNT', 'AVG', 'P95', 'ERR%'],
-        rows.map((r) => [
+        page.rows.map((r) => [
           r.method,
           r.route,
           formatCount(r.count),
@@ -76,6 +79,8 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
         ])
       )
     );
+    const footer = truncationFooter(page);
+    if (footer) log(footer);
   } finally {
     db.close();
   }
