@@ -5,6 +5,7 @@ import { handleWorkingDirectory } from '../../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../../lib/locateAppMapDir';
 import { verbose } from '../../../utils';
 import { openReadOnly } from '../lib/openReadOnly';
+import { truncationFooter } from '../lib/page';
 import { parseDuration, parseStatus, parseTime } from '../lib/parseFilter';
 import { parseClassRef } from '../lib/scope';
 import {
@@ -180,12 +181,14 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
 
   const db = openReadOnly(appmapDir, argv.queryDb);
   try {
-    const rows = find(db, type, filter);
+    const page = find(db, type, filter);
     if (argv.json) {
-      log(JSON.stringify(rows, null, 2));
+      log(JSON.stringify(page, null, 2));
       return;
     }
-    log(renderTable(type, rows));
+    log(renderTable(type, page.rows));
+    const footer = truncationFooter(page);
+    if (footer) log(footer);
   } finally {
     db.close();
   }

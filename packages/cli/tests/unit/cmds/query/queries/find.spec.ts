@@ -177,21 +177,21 @@ describe('findRequests', () => {
       ]);
 
       // Method-prefixed route
-      const r1 = findRequests(db, { route: 'POST /orders' });
+      const r1 = findRequests(db, { route: 'POST /orders' }).rows;
       expect(r1).toHaveLength(2);
       expect(r1.every((r) => r.method === 'POST' && r.route === '/orders')).toBe(true);
 
       // Status filter
-      const r2 = findRequests(db, { status: { op: '>=', value: 500 } });
+      const r2 = findRequests(db, { status: { op: '>=', value: 500 } }).rows;
       expect(r2).toHaveLength(2);
 
       // Duration filter
-      const r3 = findRequests(db, { duration: { op: '>', value: 550 } });
+      const r3 = findRequests(db, { duration: { op: '>', value: 550 } }).rows;
       expect(r3).toHaveLength(1);
       expect(r3[0].appmap_name).toBe('b');
 
       // Branch filter
-      const r4 = findRequests(db, { branch: 'feature' });
+      const r4 = findRequests(db, { branch: 'feature' }).rows;
       expect(r4).toHaveLength(1);
       expect(r4[0].appmap_name).toBe('b');
     } finally {
@@ -212,8 +212,8 @@ describe('findRequests', () => {
           ],
         },
       ]);
-      expect(findRequests(db, { limit: 2 })).toHaveLength(2);
-      expect(findRequests(db, { limit: 2, offset: 1 })[0].event_id).toBe(2);
+      expect(findRequests(db, { limit: 2 }).rows).toHaveLength(2);
+      expect(findRequests(db, { limit: 2, offset: 1 }).rows[0].event_id).toBe(2);
     } finally {
       db.close();
     }
@@ -235,7 +235,7 @@ describe('findAppmaps', () => {
         },
         { name: 'b', branch: 'feature' },
       ]);
-      const rows = findAppmaps(db, {});
+      const rows = findAppmaps(db, {}).rows;
       expect(rows).toHaveLength(2);
       const a = rows.find((r) => r.appmap_name === 'a')!;
       expect(a.route).toBe('/x'); // first request by event_id
@@ -260,7 +260,7 @@ describe('findAppmaps', () => {
           ],
         },
       ]);
-      const rows = findAppmaps(db, { route: 'POST /orders' });
+      const rows = findAppmaps(db, { route: 'POST /orders' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].elapsed_ms).toBe(100); // event_id=1 wins, not 2
     } finally {
@@ -281,7 +281,7 @@ describe('findAppmaps', () => {
           requests: [{ event_id: 1, method: 'GET', path: '/x', status: 200, elapsed_ms: 5000 }],
         },
       ]);
-      const rows = findAppmaps(db, { duration: { op: '>', value: 1000 } });
+      const rows = findAppmaps(db, { duration: { op: '>', value: 1000 } }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('slow');
     } finally {
@@ -302,7 +302,7 @@ describe('findAppmaps', () => {
         },
         { name: 'b', requests: [{ event_id: 1, method: 'GET', path: '/x', status: 200 }] },
       ]);
-      const rows = findAppmaps(db, { route: 'POST /orders', status: { op: '>=', value: 500 } });
+      const rows = findAppmaps(db, { route: 'POST /orders', status: { op: '>=', value: 500 } }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('a');
       expect(rows[0].route).toBe('/orders');
@@ -333,7 +333,7 @@ describe('findQueries', () => {
           queries: [{ event_id: 2, sql: 'INSERT INTO orders (...) VALUES (...)' }],
         },
       ]);
-      const rows = findQueries(db, { table: 'orders', status: { op: '>=', value: 500 } });
+      const rows = findQueries(db, { table: 'orders', status: { op: '>=', value: 500 } }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('a');
       expect(rows[0].sql_text).toContain('INSERT INTO orders');
@@ -359,7 +359,7 @@ describe('find filters: --commit, --since/--until, --duration', () => {
           requests: [{ event_id: 1, method: 'GET', path: '/y', status: 200 }],
         },
       ]);
-      const rows = findRequests(db, { commit: 'abc123' });
+      const rows = findRequests(db, { commit: 'abc123' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('a');
     } finally {
@@ -374,7 +374,7 @@ describe('find filters: --commit, --since/--until, --duration', () => {
         { name: 'a', commit: 'abc' },
         { name: 'b', commit: 'def' },
       ]);
-      expect(findAppmaps(db, { commit: 'abc' })).toHaveLength(1);
+      expect(findAppmaps(db, { commit: 'abc' }).rows).toHaveLength(1);
     } finally {
       db.close();
     }
@@ -403,7 +403,7 @@ describe('find filters: --commit, --since/--until, --duration', () => {
       const rows = findRequests(db, {
         since: '2026-04-10T00:00:00.000Z',
         until: '2026-04-20T00:00:00.000Z',
-      });
+      }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('b');
     } finally {
@@ -426,7 +426,7 @@ describe('find filters: --commit, --since/--until, --duration', () => {
           calls: [{ event_id: 1, defined_class: 'X', method_id: 'm' }],
         },
       ]);
-      const rows = findCalls(db, { since: '2026-04-15T00:00:00.000Z' });
+      const rows = findCalls(db, { since: '2026-04-15T00:00:00.000Z' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('new');
     } finally {
@@ -446,7 +446,7 @@ describe('find filters: --commit, --since/--until, --duration', () => {
           ],
         },
       ]);
-      const rows = findCalls(db, { duration: { op: '>', value: 100 } });
+      const rows = findCalls(db, { duration: { op: '>', value: 100 } }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].method_id).toBe('slow');
     } finally {
@@ -466,7 +466,7 @@ describe('find filters: --commit, --since/--until, --duration', () => {
           ],
         },
       ]);
-      const rows = findQueries(db, { duration: { op: '>=', value: 10 } });
+      const rows = findQueries(db, { duration: { op: '>=', value: 10 } }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].sql_text).toBe('SELECT 2');
     } finally {
@@ -505,13 +505,13 @@ describe('find filters: --commit, --since/--until, --duration', () => {
       ]);
       // Class part is read from code_objects (UserRepository), not from
       // the WrongClassName caller_class string.
-      expect(findQueries(db, { className: 'UserRepository' })).toHaveLength(1);
+      expect(findQueries(db, { className: 'UserRepository' }).rows).toHaveLength(1);
       // Full chain match also works.
-      expect(findQueries(db, { className: 'org/example/UserRepository' })).toHaveLength(
+      expect(findQueries(db, { className: 'org/example/UserRepository' }).rows).toHaveLength(
         1
       );
       // Misspelled — no match.
-      expect(findQueries(db, { className: 'OtherRepository' })).toHaveLength(0);
+      expect(findQueries(db, { className: 'OtherRepository' }).rows).toHaveLength(0);
     } finally {
       db.close();
     }
@@ -546,13 +546,13 @@ describe('find filters: --commit, --since/--until, --duration', () => {
         },
       ]);
       // Java dot-suffix
-      expect(findQueries(db, { className: 'UserRepository' })).toHaveLength(1);
+      expect(findQueries(db, { className: 'UserRepository' }).rows).toHaveLength(1);
       // Ruby ::-suffix
-      expect(findQueries(db, { className: 'Cipher' })).toHaveLength(1);
+      expect(findQueries(db, { className: 'Cipher' }).rows).toHaveLength(1);
       // Exact match also works
-      expect(findQueries(db, { className: 'OpenSSL::Cipher' })).toHaveLength(1);
+      expect(findQueries(db, { className: 'OpenSSL::Cipher' }).rows).toHaveLength(1);
       // Top-level
-      expect(findQueries(db, { className: 'Other' })).toHaveLength(1);
+      expect(findQueries(db, { className: 'Other' }).rows).toHaveLength(1);
     } finally {
       db.close();
     }
@@ -582,7 +582,7 @@ describe('findCalls', () => {
         className: 'IdempotencyKey',
         route: 'POST /orders',
         status: { op: '>=', value: 500 },
-      });
+      }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('a');
       expect(rows[0].fqid).toBe('app/IdempotencyKey.generate');
@@ -603,7 +603,7 @@ describe('findCalls', () => {
           ],
         },
       ]);
-      const rows = findCalls(db, { label: 'log' });
+      const rows = findCalls(db, { label: 'log' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].defined_class).toBe('Logger');
     } finally {
@@ -631,7 +631,7 @@ describe('findLogs', () => {
           ],
         },
       ]);
-      const rows = findLogs(db, {});
+      const rows = findLogs(db, {}).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].logger).toBe('Logger');
       expect(rows[0].method_id).toBe('info');
@@ -664,7 +664,7 @@ describe('findLogs', () => {
           ],
         },
       ]);
-      const rows = findLogs(db, { message: 'refused' });
+      const rows = findLogs(db, { message: 'refused' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].event_id).toBe(1);
     } finally {
@@ -697,7 +697,7 @@ describe('findLogs', () => {
           ],
         },
       ]);
-      const rows = findLogs(db, { message: 'refused' });
+      const rows = findLogs(db, { message: 'refused' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].event_id).toBe(1);
     } finally {
@@ -730,7 +730,7 @@ describe('findLogs', () => {
         },
       ]);
       // Suffix-aware short-form match: "AppLogger" hits "app.AppLogger".
-      const rows = findLogs(db, { logger: 'AppLogger' });
+      const rows = findLogs(db, { logger: 'AppLogger' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].event_id).toBe(1);
     } finally {
@@ -769,7 +769,7 @@ describe('findLogs', () => {
           ],
         },
       ]);
-      const rows = findLogs(db, { message: 'refused', branch: 'feature' });
+      const rows = findLogs(db, { message: 'refused', branch: 'feature' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].appmap_name).toBe('b');
     } finally {
@@ -797,7 +797,7 @@ describe('findLogs', () => {
           ],
         },
       ]);
-      const rows = findLogs(db, { message: 'message' });
+      const rows = findLogs(db, { message: 'message' }).rows;
       expect(rows).toHaveLength(1);
     } finally {
       db.close();
@@ -823,7 +823,7 @@ describe('findCalls --class / --method (fqid-aware)', () => {
         },
       ]);
       // Canonical V3 fqid prefix (slash form, sans method)
-      const rows = findCalls(db, { className: 'org/example/UserRepository' });
+      const rows = findCalls(db, { className: 'org/example/UserRepository' }).rows;
       expect(rows).toHaveLength(1);
     } finally {
       db.close();
@@ -852,7 +852,7 @@ describe('findCalls --class / --method (fqid-aware)', () => {
           ],
         },
       ]);
-      const rows = findCalls(db, { className: 'UserRepository' });
+      const rows = findCalls(db, { className: 'UserRepository' }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].method_id).toBe('findById');
     } finally {
@@ -873,7 +873,7 @@ describe('findCalls --class / --method (fqid-aware)', () => {
          VALUES (?, 1, 'org.example.UserRepository', 'findById')`
       ).run(am.lastInsertRowid);
 
-      const rows = findCalls(db, { className: 'UserRepository' });
+      const rows = findCalls(db, { className: 'UserRepository' }).rows;
       expect(rows).toHaveLength(1);
     } finally {
       db.close();
@@ -908,7 +908,7 @@ describe('findCalls --class / --method (fqid-aware)', () => {
           ],
         },
       ]);
-      const rows = findCalls(db, { method: 'findById' });
+      const rows = findCalls(db, { method: 'findById' }).rows;
       expect(rows).toHaveLength(2);
       expect(rows.every((r) => r.method_id === 'findById')).toBe(true);
     } finally {
@@ -933,9 +933,9 @@ describe('findExceptions', () => {
           exceptions: [{ event_id: 2, exception_class: 'RecordNotFound' }],
         },
       ]);
-      expect(findExceptions(db, { exception: 'IntegrityError' })).toHaveLength(1);
-      expect(findExceptions(db, { route: 'POST /orders' })).toHaveLength(1);
-      expect(findExceptions(db, { route: 'POST /orders' })[0].appmap_name).toBe('a');
+      expect(findExceptions(db, { exception: 'IntegrityError' }).rows).toHaveLength(1);
+      expect(findExceptions(db, { route: 'POST /orders' }).rows).toHaveLength(1);
+      expect(findExceptions(db, { route: 'POST /orders' }).rows[0].appmap_name).toBe('a');
     } finally {
       db.close();
     }
@@ -974,7 +974,7 @@ describe('findExceptions', () => {
           exceptions: [{ event_id: 4, exception_class: 'IOError', message: 'broken pipe' }],
         },
       ]);
-      const rows = findExceptions(db, { withLogs: 2 });
+      const rows = findExceptions(db, { withLogs: 2 }).rows;
       expect(rows).toHaveLength(1);
       expect(rows[0].recent_logs).toBeDefined();
       // Last 2 in chronological order: the warn at event 2, then error at event 3.
@@ -1005,7 +1005,7 @@ describe('findExceptions', () => {
           exceptions: [{ event_id: 2, exception_class: 'IOError' }],
         },
       ]);
-      const rows = findExceptions(db, {});
+      const rows = findExceptions(db, {}).rows;
       expect(rows[0].recent_logs).toBeUndefined();
     } finally {
       db.close();
@@ -1022,7 +1022,7 @@ describe('findExceptions', () => {
           exceptions: [{ event_id: 1, exception_class: 'IOError' }],
         },
       ]);
-      const rows = findExceptions(db, { withLogs: 5 });
+      const rows = findExceptions(db, { withLogs: 5 }).rows;
       expect(rows[0].recent_logs).toEqual([]);
     } finally {
       db.close();
@@ -1060,7 +1060,7 @@ describe('findExceptions', () => {
           exceptions: [{ event_id: 2, exception_class: 'IOError' }],
         },
       ]);
-      const rows = findExceptions(db, { withLogs: 5 });
+      const rows = findExceptions(db, { withLogs: 5 }).rows;
       expect(rows).toHaveLength(2);
       // Each exception's recent_logs is scoped to its own recording.
       for (const row of rows) {

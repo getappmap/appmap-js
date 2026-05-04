@@ -36,7 +36,9 @@ export function parseRoute(s: string): RouteSpec {
 //   - exact appmap.name
 //   - source_path ending in `<sep><ref>.appmap.json`  (Unix or Windows sep)
 //   - source_path ending in `<sep><ref>`              (non-`.appmap.json` stores)
-// Used by find / tree / hotspots so the lookup behaves the same everywhere.
+// Used by `tree` and other single-resolve operations that want
+// exact-match-or-fail (with an ambiguity error). For find/list contexts
+// where lenient matching is the right UX, use appmapLikeClause.
 export function appmapRefClause(
   ref: string,
   alias: string
@@ -46,6 +48,22 @@ export function appmapRefClause(
         OR ${alias}.source_path GLOB '*[/\\\\]' || ? || '.appmap.json'
         OR ${alias}.source_path GLOB '*[/\\\\]' || ?)`,
     params: [ref, ref, ref],
+  };
+}
+
+// Lenient appmap match for find/list contexts: ref is a substring of
+// either the human-readable name or the source_path. SQLite LIKE is
+// case-insensitive for ASCII by default. Used by appmapWhere so all the
+// find_* tools surface a recording when any reasonable word from its
+// name or path is provided.
+export function appmapLikeClause(
+  ref: string,
+  alias: string
+): { sql: string; params: string[] } {
+  const like = `%${ref}%`;
+  return {
+    sql: `(${alias}.name LIKE ? OR ${alias}.source_path LIKE ?)`,
+    params: [like, like],
   };
 }
 
@@ -75,7 +93,7 @@ export function appmapWhere(filter: RecordingScope, alias: string): Clauses {
     params.push(filter.until);
   }
   if (filter.appmap) {
-    const ref = appmapRefClause(filter.appmap, alias);
+    const ref = appmapLikeClause(filter.appmap, alias);
     where.push(ref.sql);
     params.push(...ref.params);
   }
@@ -91,8 +109,8 @@ export function httpScopeClauses(filter: RecordingScope, alias = 'h'): Clauses {
   const params: (string | number)[] = [];
   if (filter.route) {
     const route = parseRoute(filter.route);
-    where.push(`COALESCE(${alias}.normalized_path, ${alias}.path) = ?`);
-    params.push(route.path);
+    where.push(`COALESCE(${alias}.normalized_path, ${alias}.path) LIKE ?`);
+    params.push(`%${route.path}%`);
     if (route.method) {
       where.push(`${alias}.method = ?`);
       params.push(route.method);
@@ -211,22 +229,51 @@ export function classFilterClauses(input: string, fcAlias: string): Clauses {
     coParams.push(parts.method);
   }
 
-  // Fallback for unlinked function_calls.
+  // Fallback for unlinked function_calls. Includes a substring match on
+  // defined_class so a search like "Repo" matches "UserRepository" even
+  // when the row isn't linked to a code_object.
   const fbWhere: string[] = [
     `${fcAlias}.defined_class = ?`,
     `${fcAlias}.defined_class LIKE '%.' || ?`,
     `${fcAlias}.defined_class LIKE '%::' || ?`,
+    `${fcAlias}.defined_class LIKE ?`,
   ];
-  const fbParams: (string | number)[] = [parts.class, parts.class, parts.class];
+  const fbParams: (string | number)[] = [
+    parts.class,
+    parts.class,
+    parts.class,
+    `%${parts.class}%`,
+  ];
+
+  // Lenient leaf_class substring lookup against code_objects. Applied
+  // only when the user supplied a SHORT form (no package, no chain) —
+  // a canonical input like "org/example/UserRepository#findById" is
+  // explicit disambiguation and should match strictly. So short-form
+  // "Repo" finds "UserRepository", but full canonical doesn't broaden.
+  const isShortForm = !parts.package && !parts.class.includes('::');
+  if (!isShortForm) {
+    return {
+      where: [
+        `((${fcAlias}.code_object_id IN (
+            SELECT id FROM code_objects WHERE ${coWhere.join(' AND ')}
+          ))
+          OR (${fcAlias}.code_object_id IS NULL AND (${fbWhere.join(' OR ')})))`,
+      ],
+      params: [...coParams, ...fbParams],
+    };
+  }
 
   return {
     where: [
-      `(${fcAlias}.code_object_id IN (
-          SELECT id FROM code_objects WHERE ${coWhere.join(' AND ')}
-        )
+      `((${fcAlias}.code_object_id IN (
+            SELECT id FROM code_objects WHERE ${coWhere.join(' AND ')}
+          ))
+        OR (${fcAlias}.code_object_id IN (
+            SELECT id FROM code_objects WHERE leaf_class LIKE ?
+          ))
         OR (${fcAlias}.code_object_id IS NULL AND (${fbWhere.join(' OR ')})))`,
     ],
-    params: [...coParams, ...fbParams],
+    params: [...coParams, `%${parts.class}%`, ...fbParams],
   };
 }
 
@@ -234,14 +281,16 @@ export function classFilterClauses(input: string, fcAlias: string): Clauses {
 // code_objects.method column, with a fallback to function_calls.method_id
 // for rows that aren't linked to a code_object.
 export function methodFilterClauses(input: string, fcAlias: string): Clauses {
+  const like = `%${input}%`;
   return {
     where: [
       `(${fcAlias}.code_object_id IN (
-          SELECT id FROM code_objects WHERE method = ?
+          SELECT id FROM code_objects WHERE method = ? OR method LIKE ?
         )
-        OR (${fcAlias}.code_object_id IS NULL AND ${fcAlias}.method_id = ?))`,
+        OR (${fcAlias}.code_object_id IS NULL
+            AND (${fcAlias}.method_id = ? OR ${fcAlias}.method_id LIKE ?)))`,
     ],
-    params: [input, input],
+    params: [input, like, input, like],
   };
 }
 
@@ -292,22 +341,48 @@ export function sqlCallerClassClauses(input: string, qAlias: string): Clauses {
     return { where: [coClause], params: coParams };
   }
 
-  // Fallback: match the row's raw caller_class with suffix-aware logic.
+  // Fallback: match the row's raw caller_class with suffix-aware logic
+  // plus a generic substring fallback so "Repo" finds "UserRepository".
   const fbConditions: string[] = [
     `${qAlias}.caller_class = ?`,
     `${qAlias}.caller_class LIKE '%.' || ?`,
     `${qAlias}.caller_class LIKE '%::' || ?`,
+    `${qAlias}.caller_class LIKE ?`,
   ];
-  const fbParams: (string | number)[] = [parts.class, parts.class, parts.class];
+  const fbParams: (string | number)[] = [
+    parts.class,
+    parts.class,
+    parts.class,
+    `%${parts.class}%`,
+  ];
   const fbParts: string[] = [`(${fbConditions.join(' OR ')})`];
   if (parts.method) {
-    fbParts.push(`${qAlias}.caller_method = ?`);
-    fbParams.push(parts.method);
+    fbParts.push(`(${qAlias}.caller_method = ? OR ${qAlias}.caller_method LIKE ?)`);
+    fbParams.push(parts.method, `%${parts.method}%`);
   }
 
+  // Substring leaf_class lookup against code_objects. As in
+  // classFilterClauses, only applied for short-form inputs ("Repo")
+  // so canonical fqids stay strict. (parts.package is filtered out
+  // earlier; the short-form check here is just on `::`.)
+  if (parts.class.includes('::')) {
+    return {
+      where: [`(${coClause} OR (${fbParts.join(' AND ')}))`],
+      params: [...coParams, ...fbParams],
+    };
+  }
+
+  const looseLeafClause = `${qAlias}.parent_event_id IN (
+    SELECT fc.event_id FROM function_calls fc
+    WHERE fc.appmap_id = ${qAlias}.appmap_id
+      AND fc.code_object_id IN (
+        SELECT id FROM code_objects WHERE leaf_class LIKE ?
+      )
+  )`;
+
   return {
-    where: [`(${coClause} OR (${fbParts.join(' AND ')}))`],
-    params: [...coParams, ...fbParams],
+    where: [`(${coClause} OR ${looseLeafClause} OR (${fbParts.join(' AND ')}))`],
+    params: [...coParams, `%${parts.class}%`, ...fbParams],
   };
 }
 
@@ -315,18 +390,20 @@ export function sqlCallerClassClauses(input: string, qAlias: string): Clauses {
 // code_object.method, with a fallback to caller_method for unlinked
 // parents.
 export function sqlCallerMethodClauses(input: string, qAlias: string): Clauses {
+  const like = `%${input}%`;
   return {
     where: [
       `(${qAlias}.parent_event_id IN (
           SELECT fc.event_id FROM function_calls fc
           WHERE fc.appmap_id = ${qAlias}.appmap_id
             AND fc.code_object_id IN (
-              SELECT id FROM code_objects WHERE method = ?
+              SELECT id FROM code_objects WHERE method = ? OR method LIKE ?
             )
         )
-        OR ${qAlias}.caller_method = ?)`,
+        OR ${qAlias}.caller_method = ?
+        OR ${qAlias}.caller_method LIKE ?)`,
     ],
-    params: [input, input],
+    params: [input, like, input, like],
   };
 }
 

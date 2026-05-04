@@ -185,8 +185,9 @@ describe('MCP handler', () => {
       expect(Array.isArray(content)).toBe(true);
       expect(content[0].type).toBe('text');
       const parsed = JSON.parse(content[0].text);
-      expect(parsed).toHaveLength(1);
-      expect(parsed[0].exception_class).toBe('IntegrityError');
+      expect(parsed.rows).toHaveLength(1);
+      expect(parsed.total).toBe(1);
+      expect(parsed.rows[0].exception_class).toBe('IntegrityError');
     } finally {
       db.close();
     }
@@ -270,10 +271,10 @@ describe('MCP handler', () => {
         params: { name: 'find_logs', arguments: {} },
       });
       const allRows = JSON.parse((all!.result as any).content[0].text);
-      expect(allRows).toHaveLength(1);
-      expect(allRows[0].logger).toBe('Logger');
-      expect(allRows[0].method_id).toBe('error');
-      expect(allRows[0].parameters_json).toContain('connection refused');
+      expect(allRows.rows).toHaveLength(1);
+      expect(allRows.rows[0].logger).toBe('Logger');
+      expect(allRows.rows[0].method_id).toBe('error');
+      expect(allRows.rows[0].parameters_json).toContain('connection refused');
 
       // Substring filter against parameters_json.
       const matched = call(handler, {
@@ -282,7 +283,7 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'find_logs', arguments: { message: 'refused' } },
       });
-      expect(JSON.parse((matched!.result as any).content[0].text)).toHaveLength(1);
+      expect(JSON.parse((matched!.result as any).content[0].text).rows).toHaveLength(1);
 
       // Substring that doesn't appear: zero rows.
       const empty = call(handler, {
@@ -291,7 +292,7 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'find_logs', arguments: { message: 'this never appears' } },
       });
-      expect(JSON.parse((empty!.result as any).content[0].text)).toHaveLength(0);
+      expect(JSON.parse((empty!.result as any).content[0].text).rows).toHaveLength(0);
     } finally {
       db.close();
     }
@@ -319,9 +320,9 @@ describe('MCP handler', () => {
         params: { name: 'find_exceptions', arguments: {} },
       });
       const noLogsRows = JSON.parse((noLogs!.result as any).content[0].text);
-      expect(noLogsRows[0].recent_logs).toBeUndefined();
+      expect(noLogsRows.rows[0].recent_logs).toBeUndefined();
       // appmap_id is now exposed.
-      expect(typeof noLogsRows[0].appmap_id).toBe('number');
+      expect(typeof noLogsRows.rows[0].appmap_id).toBe('number');
 
       // with_logs=5: recent_logs is present and non-empty (the seed has
       // a log call at event 2, exception at event 2 — the log shares the
@@ -334,7 +335,7 @@ describe('MCP handler', () => {
         params: { name: 'find_exceptions', arguments: { with_logs: 5 } },
       });
       const withLogsRows = JSON.parse((withLogsRes!.result as any).content[0].text);
-      expect(Array.isArray(withLogsRows[0].recent_logs)).toBe(true);
+      expect(Array.isArray(withLogsRows.rows[0].recent_logs)).toBe(true);
     } finally {
       db.close();
     }
@@ -350,11 +351,11 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'find_logs', arguments: {} },
       });
-      const rows = JSON.parse((r!.result as any).content[0].text);
-      expect(rows).toHaveLength(1);
-      expect(rows[0].message).toBe('connection refused');
-      expect(rows[0].logger).toBe('Logger');
-      expect(rows[0].parameters_json).toContain('connection refused');
+      const page = JSON.parse((r!.result as any).content[0].text);
+      expect(page.rows).toHaveLength(1);
+      expect(page.rows[0].message).toBe('connection refused');
+      expect(page.rows[0].logger).toBe('Logger');
+      expect(page.rows[0].parameters_json).toContain('connection refused');
     } finally {
       db.close();
     }
@@ -370,16 +371,16 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'find_exceptions', arguments: { with_logs: 5 } },
       });
-      const rows = JSON.parse((r!.result as any).content[0].text);
-      expect(rows).toHaveLength(1);
-      expect(rows[0].return_event_id).toBe(4);
+      const page = JSON.parse((r!.result as any).content[0].text);
+      expect(page.rows).toHaveLength(1);
+      expect(page.rows[0].return_event_id).toBe(4);
       // Pre-fix the with_logs SQL filtered by `event_id < exception.event_id`
       // (=2), which excluded the Logger.error log call at event_id=2 entirely.
       // With return_event_id (=4) as the upper bound, the log call (event 2)
       // is included — that's the regression we're guarding against.
-      expect(rows[0].recent_logs).toHaveLength(1);
-      expect(rows[0].recent_logs[0].event_id).toBe(2);
-      expect(rows[0].recent_logs[0].message).toBe('connection refused');
+      expect(page.rows[0].recent_logs).toHaveLength(1);
+      expect(page.rows[0].recent_logs[0].event_id).toBe(2);
+      expect(page.rows[0].recent_logs[0].message).toBe('connection refused');
     } finally {
       db.close();
     }
@@ -395,9 +396,9 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'find_calls', arguments: { label: 'log' } },
       });
-      const rows = JSON.parse((r!.result as any).content[0].text);
-      expect(rows).toHaveLength(1);
-      expect(rows[0].method_id).toBe('error');
+      const page = JSON.parse((r!.result as any).content[0].text);
+      expect(page.rows).toHaveLength(1);
+      expect(page.rows[0].method_id).toBe('error');
     } finally {
       db.close();
     }
@@ -415,8 +416,8 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'list_endpoints', arguments: {} },
       });
-      const epRows = JSON.parse((ep!.result as any).content[0].text);
-      expect(epRows[0].route).toBe('/orders');
+      const epPage = JSON.parse((ep!.result as any).content[0].text);
+      expect(epPage.rows[0].route).toBe('/orders');
 
       const fh = call(handler, {
         jsonrpc: '2.0',
@@ -424,7 +425,7 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'function_hotspots', arguments: { limit: 5 } },
       });
-      expect(JSON.parse((fh!.result as any).content[0].text).length).toBeGreaterThan(0);
+      expect(JSON.parse((fh!.result as any).content[0].text).rows.length).toBeGreaterThan(0);
 
       const sh = call(handler, {
         jsonrpc: '2.0',
@@ -432,7 +433,7 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'sql_hotspots', arguments: { limit: 5 } },
       });
-      expect(JSON.parse((sh!.result as any).content[0].text).length).toBeGreaterThan(0);
+      expect(JSON.parse((sh!.result as any).content[0].text).rows.length).toBeGreaterThan(0);
     } finally {
       db.close();
     }
@@ -451,7 +452,7 @@ describe('MCP handler', () => {
       const contents = (r!.result as any).contents;
       expect(contents[0].uri).toBe('appmap://endpoints');
       const parsed = JSON.parse(contents[0].text);
-      expect(parsed[0].route).toBe('/orders');
+      expect(parsed.rows[0].route).toBe('/orders');
     } finally {
       db.close();
     }
@@ -501,10 +502,10 @@ describe('MCP handler', () => {
       });
       const contents = (r!.result as any).contents;
       expect(contents[0].uri).toBe('appmap://recording/rec/logs');
-      const rows = JSON.parse(contents[0].text);
-      expect(rows).toHaveLength(1);
-      expect(rows[0].logger).toBe('Logger');
-      expect(rows[0].method_id).toBe('error');
+      const page = JSON.parse(contents[0].text);
+      expect(page.rows).toHaveLength(1);
+      expect(page.rows[0].logger).toBe('Logger');
+      expect(page.rows[0].method_id).toBe('error');
     } finally {
       db.close();
     }

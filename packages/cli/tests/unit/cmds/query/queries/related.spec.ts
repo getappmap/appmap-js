@@ -111,7 +111,7 @@ describe('related', () => {
           classes: ['HealthController'],
         },
       ]);
-      const rows = related(db, 'source');
+      const rows = related(db, 'source').rows;
       expect(rows.find((r) => r.appmap_name === 'source')).toBeUndefined();
       expect(rows.find((r) => r.appmap_name === 'unrelated')).toBeUndefined();
       const best = rows.find((r) => r.appmap_name === 'best')!;
@@ -154,7 +154,7 @@ describe('related', () => {
           classes: ['Foo'],
         },
       ]);
-      const rows = related(db, 'src', { branch: 'main' });
+      const rows = related(db, 'src', { branch: 'main' }).rows;
       expect(rows.map((r) => r.appmap_name)).toEqual(['main_match']);
     } finally {
       db.close();
@@ -181,7 +181,7 @@ describe('related', () => {
           classes: ['Foo'],
         },
       ]);
-      const rows = related(db, 'src', { status: { op: '<', value: 400 } });
+      const rows = related(db, 'src', { status: { op: '<', value: 400 } }).rows;
       expect(rows.map((r) => r.appmap_name)).toEqual(['succeeded']);
     } finally {
       db.close();
@@ -197,7 +197,7 @@ describe('related', () => {
         { name: 'b', request: { method: 'GET', path: '/x', status: 200 }, classes: ['A'] },
         { name: 'c', request: { method: 'GET', path: '/x', status: 200 }, classes: ['B'] },
       ]);
-      expect(related(db, 'src', { limit: 2 })).toHaveLength(2);
+      expect(related(db, 'src', { limit: 2 }).rows).toHaveLength(2);
     } finally {
       db.close();
     }

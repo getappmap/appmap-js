@@ -1,5 +1,6 @@
 import sqlite3 from 'better-sqlite3';
 
+import { Page, paginate } from '../lib/page';
 import { appmapIdScope, classFilterClauses, RecordingScope } from '../lib/scope';
 
 export type HotspotType = 'function' | 'sql';
@@ -8,6 +9,7 @@ export interface HotspotsFilter extends RecordingScope {
   type?: HotspotType;
   className?: string;   // function mode only
   limit?: number;
+  offset?: number;
 }
 
 export interface FunctionHotspotRow {
@@ -56,7 +58,7 @@ const CHILD_TIME_CTE = `
 export function functionHotspots(
   db: sqlite3.Database,
   filter: HotspotsFilter
-): FunctionHotspotRow[] {
+): Page<FunctionHotspotRow> {
   const where: string[] = [];
   const params: (string | number)[] = [];
 
@@ -71,7 +73,7 @@ export function functionHotspots(
     params.push(...c.params);
   }
 
-  let sql = `
+  const sql = `
     ${CHILD_TIME_CTE}
     SELECT
       co.fqid                                        AS fqid,
@@ -91,14 +93,16 @@ export function functionHotspots(
     GROUP BY fc.code_object_id, fc.defined_class, fc.method_id
     ORDER BY total_ms DESC
   `;
-  if (filter.limit !== undefined) {
-    sql += ' LIMIT ?';
-    params.push(filter.limit);
-  }
-  return db.prepare(sql).all(...params) as FunctionHotspotRow[];
+  return paginate<FunctionHotspotRow>(db, sql, params, {
+    limit: filter.limit,
+    offset: filter.offset,
+  });
 }
 
-export function sqlHotspots(db: sqlite3.Database, filter: HotspotsFilter): SqlHotspotRow[] {
+export function sqlHotspots(
+  db: sqlite3.Database,
+  filter: HotspotsFilter
+): Page<SqlHotspotRow> {
   const where: string[] = [];
   const params: (string | number)[] = [];
 
@@ -108,7 +112,7 @@ export function sqlHotspots(db: sqlite3.Database, filter: HotspotsFilter): SqlHo
     params.push(...scope.params);
   }
 
-  let sql = `
+  const sql = `
     SELECT
       COUNT(*)                          AS count,
       AVG(q.elapsed_ms)                 AS avg_ms,
@@ -119,16 +123,15 @@ export function sqlHotspots(db: sqlite3.Database, filter: HotspotsFilter): SqlHo
     GROUP BY q.sql_text
     ORDER BY total_ms DESC
   `;
-  if (filter.limit !== undefined) {
-    sql += ' LIMIT ?';
-    params.push(filter.limit);
-  }
-  return db.prepare(sql).all(...params) as SqlHotspotRow[];
+  return paginate<SqlHotspotRow>(db, sql, params, {
+    limit: filter.limit,
+    offset: filter.offset,
+  });
 }
 
 export function hotspots(
   db: sqlite3.Database,
   filter: HotspotsFilter
-): FunctionHotspotRow[] | SqlHotspotRow[] {
+): Page<FunctionHotspotRow> | Page<SqlHotspotRow> {
   return filter.type === 'sql' ? sqlHotspots(db, filter) : functionHotspots(db, filter);
 }

@@ -128,16 +128,27 @@ function maybeCompareSort(s: unknown): CompareSort | undefined {
 
 // Common filter shape shared by the find_* tools and the hotspots tools.
 const COMMON_FILTER_PROPERTIES: Record<string, unknown> = {
-  route: { type: 'string', description: 'e.g. "POST /orders" or "/orders".' },
+  route: {
+    type: 'string',
+    description:
+      'Substring of the request path; optionally prefixed with an HTTP method ("POST /orders"). e.g. "orders" matches /orders, /api/orders/:id.',
+  },
   status: { type: 'string', description: 'e.g. "500", ">=500", "<400".' },
   duration: { type: 'string', description: 'e.g. ">1s", ">=500ms".' },
-  branch: { type: 'string' },
-  commit: { type: 'string' },
+  branch: { type: 'string', description: 'Exact branch name.' },
+  commit: { type: 'string', description: 'Exact commit SHA.' },
   since: { type: 'string', description: 'ISO timestamp lower bound.' },
   until: { type: 'string', description: 'ISO timestamp upper bound.' },
-  appmap: { type: 'string', description: 'Restrict to one recording (name or basename).' },
-  limit: { type: 'integer' },
-  offset: { type: 'integer' },
+  appmap: {
+    type: 'string',
+    description:
+      'Substring of the recording name OR source_path. Any reasonable word from the basename, test method, route, etc. matches. Case-insensitive.',
+  },
+  limit: {
+    type: 'integer',
+    description: 'Default 20. Pass 0 for unbounded. Response includes total count.',
+  },
+  offset: { type: 'integer', description: 'Skip this many rows for pagination.' },
 };
 
 // Build a FindFilter from MCP tool args, parsing structured fields.
@@ -174,7 +185,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'list_endpoints',
       description:
-        'Per-route summary table; the first call when orienting against an unfamiliar query database. Returns: method, route, count, avg_ms, p95_ms, err_pct.',
+        'Per-route summary table; the first call when orienting against an unfamiliar query database. Returns Page<{method, route, count, avg_ms, p95_ms, err_pct}> = {rows, total, limit, offset}.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -207,16 +218,17 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'function_hotspots',
       description:
-        'Functions ranked by total elapsed time across recordings. Filter by route to scope to a specific entry point or by class to focus on one component. Returns: fqid, defined_class, method_id, path, lineno, calls, total_ms, self_ms. path/lineno are one representative call\'s source location — read directly to see the function. fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static), "src/cmds/query/db/openQueryDb.openQueryDb" (module-level), "app/Outer::Inner#method" (nested classes).',
+        'Functions ranked by total elapsed time across recordings. Filter by route to scope to a specific entry point or by class (substring match) to focus on one component. Returns Page<{fqid, defined_class, method_id, path, lineno, calls, total_ms, self_ms}> = {rows, total, limit, offset}. path/lineno are one representative call\'s source location — read directly to see the function. fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static), "src/cmds/query/db/openQueryDb.openQueryDb" (module-level), "app/Outer::Inner#method" (nested classes).',
       inputSchema: {
         type: 'object',
         properties: {
-          route: { type: 'string' },
-          class: { type: 'string', description: 'class identifier; accepts short or canonical fqid form.' },
-          branch: { type: 'string' },
-          since: { type: 'string' },
-          until: { type: 'string' },
-          limit: { type: 'integer' },
+          route: COMMON_FILTER_PROPERTIES.route,
+          class: { type: 'string', description: 'Substring of class identifier; canonical fqid forms also accepted.' },
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
         },
       },
     },
@@ -228,7 +240,8 @@ const TOOLS: ToolImpl[] = [
         branch: maybeString(args.branch),
         since: maybeTime(args.since),
         until: maybeTime(args.until),
-        limit: maybeNumber(args.limit) ?? 20,
+        limit: maybeNumber(args.limit),
+        offset: maybeNumber(args.offset),
       }),
   },
 
@@ -236,15 +249,16 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'sql_hotspots',
       description:
-        'SQL queries ranked by total elapsed time, deduplicated by text. Returns: count, avg_ms, total_ms, sql_text.',
+        'SQL queries ranked by total elapsed time, deduplicated by text. Returns Page<{count, avg_ms, total_ms, sql_text}> = {rows, total, limit, offset}.',
       inputSchema: {
         type: 'object',
         properties: {
-          route: { type: 'string' },
-          branch: { type: 'string' },
-          since: { type: 'string' },
-          until: { type: 'string' },
-          limit: { type: 'integer' },
+          route: COMMON_FILTER_PROPERTIES.route,
+          branch: COMMON_FILTER_PROPERTIES.branch,
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
         },
       },
     },
@@ -255,7 +269,8 @@ const TOOLS: ToolImpl[] = [
         branch: maybeString(args.branch),
         since: maybeTime(args.since),
         until: maybeTime(args.until),
-        limit: maybeNumber(args.limit) ?? 20,
+        limit: maybeNumber(args.limit),
+        offset: maybeNumber(args.offset),
       }),
   },
 
@@ -286,7 +301,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_recordings',
       description:
-        'Recording-level rows matching filters. Each row is one .appmap.json file with its sample request, branch, and counts. Use to identify which recordings exercised a route, returned a particular status, or were taken on a branch. Returns: appmap_id, appmap_name, route, status_code, elapsed_ms, sql_count, branch, timestamp. Pass appmap_id (numeric) or appmap_name to get_call_tree / find_related.',
+        'Recording-level rows matching filters. Each row is one .appmap.json file with its sample request, branch, and counts. Use to identify which recordings exercised a route, returned a particular status, or were taken on a branch. The `appmap` filter is a substring match against name and source_path — pass any reasonable word from the basename, test method, or route. Returns Page<{appmap_id, appmap_name, route, status_code, elapsed_ms, sql_count, branch, timestamp}> = {rows, total, limit, offset}. Pass appmap_id (numeric) or appmap_name to get_call_tree / find_related.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -310,7 +325,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_requests',
       description:
-        'Individual HTTP request rows with status, elapsed time, and the recording each came from. Filter by route, status, duration, branch, time window. Returns: appmap_name, event_id, method, route, status_code, elapsed_ms, branch.',
+        'Individual HTTP request rows with status, elapsed time, and the recording each came from. Filter by route (substring), status, duration, branch, time window. Returns Page<{appmap_name, event_id, method, route, status_code, elapsed_ms, branch}> = {rows, total, limit, offset}.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -327,15 +342,14 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) =>
-      find(db, 'requests', buildFindFilter(args)) as FindRequestRow[],
+    handler: (args, db) => find(db, 'requests', buildFindFilter(args)),
   },
 
   {
     spec: {
       name: 'find_queries',
       description:
-        'SQL query rows. Filter by table (matches sql_text substring), caller class/method, duration, route, branch. Use duration:">100ms" to find slow queries; use route to scope to a specific request. Returns: appmap_name, event_id, sql_text, elapsed_ms, caller_class, caller_method.',
+        'SQL query rows. Filter by table (substring), caller class/method (substring), duration, route, branch. Use duration:">100ms" to find slow queries; use route to scope to a specific request. Returns Page<{appmap_name, event_id, sql_text, elapsed_ms, caller_class, caller_method}> = {rows, total, limit, offset}.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -355,23 +369,24 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'queries', buildFindFilter(args)) as FindQueryRow[],
+    handler: (args, db) => find(db, 'queries', buildFindFilter(args)),
   },
 
   {
     spec: {
       name: 'find_calls',
       description:
-        'Function-call rows. Filter by class, method, label (e.g. "log", "security.authorization"), duration. Use --label=log to retrieve application log output, or --label=security.authorization to find authorization checks. Returns: appmap_name, event_id, fqid, defined_class, method_id, path, lineno, elapsed_ms, parameters_json, return_value. parameters_json and return_value are populated only for labeled functions; unlabeled rows return null. Use path:lineno to read the source.',
+        'Function-call rows. Filter by class (substring), method (substring), label (substring; e.g. "log", "security.authorization"), duration. Use label="log" to retrieve application log output, or label="security.authorization" to find authorization checks. Returns Page<{appmap_name, event_id, fqid, defined_class, method_id, path, lineno, elapsed_ms, parameters_json, return_value}> = {rows, total, limit, offset}. parameters_json and return_value are populated only for labeled functions; unlabeled rows return null. Use path:lineno to read the source.',
       inputSchema: {
         type: 'object',
         properties: {
           class: {
             type: 'string',
-            description: 'Class identifier; accepts short ("UserRepository") or canonical fqid form ("app/services/UserRepository") or with method ("UserRepository#findById").',
+            description:
+              'Substring of the class identifier; canonical forms ("UserRepository", "app/services/UserRepository", "UserRepository#findById") get exact-or-leaf-class matching, but a partial like "Repo" also matches "UserRepository".',
           },
-          method: { type: 'string' },
-          label: { type: 'string', description: 'AppMap label name (exact match).' },
+          method: { type: 'string', description: 'Substring of the method name.' },
+          label: { type: 'string', description: 'Substring of the label name.' },
           duration: COMMON_FILTER_PROPERTIES.duration,
           route: COMMON_FILTER_PROPERTIES.route,
           status: COMMON_FILTER_PROPERTIES.status,
@@ -385,14 +400,14 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'calls', buildFindFilter(args)) as FindCallRow[],
+    handler: (args, db) => find(db, 'calls', buildFindFilter(args)),
   },
 
   {
     spec: {
       name: 'find_logs',
       description:
-        'Application log lines captured from functions labeled `log`. Filter by message substring (matches across the call\'s parameters and return value), logger class, recording, branch, or time window. Returns: appmap_name, event_id, parent_event_id, logger, method_id, path, lineno, message, parameters_json, return_value. `message` is the display-projected log text (extracted from a structured return_value or from the parameter named message/msg, falling back to the first string parameter); use it directly. parameters_json and return_value remain available for the underlying captured values. Use path:lineno to read the call site of the log statement.',
+        'Application log lines captured from functions labeled `log`. Filter by message substring (matches across the call\'s parameters and return value), logger class (substring), recording, branch, or time window. Returns Page<{appmap_name, event_id, parent_event_id, logger, method_id, path, lineno, message, parameters_json, return_value}> = {rows, total, limit, offset}. `message` is the display-projected log text (extracted from a structured return_value or from the parameter named message/msg, falling back to the first string parameter); use it directly. parameters_json and return_value remain available for the underlying captured values. Use path:lineno to read the call site of the log statement.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -416,18 +431,18 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'logs', buildFindFilter(args)) as FindLogRow[],
+    handler: (args, db) => find(db, 'logs', buildFindFilter(args)),
   },
 
   {
     spec: {
       name: 'find_exceptions',
       description:
-        'Exception rows with class, message, source location. Filter by exception class name, the request that owns the exception (via route/status), branch, or time window. Returns: appmap_id, appmap_name, event_id (the throwing call\'s entry id), return_event_id (the throw point in the event stream), exception_class, message, path, lineno. Pass with_logs=N to attach the last N log lines preceding the throw (chronological order) under recent_logs — usually the fastest way to see what the app reported before the failure. recent_logs uses return_event_id as the upper bound, so logs that fired *inside* the throwing call are included.',
+        'Exception rows with class, message, source location. Filter by exception class name (substring), the request that owns the exception (via route/status), branch, or time window. Returns Page<{appmap_id, appmap_name, event_id, return_event_id, exception_class, message, path, lineno, recent_logs?}> = {rows, total, limit, offset}. event_id is the throwing call\'s entry id; return_event_id is the throw point in the event stream. Pass with_logs=N to attach the last N log lines preceding the throw (chronological order) under recent_logs — usually the fastest way to see what the app reported before the failure. recent_logs uses return_event_id as the upper bound, so logs that fired *inside* the throwing call are included.',
       inputSchema: {
         type: 'object',
         properties: {
-          exception: { type: 'string', description: 'Exception class name (exact match).' },
+          exception: { type: 'string', description: 'Substring of the exception class name.' },
           with_logs: {
             type: 'integer',
             description: 'Attach up to N preceding log lines per exception under recent_logs (chronological). Each entry has the same shape as a find_logs row.',
@@ -444,8 +459,7 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) =>
-      find(db, 'exceptions', buildFindFilter(args)) as FindExceptionRow[],
+    handler: (args, db) => find(db, 'exceptions', buildFindFilter(args)),
   },
 
   // ----- per-recording / cross-recording --------------------------------
@@ -493,7 +507,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_related',
       description:
-        'Recordings ranked by similarity to a source recording. Score combines: same HTTP route (×5), shared SQL tables (×3 each), shared classes (×2 each). Primary use: pass a failing recording with status:succeeded to find a passing baseline for side-by-side comparison. Returns: appmap_name, score, method, route, status_code, elapsed_ms, shared (string array of contributing signals).',
+        'Recordings ranked by similarity to a source recording. Score combines: same HTTP route (×5), shared SQL tables (×3 each), shared classes (×2 each). Primary use: pass a failing recording with status:succeeded to find a passing baseline for side-by-side comparison. Returns Page<{appmap_name, score, method, route, status_code, elapsed_ms, shared}> = {rows, total, limit, offset}. shared is a string array of contributing signals.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -504,6 +518,7 @@ const TOOLS: ToolImpl[] = [
           since: COMMON_FILTER_PROPERTIES.since,
           until: COMMON_FILTER_PROPERTIES.until,
           limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
         },
         required: ['appmap'],
       },
@@ -517,6 +532,7 @@ const TOOLS: ToolImpl[] = [
       filter.since = maybeTime(args.since);
       filter.until = maybeTime(args.until);
       filter.limit = maybeNumber(args.limit);
+      filter.offset = maybeNumber(args.offset);
       return related(db, am.name, filter);
     },
   },
@@ -525,16 +541,17 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'compare_branches',
       description:
-        'Per-route p95 latency for two branches with a delta column. Use to surface regressions a feature branch introduces relative to a baseline. Returns: method, route, a_count, a_p95_ms, b_count, b_p95_ms, delta (b_p95/a_p95; null when either side has no measured durations).',
+        'Per-route p95 latency for two branches with a delta column. Use to surface regressions a feature branch introduces relative to a baseline. Returns Page<{method, route, a_count, a_p95_ms, b_count, b_p95_ms, delta}> = {rows, total, limit, offset}. delta is b_p95/a_p95; null when either side has no measured durations.',
       inputSchema: {
         type: 'object',
         properties: {
           branch_a: { type: 'string', description: 'Baseline branch.' },
           branch_b: { type: 'string', description: 'Comparison branch.' },
-          since: { type: 'string' },
-          until: { type: 'string' },
+          since: COMMON_FILTER_PROPERTIES.since,
+          until: COMMON_FILTER_PROPERTIES.until,
           sort: { type: 'string', enum: ['delta', 'p95-a', 'p95-b'] },
-          limit: { type: 'integer' },
+          limit: COMMON_FILTER_PROPERTIES.limit,
+          offset: COMMON_FILTER_PROPERTIES.offset,
         },
         required: ['branch_a', 'branch_b'],
       },
@@ -547,6 +564,7 @@ const TOOLS: ToolImpl[] = [
         until: maybeTime(args.until),
         sort: maybeCompareSort(args.sort),
         limit: maybeNumber(args.limit),
+        offset: maybeNumber(args.offset),
       }),
   },
 ];
@@ -584,7 +602,7 @@ const RESOURCE_TEMPLATES: ResourceTemplateImpl[] = [
     },
     read: (args, db) => {
       const info = resolveByIdOrRef(db, args.ref);
-      return find(db, 'logs', { appmap: info.name }) as FindLogRow[];
+      return find(db, 'logs', { appmap: info.name, limit: 0 });
     },
   },
 ];

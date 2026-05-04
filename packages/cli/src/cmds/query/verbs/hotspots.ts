@@ -5,6 +5,7 @@ import { handleWorkingDirectory } from '../../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../../lib/locateAppMapDir';
 import { verbose } from '../../../utils';
 import { openReadOnly } from '../lib/openReadOnly';
+import { truncationFooter } from '../lib/page';
 import { parseTime } from '../lib/parseFilter';
 import {
   FunctionHotspotRow,
@@ -36,7 +37,8 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     .option('branch', { type: 'string' })
     .option('since', { type: 'string' })
     .option('until', { type: 'string' })
-    .option('limit', { type: 'number' })
+    .option('limit', { type: 'number', describe: 'default 20; pass 0 for unbounded' })
+    .option('offset', { type: 'number' })
     .option('json', { type: 'boolean', default: false });
 };
 
@@ -81,15 +83,22 @@ export const handler = async (argvIn: yargs.ArgumentsCamelCase<unknown>): Promis
   if (argv.since) filter.since = parseTime(argv.since);
   if (argv.until) filter.until = parseTime(argv.until);
   if (argv.limit !== undefined) filter.limit = argv.limit;
+  if (argv.offset !== undefined) filter.offset = argv.offset;
 
   const db = openReadOnly(appmapDir, argv.queryDb);
   try {
-    const rows = hotspots(db, filter);
+    const page = hotspots(db, filter);
     if (argv.json) {
-      log(JSON.stringify(rows, null, 2));
+      log(JSON.stringify(page, null, 2));
       return;
     }
-    log(filter.type === 'sql' ? renderSql(rows as SqlHotspotRow[]) : renderFunctions(rows as FunctionHotspotRow[]));
+    log(
+      filter.type === 'sql'
+        ? renderSql(page.rows as readonly SqlHotspotRow[])
+        : renderFunctions(page.rows as readonly FunctionHotspotRow[])
+    );
+    const footer = truncationFooter(page);
+    if (footer) log(footer);
   } finally {
     db.close();
   }

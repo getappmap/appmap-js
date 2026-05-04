@@ -1,5 +1,6 @@
 import sqlite3 from 'better-sqlite3';
 
+import { DEFAULT_PAGE_LIMIT, Page } from '../lib/page';
 import { endpoints } from './endpoints';
 
 export interface CompareRow {
@@ -22,23 +23,32 @@ export interface CompareFilter {
   until?: string;
   sort?: CompareSort;
   limit?: number;
+  offset?: number;
 }
 
 // Computes per-route p95 for two branches and merges the results, exposing
 // delta = b_p95 / a_p95 alongside both sides' counts and p95s. Implementation
 // reuses endpoints() (which already does the SQL window-function p95) so the
 // p95 semantics match the endpoints verb exactly.
-export function compare(db: sqlite3.Database, filter: CompareFilter): CompareRow[] {
+export function compare(
+  db: sqlite3.Database,
+  filter: CompareFilter
+): Page<CompareRow> {
+  // Pull all endpoint rows for each branch (limit: 0 = unbounded). The
+  // outer pagination is on the merged compare rows, not on either side
+  // individually.
   const a = endpoints(db, {
     branch: filter.branch_a,
     since: filter.since,
     until: filter.until,
-  });
+    limit: 0,
+  }).rows;
   const b = endpoints(db, {
     branch: filter.branch_b,
     since: filter.since,
     until: filter.until,
-  });
+    limit: 0,
+  }).rows;
 
   const rows = new Map<string, CompareRow>();
   const key = (method: string, route: string) => `${method}\t${route}`;
@@ -83,7 +93,11 @@ export function compare(db: sqlite3.Database, filter: CompareFilter): CompareRow
   const sortKey: CompareSort = filter.sort ?? 'delta';
   result.sort(comparators[sortKey]);
 
-  return filter.limit !== undefined ? result.slice(0, filter.limit) : result;
+  const limit = filter.limit ?? DEFAULT_PAGE_LIMIT;
+  const offset = filter.offset ?? 0;
+  const total = result.length;
+  const sliced = limit > 0 ? result.slice(offset, offset + limit) : result.slice(offset);
+  return { rows: sliced, total, limit, offset };
 }
 
 // "delta" sorts by absolute deviation from 1× — biggest changes (in
