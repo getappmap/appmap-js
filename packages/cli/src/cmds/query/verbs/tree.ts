@@ -49,7 +49,7 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     })
     .option('descendants', {
       type: 'number',
-      describe: 'descendant levels below each focus match (default 3)',
+      describe: 'descendant levels below each focus match (default 4)',
     })
     .option('min-elapsed-ms', {
       type: 'number',

@@ -193,38 +193,37 @@ describe('MCP handler', () => {
     }
   });
 
-  it('get_call_tree resolves appmap (numeric id or name) and applies focus_type', () => {
+  it('get_call_tree resolves the canonical appmap path and applies focus_type', () => {
     const db = freshDb();
     try {
       seedMinimal(db);
       const handler = buildMcpHandler(db);
 
-      // Numeric id.
-      const byId = call(handler, {
+      // Look up the canonical path via find_recordings, then call
+      // get_call_tree with that exact value. This is the round-trip
+      // the API contract documents.
+      const list = call(handler, {
         jsonrpc: '2.0',
         id: 7,
         method: 'tools/call',
-        params: {
-          name: 'get_call_tree',
-          arguments: { appmap: 1, focus_type: 'sql_query', focus_value: 'INSERT INTO orders' },
-        },
+        params: { name: 'find_recordings', arguments: {} },
       });
-      const idRows = JSON.parse((byId!.result as any).content[0].text);
-      expect(Array.isArray(idRows)).toBe(true);
-      expect(idRows.some((n: any) => n.kind === 'sql')).toBe(true);
+      const path = JSON.parse((list!.result as any).content[0].text).rows[0].path;
 
-      // Name-based ref.
-      const byName = call(handler, {
+      const r = call(handler, {
         jsonrpc: '2.0',
         id: 8,
         method: 'tools/call',
         params: {
           name: 'get_call_tree',
-          arguments: { appmap: 'rec' },
+          arguments: { appmap: path, focus_type: 'sql_query', focus_value: 'INSERT INTO orders' },
         },
       });
-      const nameRows = JSON.parse((byName!.result as any).content[0].text);
-      expect(Array.isArray(nameRows)).toBe(true);
+      const result = JSON.parse((r!.result as any).content[0].text);
+      expect(Array.isArray(result.nodes)).toBe(true);
+      expect(result.nodes.some((n: any) => n.kind === 'sql')).toBe(true);
+      expect(typeof result.truncated).toBe('boolean');
+      expect(typeof result.max_depth_reached).toBe('number');
     } finally {
       db.close();
     }
@@ -481,7 +480,7 @@ describe('MCP handler', () => {
     }
   });
 
-  it('resources/read on appmap://recording/<name>/logs returns the recording\'s log rows', () => {
+  it('resources/read on appmap://recording/<encoded-path>/logs returns the recording\'s log rows', () => {
     const db = freshDb();
     try {
       seedMinimal(db);
@@ -494,14 +493,18 @@ describe('MCP handler', () => {
         JSON.stringify([{ name: 'message', class: 'String', value: 'connection refused' }])
       );
 
+      // {ref} is the canonical path (the absolute source_path). Since
+      // it contains slashes, the URI segment is URL-encoded.
+      const sourcePath = '/tmp/rec.appmap.json';
+      const uri = `appmap://recording/${encodeURIComponent(sourcePath)}/logs`;
       const r = call(buildMcpHandler(db), {
         jsonrpc: '2.0',
         id: 301,
         method: 'resources/read',
-        params: { uri: 'appmap://recording/rec/logs' },
+        params: { uri },
       });
       const contents = (r!.result as any).contents;
-      expect(contents[0].uri).toBe('appmap://recording/rec/logs');
+      expect(contents[0].uri).toBe(uri);
       const page = JSON.parse(contents[0].text);
       expect(page.rows).toHaveLength(1);
       expect(page.rows[0].logger).toBe('Logger');
@@ -511,17 +514,18 @@ describe('MCP handler', () => {
     }
   });
 
-  it('resources/read on a recording-logs URI with an unknown ref returns an error', () => {
+  it('resources/read on a recording-logs URI with an unknown path returns an error', () => {
     const db = freshDb();
     try {
+      const uri = `appmap://recording/${encodeURIComponent('/no/such/recording.appmap.json')}/logs`;
       const r = call(buildMcpHandler(db), {
         jsonrpc: '2.0',
         id: 302,
         method: 'resources/read',
-        params: { uri: 'appmap://recording/no-such-recording/logs' },
+        params: { uri },
       });
       expect(r!.error).toBeDefined();
-      expect(r!.error!.message).toMatch(/appmap not found/);
+      expect(r!.error!.message).toMatch(/not found at path/);
     } finally {
       db.close();
     }
@@ -541,5 +545,233 @@ describe('MCP handler', () => {
     } finally {
       db.close();
     }
+  });
+
+  // --- Spec 01: canonical path identifier ---------------------------------
+
+  describe('Spec 01: canonical path identifier', () => {
+    function seedTwo(db: sqlite3.Database): void {
+      // Two recordings rooted at /tmp/proj — one junit, one request — so
+      // we can verify path/kind derivation and alias equivalence.
+      db.prepare(
+        `INSERT INTO appmaps (name, source_path, git_branch, sql_query_count, elapsed_ms, timestamp)
+         VALUES ('JunitTest_method_x', '/tmp/proj/tmp/appmap/junit/JunitTest_method_x.appmap.json',
+                 'main', 0, 100, '2026-04-29T12:00:00.000Z')`
+      ).run();
+      db.prepare(
+        `INSERT INTO appmaps (name, source_path, git_branch, sql_query_count, elapsed_ms, timestamp)
+         VALUES ('1779_post_orders', '/tmp/proj/tmp/appmap/request_recording/1779_post_orders.appmap.json',
+                 'main', 0, 50,  '2026-04-29T12:00:01.000Z')`
+      ).run();
+    }
+
+    it('find_recordings rows expose path = absolute source_path, plus label and kind', () => {
+      const db = freshDb();
+      try {
+        seedTwo(db);
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 400,
+          method: 'tools/call',
+          params: { name: 'find_recordings', arguments: {} },
+        });
+        const page = JSON.parse((r!.result as any).content[0].text);
+        expect(page.rows).toHaveLength(2);
+        const byKind = Object.fromEntries(page.rows.map((row: any) => [row.kind, row]));
+        expect(byKind.junit.path).toBe(
+          '/tmp/proj/tmp/appmap/junit/JunitTest_method_x.appmap.json'
+        );
+        expect(byKind.junit.path).toBe(byKind.junit.source_path);
+        expect(byKind.junit.label).toBe('JunitTest_method_x');
+        expect(byKind.request.path).toBe(
+          '/tmp/proj/tmp/appmap/request_recording/1779_post_orders.appmap.json'
+        );
+        expect(byKind.request.kind).toBe('request');
+      } finally {
+        db.close();
+      }
+    });
+
+    it('get_call_tree only accepts the canonical path; name / numeric id return a "not found" hint', () => {
+      const db = freshDb();
+      try {
+        seedTwo(db);
+        const handler = buildMcpHandler(db);
+        const list = call(handler, {
+          jsonrpc: '2.0',
+          id: 401,
+          method: 'tools/call',
+          params: { name: 'find_recordings', arguments: {} },
+        });
+        const junit = JSON.parse((list!.result as any).content[0].text).rows.find(
+          (row: any) => row.kind === 'junit'
+        );
+
+        // Canonical path: succeeds.
+        const ok = call(handler, {
+          jsonrpc: '2.0',
+          id: 402,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: junit.path } },
+        });
+        expect(ok!.error).toBeUndefined();
+        expect(JSON.parse((ok!.result as any).content[0].text).nodes).toBeDefined();
+
+        // Recording name: rejected.
+        const byName = call(handler, {
+          jsonrpc: '2.0',
+          id: 403,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: junit.appmap_name } },
+        });
+        expect(byName!.error).toBeDefined();
+        expect(byName!.error!.message).toMatch(/not found at path/);
+
+        // Numeric id: rejected.
+        const byId = call(handler, {
+          jsonrpc: '2.0',
+          id: 404,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: String(junit.appmap_id) } },
+        });
+        expect(byId!.error).toBeDefined();
+        expect(byId!.error!.message).toMatch(/not found at path/);
+      } finally {
+        db.close();
+      }
+    });
+
+    it('find_calls attaches did_you_mean diagnostic on empty results', () => {
+      const db = freshDb();
+      try {
+        seedMinimal(db);
+        // Seed an Impl whose class is *not* a substring of the user's
+        // probe — only Levenshtein/component scoring should connect them.
+        db.prepare(
+          `INSERT INTO code_objects (fqid, package, classes, leaf_class, method, is_static)
+           VALUES ('app/PaymentServiceImpl#submit', 'app',
+                   '["PaymentServiceImpl"]', 'PaymentServiceImpl', 'submit', 0)`
+        ).run();
+        const co = (db
+          .prepare(`SELECT id FROM code_objects WHERE fqid = 'app/PaymentServiceImpl#submit'`)
+          .get() as { id: number }).id;
+        db.prepare(
+          `INSERT INTO function_calls (appmap_id, event_id, code_object_id, defined_class, method_id)
+           VALUES (1, 99, ?, 'PaymentServiceImpl', 'submit')`
+        ).run(co);
+
+        // Use a class that won't substring-match any leaf_class — substring
+        // is the existing behavior for find_calls, so the diagnostic only
+        // fires when no class match is found at all.
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 410,
+          method: 'tools/call',
+          params: { name: 'find_calls', arguments: { class: 'PmtSvc', method: 'submit' } },
+        });
+        const page = JSON.parse((r!.result as any).content[0].text);
+        expect(page.rows).toHaveLength(0);
+        expect(page.diagnostic).toBeDefined();
+        expect(
+          page.diagnostic.did_you_mean.some(
+            (d: any) => d.function_id === 'app/PaymentServiceImpl#submit'
+          )
+        ).toBe(true);
+      } finally {
+        db.close();
+      }
+    });
+
+    it('find_calls omits diagnostic when matches are non-empty', () => {
+      const db = freshDb();
+      try {
+        seedMinimal(db);
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 411,
+          method: 'tools/call',
+          params: { name: 'find_calls', arguments: { class: 'Logger' } },
+        });
+        const page = JSON.parse((r!.result as any).content[0].text);
+        expect(page.rows.length).toBeGreaterThan(0);
+        expect(page.diagnostic).toBeUndefined();
+      } finally {
+        db.close();
+      }
+    });
+
+    it('get_call_tree resolves cleanly when duplicate-basename recordings share a name (path is unambiguous)', () => {
+      // Regression: when a sticky/widened indexer scan leaves two
+      // recordings with the same basename and name in the DB — one at
+      // /tmp/proj, the other at /var/elsewhere — passing the absolute
+      // `path` field returned by find_recordings must resolve to that
+      // exact row (source_path is UNIQUE in the schema). Bare names
+      // are rejected outright by the strict resolver, with a hint
+      // pointing the caller back at the path field.
+      const db = freshDb();
+      try {
+        db.prepare(
+          `INSERT INTO appmaps (name, source_path, git_branch, sql_query_count, elapsed_ms, timestamp)
+           VALUES ('foo', '/tmp/proj/tmp/appmap/junit/foo.appmap.json',
+                   'main', 0, 100, '2026-04-29T12:00:00.000Z')`
+        ).run();
+        db.prepare(
+          `INSERT INTO appmaps (name, source_path, git_branch, sql_query_count, elapsed_ms, timestamp)
+           VALUES ('foo', '/var/elsewhere/tmp/appmap/junit/foo.appmap.json',
+                   'main', 0, 100, '2026-04-29T12:00:00.000Z')`
+        ).run();
+        db.prepare(
+          `INSERT INTO http_requests (appmap_id, event_id, parent_event_id, method, path, status_code, elapsed_ms)
+           VALUES (1, 1, NULL, 'GET', '/x', 200, 1)`
+        ).run();
+
+        const handler = buildMcpHandler(db);
+        // Absolute path: resolves cleanly.
+        const ok = call(handler, {
+          jsonrpc: '2.0',
+          id: 420,
+          method: 'tools/call',
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: '/tmp/proj/tmp/appmap/junit/foo.appmap.json' },
+          },
+        });
+        expect(ok!.error).toBeUndefined();
+
+        // Bare name: rejected with a hint to use the path field.
+        const reject = call(handler, {
+          jsonrpc: '2.0',
+          id: 421,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: 'foo' } },
+        });
+        expect(reject!.error).toBeDefined();
+        expect(reject!.error!.message).toMatch(/not found at path/);
+        expect(reject!.error!.message).toMatch(/find_recordings/);
+      } finally {
+        db.close();
+      }
+    });
+
+    it('get_call_tree rejects display-label refs with a hint', () => {
+      const db = freshDb();
+      try {
+        seedTwo(db);
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 403,
+          method: 'tools/call',
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: 'POST /orders (200) - 19:47:22.660' },
+          },
+        });
+        expect(r!.error).toBeDefined();
+        expect(r!.error!.message).toMatch(/display label/);
+        expect(r!.error!.message).toMatch(/find_recordings/);
+      } finally {
+        db.close();
+      }
+    });
   });
 });

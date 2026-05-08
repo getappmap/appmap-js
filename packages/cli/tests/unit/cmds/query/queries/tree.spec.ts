@@ -5,6 +5,7 @@ import {
   resolveAppmap,
   tree,
   treeSummary,
+  treeWithMeta,
 } from '../../../../../src/cmds/query/queries/tree';
 
 function freshDb(): sqlite3.Database {
@@ -386,6 +387,60 @@ describe('tree focus', () => {
     } finally {
       db.close();
     }
+  });
+
+  // --- Spec 04: truncation signal ---------------------------------------
+
+  describe('treeWithMeta truncation', () => {
+    it('reports truncated=true and a next_step when descendants budget cuts off children', () => {
+      const db = freshDb();
+      try {
+        seedRich(db);
+        // Focus at HTTP root (depth 0). The tree under the focus is
+        // controller (1) → idempotencyKey (2) → digest (3). With
+        // descendants=1, only the controller is reachable; idem and
+        // digest are cut off.
+        const result = treeWithMeta(db, 'rich', {
+          focusRoute: '/orders',
+          descendants: 1,
+        });
+        expect(result.truncated).toBe(true);
+        expect(result.next_step).toMatch(/child_depth=3/);
+        expect(result.next_step).toContain("appmap='rich'");
+      } finally {
+        db.close();
+      }
+    });
+
+    it('reports truncated=false when every leaf reaches its natural end', () => {
+      const db = freshDb();
+      try {
+        seedRich(db);
+        // descendants=10 is well past the deepest leaf (sha256 at 3
+        // levels under the focus). Nothing gets cut off.
+        const result = treeWithMeta(db, 'rich', {
+          focusRoute: '/orders',
+          descendants: 10,
+        });
+        expect(result.truncated).toBe(false);
+        expect(result.next_step).toBeUndefined();
+        expect(result.max_depth_reached).toBeGreaterThan(0);
+      } finally {
+        db.close();
+      }
+    });
+
+    it('reports truncated=false when no focus is active (full recording is returned)', () => {
+      const db = freshDb();
+      try {
+        seedRich(db);
+        const result = treeWithMeta(db, 'rich');
+        expect(result.truncated).toBe(false);
+        expect(result.nodes.length).toBeGreaterThan(0);
+      } finally {
+        db.close();
+      }
+    });
   });
 });
 
