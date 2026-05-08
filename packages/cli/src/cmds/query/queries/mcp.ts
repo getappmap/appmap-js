@@ -16,6 +16,7 @@ import sqlite3 from 'better-sqlite3';
 import { compare, type CompareSort } from './compare';
 import { endpoints, EndpointSort, EndpointsFilter } from './endpoints';
 import {
+  FindAppmapRow,
   FindCallRow,
   FindExceptionRow,
   FindFilter,
@@ -26,8 +27,11 @@ import {
 } from './find';
 import { hotspots } from './hotspots';
 import { related, RelatedFilter } from './related';
-import { resolveAppmap, tree, AppmapInfo, TreeOptions } from './tree';
+import { treeWithMeta, AppmapInfo, TreeOptions } from './tree';
+import { deriveKind, looksLikeDisplayLabel, RecordingKind } from '../lib/appmapPath';
+import { Page } from '../lib/page';
 import { parseDuration, parseStatus, parseTime } from '../lib/parseFilter';
+import { suggestSimilarFunctionIds } from '../lib/suggestSimilarFunctionIds';
 
 export interface JsonRpcRequest {
   jsonrpc: '2.0';
@@ -53,9 +57,16 @@ interface ToolSpec {
   };
 }
 
+// Per-handler context. Only the DB handle for now; kept as an object
+// so future cross-cutting state (auth tokens, logger, etc.) can attach
+// without touching every tool signature.
+export interface McpContext {
+  db: sqlite3.Database;
+}
+
 interface ToolImpl {
   spec: ToolSpec;
-  handler: (args: Record<string, unknown>, db: sqlite3.Database) => unknown;
+  handler: (args: Record<string, unknown>, ctx: McpContext) => unknown;
 }
 
 interface ResourceSpec {
@@ -67,7 +78,7 @@ interface ResourceSpec {
 
 interface ResourceImpl {
   spec: ResourceSpec;
-  read: (db: sqlite3.Database) => unknown;
+  read: (ctx: McpContext) => unknown;
 }
 
 // Template-based resources expose a parameterized URI. The agent
@@ -84,7 +95,7 @@ interface ResourceTemplateImpl {
   spec: ResourceTemplateSpec;
   // Returns the args object if the URI matches the template, else null.
   match: (uri: string) => Record<string, string> | null;
-  read: (args: Record<string, string>, db: sqlite3.Database) => unknown;
+  read: (args: Record<string, string>, ctx: McpContext) => unknown;
 }
 
 const SERVER_INFO = { name: 'appmap-query', version: '1.0.0' };
@@ -92,16 +103,57 @@ const PROTOCOL_VERSION = '2024-11-05';
 
 // --- helpers ------------------------------------------------------------
 
-// Accept either a numeric appmap.id or a name/basename ref.
-function resolveByIdOrRef(db: sqlite3.Database, idOrRef: unknown): AppmapInfo {
-  const s = String(idOrRef);
-  if (/^\d+$/.test(s)) {
-    const row = db
-      .prepare(`SELECT id, name, source_path FROM appmaps WHERE id = ?`)
-      .get(Number(s)) as AppmapInfo | undefined;
-    if (row) return row;
+// Resolve an `appmap` argument strictly against the canonical id —
+// the absolute source_path returned by find_recordings's `path` field.
+// `appmaps.source_path` is UNIQUE in the schema and stable across
+// reindexes, so this resolution is always unambiguous.
+//
+// Other identifier shapes (numeric appmap_id, recording name, bare
+// basename) are rejected. Numeric ids are autoincrement PKs — unique
+// only within one DB instance and not stable across rebuilds — so they
+// don't help an LLM agent that needs to refer to "the same recording"
+// reliably. Names are metadata-supplied and have been observed to
+// collide when an indexer accidentally cataloged two copies of the
+// same logical recording. Display-label strings are caught with a
+// dedicated hint, since they're an easy mistake.
+//
+// The error message always points the caller at the right input —
+// the `path` field from find_recordings — so a wrong shape costs one
+// tool call to recover, not a fan-out of guess-and-retry.
+function resolveAppmapPath(db: sqlite3.Database, ref: unknown): AppmapInfo {
+  const s = String(ref);
+  if (looksLikeDisplayLabel(s)) {
+    throw new Error(
+      `appmap argument looks like a display label. ` +
+        `Use the 'path' field from find_recordings instead. Got: '${s}'.`
+    );
   }
-  return resolveAppmap(db, s);
+  const row = db
+    .prepare(`SELECT id, name, source_path FROM appmaps WHERE source_path = ?`)
+    .get(s) as AppmapInfo | undefined;
+  if (row) return row;
+  throw new Error(
+    `appmap not found at path '${s}'. ` +
+      `The appmap argument must be the canonical 'path' field from find_recordings ` +
+      `(the absolute file path on disk). Names, basenames, and numeric ids are not accepted.`
+  );
+}
+
+// Decorate a FindAppmapRow with the canonical id surface (Spec 01):
+//   - path  : the absolute source_path — what get_call_tree, find_related,
+//             and the --appmap filter expect as input
+//   - label : the human-readable name from metadata
+//   - kind  : "junit" | "request" | "other" so the agent can pick the
+//             right vantage point without guessing from the basename
+function decorateRecording(
+  row: FindAppmapRow
+): FindAppmapRow & { path: string; label: string; kind: RecordingKind } {
+  return {
+    ...row,
+    path: row.source_path,
+    label: row.appmap_name,
+    kind: deriveKind(row.source_path),
+  };
 }
 
 function maybeTime(s: unknown): string | undefined {
@@ -142,7 +194,7 @@ const COMMON_FILTER_PROPERTIES: Record<string, unknown> = {
   appmap: {
     type: 'string',
     description:
-      'Substring of the recording name OR source_path. Any reasonable word from the basename, test method, route, etc. matches. Case-insensitive.',
+      'Substring of the recording name OR source_path. Any reasonable word from the basename, test method, route, etc. matches. Case-insensitive. To target a single recording unambiguously, prefer the canonical `path` field returned by find_recordings — that\'s the absolute source_path on disk and is unique by construction.',
   },
   limit: {
     type: 'integer',
@@ -202,7 +254,7 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => {
+    handler: (args, { db }) => {
       const f: EndpointsFilter = {};
       f.branch = maybeString(args.branch);
       f.since = maybeTime(args.since);
@@ -232,7 +284,7 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) =>
+    handler: (args, { db }) =>
       hotspots(db, {
         type: 'function',
         route: maybeString(args.route),
@@ -262,7 +314,7 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) =>
+    handler: (args, { db }) =>
       hotspots(db, {
         type: 'sql',
         route: maybeString(args.route),
@@ -281,7 +333,7 @@ const TOOLS: ToolImpl[] = [
         'AppMap labels present in the database, ranked by usage. Use to discover what semantic anchors exist (canonical: "log", "secret", "security.authentication", "security.authorization", "deserialize", "system.exec", "job.create", "http.session.clear") and any project-specific or investigation labels (e.g. "bug.<id>", "repro"). Pass a returned label to find_calls --label to retrieve its calls. Returns: label, count (distinct code objects bearing it), sample_fqid (one representative function).',
       inputSchema: { type: 'object', properties: {} },
     },
-    handler: (_args, db) =>
+    handler: (_args, { db }) =>
       db
         .prepare(
           `SELECT l.label                  AS label,
@@ -301,7 +353,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_recordings',
       description:
-        'Recording-level rows matching filters. Each row is one .appmap.json file with its sample request, branch, and counts. Use to identify which recordings exercised a route, returned a particular status, or were taken on a branch. The `appmap` filter is a substring match against name and source_path — pass any reasonable word from the basename, test method, or route. Returns Page<{appmap_id, appmap_name, route, status_code, elapsed_ms, sql_count, branch, timestamp}> = {rows, total, limit, offset}. Pass appmap_id (numeric) or appmap_name to get_call_tree / find_related.',
+        'Recording-level rows matching filters. Each row is one .appmap.json file with its sample request, branch, and counts. Use to identify which recordings exercised a route, returned a particular status, or were taken on a branch. The `appmap` filter is a substring match against name and source_path — pass any reasonable word from the basename, test method, or route. Returns Page<{appmap_id, appmap_name, source_path, path, label, kind, route, status_code, elapsed_ms, sql_count, branch, timestamp}> = {rows, total, limit, offset}. `path` is the canonical recording identifier — the absolute source_path on disk, unique by construction; pass it back to get_call_tree, find_related, and the --appmap filter. `kind` is "junit" (full test execution) or "request" (per-HTTP slice) or "other"; prefer junit recordings for full-flow context. EXAMPLE row: {"path":"/abs/path/to/customer-portal-api/tmp/appmap/junit/foo.appmap.json","label":"DuplicatePaymentRaceIT.concurrent_submissions","kind":"junit","route":"/api/v1/payments","status_code":500,...}.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -318,7 +370,13 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'appmaps', buildFindFilter(args)),
+    handler: (args, { db }) => {
+      const page = find(db, 'appmaps', buildFindFilter(args)) as Page<FindAppmapRow>;
+      return {
+        ...page,
+        rows: page.rows.map((r) => decorateRecording(r)),
+      };
+    },
   },
 
   {
@@ -342,7 +400,7 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'requests', buildFindFilter(args)),
+    handler: (args, { db }) => find(db, 'requests', buildFindFilter(args)),
   },
 
   {
@@ -369,14 +427,14 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'queries', buildFindFilter(args)),
+    handler: (args, { db }) => find(db, 'queries', buildFindFilter(args)),
   },
 
   {
     spec: {
       name: 'find_calls',
       description:
-        'Function-call rows. Filter by class (substring), method (substring), label (substring; e.g. "log", "security.authorization"), duration. Use label="log" to retrieve application log output, or label="security.authorization" to find authorization checks. Returns Page<{appmap_name, event_id, fqid, defined_class, method_id, path, lineno, elapsed_ms, parameters_json, return_value}> = {rows, total, limit, offset}. parameters_json and return_value are populated only for labeled functions; unlabeled rows return null. Use path:lineno to read the source.',
+        'Function-call rows. Filter by class (substring), method (substring), label (substring; e.g. "log", "security.authorization"), duration. Use label="log" to retrieve application log output, or label="security.authorization" to find authorization checks. Returns Page<{appmap_name, event_id, fqid, defined_class, method_id, path, lineno, elapsed_ms, parameters_json, return_value}> = {rows, total, limit, offset}. parameters_json and return_value are populated only for labeled functions; unlabeled rows return null. Use path:lineno to read the source. EXAMPLES: find_calls(class="PaymentServiceImpl", method="submit") → all calls to that instance method across recordings; find_calls(class="PaymentServiceImpl#submit") → equivalent (class+method may be combined); find_calls(class="PaymentServiceImpl", appmap="/abs/path/.../foo.appmap.json") → scoped to one recording; find_calls(label="security.authorization") → all authorization checks. When the result is empty, the response includes a `diagnostic` object with `did_you_mean` suggestions and a `hint` — read it before guessing another identifier shape. Class syntax: short ("Cipher") matches any leaf class with that name; package-qualified ("app/services/Payment") strict-matches; "Class#method" for instance, "Class.method" for static.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -400,7 +458,19 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'calls', buildFindFilter(args)),
+    handler: (args, { db }) => {
+      const filter = buildFindFilter(args);
+      const page = find(db, 'calls', filter) as Page<FindCallRow>;
+      // Empty results from a class/method query are usually identifier
+      // typos, not "the function genuinely didn't fire." Attach a
+      // diagnostic so the next call lands instead of triggering yet
+      // another shot-in-the-dark retry.
+      if (page.rows.length === 0 && (filter.className || filter.method)) {
+        const diagnostic = suggestSimilarFunctionIds(db, filter.className, filter.method);
+        return { ...page, diagnostic };
+      }
+      return page;
+    },
   },
 
   {
@@ -431,7 +501,7 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'logs', buildFindFilter(args)),
+    handler: (args, { db }) => find(db, 'logs', buildFindFilter(args)),
   },
 
   {
@@ -459,7 +529,7 @@ const TOOLS: ToolImpl[] = [
         },
       },
     },
-    handler: (args, db) => find(db, 'exceptions', buildFindFilter(args)),
+    handler: (args, { db }) => find(db, 'exceptions', buildFindFilter(args)),
   },
 
   // ----- per-recording / cross-recording --------------------------------
@@ -468,25 +538,29 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'get_call_tree',
       description:
-        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves. The appmap argument accepts a numeric appmap_id or an appmap_name (both surfaced by find_recordings). Returns ordered nodes: each has depth, kind ∈ {function, sql, http_server, http_client, exception}, event_id, parent_event_id, elapsed_ms, plus kind-specific fields (function: fqid/defined_class/method_id/path/lineno/parameters_json/return_value; sql: sql_text; http_server: method/route/status_code; http_client: method/url/status_code; exception: exception_class/message/path/lineno). function nodes\' parameters_json and return_value are populated only for labeled functions. Use path:lineno on function and exception nodes to read the source. fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static).',
+        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves. The appmap argument MUST be the canonical `path` field returned by find_recordings — that is the absolute file path on disk, which the schema guarantees unique. Recording names, basenames, numeric ids, and display labels are rejected with an error pointing at the path field. Returns {nodes, truncated, max_depth_reached, next_step?}: nodes are ordered events each with depth, kind ∈ {function, sql, http_server, http_client, exception, log}, event_id, parent_event_id, elapsed_ms, plus kind-specific fields (function: fqid/defined_class/method_id/path/lineno/parameters_json/return_value; sql: sql_text; http_server: method/route/status_code; http_client: method/url/status_code; exception: exception_class/message/path/lineno). truncated=true means the descendant budget cut off subtrees; next_step contains the exact follow-up call to drill deeper. truncated=false means the returned tree is complete — re-querying with deeper depth would return identical content. Use path:lineno on function and exception nodes to read the source. EXAMPLES: get_call_tree(appmap="/abs/path/.../MyIT_test.appmap.json") → full tree (no truncation when no focus is set); get_call_tree(appmap="/abs/.../foo.appmap.json", focus_type="function", focus_value="app/Payment#submit") → tree slice centered on that function at default depths (parent=5, child=4); add child_depth=6 if the previous response had truncated=true.',
       inputSchema: {
         type: 'object',
         properties: {
-          appmap: { type: 'string', description: 'Recording id (numeric) or name.' },
+          appmap: {
+            type: 'string',
+            description:
+              'Canonical recording path — the `path` field returned by find_recordings (the absolute file path on disk).',
+          },
           focus_type: {
             type: 'string',
             enum: ['function', 'sql_query', 'http_server_request', 'http_client_request'],
           },
           focus_value: { type: 'string' },
           parent_depth: { type: 'integer', description: 'Ancestor levels (default 5).' },
-          child_depth: { type: 'integer', description: 'Descendant levels (default 3).' },
+          child_depth: { type: 'integer', description: 'Descendant levels (default 4).' },
           min_elapsed_ms: { type: 'number' },
         },
         required: ['appmap'],
       },
     },
-    handler: (args, db) => {
-      const am = resolveByIdOrRef(db, args.appmap);
+    handler: (args, { db }) => {
+      const am = resolveAppmapPath(db, args.appmap);
       const opts: TreeOptions = {};
       const focusType = maybeString(args.focus_type);
       const focusValue = maybeString(args.focus_value);
@@ -499,7 +573,11 @@ const TOOLS: ToolImpl[] = [
       opts.ancestors = maybeNumber(args.parent_depth);
       opts.descendants = maybeNumber(args.child_depth);
       opts.minElapsedMs = maybeNumber(args.min_elapsed_ms);
-      return tree(db, am.name, opts);
+      // Pass am.source_path to tree() so its internal resolveAppmap call
+      // hits exact-match (source_path is UNIQUE) instead of the GLOB —
+      // the latter can re-trigger ambiguity when duplicate-basename
+      // recordings exist in the DB.
+      return treeWithMeta(db, am.source_path, opts);
     },
   },
 
@@ -511,7 +589,11 @@ const TOOLS: ToolImpl[] = [
       inputSchema: {
         type: 'object',
         properties: {
-          appmap: { type: 'string', description: 'Source recording (id or name).' },
+          appmap: {
+            type: 'string',
+            description:
+              'Canonical source recording path — the `path` field returned by find_recordings (the absolute file path on disk).',
+          },
           status: COMMON_FILTER_PROPERTIES.status,
           route: COMMON_FILTER_PROPERTIES.route,
           branch: COMMON_FILTER_PROPERTIES.branch,
@@ -523,8 +605,8 @@ const TOOLS: ToolImpl[] = [
         required: ['appmap'],
       },
     },
-    handler: (args, db) => {
-      const am = resolveByIdOrRef(db, args.appmap);
+    handler: (args, { db }) => {
+      const am = resolveAppmapPath(db, args.appmap);
       const filter: RelatedFilter = {};
       if (typeof args.status === 'string') filter.status = parseStatus(args.status);
       filter.route = maybeString(args.route);
@@ -533,7 +615,7 @@ const TOOLS: ToolImpl[] = [
       filter.until = maybeTime(args.until);
       filter.limit = maybeNumber(args.limit);
       filter.offset = maybeNumber(args.offset);
-      return related(db, am.name, filter);
+      return related(db, am.source_path, filter);
     },
   },
 
@@ -556,7 +638,7 @@ const TOOLS: ToolImpl[] = [
         required: ['branch_a', 'branch_b'],
       },
     },
-    handler: (args, db) =>
+    handler: (args, { db }) =>
       compare(db, {
         branch_a: String(args.branch_a),
         branch_b: String(args.branch_b),
@@ -580,7 +662,7 @@ const RESOURCES: ResourceImpl[] = [
         'All HTTP endpoints with request count, average latency, p95, and error rate.',
       mimeType: 'application/json',
     },
-    read: (db) => endpoints(db, { limit: 200 }),
+    read: ({ db }) => endpoints(db, { limit: 200 }),
   },
 ];
 
@@ -590,7 +672,7 @@ const RESOURCE_TEMPLATES: ResourceTemplateImpl[] = [
       uriTemplate: 'appmap://recording/{ref}/logs',
       name: 'recording_logs',
       description:
-        'All log lines (functions labeled `log`) for one recording, ordered by event_id. {ref} is either the numeric appmap_id or the recording name/basename — same forms find_recordings returns. Each entry has the find_logs row shape.',
+        'All log lines (functions labeled `log`) for one recording, ordered by event_id. {ref} is the canonical recording path (find_recordings\' `path` field — the absolute file path on disk; URL-encode it). Each entry has the find_logs row shape.',
       mimeType: 'application/json',
     },
     match: (uri) => {
@@ -600,9 +682,9 @@ const RESOURCE_TEMPLATES: ResourceTemplateImpl[] = [
       // contain spaces, em-dashes, etc.).
       return { ref: decodeURIComponent(m[1]) };
     },
-    read: (args, db) => {
-      const info = resolveByIdOrRef(db, args.ref);
-      return find(db, 'logs', { appmap: info.name, limit: 0 });
+    read: (args, { db }) => {
+      const info = resolveAppmapPath(db, args.ref);
+      return find(db, 'logs', { appmap: info.source_path, limit: 0 });
     },
   },
 ];
@@ -612,6 +694,7 @@ const RESOURCE_TEMPLATES: ResourceTemplateImpl[] = [
 export type McpHandler = (msg: JsonRpcRequest) => JsonRpcResponse | null;
 
 export function buildMcpHandler(db: sqlite3.Database): McpHandler {
+  const ctx: McpContext = { db };
   return (msg: JsonRpcRequest): JsonRpcResponse | null => {
     const id = msg.id ?? null;
     const method = msg.method;
@@ -645,7 +728,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
       const tool = TOOLS.find((t) => t.spec.name === name);
       if (!tool) return errorResponse(id, -32601, `unknown tool: ${name}`);
       try {
-        const result = tool.handler(args, db);
+        const result = tool.handler(args, ctx);
         return {
           jsonrpc: '2.0',
           id,
@@ -681,7 +764,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
       const resource = RESOURCES.find((r) => r.spec.uri === uri);
       if (resource) {
         try {
-          const result = resource.read(db);
+          const result = resource.read(ctx);
           return readResponse(id, uri, resource.spec.mimeType, result);
         } catch (e) {
           return errorResponse(id, -32000, (e as Error).message);
@@ -691,7 +774,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
         const matched = tmpl.match(uri);
         if (matched) {
           try {
-            const result = tmpl.read(matched, db);
+            const result = tmpl.read(matched, ctx);
             return readResponse(id, uri, tmpl.spec.mimeType, result);
           } catch (e) {
             return errorResponse(id, -32000, (e as Error).message);

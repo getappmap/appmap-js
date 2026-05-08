@@ -1,5 +1,6 @@
 import sqlite3 from 'better-sqlite3';
 
+import { looksLikeDisplayLabel } from '../lib/appmapPath';
 import { projectLogMessage } from '../lib/logMessage';
 import { appmapRefClause } from '../lib/scope';
 
@@ -92,10 +93,21 @@ export interface AppmapInfo {
   source_path: string;
 }
 
-// Resolve a user-supplied appmap reference (name or source-path basename) to
-// the row in `appmaps`. Throws on miss or ambiguity (returns candidates in
-// the message so the user can disambiguate).
+// Resolve a user-supplied appmap reference to the row in `appmaps`.
+// Accepts the canonical relative path, an absolute path (== source_path),
+// the recording name, or a basename. Throws on miss or ambiguity (with
+// candidates in the message so the user can disambiguate). Display-label
+// strings (e.g. "GET /orders (200) - 19:47:22") are rejected up front
+// with a hint to use the `path` field from find_recordings instead —
+// those silently miss otherwise, and the resulting empty result drives
+// agents to retry with yet more identifier forms.
 export function resolveAppmap(db: sqlite3.Database, ref: string): AppmapInfo {
+  if (looksLikeDisplayLabel(ref)) {
+    throw new Error(
+      `appmap argument looks like a display label. ` +
+        `Use the 'path' field from find_recordings instead. Got: '${ref}'.`
+    );
+  }
   const m = appmapRefClause(ref, 'a');
   const rows = db
     .prepare(
@@ -122,7 +134,7 @@ export interface TreeOptions {
 
   // Depth budgets, in effect only when focus is active.
   ancestors?: number;     // ancestor levels to keep above each match (default 5)
-  descendants?: number;   // descendant levels below each match (default 3)
+  descendants?: number;   // descendant levels below each match (default 4)
 
   // Prune subtrees whose maximum elapsed time is below this threshold —
   // useful for trimming traces dominated by fast leaf calls.
@@ -130,15 +142,55 @@ export interface TreeOptions {
 }
 
 const DEFAULT_ANCESTORS = 5;
-const DEFAULT_DESCENDANTS = 3;
+// Bumped from 3 → 4 (Spec 05). Across the rca2 fixtures every first
+// call to get_call_tree overrode the previous default with child_depth
+// ∈ {4, 5}; the agent had learned 3 was too shallow. With this default
+// the modal first call no longer needs an override, and the truncation
+// signal (Spec 04) handles the minority of cases where 4 isn't enough.
+const DEFAULT_DESCENDANTS = 4;
+
+// Cap suggested next-step depth so we don't egg the agent into an
+// unbounded zoom. 10 is well past the practical depth of any real
+// Spring Boot or Rails callstack we've seen in the rca2 fixtures.
+const MAX_SUGGESTED_DEPTH = 10;
+
+// Outcome of a tree() call augmented with truncation metadata. Helps the
+// caller decide whether re-querying with deeper depth would yield more —
+// returns false in two distinct cases (no focus active so the full
+// recording is already present; or focus active and every leaf bottomed
+// out before the budget). When `truncated: true`, `next_step` is a
+// ready-to-use suggestion for the next call so the agent doesn't have
+// to invent a deeper depth itself.
+export interface TreeWithMeta {
+  nodes: TreeNode[];
+  truncated: boolean;
+  max_depth_reached: number;
+  next_step?: string;
+}
 
 // Build the flat-but-depth-annotated tree for a recording. Events are
 // returned in event_id order; consumers can render with indentation.
+//
+// For the metadata-aware variant — including truncation/depth signals
+// the MCP layer surfaces to agents — call `treeWithMeta`. This entry
+// point preserves the simple TreeNode[] shape historical CLI consumers
+// (and tree.spec.ts) depend on.
 export function tree(
   db: sqlite3.Database,
   appmapRef: string,
   options: TreeOptions = {}
 ): TreeNode[] {
+  return treeWithMeta(db, appmapRef, options).nodes;
+}
+
+// Tree + truncation metadata. Agents use the metadata to decide whether
+// re-querying with deeper depth would yield more (truncated=true), or
+// whether the current call was complete (truncated=false). See Spec 04.
+export function treeWithMeta(
+  db: sqlite3.Database,
+  appmapRef: string,
+  options: TreeOptions = {}
+): TreeWithMeta {
   const am = resolveAppmap(db, appmapRef);
   const events: TreeNode[] = [];
 
@@ -320,8 +372,11 @@ export function tree(
   computeDepths(events);
 
   let result = events;
+  let truncated = false;
   if (hasFocus(options)) {
-    result = applyFocus(result, options);
+    const focused = applyFocus(result, options);
+    result = focused.events;
+    truncated = focused.truncated;
   }
   if (options.minElapsedMs && options.minElapsedMs > 0) {
     result = pruneByElapsed(result, options.minElapsedMs);
@@ -331,7 +386,19 @@ export function tree(
   // floating wherever the original absolute depth happened to be.
   if (result !== events) recomputeDepthsRelative(result);
 
-  return result;
+  let maxDepth = 0;
+  for (const e of result) if (e.depth > maxDepth) maxDepth = e.depth;
+
+  const meta: TreeWithMeta = { nodes: result, truncated, max_depth_reached: maxDepth };
+  if (truncated) {
+    const currentDescendants =
+      options.descendants ?? DEFAULT_DESCENDANTS;
+    const next = Math.min(currentDescendants + 2, MAX_SUGGESTED_DEPTH);
+    if (next > currentDescendants) {
+      meta.next_step = `To see deeper, call get_call_tree(appmap='${appmapRef}', child_depth=${next}).`;
+    }
+  }
+  return meta;
 }
 
 function computeDepths(events: TreeNode[]): void {
@@ -393,7 +460,15 @@ function matchesFocus(node: TreeNode, options: TreeOptions): boolean {
 //   - up to `ancestors` parent levels above each match
 //   - the direct children of each ancestor (so siblings of the match are visible)
 //   - up to `descendants` levels below each match
-function applyFocus(events: readonly TreeNode[], options: TreeOptions): TreeNode[] {
+//
+// Also tracks whether the descendant budget actually cut off any kids —
+// agents use that signal (Spec 04) to decide whether re-querying with
+// deeper depth would yield more, instead of the "try 4, try 5, try 6"
+// hedge pattern we observed in rca2 sessions.
+function applyFocus(
+  events: readonly TreeNode[],
+  options: TreeOptions
+): { events: TreeNode[]; truncated: boolean } {
   const ancestorBudget = options.ancestors ?? DEFAULT_ANCESTORS;
   const descendantBudget = options.descendants ?? DEFAULT_DESCENDANTS;
 
@@ -420,9 +495,10 @@ function applyFocus(events: readonly TreeNode[], options: TreeOptions): TreeNode
   for (const e of events) {
     if (matchesFocus(e, options)) focusIds.add(e.event_id);
   }
-  if (focusIds.size === 0) return [];
+  if (focusIds.size === 0) return { events: [], truncated: false };
 
   const included = new Set<number>();
+  let truncated = false;
   for (const fid of focusIds) {
     included.add(fid);
 
@@ -451,7 +527,13 @@ function applyFocus(events: readonly TreeNode[], options: TreeOptions): TreeNode
     while (queue.length > 0) {
       const next = queue.shift();
       if (!next) break;
-      if (next.depth >= descendantBudget) continue;
+      if (next.depth >= descendantBudget) {
+        // We hit the budget. If this node has any kids we'd have walked
+        // into, the result is truncated.
+        const kids = childrenByParent.get(next.id);
+        if (kids && kids.size > 0) truncated = true;
+        continue;
+      }
       const kids = childrenByParent.get(next.id);
       if (!kids) continue;
       for (const k of kids) {
@@ -463,7 +545,7 @@ function applyFocus(events: readonly TreeNode[], options: TreeOptions): TreeNode
     }
   }
 
-  return events.filter((e) => included.has(e.event_id));
+  return { events: events.filter((e) => included.has(e.event_id)), truncated };
 }
 
 // Prune subtrees whose entire branch's maximum elapsed_ms is below the

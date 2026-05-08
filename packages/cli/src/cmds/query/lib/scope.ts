@@ -34,8 +34,12 @@ export function parseRoute(s: string): RouteSpec {
 // Returns SQL clauses (and params) that match an --appmap reference against
 // the appmaps table, accepting any of:
 //   - exact appmap.name
+//   - exact source_path                                (canonical absolute id)
 //   - source_path ending in `<sep><ref>.appmap.json`  (Unix or Windows sep)
 //   - source_path ending in `<sep><ref>`              (non-`.appmap.json` stores)
+// The "ends-with" branches let a relative path under the indexer's root
+// (`customer-portal-api/tmp/appmap/junit/foo.appmap.json`) match the
+// stored absolute source_path on either platform.
 // Used by `tree` and other single-resolve operations that want
 // exact-match-or-fail (with an ambiguity error). For find/list contexts
 // where lenient matching is the right UX, use appmapLikeClause.
@@ -45,9 +49,10 @@ export function appmapRefClause(
 ): { sql: string; params: string[] } {
   return {
     sql: `(${alias}.name = ?
+        OR ${alias}.source_path = ?
         OR ${alias}.source_path GLOB '*[/\\\\]' || ? || '.appmap.json'
         OR ${alias}.source_path GLOB '*[/\\\\]' || ?)`,
-    params: [ref, ref, ref],
+    params: [ref, ref, ref, ref],
   };
 }
 

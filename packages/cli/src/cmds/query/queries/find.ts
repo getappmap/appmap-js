@@ -40,6 +40,11 @@ export interface FindFilter {
 export interface FindAppmapRow {
   appmap_id: number;
   appmap_name: string;
+  // Stored absolute path on disk. The MCP layer relativizes this to a
+  // canonical `path` field (see lib/appmapPath); CLI table output
+  // doesn't surface it, but JSON callers benefit from having it
+  // available so they don't have to round-trip through a separate query.
+  source_path: string;
   route: string | null;
   status_code: number | null;
   elapsed_ms: number | null;
@@ -164,6 +169,7 @@ export function findAppmaps(db: sqlite3.Database, filter: FindFilter): Page<Find
   const sql = `
     SELECT a.id                                       AS appmap_id,
            a.name                                     AS appmap_name,
+           a.source_path                              AS source_path,
            COALESCE(h.normalized_path, h.path)        AS route,
            h.status_code                              AS status_code,
            COALESCE(h.elapsed_ms, a.elapsed_ms)       AS elapsed_ms,
