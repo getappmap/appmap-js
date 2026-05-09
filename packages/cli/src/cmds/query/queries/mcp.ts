@@ -27,10 +27,10 @@ import {
 } from './find';
 import { hotspots } from './hotspots';
 import { related, RelatedFilter } from './related';
-import { treeWithMeta, AppmapInfo, TreeOptions } from './tree';
-import { deriveKind, looksLikeDisplayLabel, RecordingKind } from '../lib/appmapPath';
+import { treeWithMeta, TreeOptions } from './tree';
 import { Page } from '../lib/page';
 import { parseDuration, parseStatus, parseTime } from '../lib/parseFilter';
+import { decorateRecording, resolveAppmapPath } from '../lib/recordingId';
 import { suggestSimilarFunctionIds } from '../lib/suggestSimilarFunctionIds';
 
 export interface JsonRpcRequest {
@@ -102,59 +102,6 @@ const SERVER_INFO = { name: 'appmap-query', version: '1.0.0' };
 const PROTOCOL_VERSION = '2024-11-05';
 
 // --- helpers ------------------------------------------------------------
-
-// Resolve an `appmap` argument strictly against the canonical id —
-// the absolute source_path returned by find_recordings's `path` field.
-// `appmaps.source_path` is UNIQUE in the schema and stable across
-// reindexes, so this resolution is always unambiguous.
-//
-// Other identifier shapes (numeric appmap_id, recording name, bare
-// basename) are rejected. Numeric ids are autoincrement PKs — unique
-// only within one DB instance and not stable across rebuilds — so they
-// don't help an LLM agent that needs to refer to "the same recording"
-// reliably. Names are metadata-supplied and have been observed to
-// collide when an indexer accidentally cataloged two copies of the
-// same logical recording. Display-label strings are caught with a
-// dedicated hint, since they're an easy mistake.
-//
-// The error message always points the caller at the right input —
-// the `path` field from find_recordings — so a wrong shape costs one
-// tool call to recover, not a fan-out of guess-and-retry.
-function resolveAppmapPath(db: sqlite3.Database, ref: unknown): AppmapInfo {
-  const s = String(ref);
-  if (looksLikeDisplayLabel(s)) {
-    throw new Error(
-      `appmap argument looks like a display label. ` +
-        `Use the 'path' field from find_recordings instead. Got: '${s}'.`
-    );
-  }
-  const row = db
-    .prepare(`SELECT id, name, source_path FROM appmaps WHERE source_path = ?`)
-    .get(s) as AppmapInfo | undefined;
-  if (row) return row;
-  throw new Error(
-    `appmap not found at path '${s}'. ` +
-      `The appmap argument must be the canonical 'path' field from find_recordings ` +
-      `(the absolute file path on disk). Names, basenames, and numeric ids are not accepted.`
-  );
-}
-
-// Decorate a FindAppmapRow with the canonical id surface (Spec 01):
-//   - path  : the absolute source_path — what get_call_tree, find_related,
-//             and the --appmap filter expect as input
-//   - label : the human-readable name from metadata
-//   - kind  : "junit" | "request" | "other" so the agent can pick the
-//             right vantage point without guessing from the basename
-function decorateRecording(
-  row: FindAppmapRow
-): FindAppmapRow & { path: string; label: string; kind: RecordingKind } {
-  return {
-    ...row,
-    path: row.source_path,
-    label: row.appmap_name,
-    kind: deriveKind(row.source_path),
-  };
-}
 
 function maybeTime(s: unknown): string | undefined {
   return typeof s === 'string' && s.length > 0 ? parseTime(s) : undefined;

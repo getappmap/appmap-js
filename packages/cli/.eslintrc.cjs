@@ -22,7 +22,13 @@ const FIXME = [
 module.exports = {
   root: true,
   ignorePatterns: [
-    'src/telemetry.ts', // symlink to a separate "package"
+    '.eslintrc.cjs',     // self — type-aware parser doesn't include this file in tsconfig.lint
+    'src/telemetry.ts',  // symlink to a separate "package"
+    // The query-ui React app has its own toolchain (esbuild + tailwind);
+    // the main cli ESLint/TS setup doesn't ship React types and treats
+    // src/html as build-only, matching how src/html/{appmap,navie}.js are
+    // already handled.
+    'src/html/query-ui/**',
   ],
   env: {
     browser: true,
