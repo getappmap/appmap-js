@@ -27,7 +27,7 @@ import {
 } from './find';
 import { hotspots } from './hotspots';
 import { related, RelatedFilter } from './related';
-import { treeWithMeta, TreeOptions } from './tree';
+import { FunctionNode, TreeNode, treeWithMeta, TreeOptions } from './tree';
 import { Page } from '../lib/page';
 import { parseDuration, parseStatus, parseTime } from '../lib/parseFilter';
 import { decorateRecording, resolveAppmapPath } from '../lib/recordingId';
@@ -123,6 +123,165 @@ function maybeCompareSort(s: unknown): CompareSort | undefined {
   if (s === 'delta' || s === 'p95-a' || s === 'p95-b') return s;
   if (s === undefined) return undefined;
   throw new ParameterValidationError(`invalid compare sort: ${String(s)}`);
+}
+
+// ---- get_call_tree default selection -----------------------------------
+//
+// Solver trajectories repeatedly burned 2–3 calls discovering tractable
+// `child_depth` values: a junit recording at depth 6 would blow the
+// token budget, the agent retried with focus_type=http_server_request
+// (which silently returned [] on a junit recording), and only on the
+// third call landed on a per-request recording where the original
+// depth worked. The fix lives at the tool-defaults layer: pick a
+// useful depth based on the recording's shape, fall back to a
+// summary if the result still doesn't fit, and tell the agent
+// explicitly what was chosen and why.
+
+// Recordings with more events than this default to a shallow tree. The
+// value is a heuristic, not a hard rule — agents can still pass
+// child_depth explicitly to override. 500 separates per-request
+// recordings (typically 50–300 events) from junit/process recordings
+// (typically 1k+ events) in the corpus we observed.
+const BROAD_EVENT_THRESHOLD = 500;
+
+// Default child_depth used when an explicit value isn't supplied and
+// the recording is classified as broad. Two levels keeps the response
+// small enough that even a 10k-event recording stays within budget.
+const BROAD_DEFAULT_CHILD_DEPTH = 2;
+
+// Roughly 10K tokens at ~4 chars/token. Past this, fall back to summary
+// mode rather than serializing a tree the agent can't usefully process.
+const RESPONSE_BUDGET_CHARS = 40_000;
+
+// Number of expensive functions surfaced in the summary-mode drilldown
+// list. Picked to give the agent a handful of starting points without
+// re-blowing the budget.
+const SUMMARY_DRILLDOWN_LIMIT = 10;
+
+interface RecordingShape {
+  recorder_type: string | null;
+  event_count: number;
+  http_request_count: number;
+  sql_query_count: number;
+}
+
+function readRecordingShape(db: sqlite3.Database, appmapId: number): RecordingShape {
+  const row = db
+    .prepare(
+      `SELECT recorder_type, event_count, http_request_count, sql_query_count
+         FROM appmaps WHERE id = ?`
+    )
+    .get(appmapId) as RecordingShape | undefined;
+  if (!row) {
+    return { recorder_type: null, event_count: 0, http_request_count: 0, sql_query_count: 0 };
+  }
+  return row;
+}
+
+function isBroadRecording(shape: RecordingShape): boolean {
+  // Per-request recordings are always narrow regardless of event count
+  // (typically one entry-point, one full callstack). Anything else is
+  // broad if the event count crosses the threshold. The recorder_type
+  // values come from AppMap recording metadata; we recognize the common
+  // single-request markers and classify the rest by size.
+  const rt = (shape.recorder_type ?? '').toLowerCase();
+  if (rt === 'http_server_request' || rt === 'requests' || rt === 'request') return false;
+  return shape.event_count > BROAD_EVENT_THRESHOLD;
+}
+
+function buildEmptyFocusDiagnostic(focusType: string, shape: RecordingShape): string {
+  const have: string[] = [];
+  if (shape.http_request_count > 0) have.push(`${shape.http_request_count} http_server_request`);
+  if (shape.sql_query_count > 0) have.push(`${shape.sql_query_count} sql_query`);
+  if (shape.event_count > 0) have.push(`${shape.event_count} total events`);
+  const recordingType = shape.recorder_type ?? 'unknown';
+
+  // Map focus_type back to the table the user was filtering against and
+  // suggest the next step that's actually likely to land. Functions are
+  // the universal fallback because every recording has them.
+  let suggestion: string;
+  if (focusType === 'http_server_request' && shape.http_request_count === 0) {
+    suggestion =
+      "this recording has no HTTP server requests. Try omitting focus_type to get the full tree, " +
+      "or focus_type='function' with a specific fqid.";
+  } else if (focusType === 'sql_query' && shape.sql_query_count === 0) {
+    suggestion =
+      "this recording has no SQL queries. Try omitting focus_type to get the full tree, " +
+      "or focus_type='function' with a specific fqid.";
+  } else if (focusType === 'http_client_request') {
+    suggestion =
+      "no outbound HTTP calls matched. Try omitting focus_type, or list inbound traffic with focus_type='http_server_request'.";
+  } else if (focusType === 'function') {
+    suggestion =
+      "no function call with that fqid. Use find_calls to discover fqids in this recording, then re-call with the exact value.";
+  } else {
+    suggestion = "drop focus_type to get the full tree, then re-aim with a value found in those nodes.";
+  }
+
+  const haveLine = have.length > 0 ? ` Recording contents: ${have.join(', ')}.` : '';
+  return `no events of type '${focusType}' matched in this recording (recorder_type=${recordingType}).${haveLine} ${suggestion}`;
+}
+
+interface SummaryDrilldownItem {
+  fqid: string | null;
+  defined_class: string;
+  method_id: string;
+  event_id: number;
+  elapsed_ms: number | null;
+  child_count: number;
+  path: string | null;
+  lineno: number | null;
+}
+
+function buildSummaryResponse(
+  meta: { nodes: TreeNode[]; truncated: boolean; max_depth_reached: number },
+  chosenParams: Record<string, unknown>,
+  shape: RecordingShape,
+  projectedSize: number
+): Record<string, unknown> {
+  // Keep entry points + exceptions — the high-signal nodes the agent
+  // can pivot from. Drop SQL and intermediate function calls; their
+  // signal lives in the drilldown ranking instead.
+  const kept = meta.nodes.filter(
+    (n) => n.kind === 'http_server' || n.kind === 'http_client' || n.kind === 'exception'
+  );
+
+  // Top-N functions by elapsed_ms with a child_count so the agent can
+  // judge which one is worth drilling into.
+  const childCountById = new Map<number, number>();
+  for (const n of meta.nodes) {
+    if (n.parent_event_id !== null) {
+      childCountById.set(n.parent_event_id, (childCountById.get(n.parent_event_id) ?? 0) + 1);
+    }
+  }
+  const drilldown: SummaryDrilldownItem[] = meta.nodes
+    .filter((n): n is FunctionNode => n.kind === 'function')
+    .filter((n) => typeof n.elapsed_ms === 'number')
+    .sort((a, b) => (b.elapsed_ms ?? 0) - (a.elapsed_ms ?? 0))
+    .slice(0, SUMMARY_DRILLDOWN_LIMIT)
+    .map((n) => ({
+      fqid: n.fqid,
+      defined_class: n.defined_class,
+      method_id: n.method_id,
+      event_id: n.event_id,
+      elapsed_ms: n.elapsed_ms,
+      child_count: childCountById.get(n.event_id) ?? 0,
+      path: n.path,
+      lineno: n.lineno,
+    }));
+
+  return {
+    nodes: kept,
+    truncated: true,
+    max_depth_reached: meta.max_depth_reached,
+    chosen_params: chosenParams,
+    summary_mode: true,
+    reason:
+      `recording has ${shape.event_count} events; full tree at chosen depths would be ${projectedSize} chars ` +
+      `(over the ${RESPONSE_BUDGET_CHARS}-char budget). Returned entry-points and exceptions only; ` +
+      `use suggested_drilldown[].fqid with focus_type='function' to drill into specific calls.`,
+    suggested_drilldown: drilldown,
+  };
 }
 
 // Common filter shape shared by the find_* tools and the hotspots tools.
@@ -485,7 +644,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'get_call_tree',
       description:
-        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves. The appmap argument MUST be the canonical `path` field returned by find_recordings — that is the absolute file path on disk, which the schema guarantees unique. Recording names, basenames, numeric ids, and display labels are rejected with an error pointing at the path field. Returns {nodes, truncated, max_depth_reached, next_step?}: nodes are ordered events each with depth, kind ∈ {function, sql, http_server, http_client, exception, log}, event_id, parent_event_id, elapsed_ms, plus kind-specific fields (function: fqid/defined_class/method_id/path/lineno/parameters_json/return_value; sql: sql_text; http_server: method/route/status_code; http_client: method/url/status_code; exception: exception_class/message/path/lineno). truncated=true means the descendant budget cut off subtrees; next_step contains the exact follow-up call to drill deeper. truncated=false means the returned tree is complete — re-querying with deeper depth would return identical content. Use path:lineno on function and exception nodes to read the source. EXAMPLES: get_call_tree(appmap="/abs/path/.../MyIT_test.appmap.json") → full tree (no truncation when no focus is set); get_call_tree(appmap="/abs/.../foo.appmap.json", focus_type="function", focus_value="app/Payment#submit") → tree slice centered on that function at default depths (parent=5, child=4); add child_depth=6 if the previous response had truncated=true.',
+        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves. The appmap argument MUST be the canonical `path` field returned by find_recordings — that is the absolute file path on disk, which the schema guarantees unique. Recording names, basenames, numeric ids, and display labels are rejected with an error pointing at the path field. Returns {nodes, truncated, max_depth_reached, chosen_params, reason?, diagnostic?, summary_mode?, suggested_drilldown?, next_step?}: nodes are ordered events each with depth, kind ∈ {function, sql, http_server, http_client, exception, log}, event_id, parent_event_id, elapsed_ms, plus kind-specific fields (function: fqid/defined_class/method_id/path/lineno/parameters_json/return_value; sql: sql_text; http_server: method/route/status_code; http_client: method/url/status_code; exception: exception_class/message/path/lineno). truncated=true means the descendant budget cut off subtrees; next_step contains the exact follow-up call to drill deeper. truncated=false means the returned tree is complete — re-querying with deeper depth would return identical content. chosen_params reports the parent_depth/child_depth/focus actually used so callers see when defaults were auto-selected; reason explains why (only set when something non-default happened). When focus_type+focus_value match nothing in the recording, diagnostic explains what is available so the agent can re-aim the focus instead of guessing. summary_mode=true means the recording was too large to render in full at any depth — nodes contains only entry-points and exceptions, and suggested_drilldown lists the top-N most-expensive functions by elapsed_ms (each with fqid, event_id, elapsed_ms, child_count) so the agent can drill in via focus_type=function on a specific fqid. Use path:lineno on function and exception nodes to read the source. EXAMPLES: get_call_tree(appmap="/abs/path/.../MyIT_test.appmap.json") → tree at auto-selected depth (shallow on broad junit/process recordings, full on narrow per-request recordings); get_call_tree(appmap="/abs/.../foo.appmap.json", focus_type="function", focus_value="app/Payment#submit") → tree slice centered on that function at default depths (parent=5, child=4); add child_depth=6 if the previous response had truncated=true.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -500,7 +659,11 @@ const TOOLS: ToolImpl[] = [
           },
           focus_value: { type: 'string' },
           parent_depth: { type: 'integer', description: 'Ancestor levels (default 5).' },
-          child_depth: { type: 'integer', description: 'Descendant levels (default 4).' },
+          child_depth: {
+            type: 'integer',
+            description:
+              'Descendant levels. When omitted, defaults to 4 for narrow per-request recordings and 2 for broad junit/process recordings (event_count > 500).',
+          },
           min_elapsed_ms: { type: 'number' },
         },
         required: ['appmap'],
@@ -508,23 +671,77 @@ const TOOLS: ToolImpl[] = [
     },
     handler: (args, { db }) => {
       const am = resolveAppmapPath(db, args.appmap);
-      const opts: TreeOptions = {};
+      const shape = readRecordingShape(db, am.id);
+
       const focusType = maybeString(args.focus_type);
       const focusValue = maybeString(args.focus_value);
+      const parentDepthIn = maybeNumber(args.parent_depth);
+      const childDepthIn = maybeNumber(args.child_depth);
+
+      // Auto-select child_depth on broad recordings (junit/process w/ many
+      // events). Per-request recordings and small recordings keep the
+      // existing default. The chosen value is reported back in
+      // chosen_params so the agent can refine without trial and error.
+      const broadDefault = isBroadRecording(shape);
+      let chosenChildDepth = childDepthIn;
+      let autoReason: string | undefined;
+      if (chosenChildDepth === undefined && broadDefault) {
+        chosenChildDepth = BROAD_DEFAULT_CHILD_DEPTH;
+        autoReason =
+          `${shape.recorder_type ?? 'process-wide'} recording has ${shape.event_count} events; ` +
+          `using child_depth=${BROAD_DEFAULT_CHILD_DEPTH} to fit the response budget. ` +
+          `Pass child_depth explicitly to override.`;
+      }
+
+      const opts: TreeOptions = {};
       if (focusType && focusValue) {
         if (focusType === 'function') opts.focusFn = focusValue;
         else if (focusType === 'sql_query') opts.focusSql = focusValue;
         else if (focusType === 'http_server_request') opts.focusRoute = focusValue;
         else if (focusType === 'http_client_request') opts.focusUrl = focusValue;
       }
-      opts.ancestors = maybeNumber(args.parent_depth);
-      opts.descendants = maybeNumber(args.child_depth);
+      opts.ancestors = parentDepthIn;
+      opts.descendants = chosenChildDepth;
       opts.minElapsedMs = maybeNumber(args.min_elapsed_ms);
-      // Pass am.source_path to tree() so its internal resolveAppmap call
-      // hits exact-match (source_path is UNIQUE) instead of the GLOB —
-      // the latter can re-trigger ambiguity when duplicate-basename
-      // recordings exist in the DB.
-      return treeWithMeta(db, am.source_path, opts);
+
+      // Pass am.source_path so resolveAppmap inside tree() exact-matches
+      // (source_path is UNIQUE) instead of GLOB-matching, which can
+      // re-trigger ambiguity on duplicate-basename recordings.
+      const meta = treeWithMeta(db, am.source_path, opts);
+
+      const chosenParams = {
+        parent_depth: parentDepthIn ?? null,
+        child_depth: chosenChildDepth ?? null,
+        focus_type: focusType ?? null,
+        focus_value: focusValue ?? null,
+      };
+
+      // Empty-focus diagnostic: focus excluded everything. Without this
+      // signal the agent only sees nodes:[] and can't tell whether the
+      // filter was wrong or the recording genuinely lacked the kind.
+      if (focusType && focusValue && meta.nodes.length === 0) {
+        return {
+          ...meta,
+          chosen_params: chosenParams,
+          ...(autoReason ? { reason: autoReason } : {}),
+          diagnostic: buildEmptyFocusDiagnostic(focusType, shape),
+        };
+      }
+
+      // Budget check: if the rendered response would still be huge, fall
+      // back to summary mode (entry-points + exceptions in `nodes`,
+      // top-N functions in `suggested_drilldown`). Avoids the LLM seeing
+      // a truncated-mid-traversal tree that gives no useful evidence.
+      const projected = JSON.stringify({ ...meta, chosen_params: chosenParams });
+      if (projected.length > RESPONSE_BUDGET_CHARS) {
+        return buildSummaryResponse(meta, chosenParams, shape, projected.length);
+      }
+
+      return {
+        ...meta,
+        chosen_params: chosenParams,
+        ...(autoReason ? { reason: autoReason } : {}),
+      };
     },
   },
 
