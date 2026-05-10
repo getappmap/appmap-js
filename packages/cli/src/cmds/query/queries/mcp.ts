@@ -376,7 +376,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'function_hotspots',
       description:
-        'Functions ranked by total elapsed time across recordings. Filter by route to scope to a specific entry point or by class (substring match) to focus on one component. Returns Page<{fqid, defined_class, method_id, path, lineno, calls, total_ms, self_ms}> = {rows, total, limit, offset}. path/lineno are one representative call\'s source location — read directly to see the function. fqid examples: "app/Logger#error" (instance), "app/Util.parse" (static), "src/cmds/query/db/openQueryDb.openQueryDb" (module-level), "app/Outer::Inner#method" (nested classes).',
+        'Functions ranked by total elapsed time across recordings. Filter by `route` (scope to one entry point) or `class` (substring). path/lineno are one representative call\'s source location — read directly. fqid forms: "app/Logger#error" (instance), "app/Util.parse" (static), "module.fn" (module-level), "Outer::Inner#method" (nested).',
       inputSchema: {
         type: 'object',
         properties: {
@@ -436,7 +436,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'list_labels',
       description:
-        'AppMap labels present in the database, ranked by usage. Use to discover what semantic anchors exist (canonical: "log", "secret", "security.authentication", "security.authorization", "deserialize", "system.exec", "job.create", "http.session.clear") and any project-specific or investigation labels (e.g. "bug.<id>", "repro"). Pass a returned label to find_calls --label to retrieve its calls. Returns: label, count (distinct code objects bearing it), sample_fqid (one representative function).',
+        'AppMap labels in the database, ranked by usage. Discovers what semantic anchors exist (canonical examples: "log", "security.authentication", "security.authorization", "deserialize", "system.exec") and project-specific labels (e.g. "bug.<id>"). Pass a returned label to `find_calls --label` to retrieve its calls.',
       inputSchema: { type: 'object', properties: {} },
     },
     handler: (_args, { db }) =>
@@ -459,7 +459,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_recordings',
       description:
-        'Recording-level rows matching filters. Each row is one .appmap.json file with its sample request, branch, and counts. Use to identify which recordings exercised a route, returned a particular status, or were taken on a branch. The `appmap` filter is a substring match against name and source_path — pass any reasonable word from the basename, test method, or route. Returns Page<{appmap_id, appmap_name, source_path, path, label, kind, route, status_code, elapsed_ms, sql_count, branch, timestamp}> = {rows, total, limit, offset}. `path` is the canonical recording identifier — the absolute source_path on disk, unique by construction; pass it back to get_call_tree, find_related, and the --appmap filter. `kind` is "junit" (full test execution) or "request" (per-HTTP slice) or "other"; prefer junit recordings for full-flow context. EXAMPLE row: {"path":"/abs/path/to/customer-portal-api/tmp/appmap/junit/foo.appmap.json","label":"DuplicatePaymentRaceIT.concurrent_submissions","kind":"junit","route":"/api/v1/payments","status_code":500,...}.',
+        'Recording-level rows: one row per .appmap.json file with its sample request, branch, status, and counts. `appmap` filter is substring match against name and source_path. `path` is the canonical recording identifier (absolute file path on disk) — pass it back to `get_call_tree`, `find_related`, and the `--appmap` filter on other queries. `kind` ∈ {"junit" (full test), "request" (per-HTTP slice), "other"}; prefer junit for full-flow context.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -540,7 +540,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_calls',
       description:
-        'Function-call rows. Filter by class (substring), method (substring), label (substring; e.g. "log", "security.authorization"), duration. Use label="log" to retrieve application log output, or label="security.authorization" to find authorization checks. Returns Page<{appmap_name, event_id, fqid, defined_class, method_id, path, lineno, elapsed_ms, parameters_json, return_value}> = {rows, total, limit, offset}. parameters_json and return_value are populated only for labeled functions; unlabeled rows return null. Use path:lineno to read the source. EXAMPLES: find_calls(class="PaymentServiceImpl", method="submit") → all calls to that instance method across recordings; find_calls(class="PaymentServiceImpl#submit") → equivalent (class+method may be combined); find_calls(class="PaymentServiceImpl", appmap="/abs/path/.../foo.appmap.json") → scoped to one recording; find_calls(label="security.authorization") → all authorization checks. When the result is empty, the response includes a `diagnostic` object with `did_you_mean` suggestions and a `hint` — read it before guessing another identifier shape. Class syntax: short ("Cipher") matches any leaf class with that name; package-qualified ("app/services/Payment") strict-matches; "Class#method" for instance, "Class.method" for static.',
+        'Function-call rows. Filter by `class` (substring), `method` (substring), `label` (e.g. "log", "security.authorization"), `duration`, `appmap`. Class syntax: short ("Cipher") matches any leaf class; package-qualified ("app/services/Payment") strict-matches; "Class#method" for instance, "Class.method" for static; class+method may be combined. parameters_json and return_value are populated only on labeled rows. When the result is empty, response includes `diagnostic.did_you_mean` and a `hint` — read it before guessing another identifier shape.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -583,7 +583,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_logs',
       description:
-        'Application log lines captured from functions labeled `log`. Filter by message substring (matches across the call\'s parameters and return value), logger class (substring), recording, branch, or time window. Returns Page<{appmap_name, event_id, parent_event_id, logger, method_id, path, lineno, message, parameters_json, return_value}> = {rows, total, limit, offset}. `message` is the display-projected log text (extracted from a structured return_value or from the parameter named message/msg, falling back to the first string parameter); use it directly. parameters_json and return_value remain available for the underlying captured values. Use path:lineno to read the call site of the log statement.',
+        'Application log lines captured from functions labeled `log`. Filter by `message` (substring), `class` (logger), recording, branch, or time. `message` is the display-projected log text — use it directly. Use path:lineno to read the call site.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -614,7 +614,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_exceptions',
       description:
-        'Exception rows with class, message, source location. Filter by exception class name (substring), the request that owns the exception (via route/status), branch, or time window. Returns Page<{appmap_id, appmap_name, event_id, return_event_id, exception_class, message, path, lineno, recent_logs?}> = {rows, total, limit, offset}. event_id is the throwing call\'s entry id; return_event_id is the throw point in the event stream. Pass with_logs=N to attach the last N log lines preceding the throw (chronological order) under recent_logs — usually the fastest way to see what the app reported before the failure. recent_logs uses return_event_id as the upper bound, so logs that fired *inside* the throwing call are included.',
+        'Exception rows with class, message, source location. Filter by exception class (substring), route, status, branch, or time. Pass `with_logs=N` to attach the last N log lines preceding the throw under `recent_logs` — usually the fastest way to see what the app reported before the failure (logs from inside the throwing call are included).',
       inputSchema: {
         type: 'object',
         properties: {
@@ -644,7 +644,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'get_call_tree',
       description:
-        'Call tree of one recording. Without focus, returns every event. With focus_type + focus_value, narrows to the neighborhood of matching events: focus_type ∈ {function, sql_query, http_server_request, http_client_request}, focus_value is the matching identifier (fqid / SQL substring / normalized_path / URL substring). Use min_elapsed_ms to prune fast leaves. The appmap argument MUST be the canonical `path` field returned by find_recordings — that is the absolute file path on disk, which the schema guarantees unique. Recording names, basenames, numeric ids, and display labels are rejected with an error pointing at the path field. Returns {nodes, truncated, max_depth_reached, chosen_params, reason?, diagnostic?, summary_mode?, suggested_drilldown?, next_step?}: nodes are ordered events each with depth, kind ∈ {function, sql, http_server, http_client, exception, log}, event_id, parent_event_id, elapsed_ms, plus kind-specific fields (function: fqid/defined_class/method_id/path/lineno/parameters_json/return_value; sql: sql_text; http_server: method/route/status_code; http_client: method/url/status_code; exception: exception_class/message/path/lineno). truncated=true means the descendant budget cut off subtrees; next_step contains the exact follow-up call to drill deeper. truncated=false means the returned tree is complete — re-querying with deeper depth would return identical content. chosen_params reports the parent_depth/child_depth/focus actually used so callers see when defaults were auto-selected; reason explains why (only set when something non-default happened). When focus_type+focus_value match nothing in the recording, diagnostic explains what is available so the agent can re-aim the focus instead of guessing. summary_mode=true means the recording was too large to render in full at any depth — nodes contains only entry-points and exceptions, and suggested_drilldown lists the top-N most-expensive functions by elapsed_ms (each with fqid, event_id, elapsed_ms, child_count) so the agent can drill in via focus_type=function on a specific fqid. Use path:lineno on function and exception nodes to read the source. EXAMPLES: get_call_tree(appmap="/abs/path/.../MyIT_test.appmap.json") → tree at auto-selected depth (shallow on broad junit/process recordings, full on narrow per-request recordings); get_call_tree(appmap="/abs/.../foo.appmap.json", focus_type="function", focus_value="app/Payment#submit") → tree slice centered on that function at default depths (parent=5, child=4); add child_depth=6 if the previous response had truncated=true.',
+        'Call tree of one recording. **First call**: `get_call_tree(appmap=<path>)` — auto-selects depths based on recording shape; check `chosen_params` in the response and refine only if needed. `appmap` must be the `path` field from `find_recordings` (absolute file path; names/ids rejected). Optional params: `focus_type` ∈ {function, sql_query, http_server_request, http_client_request} + `focus_value` to narrow to a function/SQL/route; `child_depth=N` to override auto-tune; `min_elapsed_ms` to prune fast leaves. Response signals to refine on: `chosen_params` (what was auto-picked), `truncated` + `next_step` (subtrees cut, drill deeper), `summary_mode` + `suggested_drilldown` (recording too big — drill into named fqids), `diagnostic` (focus matched nothing — re-aim).',
       inputSchema: {
         type: 'object',
         properties: {
