@@ -774,4 +774,200 @@ describe('MCP handler', () => {
       }
     });
   });
+
+  describe('get_call_tree default selection', () => {
+    function seedRecording(
+      db: sqlite3.Database,
+      opts: { recorderType: string; eventCount: number; httpRequestCount?: number; sourcePath?: string }
+    ): { id: number; path: string } {
+      const path = opts.sourcePath ?? '/tmp/auto.appmap.json';
+      const am = db
+        .prepare(
+          `INSERT INTO appmaps (name, source_path, recorder_type, event_count, http_request_count, sql_query_count, elapsed_ms, timestamp)
+           VALUES ('auto', ?, ?, ?, ?, 0, 50, '2026-04-29T12:00:00.000Z')`
+        )
+        .run(path, opts.recorderType, opts.eventCount, opts.httpRequestCount ?? 0);
+      // Add at least one event so tree() returns something. The
+      // recorded event_count above is what the heuristic reads — the
+      // actual rows can be sparse for tests that don't care about depth.
+      db.prepare(
+        `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, defined_class, method_id, path, lineno, elapsed_ms)
+         VALUES (?, 1, NULL, 'App', 'main', '/src/App.java', 1, 5)`
+      ).run(am.lastInsertRowid);
+      return { id: Number(am.lastInsertRowid), path };
+    }
+
+    it('auto-selects child_depth=2 on broad recordings (event_count > 500)', () => {
+      const db = freshDb();
+      try {
+        const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 1500 });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 500,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: path } },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        expect(out.chosen_params).toEqual({
+          parent_depth: null,
+          child_depth: 2,
+          focus_type: null,
+          focus_value: null,
+        });
+        expect(out.reason).toMatch(/1500 events/);
+        expect(out.reason).toMatch(/child_depth=2/);
+      } finally {
+        db.close();
+      }
+    });
+
+    it('keeps default child_depth on narrow per-request recordings', () => {
+      const db = freshDb();
+      try {
+        const { path } = seedRecording(db, {
+          recorderType: 'http_server_request',
+          eventCount: 5000,
+          httpRequestCount: 1,
+        });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 501,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: path } },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        // Narrow recordings keep the existing default — chosen child_depth
+        // is undefined here because the user didn't supply one and the
+        // heuristic didn't pre-select one. tree() applies its own default
+        // (DEFAULT_DESCENDANTS=4) internally.
+        expect(out.chosen_params.child_depth).toBeNull();
+        expect(out.chosen_params.focus_type).toBeNull();
+        expect(out.reason).toBeUndefined();
+      } finally {
+        db.close();
+      }
+    });
+
+    it('keeps default child_depth on small recordings regardless of recorder_type', () => {
+      const db = freshDb();
+      try {
+        const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 100 });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 502,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: path } },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        expect(out.chosen_params.child_depth).toBeNull();
+        expect(out.reason).toBeUndefined();
+      } finally {
+        db.close();
+      }
+    });
+
+    it('respects explicit child_depth even on broad recordings', () => {
+      const db = freshDb();
+      try {
+        const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 1500 });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 503,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: path, child_depth: 6 } },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        expect(out.chosen_params.child_depth).toBe(6);
+        // The auto-reason is suppressed when the user specified the value.
+        expect(out.reason).toBeUndefined();
+      } finally {
+        db.close();
+      }
+    });
+
+    it('returns a diagnostic when focus excludes everything', () => {
+      const db = freshDb();
+      try {
+        // junit recording with no http server requests; agent tries to
+        // focus on http_server_request and gets nothing back.
+        const { path } = seedRecording(db, {
+          recorderType: 'tests',
+          eventCount: 100,
+          httpRequestCount: 0,
+        });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 504,
+          method: 'tools/call',
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: path, focus_type: 'http_server_request', focus_value: '/anything' },
+          },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        expect(out.nodes).toEqual([]);
+        expect(out.diagnostic).toMatch(/no events of type 'http_server_request'/);
+        expect(out.diagnostic).toMatch(/recorder_type=tests/);
+        expect(out.diagnostic).toMatch(/no HTTP server requests/);
+        expect(out.chosen_params.focus_type).toBe('http_server_request');
+      } finally {
+        db.close();
+      }
+    });
+
+    it('falls back to summary_mode when the response would exceed the budget', () => {
+      const db = freshDb();
+      try {
+        // Insert one entry-point HTTP request + many fat function calls
+        // so the JSON serialization easily clears RESPONSE_BUDGET_CHARS
+        // (40_000). Each row carries a kilobyte of parameters_json so we
+        // hit the budget without seeding tens of thousands of rows.
+        const am = db
+          .prepare(
+            `INSERT INTO appmaps (name, source_path, recorder_type, event_count, http_request_count, sql_query_count, elapsed_ms, timestamp)
+             VALUES ('big', '/tmp/big.appmap.json', 'tests', 5000, 1, 0, 5000, '2026-04-29T12:00:00.000Z')`
+          )
+          .run();
+        const id = am.lastInsertRowid;
+        db.prepare(
+          `INSERT INTO http_requests (appmap_id, event_id, parent_event_id, method, path, status_code, elapsed_ms)
+           VALUES (?, 1, NULL, 'GET', '/api/big', 200, 5000)`
+        ).run(id);
+        const big = 'x'.repeat(1024);
+        for (let i = 2; i < 100; i += 1) {
+          db.prepare(
+            `INSERT INTO function_calls (appmap_id, event_id, parent_event_id, defined_class, method_id, path, lineno, elapsed_ms, parameters_json)
+             VALUES (?, ?, 1, 'C', 'm', '/src/C.java', ?, ?, ?)`
+          ).run(id, i, i, i, JSON.stringify([{ value: big }]));
+        }
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 505,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: '/tmp/big.appmap.json' } },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        expect(out.summary_mode).toBe(true);
+        expect(out.nodes.some((n: any) => n.kind === 'http_server')).toBe(true);
+        expect(out.nodes.some((n: any) => n.kind === 'function')).toBe(false);
+        expect(Array.isArray(out.suggested_drilldown)).toBe(true);
+        expect(out.suggested_drilldown.length).toBeGreaterThan(0);
+        expect(out.suggested_drilldown[0]).toEqual(
+          expect.objectContaining({
+            event_id: expect.any(Number),
+            elapsed_ms: expect.any(Number),
+            child_count: expect.any(Number),
+          })
+        );
+        // Drilldown is sorted by elapsed_ms desc.
+        const elapsed: number[] = out.suggested_drilldown.map((d: any) => d.elapsed_ms);
+        for (let i = 1; i < elapsed.length; i += 1) {
+          expect(elapsed[i - 1]).toBeGreaterThanOrEqual(elapsed[i]);
+        }
+        expect(out.reason).toMatch(/over the .*-char budget/);
+      } finally {
+        db.close();
+      }
+    });
+  });
 });
