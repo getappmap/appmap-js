@@ -32,6 +32,7 @@ import { Page } from '../lib/page';
 import { parseDuration, parseStatus, parseTime } from '../lib/parseFilter';
 import { decorateRecording, resolveAppmapPath } from '../lib/recordingId';
 import { suggestSimilarFunctionIds } from '../lib/suggestSimilarFunctionIds';
+import { renderTreeForMcp, renderTreeForMcpBudgeted } from '../lib/treeRender';
 
 export interface JsonRpcRequest {
   jsonrpc: '2.0';
@@ -144,10 +145,26 @@ function maybeCompareSort(s: unknown): CompareSort | undefined {
 // (typically 1k+ events) in the corpus we observed.
 const BROAD_EVENT_THRESHOLD = 500;
 
-// Default child_depth used when an explicit value isn't supplied and
-// the recording is classified as broad. Two levels keeps the response
-// small enough that even a 10k-event recording stays within budget.
+// Default child_depth used in JSON mode when an explicit value isn't
+// supplied and the recording is classified as broad. Two levels keeps
+// the response small enough that even a 10k-event recording stays
+// within budget. Text mode uses byte-budgeted rendering instead — see
+// DEFAULT_MAX_CHARS — and skips this path.
 const BROAD_DEFAULT_CHILD_DEPTH = 2;
+
+// Default byte budget for text-mode get_call_tree responses. Sized at
+// roughly the p90 of historical response sizes on the omnibank corpus
+// so common calls pass through whole and outliers (junit-scope
+// recordings hitting deep filter/service chains) get a small clip at
+// the cut sites. Agents can override by passing max_chars explicitly;
+// can also force an unclipped response by passing a very large value.
+const DEFAULT_MAX_CHARS = 12_000;
+
+// When max_chars is in effect, fetch this many descendant levels from
+// the DB; the renderer trims by bytes. Picked deep enough that the
+// budgeted renderer has more material than it needs, but not unbounded
+// — at 8 levels even pathological recordings stay query-able.
+const DEEP_FETCH_DEPTH_FOR_BUDGET = 8;
 
 // Roughly 10K tokens at ~4 chars/token. Past this, fall back to summary
 // mode rather than serializing a tree the agent can't usefully process.
@@ -281,6 +298,44 @@ function buildSummaryResponse(
       `(over the ${RESPONSE_BUDGET_CHARS}-char budget). Returned entry-points and exceptions only; ` +
       `use suggested_drilldown[].fqid with focus_type='function' to drill into specific calls.`,
     suggested_drilldown: drilldown,
+  };
+}
+
+// Project the get_call_tree response according to the agent-requested
+// format. `text` (default) replaces the `nodes` array with a `tree`
+// string (indented one-line-per-event, prefixed with #event_id for
+// drilldown). `json` returns nodes unchanged. The metadata envelope
+// (chosen_params, truncated, diagnostic, etc.) is preserved in both.
+// When `maxChars` is given with text format, the renderer fills the
+// budget breadth-first and emits inline clip markers; the result's
+// clip stats surface to the agent so it can drill if it wants more.
+function projectTreeResponse(
+  result: Record<string, unknown>,
+  format: 'text' | 'json',
+  maxChars?: number
+): Record<string, unknown> {
+  if (format === 'json') return result;
+  const nodes = (result.nodes as TreeNode[] | undefined) ?? [];
+  const { nodes: _drop, ...rest } = result;
+  if (maxChars !== undefined) {
+    const r = renderTreeForMcpBudgeted(nodes, maxChars);
+    return {
+      tree: r.tree,
+      node_count: nodes.length,
+      rendered_events: r.rendered_events,
+      clipped_events: r.clipped_events,
+      clipped_bytes: r.clipped_bytes,
+      cutoff_depth: r.cutoff_depth,
+      partial_depth: r.partial_depth,
+      bytes_used: r.bytes_used,
+      max_chars: maxChars,
+      ...rest,
+    };
+  }
+  return {
+    tree: renderTreeForMcp(nodes),
+    node_count: nodes.length,
+    ...rest,
   };
 }
 
@@ -644,7 +699,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'get_call_tree',
       description:
-        'Call tree of one recording. **First call**: `get_call_tree(appmap=<path>)` — auto-selects depths based on recording shape; check `chosen_params` in the response and refine only if needed. `appmap` must be the `path` field from `find_recordings` (absolute file path; names/ids rejected). Optional params: `focus_type` ∈ {function, sql_query, http_server_request, http_client_request} + `focus_value` to narrow to a function/SQL/route; `child_depth=N` to override auto-tune; `min_elapsed_ms` to prune fast leaves. Response signals to refine on: `chosen_params` (what was auto-picked), `truncated` + `next_step` (subtrees cut, drill deeper), `summary_mode` + `suggested_drilldown` (recording too big — drill into named fqids), `diagnostic` (focus matched nothing — re-aim).',
+        'Call tree of one recording. **First call**: `get_call_tree(appmap=<path>)` — returns text-format tree, capped at 12,000 chars by default with inline `[clipped: N events, B bytes; drill via child_depth=K or focus on #event]` markers at cut sites. `appmap` must be the `path` field from `find_recordings` (absolute file path; names/ids rejected). Optional params: `max_chars=N` to widen or narrow the byte budget; `child_depth=N` to cap fetch depth (caps what the budget can render); `focus_type` ∈ {function, sql_query, http_server_request, http_client_request} + `focus_value` to narrow to a function/SQL/route; `min_elapsed_ms` to prune fast leaves; `format="json"` for nodes[] with full structured fields (args/return_value/etc.) — JSON ignores max_chars and uses the legacy depth auto-tune. Response signals: `clipped_events`/`clipped_bytes` + per-marker drill anchors; `summary_mode` + `suggested_drilldown` (JSON only — recording too big at fetched depth); `diagnostic` (focus matched nothing — re-aim).',
       inputSchema: {
         type: 'object',
         properties: {
@@ -665,6 +720,17 @@ const TOOLS: ToolImpl[] = [
               'Descendant levels. When omitted, defaults to 4 for narrow per-request recordings and 2 for broad junit/process recordings (event_count > 500).',
           },
           min_elapsed_ms: { type: 'number' },
+          format: {
+            type: 'string',
+            enum: ['text', 'json'],
+            description:
+              'Tree-body format. `text` (default): indented one-line-per-event, prefixed with `#event_id` for drilldown. `json`: nodes[] array with full structured fields (args, return_value, etc.). Text is ~3-5× more compact; use json when you need structured fields the text form drops.',
+          },
+          max_chars: {
+            type: 'integer',
+            description:
+              'Byte budget for the rendered tree. Default 12000 in text mode. Breadth-first fill: each depth completes before the next, the final layer partial-fills in event_id order, clipped subtrees get inline `[clipped: N events, B bytes; drill via child_depth=K or focus on #event]` markers at the cut sites. Response surfaces `rendered_events`, `clipped_events`, `clipped_bytes`, `cutoff_depth`, `partial_depth`. When both `max_chars` and `child_depth` are set, both apply as upper bounds — the more restrictive wins on each axis (bytes can only shrink what depth provides; depth can only cap what bytes would have allowed). Ignored for `format=json`.',
+          },
         },
         required: ['appmap'],
       },
@@ -677,15 +743,31 @@ const TOOLS: ToolImpl[] = [
       const focusValue = maybeString(args.focus_value);
       const parentDepthIn = maybeNumber(args.parent_depth);
       const childDepthIn = maybeNumber(args.child_depth);
+      const format = maybeString(args.format) === 'json' ? 'json' : 'text';
+      // Text mode: max_chars governs the response by default. Caller
+      // can override by passing max_chars; json mode ignores max_chars
+      // (the auto-tune below + RESPONSE_BUDGET_CHARS summary fallback
+      // serve as the safety net there).
+      const maxCharsIn = maybeNumber(args.max_chars);
+      const maxChars =
+        format === 'text' ? (maxCharsIn ?? DEFAULT_MAX_CHARS) : maxCharsIn;
 
-      // Auto-select child_depth on broad recordings (junit/process w/ many
-      // events). Per-request recordings and small recordings keep the
-      // existing default. The chosen value is reported back in
-      // chosen_params so the agent can refine without trial and error.
+      // Pick the DB-fetch depth. Text mode (the default) goes through
+      // the byte-budgeted renderer, so we fetch deep and let the
+      // renderer trim — depth-based pre-pruning would hide useful
+      // material from the budget fill. JSON mode keeps the legacy
+      // event-count auto-tune as a safety net since max_chars doesn't
+      // apply there.
       const broadDefault = isBroadRecording(shape);
       let chosenChildDepth = childDepthIn;
       let autoReason: string | undefined;
-      if (chosenChildDepth === undefined && broadDefault) {
+      if (chosenChildDepth === undefined && format === 'text') {
+        chosenChildDepth = DEEP_FETCH_DEPTH_FOR_BUDGET;
+        autoReason =
+          `text mode (max_chars=${maxChars}); fetching deep ` +
+          `(child_depth=${DEEP_FETCH_DEPTH_FOR_BUDGET}) and letting the renderer ` +
+          `trim by bytes. Pass child_depth explicitly to cap depth.`;
+      } else if (chosenChildDepth === undefined && broadDefault) {
         chosenChildDepth = BROAD_DEFAULT_CHILD_DEPTH;
         autoReason =
           `${shape.recorder_type ?? 'process-wide'} recording has ${shape.event_count} events; ` +
@@ -720,28 +802,49 @@ const TOOLS: ToolImpl[] = [
       // signal the agent only sees nodes:[] and can't tell whether the
       // filter was wrong or the recording genuinely lacked the kind.
       if (focusType && focusValue && meta.nodes.length === 0) {
-        return {
+        return projectTreeResponse(
+          {
+            ...meta,
+            chosen_params: chosenParams,
+            ...(autoReason ? { reason: autoReason } : {}),
+            diagnostic: buildEmptyFocusDiagnostic(focusType, shape),
+          },
+          format,
+          maxChars
+        );
+      }
+
+      // When the caller supplied max_chars with text format, the
+      // budgeted renderer handles clipping inline — skip summary-mode
+      // fallback entirely.
+      if (maxChars === undefined || format !== 'text') {
+        // Budget check: if the rendered response would still be huge, fall
+        // back to summary mode (entry-points + exceptions in `nodes`,
+        // top-N functions in `suggested_drilldown`). Avoids the LLM seeing
+        // a truncated-mid-traversal tree that gives no useful evidence.
+        // For budget projection use the format the agent actually asked
+        // for — text bodies are 3-5× smaller, so a tree that overflows
+        // in json may fit easily in text and shouldn't be summarized.
+        const projected =
+          format === 'text'
+            ? renderTreeForMcp(meta.nodes).length +
+              JSON.stringify({ chosen_params: chosenParams }).length
+            : JSON.stringify({ ...meta, chosen_params: chosenParams }).length;
+        if (projected > RESPONSE_BUDGET_CHARS) {
+          const summary = buildSummaryResponse(meta, chosenParams, shape, projected);
+          return projectTreeResponse(summary, format, maxChars);
+        }
+      }
+
+      return projectTreeResponse(
+        {
           ...meta,
           chosen_params: chosenParams,
           ...(autoReason ? { reason: autoReason } : {}),
-          diagnostic: buildEmptyFocusDiagnostic(focusType, shape),
-        };
-      }
-
-      // Budget check: if the rendered response would still be huge, fall
-      // back to summary mode (entry-points + exceptions in `nodes`,
-      // top-N functions in `suggested_drilldown`). Avoids the LLM seeing
-      // a truncated-mid-traversal tree that gives no useful evidence.
-      const projected = JSON.stringify({ ...meta, chosen_params: chosenParams });
-      if (projected.length > RESPONSE_BUDGET_CHARS) {
-        return buildSummaryResponse(meta, chosenParams, shape, projected.length);
-      }
-
-      return {
-        ...meta,
-        chosen_params: chosenParams,
-        ...(autoReason ? { reason: autoReason } : {}),
-      };
+        },
+        format,
+        maxChars
+      );
     },
   },
 
