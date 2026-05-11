@@ -216,7 +216,12 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: {
           name: 'get_call_tree',
-          arguments: { appmap: path, focus_type: 'sql_query', focus_value: 'INSERT INTO orders' },
+          arguments: {
+            appmap: path,
+            focus_type: 'sql_query',
+            focus_value: 'INSERT INTO orders',
+            format: 'json',
+          },
         },
       });
       const result = JSON.parse((r!.result as any).content[0].text);
@@ -615,7 +620,8 @@ describe('MCP handler', () => {
           params: { name: 'get_call_tree', arguments: { appmap: junit.path } },
         });
         expect(ok!.error).toBeUndefined();
-        expect(JSON.parse((ok!.result as any).content[0].text).nodes).toBeDefined();
+        // Text mode is default; response surface is `tree` (string).
+        expect(typeof JSON.parse((ok!.result as any).content[0].text).tree).toBe('string');
 
         // Recording name: rejected.
         const byName = call(handler, {
@@ -797,7 +803,7 @@ describe('MCP handler', () => {
       return { id: Number(am.lastInsertRowid), path };
     }
 
-    it('auto-selects child_depth=2 on broad recordings (event_count > 500)', () => {
+    it('auto-selects child_depth=2 on broad recordings in JSON mode (event_count > 500)', () => {
       const db = freshDb();
       try {
         const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 1500 });
@@ -805,7 +811,7 @@ describe('MCP handler', () => {
           jsonrpc: '2.0',
           id: 500,
           method: 'tools/call',
-          params: { name: 'get_call_tree', arguments: { appmap: path } },
+          params: { name: 'get_call_tree', arguments: { appmap: path, format: 'json' } },
         });
         const out = JSON.parse((r!.result as any).content[0].text);
         expect(out.chosen_params).toEqual({
@@ -821,7 +827,7 @@ describe('MCP handler', () => {
       }
     });
 
-    it('keeps default child_depth on narrow per-request recordings', () => {
+    it('JSON mode keeps default child_depth on narrow per-request recordings', () => {
       const db = freshDb();
       try {
         const { path } = seedRecording(db, {
@@ -833,7 +839,7 @@ describe('MCP handler', () => {
           jsonrpc: '2.0',
           id: 501,
           method: 'tools/call',
-          params: { name: 'get_call_tree', arguments: { appmap: path } },
+          params: { name: 'get_call_tree', arguments: { appmap: path, format: 'json' } },
         });
         const out = JSON.parse((r!.result as any).content[0].text);
         // Narrow recordings keep the existing default — chosen child_depth
@@ -848,7 +854,7 @@ describe('MCP handler', () => {
       }
     });
 
-    it('keeps default child_depth on small recordings regardless of recorder_type', () => {
+    it('JSON mode keeps default child_depth on small recordings regardless of recorder_type', () => {
       const db = freshDb();
       try {
         const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 100 });
@@ -856,7 +862,7 @@ describe('MCP handler', () => {
           jsonrpc: '2.0',
           id: 502,
           method: 'tools/call',
-          params: { name: 'get_call_tree', arguments: { appmap: path } },
+          params: { name: 'get_call_tree', arguments: { appmap: path, format: 'json' } },
         });
         const out = JSON.parse((r!.result as any).content[0].text);
         expect(out.chosen_params.child_depth).toBeNull();
@@ -866,7 +872,7 @@ describe('MCP handler', () => {
       }
     });
 
-    it('respects explicit child_depth even on broad recordings', () => {
+    it('JSON mode respects explicit child_depth even on broad recordings', () => {
       const db = freshDb();
       try {
         const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 1500 });
@@ -874,12 +880,111 @@ describe('MCP handler', () => {
           jsonrpc: '2.0',
           id: 503,
           method: 'tools/call',
-          params: { name: 'get_call_tree', arguments: { appmap: path, child_depth: 6 } },
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: path, child_depth: 6, format: 'json' },
+          },
         });
         const out = JSON.parse((r!.result as any).content[0].text);
         expect(out.chosen_params.child_depth).toBe(6);
         // The auto-reason is suppressed when the user specified the value.
         expect(out.reason).toBeUndefined();
+      } finally {
+        db.close();
+      }
+    });
+
+    it('text mode (default) replaces JSON nodes[] with a budgeted tree string', () => {
+      const db = freshDb();
+      try {
+        const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 1500 });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 510,
+          method: 'tools/call',
+          params: { name: 'get_call_tree', arguments: { appmap: path } },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        // Text mode replaces nodes[] with `tree` + clip stats and applies
+        // the default 12K byte budget.  child_depth is the deep-fetch
+        // value (DEEP_FETCH_DEPTH_FOR_BUDGET), not the legacy broad
+        // auto-tune value, so the renderer has material to trim from.
+        expect(typeof out.tree).toBe('string');
+        expect(out.nodes).toBeUndefined();
+        expect(out.max_chars).toBe(12_000);
+        expect(out.chosen_params.child_depth).toBe(8);
+        expect(out.reason).toMatch(/text mode/);
+        expect(out.reason).toMatch(/child_depth=8/);
+      } finally {
+        db.close();
+      }
+    });
+
+    it('text mode honors an explicit max_chars override', () => {
+      const db = freshDb();
+      try {
+        const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 1500 });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 511,
+          method: 'tools/call',
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: path, max_chars: 4_000 },
+          },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        expect(out.max_chars).toBe(4_000);
+        expect(out.bytes_used).toBeLessThanOrEqual(4_000);
+      } finally {
+        db.close();
+      }
+    });
+
+    it('text mode honors explicit child_depth as a depth ceiling alongside max_chars', () => {
+      // Both ceilings apply.  child_depth caps the DB fetch (the renderer
+      // never sees deeper nodes); max_chars caps the rendered bytes.
+      const db = freshDb();
+      try {
+        const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 1500 });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 512,
+          method: 'tools/call',
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: path, child_depth: 2, max_chars: 20_000 },
+          },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        expect(out.chosen_params.child_depth).toBe(2);
+        expect(out.max_chars).toBe(20_000);
+        // No auto-reason — caller picked child_depth explicitly.
+        expect(out.reason).toBeUndefined();
+      } finally {
+        db.close();
+      }
+    });
+
+    it('json mode ignores max_chars', () => {
+      const db = freshDb();
+      try {
+        const { path } = seedRecording(db, { recorderType: 'tests', eventCount: 1500 });
+        const r = call(buildMcpHandler(db), {
+          jsonrpc: '2.0',
+          id: 513,
+          method: 'tools/call',
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: path, max_chars: 1_000, format: 'json' },
+          },
+        });
+        const out = JSON.parse((r!.result as any).content[0].text);
+        // JSON mode keeps the legacy nodes[] surface; max_chars isn't
+        // surfaced in the response.
+        expect(out.max_chars).toBeUndefined();
+        expect(out.tree).toBeUndefined();
+        expect(Array.isArray(out.nodes)).toBe(true);
       } finally {
         db.close();
       }
@@ -901,7 +1006,12 @@ describe('MCP handler', () => {
           method: 'tools/call',
           params: {
             name: 'get_call_tree',
-            arguments: { appmap: path, focus_type: 'http_server_request', focus_value: '/anything' },
+            arguments: {
+              appmap: path,
+              focus_type: 'http_server_request',
+              focus_value: '/anything',
+              format: 'json',
+            },
           },
         });
         const out = JSON.parse((r!.result as any).content[0].text);
@@ -915,7 +1025,7 @@ describe('MCP handler', () => {
       }
     });
 
-    it('falls back to summary_mode when the response would exceed the budget', () => {
+    it('json mode falls back to summary_mode when the response would exceed the budget', () => {
       const db = freshDb();
       try {
         // Insert one entry-point HTTP request + many fat function calls
@@ -944,7 +1054,10 @@ describe('MCP handler', () => {
           jsonrpc: '2.0',
           id: 505,
           method: 'tools/call',
-          params: { name: 'get_call_tree', arguments: { appmap: '/tmp/big.appmap.json' } },
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: '/tmp/big.appmap.json', format: 'json' },
+          },
         });
         const out = JSON.parse((r!.result as any).content[0].text);
         expect(out.summary_mode).toBe(true);
