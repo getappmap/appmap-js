@@ -447,7 +447,16 @@ function matchesFocus(node: TreeNode, options: TreeOptions): boolean {
     return node.sql_text.toLowerCase().includes(options.focusSql.toLowerCase());
   }
   if (options.focusRoute && node.kind === 'http_server') {
-    return node.route === options.focusRoute;
+    // Accept "METHOD /path" (the natural concatenation when an agent reads
+    // back {method, route} pairs from other tools) or bare "/path".
+    const focus = options.focusRoute.trim();
+    const spaceIdx = focus.indexOf(' ');
+    if (spaceIdx > 0 && focus.slice(0, spaceIdx).toUpperCase() === focus.slice(0, spaceIdx)) {
+      const focusMethod = focus.slice(0, spaceIdx);
+      const focusPath = focus.slice(spaceIdx + 1).trim();
+      return node.method.toUpperCase() === focusMethod && node.route === focusPath;
+    }
+    return node.route === focus;
   }
   if (options.focusUrl && node.kind === 'http_client') {
     return node.url.toLowerCase().includes(options.focusUrl.toLowerCase());
