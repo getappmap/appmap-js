@@ -759,6 +759,74 @@ describe('MCP handler', () => {
       }
     });
 
+    it('get_call_tree resolves a unique project-relative path', () => {
+      // Callers (especially LLM clients) often quote a recording by the
+      // project-relative path they see in junit reports — e.g. the path
+      // logged by appmap-node. Accept the suffix match when it's
+      // unambiguous so the agent's first call works without an extra
+      // find_recordings round-trip.
+      const db = freshDb();
+      try {
+        db.prepare(
+          `INSERT INTO appmaps (name, source_path, git_branch, sql_query_count, elapsed_ms, timestamp)
+           VALUES ('foo', '/tmp/proj/customer-portal-api/tmp/appmap/junit/foo.appmap.json',
+                   'main', 0, 100, '2026-04-29T12:00:00.000Z')`
+        ).run();
+        db.prepare(
+          `INSERT INTO http_requests (appmap_id, event_id, parent_event_id, method, path, status_code, elapsed_ms)
+           VALUES (1, 1, NULL, 'GET', '/x', 200, 1)`
+        ).run();
+        const handler = buildMcpHandler(db);
+        const ok = call(handler, {
+          jsonrpc: '2.0',
+          id: 430,
+          method: 'tools/call',
+          params: {
+            name: 'get_call_tree',
+            arguments: {
+              appmap: 'customer-portal-api/tmp/appmap/junit/foo.appmap.json',
+            },
+          },
+        });
+        expect(ok!.error).toBeUndefined();
+        expect(typeof JSON.parse((ok!.result as any).content[0].text).tree).toBe('string');
+      } finally {
+        db.close();
+      }
+    });
+
+    it('get_call_tree errors with candidate paths when a relative path is ambiguous', () => {
+      const db = freshDb();
+      try {
+        db.prepare(
+          `INSERT INTO appmaps (name, source_path, git_branch, sql_query_count, elapsed_ms, timestamp)
+           VALUES ('foo', '/tmp/proj-a/tmp/appmap/junit/foo.appmap.json',
+                   'main', 0, 100, '2026-04-29T12:00:00.000Z')`
+        ).run();
+        db.prepare(
+          `INSERT INTO appmaps (name, source_path, git_branch, sql_query_count, elapsed_ms, timestamp)
+           VALUES ('foo', '/tmp/proj-b/tmp/appmap/junit/foo.appmap.json',
+                   'main', 0, 100, '2026-04-29T12:00:00.000Z')`
+        ).run();
+        const handler = buildMcpHandler(db);
+        const r = call(handler, {
+          jsonrpc: '2.0',
+          id: 431,
+          method: 'tools/call',
+          params: {
+            name: 'get_call_tree',
+            arguments: { appmap: 'tmp/appmap/junit/foo.appmap.json' },
+          },
+        });
+        expect(r!.error).toBeDefined();
+        expect(r!.error!.message).toMatch(/ambiguous/);
+        expect(r!.error!.message).toContain('/tmp/proj-a/tmp/appmap/junit/foo.appmap.json');
+        expect(r!.error!.message).toContain('/tmp/proj-b/tmp/appmap/junit/foo.appmap.json');
+      } finally {
+        db.close();
+      }
+    });
+
     it('get_call_tree rejects display-label refs with a hint', () => {
       const db = freshDb();
       try {
