@@ -48,6 +48,8 @@ notebooks
 tmp/appmap
 packages/*/tmp/
 packages/cli/tests/unit/fixtures/malformedParentId/parent_id_49_does_not_exist/
+# Gradle test fixtures regenerate their build/ trees on every run.
+packages/cli/tests/unit/fixtures/java/**/build/
 *.appmap.json
 .navie
 .run-stats
