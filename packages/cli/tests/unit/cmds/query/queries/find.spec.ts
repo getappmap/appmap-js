@@ -610,6 +610,46 @@ describe('findCalls', () => {
       db.close();
     }
   });
+
+  it('--event-id fetches exact calls by id', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            { event_id: 10, defined_class: 'Store', method_id: 'register' },
+            { event_id: 20, defined_class: 'Store', method_id: 'updateStatus' },
+            { event_id: 30, defined_class: 'Store', method_id: 'close' },
+          ],
+        },
+      ]);
+      const rows = findCalls(db, { eventIds: [10, 30] }).rows;
+      expect(rows.map((r) => r.event_id).sort((a, b) => a - b)).toEqual([10, 30]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('--event-id combines with --class to narrow within the id set', () => {
+    const db = freshDb();
+    try {
+      seed(db, [
+        {
+          name: 'a',
+          calls: [
+            { event_id: 10, defined_class: 'Store', method_id: 'register' },
+            { event_id: 20, defined_class: 'Service', method_id: 'close' },
+          ],
+        },
+      ]);
+      const rows = findCalls(db, { eventIds: [10, 20], className: 'Store' }).rows;
+      expect(rows).toHaveLength(1);
+      expect(rows[0].event_id).toBe(10);
+    } finally {
+      db.close();
+    }
+  });
 });
 
 describe('findLogs', () => {

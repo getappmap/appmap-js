@@ -50,6 +50,11 @@ export const builder = <T>(args: yargs.Argv<T>) => {
     .option('class', { type: 'string', describe: 'defined_class or fqid Class part' })
     .option('method', { type: 'string', describe: 'method_id (not HTTP method)' })
     .option('label', { type: 'string' })
+    .option('event-id', {
+      type: 'number',
+      array: true,
+      describe: 'exact event_id(s) to fetch (calls); repeatable',
+    })
     .option('branch', { type: 'string' })
     .option('commit', { type: 'string' })
     .option('status', { type: 'string', describe: 'e.g. 500, ">=500"' })
@@ -78,12 +83,12 @@ type Argv = ReturnType<typeof builder> extends yargs.Argv<infer T> ? T : never;
 // types where they make sense; flagging them on the wrong type is an
 // error rather than a silent no-op.
 const REJECTED_FLAGS: Record<FindType, readonly string[]> = {
-  appmaps: ['class', 'method', 'label', 'table', 'exception', 'logger', 'message', 'with-logs'],
-  requests: ['class', 'method', 'label', 'table', 'exception', 'logger', 'message', 'with-logs'],
-  queries: ['label', 'exception', 'logger', 'message', 'with-logs'],
+  appmaps: ['class', 'method', 'label', 'event-id', 'table', 'exception', 'logger', 'message', 'with-logs'],
+  requests: ['class', 'method', 'label', 'event-id', 'table', 'exception', 'logger', 'message', 'with-logs'],
+  queries: ['label', 'event-id', 'exception', 'logger', 'message', 'with-logs'],
   calls: ['table', 'exception', 'logger', 'message', 'with-logs'],
-  exceptions: ['class', 'method', 'label', 'duration', 'table', 'logger', 'message'],
-  logs: ['class', 'method', 'label', 'route', 'status', 'duration', 'table', 'exception', 'with-logs'],
+  exceptions: ['class', 'method', 'label', 'event-id', 'duration', 'table', 'logger', 'message'],
+  logs: ['class', 'method', 'label', 'event-id', 'route', 'status', 'duration', 'table', 'exception', 'with-logs'],
 };
 
 // Per-flag hints, attached to error messages when a rejected flag is used.
@@ -133,6 +138,16 @@ export function buildFindFilter(argv: Record<string, unknown>): ParsedFind {
   const filter: FindFilter = {};
   if (typeof argv.route === 'string') filter.route = argv.route;
   if (typeof argv.label === 'string') filter.label = argv.label;
+  // yargs camelCases --event-id into argv.eventId; read the kebab key
+  // too so direct test invocations don't depend on yargs coercion. A
+  // single --event-id arrives as a scalar, repeated ones as an array.
+  const eventIdArg = argv.eventId ?? argv['event-id'];
+  if (Array.isArray(eventIdArg)) {
+    const ids = eventIdArg.filter((n): n is number => typeof n === 'number');
+    if (ids.length > 0) filter.eventIds = ids;
+  } else if (typeof eventIdArg === 'number') {
+    filter.eventIds = [eventIdArg];
+  }
   if (typeof argv.branch === 'string') filter.branch = argv.branch;
   if (typeof argv.commit === 'string') filter.commit = argv.commit;
   if (typeof argv.status === 'string') filter.status = parseStatus(argv.status);

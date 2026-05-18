@@ -105,6 +105,13 @@ describe('find verb flag validation', () => {
       expect(() => validateFlags(type, { 'with-logs': 5 })).toThrow(/--with-logs/);
     }
   });
+
+  it('--event-id is accepted only on find calls', () => {
+    expect(() => validateFlags('calls', { 'event-id': [42] })).not.toThrow();
+    for (const type of ['appmaps', 'requests', 'queries', 'exceptions', 'logs'] as const) {
+      expect(() => validateFlags(type, { 'event-id': [42] })).toThrow(/--event-id/);
+    }
+  });
 });
 
 describe('buildFindFilter', () => {
@@ -154,6 +161,20 @@ describe('buildFindFilter', () => {
     expect(type).toBe('logs');
     expect(filter.logger).toBe('AppLogger');
     expect(filter.message).toBe('connection refused');
+  });
+
+  it('plumbs repeated --event-id into filter.eventIds (array)', () => {
+    const { filter } = buildFindFilter({ type: 'calls', eventId: [10, 30] });
+    expect(filter.eventIds).toEqual([10, 30]);
+  });
+
+  it('accepts a single --event-id scalar and the kebab key', () => {
+    expect(buildFindFilter({ type: 'calls', eventId: 42 }).filter.eventIds).toEqual([42]);
+    expect(buildFindFilter({ type: 'calls', 'event-id': [7] }).filter.eventIds).toEqual([7]);
+  });
+
+  it('leaves filter.eventIds undefined when --event-id is absent', () => {
+    expect(buildFindFilter({ type: 'calls' }).filter.eventIds).toBeUndefined();
   });
 });
 
