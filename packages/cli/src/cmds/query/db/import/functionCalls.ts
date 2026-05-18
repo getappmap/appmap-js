@@ -55,6 +55,8 @@ export function importFunctionCalls(
 
     let paramsJson: string | null = null;
     let returnVal: string | null = null;
+    // Parameters stay label-gated: several per call, bulky, and only
+    // worth capturing for the functions an investigator labeled.
     if (coId !== null && labeledCoIds.has(coId)) {
       const params = ev.parameters;
       if (Array.isArray(params) && params.length > 0) {
@@ -62,11 +64,16 @@ export function importFunctionCalls(
           params.map((p: any) => ({ name: p?.name, class: p?.class, value: p?.value }))
         );
       }
-      const rv = (ret as any).return_value;
-      if (rv && typeof rv === 'object') {
-        const value = rv.value;
-        returnVal = value == null ? null : String(value);
-      }
+    }
+    // Return values are captured for every call, labeled or not: one
+    // bounded string per call, and the highest-signal field for
+    // root-cause work — distinguishing sibling calls (e.g. two builders
+    // stamping different timestamps) needs the return values of plain,
+    // unlabeled domain code too.
+    const rv = (ret as any).return_value;
+    if (rv && typeof rv === 'object') {
+      const value = rv.value;
+      returnVal = value == null ? null : String(value);
     }
 
     stmt.run(
