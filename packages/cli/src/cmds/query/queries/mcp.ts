@@ -371,6 +371,13 @@ function buildFindFilter(args: Record<string, unknown>): FindFilter {
   if (typeof args.class === 'string') f.className = args.class;
   if (typeof args.method === 'string') f.method = args.method;
   if (typeof args.label === 'string') f.label = args.label;
+  // event_id: an array of exact ids, or a lone scalar for convenience.
+  if (Array.isArray(args.event_id)) {
+    const ids = args.event_id.filter((n): n is number => typeof n === 'number');
+    if (ids.length > 0) f.eventIds = ids;
+  } else if (typeof args.event_id === 'number') {
+    f.eventIds = [args.event_id];
+  }
   if (typeof args.branch === 'string') f.branch = args.branch;
   if (typeof args.commit === 'string') f.commit = args.commit;
   if (typeof args.status === 'string') f.status = parseStatus(args.status);
@@ -595,7 +602,7 @@ const TOOLS: ToolImpl[] = [
     spec: {
       name: 'find_calls',
       description:
-        'Function-call rows. Filter by `class` (substring), `method` (substring), `label` (e.g. "log", "security.authorization"), `duration`, `appmap`. Class syntax: short ("Cipher") matches any leaf class; package-qualified ("app/services/Payment") strict-matches; "Class#method" for instance, "Class.method" for static; class+method may be combined. parameters_json and return_value are populated only on labeled rows. When the result is empty, response includes `diagnostic.did_you_mean` and a `hint` — read it before guessing another identifier shape.',
+        'Function-call rows. Filter by `class` (substring), `method` (substring), `label` (e.g. "log", "security.authorization"), `duration`, `appmap`, or `event_id` (exact ids — e.g. drilled off a get_call_tree `#id` — returned with full, untruncated parameters_json / return_value). Class syntax: short ("Cipher") matches any leaf class; package-qualified ("app/services/Payment") strict-matches; "Class#method" for instance, "Class.method" for static; class+method may be combined. parameters_json and return_value are captured for every call. When the result is empty, response includes `diagnostic.did_you_mean` and a `hint` — read it before guessing another identifier shape.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -606,6 +613,12 @@ const TOOLS: ToolImpl[] = [
           },
           method: { type: 'string', description: 'Substring of the method name.' },
           label: { type: 'string', description: 'Substring of the label name.' },
+          event_id: {
+            type: 'array',
+            items: { type: 'integer' },
+            description:
+              'Exact event_id(s) to fetch — e.g. ids read off a get_call_tree `#id`. Returns those rows with full, untruncated parameters_json and return_value. Pass several ids in one call to drill a set of sibling calls at once.',
+          },
           duration: COMMON_FILTER_PROPERTIES.duration,
           route: COMMON_FILTER_PROPERTIES.route,
           status: COMMON_FILTER_PROPERTIES.status,

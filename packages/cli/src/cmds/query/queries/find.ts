@@ -21,6 +21,7 @@ export interface FindFilter {
   className?: string;      // --class (TS reserved word workaround)
   method?: string;         // --method (method_id, not HTTP method)
   label?: string;          // --label
+  eventIds?: number[];     // --event-id; exact event_id match (find calls)
   branch?: string;
   commit?: string;
   status?: NumberFilter;   // --status N / >=N
@@ -298,6 +299,13 @@ export function findCalls(db: sqlite3.Database, filter: FindFilter): Page<FindCa
       `fc.code_object_id IN (SELECT l.code_object_id FROM labels l WHERE l.label LIKE ?)`
     );
     params.push(`%${filter.label}%`);
+  }
+  // Exact event_id drill: fetch specific calls (e.g. ids read off a
+  // get_call_tree) so their full, untruncated parameters_json /
+  // return_value can be inspected.
+  if (filter.eventIds && filter.eventIds.length > 0) {
+    where.push(`fc.event_id IN (${filter.eventIds.map(() => '?').join(', ')})`);
+    params.push(...filter.eventIds);
   }
   const dur = durationClause(filter, 'fc.elapsed_ms');
   where.push(...dur.where);
