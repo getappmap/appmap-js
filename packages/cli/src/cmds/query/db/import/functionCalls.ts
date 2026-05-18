@@ -3,8 +3,8 @@ import sqlite3 from 'better-sqlite3';
 import type { ReturnEventLike } from './returnEventMap';
 
 // Import function call events. Each event is linked to a code_object via
-// (path, lineno) → classMap location, and gains parameter / return-value
-// capture iff the linked code_object has any labels.
+// (path, lineno) → classMap location, and captures parameters + return
+// value for every call.
 export function importFunctionCalls(
   db: sqlite3.Database,
   appmapId: number,
@@ -13,20 +13,6 @@ export function importFunctionCalls(
   parentEventMap: Map<number, number>,
   codeObjectLookup: Map<string, number>
 ): void {
-  // Set of code_object_ids that have labels — narrows param capture to the
-  // functions an investigator cares about (log, security.*, dao.*, …).
-  const labeledCoIds = new Set<number>();
-  if (codeObjectLookup.size > 0) {
-    const placeholders = new Array(codeObjectLookup.size).fill('?').join(',');
-    const ids = [...codeObjectLookup.values()];
-    const rows = db
-      .prepare(
-        `SELECT DISTINCT code_object_id FROM labels WHERE code_object_id IN (${placeholders})`
-      )
-      .all(...ids) as { code_object_id: number }[];
-    for (const r of rows) labeledCoIds.add(r.code_object_id);
-  }
-
   const stmt = db.prepare(
     `INSERT INTO function_calls (appmap_id, event_id, thread_id, parent_event_id,
       code_object_id, defined_class, method_id, path, lineno, is_static,
@@ -55,15 +41,17 @@ export function importFunctionCalls(
 
     let paramsJson: string | null = null;
     let returnVal: string | null = null;
-    // Parameters stay label-gated: several per call, bulky, and only
-    // worth capturing for the functions an investigator labeled.
-    if (coId !== null && labeledCoIds.has(coId)) {
-      const params = ev.parameters;
-      if (Array.isArray(params) && params.length > 0) {
-        paramsJson = JSON.stringify(
-          params.map((p: any) => ({ name: p?.name, class: p?.class, value: p?.value }))
-        );
-      }
+    // Parameters are captured for every call, labeled or not — symmetric
+    // with return_value below. For void methods params are the *only*
+    // runtime signal, and distinguishing sibling calls (e.g. updateStatus
+    // invoked with different newStatus args) needs them on plain,
+    // unlabeled domain code too. Storage keeps the full JSON; renderers
+    // apply a per-field budget when surfacing it compactly.
+    const params = ev.parameters;
+    if (Array.isArray(params) && params.length > 0) {
+      paramsJson = JSON.stringify(
+        params.map((p: any) => ({ name: p?.name, class: p?.class, value: p?.value }))
+      );
     }
     // Return values are captured for every call, labeled or not: one
     // bounded string per call, and the highest-signal field for

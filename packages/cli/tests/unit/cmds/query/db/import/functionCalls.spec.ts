@@ -69,7 +69,7 @@ describe('importFunctionCalls', () => {
     }
   });
 
-  it('captures parameters and return value for labeled functions', () => {
+  it('captures parameters and return value for a labeled function', () => {
     const db = freshDb();
     try {
       const appmapId = seedAppmap(db);
@@ -128,6 +128,51 @@ describe('importFunctionCalls', () => {
       ]);
       expect(row.return_value).toBe("'k-9281'");
       expect(row.is_static).toBe(1);
+    } finally {
+      db.close();
+    }
+  });
+
+  it('captures parameters for an unlabeled function (no label gating)', () => {
+    // Regression: parameter capture used to be gated on the code object
+    // carrying a label. A void domain method on an unlabeled class then
+    // had *both* parameters_json and return_value null — fully opaque.
+    const db = freshDb();
+    try {
+      const appmapId = seedAppmap(db);
+      // No classMap → coId stays null → the call is unlabeled.
+      const events = [
+        {
+          id: 1,
+          event: 'call',
+          thread_id: 1,
+          defined_class: 'SyndicationCloseStore',
+          method_id: 'updateStatus',
+          path: 'lending/SyndicationCloseStore.java',
+          lineno: 55,
+          parameters: [
+            { name: 'loanId', class: 'LoanId', value: 'LOAN-4c26df4c' },
+            { name: 'newStatus', class: 'Status', value: 'PREFLIGHT_OK' },
+          ],
+        },
+        // Void method: the return event carries no return_value.
+        { id: 2, event: 'return', parent_id: 1, elapsed: 0.001 },
+      ];
+      importFunctionCalls(
+        db,
+        appmapId,
+        events,
+        buildReturnEventMap(events),
+        buildParentEventMap(events),
+        new Map()
+      );
+      const row = db.prepare('SELECT * FROM function_calls').get() as any;
+      expect(row.code_object_id).toBeNull();
+      expect(JSON.parse(row.parameters_json)).toEqual([
+        { name: 'loanId', class: 'LoanId', value: 'LOAN-4c26df4c' },
+        { name: 'newStatus', class: 'Status', value: 'PREFLIGHT_OK' },
+      ]);
+      expect(row.return_value).toBeNull();
     } finally {
       db.close();
     }
