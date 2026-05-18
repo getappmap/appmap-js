@@ -83,8 +83,10 @@ function truncate(s: string, n: number): string {
 // Dense one-line-per-event rendering for MCP responses. Each line starts
 // with the event_id (so the agent can drill via find_calls/find_queries)
 // and includes file:line for source-reading without a follow-up call.
-// Trades structured-JSON fields (args, return_value) for ~3-5× token
-// savings; agents can query specific event_ids if they need detail.
+// Carries a truncated return value inline — the cheapest evidence that
+// distinguishes sibling calls (e.g. two builders stamping different
+// timestamps) — but drops parameters; agents query specific event_ids
+// or `format=json` for full, untruncated detail.
 export function renderTreeForMcp(nodes: readonly TreeNode[]): string {
   return nodes.map(renderTreeLineForMcp).join('\n');
 }
@@ -108,11 +110,20 @@ function renderTreeLineForMcp(node: TreeNode): string {
   }
 }
 
+// Return values are truncated to 120 chars — matching renderSql's budget.
+// Java/Ruby record-style toString()s front-load their fields, so the
+// distinguishing value (an id, a timestamp, a status) survives the cut.
+const MCP_RETURN_VALUE_CHARS = 120;
+
 function renderFunctionForMcp(n: FunctionNode): string {
   const id = n.fqid ?? `${n.defined_class}${n.is_static ? '.' : '#'}${n.method_id}`;
   const where =
     n.path != null ? ` (${n.path}${n.lineno != null ? `:${n.lineno}` : ''})` : '';
-  return `${id}${where} ${bracket(n.elapsed_ms)}`.trim();
+  const ret =
+    n.return_value != null
+      ? `  → ${truncate(n.return_value, MCP_RETURN_VALUE_CHARS)}`
+      : '';
+  return `${id}${where} ${bracket(n.elapsed_ms)}${ret}`.trim();
 }
 
 export interface BudgetedRenderResult {
