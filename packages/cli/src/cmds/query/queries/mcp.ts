@@ -609,9 +609,13 @@ const TOOLS: ToolImpl[] = [
           class: {
             type: 'string',
             description:
-              'Substring of the class identifier; canonical forms ("UserRepository", "app/services/UserRepository", "UserRepository#findById") get exact-or-leaf-class matching, but a partial like "Repo" also matches "UserRepository".',
+              'Class name. Bare class ("UserRepository") matches any leaf class with that name; slash-separated package form ("app/services/UserRepository") scopes to one definition; substrings match ("Repo" finds "UserRepository"). Combine with `method` to filter by both. On empty results, `diagnostic.hint` reports the actual indexed form to retry with.',
           },
-          method: { type: 'string', description: 'Substring of the method name.' },
+          method: {
+            type: 'string',
+            description:
+              'Method name. Bare identifier ("submit") or substring ("subm" finds "submit"). Combine with `class` to filter by both.',
+          },
           label: { type: 'string', description: 'Substring of the label name.' },
           event_id: {
             type: 'array',
