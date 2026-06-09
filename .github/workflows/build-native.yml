@@ -110,7 +110,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Prepare yarn
-        run: corepack prepare --activate
+        run: npm install -g yarn
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -156,7 +156,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Prepare yarn
-        run: corepack prepare --activate
+        run: npm install -g yarn
 
       - name: Cache node_modules
         uses: actions/cache@v4
