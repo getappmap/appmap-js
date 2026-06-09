@@ -107,7 +107,7 @@
     "ajv": "^8.6.3",
     "async": "^3.2.4",
     "axios": "^0.27.2",
-    "better-sqlite3": "^11.5.0",
+    "better-sqlite3": "^12.0.0",
     "body-parser": "^1.20.2",
     "boxen": "^5.0.1",
     "chalk": "^4.1.2",

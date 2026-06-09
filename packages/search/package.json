@@ -39,7 +39,7 @@
     "typescript-eslint": "^8.38.0"
   },
   "dependencies": {
-    "better-sqlite3": "^11.9.1",
+    "better-sqlite3": "^12.0.0",
     "cachedir": "^2.4.0",
     "isbinaryfile": "^5.0.4",
     "yargs": "^17.7.2"

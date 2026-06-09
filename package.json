@@ -43,6 +43,8 @@
     "puppeteer": "^19.7.2"
   },
   "resolutions": {
+    "deasync": "^0.1.31",
+    "node-gyp": "^10.1.0",
     "web-auth-library": "getappmap/web-auth-library#v1.0.3-cjs",
     "whatwg-url": "14.0.0",
     "tar": "7.5.11",
