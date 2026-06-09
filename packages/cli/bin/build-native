@@ -7,7 +7,7 @@ set -e
 # Otherwise every target will be built.
 OS="${1}"
 ARCH="${2:-x64}"
-ARGS="--config package.json --compress GZip"
+ARGS="--config package.json --compress Zstd"
 PKG_NAME=$(node -p "require('./package.json').name.split('/').pop()")
 
 # check if OS is set and OS/ARCH is the same as the current system.
@@ -42,7 +42,7 @@ fi
 
 if [ -n "${OS}" ]; then
   echo "Building native binaries for ${OS} ${ARCH}..."
-  ARGS="${ARGS} -o release/${PKG_NAME}-${OS}-${ARCH} -t node18-${OS}-${ARCH}"
+  ARGS="${ARGS} -o release/${PKG_NAME}-${OS}-${ARCH} -t node24-${OS}-${ARCH}"
 else
   echo "Building native binaries for each target..."
 fi
