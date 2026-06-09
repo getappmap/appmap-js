@@ -2,11 +2,10 @@ import { join, resolve } from 'node:path';
 import { BinaryPath } from '.';
 import { run } from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct from '../../../src/cmds/agentInstaller/commandStruct';
-import { stat } from 'node:fs/promises';
+import { copyFile, stat } from 'node:fs/promises';
 import { exit } from 'node:process';
 import { log } from 'console';
 import chalk from 'chalk';
-import { platform } from 'node:os';
 
 const packageRoot = join(__dirname, '..', '..', '..');
 const oneDayAgo = Date.now() - 1000 * 60 * 60 * 24;
@@ -32,27 +31,24 @@ export default async function performSetup() {
   log(chalk.yellow('Building native appmap binary. This may take a while.'));
   log(`To skip this step, set the ${chalk.green('SKIP_BUILD_NATIVE')} environment variable.`);
 
+  const os = process.platform === 'darwin' ? 'macos' : process.platform === 'win32' ? 'win' : 'linux';
+  const arch = process.arch === 'arm64' ? 'arm64' : 'x64';
+  const ext = os === 'win' ? '.exe' : '';
+
   const startTime = Date.now();
   try {
     await run(
       new CommandStruct(
-        'yarn',
-        [
-          'pkg',
-          '--config',
-          'package.json',
-          '--compress',
-          'GZip',
-          '-o',
-          'release/appmap',
-          '-t',
-          `node18-${platform()}-x64`,
-          'built/cli.js',
-        ],
+        './bin/build-native',
+        [os, arch],
         packageRoot,
         {}
       )
     );
+
+    const buildBinaryName = `appmap-${os}-${arch}${ext}`;
+    const builtBinaryPath = join(packageRoot, 'release', buildBinaryName);
+    await copyFile(builtBinaryPath, BinaryPath);
   } catch (err) {
     log(chalk.red('Error building binary'));
     log(err);

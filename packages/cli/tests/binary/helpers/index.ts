@@ -6,12 +6,21 @@ import { join } from 'node:path';
 import { run } from '../../../src/cmds/agentInstaller/commandRunner';
 import CommandStruct, { CommandReturn } from '../../../src/cmds/agentInstaller/commandStruct';
 
-export const BinaryPath = join(__dirname, '..', '..', '..', 'release', 'appmap');
+export const BinaryPath = join(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'release',
+  process.platform === 'win32' ? 'appmap.exe' : 'appmap'
+);
 
 export function runUntilCompletion(args: string[], cwd = process.cwd()): Promise<CommandReturn> {
   return run(
     new CommandStruct(BinaryPath, args, cwd, {
       APPMAP_TELEMETRY_DISABLED: '1',
+      LANG: 'en_US.UTF-8',
+      LC_ALL: 'en_US.UTF-8',
     })
   );
 }
@@ -20,7 +29,10 @@ export function runInBackground(args: string[], cwd = process.cwd()): ChildProce
   return spawn(BinaryPath, args, {
     cwd,
     env: {
+      ...process.env,
       APPMAP_TELEMETRY_DISABLED: '1',
+      LANG: 'en_US.UTF-8',
+      LC_ALL: 'en_US.UTF-8',
     },
   });
 }
