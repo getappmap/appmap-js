@@ -77,6 +77,7 @@ if (!argv.format || argv.format === 'es') {
       svg(),
       typescript({
         tsconfig: 'tsconfig.json',
+        include: ['**/*.ts', '**/*.tsx'],
       }),
       vue(baseConfig.plugins.vue),
       image({ exclude: ['**/*.svg'] }),
