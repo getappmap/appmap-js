@@ -11,6 +11,7 @@ import { FingerprintEvent } from './fingerprinter';
 import { Metadata } from '@appland/models';
 import { rm } from 'fs/promises';
 import AppMapIndex from './appmapIndex';
+import type { QueryDbIndexer } from '../cmds/query/db/import/QueryDbIndexer';
 
 export default class FingerprintWatchCommand {
   private pidfilePath: string | undefined;
@@ -31,7 +32,7 @@ export default class FingerprintWatchCommand {
     this._numProcessed = value;
   }
 
-  constructor(private directory: string) {
+  constructor(private directory: string, private readonly indexer?: QueryDbIndexer) {
     this.pidfilePath = process.env.APPMAP_WRITE_PIDFILE && join(this.directory, 'index.pid');
     this.fpQueue = new FingerprintQueue();
     this.eventAggregator = new EventAggregator(async (events) => {
@@ -39,6 +40,7 @@ export default class FingerprintWatchCommand {
       this.numProcessed += events.length;
     });
     this.eventAggregator.attach(this.fpQueue, 'index');
+    if (this.indexer) this.indexer.attach(this.fpQueue);
   }
 
   removePidfile() {
@@ -198,6 +200,8 @@ export default class FingerprintWatchCommand {
     this.poller.start();
     await pollReady;
 
+    if (this.indexer) await this.indexer.syncDirectory(this.directory);
+
     this.ready();
   }
 
@@ -229,6 +233,7 @@ export default class FingerprintWatchCommand {
 
     const { indexDir } = new AppMapIndex(file);
     rm(indexDir, { force: true, recursive: true });
+    if (this.indexer) this.indexer.onRemoved(file);
   }
 
   ready() {

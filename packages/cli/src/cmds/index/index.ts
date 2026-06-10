@@ -10,6 +10,8 @@ import { configureRpcDirectories, handleWorkingDirectory } from '../../lib/handl
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { verbose } from '../../utils';
 import { log, warn } from 'console';
+import { openQueryDb } from '../query/db';
+import { QueryDbIndexer } from '../query/db/import/QueryDbIndexer';
 import { numProcessed } from '../../rpc/index/numProcessed';
 import { search } from '../../rpc/search/search';
 import appmapFilter from '../../rpc/appmap/filter';
@@ -51,6 +53,10 @@ export const builder = (args: yargs.Argv) => {
     type: 'number',
     alias: 'p',
   });
+  args.option('query-db', {
+    describe: 'path to query.db (overrides default ~/.appmap/data/<sha>/query.db)',
+    type: 'string',
+  });
   args.option('navie-provider', {
     describe: 'navie provider to use',
     type: 'string',
@@ -78,11 +84,19 @@ export const handler = async (argv) => {
   const runServer = watch || port !== undefined;
   if (port && !watch) warn(`Note: --port option implies --watch`);
 
+  const queryDb = openQueryDb(appmapDir, argv.queryDb as string | undefined);
+  const indexer = new QueryDbIndexer(queryDb.db);
+  log(
+    `Query DB at ${queryDb.path} (schema v${queryDb.version}${
+      queryDb.rebuilt ? ', rebuilt' : ''
+    })`
+  );
+
   if (runServer) {
     void checkLicense(false);
 
     log(`Running indexer in watch mode`);
-    const cmd = new FingerprintWatchCommand(appmapDir);
+    const cmd = new FingerprintWatchCommand(appmapDir, indexer);
     await cmd.execute();
 
     if (port !== undefined) {
@@ -149,7 +163,8 @@ export const handler = async (argv) => {
       }
     }
   } else {
-    const cmd = new FingerprintDirectoryCommand(appmapDir);
+    const cmd = new FingerprintDirectoryCommand(appmapDir, indexer);
     await cmd.execute();
+    indexer.close();
   }
 };
