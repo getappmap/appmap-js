@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.199.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.198.0...@appland/appmap-v3.199.0) (2026-06-10)
+
+
+### Features
+
+* **query:** query commands and mcp server ([c9c7d47](https://github.com/getappmap/appmap-js/commit/c9c7d47fbcfbb9ed1012d088970aa3af6ffa793b))
+
 # [@appland/appmap-v3.198.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.197.1...@appland/appmap-v3.198.0) (2026-04-26)
 
 
