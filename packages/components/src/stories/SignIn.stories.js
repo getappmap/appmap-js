@@ -21,7 +21,18 @@ const Template = (args, { argTypes }) => ({
 
 export const SignIn = Template.bind({});
 
-export const SignInWithOrgConfig = Template.bind({});
+// Simulates a host that handles the apply-org-config event, so e2e tests can
+// exercise the full click → event → confirmation round trip.
+const OrgConfigTemplate = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { VSignIn },
+  template: '<v-sign-in v-bind="$props" ref="vsCode" />',
+  mounted() {
+    this.$root.$on('apply-org-config', () => this.$refs.vsCode.onOrgConfigApplied());
+  },
+});
+
+export const SignInWithOrgConfig = OrgConfigTemplate.bind({});
 SignInWithOrgConfig.args = {
   enableOrgConfig: true,
 };
