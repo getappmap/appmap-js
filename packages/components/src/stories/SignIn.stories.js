@@ -20,3 +20,8 @@ const Template = (args, { argTypes }) => ({
 });
 
 export const SignIn = Template.bind({});
+
+export const SignInWithOrgConfig = Template.bind({});
+SignInWithOrgConfig.args = {
+  enableOrgConfig: true,
+};
