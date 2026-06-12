@@ -183,8 +183,7 @@
     "assets": [
       "package.json",
       "resources",
-      "built/appmap.html",
-      "built/sequenceDiagram.html",
+      "built/html",
       "built/docs",
       "../../node_modules/better-sqlite3/build/Release/better_sqlite3.node",
       "node_modules/better-sqlite3/build/Release/better_sqlite3.node"
