@@ -108,7 +108,14 @@ describe('Sidebar activation page with organization configuration enabled', () =
 
   it('shows a confirmation once the configuration has been applied', () => {
     cy.get('.signin-sidebar').then(($el) => {
-      $el[0].__vue__.onOrgConfigApplied();
+      // __vue__ resolves to the outermost story wrapper sharing the root
+      // element; walk down to the SignIn instance.
+      let vm = $el[0].__vue__;
+      while (vm && typeof vm.onOrgConfigApplied !== 'function') {
+        vm = vm.$children && vm.$children[0];
+      }
+      expect(vm, 'SignIn component instance').to.exist;
+      vm.onOrgConfigApplied();
     });
     cy.get('[data-cy="org-config-prompt"]').should('not.exist');
     cy.get('[data-cy="org-config-applied"]')
