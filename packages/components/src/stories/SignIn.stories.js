@@ -28,11 +28,27 @@ const OrgConfigTemplate = (args, { argTypes }) => ({
   components: { VSignIn },
   template: '<v-sign-in v-bind="$props" ref="vsCode" />',
   mounted() {
-    this.$root.$on('apply-org-config', () => this.$refs.vsCode.onOrgConfigApplied());
+    this.applyOrgConfigHandler = () => {
+      if (this.$refs.vsCode) {
+        this.$refs.vsCode.onOrgConfigApplied();
+      }
+    };
+    this.$root.$on('apply-org-config', this.applyOrgConfigHandler);
+  },
+  beforeDestroy() {
+    if (this.applyOrgConfigHandler) {
+      this.$root.$off('apply-org-config', this.applyOrgConfigHandler);
+    }
   },
 });
 
 export const SignInWithOrgConfig = OrgConfigTemplate.bind({});
 SignInWithOrgConfig.args = {
   enableOrgConfig: true,
+};
+
+export const SignInWithOrgConfigAlreadyApplied = OrgConfigTemplate.bind({});
+SignInWithOrgConfigAlreadyApplied.args = {
+  enableOrgConfig: true,
+  orgConfigApplied: true,
 };

@@ -116,3 +116,18 @@ describe('Sidebar activation page with organization configuration enabled', () =
       .should('contain.text', 'Now activate with your work email above.');
   });
 });
+
+describe('Sidebar activation page with organization configuration already applied', () => {
+  beforeEach(() => {
+    cy.visit(
+      'http://localhost:6006/iframe.html?args=&id=pages-vs-code--sign-in-with-org-config-already-applied&viewMode=story'
+    );
+  });
+
+  it('shows the configuration confirmation directly and hides the prompt', () => {
+    cy.get('[data-cy="org-config-prompt"]').should('not.exist');
+    cy.get('[data-cy="org-config-applied"]')
+      .should('contain.text', 'Organization configuration applied.')
+      .should('contain.text', 'Now activate with your work email above.');
+  });
+});

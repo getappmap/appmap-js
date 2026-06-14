@@ -44,12 +44,15 @@ describe('SignIn.vue', () => {
       expect(wrapper.find('[data-cy="org-config-applied"]').exists()).toBe(false);
     });
 
-    it('does not show the prompt when a configuration is already applied', () => {
+    it('shows the confirmation banner (and hides prompt) when a configuration is already applied', () => {
       wrapper = shallowMount(SignIn, {
         propsData: { enableOrgConfig: true, orgConfigApplied: true },
       });
       expect(wrapper.find('[data-cy="org-config-prompt"]').exists()).toBe(false);
-      expect(wrapper.find('[data-cy="org-config-applied"]').exists()).toBe(false);
+      expect(wrapper.find('[data-cy="org-config-applied"]').exists()).toBe(true);
+      expect(wrapper.find('[data-cy="org-config-applied"]').text()).toContain(
+        'Organization configuration applied.'
+      );
     });
 
     it('emits apply-org-config on the root when the link is clicked', () => {

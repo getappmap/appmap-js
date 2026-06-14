@@ -194,7 +194,7 @@ export default {
       return this.enableOrgConfig && !this.orgConfigApplied && !this.orgConfigJustApplied;
     },
     showOrgConfigConfirmation() {
-      return this.enableOrgConfig && this.orgConfigJustApplied;
+      return this.enableOrgConfig && (this.orgConfigJustApplied || this.orgConfigApplied);
     },
   },
 
