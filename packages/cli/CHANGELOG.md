@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.199.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.199.0...@appland/appmap-v3.199.1) (2026-06-14)
+
+
+### Bug Fixes
+
+* **cli:** package built/html in binary instead of stale per-file asset paths ([d4aa5df](https://github.com/getappmap/appmap-js/commit/d4aa5df43e197455e9753d8b7584d2736c048a71))
+
 # [@appland/appmap-v3.199.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.198.0...@appland/appmap-v3.199.0) (2026-06-10)
 
 
