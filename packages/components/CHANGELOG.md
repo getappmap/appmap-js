@@ -1,3 +1,10 @@
+# [@appland/components-v4.49.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.48.0...@appland/components-v4.49.0) (2026-06-14)
+
+
+### Features
+
+* **components:** organization configuration prompt on the sign-in screen ([1213d02](https://github.com/getappmap/appmap-js/commit/1213d02be4e1483c9f61d4b9845389035016640e))
+
 # [@appland/components-v4.48.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.47.0...@appland/components-v4.48.0) (2026-04-26)
 
 
