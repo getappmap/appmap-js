@@ -58,6 +58,26 @@
             </a>
           </p>
         </div>
+
+        <div v-if="showOrgConfigPrompt" class="org-config" data-cy="org-config-prompt">
+          <p>
+            Using AppMap through your organization?<br />
+            <a class="link" href="/" data-cy="org-config-link" @click.prevent="applyOrgConfig">
+              Apply your organization&rsquo;s configuration first
+            </a>
+          </p>
+        </div>
+        <div
+          v-else-if="showOrgConfigConfirmation"
+          class="org-config-applied"
+          data-cy="org-config-applied"
+        >
+          <CheckIcon class="check-icon" />
+          <p>
+            <strong>Organization configuration applied.</strong><br />
+            Now activate with your work email above.
+          </p>
+        </div>
       </div>
 
       <div class="your-data">
@@ -123,6 +143,7 @@ import GitHubLogo from '@/assets/github-logo.svg';
 import GitLabLogo from '@/assets/gitlab-logo.svg';
 import EmailIcon from '@/assets/email.svg';
 import ExternalLinkIcon from '@/assets/external-link.svg';
+import CheckIcon from '@/assets/check.svg';
 
 const GENERIC_ERROR_MSG = 'Something went wrong, please try again later.';
 
@@ -136,12 +157,24 @@ export default {
     GitLabLogo,
     ExternalLinkIcon,
     EmailIcon,
+    CheckIcon,
   },
 
   props: {
     appmapServerUrl: {
       type: String,
       default: 'https://getappmap.com',
+    },
+    // Host opt-in: only hosts that handle the 'apply-org-config' event should enable this.
+    enableOrgConfig: {
+      type: Boolean,
+      default: false,
+    },
+    // Set by the host when an organization configuration is already in effect
+    // (e.g. applied earlier, or delivered via a managed environment).
+    orgConfigApplied: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -152,7 +185,17 @@ export default {
       verificationCode: '',
       error: '',
       pendingRequest: undefined,
+      orgConfigJustApplied: false,
     };
+  },
+
+  computed: {
+    showOrgConfigPrompt() {
+      return this.enableOrgConfig && !this.orgConfigApplied && !this.orgConfigJustApplied;
+    },
+    showOrgConfigConfirmation() {
+      return this.enableOrgConfig && (this.orgConfigJustApplied || this.orgConfigApplied);
+    },
   },
 
   methods: {
@@ -167,6 +210,13 @@ export default {
     },
     signIn(target) {
       this.$root.$emit('sign-in', target);
+    },
+    applyOrgConfig() {
+      this.$root.$emit('apply-org-config');
+    },
+    // Called by the host (via ref) once the organization configuration has been applied.
+    onOrgConfigApplied() {
+      this.orgConfigJustApplied = true;
     },
     reset() {
       this.email = '';
@@ -363,6 +413,38 @@ export default {
 
     .accept-tos {
       width: 90%;
+    }
+
+    .org-config {
+      width: 90%;
+      padding-top: 1rem;
+      border-top: 1px solid $gray3;
+      text-align: center;
+      color: $gray4;
+      line-height: 1.45;
+
+      a.link {
+        font-weight: 600;
+      }
+    }
+
+    .org-config-applied {
+      width: 90%;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid rgba($alert-success, 0.4);
+      border-radius: 0.5rem;
+      line-height: 1.45;
+
+      .check-icon {
+        flex-shrink: 0;
+        width: 14px;
+        height: 14px;
+        margin-top: 0.25rem;
+        fill: $alert-success;
+      }
     }
   }
 

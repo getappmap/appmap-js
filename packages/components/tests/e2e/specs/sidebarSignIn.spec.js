@@ -68,6 +68,11 @@ describe('Sidebar activation page', () => {
     cy.get('#email-input').should('have.value', '');
   });
 
+  it('does not show the organization configuration prompt by default', () => {
+    cy.get('[data-cy="org-config-prompt"]').should('not.exist');
+    cy.get('[data-cy="org-config-applied"]').should('not.exist');
+  });
+
   it('shows an error message with incorrect verification code', () => {
     cy.intercept('POST', 'https://getappmap.com/api/activations*', {
       statusCode: 201,
@@ -79,5 +84,50 @@ describe('Sidebar activation page', () => {
     });
     cy.get('#verification-code-input').type('1234').type('{enter}');
     cy.get('.error').should('contain.text', 'Invalid verification code, please try again.');
+  });
+});
+
+describe('Sidebar activation page with organization configuration enabled', () => {
+  beforeEach(() => {
+    cy.visit(
+      'http://localhost:6006/iframe.html?args=&id=pages-vs-code--sign-in-with-org-config&viewMode=story'
+    );
+  });
+
+  it('shows the organization configuration prompt', () => {
+    cy.get('[data-cy="org-config-prompt"]').should(
+      'contain.text',
+      'Using AppMap through your organization?'
+    );
+    cy.get('[data-cy="org-config-link"]').should(
+      'contain.text',
+      'Apply your organization’s configuration first'
+    );
+    cy.get('[data-cy="org-config-applied"]').should('not.exist');
+  });
+
+  it('shows a confirmation once the configuration has been applied', () => {
+    // The story wrapper acts as the host: it answers apply-org-config by
+    // calling onOrgConfigApplied() on the component.
+    cy.get('[data-cy="org-config-link"]').click();
+    cy.get('[data-cy="org-config-prompt"]').should('not.exist');
+    cy.get('[data-cy="org-config-applied"]')
+      .should('contain.text', 'Organization configuration applied.')
+      .should('contain.text', 'Now activate with your work email above.');
+  });
+});
+
+describe('Sidebar activation page with organization configuration already applied', () => {
+  beforeEach(() => {
+    cy.visit(
+      'http://localhost:6006/iframe.html?args=&id=pages-vs-code--sign-in-with-org-config-already-applied&viewMode=story'
+    );
+  });
+
+  it('shows the configuration confirmation directly and hides the prompt', () => {
+    cy.get('[data-cy="org-config-prompt"]').should('not.exist');
+    cy.get('[data-cy="org-config-applied"]')
+      .should('contain.text', 'Organization configuration applied.')
+      .should('contain.text', 'Now activate with your work email above.');
   });
 });
