@@ -4,7 +4,7 @@ title: Docs - AppMap Navie
 description: "Reference Guide to AppMap Navie AI, a complete list of options available in AppMap Navie AI."
 name: Navie Options
 navie: true
-step: 5
+step: 6
 toc: true
 ---
 

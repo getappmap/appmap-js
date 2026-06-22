@@ -3,7 +3,7 @@ layout: docs
 title: Docs - Reference
 name: Accessing Navie Logs
 toc: true
-step: 6
+step: 7
 navie: true
 description: "Reference Guide to AppMap Navie AI, how-to guide for accessing logs."
 ---

@@ -120,6 +120,8 @@ When you run a Java application with the AppMap agent, [remote recording](/docs/
 
 You can make a [remote recording](../recording-methods#remote-recording) from within the JetBrains IDE.
 
+**Security Warning**: Remote recording should only be enabled in non-production environments. Enabling it in other environments is a security risk as the recording endpoints may be accessible to anyone who can reach the application server. You can ensure that remote recording is not enabled by ensuring that the `appmap` Java agent is not loaded by the JVM.
+
 1. [Install the JetBrains plugin](https://plugins.jetbrains.com/plugin/16701-appmap) if you haven't already.
 2. Start your application with remote recording enabled. For Java, [run your Java application with AppMap](#running-a-java-application-with-appmap). For other languages, consult the [agent reference](/docs/reference) for details.
 3. To start a recording, click the remote recording button, or use the command **Start AppMap recording**.
@@ -133,8 +135,21 @@ You can make a [remote recording](../recording-methods#remote-recording) from wi
 
 For more details about remote recording, see:
 
-- [Recording methods > Remote recording](/docs/recording-methods)
+- [Recording methods > Remote recording](/docs/get-started-with-appmap/making-appmap-data#with-remote-application-recording)
 - [Remote recording API](../reference/remote-recording-api)
+
+## Requests recording
+
+You can configure AppMap to record HTTP requests and responses in your Java application. This is useful for understanding how your application interacts with external services.
+
+1. [Install the JetBrains plugin](https://plugins.jetbrains.com/plugin/16701-appmap) if you haven't already.
+2. Start your application with the `appmap` Java agent enabled. For Java, [run your Java application with AppMap](#running-a-java-application-with-appmap). For other languages, consult the [agent reference](/docs/reference) for details.
+3. Interact with your application through its UI or API.
+4. AppMap will automatically record HTTP requests and responses. The recorded requests will be saved as AppMap data files in the project AppMap directory (`tmp/appmap` by default).
+
+For more details about requests recording, see:
+
+- [Recording methods > Requests recording](/docs/get-started-with-appmap/making-appmap-data#with-api-request-recording)
 
 ## AppMap Plugin actions
 

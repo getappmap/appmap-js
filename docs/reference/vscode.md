@@ -131,6 +131,7 @@ To open the list of AppMap extension actions, press `CTRL+SHIFT+P` or `COMMAND+S
 
 Most of the command names should be self-explanatory. Here are a few commands which are a bit more complicated:
 
+- **AppMap: Review Your Code** Starts a code review using AppMap Navie. This command analyzes your code changes and provides a comprehensive report to help you improve code quality, security, and performance by providing specific, actionable suggestions.
 - **AppMap: Filter/Find AppMap by name** Opens the AppMap side bar view and the filter/find text field
 - **AppMap: Login**, **AppMap: Logout** Some extension functionality requires you to login to the AppMap Server. You'll be prompted to do this when you setup AppMap for the first time. You can also login and logout using the built-in `Accounts` feature of VSCode.
 - **AppMap: Touch Out-of-Date Test Files** If you have AppMap Diagrams generated from test cases, this command will determine which tests need to be re-run in order to bring the AppMap Data up-to-date. It will then "touch" (update the modified date) of each out-of-date test case. You can use a file watching trigger program like `Guard` (Ruby), `grunt` or `gulp` (JS) to re-run the test cases as they are touched.
@@ -175,3 +176,9 @@ After [recording AppMap Data](/docs/recording-methods.html) for your project, op
 ## GitHub repository
 
 [https://github.com/getappmap/vscode-appland](https://github.com/getappmap/vscode-appland)
+
+## Troubleshooting
+
+If you encounter issues with the AppMap VS Code extension, particularly during startup, please check the Output panel
+(`View -> Output`, select "AppMap: Services") for error messages. Common startup issues and their solutions are documented
+in our [troubleshooting guide](/docs/troubleshooting/vscode).
