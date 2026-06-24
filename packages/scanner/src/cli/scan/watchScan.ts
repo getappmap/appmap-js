@@ -13,6 +13,7 @@ import {
 } from '../../configuration/configurationProvider';
 import { Telemetry } from '@appland/telemetry';
 import EventEmitter from 'events';
+import { WatchScanTelemetry } from './watchScanTelemetry';
 import isAncestorPath from '../../util/isAncestorPath';
 import { debuglog } from 'util';
 import { warn } from 'console';
@@ -54,9 +55,11 @@ export class Watcher {
   appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
   scanEventEmitter = new EventEmitter();
+  private cancelScanTelemetry: () => void;
 
   constructor(private options: WatchScanOptions) {
     this.queue.error((error, task) => console.warn(`Problem processing ${task}:\n`, error));
+    this.cancelScanTelemetry = WatchScanTelemetry.watch(this.scanEventEmitter, options.appmapDir);
   }
 
   async watch(): Promise<void> {
@@ -138,6 +141,7 @@ export class Watcher {
   }
 
   async close(): Promise<void> {
+    this.cancelScanTelemetry();
     await Promise.all(
       (['appmapWatcher', 'appmapPoller', 'configWatcher'] as const).map((k) => {
         const closer = this[k]?.close();
