@@ -18,5 +18,9 @@ export interface ScanSummary {
   ruleLabels: string[];
   numChecks: number;
   numFindings: number;
+  // Number of findings keyed by the rule that produced them.
+  findingCountsByRule: Record<string, number>;
+  // Number of findings keyed by impact domain (findings without one are omitted).
+  findingCountsByImpactDomain: Record<string, number>;
   appMapMetadata: AppMapMetadata;
 }
