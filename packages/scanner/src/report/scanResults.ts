@@ -1,5 +1,5 @@
 import { Metadata } from '@appland/models';
-import { Git, GitState, Telemetry, TelemetryData } from '@appland/telemetry';
+import { Git, GitState, Telemetry, type TelemetryData } from '@appland/telemetry';
 import Check from '../check';
 import Configuration from '../configuration/types/configuration';
 import { Finding } from '../index';
@@ -176,7 +176,12 @@ export function scanCompletedEvent(
 }
 
 export async function sendScanResultsTelemetry(telemetry: ScanTelemetry): Promise<void> {
-  const gitState = GitState[await Git.state(telemetry.appmapDir)];
-  const contributors = (await Git.contributors(60, telemetry.appmapDir)).length;
-  Telemetry.sendEvent(scanCompletedEvent(telemetry, gitState, contributors));
+  // Never let telemetry (git lookups, sending) reject and break the caller's shutdown.
+  try {
+    const gitState = GitState[await Git.state(telemetry.appmapDir)];
+    const contributors = (await Git.contributors(60, telemetry.appmapDir)).length;
+    Telemetry.sendEvent(scanCompletedEvent(telemetry, gitState, contributors));
+  } catch {
+    // ignore
+  }
 }
