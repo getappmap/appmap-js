@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.90.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.89.1...@appland/scanner-v1.90.0) (2026-06-24)
+
+
+### Features
+
+* **scanner:** revive enriched scan:completed telemetry (watch mode) ([4dd20b1](https://github.com/getappmap/appmap-js/commit/4dd20b1c124dbb00badc21cd44afcb0d7ae3fd67))
+
 # [@appland/scanner-v1.89.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.89.0...@appland/scanner-v1.89.1) (2026-03-04)
 
 
