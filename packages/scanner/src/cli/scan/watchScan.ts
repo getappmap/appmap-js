@@ -55,11 +55,11 @@ export class Watcher {
   appmapPoller?: chokidar.FSWatcher;
   configWatcher?: chokidar.FSWatcher;
   scanEventEmitter = new EventEmitter();
-  private cancelScanTelemetry: () => void;
+  private scanTelemetry: WatchScanTelemetry;
 
   constructor(private options: WatchScanOptions) {
     this.queue.error((error, task) => console.warn(`Problem processing ${task}:\n`, error));
-    this.cancelScanTelemetry = WatchScanTelemetry.watch(this.scanEventEmitter, options.appmapDir);
+    this.scanTelemetry = new WatchScanTelemetry(this.scanEventEmitter, options.appmapDir);
   }
 
   async watch(): Promise<void> {
@@ -141,7 +141,7 @@ export class Watcher {
   }
 
   async close(): Promise<void> {
-    this.cancelScanTelemetry();
+    await this.scanTelemetry.cancel();
     await Promise.all(
       (['appmapWatcher', 'appmapPoller', 'configWatcher'] as const).map((k) => {
         const closer = this[k]?.close();

@@ -1,4 +1,5 @@
 import { AppMap, buildAppMap } from '@appland/models';
+import { Telemetry } from '@appland/telemetry';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import RuleChecker from '../src/ruleChecker';
@@ -51,24 +52,19 @@ const scan = async (
   return { appMap: appMapData, findings };
 };
 
-const stubTelemetry = (): void => {
-  jest.mock('@appland/telemetry', () => {
-    const originalModule = jest.requireActual('@appland/telemetry');
+// Stub telemetry by spying on the shared Telemetry singleton. This must mutate the
+// same instance the code under test imported, so spy on the object rather than
+// jest.mock()-ing the module in a beforeEach (which can't replace an already-imported
+// binding, letting the real client — and a real network/git call — run in tests).
+let telemetrySpy: jest.SpyInstance | undefined;
 
-    //Mock the default export and named export 'foo'
-    return {
-      __esModule: true,
-      ...originalModule,
-      Telemetry: {
-        configure: jest.fn(),
-        sendEvent: jest.fn(),
-      },
-    };
-  });
+const stubTelemetry = (): void => {
+  telemetrySpy = jest.spyOn(Telemetry, 'sendEvent').mockImplementation(() => undefined);
 };
 
 const unstubTelemetry = (): void => {
-  jest.unmock('@appland/telemetry');
+  telemetrySpy?.mockRestore();
+  telemetrySpy = undefined;
 };
 
 export { fixtureAppMap, fixtureAppMapFileName, scan, stubTelemetry, unstubTelemetry };

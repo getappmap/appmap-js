@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
-import { Metadata } from '@appland/models';
+import type { Metadata } from '@appland/models';
 
-import { Finding } from '../../../src';
+import type { Finding } from '../../../src';
 import * as scanResultsModule from '../../../src/report/scanResults';
 import { WatchScanTelemetry } from '../../../src/cli/scan/watchScanTelemetry';
 
@@ -20,13 +20,13 @@ describe('WatchScanTelemetry', () => {
     jest.restoreAllMocks();
   });
 
-  it('batches scan events and sends a single aggregated scan:completed', () => {
+  it('batches scan events and sends a single aggregated scan:completed', async () => {
     const send = jest
       .spyOn(scanResultsModule, 'sendScanResultsTelemetry')
       .mockResolvedValue(undefined);
 
     const emitter = new EventEmitter();
-    const cancel = WatchScanTelemetry.watch(emitter, '/tmp/appmaps');
+    const telemetry = new WatchScanTelemetry(emitter, '/tmp/appmaps');
 
     emitter.emit('scan', {
       scanResults: scanResultsFor('a', [finding('rule-a', 'Security')]),
@@ -54,17 +54,17 @@ describe('WatchScanTelemetry', () => {
       })
     );
 
-    cancel();
+    await telemetry.cancel();
   });
 
-  it('stops listening for scan events once cancelled', () => {
+  it('stops listening for scan events once cancelled', async () => {
     const send = jest
       .spyOn(scanResultsModule, 'sendScanResultsTelemetry')
       .mockResolvedValue(undefined);
 
     const emitter = new EventEmitter();
-    const cancel = WatchScanTelemetry.watch(emitter, '/tmp/appmaps');
-    cancel();
+    const telemetry = new WatchScanTelemetry(emitter, '/tmp/appmaps');
+    await telemetry.cancel();
 
     emitter.emit('scan', {
       scanResults: scanResultsFor('a', [finding('rule-a', 'Security')]),

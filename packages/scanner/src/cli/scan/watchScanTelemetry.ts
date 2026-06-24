@@ -1,5 +1,5 @@
-import { EventEmitter } from 'stream';
-import EventAggregator, { CancelFn } from '../../util/eventAggregator';
+import type { EventEmitter } from 'stream';
+import EventAggregator from '../../util/eventAggregator';
 import { ScanResults, sendScanResultsTelemetry } from '../../report/scanResults';
 
 export type ScanEvent = {
@@ -16,16 +16,11 @@ export class WatchScanTelemetry {
     );
   }
 
-  cancel(): void {
-    this.aggregator.cancel();
+  cancel(): Promise<void> {
+    return this.aggregator.cancel();
   }
 
-  static watch(scanEvents: EventEmitter, appmapDir?: string): CancelFn {
-    const telemetry = new WatchScanTelemetry(scanEvents, appmapDir);
-    return () => telemetry.cancel();
-  }
-
-  private sendTelemetry(scanEvents: ScanEvent[]) {
+  private sendTelemetry(scanEvents: ScanEvent[]): Promise<void> {
     let elapsed = 0;
     const telemetryScanResults = new ScanResults();
     for (const scanEvent of scanEvents) {
@@ -33,7 +28,7 @@ export class WatchScanTelemetry {
       elapsed += scanEvent.elapsed;
     }
 
-    sendScanResultsTelemetry({
+    return sendScanResultsTelemetry({
       ruleIds: telemetryScanResults.summary.rules,
       numAppMaps: telemetryScanResults.summary.numAppMaps,
       numFindings: telemetryScanResults.summary.numFindings,

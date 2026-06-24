@@ -216,10 +216,10 @@ describe('scan', () => {
     }
 
     afterEach(async () => {
-      if (watcher) watcher.close();
+      if (watcher) await watcher.close();
       watcher = undefined;
 
-      fsextra.rm(tmpDir, { recursive: true });
+      await fsextra.rm(tmpDir, { recursive: true });
     });
 
     it('scans already indexed AppMaps on start', async () => {
