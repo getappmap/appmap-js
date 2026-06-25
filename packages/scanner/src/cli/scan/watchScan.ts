@@ -1,4 +1,4 @@
-import { stat, writeFile } from 'fs/promises';
+import { readFile, stat, writeFile } from 'fs/promises';
 import * as chokidar from 'chokidar';
 import assert from 'assert';
 import path from 'path';
@@ -14,9 +14,21 @@ import {
 import { Telemetry } from '@appland/telemetry';
 import EventEmitter from 'events';
 import { WatchScanTelemetry } from './watchScanTelemetry';
+import { diffFindings } from '../../report/findingsDiff';
+import { Finding } from '../../index';
 import isAncestorPath from '../../util/isAncestorPath';
 import { debuglog } from 'util';
 import { warn } from 'console';
+
+/** Read the findings from a previously-written report file, or [] if unreadable. */
+async function readPriorFindings(reportFile: string): Promise<Finding[]> {
+  try {
+    const report = JSON.parse(await readFile(reportFile, 'utf8')) as { findings?: Finding[] };
+    return report.findings ?? [];
+  } catch {
+    return [];
+  }
+}
 
 const debug = debuglog('scanner:watch');
 
@@ -203,7 +215,10 @@ export class Watcher {
 
       const rawScanResults = await scanner.scan();
       const elapsed = Date.now() - startTime;
-      this.scanEventEmitter.emit('scan', { scanResults: rawScanResults, elapsed });
+
+      const priorFindings = reportStats ? await readPriorFindings(reportFile) : [];
+      const diff = diffFindings(priorFindings, rawScanResults.findings);
+      this.scanEventEmitter.emit('scan', { scanResults: rawScanResults, elapsed, diff });
 
       // Always report the raw data
       await writeFile(reportFile, formatReport(rawScanResults));

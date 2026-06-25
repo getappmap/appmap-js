@@ -12,13 +12,18 @@ function mergeCounts(target: Record<string, number>, source: Record<string, numb
   }
 }
 
-/** Count findings by the value returned from `key`, skipping undefined keys. */
-function countFindings(
+/** Count findings by the value returned from `key`, skipping undefined keys.
+ * Deduplicates findings by hash_v2, so that multiple findings with the same hash are counted only once.
+ */
+export function countFindings(
   findings: Finding[],
   key: (finding: Finding) => string | undefined
 ): Record<string, number> {
+  const seen = new Set<string>();
   const counts: Record<string, number> = {};
   for (const finding of findings) {
+    if (seen.has(finding.hash_v2)) continue;
+    seen.add(finding.hash_v2);
     const value = key(finding);
     if (value === undefined) continue;
     counts[value] = (counts[value] ?? 0) + 1;
@@ -144,6 +149,11 @@ export type ScanTelemetry = {
   numFindings: number;
   findingCountsByRule: Record<string, number>;
   findingCountsByImpactDomain: Record<string, number>;
+  // Findings new/resolved since each AppMap's prior scan, aggregated over the batch.
+  numNewFindings: number;
+  numResolvedFindings: number;
+  newFindingCountsByRule: Record<string, number>;
+  newFindingCountsByImpactDomain: Record<string, number>;
   elapsedMs: number;
   appmapDir?: string;
 };
@@ -164,12 +174,16 @@ export function scanCompletedEvent(
       git_state: gitState,
       findingsByRule: sortedCountsJson(telemetry.findingCountsByRule),
       findingsByImpactDomain: sortedCountsJson(telemetry.findingCountsByImpactDomain),
+      newFindingsByRule: sortedCountsJson(telemetry.newFindingCountsByRule),
+      newFindingsByImpactDomain: sortedCountsJson(telemetry.newFindingCountsByImpactDomain),
     },
     metrics: {
       duration: telemetry.elapsedMs / 1000,
       numRules: telemetry.ruleIds.length,
       numAppMaps: telemetry.numAppMaps,
       numFindings: telemetry.numFindings,
+      numNewFindings: telemetry.numNewFindings,
+      numResolvedFindings: telemetry.numResolvedFindings,
       contributors,
     },
   };

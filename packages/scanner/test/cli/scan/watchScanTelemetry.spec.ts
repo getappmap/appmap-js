@@ -8,7 +8,7 @@ import { WatchScanTelemetry } from '../../../src/cli/scan/watchScanTelemetry';
 const { ScanResults } = scanResultsModule;
 
 const finding = (ruleId: string, impactDomain?: string): Finding =>
-  ({ ruleId, impactDomain } as Finding);
+  ({ ruleId, impactDomain, hash_v2: `${ruleId}-${impactDomain}` } as Finding);
 
 const scanResultsFor = (appmap: string, findings: Finding[]): InstanceType<typeof ScanResults> =>
   new ScanResults({ checks: [] }, { [appmap]: {} as Metadata }, findings, []);
@@ -31,6 +31,7 @@ describe('WatchScanTelemetry', () => {
     emitter.emit('scan', {
       scanResults: scanResultsFor('a', [finding('rule-a', 'Security')]),
       elapsed: 1000,
+      diff: { newFindings: [finding('rule-a', 'Security')], resolvedFindings: [] },
     });
     emitter.emit('scan', {
       scanResults: scanResultsFor('b', [
@@ -38,6 +39,10 @@ describe('WatchScanTelemetry', () => {
         finding('rule-b', 'Performance'),
       ]),
       elapsed: 500,
+      diff: {
+        newFindings: [finding('rule-b', 'Performance')],
+        resolvedFindings: [finding('rule-c', 'Stability')],
+      },
     });
 
     jest.advanceTimersByTime(10_000);
@@ -49,6 +54,10 @@ describe('WatchScanTelemetry', () => {
         numFindings: 3,
         findingCountsByRule: { 'rule-a': 2, 'rule-b': 1 },
         findingCountsByImpactDomain: { Security: 2, Performance: 1 },
+        numNewFindings: 2,
+        numResolvedFindings: 1,
+        newFindingCountsByRule: { 'rule-a': 1, 'rule-b': 1 },
+        newFindingCountsByImpactDomain: { Security: 1, Performance: 1 },
         elapsedMs: 1500,
         appmapDir: '/tmp/appmaps',
       })
