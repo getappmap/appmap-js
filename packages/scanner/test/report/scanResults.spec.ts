@@ -2,7 +2,7 @@ import { Finding } from '../../src';
 import { ScanResults, scanCompletedEvent, ScanTelemetry } from '../../src/report/scanResults';
 
 const finding = (ruleId: string, impactDomain?: string): Finding =>
-  ({ ruleId, impactDomain } as Finding);
+  ({ ruleId, impactDomain, hash_v2: `${ruleId}-${impactDomain}` } as Finding);
 
 describe('ScanResults finding breakdowns', () => {
   it('counts findings by rule and by impact domain', () => {
@@ -11,13 +11,13 @@ describe('ScanResults finding breakdowns', () => {
       {},
       [
         finding('rule-a', 'Security'),
-        finding('rule-a', 'Security'),
+        finding('rule-c', 'Security'),
         finding('rule-b', 'Performance'),
       ],
       []
     );
 
-    expect(results.summary.findingCountsByRule).toEqual({ 'rule-a': 2, 'rule-b': 1 });
+    expect(results.summary.findingCountsByRule).toEqual({ 'rule-a': 1, 'rule-b': 1, 'rule-c': 1 });
     expect(results.summary.findingCountsByImpactDomain).toEqual({ Security: 2, Performance: 1 });
   });
 
@@ -52,10 +52,14 @@ describe('scanCompletedEvent', () => {
     numFindings: 5,
     findingCountsByRule: { 'rule-b': 2, 'rule-a': 3 },
     findingCountsByImpactDomain: { Security: 3, Performance: 2 },
+    numNewFindings: 2,
+    numResolvedFindings: 1,
+    newFindingCountsByRule: { 'rule-a': 2 },
+    newFindingCountsByImpactDomain: { Security: 2 },
     elapsedMs: 2000,
   };
 
-  it('builds a scan:completed event with per-rule and impact-domain breakdowns', () => {
+  it('builds a scan:completed event with per-rule, impact-domain, and delta breakdowns', () => {
     const event = scanCompletedEvent(telemetry, 'Ok', 4);
 
     expect(event.name).toBe('scan:completed');
@@ -64,12 +68,16 @@ describe('scanCompletedEvent', () => {
       git_state: 'Ok',
       findingsByRule: JSON.stringify({ 'rule-a': 3, 'rule-b': 2 }),
       findingsByImpactDomain: JSON.stringify({ Performance: 2, Security: 3 }),
+      newFindingsByRule: JSON.stringify({ 'rule-a': 2 }),
+      newFindingsByImpactDomain: JSON.stringify({ Security: 2 }),
     });
     expect(event.metrics).toEqual({
       duration: 2,
       numRules: 2,
       numAppMaps: 3,
       numFindings: 5,
+      numNewFindings: 2,
+      numResolvedFindings: 1,
       contributors: 4,
     });
   });
