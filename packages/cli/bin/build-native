@@ -42,7 +42,7 @@ fi
 
 if [ -n "${OS}" ]; then
   echo "Building native binaries for ${OS} ${ARCH}..."
-  ARGS="${ARGS} -o release/${PKG_NAME}-${OS}-${ARCH} -t node24-${OS}-${ARCH}"
+  ARGS="${ARGS} -o release/${PKG_NAME}-${OS}-${ARCH} -t node22-${OS}-${ARCH}"
 else
   echo "Building native binaries for each target..."
 fi
