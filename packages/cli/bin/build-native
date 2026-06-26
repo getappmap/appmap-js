@@ -40,6 +40,13 @@ if is_native; then
   ARGS="${ARGS} --no-native-build"
 fi
 
+# NOTE: The Node version target (e.g. node22) MUST match the Node version configured
+# in GHA workflows and actions (e.g. setup-node/action.yml). If they mismatch, native Node addons
+# (like better-sqlite3) compiled during GHA host execution will have ABI version mismatches
+# (NODE_MODULE_VERSION mismatches) at runtime in the packaged executable.
+# 
+# Note that Node 24+ officially dropped support for macOS < 13.5 due to newer libc++ requirements.
+# Keeping the target at Node 22 ensures backward compatibility with older macOS versions.
 if [ -n "${OS}" ]; then
   echo "Building native binaries for ${OS} ${ARCH}..."
   ARGS="${ARGS} -o release/${PKG_NAME}-${OS}-${ARCH} -t node22-${OS}-${ARCH}"
