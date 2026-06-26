@@ -6,7 +6,9 @@ runs:
     - name: Setup Node
       uses: actions/setup-node@v6
       with:
-        node-version: lts/*
+        # NOTE: This Node version MUST match the pkg target Node version (e.g. node22)
+        # in packages/{cli,scanner}/package.json to prevent native module ABI mismatches.
+        node-version: 22
     - name: Detect Yarn cache dir
       id: yarn-cache-dir-path
       shell: bash

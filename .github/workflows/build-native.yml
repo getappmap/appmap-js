@@ -121,7 +121,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          # NOTE: This Node version MUST match the pkg target Node version (e.g. node22)
+          # in packages/{cli,scanner}/package.json to prevent native module ABI mismatches.
+          node-version: 22
           cache: yarn
 
       - name: Build
@@ -167,7 +169,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          # NOTE: This Node version MUST match the pkg target Node version (e.g. node22)
+          # in packages/{cli,scanner}/package.json to prevent native module ABI mismatches.
+          node-version: 22
           cache: yarn
 
       - name: Build
@@ -189,6 +193,9 @@ jobs:
     timeout-minutes: 60
     env:
       PUPPETEER_SKIP_DOWNLOAD: 1
+      # NOTE: MACOSX_DEPLOYMENT_TARGET ensures that native compiled Node addons (like better-sqlite3)
+      # do not compile with or link against newer libc++ symbols (like __libcpp_verbose_abort) only
+      # present in macOS 13.5+. Setting it to 11.0 ensures backward compatibility with older macOS versions.
       MACOSX_DEPLOYMENT_TARGET: "11.0"
       APPLE_IDENTITY_PRIVATE_KEY: ${{ secrets.APPLE_IDENTITY_PRIVATE_KEY }}
       APPLE_IDENTITY_CERTIFICATE: ${{ secrets.APPLE_IDENTITY_CERTIFICATE }}
@@ -236,6 +243,9 @@ jobs:
     timeout-minutes: 60
     env:
       PUPPETEER_SKIP_DOWNLOAD: 1
+      # NOTE: MACOSX_DEPLOYMENT_TARGET ensures that native compiled Node addons (like better-sqlite3)
+      # do not compile with or link against newer libc++ symbols (like __libcpp_verbose_abort) only
+      # present in macOS 13.5+. Setting it to 11.0 ensures backward compatibility with older macOS versions.
       MACOSX_DEPLOYMENT_TARGET: "11.0"
       APPLE_IDENTITY_PRIVATE_KEY: ${{ secrets.APPLE_IDENTITY_PRIVATE_KEY }}
       APPLE_IDENTITY_CERTIFICATE: ${{ secrets.APPLE_IDENTITY_CERTIFICATE }}
