@@ -109,6 +109,27 @@ describe('Sequence diagram', () => {
     });
   });
 
+  describe('labels', () => {
+    it('are reported on a labeled function action', () => {
+      const action = findActionById(SHOW_USER_APPMAP, 'lib/controllers/UsersController#show');
+      assert(isFunction(action));
+      assert.deepStrictEqual(action.labels, ['mvc.controller']);
+    });
+    it('are omitted (undefined) on an unlabeled action', () => {
+      const action = findActionById(SHOW_USER_APPMAP, 'lib/views/users/Views::Users::Show#show');
+      assert(isFunction(action));
+      assert.strictEqual(action.labels, undefined);
+    });
+    it('are not part of the digest (a label is not behavior)', () => {
+      // Same code object, with and without labels, must hash identically: labels are a
+      // classification signal, not a behavioral one.
+      const labeled = findActionById(SHOW_USER_APPMAP, 'lib/controllers/UsersController#show');
+      assert(isFunction(labeled));
+      assert(labeled.labels && labeled.labels.length > 0);
+      assert(!labeled.digest.includes('mvc.controller'));
+    });
+  });
+
   describe('incoming message', () => {
     it('is reported', () => {
       const action = findActionById(SHOW_USER_APPMAP, 'lib/controllers/UsersController#show');
