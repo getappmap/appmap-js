@@ -13,8 +13,10 @@ export function formatReport(rawScanResults: ScanResults): string {
     Object.entries(appMapMetadata).map(([id, metadata]) => [id, filter(metadata)])
   );
 
-  // only keep one finding of the same hash
-  const uniqueFindings = [...uniq(findings, ({ hash }) => hash)];
+  // only keep one finding of the same hash_v2 (the stable finding identity used by the
+  // findings diff, summary report, and IDEs; the legacy v1 hash can collide across
+  // distinct findings, which would drop one and skew downstream new/resolved diffs)
+  const uniqueFindings = [...uniq(findings, ({ hash_v2: hashV2 }) => hashV2)];
 
   return JSON.stringify(
     {

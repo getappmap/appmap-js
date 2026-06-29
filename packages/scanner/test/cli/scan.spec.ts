@@ -173,10 +173,13 @@ describe('scan', () => {
       );
     }
 
-    async function waitForSingleFinding(rule = 'secret-in-log'): Promise<ScanResults> {
+    async function waitForFindings(rule = 'secret-in-log'): Promise<ScanResults> {
       const findings = await expectScan(secretInLogMap);
-      expect(findings.findings.length).toEqual(1);
-      expect(findings.findings[0].ruleId).toEqual(rule);
+      // The fixture leaks the same token in two distinct log statements (a request log
+      // and a parameters log). They collide on the legacy v1 hash but are distinct under
+      // hash_v2, so the report keeps both (matching the scanner's "2 unique" summary).
+      expect(findings.findings.length).toEqual(2);
+      expect(findings.findings.map((f) => f.ruleId)).toEqual([rule, rule]);
       return findings;
     }
 
@@ -225,14 +228,14 @@ describe('scan', () => {
     it('scans already indexed AppMaps on start', async () => {
       await createIndex(secretInLogMap);
       await createWatcher();
-      await waitForSingleFinding();
+      await waitForFindings();
     });
 
     it('scans AppMaps when the mtime file is created or changed', async () => {
       await createWatcher();
 
       await createIndex(secretInLogMap);
-      await waitForSingleFinding();
+      await waitForFindings();
     });
 
     it('does not raise if it hits the limit of the number of file watchers', async () => {
@@ -253,7 +256,7 @@ describe('scan', () => {
       watcher?.appmapWatcher?.removeAllListeners();
 
       await createIndex(secretInLogMap);
-      await waitForSingleFinding();
+      await waitForFindings();
     });
 
     it('does not raise on EACCES: permission denied', async () => {
@@ -263,7 +266,7 @@ describe('scan', () => {
       await fsextra.copy(secretInLogMap, join(permissionDeniedDir, basename(secretInLogMap)));
       await chmod(permissionDeniedDir, 0o000);
       await createWatcher();
-      await waitForSingleFinding();
+      await waitForFindings();
       await chmod(permissionDeniedDir, 0o777); // else the next testcase fails
     });
 
@@ -296,11 +299,11 @@ describe('scan', () => {
     it('picks up mtime changes after a relative directory is removed and recreated', async () => {
       await createWatcher();
       await createIndex(secretInLogMap);
-      await waitForSingleFinding();
+      await waitForFindings();
 
       await rm(indexPath(secretInLogMap), { recursive: true });
       await createIndex(secretInLogMap);
-      await waitForSingleFinding();
+      await waitForFindings();
     });
 
     it('does not rescan when not needed, but scans every new file @appmap-fixme', async () => {
