@@ -5,7 +5,7 @@ import assert from 'assert';
 import { warn } from 'console';
 
 import { Metadata } from '@appland/models';
-import { Finding } from '@appland/scanner';
+import { Finding, diffFindings } from '@appland/scanner';
 
 import { ArchiveMetadata } from '../lib/ArchiveMetadata';
 import { Paths } from '../diffArchive/Paths';
@@ -307,37 +307,7 @@ export class ChangeAnalysisImpl {
     const baseFindings = await loadFindings(paths, RevisionName.Base, baseManifest.appMapDir);
     const headFindings = await loadFindings(paths, RevisionName.Head, headManifest.appMapDir);
 
-    let newFindings: Finding[];
-    let resolvedFindings: Finding[];
-
-    const baseFindingHashes = baseFindings.reduce(
-      (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
-      new Set<string>()
-    );
-    const headFindingHashes = headFindings.reduce(
-      (memo, finding: Finding) => (memo.add(finding.hash_v2), memo),
-      new Set<string>()
-    );
-    const newFindingHashes = [...headFindingHashes].filter((hash) => !baseFindingHashes.has(hash));
-    const resolvedFindingHashes = [...baseFindingHashes].filter(
-      (hash) => !headFindingHashes.has(hash)
-    );
-    newFindings = Object.values(
-      headFindings
-        .filter((finding) => newFindingHashes.includes(finding.hash_v2))
-        .reduce((memo, finding) => {
-          if (!(finding.hash_v2 in memo)) memo[finding.hash_v2] = finding;
-          return memo;
-        }, {})
-    );
-    resolvedFindings = Object.values(
-      baseFindings
-        .filter((finding) => resolvedFindingHashes.includes(finding.hash_v2))
-        .reduce((memo, finding) => {
-          if (!(finding.hash_v2 in memo)) memo[finding.hash_v2] = finding;
-          return memo;
-        }, {})
-    );
+    const { newFindings, resolvedFindings } = diffFindings(baseFindings, headFindings);
 
     this.findingDiff = {
       new: newFindings,
