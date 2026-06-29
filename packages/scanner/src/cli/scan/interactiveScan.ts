@@ -1,9 +1,9 @@
 import { loadConfig } from '../../configuration/configurationProvider';
-import Configuration from '../../configuration/types/configuration';
+import type Configuration from '../../configuration/types/configuration';
 import { collectAppMapFiles } from '../../rules/lib/util';
 import validateFile from '../validateFile';
 import ScanContext from './ui/scanContext';
-import { State } from './ui/state';
+import type { State } from './ui/state';
 import initial from './ui/state/initial';
 
 type InteractiveScanOptions = {

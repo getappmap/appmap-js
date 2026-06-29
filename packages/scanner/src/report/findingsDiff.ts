@@ -1,4 +1,4 @@
-import { Finding } from '../index';
+import type { Finding } from '../index';
 
 export type FindingsDiff = {
   newFindings: Finding[];

@@ -1,5 +1,6 @@
 import chalk from 'chalk';
-import { PathLike, constants as fsConstants } from 'fs';
+import type { PathLike } from 'fs';
+import { constants as fsConstants } from 'fs';
 import { access } from 'fs/promises';
 import { ValidationError } from '../errors';
 

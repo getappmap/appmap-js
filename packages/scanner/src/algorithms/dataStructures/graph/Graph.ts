@@ -1,5 +1,5 @@
-import GraphEdge from './GraphEdge';
-import GraphVertex from './GraphVertex';
+import type GraphEdge from './GraphEdge';
+import type GraphVertex from './GraphVertex';
 
 export default class Graph {
   vertices: Record<string, GraphVertex> = {};

@@ -1,8 +1,9 @@
-import { Event, EventNavigator } from '@appland/models';
-import { MatchResult, RuleLogic } from '../types';
+import type { Event } from '@appland/models';
+import { EventNavigator } from '@appland/models';
+import type { MatchResult, RuleLogic } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 function containsSessionClear(events: Generator<EventNavigator>) {
   for (const iter of events) {

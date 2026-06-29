@@ -1,4 +1,4 @@
-import { Event } from '@appland/models';
+import type { Event } from '@appland/models';
 
 export default function isCommand(event: Event): string | undefined {
   let label: string | undefined;

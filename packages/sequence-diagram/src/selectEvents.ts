@@ -1,5 +1,5 @@
-import { AppMap, Event } from '@appland/models';
-import Specification from './specification';
+import type { AppMap, Event } from '@appland/models';
+import type Specification from './specification';
 
 type EventFilter = (event: Event) => boolean;
 

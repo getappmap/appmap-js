@@ -1,4 +1,4 @@
-import { Metadata } from '../lib/metadata';
+import type { Metadata } from '../lib/metadata';
 
 export default {
   title: 'HTTP 500 status code',

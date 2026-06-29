@@ -7,15 +7,13 @@ import { callbackify } from 'node:util';
 
 import { formatReport } from './formatReport';
 import { default as buildScanner } from './scanner';
-import {
-  parseConfigFile,
-  TimestampedConfiguration,
-} from '../../configuration/configurationProvider';
+import type { TimestampedConfiguration } from '../../configuration/configurationProvider';
+import { parseConfigFile } from '../../configuration/configurationProvider';
 import { Telemetry } from '@appland/telemetry';
 import EventEmitter from 'events';
 import { WatchScanTelemetry } from './watchScanTelemetry';
 import { diffFindings } from '../../report/findingsDiff';
-import { Finding } from '../../index';
+import type { Finding } from '../../index';
 import isAncestorPath from '../../util/isAncestorPath';
 import { debuglog } from 'util';
 import { warn } from 'console';

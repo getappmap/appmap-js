@@ -1,9 +1,9 @@
-import { Event } from '@appland/models';
-import { AppMapIndex, MatchResult, RuleLogic } from '../types';
+import type { Event } from '@appland/models';
+import type { AppMapIndex, MatchResult, RuleLogic } from '../types';
 import { visit } from '../database/visit';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 function isMaterialized(e: Event): boolean {
   return e.ancestors().some(({ labels }) => labels.has(DAOMaterialize));

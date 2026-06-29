@@ -1,10 +1,11 @@
-import { Event } from '@appland/models';
-import { AppMapIndex, EventFilter, Level, MatchResult, RuleLogic } from '../types';
-import * as types from './types';
-import { SQLEvent, sqlStrings } from '../database';
+import type { Event } from '@appland/models';
+import type { AppMapIndex, EventFilter, Level, MatchResult, RuleLogic } from '../types';
+import type * as types from './types';
+import type { SQLEvent } from '../database';
+import { sqlStrings } from '../database';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 class Options implements types.NPlusOneQuery.Options {
   public warningLimit = 5;

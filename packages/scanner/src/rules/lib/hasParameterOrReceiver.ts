@@ -1,4 +1,4 @@
-import { Event } from '@appland/models';
+import type { Event } from '@appland/models';
 
 // Builds a function that returns true if the provided event argument has the specified
 // objectId as the receiver or as a parameter value.

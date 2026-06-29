@@ -1,8 +1,9 @@
-import { EventNavigator, Event } from '@appland/models';
+import type { Event } from '@appland/models';
+import { EventNavigator } from '@appland/models';
 import { visit } from './visit';
-import { AppMapIndex, EventFilter, QueryAST } from '../types';
+import type { AppMapIndex, EventFilter, QueryAST } from '../types';
 import { URL } from 'url';
-import { SqliteParser } from '@appland/models/types/sqlite-parser';
+import type { SqliteParser } from '@appland/models/types/sqlite-parser';
 
 export interface SQLEvent {
   sql: string;

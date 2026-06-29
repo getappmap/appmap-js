@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import UI from '../userInteraction';
-import ScanContext from '../scanContext';
-import { State } from '../state';
+import type ScanContext from '../scanContext';
+import type { State } from '../state';
 import hitBreakpoint from './hitBreakpoint';
 import { inspect } from 'util';
 

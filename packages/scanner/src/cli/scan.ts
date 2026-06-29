@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import cliProgress from 'cli-progress';
 import { readFile } from 'fs/promises';
-import { buildAppMap, Metadata } from '@appland/models';
+import type { Metadata } from '@appland/models';
+import { buildAppMap } from '@appland/models';
 
-import Check from '../check';
+import type Check from '../check';
 import RuleChecker from '../ruleChecker';
-import { Finding } from '../index';
+import type { Finding } from '../index';
 
 import AppMapIndex from '../appMapIndex';
 import assert from 'node:assert';

@@ -1,8 +1,6 @@
+import type { Action, Actor, Diagram } from '../types';
 import {
-  Action,
   actionActors,
-  Actor,
-  Diagram,
   DiffMode,
   isClientRPC,
   isFunction,

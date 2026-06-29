@@ -1,4 +1,4 @@
-import { Event } from '@appland/models';
+import type { Event } from '@appland/models';
 
 export default function sanitizesData(event: Event, objectId: number, label: string): boolean {
   return (

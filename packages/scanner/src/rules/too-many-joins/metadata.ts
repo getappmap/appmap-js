@@ -1,4 +1,4 @@
-import { Metadata } from '../lib/metadata';
+import type { Metadata } from '../lib/metadata';
 
 export default {
   title: 'Too many joins',

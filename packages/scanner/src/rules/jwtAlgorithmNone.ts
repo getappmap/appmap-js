@@ -1,8 +1,8 @@
-import { MatchResult, RuleLogic } from '../types';
+import type { MatchResult, RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
-import { Event } from '@appland/models';
+import type { Event } from '@appland/models';
 import { URL } from 'url';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 export enum Labels {
   JwtEncode = 'jwt.encode',

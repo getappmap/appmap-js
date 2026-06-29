@@ -1,9 +1,10 @@
-import { Event } from '@appland/models';
-import { MatchResult } from '../types';
+import type { Event } from '@appland/models';
+import type { MatchResult } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import analyzeDataFlow, { TrackedValue } from './lib/analyzeDataFlow';
-import RuleInstance from '../ruleInstance';
+import type { TrackedValue } from './lib/analyzeDataFlow';
+import analyzeDataFlow from './lib/analyzeDataFlow';
+import type RuleInstance from '../ruleInstance';
 
 function valueHistory(value: TrackedValue): Event[] {
   const events: Event[] = [];

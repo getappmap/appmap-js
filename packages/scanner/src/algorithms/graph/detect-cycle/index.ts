@@ -1,6 +1,7 @@
-import Graph from '../../dataStructures/graph/Graph';
-import GraphVertex from '../../dataStructures/graph/GraphVertex';
-import { Callbacks, depthFirstSearch } from '../depth-first-search';
+import type Graph from '../../dataStructures/graph/Graph';
+import type GraphVertex from '../../dataStructures/graph/GraphVertex';
+import type { Callbacks } from '../depth-first-search';
+import { depthFirstSearch } from '../depth-first-search';
 
 /**
  * Detect cycle in directed graph using Depth First Search.

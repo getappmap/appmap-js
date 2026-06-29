@@ -1,23 +1,22 @@
-import { AppMap, Event } from '@appland/models';
+import type { AppMap, Event } from '@appland/models';
 import { classNameToOpenAPIType } from '@appland/openapi';
 import sha256 from 'crypto-js/sha256.js';
 import { LRUCache } from 'lru-cache';
 import { merge } from './mergeWindow';
 import { selectEvents } from './selectEvents';
-import Specification from './specification';
-import {
+import type Specification from './specification';
+import type {
   Action,
   Actor,
   Diagram,
-  NodeType,
   FunctionCall,
   ReturnValue,
-  setParent,
   Type,
   ServerRPC,
   ClientRPC,
   Query,
 } from './types';
+import { NodeType, setParent } from './types';
 
 const MAX_WINDOW_SIZE = 5;
 

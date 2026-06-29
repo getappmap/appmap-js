@@ -1,5 +1,5 @@
-import { Rule } from './index';
-import { RuleLogic } from './types';
+import type { Rule } from './index';
+import type { RuleLogic } from './types';
 
 export default interface RuleInstance extends Rule {
   // User-defined options for the rule.

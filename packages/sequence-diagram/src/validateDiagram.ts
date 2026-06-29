@@ -1,14 +1,12 @@
+import type { Actor, Action, Diagram } from './types';
 import {
   ValidationResult,
-  Actor,
-  Action,
   isLoop,
   NodeType,
   isFunction,
   isServerRPC,
   isClientRPC,
   isQuery,
-  Diagram,
 } from './types';
 
 export default async function validateDiagram(diagramData: Diagram): Promise<ValidationResult> {

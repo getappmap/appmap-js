@@ -1,17 +1,17 @@
-import { Event } from '@appland/models';
-import { MatchResult, RuleLogic, StringFilter } from '../types';
+import type { Event } from '@appland/models';
+import type { MatchResult, RuleLogic, StringFilter } from '../types';
 import GraphEdge from '../algorithms/dataStructures/graph/GraphEdge';
 import GraphVertex from '../algorithms/dataStructures/graph/GraphVertex';
 import Graph from '../algorithms/dataStructures/graph/Graph';
 import detectDirectedCycle from '../algorithms/graph/detect-cycle';
 import { isAbsolute } from 'path';
-import * as types from './types';
+import type * as types from './types';
 import { verbose } from './lib/util';
-import MatchPatternConfig from '../configuration/types/matchPatternConfig';
+import type MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 type PackageName = string;
 

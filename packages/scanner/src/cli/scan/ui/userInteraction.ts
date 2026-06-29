@@ -1,5 +1,7 @@
-import inquirer, { Answers, QuestionCollection } from 'inquirer';
-import ora, { Ora } from 'ora';
+import type { Answers, QuestionCollection } from 'inquirer';
+import inquirer from 'inquirer';
+import type { Ora } from 'ora';
+import ora from 'ora';
 import boxen from 'boxen';
 import { verbose } from '../../../rules/lib/util';
 

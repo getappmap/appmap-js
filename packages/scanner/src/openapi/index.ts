@@ -1,6 +1,6 @@
 import { writeFileSync } from 'fs';
 import OpenApiDiff from 'openapi-diff';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 import { verbose } from '../rules/lib/util';
 
 export * from '@appland/openapi';

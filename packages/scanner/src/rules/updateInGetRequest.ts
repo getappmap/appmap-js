@@ -1,9 +1,9 @@
-import { Event } from '@appland/models';
-import { RuleLogic } from '../types';
+import type { Event } from '@appland/models';
+import type { RuleLogic } from '../types';
 import { toRegExpArray } from './lib/util';
 import parseRuleDescription from './lib/parseRuleDescription';
 import assert from 'assert';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 class Options {
   private _queryInclude: RegExp[];

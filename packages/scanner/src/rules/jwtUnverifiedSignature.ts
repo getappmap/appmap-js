@@ -1,7 +1,8 @@
-import { MatchResult, RuleLogic } from '../types';
+import type { MatchResult, RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
-import { Event, EventNavigator, ParameterObject } from '@appland/models';
-import RuleInstance from '../ruleInstance';
+import type { Event, ParameterObject } from '@appland/models';
+import { EventNavigator } from '@appland/models';
+import type RuleInstance from '../ruleInstance';
 
 export enum Labels {
   SignatureVerify = 'jwt.signature.verify',

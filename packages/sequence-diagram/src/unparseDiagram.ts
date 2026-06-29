@@ -1,4 +1,5 @@
-import { Actor, Diagram, setParent } from './types';
+import type { Actor, Diagram } from './types';
+import { setParent } from './types';
 
 export type SerializedAction = {
   caller?: string | Actor;

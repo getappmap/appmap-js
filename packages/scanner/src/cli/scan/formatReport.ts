@@ -1,7 +1,7 @@
-import { Metadata } from '@appland/models';
+import type { Metadata } from '@appland/models';
 
-import { AppMapMetadata } from '../../report/scanSummary';
-import { ScanResults } from '../../report/scanResults';
+import type { AppMapMetadata } from '../../report/scanSummary';
+import type { ScanResults } from '../../report/scanResults';
 
 // Formats a report to JSON. Does some data deduplication.
 export function formatReport(rawScanResults: ScanResults): string {

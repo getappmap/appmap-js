@@ -1,14 +1,9 @@
-import { CodeObject } from '@appland/models';
+import type { CodeObject } from '@appland/models';
 import { createInterface } from 'readline';
-import {
-  BreakOnCodeObject,
-  BreakOnCounter,
-  BreakOnEvent,
-  BreakOnLabel,
-  Breakpoint,
-} from '../../breakpoint';
-import ScanContext from '../scanContext';
-import { State } from '../state';
+import type { Breakpoint } from '../../breakpoint';
+import { BreakOnCodeObject, BreakOnCounter, BreakOnEvent, BreakOnLabel } from '../../breakpoint';
+import type ScanContext from '../scanContext';
+import type { State } from '../state';
 import UI from '../userInteraction';
 import scan from './scan';
 

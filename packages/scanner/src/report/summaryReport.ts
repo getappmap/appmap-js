@@ -1,10 +1,10 @@
 import chalk from 'chalk';
 
-import { Finding } from '../index';
+import type { Finding } from '../index';
 import { pluralize } from '../rules/lib/util';
 
-import { FindingSummary } from './findingSummary';
-import { ScanResults } from './scanResults';
+import type { FindingSummary } from './findingSummary';
+import type { ScanResults } from './scanResults';
 
 function summarizeFindings(findings: Finding[]): FindingSummary[] {
   const result = findings.reduce((memo, finding) => {

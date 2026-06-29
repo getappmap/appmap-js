@@ -1,4 +1,4 @@
-import { URL } from 'url';
+import type { URL } from 'url';
 
 export default function reportUploadURL(numFindings: number, url?: URL): void {
   let message = `Uploaded ${numFindings} findings`;

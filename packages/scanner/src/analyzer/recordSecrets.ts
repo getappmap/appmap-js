@@ -1,4 +1,4 @@
-import { Event } from '@appland/models';
+import type { Event } from '@appland/models';
 import { emptyValue, parseValue, verbose } from '../rules/lib/util';
 
 export type Secret = {

@@ -1,11 +1,11 @@
-import { Event } from '@appland/models';
-import { MatchResult, RuleLogic } from '../types';
+import type { Event } from '@appland/models';
+import type { MatchResult, RuleLogic } from '../types';
 import SecretsRegexes, { looksSecret } from '../analyzer/secretsRegexes';
 import { emptyValue } from './lib/util';
 import recordSecrets, { Secret } from '../analyzer/recordSecrets';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 class Match {
   private constructor(

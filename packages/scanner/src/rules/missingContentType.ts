@@ -1,8 +1,8 @@
-import { Event } from '@appland/models';
-import { RuleLogic } from '../types';
+import type { Event } from '@appland/models';
+import type { RuleLogic } from '../types';
 import { rpcRequestForEvent } from '@appland/openapi';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 const isRedirect = (status: number) => [301, 302, 303, 307, 308].includes(status);
 const hasContent = (status: number) => status !== 204;

@@ -1,5 +1,5 @@
-import { Event } from '@appland/models';
-import { MatcherResult, RuleLogic } from '../../types';
+import type { Event } from '@appland/models';
+import type { MatcherResult, RuleLogic } from '../../types';
 import { labels } from './metadata';
 
 export const deprecatedAlgorithms = [

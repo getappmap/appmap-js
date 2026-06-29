@@ -1,6 +1,6 @@
-import { Event } from '@appland/models';
-import Check from '../../check';
-import { MatchResult } from '../../types';
+import type { Event } from '@appland/models';
+import type Check from '../../check';
+import type { MatchResult } from '../../types';
 
 export type ExecutionContext = {
   counter: number;

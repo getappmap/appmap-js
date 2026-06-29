@@ -1,7 +1,8 @@
 import { load } from 'js-yaml';
 import { fileURLToPath, URL } from 'url';
-import { OpenAPIV3 } from 'openapi-types';
-import http, { IncomingMessage } from 'http';
+import type { OpenAPIV3 } from 'openapi-types';
+import type { IncomingMessage } from 'http';
+import http from 'http';
 import https from 'https';
 import { readFile } from 'fs/promises';
 

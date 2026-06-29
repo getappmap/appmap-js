@@ -1,4 +1,5 @@
-import { Event, EventNavigator } from '@appland/models';
+import type { Event } from '@appland/models';
+import { EventNavigator } from '@appland/models';
 
 export default function* precedingEvents(
   rootEvent: Event,

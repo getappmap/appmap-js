@@ -1,24 +1,24 @@
-import { ValidateFunction } from 'ajv';
+import type { ValidateFunction } from 'ajv';
 import Ajv from 'ajv';
 import yaml from 'js-yaml';
 import { exists, promises as fs } from 'fs';
 
-import { ScopeName } from '../index';
+import type { ScopeName } from '../index';
 import Check from '../check';
 
 import { camelize, capitalize, dasherize, verbose } from '../rules/lib/util';
 import { buildFilters as buildEventFilterArray } from '../rules/lib/matchEvent';
-import { Metadata } from '../rules/lib/metadata';
+import type { Metadata } from '../rules/lib/metadata';
 import parseRuleDescription from '../rules/lib/parseRuleDescription';
 
 import options_schema from './schema/options.json';
 import match_pattern_config_schema from './schema/match-pattern-config.json';
-import Configuration from './types/configuration';
-import CheckConfig from './types/checkConfig';
+import type Configuration from './types/configuration';
+import type CheckConfig from './types/checkConfig';
 import { URL } from 'url';
 import { promisify } from 'util';
 import { join } from 'path';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 const ajv = new Ajv();
 ajv.addSchema(match_pattern_config_schema);

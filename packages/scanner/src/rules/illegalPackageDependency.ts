@@ -1,11 +1,11 @@
-import { Event } from '@appland/models';
-import types from './types';
-import { MatchResult, RuleLogic } from '../types';
-import MatchPatternConfig from '../configuration/types/matchPatternConfig';
+import type { Event } from '@appland/models';
+import type types from './types';
+import type { MatchResult, RuleLogic } from '../types';
+import type MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilter, buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 class Options implements types.IllegalPackageDependency.Options {
   public callerPackages: MatchPatternConfig[] = [];

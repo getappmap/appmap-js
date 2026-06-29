@@ -1,4 +1,4 @@
-import { Argv } from 'yargs';
+import type { Argv } from 'yargs';
 
 export default function (args: Argv): void {
   args.option('directory', {

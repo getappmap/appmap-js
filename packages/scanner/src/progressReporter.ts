@@ -1,7 +1,7 @@
-import { AppMap, Event } from '@appland/models';
-import Check from './check';
-import { AppMapIndex, MatchResult } from './types';
-import { ScopeName } from './index';
+import type { AppMap, Event } from '@appland/models';
+import type Check from './check';
+import type { AppMapIndex, MatchResult } from './types';
+import type { ScopeName } from './index';
 
 export default interface ProgressReporter {
   beginAppMap(appMapFileName: string, appMap: AppMap): Promise<void>;
