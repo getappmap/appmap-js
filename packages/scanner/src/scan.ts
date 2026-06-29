@@ -74,7 +74,15 @@ class StatsProgressReporter implements ProgressReporter {
 
 const STATS_REPORTER = new StatsProgressReporter();
 
-setInterval(() => STATS_REPORTER.printSummary(), 3000);
+// The progress reporter periodically logs average parse/check times while scanning in
+// verbose mode. Start its timer lazily on the first scan rather than at import time, so
+// merely importing this module has no side effect; unref() it so it never keeps the
+// process — or a jest worker that imported this module — alive on its own.
+let statsReporterTimer: NodeJS.Timeout | undefined;
+function ensureStatsReporting(): void {
+  if (statsReporterTimer || !verbose()) return;
+  statsReporterTimer = setInterval(() => STATS_REPORTER.printSummary(), 3000).unref();
+}
 
 /**
  * Perform all configured checks on a single AppMap file.
@@ -83,6 +91,8 @@ export default async function scan(
   appmapFile: string,
   configurationFile: string
 ): Promise<ScanResults> {
+  ensureStatsReporting();
+
   let configuration = ConfigurationByFileName.get(configurationFile);
   if (!configuration) {
     if (verbose()) warn(`Loading configuration from ${configurationFile}`);
