@@ -19,6 +19,7 @@
     "doc-up-to-date": "git diff --exit-code doc/",
     "lint": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit",
+    "verify": "yarn lint && yarn typecheck",
     "ci": "yarn lint && yarn build && yarn schema-up-to-date && yarn doc-up-to-date && yarn test",
     "test": "yarn jest",
     "jest": "jest --filter=./test/testFilter.js --detectOpenHandles",
