@@ -11,18 +11,10 @@ import { withStubbedTelemetry } from '../../helper';
 describe('record', () => {
   withStubbedTelemetry();
 
-  const parser = yargs.command(recordCmd);
   const runCommand = async () => {
+    const parser = yargs.command(recordCmd);
     const cmdLine = `record remote`;
-    await new Promise((resolve, reject) => {
-      parser.parse(cmdLine, {}, (err, argv, output) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(output);
-        }
-      });
-    });
+    await parser.parseAsync(cmdLine, {});
   };
 
   describe('handling tickets', () => {
