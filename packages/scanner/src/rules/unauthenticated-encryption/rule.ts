@@ -1,5 +1,5 @@
-import { Event } from '@appland/models';
-import { AppMapIndex, MatcherResult, RuleLogic } from '../../types';
+import type { Event } from '@appland/models';
+import type { AppMapIndex, MatcherResult, RuleLogic } from '../../types';
 
 function matcher(event: Event, appMapIndex: AppMapIndex): MatcherResult {
   if (!event.receiver) return;

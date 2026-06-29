@@ -1,4 +1,4 @@
-import { CodeObject } from './types';
+import type { CodeObject } from './types';
 
 export default class Priority {
   patterns: string[] = [];

@@ -1,4 +1,4 @@
-import { Metadata } from '../lib/metadata';
+import type { Metadata } from '../lib/metadata';
 
 export const labels = ['crypto.encrypt', 'crypto.decrypt', 'crypto.digest'];
 

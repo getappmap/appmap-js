@@ -8,14 +8,14 @@ import { warn } from 'console';
 import { buildAppMap } from '@appland/models';
 
 import { loadConfig, parseConfigFile } from './configuration/configurationProvider';
-import Configuration from './configuration/types/configuration';
-import { default as CheckImpl } from './check';
+import type Configuration from './configuration/types/configuration';
+import type { default as CheckImpl } from './check';
 import { verbose } from './rules/lib/util';
 import RuleChecker from './ruleChecker';
-import { AppMap, Event } from '@appland/models';
-import { MatchResult } from './types';
-import { Check, Finding, ScanResults, ScopeName } from './index';
-import ProgressReporter from './progressReporter';
+import type { AppMap, Event } from '@appland/models';
+import type { MatchResult } from './types';
+import type { Check, Finding, ScanResults, ScopeName } from './index';
+import type ProgressReporter from './progressReporter';
 import AppMapIndex from './appMapIndex';
 
 const ConfigurationByFileName = new LRUCache<string, Configuration>({ max: 10 });

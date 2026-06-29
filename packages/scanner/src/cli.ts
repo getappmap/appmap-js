@@ -5,7 +5,8 @@ import ScanCommand from './cli/scan/command';
 import { verbose } from './rules/lib/util';
 import { AbortError, ValidationError } from './errors';
 import { ExitCode } from './cli/exitCode';
-import { Telemetry, TelemetryData } from '@appland/telemetry';
+import type { TelemetryData } from '@appland/telemetry';
+import { Telemetry } from '@appland/telemetry';
 import { setSQLErrorHandler } from '@appland/models';
 import sqlWarning from './sqlWarning';
 

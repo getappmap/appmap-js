@@ -1,4 +1,4 @@
-import { SqliteParser } from '@appland/models/types/sqlite-parser';
+import type { SqliteParser } from '@appland/models/types/sqlite-parser';
 
 type Callbacks = {
   [Node in SqliteParser.Node as `${Node['type']}.${Node['variant']}`]?: (node: Node) => void;

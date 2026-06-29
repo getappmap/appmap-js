@@ -1,10 +1,11 @@
-import { Event, EventNavigator } from '@appland/models';
+import type { Event } from '@appland/models';
+import { EventNavigator } from '@appland/models';
 import { URL } from 'url';
-import { MatchResult, RuleLogic } from '../types';
+import type { MatchResult, RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
 import precedingEvents from './lib/precedingEvents';
 import sanitizesData from './lib/sanitizesData';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 function allArgumentsSanitized(rootEvent: Event, event: Event): boolean {
   return (event.parameters || [])

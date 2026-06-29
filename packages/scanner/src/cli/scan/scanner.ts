@@ -1,5 +1,5 @@
 import { loadConfig } from '../../configuration/configurationProvider';
-import Configuration from '../../configuration/types/configuration';
+import type Configuration from '../../configuration/types/configuration';
 
 import scan from '../scan';
 import { ScanResults } from '../../report/scanResults';

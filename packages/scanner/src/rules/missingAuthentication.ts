@@ -1,13 +1,14 @@
-import { Event, EventNavigator } from '@appland/models';
+import type { Event } from '@appland/models';
+import { EventNavigator } from '@appland/models';
 import { rpcRequestForEvent } from '@appland/openapi';
-import * as types from './types';
-import { MatchResult, RuleLogic, StringFilter } from '../types';
+import type * as types from './types';
+import type { MatchResult, RuleLogic, StringFilter } from '../types';
 import { providesAuthentication } from './lib/util';
-import MatchPatternConfig from '../configuration/types/matchPatternConfig';
+import type MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 function isPublic(event: Event): boolean {
   return event.labels.has(AccessPublic);

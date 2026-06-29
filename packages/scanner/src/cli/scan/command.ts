@@ -1,11 +1,11 @@
-import { Arguments, Argv } from 'yargs';
+import type { Arguments, Argv } from 'yargs';
 
 import { ValidationError } from '../../errors';
 import { verbose } from '../../rules/lib/util';
 import { appmapDirFromConfig } from '../appmapDirFromConfig';
 
 import validateFile from '../validateFile';
-import CommandOptions from './options';
+import type CommandOptions from './options';
 import scanArgs from '../scanArgs';
 import singleScan from './singleScan';
 import watchScan from './watchScan';

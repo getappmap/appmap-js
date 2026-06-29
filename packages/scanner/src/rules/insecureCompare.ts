@@ -1,10 +1,10 @@
-import { Event } from '@appland/models';
+import type { Event } from '@appland/models';
 import { URL } from 'url';
 import recordSecrets, { Secret } from '../analyzer/recordSecrets';
 import { looksSecret } from '../analyzer/secretsRegexes';
-import { RuleLogic } from '../types.d';
+import type { RuleLogic } from '../types.d';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 const BCRYPT_REGEXP = /^[$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$/;
 

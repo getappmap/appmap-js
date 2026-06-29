@@ -1,18 +1,20 @@
 import { diffChars } from 'diff';
-import {
+import type {
   Action,
   Diagram,
+  FunctionCall,
+  ReturnValue,
+  ServerRPC,
+  ClientRPC,
+  Query,
+} from '../types';
+import {
   DiffMode,
   hasAncestor,
   isLoop,
   isFunction,
   isServerRPC,
-  FunctionCall,
-  ReturnValue,
   actionActors,
-  ServerRPC,
-  ClientRPC,
-  Query,
   isClientRPC,
   nodeResult,
   nodeName,

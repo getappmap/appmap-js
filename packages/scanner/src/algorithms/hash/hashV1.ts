@@ -1,4 +1,5 @@
-import { abstractSqlAstJSON, Event } from '@appland/models';
+import type { Event } from '@appland/models';
+import { abstractSqlAstJSON } from '@appland/models';
 import sha256 from 'crypto-js/sha256';
 import assert from 'assert';
 import { createHash } from 'crypto';

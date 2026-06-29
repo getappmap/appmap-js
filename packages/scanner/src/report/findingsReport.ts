@@ -1,7 +1,7 @@
-import { Metadata } from '@appland/models';
+import type { Metadata } from '@appland/models';
 import chalk from 'chalk';
 import { ideLink } from '../rules/lib/util';
-import { Finding } from '../index';
+import type { Finding } from '../index';
 
 function writeln(text = ''): void {
   process.stdout.write(text);

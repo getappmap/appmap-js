@@ -1,4 +1,4 @@
-import CheckConfig from './checkConfig';
+import type CheckConfig from './checkConfig';
 
 /**
  * Configuration is the code representation of the scanner configuration file.

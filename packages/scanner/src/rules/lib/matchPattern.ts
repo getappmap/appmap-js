@@ -1,5 +1,5 @@
-import MatchPatternConfig from '../../configuration/types/matchPatternConfig';
-import { StringFilter } from '../../types';
+import type MatchPatternConfig from '../../configuration/types/matchPatternConfig';
+import type { StringFilter } from '../../types';
 
 export function buildFilter(pattern: MatchPatternConfig): StringFilter {
   function respectIgnoreCaseFlag(value: string): string {

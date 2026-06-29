@@ -1,11 +1,11 @@
-import { Event } from '@appland/models';
-import { MatchResult, RuleLogic } from '../types';
-import * as types from './types';
-import MatchPatternConfig from '../configuration/types/matchPatternConfig';
+import type { Event } from '@appland/models';
+import type { MatchResult, RuleLogic } from '../types';
+import type * as types from './types';
+import type MatchPatternConfig from '../configuration/types/matchPatternConfig';
 import { buildFilters } from './lib/matchPattern';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 // TODO: Use the Query AST for this.
 const WHITELIST = [/\bBEGIN\b/i, /\bCOMMIT\b/i, /\bROLLBACK\b/i, /\bRELEASE\b/i, /\bSAVEPOINT\b/i];

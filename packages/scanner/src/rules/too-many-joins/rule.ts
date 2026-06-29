@@ -1,11 +1,12 @@
-import { Event } from '@appland/models';
-import { SqliteParser } from '@appland/models/types/sqlite-parser';
+import type { Event } from '@appland/models';
+import type { SqliteParser } from '@appland/models/types/sqlite-parser';
 import assert from 'assert';
-import AppMapIndex from '../../appMapIndex';
-import { countJoins, SQLCount, sqlStrings } from '../../database';
-import { EventFilter, MatchResult, RuleLogic } from '../../types';
+import type AppMapIndex from '../../appMapIndex';
+import type { SQLCount } from '../../database';
+import { countJoins, sqlStrings } from '../../database';
+import type { EventFilter, MatchResult, RuleLogic } from '../../types';
 import { buildFilters } from '../lib/matchPattern';
-import Options from './options';
+import type Options from './options';
 
 export interface JoinCount extends SQLCount {
   joins: number;

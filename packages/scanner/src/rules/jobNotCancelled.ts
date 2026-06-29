@@ -4,7 +4,7 @@ import Labels from '../wellKnownLabels';
 import { hasTransactionDetails } from '../scope/sqlTransactionScope';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 function build(): RuleLogic {
   function matcher(event: Event): MatchResult[] | undefined {

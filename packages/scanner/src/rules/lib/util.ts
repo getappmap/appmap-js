@@ -1,4 +1,4 @@
-import { Event, ReturnValueObject } from '@appland/models';
+import type { Event, ReturnValueObject } from '@appland/models';
 import { isAbsolute } from 'path';
 import { promisify } from 'util';
 import { glob as globCallback } from 'glob';

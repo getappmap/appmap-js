@@ -1,6 +1,6 @@
 import UI from '../userInteraction';
-import ScanContext from '../scanContext';
-import { State } from '../state';
+import type ScanContext from '../scanContext';
+import type { State } from '../state';
 
 export default async function initial(_context: ScanContext): Promise<State | undefined> {
   const choices: Record<string, string | null> = {

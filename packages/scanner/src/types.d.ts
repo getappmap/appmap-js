@@ -1,5 +1,5 @@
-import { AppMap, Event } from '@appland/models';
-import { SqliteParser } from '@appland/models/types/sqlite-parser';
+import type { AppMap, Event } from '@appland/models';
+import type { SqliteParser } from '@appland/models/types/sqlite-parser';
 
 /**
  * Scope provides an Event at the root of the scope, and a Generator to iterate over its descendants.

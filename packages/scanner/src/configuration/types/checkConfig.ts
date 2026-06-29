@@ -1,4 +1,4 @@
-import MatchEventConfig from './matchEventConfig';
+import type MatchEventConfig from './matchEventConfig';
 
 interface MatchConfig {
   scope?: MatchEventConfig;

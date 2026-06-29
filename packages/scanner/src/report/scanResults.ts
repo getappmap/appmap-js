@@ -1,9 +1,10 @@
-import { Metadata } from '@appland/models';
-import { Git, GitState, Telemetry, type TelemetryData } from '@appland/telemetry';
-import Check from '../check';
-import Configuration from '../configuration/types/configuration';
-import { Finding } from '../index';
-import { AppMapMetadata, ScanSummary } from './scanSummary';
+import type { Metadata } from '@appland/models';
+import type { TelemetryData } from '@appland/telemetry';
+import { Git, GitState, Telemetry } from '@appland/telemetry';
+import type Check from '../check';
+import type Configuration from '../configuration/types/configuration';
+import type { Finding } from '../index';
+import type { AppMapMetadata, ScanSummary } from './scanSummary';
 
 /** Tally values in `source` into `target`, summing counts for repeated keys. */
 function mergeCounts(target: Record<string, number>, source: Record<string, number>): void {

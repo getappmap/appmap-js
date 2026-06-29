@@ -1,5 +1,6 @@
-import { AppMap, normalizeSQL, parseSQL, Event } from '@appland/models';
-import { QueryAST } from './types';
+import type { AppMap, Event } from '@appland/models';
+import { normalizeSQL, parseSQL } from '@appland/models';
+import type { QueryAST } from './types';
 import { LRUCache } from 'lru-cache';
 
 const NormalizedSQLBySQLString = new LRUCache<string, string>({ max: 10000 });

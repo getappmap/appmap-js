@@ -1,7 +1,7 @@
-import { RuleLogic } from '../types';
-import * as types from './types';
+import type { RuleLogic } from '../types';
+import type * as types from './types';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 class Options implements types.SlowHTTPServerRequest.Options {
   public timeAllowed = 1;

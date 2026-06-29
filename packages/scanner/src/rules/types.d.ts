@@ -1,4 +1,4 @@
-import MatchPatternConfig from '../configuration/types/matchPatternConfig';
+import type MatchPatternConfig from '../configuration/types/matchPatternConfig';
 
 interface TimeAllowed {
   timeAllowed?: number;

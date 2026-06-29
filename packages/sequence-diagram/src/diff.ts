@@ -1,5 +1,6 @@
 import { MinPriorityQueue } from '@datastructures-js/priority-queue';
-import { Action, actionActors, Diagram, nodeName } from './types';
+import type { Action, Diagram } from './types';
+import { actionActors, nodeName } from './types';
 
 type ActionIndex = number;
 

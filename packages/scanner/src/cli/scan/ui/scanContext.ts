@@ -3,10 +3,10 @@ import { assert } from 'console';
 import EventEmitter from 'events';
 import { readFile } from 'fs/promises';
 import AppMapIndex from '../../../appMapIndex';
-import Check from '../../../check';
+import type Check from '../../../check';
 import RuleChecker from '../../../ruleChecker';
-import { Finding } from '../../../index';
-import { Breakpoint } from '../breakpoint';
+import type { Finding } from '../../../index';
+import type { Breakpoint } from '../breakpoint';
 import InteractiveProgress from './interactiveProgess';
 
 export default class ScanContext extends EventEmitter {

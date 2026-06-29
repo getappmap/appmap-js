@@ -1,6 +1,6 @@
-import { Event, Metadata } from '@appland/models';
+import type { Event, Metadata } from '@appland/models';
 
-import Configuration from './configuration/types/configuration';
+import type Configuration from './configuration/types/configuration';
 
 /**
  * Each Rule in the scanner library wants to consider some set of events as it decides whether the code should be flagged or not.

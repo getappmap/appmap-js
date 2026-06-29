@@ -1,12 +1,12 @@
 /* eslint-disable prefer-rest-params */
-import { AppMap, Event } from '@appland/models';
+import type { AppMap, Event } from '@appland/models';
 import EventEmitter from 'events';
-import AppMapIndex from '../../../appMapIndex';
-import Check from '../../../check';
-import ProgressReporter from '../../../progressReporter';
-import { MatchResult } from '../../../types';
-import { ScopeName } from '../../../index';
-import { Breakpoint, ExecutionContext } from '../breakpoint';
+import type AppMapIndex from '../../../appMapIndex';
+import type Check from '../../../check';
+import type ProgressReporter from '../../../progressReporter';
+import type { MatchResult } from '../../../types';
+import type { ScopeName } from '../../../index';
+import type { Breakpoint, ExecutionContext } from '../breakpoint';
 
 type ContextVariables = {
   event?: Event;

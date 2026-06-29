@@ -1,6 +1,6 @@
-import { CodeObject } from './types';
+import type { CodeObject } from './types';
 import Priority from './priority';
-import { AppMap, CodeObject as AppMapCodeObject, CodeObjectType } from '@appland/models';
+import type { AppMap, CodeObject as AppMapCodeObject, CodeObjectType } from '@appland/models';
 
 export type CodeObjectId = string;
 

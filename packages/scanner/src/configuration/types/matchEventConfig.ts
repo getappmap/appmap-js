@@ -1,4 +1,4 @@
-import MatchPatternConfig from './matchPatternConfig';
+import type MatchPatternConfig from './matchPatternConfig';
 
 type PropertyName = 'id' | 'type' | 'fqid' | 'query' | 'route';
 

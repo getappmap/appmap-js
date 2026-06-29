@@ -1,4 +1,4 @@
-import { Diagram } from '../types';
+import type { Diagram } from '../types';
 
 export const extension = '.json';
 

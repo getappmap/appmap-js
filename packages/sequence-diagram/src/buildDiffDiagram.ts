@@ -1,5 +1,7 @@
-import { Diff, MoveType, Move } from './diff';
-import { Action, actionActors, Actor, Diagram, DiffMode, nodeName, nodeResult } from './types';
+import type { Diff, Move } from './diff';
+import { MoveType } from './diff';
+import type { Action, Actor, Diagram } from './types';
+import { actionActors, DiffMode, nodeName, nodeResult } from './types';
 
 function cloneAction(action: Action): Action {
   const parent = action.parent;

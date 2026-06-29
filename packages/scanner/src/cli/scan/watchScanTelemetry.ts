@@ -1,8 +1,8 @@
 import type { EventEmitter } from 'stream';
 import EventAggregator from '../../util/eventAggregator';
 import { countFindings, ScanResults, sendScanResultsTelemetry } from '../../report/scanResults';
-import { Finding } from '../../index';
-import { FindingsDiff } from '../../report/findingsDiff';
+import type { Finding } from '../../index';
+import type { FindingsDiff } from '../../report/findingsDiff';
 
 export type ScanEvent = {
   scanResults: ScanResults;

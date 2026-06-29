@@ -1,4 +1,4 @@
-import { Metadata } from '@appland/models';
+import type { Metadata } from '@appland/models';
 
 export interface AppMapMetadata {
   labels: string[];

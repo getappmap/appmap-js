@@ -1,4 +1,5 @@
-import { Diagram, FormatType } from './types';
+import type { Diagram } from './types';
+import { FormatType } from './types';
 
 import * as json from './formatter/json';
 import * as plantUML from './formatter/plantUML';

@@ -1,9 +1,10 @@
-import { Event, EventNavigator } from '@appland/models';
+import type { Event } from '@appland/models';
+import { EventNavigator } from '@appland/models';
 import { isTruthy, providesAuthentication } from './lib/util';
-import { MatcherResult, RuleLogic } from '../types.d';
+import type { MatcherResult, RuleLogic } from '../types.d';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 function containsAuthentication(events: Generator<EventNavigator>) {
   for (const iter of events) {

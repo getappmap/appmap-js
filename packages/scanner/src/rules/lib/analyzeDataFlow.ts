@@ -1,4 +1,4 @@
-import { Event, ValueBase } from '@appland/models';
+import type { Event, ValueBase } from '@appland/models';
 
 function matches(template: ValueBase, value: ValueBase): boolean {
   if (template.object_id && template.object_id === value.object_id) return true;

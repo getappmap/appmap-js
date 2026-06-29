@@ -1,5 +1,5 @@
-import { Event, Label } from '@appland/models';
-import { RuleLogic } from '../../types';
+import type { Event, Label } from '@appland/models';
+import type { RuleLogic } from '../../types';
 
 export interface RPCWithoutProtectionOptions {
   get expectedLabel(): Label;

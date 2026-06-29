@@ -1,4 +1,4 @@
-import ScanOptions from '../scanOptions';
+import type ScanOptions from '../scanOptions';
 
 export default interface CommandOptions extends ScanOptions {
   all: boolean;

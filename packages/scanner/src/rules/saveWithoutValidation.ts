@@ -1,8 +1,9 @@
-import { Event, EventNavigator } from '@appland/models';
+import type { Event } from '@appland/models';
+import { EventNavigator } from '@appland/models';
 import { URL } from 'url';
-import { RuleLogic } from '../types';
+import type { RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 const validatedBy = (iterator: Iterator<EventNavigator>): boolean => {
   let i: IteratorResult<EventNavigator> = iterator.next();

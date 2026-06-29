@@ -1,5 +1,5 @@
-import MatchPatternConfig from '../../configuration/types/matchPatternConfig';
-import { TooManyJoins } from '../types';
+import type MatchPatternConfig from '../../configuration/types/matchPatternConfig';
+import type { TooManyJoins } from '../types';
 
 export default class Options implements TooManyJoins.Options {
   public warningLimit = 5;

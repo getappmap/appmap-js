@@ -1,13 +1,13 @@
-import { Event } from '@appland/models';
+import type { Event } from '@appland/models';
 import { forClientRequest, breakingChanges } from '../openapi';
-import { MatchResult, RuleLogic } from '../types';
-import * as types from './types';
-import OpenApiDiff from 'openapi-diff';
-import { OpenAPIV3 } from 'openapi-types';
+import type { MatchResult, RuleLogic } from '../types';
+import type * as types from './types';
+import type OpenApiDiff from 'openapi-diff';
+import type { OpenAPIV3 } from 'openapi-types';
 import parseRuleDescription from './lib/parseRuleDescription';
 import openapiProvider from './lib/openapiProvider';
 import assert from 'assert';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 class Options implements types.IncompatibleHttpClientRequest.Options {
   public schemata: Record<string, string> = {};

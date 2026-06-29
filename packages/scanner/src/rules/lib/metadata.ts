@@ -1,4 +1,4 @@
-import { ImpactDomain, ScopeName } from '../../index';
+import type { ImpactDomain, ScopeName } from '../../index';
 
 export type Metadata = {
   title: string;

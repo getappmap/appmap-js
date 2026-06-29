@@ -2,7 +2,7 @@ import { writeFile } from 'fs/promises';
 import { default as buildScanner } from './scanner';
 
 import { ValidationError } from '../../errors';
-import Configuration from '../../configuration/types/configuration';
+import type Configuration from '../../configuration/types/configuration';
 import findingsReport from '../../report/findingsReport';
 import summaryReport from '../../report/summaryReport';
 import { formatReport } from './formatReport';

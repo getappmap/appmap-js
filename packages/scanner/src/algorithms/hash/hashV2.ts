@@ -1,4 +1,4 @@
-import { Event } from '@appland/models';
+import type { Event } from '@appland/models';
 import { createHash } from 'crypto';
 import isCommand from '../../rules/lib/isCommand';
 import { verbose } from '../../rules/lib/util';

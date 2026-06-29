@@ -1,6 +1,6 @@
-import GraphEdge from './GraphEdge';
+import type GraphEdge from './GraphEdge';
 import LinkedList from '../linked-list/LinkedList';
-import LinkedListNode from '../linked-list/LinkedListNode';
+import type LinkedListNode from '../linked-list/LinkedListNode';
 
 export default class GraphVertex {
   value: string;

@@ -1,4 +1,4 @@
-import { ParseError } from '@appland/models';
+import type { ParseError } from '@appland/models';
 import { open } from 'fs/promises';
 
 const SqlErrors = new Set();

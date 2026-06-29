@@ -1,4 +1,4 @@
-import GraphVertex from './GraphVertex';
+import type GraphVertex from './GraphVertex';
 
 export default class GraphEdge {
   startVertex: GraphVertex;

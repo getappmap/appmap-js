@@ -1,9 +1,9 @@
-import { Event, Label } from '@appland/models';
-import * as types from './types';
-import { RuleLogic } from '../types';
+import type { Event, Label } from '@appland/models';
+import type * as types from './types';
+import type { RuleLogic } from '../types';
 import { URL } from 'url';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 class Options implements types.QueryFromView.Options {
   public forbiddenLabel: Label = 'mvc.template';

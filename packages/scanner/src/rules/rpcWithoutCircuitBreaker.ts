@@ -1,9 +1,11 @@
-import { Event, EventNavigator } from '@appland/models';
-import * as types from './types';
-import { RPCWithoutProtectionOptions, rpcWithoutProtection } from './lib/rpcWithoutProtection';
-import { RuleLogic } from '../types';
+import type { Event } from '@appland/models';
+import { EventNavigator } from '@appland/models';
+import type * as types from './types';
+import type { RPCWithoutProtectionOptions } from './lib/rpcWithoutProtection';
+import { rpcWithoutProtection } from './lib/rpcWithoutProtection';
+import type { RuleLogic } from '../types';
 import parseRuleDescription from './lib/parseRuleDescription';
-import RuleInstance from '../ruleInstance';
+import type RuleInstance from '../ruleInstance';
 
 class Options implements RPCWithoutProtectionOptions, types.RPCWithoutCircuitBreaker.Options {
   public expectedLabel: string = RPCCircuitBreaker;

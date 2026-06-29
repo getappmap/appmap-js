@@ -1,6 +1,6 @@
-import { Event } from '@appland/models';
-import MatchEventConfig from '../../configuration/types/matchEventConfig';
-import { AppMapIndex, EventFilter } from '../../types';
+import type { Event } from '@appland/models';
+import type MatchEventConfig from '../../configuration/types/matchEventConfig';
+import type { AppMapIndex, EventFilter } from '../../types';
 import { buildFilter as buildMatchPattern } from './matchPattern';
 
 export function buildFilter(pattern: MatchEventConfig): EventFilter {
