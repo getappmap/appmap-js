@@ -96,3 +96,4 @@ export interface ScanResults {
 }
 
 export { default as scan } from './scan';
+export { diffFindings, FindingsDiff } from './report/findingsDiff';
