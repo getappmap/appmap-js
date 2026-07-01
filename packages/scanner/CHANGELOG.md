@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.90.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.90.0...@appland/scanner-v1.90.1) (2026-07-01)
+
+
+### Bug Fixes
+
+* Restore backward compatibility down to macOS 11.0 ([76dfbf2](https://github.com/getappmap/appmap-js/commit/76dfbf2df1ee0c566b0ef658c4f0ffa263fa2c03))
+
 # [@appland/scanner-v1.90.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.89.1...@appland/scanner-v1.90.0) (2026-06-24)
 
 
