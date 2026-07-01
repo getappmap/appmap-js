@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.199.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.199.1...@appland/appmap-v3.199.2) (2026-07-01)
+
+
+### Bug Fixes
+
+* Restore backward compatibility down to macOS 11.0 ([76dfbf2](https://github.com/getappmap/appmap-js/commit/76dfbf2df1ee0c566b0ef658c4f0ffa263fa2c03))
+
 # [@appland/appmap-v3.199.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.199.0...@appland/appmap-v3.199.1) (2026-06-14)
 
 
