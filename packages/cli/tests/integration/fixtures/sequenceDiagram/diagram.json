@@ -88,6 +88,9 @@
       "elapsed": 0.038045,
       "eventIds": [
         1
+      ],
+      "labels": [
+        "security"
       ]
     },
     {
@@ -250,6 +253,10 @@
           "elapsed": 0.150356,
           "eventIds": [
             8
+          ],
+          "labels": [
+            "provider.authenticate",
+            "security"
           ]
         },
         {
@@ -347,6 +354,9 @@
               "elapsed": 0.008962,
               "eventIds": [
                 29
+              ],
+              "labels": [
+                "security"
               ]
             }
           ],
@@ -431,6 +441,10 @@
           "elapsed": 0.005355,
           "eventIds": [
             40
+          ],
+          "labels": [
+            "provider.authenticate",
+            "security"
           ]
         },
         {
@@ -456,6 +470,10 @@
           "elapsed": 0.00005,
           "eventIds": [
             46
+          ],
+          "labels": [
+            "json",
+            "serialization"
           ]
         }
       ],

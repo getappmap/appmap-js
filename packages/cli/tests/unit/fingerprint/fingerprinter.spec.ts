@@ -1,4 +1,4 @@
-import { mkdtemp, open, rm, writeFile } from 'fs/promises';
+import { cp, mkdtemp, open, readdir, rm, writeFile } from 'fs/promises';
 import path from 'node:path';
 import { tmpdir } from 'os';
 import FileTooLargeError from '../../../src/fingerprint/fileTooLargeError';
@@ -18,6 +18,25 @@ function withTempDir<T>(closure: (dir: string) => Promise<T>): () => Promise<T> 
 }
 
 describe(Fingerprinter, () => {
+  it(
+    'fingerprints a recording and writes the on-disk index',
+    withTempDir(async (dir) => {
+      const filePath = path.join(dir, 'revoke_api_key.appmap.json');
+      await cp(
+        path.join(__dirname, '..', 'fixtures', 'ruby', 'revoke_api_key.appmap.json'),
+        filePath
+      );
+
+      await new Fingerprinter().fingerprint(filePath);
+
+      // The legacy per-file index is written into a directory named after the
+      // AppMap (classMap, metadata, canonicalized forms).
+      const indexFiles = await readdir(path.join(dir, 'revoke_api_key'));
+      expect(indexFiles).toContain('metadata.json');
+      expect(indexFiles).toContain('classMap.json');
+    })
+  );
+
   it(
     'rejects appmaps that are too large',
     withTempDir(async (dir) => {
