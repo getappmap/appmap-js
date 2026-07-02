@@ -12,6 +12,13 @@ packages:
       - matchFile
       - collectParameters
       - indexEvent
+      # Incidental usage-telemetry leaves: sanitizeURL (and its inner parseURL)
+      # only fire when the checkout has a git remote (buildMetadata's
+      # `if (repository)` branch), so they appear/vanish with ambient git state
+      # rather than app behavior. Exclude to keep gold traces deterministic
+      # across machines (see appmap-gold-traces determinism).
+      - sanitizeURL
+      - parseURL
   - path: packages/navie
     exclude:
       - node_modules
@@ -36,6 +43,12 @@ packages:
     exclude:
       - node_modules
       - .yarn
+  - path: packages/sequence-diagram
+    exclude:
+      - node_modules
+      - .yarn
+      - dist
+      - tests
 test_commands:
   - language: javascript
     command: npx appmap-node yarn test $(test_name)
