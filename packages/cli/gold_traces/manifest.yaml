@@ -99,6 +99,19 @@ entries:
     appmap_path: jest/MCP_handler/get_call_tree_resolves_the_canonical_appmap_path_and_applies_focus_type.appmap.json
     summary: MCP handler resolves an AppMap path and returns a focused call tree (get_call_tree tool).
 
+  # Negative branch of the security.path-resolution gate (resolveAppmapPath).
+  # The happy-path entry above only exercises a successful canonical-path match;
+  # a single happy-path trace cannot guard a security gate. This entry drives the
+  # gate's REJECTION arm: a canonical absolute path resolves, but a bare recording
+  # name and a numeric id are refused with a "not found" hint instead of silently
+  # resolving to the wrong recording. If someone loosened resolveAppmapPath to
+  # accept looser shapes, this trace drifts where the happy-path one would not.
+  - feature: query-mcp-path-resolution
+    test_file: tests/unit/cmds/query/queries/mcp.spec.ts
+    test_name: get_call_tree only accepts the canonical path; name / numeric id return a "not found" hint
+    appmap_path: jest/MCP_handler/Spec_01-_canonical_path_identifier/get_call_tree_only_accepts_the_canonical_path;_name_-_numeric_id_return_a_-not_found-_hint.appmap.json
+    summary: resolveAppmapPath (security.path-resolution) rejects a bare name and numeric id, accepting only the canonical absolute path.
+
   # trim underpins the gold-traces engine itself (every blessed baseline is run
   # through `appmap trim`), so a change to the value-truncation algorithm would
   # silently reshape every baseline. Guard the transform directly. One entry
