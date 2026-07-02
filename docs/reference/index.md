@@ -19,6 +19,7 @@ redirect_from: [/docs/reference/browser-extension]
   - [AppMap for Java – Gradle Plugin](/docs/reference/appmap-gradle-plugin)
 - [AppMap Command line interface (CLI)](/docs/reference/appmap-client-cli.html)
 - [Remote recording API](/docs/reference/remote-recording-api)
+- [AppMap MCP Server](/docs/reference/appmap-mcp)
 - [Analysis Rules](/docs/reference/analysis-rules)
 - [Analysis Labels](/docs/reference/analysis-labels)
 - [License Key Installation](/docs/reference/license-key-install)

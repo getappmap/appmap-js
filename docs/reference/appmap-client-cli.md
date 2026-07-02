@@ -17,12 +17,16 @@ redirect_from: [docs/reference/appmap-swagger-ruby]
     - [Install AppMap CLI Precompiled Binary](#install-appmap-cli-precompiled-binary)
   - [Usage](#usage)
   - [`install`](#install)
+  - [`index`](#index)
+  - [`query`](#query)
+  - [`rpc`](#rpc)
   - [`inspect`](#inspect)
   - [`sequence-diagram`](#sequence-diagram)
   - [`sequence-diagram-diff`](#sequence-diagram-diff)
   - [`openapi`](#openapi)
   - [`stats`](#stats)
   - [`prune`](#prune)
+  - [`trim`](#trim)
   - [`archive`](#archive)
   - [`restore`](#restore)
   - [`compare`](#compare)
@@ -98,6 +102,167 @@ Installing AppMap agent for ....
 The installer changes your project's build process (yarn.lock for
 JavaScript, Gemfile for Ruby, etc) to run AppMap when the tests run
 and when developing locally. It will not be added to your production system.
+
+## `index`
+
+Use this command to compute fingerprints and update index files for all AppMap Data in a directory. Indexing also builds the query database (`query.db`) that the [`query`](#query) command reads.
+
+### Usage
+
+Run the command in your project directory. It will locate AppMap Data using the `appmap_dir:` setting in `appmap.yml` (or the `--appmap-dir` option), index every AppMap it finds, and exit:
+
+```console
+$ appmap index
+```
+{: .example-code}
+
+The query database is stored outside of your project, at `~/.appmap/data/<sha>/query.db`, where `<sha>` is derived from the resolved path of the AppMap directory. Each AppMap directory therefore gets its own query database. You can override this location with the `--query-db` option.
+
+Re-run `appmap index` after recording new AppMap Data to bring the index and query database up to date. Alternatively, use the `--watch` option to keep the indexer running continuously; it will index new and changed AppMap files as they appear:
+
+```console
+$ appmap index --watch
+```
+{: .example-code}
+
+The `--port` option (which implies `--watch`) additionally starts a JSON-RPC server on the given port. This mode is used by the AppMap code editor extensions and Navie, and is not usually invoked directly.
+
+### Arguments
+
+```
+appmap index
+
+Compute fingerprints and update index files for all appmaps in a directory
+
+Options:
+      --version     Show version number                                [boolean]
+  -v, --verbose     Run with verbose logging                           [boolean]
+      --help        Show help                                          [boolean]
+  -d, --directory   program working directory                           [string]
+      --appmap-dir  directory to recursively inspect for AppMaps
+  -w, --watch       watch the directory for changes to appmaps         [boolean]
+  -p, --port        port to listen on for JSON-RPC requests             [number]
+      --query-db    path to query.db (overrides default
+                    ~/.appmap/data/<sha>/query.db)                      [string]
+      --log-navie   Log Navie events to stderr        [boolean] [default: false]
+```
+
+## `query`
+
+Use this command to search and analyze indexed AppMap Data. `query` provides a family of subcommands ("verbs") that answer questions about recorded application behavior: which routes were exercised, which requests failed, which functions and SQL queries are slowest, how behavior differs between branches, and more.
+
+`query` reads from the query database built by the [`index`](#index) command, so run `appmap index` first. If the query database is missing, `query` will exit with an error prompting you to build it.
+
+### Query verbs
+
+| Verb | Description |
+|------|-------------|
+| `endpoints` | Per-route summary table. A good first command for orienting yourself in a set of recordings. |
+| `find <type>` | Row-level search across recordings. Types: `appmaps` (alias `recordings`), `requests`, `queries`, `calls`, `exceptions`, `logs`. |
+| `tree <appmap>` | Render the call tree of one recording. |
+| `related <appmap>` | Rank recordings that are similar to the given recording. |
+| `hotspots` | Rank functions or SQL queries by cumulative elapsed time. |
+| `compare <branch-a> <branch-b>` | Per-route latency delta between two branches. |
+| `mcp` | Run an MCP (Model Context Protocol) server on stdio that exposes the query verbs as tools, for use by AI assistants. |
+| `ui` | Launch a local web UI for browsing the query database (dashboard, endpoints, hotspots, traces). |
+
+Run any verb with `--help` for its full set of options:
+
+```console
+$ appmap query find --help
+```
+{: .example-code}
+
+### Common options
+
+Most verbs accept `--appmap-dir` (directory containing the AppMap Data) and `--query-db` (explicit path to the query database), as well as `--json` to emit machine-readable output instead of a formatted table. The `find` verb supports a rich set of filters, including `--route`, `--class`, `--method`, `--status`, `--duration`, `--branch`, `--commit`, `--since`, `--until`, and `--table`.
+
+### Examples
+
+Summarize all recorded routes:
+
+```console
+$ appmap query endpoints
+```
+{: .example-code}
+
+Find failed requests:
+
+```console
+$ appmap query find requests --status ">=500"
+```
+{: .example-code}
+
+Find SQL queries that touch the `users` table, as JSON:
+
+```console
+$ appmap query find queries --table users --json
+```
+{: .example-code}
+
+Rank the slowest functions and SQL queries:
+
+```console
+$ appmap query hotspots
+```
+{: .example-code}
+
+## `rpc`
+
+Use this command to run the AppMap JSON-RPC server. The server exposes AppMap Data and Navie AI methods over JSON-RPC, and is the integration point used by the AppMap code editor extensions. You can also run it directly to integrate AppMap and Navie into your own tools and scripts.
+
+### Usage
+
+```console
+$ appmap rpc
+```
+{: .example-code}
+
+By default the server listens on a port chosen by the operating system (`--port 0`); the selected port number is printed to stdout on startup. Pass an explicit `--port` to use a fixed port.
+
+The server provides JSON-RPC methods for:
+
+- Searching AppMap Data and retrieving AppMap statistics, metadata, data, and sequence diagrams.
+- Asking Navie AI questions about your application (`explain`), including managing conversation threads, message attachments, and pinned items.
+- Getting and setting configuration, and listing and selecting Navie AI models.
+
+To invoke a single RPC method from the command line without keeping a server running, use the companion `rpc-client` command:
+
+```console
+$ appmap rpc-client <function> [request]
+```
+{: .example-code}
+
+### Arguments
+
+```
+appmap rpc
+
+Run AppMap JSON-RPC server
+
+Options:
+      --version          Show version number                           [boolean]
+      --help             Show help                                     [boolean]
+      --verbose          Verbose output               [boolean] [default: false]
+  -d, --directory        program working directory. May be repeated.    [array]
+      --log-navie        Log Navie events to stderr   [boolean] [default: false]
+      --ai-option        Specify an extended option to the AI provider, in the
+                         form of a key=value pair. May be repeated.      [array]
+      --prompt           A file containing custom system prompts to send to the
+                         LLM                                            [string]
+      --code-editor      Active code editor. This information is used to tune
+                         the @help responses. If unspecified, the code editor
+                         may be picked up from environment variables
+                         APPMAP_CODE_EDITOR, TERM_PROGRAM and
+                         TERMINAL_EMULATOR.                             [string]
+      --thread-id        The thread ID to use for the question. If not
+                         provided, a new thread ID will be allocated.   [string]
+      --trajectory-file  File to write the LLM interaction history, in JSONL
+                         format                                         [string]
+  -p, --port             port to listen on for JSON-RPC requests. Use port 0 to
+                         let the OS choose a port. The port number will be
+                         printed to stdout on startup.      [number] [default: 0]
+```
 
 ## `inspect` 
 
@@ -462,6 +627,46 @@ using the `--filter` option. Here are the steps for using this technique:
 $ appmap prune <APPMAP_FILE> --filter eyJjdXJyZW50VmlldyI6InZpZXdTZXF1ZW5jZSIsImZpbHRlcnMi
 ```
 {: .example-code}
+
+## `trim`
+
+Use this command to shrink AppMap files by truncating captured value strings — parameters, return values, receivers, log messages, and exceptions.
+
+Unlike [`prune`](#prune), which removes events from an AppMap, `trim` keeps every event. Only the captured `value` strings are shortened; the call structure, code objects, SQL, and all other properties are untouched. A trimmed AppMap is therefore behaviorally identical to the original, but much smaller — which makes `trim` well suited to preparing AppMap Data for long-term storage, such as committing a baseline to a repository.
+
+### Usage
+
+Pass one or more AppMap files to trim. By default, each file is overwritten in place; use `--output-dir` to write the trimmed files to a different directory instead. The command reports the size reduction for each file:
+
+```console
+$ appmap trim tmp/appmap/minitest/*.appmap.json
+trim tmp/appmap/minitest/Valid_login_redirect_after_login.appmap.json: 1548288 -> 216430 bytes (14%)
+```
+{: .example-code}
+
+The `--max-length` option controls how aggressively values are truncated. Plain strings are capped at this length (default: 120 characters), while structured values (objects, arrays, hashes) are budgeted per field, so their overall shape remains readable.
+
+### Arguments
+
+```
+appmap trim <files..>
+
+Shrink AppMaps by truncating captured parameter, return, receiver, and message
+values
+
+Positionals:
+  files  AppMap file(s) to trim                                         [string]
+
+Options:
+      --version     Show version number                                [boolean]
+  -v, --verbose     Run with verbose logging                           [boolean]
+      --help        Show help                                          [boolean]
+      --max-length  Maximum length of a captured value string (structured
+                    values are budgeted per field)      [number] [default: 120]
+  -o, --output-dir  Write trimmed AppMaps here (default: overwrite each file in
+                    place)                                              [string]
+  -d, --directory   Working directory for the command                   [string]
+```
 
 ## `archive`
 

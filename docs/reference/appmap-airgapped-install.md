@@ -345,6 +345,13 @@ To open the Output window, on the menu bar, choose View > Output, or in Windows 
 
 ![Open View in VS Code](/assets/img/docs/vscode-output-1.webp)
 
+When reviewing logs, pay attention to startup errors that might indicate:
+- System compatibility issues (e.g., GLIBC version requirements on Linux)
+- Permission problems (especially on Windows)
+- Temporary directory access restrictions
+
+For detailed information about common error patterns and their solutions, see our [VS Code troubleshooting guide](/docs/troubleshooting/vscode).
+
 Click on the output log dropdown in the right corner to view a list of all the available output logs.
 
 ![Open Output logs list](/assets/img/docs/vscode-output-2.webp)
@@ -369,10 +376,18 @@ Next, open `Help` > `Show Log...` will open the IDE log file.
 
 ## Support
 
-For help with your offline install of AppMap Navie, please open a new support request by emailing [support@appmap.io](mailto:support@appmap.io)
+If you encounter startup issues with the VS Code extension, first check our [troubleshooting guide](/docs/troubleshooting/vscode) for solutions to common problems like:
+- Linux GLIBC version compatibility requirements
+- Windows temporary directory permissions
+- Extension startup failures
 
-Include the following information in your support request.
+If you're still experiencing issues with your offline installation of AppMap Navie, please open a new support request by emailing [support@appmap.io](mailto:support@appmap.io)
 
+Include the following information in your support request:
+- Any error messages from the VS Code Output panel (AppMap: Services channel)
+- Your operating system version and details:
+  - For Linux: output of `ldd --version`
+  - For Windows: OS build number and whether VS Code is running as administrator
 - Company Name
 - Code editor name and version (e.g. VS Code or JetBrains)
 - AppMap binary version

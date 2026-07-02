@@ -29,7 +29,7 @@ After you complete the installation of AppMap for your code editor. Open the Nav
 
 To open the Navie Chat, open the AppMap plugin in the sidebar menu for your code editor, and select the `New Navie Chat` option.
 
-![Open Navie](/assets/img/open-navie.webp)
+![Open Navie](/assets/img/open-navie.png)
 
 ## Ask Navie about your App
 
@@ -64,6 +64,24 @@ The Navie UI includes a standard chat window, and a context panel which will inc
 - All modules available in JetBrains IDEs
 
 ![Navie Context Window](/assets/img/navie-context-window.webp)
+
+## Review Your Code
+
+You can also use Navie to review your code. This is a great way to get an overview of your codebase, identify potential issues, and improve the quality of your code.
+Navie uses the same types of data to perform code review as it does for answering questions, including code snippets, sequence diagrams, traces, and other I/O data.
+
+To start a code review, click the `Review Your Code` button in the Navie sidebar. This will generate a list of suggested improvements for your codebase, including:
+
+![Review Your Code](/assets/img/review_your_code_button.png)
+
+- Potential bugs
+- SQL query optimizations
+- HTTP request optimizations
+- Security vulnerabilities
+- Performance improvements
+- Code design improvements and anti-patterns
+
+... and more. Because Navie uses AppMap Data, it can provide more accurate and relevant suggestions than other code review tools.
 
 ## Improve Navie AI Responses with AppMap Data
 
