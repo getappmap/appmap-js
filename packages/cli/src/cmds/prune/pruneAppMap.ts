@@ -22,6 +22,10 @@ export const pruneAppMap = (appMap: AppMap, size: number): PruneResult => {
   return { appmap };
 };
 
+// Deserializes an untrusted serialized filter (the CLI accepts it as a
+// base64url-encoded string) into an AppMapFilter and applies it to the map.
+// Labeled so appmap-review interprets changes to this deserialization boundary.
+// @label security.deserialization
 export const pruneWithFilter = (appMap: AppMap, serializedFilter: string): PruneResult => {
   // TODO: update type for AppMap
   const fullMap = buildAppMap().source(appMap).normalize().build() as any;

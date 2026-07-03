@@ -34,6 +34,7 @@ import type { AppmapInfo } from '../queries/tree';
 // shapes silently collide in real corpora (multiple recordings share
 // the same basename or name), and the resulting wrong-recording
 // resolution is harder to debug than an explicit error.
+// @label security.path-resolution
 export function resolveAppmapPath(db: sqlite3.Database, ref: unknown): AppmapInfo {
   const s = String(ref);
   if (looksLikeDisplayLabel(s)) {

@@ -44,6 +44,11 @@ export type Node = {
   formerName?: string;
   formerResult?: string;
   eventIds: number[];
+  // AppMap labels applied to the callee code object (sorted, omitted when empty).
+  // Carried so downstream analysis (e.g. behavioral diffing) can read labels straight
+  // from the diagram. Not part of `digest`/`subtreeDigest`, so a pure re-label is not a
+  // behavioral change.
+  labels?: string[];
 };
 
 export type Loop = Node & {

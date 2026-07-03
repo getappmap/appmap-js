@@ -24,6 +24,15 @@ const MAX_WINDOW_SIZE = 5;
 const parsedSqlCache = new LRUCache<string, any>({ max: 1000 });
 const sha256Cache = new LRUCache<string, string>({ max: 1000 });
 
+// AppMap labels applied to the callee's code object, sorted for stable output.
+// Returns undefined when there are none so the field is omitted from the diagram.
+function labelsOf(event: Event): string[] | undefined {
+  const labels = event.codeObject?.labels;
+  if (!labels) return undefined;
+  const sorted = [...labels].sort();
+  return sorted.length > 0 ? sorted : undefined;
+}
+
 class ActorManager {
   private _actorsByCodeObjectId = new Map<string, Actor>();
   private _actors: Actor[] = [];
@@ -77,6 +86,7 @@ export default function buildDiagram(
         children: [],
         elapsed: callee.elapsedTime,
         eventIds: [callee.id],
+        labels: labelsOf(callee),
       } as ServerRPC;
     } else if (callee?.httpClientRequest && callee?.httpClientResponse) {
       if (!callee.route) throw Error('callee.route not found');
@@ -92,6 +102,7 @@ export default function buildDiagram(
         children: [],
         elapsed: callee.elapsedTime,
         eventIds: [callee.id],
+        labels: labelsOf(callee),
       } as ClientRPC;
     } else if (callee?.sqlQuery) {
       const truncatedQuery = callee.sqlQuery.endsWith('...');
@@ -105,6 +116,7 @@ export default function buildDiagram(
         children: [],
         elapsed: callee.elapsedTime,
         eventIds: [callee.id],
+        labels: labelsOf(callee),
       } as Query;
     } else if (callee) {
       return {
@@ -120,6 +132,7 @@ export default function buildDiagram(
         children: [],
         elapsed: callee.elapsedTime,
         eventIds: [callee.id],
+        labels: labelsOf(callee),
       } as FunctionCall;
     }
   }
