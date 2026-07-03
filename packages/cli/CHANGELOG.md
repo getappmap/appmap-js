@@ -1,3 +1,15 @@
+# [@appland/appmap-v3.200.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.199.2...@appland/appmap-v3.200.0) (2026-07-03)
+
+
+### Bug Fixes
+
+* **cli:** make `appmap trim` crash-safe and --max-length a real cap ([d37c53e](https://github.com/getappmap/appmap-js/commit/d37c53e85bb6e1bce113bfc2a9c6f9f486ae4b61))
+
+
+### Features
+
+* **cli:** add `appmap trim` command and shared value-truncation lib ([87824eb](https://github.com/getappmap/appmap-js/commit/87824eb418feb72d5a4387bb39cf39c22e80c124))
+
 # [@appland/appmap-v3.199.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.199.1...@appland/appmap-v3.199.2) (2026-07-01)
 
 
