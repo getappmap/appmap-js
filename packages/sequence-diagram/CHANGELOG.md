@@ -1,3 +1,10 @@
+# [@appland/sequence-diagram-v1.13.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.12.0...@appland/sequence-diagram-v1.13.0) (2026-07-03)
+
+
+### Features
+
+* **sequence-diagram:** carry AppMap labels on diagram actions ([0d99566](https://github.com/getappmap/appmap-js/commit/0d99566f635856f624f27289e611f2f05244045b))
+
 # [@appland/sequence-diagram-v1.12.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.11.0...@appland/sequence-diagram-v1.12.0) (2023-12-28)
 
 
