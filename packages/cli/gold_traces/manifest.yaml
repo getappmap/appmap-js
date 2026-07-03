@@ -1,0 +1,124 @@
+# Gold-traces spec (managed by the appmap-gold-traces skill).
+#
+# Behavioral baseline for the @appland/appmap CLI. Each entry reuses an EXISTING
+# jest test that exercises a command handler or the query engine end-to-end
+# (test_file + the it() name; appmap_path is the describe/it path appmap-node
+# writes, spaces -> underscores). Chosen to be lean, deterministic, and to cover
+# distinct subsystems. Navie is intentionally excluded.
+#
+# Deliberately excluded (do not add without addressing the reason):
+#   - compare, inventory: their handler tests balloon to multi-MB AppMaps from
+#     repeated fixture processing that the sequence diagram collapses anyway, so
+#     they add git weight without extra digest signal (see the skill's leanness
+#     and "repetition, not structure" guidance).
+#   - navie: intentionally out of scope for this baseline.
+
+schema_version: 1
+
+commands:
+  # Record ONE gold test. No trim step here — the engine trims the committed
+  # baseline via `appmap trim`. Recording from the package dir picks up its
+  # ts-jest preset (see repo CLAUDE.md).
+  record: "npx appmap-node npx jest {test_file} >/dev/null"
+
+  # The CLI used to export the bless-gating sequence diagram and to trim baselines.
+  appmap_cli: "node built/cli.js"
+
+entries:
+  - feature: stats
+    test_file: tests/unit/stats/stats.spec.ts
+    test_name: analyzes a directory
+    appmap_path: jest/stats_subcommand/analyzes_a_directory.appmap.json
+    summary: stats command aggregates event statistics over a directory of AppMaps.
+
+  - feature: sequence-diagram
+    test_file: tests/unit/sequenceDiagram.spec.ts
+    test_name: is valid
+    appmap_path: jest/sequence_diagram_command/JSON_format/is_valid.appmap.json
+    summary: sequence-diagram command generates a valid JSON sequence diagram.
+
+  - feature: openapi
+    test_file: tests/unit/openapi.spec.ts
+    test_name: handles valid and malformed HTTP server requests
+    appmap_path: jest/OpenAPI/handles_valid_and_malformed_HTTP_server_requests.appmap.json
+    summary: openapi command builds an OpenAPI document from request/response data.
+
+  - feature: prune
+    test_file: tests/unit/prune.spec.ts
+    test_name: correctly reduces the size of an appmap from a base64url-encoded filter
+    appmap_path: jest/prune_subcommand/correctly_reduces_the_size_of_an_appmap_from_a_base64url-encoded_filter.appmap.json
+    summary: prune command shrinks an AppMap by removing events per a filter.
+
+  # The `index` command has three separable responsibilities; each gets its own
+  # trace so a change to one doesn't drift the others.
+  - feature: index-fingerprinter
+    test_file: tests/unit/fingerprint/fingerprinter.spec.ts
+    test_name: fingerprints a recording and writes the on-disk index
+    appmap_path: jest/Fingerprinter/fingerprints_a_recording_and_writes_the_on-disk_index.appmap.json
+    summary: Fingerprinter builds the legacy per-file on-disk index (canonicalize + hash + classMap/metadata).
+
+  - feature: index-querydb
+    test_file: tests/unit/cmds/query/db/import/importAppmap.spec.ts
+    test_name: imports an end-to-end recording into all tables
+    appmap_path: jest/importAppmap/imports_an_end-to-end_recording_into_all_tables.appmap.json
+    summary: importAppmap imports a recording into the query.db SQLite index that the query/MCP commands read.
+
+  - feature: index-traversal
+    test_file: tests/unit/fingerprint/fingerprintDirectoryCommand.spec.ts
+    test_name: fingerprints AppMaps and writes an index
+    appmap_path: jest/index_command/fingerprinting_a_directory/fingerprints_AppMaps_and_writes_an_index.appmap.json
+    summary: FingerprintDirectoryCommand walks a directory and drives fingerprinting via the queue (index traversal/orchestration).
+
+  - feature: query-find
+    test_file: tests/unit/cmds/query/queries/find.spec.ts
+    test_name: --label filters via the labels table
+    appmap_path: jest/findCalls/--label_filters_via_the_labels_table.appmap.json
+    summary: query find engine filters calls via the labels table (SQL-backed).
+
+  - feature: query-tree
+    test_file: tests/unit/cmds/query/queries/tree.spec.ts
+    test_name: returns only sql events when filter=sql
+    appmap_path: jest/tree_--filter/returns_only_sql_events_when_filter=sql.appmap.json
+    summary: query tree engine builds a call tree and filters to SQL events.
+
+  - feature: query-hotspots
+    test_file: tests/unit/cmds/query/queries/hotspots.spec.ts
+    test_name: --class filters by defined class
+    appmap_path: jest/functionHotspots/--class_filters_by_defined_class.appmap.json
+    summary: query hotspots engine ranks function hotspots filtered by class.
+
+  - feature: query-endpoints
+    test_file: tests/unit/cmds/query/queries/endpoints.spec.ts
+    test_name: sorts by the requested key
+    appmap_path: jest/endpoints/sorts_by_the_requested_key.appmap.json
+    summary: query endpoints engine lists HTTP endpoints and sorts by the requested key.
+
+  - feature: query-mcp
+    test_file: tests/unit/cmds/query/queries/mcp.spec.ts
+    test_name: get_call_tree resolves the canonical appmap path and applies focus type
+    appmap_path: jest/MCP_handler/get_call_tree_resolves_the_canonical_appmap_path_and_applies_focus_type.appmap.json
+    summary: MCP handler resolves an AppMap path and returns a focused call tree (get_call_tree tool).
+
+  # Negative branch of the security.path-resolution gate (resolveAppmapPath).
+  # The happy-path entry above only exercises a successful canonical-path match;
+  # a single happy-path trace cannot guard a security gate. This entry drives the
+  # gate's REJECTION arm: a canonical absolute path resolves, but a bare recording
+  # name and a numeric id are refused with a "not found" hint instead of silently
+  # resolving to the wrong recording. If someone loosened resolveAppmapPath to
+  # accept looser shapes, this trace drifts where the happy-path one would not.
+  - feature: query-mcp-path-resolution
+    test_file: tests/unit/cmds/query/queries/mcp.spec.ts
+    test_name: get_call_tree only accepts the canonical path; name / numeric id return a "not found" hint
+    appmap_path: jest/MCP_handler/Spec_01-_canonical_path_identifier/get_call_tree_only_accepts_the_canonical_path;_name_-_numeric_id_return_a_-not_found-_hint.appmap.json
+    summary: resolveAppmapPath (security.path-resolution) rejects a bare name and numeric id, accepting only the canonical absolute path.
+
+  # trim underpins the gold-traces engine itself (every blessed baseline is run
+  # through `appmap trim`), so a change to the value-truncation algorithm would
+  # silently reshape every baseline. Guard the transform directly. One entry
+  # exercising all captured slot types is enough; the sibling trim tests walk the
+  # same trimAppMap -> truncateStructValue path and would only duplicate coverage.
+  - feature: trim
+    test_file: tests/unit/trim.spec.ts
+    test_name: truncates values across every captured slot while preserving structure
+    appmap_path: jest/trim_command/trimAppMap/truncates_values_across_every_captured_slot_while_preserving_structure.appmap.json
+    summary: trimAppMap truncates captured values across every slot type while preserving event structure.

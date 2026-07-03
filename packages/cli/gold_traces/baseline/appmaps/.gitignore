@@ -1,0 +1,4 @@
+# Gold-trace baselines are committed on purpose, overriding the repo-wide
+# `*.appmap.json` ignore. Everything else (derived sequence exports, archives)
+# stays out of git.
+!*.appmap.json

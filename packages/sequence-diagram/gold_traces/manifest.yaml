@@ -1,0 +1,62 @@
+# Gold-traces spec for @appland/sequence-diagram (managed by the appmap-gold-traces skill).
+#
+# One file: HOW to record (commands) + WHAT to record (entries). Paths are derived —
+# commands run from this file's parent dir (packages/sequence-diagram), and recordings
+# come from the repo-root appmap.yml's appmap_dir (tmp/appmap). See repo CLAUDE.md;
+# recording must run from the package dir so Jest picks up its ts-jest preset.
+#
+# Each entry exercises a distinct subsystem of src/ via a Jest test recorded under
+# appmap-node. Lean, deterministic, single-behavior traces only: loop- or
+# big-fixture-heavy tests (e.g. loop rendering, list-vs-prefetch diff) are left out —
+# their extra events are repeated helper frames the sequence diagram collapses, so they
+# add MBs to the baseline with no extra digest signal.
+
+schema_version: 1
+
+commands:
+  # Record ONE gold test, then trim its captured values so the committed baseline
+  # stays lean (see gold_traces/trim.mts). appmap-node names the output by the full
+  # describe/it path, so we record the whole test file and trim just the entry's
+  # appmap_path. Recording from the package dir is required for the ts-jest preset.
+  record: "npx appmap-node npx jest {test_file} >/dev/null"
+
+  # The repo's built CLI exports the sequence diagram whose digest gates the bless.
+  # Resolved relative to the record dir (packages/sequence-diagram).
+  appmap_cli: "node ../cli/built/cli.js"
+
+entries:
+  - feature: specification
+    test_file: tests/integration/specification.spec.ts
+    test_name: includes all relevant actors
+    appmap_path: jest/Specification/includes_all_relevant_actors.appmap.json
+    summary: Code-object selection picks the actors/packages to include in the diagram.
+
+  - feature: labels
+    test_file: tests/unit/sequenceDiagram.spec.ts
+    test_name: are reported on a labeled function action
+    appmap_path: jest/Sequence_diagram/labels/are_reported_on_a_labeled_function_action.appmap.json
+    summary: AppMap labels are carried onto the diagram action (the feature on this branch).
+
+  - feature: protocols-http
+    test_file: tests/unit/http.spec.ts
+    test_name: is recorded
+    appmap_path: jest/Sequence_diagram/HTTP_server_request/is_recorded.appmap.json
+    summary: An HTTP server request is represented as a diagram action.
+
+  - feature: protocols-sql
+    test_file: tests/unit/sql.spec.ts
+    test_name: is recorded
+    appmap_path: jest/Sequence_diagram/SQL_query/is_recorded.appmap.json
+    summary: A SQL query is represented as a diagram action.
+
+  - feature: diff
+    test_file: tests/integration/sequenceDiagramDiff.spec.ts
+    test_name: UML matches expectation
+    appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/UML_matches_expectation.appmap.json
+    summary: Diff of two diagrams (user found vs not found) built and rendered to PlantUML.
+
+  - feature: formatter-text
+    test_file: tests/integration/sequenceDiagramDiff.spec.ts
+    test_name: Text matches expectation
+    appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/Text_matches_expectation.appmap.json
+    summary: The same diff diagram rendered to the Text output format (formatter.format -> text.format subtree, distinct from the PlantUML branch).

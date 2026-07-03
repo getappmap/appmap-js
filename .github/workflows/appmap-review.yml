@@ -1,0 +1,119 @@
+name: AppMap Behavioral Review
+
+# For each changed package that has a gold-trace baseline, re-record + bless the
+# baseline and post an interpreted behavioral review to the PR (sticky comment +
+# job summary) via getappmap/review-action. The review catches regressions that
+# still pass the test suite — a dropped guard, a new query in a loop, a
+# security-sensitive function that changed but gained no check.
+#
+# Baselines live in packages/<pkg>/gold_traces/ (manifest.yaml + baseline/), and
+# are auto-trimmed by the gold-traces engine via `appmap trim`.
+
+on:
+  pull_request:
+    paths:
+      - 'packages/cli/**'
+      - 'packages/sequence-diagram/**'
+  workflow_dispatch:
+
+# The action commits blessed gold-trace updates to the PR branch and posts the
+# review comment.
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  # Serialize all runs for a branch (pull_request and workflow_dispatch alike,
+  # keyed by branch name) so overlapping runs don't push baselines concurrently.
+  # The action also rebase-retries its push, covering writers outside this group
+  # (e.g. other agents on the branch).
+  group: appmap-review-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  review:
+    # Secrets (ANTHROPIC_API_KEY) and a write token are not available to fork PRs.
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' ||
+          github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      # One baseline push to the PR branch at a time; don't cancel the other
+      # package's review if one fails.
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        package:
+          - packages/cli
+          - packages/sequence-diagram
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the review reads gold traces from both revisions' history
+          ref: ${{ github.head_ref || github.ref }} # push blessed baselines back to the PR branch
+
+      # Skip the (expensive) agent run for a package this PR didn't touch.
+      - name: Did ${{ matrix.package }} change?
+        id: changed
+        run: |
+          base="${{ github.event.pull_request.base.sha }}"
+          if [ -z "$base" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"   # workflow_dispatch: review both
+          elif git diff --quiet "$base"...HEAD -- "${{ matrix.package }}"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node
+        if: steps.changed.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        if: steps.changed.outputs.changed == 'true'
+        run: yarn install --immutable
+
+      # This repo IS @appland/appmap. The gold-traces engine's appmap_cli is the
+      # locally-built CLI (`node built/cli.js`) — the only build that carries
+      # `appmap trim` — so build the workspaces before recording + trimming.
+      - name: Build workspaces
+        if: steps.changed.outputs.changed == 'true'
+        run: yarn build
+
+      # The review action installs @appland/appmap globally, which builds the
+      # non-optional fsevents@1 (via chokidar@2) and fails node-gyp on Linux —
+      # neither --omit=optional nor npm@9 avoids it. Since this repo builds the
+      # CLI, expose the local build as `appmap` on PATH; the action skips its own
+      # install when `appmap` is present (and it's the in-tree CLI, with `trim`).
+      - name: Expose locally-built appmap on PATH
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/appmap-bin"
+          cat > "$RUNNER_TEMP/appmap-bin/appmap" <<EOF
+          #!/usr/bin/env bash
+          exec node "$GITHUB_WORKSPACE/packages/cli/built/cli.js" "\$@"
+          EOF
+          chmod +x "$RUNNER_TEMP/appmap-bin/appmap"
+          echo "$RUNNER_TEMP/appmap-bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/appmap-bin/appmap" --version
+
+      - name: Review ${{ matrix.package }}
+        if: steps.changed.outputs.changed == 'true'
+        # In-development action — track its default branch until it ships a
+        # taggable release; pin to a SHA/tag once published.
+        uses: getappmap/review-action@main
+        with:
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          working-directory: ${{ matrix.package }}
+          gold-traces-dir: gold_traces
+          # On pull_request this is the PR base; on workflow_dispatch base_ref is
+          # empty, so fall back to main to keep the review's compare well-defined.
+          base-revision: ${{ github.base_ref || 'main' }}
+          # The in-repo gold_traces use the single-file manifest.yaml + auto-trim
+          # engine, which currently lives on this skills branch (merge to main
+          # will let this default).
+          skills-ref: feat/gold-traces-label-aware-compare
