@@ -3,8 +3,8 @@ layout: docs
 title: Docs - AppMap Navie
 description: "Reference Guide to AppMap Navie AI, a complete list of options available in AppMap Navie AI."
 name: Navie Options
-navie-reference: true
-step: 4
+navie: true
+step: 6
 toc: true
 ---
 
