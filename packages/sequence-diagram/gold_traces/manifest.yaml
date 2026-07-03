@@ -54,3 +54,9 @@ entries:
     test_name: UML matches expectation
     appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/UML_matches_expectation.appmap.json
     summary: Diff of two diagrams (user found vs not found) built and rendered to PlantUML.
+
+  - feature: formatter-text
+    test_file: tests/integration/sequenceDiagramDiff.spec.ts
+    test_name: Text matches expectation
+    appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/Text_matches_expectation.appmap.json
+    summary: The same diff diagram rendered to the Text output format (formatter.format -> text.format subtree, distinct from the PlantUML branch).
