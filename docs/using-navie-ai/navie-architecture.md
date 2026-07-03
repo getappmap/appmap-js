@@ -4,7 +4,7 @@ title: Docs - AppMap Navie
 description: "Reference Guide to AppMap Navie AI, architectural overview of AppMap Navie AI."
 name: Navie Architecture
 navie: true
-step: 7
+step: 8
 toc: true
 ---
 

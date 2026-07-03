@@ -3,11 +3,12 @@ layout: docs
 title: Docs - AppMap Navie
 description: "Learn how to use AppMap Navie to provide personalized code analysis. Generate AppMap Data, ask Navie questions, analyze code, and iterate for optimal results."
 name: Navie Command Workflow
-step: 4
+step: 5
 navie: true
 toc: true
 redirect_from: [/docs/guides/navie-best-practices, /docs/navie/using-navie]
 ---
+
 # Navie Command Workflow
 
 AppMap Navie is designed to help you solve issues and add features in your codebase by leveraging runtime data and AI-driven commands. By following a structured workflow, you can maximize Navie’s capabilities to plan, generate, and verify your code changes with precision. This guide outlines the recommended workflow and provides an overview of the key command modes used throughout the process.
@@ -22,7 +23,7 @@ To achieve the highest quality results when using Navie, we suggest using the fo
    The @explain command helps you learn more about your project. It prompts Navie to be more explanatory and dive into architectural level questions pulling information from across your entire code base.
 
 2. **@diagram**  
-The @diagram command prompts Navie to create visual diagrams such as sequence diagrams, class diagrams, and flow charts. These diagrams are based on the code and runtime data associated with the issue or feature. Navie diagrams are exportable, compatible with Mermaid, and can be used to enhance technical documentation or shared with team members.
+   The @diagram command prompts Navie to create visual diagrams such as sequence diagrams, class diagrams, and flow charts. These diagrams are based on the code and runtime data associated with the issue or feature. Navie diagrams are exportable, compatible with Mermaid, and can be used to enhance technical documentation or shared with team members.
 
 3. **@plan**  
    The @plan command helps you generate a step-by-step, multi-file plan that aligns with your application's design. Based on the issue you are working on, Navie will propose a solution with code snippets, flow charts, and runtime context to ensure accuracy.
@@ -33,22 +34,21 @@ The @diagram command prompts Navie to create visual diagrams such as sequence di
 5. **@test**  
    Navie can also assist in generating and refining test cases. The @test command is used to generate tests for both new and existing code to ensure functionality and catch breaking behaviors.
 
-6. **@review**  
-   Finally, the @review command allows you to compare the newly generated code with your existing codebase, ensuring that the changes are in line with the desired functionality and do not introduce regressions.
-
+6. **Review Your Code**  
+   Use the `Review Your Code` feature to analyze your code changes and receive a comprehensive report. This feature helps you improve code quality, security, and performance by providing specific, actionable suggestions. You can find the `Review Your Code` button in the Navie sidebar, or you can use the command palette (VSCode) or AppMap menu (JetBrains) to start a review.
 
 #### Step-by-Step Example of Solving an Issue with Navie
 
-The Navie command modes are available to be used in any sequence at any time. However, building up understanding through the iteration of the following process has proven to maximize the quality and consistency of positive results. 
+The Navie command modes are available to be used in any sequence at any time. However, building up understanding through the iteration of the following process has proven to maximize the quality and consistency of positive results.
 
-{% include vimeo.html id='1012769182' %}
-
+{% include vimeo.html id='1102292990' %}
 
 ##### Step 1: Collect Data and Plan the Solution
+
 Copy the details of your issue, including the steps to reproduce it, into Navie using the `@plan` command.
 
 ```plaintext
-@plan 
+@plan
 <Paste issue text from GitHub, Jira, or any issue tracking system>
 ```
 
@@ -71,27 +71,30 @@ When you ask Navie a question, the default mode is `@explain`, which you can use
 Supported diagram types include sequence diagram, flow chart, entity-relationship, and class diagram.
 
 ```plaintext
-@diagram 
+@diagram
 <Insert details for the code behavior you want diagrammed>
 ```
+
 If AppMap data is available for the issue you're working on, Navie will have a deep understanding of your application's architecture. This enhances the quality of insights you receive when asking questions. Navie can search through your AppMap data to pinpoint the files, methods, and external services involved in processes like user registration.
 
 Navie can also provide **comparative analysis and recommendations** based on patterns in your existing codebase.
 
 ##### Step 3: Generating Code
+
 Once the plan is confirmed, use the `@generate` command to produce the necessary code changes.
 
 ```plaintext
-@generate 
+@generate
 ```
 
 Navie will generate code based on the approved plan, updating multiple files if needed. The changes will be consistent with your project’s architecture and runtime context.
 
 ##### Step 4: Testing the Changes
 
-The `@test` command helps you generate test cases. It works best when you specify the code that you want to test. You can do this by selecting the relevant code directly or by indicating the files to be tested in your conversation with Navie. 
+The `@test` command helps you generate test cases. It works best when you specify the code that you want to test. You can do this by selecting the relevant code directly or by indicating the files to be tested in your conversation with Navie.
 
 To guide Navie, you can:
+
 - Pin files containing the code you want to test in the Navie context window
 - Select code and use the lightbulb icon in your editor (VS Code or JetBrains) to add it to the conversation.
 
@@ -102,6 +105,10 @@ This way, Navie knows exactly what to focus on and can generate precise, relevan
 ```
 
 After Navie generates test cases, insert them into your project’s test suite and run them using your test framework. Navie ensures that all test cases pass successfully.
+
+##### Step 5: Review
+
+By creating and running test cases, you've generated AppMap runtime data that can be used in the code review process. Use the `Review Your Code` feature to analyze your code changes and receive a comprehensive report. This feature helps you improve code quality, security, and performance by providing specific, actionable suggestions.
 
 ---
 
