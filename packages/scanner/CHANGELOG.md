@@ -1,3 +1,16 @@
+# [@appland/scanner-v1.91.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.90.1...@appland/scanner-v1.91.0) (2026-07-06)
+
+
+### Bug Fixes
+
+* **scanner:** dedupe findings report by hash_v2 ([5c129ab](https://github.com/getappmap/appmap-js/commit/5c129abcaa3d707a348d6ec824a49789fcebd839))
+* **scanner:** don't let the scan progress timer block process exit ([e6a8a3c](https://github.com/getappmap/appmap-js/commit/e6a8a3ca638da7d1c9506476bb2b4bc1d1d04178))
+
+
+### Features
+
+* **scanner:** add new/resolved finding deltas to scan:completed ([a9b5e10](https://github.com/getappmap/appmap-js/commit/a9b5e1013af8c685c065f3f78387a56a1d8713d0))
+
 # [@appland/scanner-v1.90.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.90.0...@appland/scanner-v1.90.1) (2026-07-01)
 
 
