@@ -14,10 +14,11 @@
 schema_version: 1
 
 commands:
-  # Record ONE gold test, then trim its captured values so the committed baseline
-  # stays lean (see gold_traces/trim.mts). appmap-node names the output by the full
-  # describe/it path, so we record the whole test file and trim just the entry's
-  # appmap_path. Recording from the package dir is required for the ts-jest preset.
+  # Record ONE gold test. No trim step here — the engine trims each committed
+  # baseline via `appmap trim`. appmap-node names the output by the full
+  # describe/it path, so we record the whole test file; the engine picks out the
+  # entry's appmap_path. Recording from the package dir is required for the
+  # ts-jest preset.
   record: "npx appmap-node npx jest {test_file} >/dev/null"
 
   # The repo's built CLI exports the sequence diagram whose digest gates the bless.
