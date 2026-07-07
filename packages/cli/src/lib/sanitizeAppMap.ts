@@ -58,6 +58,11 @@ export class ValueTokenizer {
     return this.tokens.size;
   }
 
+  // The tokenization primitive: every captured value string passes through
+  // here and is replaced with a content-free token (allow-list and
+  // already-assigned tokens excepted). Labeled so appmap-review interprets
+  // changes to what escapes tokenization.
+  // @label security.sanitization
   tokenize(value: string): string {
     if (this.allow.has(value) || TOKEN_PATTERN.test(value)) return value;
     let token = this.tokens.get(value);
@@ -89,6 +94,7 @@ const SQL_RESIDUE: Record<string, RegExp> = {
 };
 const SQL_RESIDUE_DEFAULT = /'|"|\/\*|\*\//;
 
+// @label security.sanitization
 function sanitizeSql(sql: string, adapter: string | undefined, tokenizer: ValueTokenizer): string {
   if (TOKEN_PATTERN.test(sql)) return sql;
   const normalized = normalizeSQL(sql, adapter ?? '');
@@ -157,6 +163,11 @@ function sanitizeHeaders(headers: Record<string, unknown> | undefined, tokenizer
   }
 }
 
+// The redaction boundary: sanitizes every field defined to hold captured
+// runtime data (parameters, return values, exceptions, HTTP paths/headers,
+// SQL) so the committed AppMap is structurally incapable of carrying a secret.
+// Labeled so appmap-review interprets any change to this boundary.
+// @label security.sanitization
 export function sanitizeAppMap(
   appmap: AppMap,
   tokenizer: ValueTokenizer = new ValueTokenizer()
