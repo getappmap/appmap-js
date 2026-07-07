@@ -84,11 +84,10 @@ jobs:
         if: steps.changed.outputs.changed == 'true'
         run: yarn build
 
-      # The review action installs @appland/appmap globally, which builds the
-      # non-optional fsevents@1 (via chokidar@2) and fails node-gyp on Linux —
-      # neither --omit=optional nor npm@9 avoids it. Since this repo builds the
-      # CLI, expose the local build as `appmap` on PATH; the action skips its own
-      # install when `appmap` is present (and it's the in-tree CLI, with `trim`).
+      # This repo IS the AppMap CLI, so expose the in-tree build as `appmap` on
+      # PATH: without an explicit version pin, the action prefers a PATH-provided
+      # appmap over installing a release binary — and the in-tree CLI carries
+      # commands a released binary may not have yet (e.g. trim/sanitize).
       - name: Expose locally-built appmap on PATH
         if: steps.changed.outputs.changed == 'true'
         run: |
@@ -103,9 +102,9 @@ jobs:
 
       - name: Review ${{ matrix.package }}
         if: steps.changed.outputs.changed == 'true'
-        # In-development action — track its default branch until it ships a
-        # taggable release; pin to a SHA/tag once published.
-        uses: getappmap/review-action@main
+        # v1 also gives each matrix package its own sticky PR comment
+        # (comment-tag defaults to working-directory).
+        uses: getappmap/review-action@v1
         with:
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           working-directory: ${{ matrix.package }}
@@ -113,7 +112,3 @@ jobs:
           # On pull_request this is the PR base; on workflow_dispatch base_ref is
           # empty, so fall back to main to keep the review's compare well-defined.
           base-revision: ${{ github.base_ref || 'main' }}
-          # The in-repo gold_traces use the single-file manifest.yaml + auto-trim
-          # engine, which currently lives on this skills branch (merge to main
-          # will let this default).
-          skills-ref: feat/gold-traces-label-aware-compare
