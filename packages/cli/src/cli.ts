@@ -22,6 +22,7 @@ import StatusCommand from './cmds/agentInstaller/status';
 import { default as OpenAPICommand } from './cmds/openapi/openapi';
 import PruneCommand from './cmds/prune/prune';
 import TrimCommand from './cmds/trim/trim';
+import SanitizeCommand from './cmds/sanitize/sanitize';
 import RecordCommand from './cmds/record/record';
 import { handleWorkingDirectory } from './lib/handleWorkingDirectory';
 import { locateAppMapDir } from './lib/locateAppMapDir';
@@ -148,6 +149,7 @@ yargs(process.argv.slice(2))
   .command(SequenceDiagramDiffCommand)
   .command(PruneCommand)
   .command(TrimCommand)
+  .command(SanitizeCommand)
   .command(ArchiveCommand)
   .command(RestoreCommand)
   .command(CompareCommand)
