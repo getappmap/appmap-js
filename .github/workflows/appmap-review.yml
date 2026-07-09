@@ -15,8 +15,9 @@ name: AppMap Behavioral Review
 # re-reviews the same revision. The label does nothing on a PR that touches
 # neither package: no run is created at all.
 #
-# "Run workflow" reviews the branch you pick, compared against main — so on
-# main itself it is a baseline maintenance run (main vs main), not a review.
+# "Run workflow" reviews any two refs: head (default: the branch you pick)
+# against base (default: main). Picking main with the defaults is a baseline
+# maintenance run (main vs main), not a review.
 
 on:
   pull_request:
@@ -25,6 +26,15 @@ on:
       - 'packages/cli/**'
       - 'packages/sequence-diagram/**'
   workflow_dispatch:
+    inputs:
+      head:
+        description: 'Ref to review (branch, tag, or SHA). Empty: the branch picked under "Use workflow from". Baseline updates are only pushed back when this is a branch.'
+        required: false
+        default: ''
+      base:
+        description: 'Ref to review against (branch, tag, or SHA).'
+        required: false
+        default: 'main'
 
 # The action commits blessed gold-trace updates to the PR branch and posts the
 # review comment.
@@ -64,15 +74,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # the review reads gold traces from both revisions' history
-          ref: ${{ github.head_ref || github.ref }} # push blessed baselines back to the PR branch
+          ref: ${{ inputs.head || github.head_ref || github.ref }} # push blessed baselines back to the PR branch
 
       # Skip the (expensive) agent run for a package this PR didn't touch.
       - name: Did ${{ matrix.package }} change?
         id: changed
         run: |
-          base="${{ github.event.pull_request.base.sha }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            ref="${{ inputs.base }}"
+            base="$(git rev-parse --verify --quiet "$ref^{commit}" \
+                 || git rev-parse --verify --quiet "origin/$ref^{commit}" || true)"
+          else
+            base="${{ github.event.pull_request.base.sha }}"
+          fi
           if [ -z "$base" ]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"   # workflow_dispatch: review both
+            echo "changed=true" >> "$GITHUB_OUTPUT"   # unknown base: review both
           elif git diff --quiet "$base"...HEAD -- "${{ matrix.package }}"; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
@@ -121,6 +137,7 @@ jobs:
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           working-directory: ${{ matrix.package }}
           gold-traces-dir: gold_traces
-          # On pull_request this is the PR base; on workflow_dispatch base_ref is
-          # empty, so fall back to main to keep the review's compare well-defined.
-          base-revision: ${{ github.base_ref || 'main' }}
+          # Pull requests compare head against the PR base; "Run workflow"
+          # compares any two refs (defaults: the checked-out branch vs main).
+          base-revision: ${{ inputs.base || github.base_ref || 'main' }}
+          head-revision: ${{ inputs.head || github.sha }}
