@@ -47,9 +47,10 @@ export const BUILTIN_ALLOW: ReadonlySet<string> = new Set([
   'NULL',
   'nil',
   'None',
+  'undefined',
 ]);
 
-export class ValueTokenizer {
+export class ValueMasker {
   private tokens = new Map<string, string>();
 
   constructor(private allow: ReadonlySet<string> = BUILTIN_ALLOW) {}
@@ -58,12 +59,12 @@ export class ValueTokenizer {
     return this.tokens.size;
   }
 
-  // The tokenization primitive: every captured value string passes through
-  // here and is replaced with a content-free token (allow-list and
+  // The masking primitive: every captured value string passes through here
+  // and is replaced with a content-free token (allow-list and
   // already-assigned tokens excepted). Labeled so appmap-review interprets
-  // changes to what escapes tokenization.
+  // changes to what escapes masking.
   // @label security.sanitization
-  tokenize(value: string): string {
+  mask(value: string): string {
     if (this.allow.has(value) || TOKEN_PATTERN.test(value)) return value;
     let token = this.tokens.get(value);
     if (!token) {
@@ -95,11 +96,11 @@ const SQL_RESIDUE: Record<string, RegExp> = {
 const SQL_RESIDUE_DEFAULT = /'|"|\/\*|\*\//;
 
 // @label security.sanitization
-function sanitizeSql(sql: string, adapter: string | undefined, tokenizer: ValueTokenizer): string {
+function sanitizeSql(sql: string, adapter: string | undefined, masker: ValueMasker): string {
   if (TOKEN_PATTERN.test(sql)) return sql;
   const normalized = normalizeSQL(sql, adapter ?? '');
   const residue = (adapter && SQL_RESIDUE[adapter]) || SQL_RESIDUE_DEFAULT;
-  if (residue.test(normalized)) return tokenizer.tokenize(sql);
+  if (residue.test(normalized)) return masker.mask(sql);
   return normalized;
 }
 
@@ -150,16 +151,16 @@ interface AppMap {
   events?: AppMapEvent[];
 }
 
-function sanitizeSlot(slot: ValueSlot | undefined, tokenizer: ValueTokenizer): void {
-  if (slot && typeof slot.value === 'string') slot.value = tokenizer.tokenize(slot.value);
+function sanitizeSlot(slot: ValueSlot | undefined, masker: ValueMasker): void {
+  if (slot && typeof slot.value === 'string') slot.value = masker.mask(slot.value);
 }
 
 // Header NAMES are schema (kept); header VALUES are captured data (tokenized).
-function sanitizeHeaders(headers: Record<string, unknown> | undefined, tokenizer: ValueTokenizer): void {
+function sanitizeHeaders(headers: Record<string, unknown> | undefined, masker: ValueMasker): void {
   if (!headers) return;
   for (const name of Object.keys(headers)) {
     const value = headers[name];
-    if (typeof value === 'string') headers[name] = tokenizer.tokenize(value);
+    if (typeof value === 'string') headers[name] = masker.mask(value);
   }
 }
 
@@ -170,17 +171,17 @@ function sanitizeHeaders(headers: Record<string, unknown> | undefined, tokenizer
 // @label security.sanitization
 export function sanitizeAppMap(
   appmap: AppMap,
-  tokenizer: ValueTokenizer = new ValueTokenizer()
+  masker: ValueMasker = new ValueMasker()
 ): AppMap {
   for (const event of appmap.events ?? []) {
-    for (const p of event.parameters ?? []) sanitizeSlot(p, tokenizer);
-    for (const m of event.message ?? []) sanitizeSlot(m, tokenizer);
-    sanitizeSlot(event.receiver, tokenizer);
-    sanitizeSlot(event.return_value, tokenizer);
+    for (const p of event.parameters ?? []) sanitizeSlot(p, masker);
+    for (const m of event.message ?? []) sanitizeSlot(m, masker);
+    sanitizeSlot(event.receiver, masker);
+    sanitizeSlot(event.return_value, masker);
 
     for (const x of event.exceptions ?? []) {
-      if (typeof x.message === 'string') x.message = tokenizer.tokenize(x.message);
-      if (typeof x.value === 'string') x.value = tokenizer.tokenize(x.value);
+      if (typeof x.message === 'string') x.message = masker.mask(x.message);
+      if (typeof x.value === 'string') x.value = masker.mask(x.value);
     }
 
     const serverRequest = event.http_server_request;
@@ -188,21 +189,21 @@ export function sanitizeAppMap(
       // The concrete path carries path params (ids, PII); the normalized
       // route template is the interesting part and stays.
       if (typeof serverRequest.path_info === 'string')
-        serverRequest.path_info = tokenizer.tokenize(serverRequest.path_info);
-      sanitizeHeaders(serverRequest.headers, tokenizer);
+        serverRequest.path_info = masker.mask(serverRequest.path_info);
+      sanitizeHeaders(serverRequest.headers, masker);
     }
     const clientRequest = event.http_client_request;
     if (clientRequest) {
       if (typeof clientRequest.url === 'string')
-        clientRequest.url = tokenizer.tokenize(clientRequest.url);
-      sanitizeHeaders(clientRequest.headers, tokenizer);
+        clientRequest.url = masker.mask(clientRequest.url);
+      sanitizeHeaders(clientRequest.headers, masker);
     }
-    sanitizeHeaders(event.http_server_response?.headers, tokenizer);
-    sanitizeHeaders(event.http_client_response?.headers, tokenizer);
+    sanitizeHeaders(event.http_server_response?.headers, masker);
+    sanitizeHeaders(event.http_client_response?.headers, masker);
 
     const sqlQuery = event.sql_query;
     if (sqlQuery && typeof sqlQuery.sql === 'string')
-      sqlQuery.sql = sanitizeSql(sqlQuery.sql, sqlQuery.database_type, tokenizer);
+      sqlQuery.sql = sanitizeSql(sqlQuery.sql, sqlQuery.database_type, masker);
   }
   return appmap;
 }

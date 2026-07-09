@@ -1,4 +1,4 @@
-import { BUILTIN_ALLOW, sanitizeAppMap, ValueTokenizer } from '../../../src/lib/sanitizeAppMap';
+import { BUILTIN_ALLOW, sanitizeAppMap, ValueMasker } from '../../../src/lib/sanitizeAppMap';
 
 const param = (name: string, value: string, klass = 'String') => ({ name, class: klass, value });
 
@@ -60,7 +60,7 @@ describe('sanitizeAppMap', () => {
         },
       ],
     };
-    sanitizeAppMap(appmap, new ValueTokenizer(allow));
+    sanitizeAppMap(appmap, new ValueMasker(allow));
     const [p1, p2, p3] = appmap.events[0].parameters;
     expect(p1.value).toEqual('true');
     expect(p2.value).toEqual('private');
@@ -97,7 +97,7 @@ describe('sanitizeAppMap', () => {
     };
     sanitizeAppMap(appmap);
     const once = JSON.stringify(appmap);
-    sanitizeAppMap(appmap, new ValueTokenizer());
+    sanitizeAppMap(appmap, new ValueMasker());
     expect(JSON.stringify(appmap)).toEqual(once);
   });
 

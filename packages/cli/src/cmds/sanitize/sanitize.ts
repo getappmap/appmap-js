@@ -3,7 +3,7 @@ import { basename, dirname, join } from 'path';
 import Yargs from 'yargs';
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import { BUILTIN_ALLOW, sanitizeAppMap, ValueTokenizer } from '../../lib/sanitizeAppMap';
+import { BUILTIN_ALLOW, sanitizeAppMap, ValueMasker } from '../../lib/sanitizeAppMap';
 import { writeFileAtomic } from '../../utils';
 
 // Build the allowlist: built-ins plus values the user curated. Exact whole-value
@@ -75,11 +75,11 @@ export default {
       let distinct: number;
       try {
         before = readFileSync(file, 'utf8');
-        // A fresh tokenizer per file: the token namespace is per-AppMap by
+        // A fresh masker per file: the token namespace is per-AppMap by
         // design, so values never correlate across files.
-        const tokenizer = new ValueTokenizer(allow);
-        sanitized = JSON.stringify(sanitizeAppMap(JSON.parse(before), tokenizer));
-        distinct = tokenizer.distinctCount;
+        const masker = new ValueMasker(allow);
+        sanitized = JSON.stringify(sanitizeAppMap(JSON.parse(before), masker));
+        distinct = masker.distinctCount;
       } catch (error) {
         // Skip an unreadable/malformed file rather than aborting: one bad file
         // in a batch must not stop the rest or leave earlier files half-done.
