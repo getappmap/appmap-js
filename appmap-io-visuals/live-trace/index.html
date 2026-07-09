@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AppMap · live trace visuals</title>
+    <style>
+      :root {
+        --bg: #010306;
+        --bg2: #0a0418;
+        --pink: #ff07aa;
+        --royal: #9c2fba;
+        --blue: #4362b1;
+        --text: #e1e2e2;
+        --dim: #808b98;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--bg); color: var(--text); }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; }
+      .eyebrow {
+        font: 600 12px/1 ui-monospace, Menlo, monospace;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--pink);
+        margin: 0 0 14px;
+      }
+      h1 {
+        font-size: clamp(30px, 5vw, 52px);
+        line-height: 1.05;
+        margin: 0 0 16px;
+        font-weight: 700;
+        background: linear-gradient(90deg, var(--pink) 0%, var(--royal) 50%, var(--blue) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      p.lede { color: var(--dim); font-size: 18px; max-width: 640px; margin: 0 0 36px; }
+
+      /* The hero visual frame. */
+      .stage {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(156, 47, 186, 0.35);
+        box-shadow: 0 24px 80px -24px rgba(255, 7, 170, 0.35),
+          0 0 0 1px rgba(10, 4, 24, 0.6) inset;
+        background: var(--bg2);
+      }
+      appmap-live-trace { width: 100%; height: 440px; }
+      .hero appmap-live-trace { height: 460px; }
+
+      h2 { font-size: 20px; margin: 64px 0 6px; }
+      .sub { color: var(--dim); margin: 0 0 18px; font-size: 14px; }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 22px;
+      }
+      .grid .stage appmap-live-trace { height: 300px; }
+      .label {
+        position: absolute;
+        bottom: 12px;
+        left: 14px;
+        font: 600 12px/1 ui-monospace, Menlo, monospace;
+        color: var(--dim);
+      }
+      footer {
+        margin-top: 72px;
+        color: var(--dim);
+        font-size: 13px;
+        border-top: 1px solid rgba(120, 139, 152, 0.15);
+        padding-top: 20px;
+      }
+      code {
+        font: 12px ui-monospace, Menlo, monospace;
+        background: rgba(120, 139, 152, 0.12);
+        padding: 2px 6px;
+        border-radius: 5px;
+        color: var(--text);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="hero">
+        <p class="eyebrow">appmap.io</p>
+        <h1>See your code run.</h1>
+        <p class="lede">
+          AppMap records what actually happens at runtime — every request, query, and
+          call — and renders it as a live trace. This visual is the real thing, animating
+          a request as it flows through the stack.
+        </p>
+        <div class="stage">
+          <appmap-live-trace scenario="web"></appmap-live-trace>
+        </div>
+      </div>
+
+      <h2>Scenarios</h2>
+      <p class="sub">
+        Each <code>&lt;appmap-live-trace&gt;</code> is self-contained — set the
+        <code>scenario</code> attribute to swap the story.
+      </p>
+      <div class="grid">
+        <div class="stage">
+          <appmap-live-trace scenario="web" speed="1.1"></appmap-live-trace>
+          <span class="label">scenario="web"</span>
+        </div>
+        <div class="stage">
+          <appmap-live-trace scenario="background" speed="1.1"></appmap-live-trace>
+          <span class="label">scenario="background"</span>
+        </div>
+        <div class="stage">
+          <appmap-live-trace scenario="navie" speed="1.1"></appmap-live-trace>
+          <span class="label">scenario="navie"</span>
+        </div>
+      </div>
+
+      <footer>
+        Embed with
+        <code>&lt;script src="appmap-live-trace.js"&gt;&lt;/script&gt;</code> then
+        <code>&lt;appmap-live-trace&gt;&lt;/appmap-live-trace&gt;</code>. No build step, no
+        dependencies. Honors <code>prefers-reduced-motion</code>.
+      </footer>
+    </div>
+
+    <script src="appmap-live-trace.js"></script>
+  </body>
+</html>
