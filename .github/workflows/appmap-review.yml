@@ -8,9 +8,19 @@ name: AppMap Behavioral Review
 #
 # Baselines live in packages/<pkg>/gold_traces/ (manifest.yaml + baseline/), and
 # are auto-trimmed by the gold-traces engine via `appmap trim`.
+#
+# User-triggered: add the `appmap-review` label to a PR to run one review
+# (a run costs a few dollars of agent time, so it doesn't run on every push).
+# To review again after new pushes, remove and re-add the label; "Re-run jobs"
+# re-reviews the same revision. The label does nothing on a PR that touches
+# neither package: no run is created at all.
+#
+# "Run workflow" reviews the branch you pick, compared against main — so on
+# main itself it is a baseline maintenance run (main vs main), not a review.
 
 on:
   pull_request:
+    types: [labeled]
     paths:
       - 'packages/cli/**'
       - 'packages/sequence-diagram/**'
@@ -32,10 +42,12 @@ concurrency:
 
 jobs:
   review:
-    # Secrets (ANTHROPIC_API_KEY) and a write token are not available to fork PRs.
+    # Only the appmap-review label starts a PR review; secrets (ANTHROPIC_API_KEY)
+    # and a write token are not available to fork PRs.
     if: >-
       ${{ github.event_name == 'workflow_dispatch' ||
-          github.event.pull_request.head.repo.full_name == github.repository }}
+          (github.event.label.name == 'appmap-review' &&
+           github.event.pull_request.head.repo.full_name == github.repository) }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
