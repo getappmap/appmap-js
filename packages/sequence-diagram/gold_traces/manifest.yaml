@@ -61,3 +61,9 @@ entries:
     test_name: Text matches expectation
     appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/Text_matches_expectation.appmap.json
     summary: The same diff diagram rendered to the Text output format (formatter.format -> text.format subtree, distinct from the PlantUML branch).
+
+  - feature: validation
+    test_file: tests/integration/validateDiagram.spec.ts
+    test_name: accepts a valid diagram and rejects an invalid one
+    appmap_path: jest/Diagram_validation/accepts_a_valid_diagram_and_rejects_an_invalid_one.appmap.json
+    summary: The validateDiagram gate over one trace - the valid path (recursing validateAction over every action), the negative branch (a structurally-invalid diagram is rejected), and AppMap detection. Imports from src (the unit spec imports the excluded dist export, so it records nothing).
