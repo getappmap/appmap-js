@@ -95,8 +95,14 @@ export default {
         `sanitize ${file}: ${distinct} distinct value(s) tokenized, ${before.length} -> ${sanitized.length} bytes`
       );
     }
-    if (files.length > 0 && failed === files.length) {
-      throw new Error(`sanitize: all ${failed} input file(s) failed to process`);
+    // The exit code is the contract: 0 means every file is now sanitized. A
+    // skipped file keeps its original, possibly secret-bearing contents, so a
+    // partial batch must not look like success. All files are still processed
+    // before failing; callers who want best-effort can append `|| true`.
+    if (failed > 0) {
+      throw new Error(
+        `sanitize: ${failed} of ${files.length} file(s) failed to process and remain unsanitized`
+      );
     }
   },
 };

@@ -1,3 +1,8 @@
+import { mkdtempSync, readFileSync, writeFileSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
+
+import SanitizeCommand from '../../../src/cmds/sanitize/sanitize';
 import { BUILTIN_ALLOW, sanitizeAppMap, ValueMasker } from '../../../src/lib/sanitizeAppMap';
 
 const param = (name: string, value: string, klass = 'String') => ({ name, class: klass, value });
@@ -219,5 +224,37 @@ describe('sanitizeAppMap', () => {
     expect(event.labels).toEqual(['security.authentication']);
     expect(event.parameters[0].name).toEqual('token');
     expect(event.parameters[0].class).toEqual('myapp.Token');
+  });
+});
+
+describe('sanitize command handler', () => {
+  const run = (files: string[]) =>
+    SanitizeCommand.handler({ files, allow: [], _: [], $0: 'appmap' });
+
+  beforeEach(() => jest.spyOn(console, 'warn').mockImplementation());
+  afterEach(() => jest.restoreAllMocks());
+
+  const goodAppMap = () =>
+    JSON.stringify({ events: [{ parameters: [param('token', 'sekrit')] }] });
+
+  it('exits cleanly when every file is sanitized', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'sanitize-'));
+    const good = join(dir, 'good.appmap.json');
+    writeFileSync(good, goodAppMap());
+    await expect(run([good])).resolves.toBeUndefined();
+    expect(readFileSync(good, 'utf8')).toContain('"<v1>"');
+  });
+
+  it('fails when any file is skipped, while still sanitizing the rest', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'sanitize-'));
+    const good = join(dir, 'good.appmap.json');
+    const bad = join(dir, 'bad.appmap.json');
+    writeFileSync(good, goodAppMap());
+    writeFileSync(bad, 'not json {');
+    await expect(run([bad, good])).rejects.toThrow(
+      '1 of 2 file(s) failed to process and remain unsanitized'
+    );
+    expect(readFileSync(good, 'utf8')).toContain('"<v1>"'); // good file still processed
+    expect(readFileSync(bad, 'utf8')).toEqual('not json {'); // bad file left untouched
   });
 });
