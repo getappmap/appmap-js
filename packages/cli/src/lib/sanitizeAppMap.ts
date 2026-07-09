@@ -1,5 +1,8 @@
 import { normalizeSQL } from '@appland/models';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const CLI_VERSION: string = require('../../package.json').version;
+
 // Sanitize an AppMap so its committed form is structurally incapable of
 // carrying a secret. Every captured runtime value string is replaced with a
 // per-AppMap token (`<v1>`, `<v2>`, …) assigned in order of first appearance,
@@ -27,8 +30,10 @@ const KIND_PATTERNS: [string, RegExp][] = [
   ['int', /^-?\d+$/],
 ];
 
-// An already-assigned token passes through unchanged, making sanitization
-// idempotent — re-running it on a sanitized AppMap is byte-identical.
+// The shape of an assigned token. Recognition of existing tokens is gated on
+// the file's metadata.sanitized marker: in a marked file the tokens are ours
+// and pass through (making re-runs idempotent); in a fresh file a string that
+// merely looks like a token is application data and is masked like any other.
 const TOKEN_PATTERN = /^<(?:[a-z0-9]+:)?v\d+>$/;
 
 // Values kept verbatim: universally enumerable sets with no secret capacity.
@@ -55,10 +60,18 @@ export class ValueMasker {
 
   private counter = 0;
 
+  // Set by sanitizeAppMap when the file carries a metadata.sanitized marker.
+  recognizeTokens = false;
+
   constructor(private allow: ReadonlySet<string> = BUILTIN_ALLOW) {}
 
   get distinctCount(): number {
     return this.tokens.size;
+  }
+
+  // The user-supplied allowlist (built-ins excluded), for the provenance marker.
+  get userAllowValues(): string[] {
+    return [...this.allow].filter((v) => !BUILTIN_ALLOW.has(v)).sort();
   }
 
   // Start numbering new tokens above `n`. Used when a document already carries
@@ -74,7 +87,7 @@ export class ValueMasker {
   // changes to what escapes masking.
   // @label security.sanitization
   mask(value: string): string {
-    if (this.allow.has(value) || TOKEN_PATTERN.test(value)) return value;
+    if (this.allow.has(value) || (this.recognizeTokens && TOKEN_PATTERN.test(value))) return value;
     let token = this.tokens.get(value);
     if (!token) {
       const kind = KIND_PATTERNS.find(([, pattern]) => pattern.test(value))?.[0];
@@ -107,7 +120,7 @@ const SQL_RESIDUE_DEFAULT = /'|"|\/\*|\*\//;
 
 // @label security.sanitization
 function sanitizeSql(sql: string, adapter: string | undefined, masker: ValueMasker): string {
-  if (TOKEN_PATTERN.test(sql)) return sql;
+  if (masker.recognizeTokens && TOKEN_PATTERN.test(sql)) return sql;
   const normalized = normalizeSQL(sql, adapter ?? '');
   const residue = (adapter && SQL_RESIDUE[adapter]) || SQL_RESIDUE_DEFAULT;
   if (residue.test(normalized)) return masker.mask(sql);
@@ -157,7 +170,18 @@ interface AppMapEvent {
   sql_query?: SqlQuery;
 }
 
+export interface SanitizedMarker {
+  version: string;
+  allow_values: string[];
+}
+
+interface AppMapMetadata {
+  sanitized?: SanitizedMarker;
+  [key: string]: unknown;
+}
+
 interface AppMap {
+  metadata?: AppMapMetadata;
   events?: AppMapEvent[];
   // Late updates to events, keyed by event id — e.g. a promise's return value,
   // filled in after the call event was written. Same shape as an event.
@@ -188,17 +212,31 @@ export function sanitizeAppMap(
   appmap: AppMap,
   masker: ValueMasker = new ValueMasker()
 ): AppMap {
-  // If the document already carries tokens (sanitized by an earlier version of
-  // this walk), number new tokens above them so no token is ever shared by
-  // two different values.
-  for (const match of JSON.stringify(appmap).matchAll(TOKEN_SCAN)) {
-    masker.reserveThrough(Number(match[1]));
+  const prior = appmap.metadata?.sanitized;
+  masker.recognizeTokens = Boolean(prior);
+  if (prior) {
+    // The document's tokens are ours: number new tokens above them so no
+    // token is ever shared by two different values.
+    for (const match of JSON.stringify(appmap).matchAll(TOKEN_SCAN)) {
+      masker.reserveThrough(Number(match[1]));
+    }
   }
   for (const event of appmap.events ?? []) sanitizeEvent(event, masker);
   // eventUpdates carry the same captured-data fields as events; sanitize them
   // in place, in the same token namespace. They are deliberately not merged
   // into their events — sanitize changes values only, never structure.
   for (const update of Object.values(appmap.eventUpdates ?? {})) sanitizeEvent(update, masker);
+
+  // Provenance. Masking is one-way, so on a re-run the values still verbatim
+  // are those allowed by BOTH runs — the marker records that intersection.
+  const current = masker.userAllowValues;
+  const allowValues = prior
+    ? current.filter((v) => prior.allow_values.includes(v))
+    : current;
+  appmap.metadata = {
+    ...(appmap.metadata ?? {}),
+    sanitized: { version: CLI_VERSION, allow_values: allowValues },
+  };
   return appmap;
 }
 

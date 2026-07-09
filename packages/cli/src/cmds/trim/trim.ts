@@ -20,9 +20,18 @@ interface AppMapEvent {
   exceptions?: ValueSlot[];
 }
 
+interface TrimmedMarker {
+  version: string;
+  max_length: number;
+}
+
 interface AppMap {
+  metadata?: { trimmed?: TrimmedMarker; [key: string]: unknown };
   events?: AppMapEvent[];
 }
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const CLI_VERSION: string = require('../../../package.json').version;
 
 function trimSlot(slot: ValueSlot | undefined, budget: StructBudget): void {
   if (slot && typeof slot.value === 'string') {
@@ -103,7 +112,31 @@ export default {
       let trimmed: string;
       try {
         before = readFileSync(file, 'utf8');
-        trimmed = JSON.stringify(trimAppMap(JSON.parse(before) as AppMap, budget));
+        const appmap = JSON.parse(before) as AppMap;
+
+        // metadata.trimmed is the file's provenance: skip when this exact CLI
+        // version already trimmed it to this cap. Truncation is one-way, so a
+        // re-run records the smaller of the two caps and can never grow values.
+        const prior = appmap.metadata?.trimmed;
+        if (prior && prior.version === CLI_VERSION && prior.max_length === maxLength) {
+          console.warn(`trim ${file}: already trimmed (v${CLI_VERSION}), skipping`);
+          continue;
+        }
+        if (prior && maxLength > prior.max_length)
+          console.warn(
+            `trim ${file}: already trimmed to ${prior.max_length}; a larger cap cannot ` +
+              `restore truncated values (re-record to grow them)`
+          );
+
+        trimAppMap(appmap, budget);
+        appmap.metadata = {
+          ...(appmap.metadata ?? {}),
+          trimmed: {
+            version: CLI_VERSION,
+            max_length: prior ? Math.min(prior.max_length, maxLength) : maxLength,
+          },
+        };
+        trimmed = JSON.stringify(appmap);
       } catch (error) {
         // Skip an unreadable/malformed file rather than aborting: one bad file
         // in a batch must not stop the rest or leave earlier files half-done.

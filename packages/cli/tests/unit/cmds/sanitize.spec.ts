@@ -219,15 +219,44 @@ describe('sanitizeAppMap', () => {
     expect(Object.keys(appmap.eventUpdates)).toEqual(['42']); // updates stay in place, not merged
   });
 
-  it('never assigns a token that the document already contains', () => {
-    // A file sanitized before the walk covered eventUpdates: events are
-    // masked, eventUpdates still raw. The new value must not reuse <v1>.
+  it('never assigns a token that a marked document already contains', () => {
+    // A file sanitized before the walk covered eventUpdates: marker present,
+    // events masked, eventUpdates still raw. The new value must not reuse <v1>.
     const appmap = {
+      metadata: { sanitized: { version: '0.0.1', allow_values: [] } },
       events: [{ parameters: [param('a', '<v1>'), param('b', '<uuid:v7>')] }],
       eventUpdates: { '9': { return_value: { class: 'String', value: 'fresh-secret' } } },
     } as any;
     sanitizeAppMap(appmap);
     expect(appmap.eventUpdates['9'].return_value.value).toEqual('<v8>');
+  });
+
+  it('masks token-lookalike strings in a fresh (unmarked) file', () => {
+    // Without a marker, nothing in the file is ours: a value that merely looks
+    // like a token is application data and must not slip through.
+    const appmap = {
+      events: [{ parameters: [param('a', '<v9>'), param('b', 'other')] }],
+    } as any;
+    sanitizeAppMap(appmap);
+    const [a, b] = appmap.events[0].parameters;
+    expect(a.value).toEqual('<v1>'); // masked (assigned first), not passed through as <v9>
+    expect(b.value).toEqual('<v2>');
+  });
+
+  it('writes a provenance marker, recording the allowlist intersection on re-runs', () => {
+    const appmap = {
+      events: [{ parameters: [param('state', 'public'), param('pw', 'hunter2')] }],
+    } as any;
+    sanitizeAppMap(appmap, new ValueMasker(new Set([...BUILTIN_ALLOW, 'public', 'staging'])));
+    expect(appmap.metadata.sanitized.allow_values).toEqual(['public', 'staging']);
+    expect(typeof appmap.metadata.sanitized.version).toEqual('string');
+    expect(appmap.events[0].parameters[0].value).toEqual('public'); // allowed, kept
+
+    // Re-run with a different allowlist: 'staging' dropped, 'newone' added.
+    // Kept-verbatim values are those allowed by BOTH runs: the intersection.
+    sanitizeAppMap(appmap, new ValueMasker(new Set([...BUILTIN_ALLOW, 'public', 'newone'])));
+    expect(appmap.metadata.sanitized.allow_values).toEqual(['public']);
+    expect(appmap.events[0].parameters[0].value).toEqual('public');
   });
 
   it('never touches schema fields', () => {

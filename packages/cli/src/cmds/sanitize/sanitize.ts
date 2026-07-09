@@ -3,7 +3,7 @@ import { basename, dirname, join } from 'path';
 import Yargs from 'yargs';
 
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
-import { BUILTIN_ALLOW, sanitizeAppMap, ValueMasker } from '../../lib/sanitizeAppMap';
+import { BUILTIN_ALLOW, CLI_VERSION, sanitizeAppMap, ValueMasker } from '../../lib/sanitizeAppMap';
 import { writeFileAtomic } from '../../utils';
 
 // Build the allowlist: built-ins plus values the user curated. Exact whole-value
@@ -68,6 +68,8 @@ export default {
     const files = argv.files as string[];
     if (argv.outputDir) mkdirSync(argv.outputDir, { recursive: true });
 
+    const userAllow = [...allow].filter((v) => !BUILTIN_ALLOW.has(v)).sort();
+
     let failed = 0;
     for (const file of files) {
       let before: string;
@@ -75,10 +77,34 @@ export default {
       let distinct: number;
       try {
         before = readFileSync(file, 'utf8');
+        const appmap = JSON.parse(before);
+
+        // The metadata.sanitized marker is the file's provenance: skip when
+        // this exact CLI version already sanitized it with these options.
+        const prior = appmap?.metadata?.sanitized;
+        if (
+          prior &&
+          prior.version === CLI_VERSION &&
+          JSON.stringify(prior.allow_values) === JSON.stringify(userAllow)
+        ) {
+          console.warn(`sanitize ${file}: already sanitized (v${CLI_VERSION}), skipping`);
+          continue;
+        }
+        // Masking is one-way: allowing a value now cannot restore it if an
+        // earlier run already masked it.
+        if (prior) {
+          const restored = userAllow.filter((v: string) => !prior.allow_values.includes(v));
+          if (restored.length > 0)
+            console.warn(
+              `sanitize ${file}: ${restored.length} allow value(s) were not allowed on the ` +
+                `first run; already-masked values cannot be restored (re-record to loosen)`
+            );
+        }
+
         // A fresh masker per file: the token namespace is per-AppMap by
         // design, so values never correlate across files.
         const masker = new ValueMasker(allow);
-        sanitized = JSON.stringify(sanitizeAppMap(JSON.parse(before), masker));
+        sanitized = JSON.stringify(sanitizeAppMap(appmap, masker));
         distinct = masker.distinctCount;
       } catch (error) {
         // Skip an unreadable/malformed file rather than aborting: one bad file
