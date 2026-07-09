@@ -62,6 +62,12 @@ entries:
     appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/Text_matches_expectation.appmap.json
     summary: The same diff diagram rendered to the Text output format (formatter.format -> text.format subtree, distinct from the PlantUML branch).
 
+  - feature: formatter-json
+    test_file: tests/integration/sequenceDiagramDiff.spec.ts
+    test_name: JSON matches expectation
+    appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/JSON_matches_expectation.appmap.json
+    summary: The same diff diagram serialized to the JSON output format (formatter.format -> json.format branch, which produces the .sequence.json consumed by the CLI and appmap-review; distinct from the PlantUML and Text branches).
+
   - feature: validation
     test_file: tests/integration/validateDiagram.spec.ts
     test_name: accepts a valid diagram and rejects an invalid one

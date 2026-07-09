@@ -85,6 +85,12 @@ export async function checkTextEqual(actualData: string, expectedFileName: strin
     normalizeFile(await readFile(expectedFileName, 'utf-8'))
   );
 }
+export async function checkJSONEqual(actualData: string, expectedFileName: string): Promise<void> {
+  assert.deepStrictEqual(
+    JSON.parse(actualData),
+    JSON.parse(await readFile(expectedFileName, 'utf-8'))
+  );
+}
 export function loadDiagram(
   appmap: AppMap,
   options: SequenceDiagramOptions = { loops: true }
