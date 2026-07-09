@@ -125,20 +125,30 @@ entries:
 
   # sanitize (security.sanitization) is the redaction boundary that makes a
   # committed AppMap structurally incapable of carrying a secret — the whole
-  # reason gold-trace baselines can be committed. Three traces guard its
-  # distinct arms; a single happy-path trace cannot cover a fail-closed gate.
-  #   * sanitize: the value-tokenization core plus the HTTP arm (path_info +
-  #     headers), which also proves the shared per-AppMap token namespace and
-  #     equality preservation.
-  #   * sanitize-sql: the SQL parameterize-and-keep-shape branch (obfuscator
-  #     succeeds, no residue -> return the normalized statement; sanitizeSql
-  #     does NOT call tokenize).
-  #   * sanitize-sql-fail-closed: the SECURITY negative branch — SQL the
-  #     obfuscator cannot reliably parameterize is downgraded to a token
-  #     (sanitizeSql additionally calls tokenize). Its call graph differs from
-  #     the happy path, so loosening the fail-closed guard drifts this trace.
+  # reason gold-trace baselines can be committed. Two traces guard it at two
+  # altitudes; a single happy-path trace cannot cover a fail-closed gate.
+  #   * sanitize: one composite walk of the value-tokenization transform
+  #     (sanitizeAppMap) — shared per-AppMap token namespace and equality
+  #     preservation across parameters, headers, and paths; SQL parameterized
+  #     when parseable and masked whole when the obfuscator cannot reliably
+  #     parameterize it (the SQL fail-closed arm).
+  #   * sanitize-batch-fail-closed: the COMMAND-HANDLER negative branch. The
+  #     exit code is the contract — 0 must mean every file is sanitized. This
+  #     trace drives a mixed batch (one good file, one unparseable file): the
+  #     good file is still written, but the handler throws so the batch exits
+  #     non-zero rather than leaving a skipped, possibly secret-bearing file
+  #     looking like success. Its call graph (good file fully processed + the
+  #     failure throw) differs from an all-success batch, so loosening the
+  #     "fail if ANY file failed" guard back to "fail only if ALL failed"
+  #     drifts this trace. Guards fix 77ce035e.
   - feature: sanitize
     test_file: tests/unit/cmds/sanitize.spec.ts
     test_name: sanitizes a composite AppMap end-to-end
     appmap_path: jest/sanitizeAppMap/sanitizes_a_composite_AppMap_end-to-end.appmap.json
     summary: One composite walk of the sanitize subsystem — shared-namespace masking across parameters, headers, and paths; SQL parameterized when parseable and masked whole when not.
+
+  - feature: sanitize-batch-fail-closed
+    test_file: tests/unit/cmds/sanitize.spec.ts
+    test_name: fails when any file is skipped, while still sanitizing the rest
+    appmap_path: "jest/sanitize_command_handler/fails_when_any_file_is_skipped,_while_still_sanitizing_the_rest.appmap.json"
+    summary: sanitize command handler fails closed — a batch with one unparseable file still sanitizes the good file but exits non-zero so a skipped, possibly secret-bearing file never looks like success.
