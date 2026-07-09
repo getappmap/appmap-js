@@ -53,10 +53,19 @@ export const BUILTIN_ALLOW: ReadonlySet<string> = new Set([
 export class ValueMasker {
   private tokens = new Map<string, string>();
 
+  private counter = 0;
+
   constructor(private allow: ReadonlySet<string> = BUILTIN_ALLOW) {}
 
   get distinctCount(): number {
     return this.tokens.size;
+  }
+
+  // Start numbering new tokens above `n`. Used when a document already carries
+  // tokens (sanitized before this code covered some field): a new value must
+  // never receive a token that another value in the document already holds.
+  reserveThrough(n: number): void {
+    this.counter = Math.max(this.counter, n);
   }
 
   // The masking primitive: every captured value string passes through here
@@ -69,7 +78,8 @@ export class ValueMasker {
     let token = this.tokens.get(value);
     if (!token) {
       const kind = KIND_PATTERNS.find(([, pattern]) => pattern.test(value))?.[0];
-      token = `<${kind ? `${kind}:` : ''}v${this.tokens.size + 1}>`;
+      this.counter += 1;
+      token = `<${kind ? `${kind}:` : ''}v${this.counter}>`;
       this.tokens.set(value, token);
     }
     return token;
@@ -149,6 +159,9 @@ interface AppMapEvent {
 
 interface AppMap {
   events?: AppMapEvent[];
+  // Late updates to events, keyed by event id — e.g. a promise's return value,
+  // filled in after the call event was written. Same shape as an event.
+  eventUpdates?: Record<string, AppMapEvent>;
 }
 
 function sanitizeSlot(slot: ValueSlot | undefined, masker: ValueMasker): void {
@@ -169,41 +182,55 @@ function sanitizeHeaders(headers: Record<string, unknown> | undefined, masker: V
 // SQL) so the committed AppMap is structurally incapable of carrying a secret.
 // Labeled so appmap-review interprets any change to this boundary.
 // @label security.sanitization
+const TOKEN_SCAN = /<(?:[a-z0-9]+:)?v(\d+)>/g;
+
 export function sanitizeAppMap(
   appmap: AppMap,
   masker: ValueMasker = new ValueMasker()
 ): AppMap {
-  for (const event of appmap.events ?? []) {
-    for (const p of event.parameters ?? []) sanitizeSlot(p, masker);
-    for (const m of event.message ?? []) sanitizeSlot(m, masker);
-    sanitizeSlot(event.receiver, masker);
-    sanitizeSlot(event.return_value, masker);
-
-    for (const x of event.exceptions ?? []) {
-      if (typeof x.message === 'string') x.message = masker.mask(x.message);
-      if (typeof x.value === 'string') x.value = masker.mask(x.value);
-    }
-
-    const serverRequest = event.http_server_request;
-    if (serverRequest) {
-      // The concrete path carries path params (ids, PII); the normalized
-      // route template is the interesting part and stays.
-      if (typeof serverRequest.path_info === 'string')
-        serverRequest.path_info = masker.mask(serverRequest.path_info);
-      sanitizeHeaders(serverRequest.headers, masker);
-    }
-    const clientRequest = event.http_client_request;
-    if (clientRequest) {
-      if (typeof clientRequest.url === 'string')
-        clientRequest.url = masker.mask(clientRequest.url);
-      sanitizeHeaders(clientRequest.headers, masker);
-    }
-    sanitizeHeaders(event.http_server_response?.headers, masker);
-    sanitizeHeaders(event.http_client_response?.headers, masker);
-
-    const sqlQuery = event.sql_query;
-    if (sqlQuery && typeof sqlQuery.sql === 'string')
-      sqlQuery.sql = sanitizeSql(sqlQuery.sql, sqlQuery.database_type, masker);
+  // If the document already carries tokens (sanitized by an earlier version of
+  // this walk), number new tokens above them so no token is ever shared by
+  // two different values.
+  for (const match of JSON.stringify(appmap).matchAll(TOKEN_SCAN)) {
+    masker.reserveThrough(Number(match[1]));
   }
+  for (const event of appmap.events ?? []) sanitizeEvent(event, masker);
+  // eventUpdates carry the same captured-data fields as events; sanitize them
+  // in place, in the same token namespace. They are deliberately not merged
+  // into their events — sanitize changes values only, never structure.
+  for (const update of Object.values(appmap.eventUpdates ?? {})) sanitizeEvent(update, masker);
   return appmap;
+}
+
+function sanitizeEvent(event: AppMapEvent, masker: ValueMasker): void {
+  for (const p of event.parameters ?? []) sanitizeSlot(p, masker);
+  for (const m of event.message ?? []) sanitizeSlot(m, masker);
+  sanitizeSlot(event.receiver, masker);
+  sanitizeSlot(event.return_value, masker);
+
+  for (const x of event.exceptions ?? []) {
+    if (typeof x.message === 'string') x.message = masker.mask(x.message);
+    if (typeof x.value === 'string') x.value = masker.mask(x.value);
+  }
+
+  const serverRequest = event.http_server_request;
+  if (serverRequest) {
+    // The concrete path carries path params (ids, PII); the normalized
+    // route template is the interesting part and stays.
+    if (typeof serverRequest.path_info === 'string')
+      serverRequest.path_info = masker.mask(serverRequest.path_info);
+    sanitizeHeaders(serverRequest.headers, masker);
+  }
+  const clientRequest = event.http_client_request;
+  if (clientRequest) {
+    if (typeof clientRequest.url === 'string')
+      clientRequest.url = masker.mask(clientRequest.url);
+    sanitizeHeaders(clientRequest.headers, masker);
+  }
+  sanitizeHeaders(event.http_server_response?.headers, masker);
+  sanitizeHeaders(event.http_client_response?.headers, masker);
+
+  const sqlQuery = event.sql_query;
+  if (sqlQuery && typeof sqlQuery.sql === 'string')
+    sqlQuery.sql = sanitizeSql(sqlQuery.sql, sqlQuery.database_type, masker);
 }

@@ -202,6 +202,34 @@ describe('sanitizeAppMap', () => {
     expect(badSql.sql_query.sql).toMatch(/^<v\d+>$/); // unparseable: whole statement masked
   });
 
+  it('sanitizes eventUpdates in place, in the same token namespace', () => {
+    const appmap = {
+      events: [{ parameters: [param('token', 'sekrit')] }],
+      eventUpdates: {
+        '42': {
+          return_value: { class: 'Promise<String>', value: 'sekrit' },
+          exceptions: [{ class: 'E', message: 'late boom' }],
+        },
+      },
+    } as any;
+    sanitizeAppMap(appmap);
+    expect(appmap.eventUpdates['42'].return_value.value).toEqual('<v1>'); // same value as the event: same token
+    expect(appmap.eventUpdates['42'].exceptions[0].message).toEqual('<v2>');
+    expect(appmap.events[0].parameters[0].value).toEqual('<v1>');
+    expect(Object.keys(appmap.eventUpdates)).toEqual(['42']); // updates stay in place, not merged
+  });
+
+  it('never assigns a token that the document already contains', () => {
+    // A file sanitized before the walk covered eventUpdates: events are
+    // masked, eventUpdates still raw. The new value must not reuse <v1>.
+    const appmap = {
+      events: [{ parameters: [param('a', '<v1>'), param('b', '<uuid:v7>')] }],
+      eventUpdates: { '9': { return_value: { class: 'String', value: 'fresh-secret' } } },
+    } as any;
+    sanitizeAppMap(appmap);
+    expect(appmap.eventUpdates['9'].return_value.value).toEqual('<v8>');
+  });
+
   it('never touches schema fields', () => {
     const appmap = {
       events: [
