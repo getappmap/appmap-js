@@ -153,6 +153,50 @@ describe('sanitizeAppMap', () => {
     expect(appmap.events[0].exceptions[0].class).toEqual('ConnError'); // schema, kept
   });
 
+  // One test that walks every sanitization branch in a single AppMap. Its
+  // recording is the gold trace for the sanitize subsystem: one composite
+  // trace instead of one trace per unit test above.
+  it('sanitizes a composite AppMap end-to-end', () => {
+    const appmap = {
+      events: [
+        {
+          parameters: [param('token', 'sekrit-abc'), param('count', '42')],
+          return_value: { class: 'String', value: 'sekrit-abc' },
+          exceptions: [{ class: 'ConnError', message: 'postgres://u:pw@db failed' }],
+          http_server_request: {
+            request_method: 'POST',
+            path_info: '/games/123/join',
+            normalized_path_info: '/games/:id/join',
+            headers: { Authorization: 'sekrit-abc' },
+          },
+        },
+        {
+          sql_query: {
+            sql: "SELECT * FROM users WHERE email = 'a@b.c'",
+            database_type: 'postgres',
+          },
+        },
+        {
+          sql_query: {
+            sql: "SELECT * FROM users WHERE name = 'unterminated",
+            database_type: 'postgres',
+          },
+        },
+      ],
+    };
+    sanitizeAppMap(appmap);
+    const [call, goodSql, badSql] = appmap.events as any[];
+    expect(call.parameters[0].value).toEqual('<v1>');
+    expect(call.return_value.value).toEqual('<v1>'); // equality preserved
+    expect(call.http_server_request.headers.Authorization).toEqual('<v1>'); // shared namespace
+    expect(call.parameters[1].value).toMatch(/^<int:v\d+>$/);
+    expect(call.exceptions[0].message).toMatch(/^<v\d+>$/);
+    expect(call.http_server_request.normalized_path_info).toEqual('/games/:id/join');
+    expect(call.http_server_request.path_info).toMatch(/^<v\d+>$/);
+    expect(goodSql.sql_query.sql).toEqual('SELECT * FROM users WHERE email = ?');
+    expect(badSql.sql_query.sql).toMatch(/^<v\d+>$/); // unparseable: whole statement masked
+  });
+
   it('never touches schema fields', () => {
     const appmap = {
       events: [

@@ -139,18 +139,6 @@ entries:
   #     the happy path, so loosening the fail-closed guard drifts this trace.
   - feature: sanitize
     test_file: tests/unit/cmds/sanitize.spec.ts
-    test_name: shares the token namespace across all value positions
-    appmap_path: jest/sanitizeAppMap/shares_the_token_namespace_across_all_value_positions.appmap.json
-    summary: sanitizeAppMap tokenizes captured values across parameters and the HTTP arm (path_info + header values) from one shared token namespace, preserving equality while keeping header names and the route template.
-
-  - feature: sanitize-sql
-    test_file: tests/unit/cmds/sanitize.spec.ts
-    test_name: parameterizes SQL literals but keeps the statement shape
-    appmap_path: jest/sanitizeAppMap/parameterizes_SQL_literals_but_keeps_the_statement_shape.appmap.json
-    summary: sanitizeSql parameterizes SQL literals while preserving the statement shape (residue-free obfuscation returns the normalized statement, without tokenizing).
-
-  - feature: sanitize-sql-fail-closed
-    test_file: tests/unit/cmds/sanitize.spec.ts
-    test_name: fails closed on SQL it cannot reliably parameterize
-    appmap_path: jest/sanitizeAppMap/fails_closed_on_SQL_it_cannot_reliably_parameterize.appmap.json
-    summary: sanitizeSql fails closed on SQL it cannot reliably obfuscate, downgrading the whole statement to a token instead of leaking an unobfuscated literal.
+    test_name: sanitizes a composite AppMap end-to-end
+    appmap_path: jest/sanitizeAppMap/sanitizes_a_composite_AppMap_end-to-end.appmap.json
+    summary: One composite walk of the sanitize subsystem — shared-namespace masking across parameters, headers, and paths; SQL parameterized when parseable and masked whole when not.
