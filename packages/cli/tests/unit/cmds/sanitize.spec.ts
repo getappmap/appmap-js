@@ -324,7 +324,7 @@ describe('sanitize command handler', () => {
       })
     );
     await run([file]);
-    const out = JSON.parse(readFileSync(file, 'utf8')) as any;
+    const out = JSON.parse(readFileSync(file, 'utf8'));
     expect(out.metadata.git.repository).toEqual('https://github.com/x/y.git');
     expect(out.eventUpdates).toBeUndefined(); // merged into events by normalization
     const updated = out.events.find((e: any) => e.event === 'return' && e.return_value);
