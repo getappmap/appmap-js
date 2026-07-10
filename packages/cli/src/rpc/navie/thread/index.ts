@@ -226,11 +226,11 @@ export class Thread {
    * @param messageId The message id associated with the token
    */
   private onToken(token: string, messageId: string) {
-    const subTokens = token.split(/^(`{3,})\n?/gm);
+    const subTokens = token.split(/^(\s*?`{3,})/gm);
     for (let subToken of subTokens) {
       if (subToken.length === 0) continue;
 
-      const fileMatch = subToken.match(/^<!-- file: (.*) -->\s*?\n?/m);
+      const fileMatch = subToken.match(/^\s*?<!-- file: (.*) -->\s*?\n?/m);
       if (fileMatch) {
         // TODO: Should this be a file URI? We don't currently include line ranges.
         this.codeBlockUri = this.codeBlockUri ?? URI.random().toString();
@@ -262,7 +262,7 @@ export class Thread {
       this.lastTokenBeganCodeBlock = false;
 
       let clearCodeBlock = false;
-      if (subToken.match(/^`{3,}/)) {
+      if (subToken.match(/^\s*?`{3,}/)) {
         // Code block fences
         if (this.codeBlockLength === undefined) {
           this.codeBlockUri = this.codeBlockUri ?? URI.random().toString();
