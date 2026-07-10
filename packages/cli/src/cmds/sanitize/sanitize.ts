@@ -1,3 +1,4 @@
+import { buildAppMap } from '@appland/models';
 import { mkdirSync, readFileSync } from 'fs';
 import { basename, dirname, join } from 'path';
 import Yargs from 'yargs';
@@ -101,10 +102,18 @@ export default {
             );
         }
 
+        // Normalize first — the same transform every AppMap viewer applies on
+        // load: eventUpdates merged into their events, event ids re-indexed,
+        // unreturned calls balanced, and credentials stripped from
+        // metadata.git.repository. Masking then runs over the canonical form.
+        const normalized = JSON.parse(
+          JSON.stringify(buildAppMap().source(appmap).normalize().build())
+        );
+
         // A fresh masker per file: the token namespace is per-AppMap by
         // design, so values never correlate across files.
         const masker = new ValueMasker(allow);
-        sanitized = JSON.stringify(sanitizeAppMap(appmap, masker));
+        sanitized = JSON.stringify(sanitizeAppMap(normalized, masker));
         distinct = masker.distinctCount;
       } catch (error) {
         // Skip an unreadable/malformed file rather than aborting: one bad file

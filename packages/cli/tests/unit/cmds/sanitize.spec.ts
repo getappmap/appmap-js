@@ -292,7 +292,12 @@ describe('sanitize command handler', () => {
   afterEach(() => jest.restoreAllMocks());
 
   const goodAppMap = () =>
-    JSON.stringify({ events: [{ parameters: [param('token', 'sekrit')] }] });
+    JSON.stringify({
+      events: [
+        { id: 1, event: 'call', method_id: 'm', parameters: [param('token', 'sekrit')] },
+        { id: 2, event: 'return', parent_id: 1 },
+      ],
+    });
 
   it('exits cleanly when every file is sanitized', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'sanitize-'));
@@ -300,6 +305,31 @@ describe('sanitize command handler', () => {
     writeFileSync(good, goodAppMap());
     await expect(run([good])).resolves.toBeUndefined();
     expect(readFileSync(good, 'utf8')).toContain('"<v1>"');
+  });
+
+  it('normalizes before masking: git credentials stripped, eventUpdates merged', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'sanitize-'));
+    const file = join(dir, 'n.appmap.json');
+    writeFileSync(
+      file,
+      JSON.stringify({
+        metadata: { git: { repository: 'https://user:tok3n@github.com/x/y.git' } },
+        events: [
+          { id: 1, event: 'call', method_id: 'm', parameters: [param('token', 'sekrit')] },
+          { id: 2, event: 'return', parent_id: 1 },
+        ],
+        eventUpdates: {
+          '2': { id: 2, event: 'return', parent_id: 1, return_value: { class: 'String', value: 'sekrit' } },
+        },
+      })
+    );
+    await run([file]);
+    const out = JSON.parse(readFileSync(file, 'utf8')) as any;
+    expect(out.metadata.git.repository).toEqual('https://github.com/x/y.git');
+    expect(out.eventUpdates).toBeUndefined(); // merged into events by normalization
+    const updated = out.events.find((e: any) => e.event === 'return' && e.return_value);
+    expect(updated.return_value.value).toEqual('<v1>'); // merged value, masked, same token as the parameter
+    expect(out.events[0].parameters[0].value).toEqual('<v1>');
   });
 
   it('fails when any file is skipped, while still sanitizing the rest', async () => {
