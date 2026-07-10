@@ -259,6 +259,33 @@ describe('sanitizeAppMap', () => {
     expect(appmap.events[0].parameters[0].value).toEqual('public');
   });
 
+  it('sanitizes metadata: git credentials, identity, and failure messages', () => {
+    const appmap = {
+      metadata: {
+        git: {
+          repository: 'https://user:tok3n@github.com/x/y.git',
+          branch: 'main',
+          commit: 'abc123',
+          user_name: 'Kevin Gilpin',
+          user_email: 'kevin@app.land',
+        },
+        exception: { class: 'E', message: 'connect postgres://u:pw@db failed' },
+        test_failure: { message: 'expected token abc123', location: 'tests/x.py:10' },
+      },
+      events: [],
+    } as any;
+    sanitizeAppMap(appmap);
+    const meta = appmap.metadata;
+    expect(meta.git.repository).toEqual('https://github.com/x/y.git');
+    expect(meta.git.branch).toEqual('main'); // repo state, kept
+    expect(meta.git.commit).toEqual('abc123');
+    expect(meta.git.user_name).toMatch(/^<v\d+>$/);
+    expect(meta.git.user_email).toMatch(/^<v\d+>$/);
+    expect(meta.exception.message).toMatch(/^<v\d+>$/);
+    expect(meta.test_failure.message).toMatch(/^<v\d+>$/);
+    expect(meta.test_failure.location).toEqual('tests/x.py:10'); // code location, kept
+  });
+
   it('never touches schema fields', () => {
     const appmap = {
       events: [

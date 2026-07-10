@@ -175,8 +175,18 @@ export interface SanitizedMarker {
   allow_values: string[];
 }
 
+interface GitMetadata {
+  repository?: unknown;
+  user_name?: unknown;
+  user_email?: unknown;
+  [key: string]: unknown;
+}
+
 interface AppMapMetadata {
   sanitized?: SanitizedMarker;
+  git?: GitMetadata;
+  exception?: { message?: unknown; [key: string]: unknown };
+  test_failure?: { message?: unknown; [key: string]: unknown };
   [key: string]: unknown;
 }
 
@@ -226,6 +236,7 @@ export function sanitizeAppMap(
   // in place, in the same token namespace. They are deliberately not merged
   // into their events — sanitize changes values only, never structure.
   for (const update of Object.values(appmap.eventUpdates ?? {})) sanitizeEvent(update, masker);
+  sanitizeMetadata(appmap.metadata, masker);
 
   // Provenance. Masking is one-way, so on a re-run the values still verbatim
   // are those allowed by BOTH runs — the marker records that intersection.
@@ -238,6 +249,35 @@ export function sanitizeAppMap(
     sanitized: { version: CLI_VERSION, allow_values: allowValues },
   };
   return appmap;
+}
+
+// Metadata carries captured data too: the git identity, credentials embedded
+// in the repository URL, and exception / test-failure messages. The command
+// pipeline's normalize step also strips repository credentials, but the walk
+// must not depend on it — the security guarantee lives here, alone.
+function sanitizeMetadata(metadata: AppMapMetadata | undefined, masker: ValueMasker): void {
+  if (!metadata) return;
+  const git = metadata.git;
+  if (git) {
+    if (typeof git.repository === 'string' && /^https?:/.test(git.repository)) {
+      const repository = git.repository;
+      try {
+        const url = new URL(repository);
+        url.username = '';
+        url.password = '';
+        git.repository = url.toString();
+      } catch {
+        // Unparseable URL: mask the whole value rather than risk a credential.
+        git.repository = masker.mask(repository);
+      }
+    }
+    if (typeof git.user_name === 'string') git.user_name = masker.mask(git.user_name);
+    if (typeof git.user_email === 'string') git.user_email = masker.mask(git.user_email);
+  }
+  if (metadata.exception && typeof metadata.exception.message === 'string')
+    metadata.exception.message = masker.mask(metadata.exception.message);
+  if (metadata.test_failure && typeof metadata.test_failure.message === 'string')
+    metadata.test_failure.message = masker.mask(metadata.test_failure.message);
 }
 
 function sanitizeEvent(event: AppMapEvent, masker: ValueMasker): void {
