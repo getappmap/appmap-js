@@ -23,7 +23,10 @@ export const CLI_VERSION: string = require('../../package.json').version;
 // Sanitization is positional, driven by the AppMap format: it touches only
 // the fields defined to hold captured runtime data. Code object names,
 // classes, paths, labels, and route templates are schema, not data, and are
-// never modified.
+// never modified — with one exception: a `query` code object's name IS a SQL
+// statement, literals included, so it is parameterized exactly like an event's
+// sql_query (otherwise a literal that was scrubbed from the events would still
+// survive in the class map).
 //
 // The per-file token namespace is deliberate: unlinkability across
 // files/revisions is the anti-correlation guarantee, and (routes aside) values
@@ -199,8 +202,18 @@ interface AppMapMetadata {
   [key: string]: unknown;
 }
 
+// A class-map code object. Only `type: 'query'` nodes carry captured data (the
+// SQL statement, in `name`); every other node is schema.
+interface ClassMapEntry {
+  type?: string;
+  name?: unknown;
+  sql?: unknown;
+  children?: ClassMapEntry[];
+}
+
 interface AppMap {
   metadata?: AppMapMetadata;
+  classMap?: ClassMapEntry[];
   events?: AppMapEvent[];
   // Late updates to events, keyed by event id — e.g. a promise's return value,
   // filled in after the call event was written. Same shape as an event.
@@ -286,11 +299,23 @@ export function sanitizeAppMap(
       masker.reserveThrough(Number(match[1]));
     }
   }
+  // A query code object in the classMap carries the SQL statement (in `name`)
+  // with its literals — the same secret/PII surface as an event's sql_query,
+  // but keyed without the adapter. Record each statement's adapter now, before
+  // the events pass rewrites their sql, so the classMap sanitizes identically.
+  const sqlAdapters = new Map<string, string | undefined>();
+  for (const event of appmap.events ?? []) {
+    const query = event.sql_query;
+    if (query && typeof query.sql === 'string' && !sqlAdapters.has(query.sql))
+      sqlAdapters.set(query.sql, query.database_type);
+  }
+
   for (const event of appmap.events ?? []) sanitizeEvent(event, masker);
   // eventUpdates carry the same captured-data fields as events; sanitize them
   // in place, in the same token namespace. They are deliberately not merged
   // into their events — sanitize changes values only, never structure.
   for (const update of Object.values(appmap.eventUpdates ?? {})) sanitizeEvent(update, masker);
+  sanitizeClassMap(appmap.classMap, masker, sqlAdapters);
   sanitizeMetadata(appmap.metadata, masker);
 
   // Provenance. Masking is one-way, so on a re-run the values still verbatim
@@ -310,6 +335,28 @@ export function sanitizeAppMap(
 // in the repository URL, and exception / test-failure messages. The command
 // pipeline's normalize step also strips repository credentials, but the walk
 // must not depend on it — the security guarantee lives here, alone.
+// A query code object's `name` (some formats also a `sql` field) is a SQL
+// statement with literals — the same secret surface sanitizeSql handles for an
+// event's sql_query. Parameterize it with the same adapter and masker so it
+// matches the event exactly. Everything else in the classMap (packages,
+// classes, functions, route templates) is schema and is left untouched.
+// @label security.sanitization
+function sanitizeClassMap(
+  entries: ClassMapEntry[] | undefined,
+  masker: ValueMasker,
+  sqlAdapters: Map<string, string | undefined>
+): void {
+  for (const entry of entries ?? []) {
+    if (entry.type === 'query') {
+      if (typeof entry.name === 'string')
+        entry.name = sanitizeSql(entry.name, sqlAdapters.get(entry.name), masker);
+      if (typeof entry.sql === 'string')
+        entry.sql = sanitizeSql(entry.sql, sqlAdapters.get(entry.sql), masker);
+    }
+    sanitizeClassMap(entry.children, masker, sqlAdapters);
+  }
+}
+
 function sanitizeMetadata(metadata: AppMapMetadata | undefined, masker: ValueMasker): void {
   if (!metadata) return;
   const git = metadata.git;
