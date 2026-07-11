@@ -1,3 +1,20 @@
+# [@appland/appmap-v3.201.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.200.0...@appland/appmap-v3.201.0) (2026-07-11)
+
+
+### Bug Fixes
+
+* **cli:** sanitize eventUpdates too ([0cc5b94](https://github.com/getappmap/appmap-js/commit/0cc5b94f2c0828a93b1a5b85e2c8da5ec6e77dc6))
+* **cli:** sanitize exits non-zero when any file in the batch is skipped ([77ce035](https://github.com/getappmap/appmap-js/commit/77ce035efdb748f08ca8a0186cf93bc2b27e6cfc))
+* **cli:** the masking walk sanitizes metadata itself ([e280c56](https://github.com/getappmap/appmap-js/commit/e280c5601aad1a7968e75942325105f5905edffe))
+
+
+### Features
+
+* **cli:** add 'appmap sanitize' — equality-preserving value tokenization ([4b2cd63](https://github.com/getappmap/appmap-js/commit/4b2cd63d26dc2d171dbcdb4115bd5c2729b60dc6))
+* **cli:** normalize AppMaps as the first step of sanitize ([5a414d9](https://github.com/getappmap/appmap-js/commit/5a414d98d7c8a1f3c3b17a2cbd482408c4e75a0b))
+* **cli:** normalize HTTP routes in sanitize instead of tokenizing ([f76cd70](https://github.com/getappmap/appmap-js/commit/f76cd7085caa2449628d2dc142ae46a0a46f9f7f))
+* **cli:** provenance markers for sanitize and trim ([1157abc](https://github.com/getappmap/appmap-js/commit/1157abc9687261227b3046ac3b5a2ba50f3396ec))
+
 # [@appland/appmap-v3.200.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.199.2...@appland/appmap-v3.200.0) (2026-07-03)
 
 
