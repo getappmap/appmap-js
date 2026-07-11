@@ -11,14 +11,23 @@ export const CLI_VERSION: string = require('../../package.json').version;
 // across all value positions, so a header value, a parameter, and a return
 // value that held the same string get the same token.
 //
+// Two fields are the exception: an HTTP server `path_info` with no route
+// template, and a client `url`. These are the only captured values that feed
+// the `appmap compare` digest (through the request route), so a per-file token
+// would make two otherwise-identical recordings compare as different. They are
+// instead normalized to a deterministic, lossy route template (see
+// normalizeUrl) — stable across files, with the concrete id dropped rather than
+// encoded. (A content hash would give cross-file stability for free, but a hash
+// of low-entropy PII is reversible by guess-and-check; erasure is not.)
+//
 // Sanitization is positional, driven by the AppMap format: it touches only
 // the fields defined to hold captured runtime data. Code object names,
 // classes, paths, labels, and route templates are schema, not data, and are
 // never modified.
 //
-// This trades away cross-AppMap comparison of values (each file has its own
-// token namespace) — deliberately: the comparison digest excludes values, and
-// unlinkability across files/revisions is the anti-correlation guarantee.
+// The per-file token namespace is deliberate: unlinkability across
+// files/revisions is the anti-correlation guarantee, and (routes aside) values
+// are excluded from the comparison digest, so nothing is lost by it.
 
 // Kind recognizers annotate a token with the *shape* of the original value
 // (`<uuid:v3>`) — readability only. Recognition never exempts a value from
@@ -211,6 +220,52 @@ function sanitizeHeaders(headers: Record<string, unknown> | undefined, masker: V
   }
 }
 
+// HTTP paths and client URLs are the one kind of captured value that feeds the
+// `appmap compare` digest: the request route is derived from `path_info`/`url`
+// (Event.route). A per-file `<vN>` token there would vary between recordings
+// and destabilize the digest, so instead of tokenizing we normalize to a route
+// template — deterministic (same input, same output, so the digest is stable
+// across files) and lossy (the concrete id is dropped, not encoded, so there is
+// nothing to reverse).
+//
+// A segment that looks like a value (numeric/uuid/hex/timestamp id) becomes a
+// `:kind` placeholder; a plain route word or version segment is kept; anything
+// else (mixed-alnum ids, opaque tokens, emails) falls to `:param`. Without the
+// application's route table this is a heuristic: a purely alphabetic segment
+// (a username in `/users/alice`) is indistinguishable from a route word and is
+// kept — the one spot a template-less path can retain a value.
+function normalizeSegment(seg: string): string {
+  if (seg === '') return seg; // preserve leading/trailing/'//' structure
+  const kind = KIND_PATTERNS.find(([, pattern]) => pattern.test(seg))?.[0];
+  if (kind) return `:${kind}`;
+  if (/^[A-Za-z][A-Za-z_-]*$/.test(seg) || /^v\d+$/.test(seg)) return seg;
+  return ':param';
+}
+
+// Drop the query string and fragment entirely: they are the densest home for
+// secrets and PII (tokens, emails, ids as `?user=…`) and carry little route
+// signal, so dropping them is both the safest and simplest choice. (A later
+// revision could instead keep sorted parameter *names* with erased values, if
+// query-distinguished endpoints ever need to compare apart.)
+// @label security.sanitization
+function normalizePath(path: string): string {
+  return path.split(/[?#]/)[0].split('/').map(normalizeSegment).join('/');
+}
+
+// Client URL: strip userinfo (a `user:pass@` can ride here as in a git URL),
+// keep scheme + host + port as route signal, parameterize the path, drop query
+// and fragment. A relative or malformed URL that won't parse is parameterized
+// as a bare path — deterministic and secret-free, never fail-open.
+// @label security.sanitization
+function normalizeUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    return `${parsed.protocol}//${parsed.host}${normalizePath(parsed.pathname)}`;
+  } catch {
+    return normalizePath(url);
+  }
+}
+
 // The redaction boundary: sanitizes every field defined to hold captured
 // runtime data (parameters, return values, exceptions, HTTP paths/headers,
 // SQL) so the committed AppMap is structurally incapable of carrying a secret.
@@ -293,16 +348,24 @@ function sanitizeEvent(event: AppMapEvent, masker: ValueMasker): void {
 
   const serverRequest = event.http_server_request;
   if (serverRequest) {
-    // The concrete path carries path params (ids, PII); the normalized
-    // route template is the interesting part and stays.
+    // path_info carries the concrete path (ids, PII). When a route template
+    // (normalized_path_info) is present it wins the digest, so the concrete
+    // path is not structural and we fully redact it to a token. When it is
+    // absent, path_info IS the digest's route, so normalize it to a
+    // deterministic template instead — a per-file token there would vary
+    // between recordings and destabilize `appmap compare`.
     if (typeof serverRequest.path_info === 'string')
-      serverRequest.path_info = masker.mask(serverRequest.path_info);
+      serverRequest.path_info = serverRequest.normalized_path_info
+        ? masker.mask(serverRequest.path_info)
+        : normalizePath(serverRequest.path_info);
     sanitizeHeaders(serverRequest.headers, masker);
   }
   const clientRequest = event.http_client_request;
   if (clientRequest) {
+    // The client URL always feeds the ClientRPC route/digest, so normalize it
+    // to a route template rather than tokenize it (see normalizeUrl).
     if (typeof clientRequest.url === 'string')
-      clientRequest.url = masker.mask(clientRequest.url);
+      clientRequest.url = normalizeUrl(clientRequest.url);
     sanitizeHeaders(clientRequest.headers, masker);
   }
   sanitizeHeaders(event.http_server_response?.headers, masker);

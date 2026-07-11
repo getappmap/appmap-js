@@ -52,6 +52,78 @@ describe('sanitizeAppMap', () => {
     expect(event.http_server_request.request_method).toEqual('POST');
   });
 
+  it('normalizes a template-less server path to a route template, not a token', () => {
+    const appmap = {
+      events: [
+        {
+          http_server_request: {
+            request_method: 'GET',
+            // no normalized_path_info: path_info feeds the compare digest
+            path_info: '/users/123/posts/0f5e2b1a-9c4d-4e6f-8a7b-1c2d3e4f5a6b',
+          },
+        },
+      ],
+    } as any;
+    sanitizeAppMap(appmap);
+    // deterministic template — stable across files, so compare digests match
+    expect(appmap.events[0].http_server_request.path_info).toEqual('/users/:int/posts/:uuid');
+  });
+
+  it('fully redacts the concrete path when a route template is present', () => {
+    const appmap = {
+      events: [
+        {
+          http_server_request: {
+            path_info: '/users/123/edit',
+            normalized_path_info: '/users/:id/edit',
+          },
+        },
+      ],
+    } as any;
+    sanitizeAppMap(appmap);
+    // the template wins the digest, so the concrete path is not structural: token it
+    expect(appmap.events[0].http_server_request.path_info).toMatch(/^<v\d+>$/);
+    expect(appmap.events[0].http_server_request.normalized_path_info).toEqual('/users/:id/edit');
+  });
+
+  it('normalizes a client URL: strips credentials and query, parameterizes the path', () => {
+    const appmap = {
+      events: [
+        {
+          http_client_request: {
+            request_method: 'POST',
+            url: 'https://user:tok3n@api.example.com/v1/charges/ch_abc123?key=sk_live_x',
+          },
+        },
+      ],
+    } as any;
+    sanitizeAppMap(appmap);
+    expect(appmap.events[0].http_client_request.url).toEqual(
+      'https://api.example.com/v1/charges/:param'
+    );
+  });
+
+  it('parameterizes a relative or unparseable client URL as a bare path (never fail-open)', () => {
+    const appmap = { events: [{ http_client_request: { url: '/orders/42?token=abc' } }] } as any;
+    sanitizeAppMap(appmap);
+    expect(appmap.events[0].http_client_request.url).toEqual('/orders/:int');
+  });
+
+  it('produces route templates that are stable across independent AppMaps', () => {
+    // The property that keeps `appmap compare` stable: the same route with a
+    // different id yields the same template in every file (unlike per-file
+    // tokens), so id churn is not a spurious diff.
+    const mk = (path: string) => ({ events: [{ http_server_request: { path_info: path } }] } as any);
+    const a = mk('/users/1/edit');
+    const b = mk('/users/999/edit');
+    sanitizeAppMap(a, new ValueMasker());
+    sanitizeAppMap(b, new ValueMasker());
+    expect(a.events[0].http_server_request.path_info).toEqual(
+      b.events[0].http_server_request.path_info
+    );
+    expect(a.events[0].http_server_request.path_info).toEqual('/users/:int/edit');
+  });
+
   it('keeps built-in enumerable values and user-allowed vocabularies verbatim', () => {
     const allow = new Set([...BUILTIN_ALLOW, 'private', 'public']);
     const appmap = {
@@ -176,6 +248,23 @@ describe('sanitizeAppMap', () => {
           },
         },
         {
+          // No route template: path_info feeds the compare digest, so it is
+          // normalized to a template rather than tokenized.
+          http_server_request: {
+            request_method: 'GET',
+            path_info: '/users/123/friends/alice',
+          },
+        },
+        {
+          // Client request: the URL always feeds the digest; credentials and
+          // query are stripped and the path is parameterized.
+          http_client_request: {
+            request_method: 'GET',
+            url: 'https://user:pw@api.example.com/v1/items/42?token=sk_live',
+            headers: { Authorization: 'sekrit-abc' },
+          },
+        },
+        {
           sql_query: {
             sql: "SELECT * FROM users WHERE email = 'a@b.c'",
             database_type: 'postgres',
@@ -190,7 +279,7 @@ describe('sanitizeAppMap', () => {
       ],
     };
     sanitizeAppMap(appmap);
-    const [call, goodSql, badSql] = appmap.events as any[];
+    const [call, templatelessReq, clientReq, goodSql, badSql] = appmap.events as any[];
     expect(call.parameters[0].value).toEqual('<v1>');
     expect(call.return_value.value).toEqual('<v1>'); // equality preserved
     expect(call.http_server_request.headers.Authorization).toEqual('<v1>'); // shared namespace
@@ -198,6 +287,12 @@ describe('sanitizeAppMap', () => {
     expect(call.exceptions[0].message).toMatch(/^<v\d+>$/);
     expect(call.http_server_request.normalized_path_info).toEqual('/games/:id/join');
     expect(call.http_server_request.path_info).toMatch(/^<v\d+>$/);
+    // template-less path normalized deterministically ('alice' kept: without a
+    // route table a username is indistinguishable from a route word).
+    expect(templatelessReq.http_server_request.path_info).toEqual('/users/:int/friends/alice');
+    // client URL normalized: credentials and query gone, path parameterized.
+    expect(clientReq.http_client_request.url).toEqual('https://api.example.com/v1/items/:int');
+    expect(clientReq.http_client_request.headers.Authorization).toEqual('<v1>'); // header still tokenized
     expect(goodSql.sql_query.sql).toEqual('SELECT * FROM users WHERE email = ?');
     expect(badSql.sql_query.sql).toMatch(/^<v\d+>$/); // unparseable: whole statement masked
   });
