@@ -266,13 +266,13 @@ function normalizeUrl(url: string): string {
   }
 }
 
+const TOKEN_SCAN = /<(?:[a-z0-9]+:)?v(\d+)>/g;
+
 // The redaction boundary: sanitizes every field defined to hold captured
 // runtime data (parameters, return values, exceptions, HTTP paths/headers,
 // SQL) so the committed AppMap is structurally incapable of carrying a secret.
 // Labeled so appmap-review interprets any change to this boundary.
 // @label security.sanitization
-const TOKEN_SCAN = /<(?:[a-z0-9]+:)?v(\d+)>/g;
-
 export function sanitizeAppMap(
   appmap: AppMap,
   masker: ValueMasker = new ValueMasker()
