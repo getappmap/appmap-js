@@ -14,10 +14,11 @@
 schema_version: 1
 
 commands:
-  # Record ONE gold test, then trim its captured values so the committed baseline
-  # stays lean (see gold_traces/trim.mts). appmap-node names the output by the full
-  # describe/it path, so we record the whole test file and trim just the entry's
-  # appmap_path. Recording from the package dir is required for the ts-jest preset.
+  # Record ONE gold test. No trim step here — the engine trims each committed
+  # baseline via `appmap trim`. appmap-node names the output by the full
+  # describe/it path, so we record the whole test file; the engine picks out the
+  # entry's appmap_path. Recording from the package dir is required for the
+  # ts-jest preset.
   record: "npx appmap-node npx jest {test_file} >/dev/null"
 
   # The repo's built CLI exports the sequence diagram whose digest gates the bless.
@@ -60,3 +61,15 @@ entries:
     test_name: Text matches expectation
     appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/Text_matches_expectation.appmap.json
     summary: The same diff diagram rendered to the Text output format (formatter.format -> text.format subtree, distinct from the PlantUML branch).
+
+  - feature: formatter-json
+    test_file: tests/integration/sequenceDiagramDiff.spec.ts
+    test_name: JSON matches expectation
+    appmap_path: jest/Sequence_diagram_diff/PlantUML/user_found_vs_not_found/JSON_matches_expectation.appmap.json
+    summary: The same diff diagram serialized to the JSON output format (formatter.format -> json.format branch, which produces the .sequence.json consumed by the CLI and appmap-review; distinct from the PlantUML and Text branches).
+
+  - feature: validation
+    test_file: tests/integration/validateDiagram.spec.ts
+    test_name: accepts a valid diagram and rejects an invalid one
+    appmap_path: jest/Diagram_validation/accepts_a_valid_diagram_and_rejects_an_invalid_one.appmap.json
+    summary: The validateDiagram gate over one trace - the valid path (recursing validateAction over every action), the negative branch (a structurally-invalid diagram is rejected), and AppMap detection. Imports from src (the unit spec imports the excluded dist export, so it records nothing).

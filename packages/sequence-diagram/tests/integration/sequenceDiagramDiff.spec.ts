@@ -10,6 +10,7 @@ import {
   VERBOSE,
   checkPlantUMLEqual,
   checkTextEqual,
+  checkJSONEqual,
 } from '../util';
 import { join } from 'path';
 import format from '../../src/formatter';
@@ -36,6 +37,14 @@ describe('Sequence diagram diff', () => {
         await checkTextEqual(
           diagram,
           join(FIXTURE_DIR, 'sequenceDiagrams/userFoundVsNotFound.sequence.txt')
+        );
+      });
+
+      it('JSON matches expectation', async () => {
+        const { diagram } = format(FormatType.JSON, diffDiagram, 'computed diff');
+        await checkJSONEqual(
+          diagram,
+          join(FIXTURE_DIR, 'sequenceDiagrams/userFoundVsNotFound.diff.sequence.json')
         );
       });
     });
