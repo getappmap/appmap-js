@@ -1,3 +1,16 @@
+# [@appland/sequence-diagram-v1.14.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.13.0...@appland/sequence-diagram-v1.14.0) (2026-07-11)
+
+
+### Bug Fixes
+
+* **cli:** sanitize eventUpdates too ([0cc5b94](https://github.com/getappmap/appmap-js/commit/0cc5b94f2c0828a93b1a5b85e2c8da5ec6e77dc6))
+
+
+### Features
+
+* **cli:** normalize AppMaps as the first step of sanitize ([5a414d9](https://github.com/getappmap/appmap-js/commit/5a414d98d7c8a1f3c3b17a2cbd482408c4e75a0b))
+* **cli:** provenance markers for sanitize and trim ([1157abc](https://github.com/getappmap/appmap-js/commit/1157abc9687261227b3046ac3b5a2ba50f3396ec))
+
 # [@appland/sequence-diagram-v1.13.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.12.0...@appland/sequence-diagram-v1.13.0) (2026-07-03)
 
 
