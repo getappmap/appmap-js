@@ -213,6 +213,37 @@ describe('sanitizeAppMap', () => {
     expect(appmap.events[0].sql_query.sql).toMatch(/^<v\d+>$/);
   });
 
+  it('sanitizes SQL in the class map too, so no event literal survives anywhere', () => {
+    const secret = 'kevin@app.land';
+    const statement = `SELECT * FROM users WHERE email = '${secret}'`;
+    const appmap = {
+      classMap: [
+        {
+          type: 'database',
+          name: 'Database',
+          children: [{ type: 'query', name: statement }],
+        },
+      ],
+      events: [{ sql_query: { sql: statement, database_type: 'postgres' } }],
+    };
+    sanitizeAppMap(appmap);
+
+    // The class-map query node is parameterized, identical to the event's SQL.
+    expect(appmap.classMap[0].children[0].name).toContain('SELECT * FROM users WHERE email = ?');
+    expect(appmap.events[0].sql_query.sql).toContain('SELECT * FROM users WHERE email = ?');
+    // The literal survives nowhere in the document — class map included.
+    expect(JSON.stringify(appmap)).not.toContain(secret);
+  });
+
+  it('fails closed on a class-map query it cannot parameterize', () => {
+    const appmap = {
+      classMap: [{ type: 'query', name: "SELECT * FROM users WHERE name = 'unterminated" }],
+      events: [],
+    };
+    sanitizeAppMap(appmap);
+    expect(appmap.classMap[0].name).toMatch(/^<v\d+>$/);
+  });
+
   it('sanitizes exception messages and message parameters', () => {
     const appmap = {
       events: [
