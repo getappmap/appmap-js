@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.201.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.0...@appland/appmap-v3.201.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* **cli:** sanitize SQL in the class map, not just events ([9119b3d](https://github.com/getappmap/appmap-js/commit/9119b3df1c370004ed65a0c0f72149d972a8a66d))
+
 # [@appland/appmap-v3.201.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.200.0...@appland/appmap-v3.201.0) (2026-07-11)
 
 
