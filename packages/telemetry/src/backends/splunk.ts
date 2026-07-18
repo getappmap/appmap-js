@@ -2,6 +2,7 @@ import * as http from 'node:http';
 import * as https from 'node:https';
 import { URL } from 'node:url';
 import * as fs from 'node:fs';
+import * as tls from 'node:tls';
 
 import type {
   SplunkBackendConfiguration,
@@ -12,6 +13,20 @@ import type {
 
 const DefaultSplunkPath = '/services/collector/event';
 const MaxFlushTime = 5000; // 5 seconds
+
+// tls.getCACertificates (Node 22.16.0+) exposes the OS certificate store, which
+// Node's default TLS trust store does not include on its own. Older runtimes
+// (the npm-installed CLI supports Node >15) fall back to the previous
+// behavior of trusting only Node's bundled Mozilla CA list.
+function getSystemCACertificates(): string[] | undefined {
+  if (typeof tls.getCACertificates !== 'function') return undefined;
+  try {
+    return [...tls.getCACertificates('bundled'), ...tls.getCACertificates('system')];
+  } catch (e) {
+    console.warn(`SplunkBackend: Failed to load system CA certificates: ${(e as Error).message}`);
+    return tls.getCACertificates('bundled');
+  }
+}
 
 export class SplunkBackend implements TelemetryBackend {
   private readonly config: Required<SplunkBackendConfiguration>;
@@ -48,6 +63,7 @@ export class SplunkBackend implements TelemetryBackend {
         if (splunkCaCert === 'system') {
           httpsAgentOptions = {
             rejectUnauthorized: true,
+            ca: getSystemCACertificates(),
           };
         } else if (splunkCaCert.startsWith('@')) {
           const caPath = splunkCaCert.substring(1);

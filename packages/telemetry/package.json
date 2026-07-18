@@ -6,6 +6,7 @@
     "test": "jest",
     "build": "tsc",
     "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
     "pre-commit": "lint-staged"
   },
   "main": "dist/index.js",
