@@ -15,16 +15,19 @@ const DefaultSplunkPath = '/services/collector/event';
 const MaxFlushTime = 5000; // 5 seconds
 
 // tls.getCACertificates (Node 22.16.0+) exposes the OS certificate store, which
-// Node's default TLS trust store does not include on its own. Older runtimes
-// (the npm-installed CLI supports Node >15) fall back to the previous
-// behavior of trusting only Node's bundled Mozilla CA list.
+// Node's default TLS trust store does not include on its own. 'default' is used
+// as the baseline (rather than 'bundled') so that NODE_EXTRA_CA_CERTS-provided
+// roots are preserved; 'system' is appended on top of it. Older runtimes (the
+// npm-installed CLI supports Node >15) fall back to leaving `ca` unset, which
+// keeps today's ambient default (bundled + NODE_EXTRA_CA_CERTS, no OS store).
 function getSystemCACertificates(): string[] | undefined {
   if (typeof tls.getCACertificates !== 'function') return undefined;
+  const defaultCerts = tls.getCACertificates('default');
   try {
-    return [...tls.getCACertificates('bundled'), ...tls.getCACertificates('system')];
+    return [...defaultCerts, ...tls.getCACertificates('system')];
   } catch (e) {
     console.warn(`SplunkBackend: Failed to load system CA certificates: ${(e as Error).message}`);
-    return tls.getCACertificates('bundled');
+    return defaultCerts;
   }
 }
 

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as https from 'https';
 import * as path from 'path';
+import * as tls from 'tls';
 import { SplunkBackend } from '../../src/backends/splunk';
 import { TelemetryData } from '../../src/types';
 
@@ -195,10 +196,15 @@ describe('SplunkBackend', () => {
       });
       const agent = splunk['httpAgent'] as https.Agent;
       expect(agent.options.rejectUnauthorized).toBe(true);
-      // Includes both Node's bundled CAs and the OS certificate store (Node 22.16+),
-      // rather than relying on the ambient default trust store.
-      expect(Array.isArray(agent.options.ca)).toBe(true);
-      expect((agent.options.ca as string[]).length).toBeGreaterThan(0);
+      if (typeof tls.getCACertificates === 'function') {
+        // Node 22.16+: includes Node's default trust store (bundled + NODE_EXTRA_CA_CERTS)
+        // plus the OS certificate store, rather than relying on the ambient default.
+        expect(Array.isArray(agent.options.ca)).toBe(true);
+        expect((agent.options.ca as string[]).length).toBeGreaterThan(0);
+      } else {
+        // Pre-22.16: no way to read the OS store, so `ca` is left unset.
+        expect(agent.options.ca).toBeUndefined();
+      }
     });
 
     it('loads CA from a file when SPLUNK_CA_CERT starts with @', () => {
