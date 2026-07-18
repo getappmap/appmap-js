@@ -195,7 +195,10 @@ describe('SplunkBackend', () => {
       });
       const agent = splunk['httpAgent'] as https.Agent;
       expect(agent.options.rejectUnauthorized).toBe(true);
-      expect(agent.options.ca).toBeUndefined();
+      // Includes both Node's bundled CAs and the OS certificate store (Node 22.16+),
+      // rather than relying on the ambient default trust store.
+      expect(Array.isArray(agent.options.ca)).toBe(true);
+      expect((agent.options.ca as string[]).length).toBeGreaterThan(0);
     });
 
     it('loads CA from a file when SPLUNK_CA_CERT starts with @', () => {
