@@ -1,3 +1,11 @@
+# [@appland/telemetry-v1.2.1](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.2.0...@appland/telemetry-v1.2.1) (2026-07-20)
+
+
+### Bug Fixes
+
+* **telemetry:** preserve NODE_EXTRA_CA_CERTS roots for SPLUNK_CA_CERT=system ([a61dc50](https://github.com/getappmap/appmap-js/commit/a61dc50ddde22b6b2164876d13c0e707db63cc7e))
+* **telemetry:** SPLUNK_CA_CERT=system now trusts the OS certificate store ([742a4b1](https://github.com/getappmap/appmap-js/commit/742a4b13c59c5268f570d91994f31496a0a42172))
+
 # [@appland/telemetry-v1.2.0](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.1.2...@appland/telemetry-v1.2.0) (2025-10-28)
 
 
