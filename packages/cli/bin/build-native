@@ -7,7 +7,7 @@ set -e
 # Otherwise every target will be built.
 OS="${1}"
 ARCH="${2:-x64}"
-ARGS="--config package.json --compress Zstd"
+ARGS="--config package.json --compress Brotli"
 PKG_NAME=$(node -p "require('./package.json').name.split('/').pop()")
 
 # check if OS is set and OS/ARCH is the same as the current system.
