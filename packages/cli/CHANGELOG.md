@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.201.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.1...@appland/appmap-v3.201.2) (2026-07-21)
+
+
+### Bug Fixes
+
+* **build-native:** switch pkg compression from Zstd to Brotli ([2e2b9b1](https://github.com/getappmap/appmap-js/commit/2e2b9b1466a6285cf656d05bd766e4de85ed46f0))
+
 # [@appland/appmap-v3.201.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.0...@appland/appmap-v3.201.1) (2026-07-14)
 
 
