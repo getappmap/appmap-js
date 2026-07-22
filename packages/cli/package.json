@@ -188,6 +188,9 @@
       "../../node_modules/better-sqlite3/build/Release/better_sqlite3.node",
       "node_modules/better-sqlite3/build/Release/better_sqlite3.node"
     ],
+    "ignore": [
+      "**/*.map"
+    ],
     "outputPath": "dist"
   },
   "optionalDependencies": {

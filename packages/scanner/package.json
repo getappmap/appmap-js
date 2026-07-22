@@ -114,6 +114,9 @@
       "package.json",
       "doc/**/*.md"
     ],
+    "ignore": [
+      "**/*.map"
+    ],
     "outputPath": "dist"
   }
 }
