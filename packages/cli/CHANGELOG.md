@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.201.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.2...@appland/appmap-v3.201.3) (2026-07-27)
+
+
+### Bug Fixes
+
+* **cli:** exclude source maps from pkg binary ([b84a452](https://github.com/getappmap/appmap-js/commit/b84a452c66877d5faa19df78cb62af7656f129de))
+
 # [@appland/appmap-v3.201.2](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.1...@appland/appmap-v3.201.2) (2026-07-21)
 
 
