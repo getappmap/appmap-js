@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.91.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.0...@appland/scanner-v1.91.1) (2026-07-27)
+
+
+### Bug Fixes
+
+* **scanner:** exclude source maps from pkg binary ([fe367a2](https://github.com/getappmap/appmap-js/commit/fe367a2a59bc56ac15aab5fa69173483d122ba57))
+
 # [@appland/scanner-v1.91.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.90.1...@appland/scanner-v1.91.0) (2026-07-06)
 
 
