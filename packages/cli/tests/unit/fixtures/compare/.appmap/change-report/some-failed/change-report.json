@@ -38,10 +38,6 @@
   "sequenceDiagramDiff": {
     "removed SQL `PRAGMA foreign_keys = ON`": [
       "minitest/Microposts_controller_should_redirect_destroy_for_wrong_micropost"
-    ],
-    "": [
-      "minitest/Microposts_interface_micropost_interface",
-      "minitest/User_associated_microposts_should_be_destroyed"
     ]
   },
   "appMapMetadata": {

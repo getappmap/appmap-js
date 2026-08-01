@@ -21,11 +21,6 @@
   ],
   "removedAppMaps": ["minitest/Relationship_should_be_valid"],
   "sequenceDiagramDiff": {
-    "": [
-      "minitest/Microposts_interface_micropost_interface",
-      "minitest/Users_login_login_with_valid_information_followed_by_logout",
-      "minitest/Users_signup_valid_signup_information_with_account_activation"
-    ],
     "changed HTTP server request `GET /users/{id}` to return 302 instead of 200\n  changed function call `app/helpers#show` to function call `app/helpers#logged_in_user` and changed to return string instead of ActiveRecord::AssociationRelation\n    removed SQL `SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?`\n    removed function call `controllers#page_number`\n    changed function call `app/helpers#render` to function call `app/helpers#store_location` and changed to return string instead of void\n  removed function call `views.render`\n    removed function call `helpers#gravatar_for`\n4 times:     removed function call `views.render`\n      removed SQL `SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?`\n      removed SQL `SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?`\n    removed SQL `SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?`\n2 times:     removed SQL `SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?`\n      removed SQL `SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?`\n      removed loop\n    removed function call `helpers#full_title`\n      removed function call `helpers#logged_in?`": [
       "minitest/Users_profile_profile_display_while_anonyomus"
     ]

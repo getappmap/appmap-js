@@ -8,9 +8,7 @@
       "sequenceDiagramDiff": "minitest/Microposts_interface_micropost_interface.diff.sequence.json"
     }
   ],
-  "sequenceDiagramDiff": {
-    "": ["minitest/Microposts_interface_micropost_interface"]
-  },
+  "sequenceDiagramDiff": {},
   "appMapMetadata": {
     "base": {
       "minitest/Microposts_interface_micropost_interface": {
