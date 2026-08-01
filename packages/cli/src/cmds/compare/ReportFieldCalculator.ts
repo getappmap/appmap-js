@@ -74,7 +74,7 @@ export default class ReportFieldCalculator {
             const action = diagramDiff.rootActions[actionIndex];
             diagramDiff.rootActions = [action];
             const snippet = format(FormatType.Text, diagramDiff, 'diff');
-            // TODO: nop if this is the empty string
+            if (snippet.diagram === '') continue;
             if (!sequenceDiagramDiff.has(snippet.diagram))
               sequenceDiagramDiff.set(snippet.diagram, []);
             sequenceDiagramDiff.get(snippet.diagram)?.push(appmap);
