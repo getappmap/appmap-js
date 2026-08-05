@@ -72,13 +72,13 @@ describe('scanCompletedEvent', () => {
       newFindingsByImpactDomain: JSON.stringify({ Security: 2 }),
     });
     expect(event.metrics).toEqual({
-      duration: 2,
+      numDurationSeconds: 2,
       numRules: 2,
       numAppMaps: 3,
       numFindings: 5,
       numNewFindings: 2,
       numResolvedFindings: 1,
-      contributors: 4,
+      numContributors: 4,
     });
   });
 });

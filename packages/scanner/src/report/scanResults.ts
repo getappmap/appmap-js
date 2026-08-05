@@ -179,13 +179,13 @@ export function scanCompletedEvent(
       newFindingsByImpactDomain: sortedCountsJson(telemetry.newFindingCountsByImpactDomain),
     },
     metrics: {
-      duration: telemetry.elapsedMs / 1000,
+      numDurationSeconds: telemetry.elapsedMs / 1000,
       numRules: telemetry.ruleIds.length,
       numAppMaps: telemetry.numAppMaps,
       numFindings: telemetry.numFindings,
       numNewFindings: telemetry.numNewFindings,
       numResolvedFindings: telemetry.numResolvedFindings,
-      contributors,
+      numContributors: contributors,
     },
   };
 }
