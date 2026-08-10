@@ -173,19 +173,19 @@ export function scanCompletedEvent(
     properties: {
       rules: [...telemetry.ruleIds].sort().join(', '),
       git_state: gitState,
-      findingsByRule: sortedCountsJson(telemetry.findingCountsByRule),
-      findingsByImpactDomain: sortedCountsJson(telemetry.findingCountsByImpactDomain),
-      newFindingsByRule: sortedCountsJson(telemetry.newFindingCountsByRule),
-      newFindingsByImpactDomain: sortedCountsJson(telemetry.newFindingCountsByImpactDomain),
+      ruleMatchesByRule: sortedCountsJson(telemetry.findingCountsByRule),
+      ruleMatchesByImpactDomain: sortedCountsJson(telemetry.findingCountsByImpactDomain),
+      newRuleMatchesByRule: sortedCountsJson(telemetry.newFindingCountsByRule),
+      newRuleMatchesByImpactDomain: sortedCountsJson(telemetry.newFindingCountsByImpactDomain),
     },
     metrics: {
-      duration: telemetry.elapsedMs / 1000,
+      numDurationSeconds: telemetry.elapsedMs / 1000,
       numRules: telemetry.ruleIds.length,
       numAppMaps: telemetry.numAppMaps,
-      numFindings: telemetry.numFindings,
-      numNewFindings: telemetry.numNewFindings,
-      numResolvedFindings: telemetry.numResolvedFindings,
-      contributors,
+      numRuleMatches: telemetry.numFindings,
+      numNewRuleMatches: telemetry.numNewFindings,
+      numClearedRuleMatches: telemetry.numResolvedFindings,
+      numContributors: contributors,
     },
   };
 }

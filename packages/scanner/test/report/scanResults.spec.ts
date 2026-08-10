@@ -66,19 +66,19 @@ describe('scanCompletedEvent', () => {
     expect(event.properties).toEqual({
       rules: 'rule-a, rule-b',
       git_state: 'Ok',
-      findingsByRule: JSON.stringify({ 'rule-a': 3, 'rule-b': 2 }),
-      findingsByImpactDomain: JSON.stringify({ Performance: 2, Security: 3 }),
-      newFindingsByRule: JSON.stringify({ 'rule-a': 2 }),
-      newFindingsByImpactDomain: JSON.stringify({ Security: 2 }),
+      ruleMatchesByRule: JSON.stringify({ 'rule-a': 3, 'rule-b': 2 }),
+      ruleMatchesByImpactDomain: JSON.stringify({ Performance: 2, Security: 3 }),
+      newRuleMatchesByRule: JSON.stringify({ 'rule-a': 2 }),
+      newRuleMatchesByImpactDomain: JSON.stringify({ Security: 2 }),
     });
     expect(event.metrics).toEqual({
-      duration: 2,
+      numDurationSeconds: 2,
       numRules: 2,
       numAppMaps: 3,
-      numFindings: 5,
-      numNewFindings: 2,
-      numResolvedFindings: 1,
-      contributors: 4,
+      numRuleMatches: 5,
+      numNewRuleMatches: 2,
+      numClearedRuleMatches: 1,
+      numContributors: 4,
     });
   });
 });
