@@ -212,12 +212,6 @@ jobs:
       - name: Setup Node
         uses: ./.github/actions/setup-node
 
-      - name: Restore cargo cache
-        uses: actions/cache@v5
-        with:
-          path: ~/.cargo
-          key: ${{ runner.os }}-${{ runner.arch }}-cargo
-
       - name: Build binary
         run: |
           yarn build
@@ -262,12 +256,6 @@ jobs:
       - name: Setup Node
         uses: ./.github/actions/setup-node
 
-      - name: Restore cargo cache
-        uses: actions/cache@v5
-        with:
-          path: ~/.cargo
-          key: ${{ runner.os }}-${{ runner.arch }}-cargo
-
       - name: Build binary
         run: |
           yarn build
@@ -300,12 +288,6 @@ jobs:
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
-
-      - name: Restore cargo cache
-        uses: actions/cache@v5
-        with:
-          path: ~/.cargo
-          key: ${{ runner.os }}-${{ runner.arch }}-cargo
 
       - name: Build
         shell: bash
