@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.91.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.1...@appland/scanner-v1.91.2) (2026-08-10)
+
+
+### Bug Fixes
+
+* rename scanner telemetry fields for consistent terminology ([05b1f05](https://github.com/getappmap/appmap-js/commit/05b1f052dbb6c597a7993464b3572a38a37121dd))
+
 # [@appland/scanner-v1.91.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.0...@appland/scanner-v1.91.1) (2026-07-27)
 
 
