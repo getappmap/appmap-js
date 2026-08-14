@@ -49,63 +49,10 @@ jobs:
           echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
           echo "$(wc -l <<<"$files") changed file(s), docs_only=$docs_only" >> "$GITHUB_STEP_SUMMARY"
 
-  yarn_install:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          # NOTE: This Node version MUST match the pkg target Node version (e.g. node22)
-          # in packages/{cli,scanner}/package.json to prevent native module ABI mismatches.
-          node-version: 22
-
-      - name: Detect Yarn cache dir
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
-
-      - name: Restore Yarn packages
-        id: yarn-restore
-        uses: actions/cache/restore@v5
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      # Restore node modules only if the SHA is perfect; to avoid possibility of corruption.
-      - name: Restore node_modules
-        id: node_modules-restore
-        uses: actions/cache/restore@v5
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-
-      - name: Yarn install
-        if: steps.node_modules-restore.outputs.cache-hit != 'true'
-        run: yarn install
-
-      - name: Save Yarn packages
-        if: steps.node_modules-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v5
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-
-      - name: Save node_modules
-        if: steps.node_modules-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v5
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-
   test_components:
     runs-on: ubuntu-latest
 
-    needs: [yarn_install, changes]
+    needs: [changes]
 
     if: needs.changes.outputs.docs_only != 'true'
 
@@ -134,7 +81,7 @@ jobs:
 
     if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only != 'true'
 
-    needs: [yarn_install, changes]
+    needs: [changes]
 
     env:
       CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -160,8 +107,6 @@ jobs:
   test_cli:
     runs-on: ubuntu-latest
 
-    needs: [yarn_install]
-
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -181,7 +126,7 @@ jobs:
   test_scanner:
     runs-on: ubuntu-latest
 
-    needs: [yarn_install, changes]
+    needs: [changes]
 
     if: needs.changes.outputs.docs_only != 'true'
 
@@ -205,7 +150,7 @@ jobs:
   test_native:
     runs-on: ubuntu-latest
 
-    needs: [yarn_install, changes]
+    needs: [changes]
 
     if: needs.changes.outputs.docs_only != 'true'
 
@@ -232,7 +177,7 @@ jobs:
   test_the_rest:
     runs-on: ubuntu-latest
 
-    needs: [yarn_install, changes]
+    needs: [changes]
 
     if: needs.changes.outputs.docs_only != 'true'
 
