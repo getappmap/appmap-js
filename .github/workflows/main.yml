@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -29,11 +29,11 @@ jobs:
 
       - name: Detect Yarn cache dir
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+        run: echo "dir=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
 
       - name: Restore Yarn packages
         id: yarn-restore
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v5
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
@@ -43,7 +43,7 @@ jobs:
       # Restore node modules only if the SHA is perfect; to avoid possibility of corruption.
       - name: Restore node_modules
         id: node_modules-restore
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v5
         with:
           path: ./node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
@@ -54,14 +54,14 @@ jobs:
 
       - name: Save Yarn packages
         if: steps.node_modules-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v5
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Save node_modules
         if: steps.node_modules-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v5
         with:
           path: ./node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
@@ -73,7 +73,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           # The storybook runner is going to do some Git operations that rely on access to the main branch.
           ref: ${{ github.event.pull_request.head.sha }}
@@ -103,7 +103,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -126,7 +126,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
@@ -147,7 +147,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
@@ -169,7 +169,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
@@ -194,7 +194,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Setup Node
         uses: ./.github/actions/setup-node
@@ -219,7 +219,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
