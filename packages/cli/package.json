@@ -25,7 +25,7 @@
     "watch": "tsc --watch",
     "build:html": "ts-node esbuild.html.ts",
     "build:ui:css": "tailwindcss -i src/html/query-ui/index.css -o built/html/query-ui/tailwind.css --config src/html/query-ui/tailwind.config.js --minify",
-    "build:doc": "rsync -av --delete ../../docs built/ && rm -f built/docs/reference/appmap-agent-js.md",
+    "build:doc": "node ../../scripts/sync-docs.mjs --source ../../docs --target built/docs",
     "start": "ts-node src/cli.ts",
     "build-native": "yarn build && ./bin/build-native"
   },

@@ -9,6 +9,8 @@
     "verify": "node scripts/verify.mjs",
     "verify:staged": "node scripts/verify.mjs --staged",
     "test": "yarn workspaces foreach --exclude '{root}' -v run test",
+    "test:scripts": "node --test scripts/*.test.mjs",
+    "sync-docs": "node scripts/sync-docs.mjs",
     "build": "yarn workspaces foreach -t --exclude root -v run build",
     "build-native": "yarn workspaces foreach -t --exclude root -v run build-native",
     "codesign": "yarn workspaces foreach -t --exclude root -v run codesign",
