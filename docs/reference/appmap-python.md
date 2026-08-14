@@ -558,8 +558,13 @@ These environment variables can be used to control various aspects of the AppMap
   default, not case-sensitive), parameters are rendered using `repr`. If
   `false`, a generic string is used instead.
 
-* `APPMAP_DISABLE_LOG_FILE` controls the automatic creation of a log file by the
-  AppMap agent. If not `true` (the default), a log file will be created.
+* `APPMAP_DISABLE_LOG_FILE` controls the automatic creation of a log file (`appmap.log`) by
+  the AppMap agent. It defaults to `true`, so no log file is created unless you explicitly
+  set it to `false` (or pass `--enable-log` to the `appmap-python` script). This is
+  deliberately opt-in: the log can include configuration and rendered parameter values, so
+  it shouldn't be written to disk, or committed to source control, unless you ask for it.
+  If you do enable it, make sure `appmap.log` is excluded from version control (e.g. via
+  `.gitignore`).
 
 
 ## GitHub repository

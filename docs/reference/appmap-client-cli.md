@@ -27,6 +27,7 @@ redirect_from: [docs/reference/appmap-swagger-ruby]
   - [`stats`](#stats)
   - [`prune`](#prune)
   - [`trim`](#trim)
+  - [`sanitize`](#sanitize)
   - [`archive`](#archive)
   - [`restore`](#restore)
   - [`compare`](#compare)
@@ -646,6 +647,8 @@ trim tmp/appmap/minitest/Valid_login_redirect_after_login.appmap.json: 1548288 -
 
 The `--max-length` option controls how aggressively values are truncated. Plain strings are capped at this length (default: 120 characters), while structured values (objects, arrays, hashes) are budgeted per field, so their overall shape remains readable.
 
+Each trimmed file records what was done to it in `metadata.trimmed`: the tool version and the cap applied. Running `trim` again on a file that the same version already trimmed to the same cap is skipped. Re-running with a smaller cap truncates further; a larger cap cannot restore what was already cut (the command warns — re-record the AppMap to grow values back). After repeated runs the marker records the smallest cap applied.
+
 ### Arguments
 
 ```
@@ -665,6 +668,73 @@ Options:
                     values are budgeted per field)      [number] [default: 120]
   -o, --output-dir  Write trimmed AppMaps here (default: overwrite each file in
                     place)                                              [string]
+  -d, --directory   Working directory for the command                   [string]
+```
+
+## `sanitize`
+
+Use this command to remove secrets and PII from AppMap files before committing or sharing them. `sanitize` replaces every captured runtime value string with a token, so the sanitized file is structurally incapable of carrying a secret.
+
+Tokens are equality-preserving within each AppMap: values are replaced with `<v1>`, `<v2>`, … in order of first appearance, and the same original value always receives the same token wherever it occurs — whether as a parameter, a return value, or an HTTP header value. This means data-flow correlation within the AppMap still reads naturally, even though no content characters are retained. When a value has a recognizable shape, the token is annotated with its kind for readability — for example `<uuid:v3>`, `<iso8601:v7>`, `<hex:v2>`, or `<int:v5>`. Recognition affects only the annotation; a UUID or timestamp is still tokenized like any other value.
+
+Each file gets its own token namespace, so values cannot be correlated across AppMap files or across revisions.
+
+Each sanitized file records what was done to it in `metadata.sanitized`: the tool version and the allowed values that were applied. Running `sanitize` again on a file that the same version already sanitized with the same options is skipped; with different options it is re-applied. Re-applying can only tighten: masking is one-way, so allowing a value on a later run cannot restore it if an earlier run already masked it (the command warns — re-record the AppMap to loosen the allowlist). After repeated runs the marker records the values allowed by every run.
+
+### What is sanitized
+
+Before masking, each file is normalized — the same transform every AppMap viewer applies on load: event updates are merged into their events, event ids are re-indexed, and unreturned calls are balanced. Masking then runs over this canonical form.
+
+Sanitization is positional, driven by the AppMap format: it touches only the fields defined to hold captured runtime data.
+
+- Parameter, message, receiver, and return values
+- Exception messages
+- HTTP header **values** on requests and responses (header names are kept)
+- The concrete request path (`path_info`) and client request URLs, which can carry path parameters such as ids
+- Metadata that carries captured data: the git user name and email, credentials embedded in the repository URL, and exception and test-failure messages
+
+Code object names, classes, source paths, labels, and normalized route templates are schema, not data, and are never modified.
+
+SQL is handled specially: statements are parameterized rather than tokenized, with literals replaced by `?`, so the statement shape remains readable. If a statement cannot be reliably parameterized, the entire statement is downgraded to a token — sanitization fails closed rather than risk leaking a literal.
+
+HTTP request routes are also handled specially. A client request URL, and a server request path that has no route template, are the two captured values that feed the `appmap compare` digest — a per-file token there would make two otherwise-identical recordings compare as different. Instead of tokenizing these fields, `sanitize` normalizes them to a route template: any `user:password` part of a URL is stripped, the query string and fragment are dropped, the host and static path words are kept, and path segments that look like values are replaced with a placeholder (`/users/123` becomes `/users/:int`). The result is the same for every recording of the same route, so comparison stays stable, and the concrete id is erased rather than encoded, so nothing can be reversed. One caveat: without the application's route table this is a heuristic, so a purely alphabetic path segment — such as a username in `/users/alice` — cannot be told apart from a route word and is kept. When a server request does have a route template, the concrete path is not used for comparison, and it is fully tokenized like any other value.
+
+### Allowed values
+
+A small built-in allowlist keeps values that have no secret capacity, such as `true`, `false`, `null`, `nil`, and `None`. You can extend it with project-specific public vocabularies — enum strings such as state or role names — using `--allow` (repeatable) or `--allow-file` (one value per line; `#` comments and blank lines are skipped). Matching is exact whole-value only: an allowed word appearing inside a larger value keeps nothing.
+
+### Usage
+
+Pass one or more AppMap files. By default, each file is overwritten in place; use `--output-dir` to write the sanitized files elsewhere. Files are written atomically, so an interrupted run never leaves a partial AppMap. A malformed or unreadable file is skipped with a warning rather than aborting the batch — but the command then exits non-zero, because a skipped file keeps its original, possibly secret-bearing contents. Exit code 0 means every file is sanitized. The command reports the number of distinct values tokenized in each file:
+
+```console
+$ appmap sanitize tmp/appmap/minitest/*.appmap.json --allow pending --allow shipped
+sanitize tmp/appmap/minitest/Valid_login_redirect_after_login.appmap.json: 214 distinct value(s) tokenized, 1548288 -> 903112 bytes
+```
+{: .example-code}
+
+### Arguments
+
+```
+appmap sanitize <files..>
+
+Replace captured values in AppMaps with per-file equality-preserving tokens,
+so the files cannot carry secrets
+
+Positionals:
+  files  AppMap file(s) to sanitize                                     [string]
+
+Options:
+      --version     Show version number                                [boolean]
+  -v, --verbose     Run with verbose logging                           [boolean]
+      --help        Show help                                          [boolean]
+      --allow       Value to keep verbatim (repeatable). Exact whole-value
+                    match; meant for small public vocabularies such as state or
+                    role names                             [array] [default: []]
+      --allow-file  File of values to keep verbatim, one per line (# comments
+                    and blank lines skipped)                            [string]
+  -o, --output-dir  Write sanitized AppMaps here (default: overwrite each file
+                    in place)                                           [string]
   -d, --directory   Working directory for the command                   [string]
 ```
 
