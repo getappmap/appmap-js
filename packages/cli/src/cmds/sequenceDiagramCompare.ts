@@ -144,8 +144,12 @@ function comparisonChange(
   baseActions: Action[],
   headActions: Action[]
 ): SequenceComparisonChange | undefined {
-  const baseAction = actionAt(baseActions, move.lNode);
-  const headAction = actionAt(headActions, move.rNode);
+  // Insert and delete moves retain the other cursor's previous position. It is
+  // context, not the corresponding action, so never expose it as an alignment.
+  const baseAction =
+    move.moveType === MoveType.InsertRight ? undefined : actionAt(baseActions, move.lNode);
+  const headAction =
+    move.moveType === MoveType.DeleteLeft ? undefined : actionAt(headActions, move.rNode);
 
   let kind: SequenceComparisonChange['kind'];
   let diffMode: DiffMode;
