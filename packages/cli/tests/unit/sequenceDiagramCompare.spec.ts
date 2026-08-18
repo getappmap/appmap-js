@@ -1,9 +1,12 @@
-import { DiffMode, unparseDiagram } from '@appland/sequence-diagram';
+import { Diagram, DiffMode, unparseDiagram } from '@appland/sequence-diagram';
 import { existsSync, mkdirSync } from 'fs';
 import { readFile } from 'fs/promises';
 import path from 'path';
 
-import { handler as compareSequenceDiagrams } from '../../src/cmds/sequenceDiagramCompare';
+import {
+  handler as compareSequenceDiagrams,
+  SequenceComparisonBundle,
+} from '../../src/cmds/sequenceDiagramCompare';
 
 const fixtureDir = path.join(
   '..',
@@ -32,7 +35,9 @@ describe('sequence diagram compare command', () => {
     });
 
     expect(existsSync(outputFile)).toBe(true);
-    const bundle = JSON.parse(await readFile(outputFile, 'utf8'));
+    const bundle = JSON.parse(
+      await readFile(outputFile, 'utf8')
+    ) as SequenceComparisonBundle;
 
     expect(bundle.kind).toBe('appmap.sequence-comparison');
     expect(bundle.schemaVersion).toBe(1);
@@ -41,13 +46,12 @@ describe('sequence diagram compare command', () => {
     expect(bundle.headRevision).toBe('head-sha');
     expect(bundle.changes.length).toBeGreaterThan(0);
 
-    const actorOrder = (diagram) => diagram.actors.map((actor) => actor.id);
-    expect(actorOrder(bundle.base)).toEqual(
-      actorOrder(bundle.diff).filter((actorId) => actorOrder(bundle.base).includes(actorId))
-    );
-    expect(actorOrder(bundle.head)).toEqual(
-      actorOrder(bundle.diff).filter((actorId) => actorOrder(bundle.head).includes(actorId))
-    );
+    const actorOrder = (diagram: Diagram) => diagram.actors.map((actor) => actor.id);
+    const diffActors = actorOrder(bundle.diff);
+    const baseActors = actorOrder(bundle.base);
+    const headActors = actorOrder(bundle.head);
+    expect(baseActors).toEqual(diffActors.filter((actorId) => baseActors.includes(actorId)));
+    expect(headActors).toEqual(diffActors.filter((actorId) => headActors.includes(actorId)));
 
     expect(() => unparseDiagram(bundle.base)).not.toThrow();
     expect(() => unparseDiagram(bundle.head)).not.toThrow();
