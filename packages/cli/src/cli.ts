@@ -30,6 +30,7 @@ const OpenCommand = require('./cmds/open/open');
 const InspectCommand = require('./cmds/inspect/inspect');
 const SequenceDiagramCommand = require('./cmds/sequenceDiagram');
 const SequenceDiagramDiffCommand = require('./cmds/sequenceDiagramDiff');
+const SequenceDiagramCompareCommand = require('./cmds/sequenceDiagramCompare');
 const StatsCommand = require('./cmds/stats/stats');
 const ArchiveCommand = require('./cmds/archive/archive');
 const RestoreCommand = require('./cmds/archive/restore');
@@ -147,6 +148,7 @@ yargs(process.argv.slice(2))
   .command(InspectCommand)
   .command(SequenceDiagramCommand)
   .command(SequenceDiagramDiffCommand)
+  .command(SequenceDiagramCompareCommand)
   .command(PruneCommand)
   .command(TrimCommand)
   .command(SanitizeCommand)
