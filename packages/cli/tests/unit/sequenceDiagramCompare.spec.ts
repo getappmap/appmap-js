@@ -1,4 +1,5 @@
 import {
+  APPMAP_COMPARISON_CHANGE_ID_PATTERN,
   APPMAP_COMPARISON_KIND,
   AppMapComparison,
   assertAppMapComparison,
@@ -27,7 +28,7 @@ const outputDir = path.join('tests', 'output', 'sequence-comparison');
 const outputFile = path.join(outputDir, 'users.compare.diff.sequence.json');
 const baseAppMap = path.join(fixtureDir, 'user_not_found.appmap.json');
 const headAppMap = path.join(fixtureDir, 'show_user.appmap.json');
-const changeIdPattern = /^chg_[0-9a-f]{20}(?:_[2-9][0-9]*|_[1-9][0-9]+)?$/;
+const changeIdPattern = new RegExp(APPMAP_COMPARISON_CHANGE_ID_PATTERN);
 
 type Bundle = AppMapComparison<{ sequence: SequenceComparisonView }>;
 
@@ -75,6 +76,11 @@ describe('sequence diagram compare command', () => {
       expect(change.id).toMatch(changeIdPattern);
       expect(change.kind).toMatch(/-(added|removed|changed)$/);
       expect(change.views.sequence).toBeDefined();
+      Object.values(change.views.sequence || {})
+        .filter(Boolean)
+        .forEach((reference) => {
+          expect((reference?.eventIds?.length || 0) + (reference?.elementIds?.length || 0)).toBeGreaterThan(0);
+        });
     });
   });
 
