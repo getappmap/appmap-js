@@ -2,6 +2,8 @@ declare module '@appland/models' {
   export const APPMAP_COMPARISON_KIND: 'appmap.comparison';
   export const APPMAP_COMPARISON_SCHEMA_VERSION: 1;
   export const APPMAP_COMPARISON_CHANGE_ID_VERSION: 1;
+  export const APPMAP_COMPARISON_CHANGE_ID_PATTERN:
+    '^chg_[0-9a-f]{20}(?:_(?:[2-9]|[1-9][0-9]+))?$';
 
   export const comparisonViewIds: readonly ['dependency', 'sequence', 'trace', 'flame'];
   export type ComparisonViewId = (typeof comparisonViewIds)[number];
