@@ -6,7 +6,9 @@ import {
   APPMAP_COMPARISON_SCHEMA_VERSION,
   appMapComparisonSchema,
   assertAppMapComparison,
+  behavioralChangeKinds,
   canonicalComparisonIdentity,
+  comparisonViewIds,
   makeComparisonChangeId,
   validateAppMapComparison,
 } from '../../src/comparison';
@@ -25,11 +27,20 @@ describe('AppMap comparison contract', () => {
     expect(() => assertAppMapComparison(example)).not.toThrow();
   });
 
-  it('exports a schema which matches the runtime constants', () => {
+  it('keeps the published JSON schema aligned with runtime constants', () => {
     expect(appMapComparisonSchema.$id).toBe('https://appmap.io/schemas/comparison/v1');
     expect(appMapComparisonSchema.properties.kind.const).toBe(APPMAP_COMPARISON_KIND);
     expect(appMapComparisonSchema.properties.schemaVersion.const).toBe(
       APPMAP_COMPARISON_SCHEMA_VERSION
+    );
+    expect(appMapComparisonSchema.$defs.change.properties.kind.enum).toEqual(
+      behavioralChangeKinds
+    );
+    expect(Object.keys(appMapComparisonSchema.properties.views.properties)).toEqual(
+      comparisonViewIds
+    );
+    expect(Object.keys(appMapComparisonSchema.$defs.capabilities.properties.views.properties)).toEqual(
+      comparisonViewIds
     );
   });
 
