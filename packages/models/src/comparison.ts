@@ -5,6 +5,8 @@ import comparisonSchema from '../schema/comparison.schema.json';
 export const APPMAP_COMPARISON_KIND = 'appmap.comparison' as const;
 export const APPMAP_COMPARISON_SCHEMA_VERSION = 1 as const;
 export const APPMAP_COMPARISON_CHANGE_ID_VERSION = 1 as const;
+export const APPMAP_COMPARISON_CHANGE_ID_PATTERN =
+  '^chg_[0-9a-f]{20}(?:_(?:[2-9]|[1-9][0-9]+))?$' as const;
 
 export const comparisonViewIds = ['dependency', 'sequence', 'trace', 'flame'] as const;
 export type ComparisonViewId = (typeof comparisonViewIds)[number];
@@ -114,10 +116,18 @@ export const appMapComparisonSchema = comparisonSchema;
 
 const changeKinds = new Set<string>(behavioralChangeKinds);
 const viewIds = new Set<string>(comparisonViewIds);
-const changeIdPattern = /^chg_[0-9a-f]{20}(?:_[2-9][0-9]*|_[1-9][0-9]+)?$/;
+const changeIdPattern = new RegExp(APPMAP_COMPARISON_CHANGE_ID_PATTERN);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isComparisonValue(value: unknown): value is ComparisonValue {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return true;
+  if (typeof value === 'number') return Number.isFinite(value);
+  if (Array.isArray(value)) return value.every(isComparisonValue);
+  if (isRecord(value)) return Object.values(value).every(isComparisonValue);
+  return false;
 }
 
 function canonicalize(value: unknown): string {
@@ -174,22 +184,29 @@ function validatePositiveIntegerArray(value: unknown, path: string, errors: stri
     return false;
   }
 
+  if (value.length === 0) errors.push(`${path} must not be empty`);
   const valid = value.every((item) => Number.isInteger(item) && item > 0);
   if (!valid) errors.push(`${path} must contain positive integers`);
   if (new Set(value).size !== value.length) errors.push(`${path} must contain unique values`);
-  return valid;
+  return value.length > 0 && valid;
 }
 
-function validateStringArray(value: unknown, path: string, errors: string[]): boolean {
+function validateStringArray(
+  value: unknown,
+  path: string,
+  errors: string[],
+  allowEmpty = false
+): boolean {
   if (!Array.isArray(value)) {
     errors.push(`${path} must be an array`);
     return false;
   }
 
+  if (!allowEmpty && value.length === 0) errors.push(`${path} must not be empty`);
   const valid = value.every((item) => typeof item === 'string' && item.length > 0);
   if (!valid) errors.push(`${path} must contain non-empty strings`);
   if (new Set(value).size !== value.length) errors.push(`${path} must contain unique values`);
-  return valid;
+  return (allowEmpty || value.length > 0) && valid;
 }
 
 function validateReference(value: unknown, path: string, errors: string[]): boolean {
@@ -200,14 +217,14 @@ function validateReference(value: unknown, path: string, errors: string[]): bool
 
   let hasReference = false;
   if (value.eventIds !== undefined) {
-    hasReference = true;
-    validatePositiveIntegerArray(value.eventIds, `${path}.eventIds`, errors);
+    hasReference = validatePositiveIntegerArray(value.eventIds, `${path}.eventIds`, errors) ||
+      hasReference;
   }
   if (value.elementIds !== undefined) {
-    hasReference = true;
-    validateStringArray(value.elementIds, `${path}.elementIds`, errors);
+    hasReference = validateStringArray(value.elementIds, `${path}.elementIds`, errors) ||
+      hasReference;
   }
-  if (!hasReference) errors.push(`${path} must contain eventIds or elementIds`);
+  if (!hasReference) errors.push(`${path} must contain at least one eventId or elementId`);
   return hasReference;
 }
 
@@ -220,6 +237,19 @@ function validateViewReference(value: unknown, path: string, errors: string[]): 
   const references = ['base', 'head', 'diff'].filter((side) => value[side] !== undefined);
   if (references.length === 0) errors.push(`${path} must reference base, head, or diff`);
   references.forEach((side) => validateReference(value[side], `${path}.${side}`, errors));
+}
+
+function validateValueChange(value: unknown, path: string, errors: string[]): void {
+  if (!isRecord(value)) {
+    errors.push(`${path} must be an object`);
+    return;
+  }
+
+  const sides = ['before', 'after'].filter((side) => value[side] !== undefined);
+  if (sides.length === 0) errors.push(`${path} must contain before or after`);
+  sides.forEach((side) => {
+    if (!isComparisonValue(value[side])) errors.push(`${path}.${side} must be JSON-compatible`);
+  });
 }
 
 function validateChange(
@@ -251,8 +281,10 @@ function validateChange(
       errors.push(`${path}.head is required for an added change`);
     if (value.kind.endsWith('-removed') && value.base === undefined)
       errors.push(`${path}.base is required for a removed change`);
-    if ((value.kind.endsWith('-changed') || value.kind.endsWith('-reordered')) &&
-        (value.base === undefined || value.head === undefined))
+    if (
+      (value.kind.endsWith('-changed') || value.kind.endsWith('-reordered')) &&
+      (value.base === undefined || value.head === undefined)
+    )
       errors.push(`${path}.base and ${path}.head are required for changed/reordered changes`);
   }
 
@@ -268,8 +300,13 @@ function validateChange(
   }
 
   if (value.labels !== undefined) validateStringArray(value.labels, `${path}.labels`, errors);
-  if (value.details !== undefined && !isRecord(value.details))
-    errors.push(`${path}.details must be an object`);
+  if (value.details !== undefined) {
+    if (!isRecord(value.details)) errors.push(`${path}.details must be an object`);
+    else
+      Object.entries(value.details).forEach(([name, detail]) =>
+        validateValueChange(detail, `${path}.details.${name}`, errors)
+      );
+  }
 }
 
 function validateDiagram(value: unknown, path: string, errors: string[]): void {
@@ -279,6 +316,33 @@ function validateDiagram(value: unknown, path: string, errors: string[]): void {
   }
   if (!Array.isArray(value.actors)) errors.push(`${path}.actors must be an array`);
   if (!Array.isArray(value.rootActions)) errors.push(`${path}.rootActions must be an array`);
+}
+
+function validateView(value: unknown, viewId: string, path: string, errors: string[]): void {
+  if (!isRecord(value)) {
+    errors.push(`${path} must be an object`);
+    return;
+  }
+
+  if (!Number.isInteger(value.schemaVersion) || Number(value.schemaVersion) < 1)
+    errors.push(`${path}.schemaVersion must be a positive integer`);
+
+  for (const field of ['base', 'head', 'diff', 'alignment']) {
+    if (!isRecord(value[field])) errors.push(`${path}.${field} must be an object`);
+  }
+
+  if (viewId === 'sequence') {
+    validateDiagram(value.base, `${path}.base`, errors);
+    validateDiagram(value.head, `${path}.head`, errors);
+    validateDiagram(value.diff, `${path}.diff`, errors);
+    if (isRecord(value.alignment))
+      validateStringArray(value.alignment.actorOrder, `${path}.alignment.actorOrder`, errors, true);
+  }
+}
+
+function validatePositiveInteger(value: unknown, path: string, errors: string[]): void {
+  if (!Number.isInteger(value) || Number(value) < 1)
+    errors.push(`${path} must be a positive integer`);
 }
 
 /** Return all contract violations. An empty result means the bundle is valid. */
@@ -326,37 +390,52 @@ export function validateAppMapComparison(value: unknown): string[] {
   } else {
     Object.entries(value.views).forEach(([viewId, view]) => {
       if (!viewIds.has(viewId)) errors.push(`$.views.${viewId} is unsupported`);
-      availableViews.add(viewId);
-      if (!isRecord(view)) {
-        errors.push(`$.views.${viewId} must be an object`);
-        return;
-      }
-      if (!Number.isInteger(view.schemaVersion) || Number(view.schemaVersion) < 1)
-        errors.push(`$.views.${viewId}.schemaVersion must be a positive integer`);
-      if (viewId === 'sequence') {
-        validateDiagram(view.base, '$.views.sequence.base', errors);
-        validateDiagram(view.head, '$.views.sequence.head', errors);
-        validateDiagram(view.diff, '$.views.sequence.diff', errors);
-        if (!isRecord(view.alignment)) errors.push('$.views.sequence.alignment must be an object');
-        else validateStringArray(view.alignment.actorOrder, '$.views.sequence.alignment.actorOrder', errors);
-      }
+      else availableViews.add(viewId);
+      validateView(view, viewId, `$.views.${viewId}`, errors);
     });
   }
 
+  const capabilityViews = new Set<string>();
   if (!isRecord(value.capabilities)) errors.push('$.capabilities must be an object');
-  else if (!isRecord(value.capabilities.views) || Object.keys(value.capabilities.views).length === 0)
-    errors.push('$.capabilities.views must contain at least one view capability');
   else {
-    Object.entries(value.capabilities.views).forEach(([viewId, version]) => {
-      if (!viewIds.has(viewId)) errors.push(`$.capabilities.views.${viewId} is unsupported`);
-      if (!Number.isInteger(version) || Number(version) < 1)
-        errors.push(`$.capabilities.views.${viewId} must be a positive integer`);
-      const view = isRecord(value.views) ? value.views[viewId] : undefined;
-      if (!isRecord(view)) errors.push(`$.capabilities.views.${viewId} has no corresponding view`);
-      else if (view.schemaVersion !== version)
-        errors.push(`$.capabilities.views.${viewId} must match the view schemaVersion`);
-    });
+    if (!isRecord(value.capabilities.views) || Object.keys(value.capabilities.views).length === 0) {
+      errors.push('$.capabilities.views must contain at least one view capability');
+    } else {
+      Object.entries(value.capabilities.views).forEach(([viewId, version]) => {
+        if (!viewIds.has(viewId)) errors.push(`$.capabilities.views.${viewId} is unsupported`);
+        else capabilityViews.add(viewId);
+        validatePositiveInteger(version, `$.capabilities.views.${viewId}`, errors);
+        const view = isRecord(value.views) ? value.views[viewId] : undefined;
+        if (!isRecord(view)) errors.push(`$.capabilities.views.${viewId} has no corresponding view`);
+        else if (view.schemaVersion !== version)
+          errors.push(`$.capabilities.views.${viewId} must match the view schemaVersion`);
+      });
+    }
+
+    if (value.capabilities.navigation !== undefined) {
+      if (!isRecord(value.capabilities.navigation))
+        errors.push('$.capabilities.navigation must be an object');
+      else {
+        if (value.capabilities.navigation.changes !== undefined)
+          validatePositiveInteger(
+            value.capabilities.navigation.changes,
+            '$.capabilities.navigation.changes',
+            errors
+          );
+        if (value.capabilities.navigation.eventAlignment !== undefined)
+          validatePositiveInteger(
+            value.capabilities.navigation.eventAlignment,
+            '$.capabilities.navigation.eventAlignment',
+            errors
+          );
+      }
+    }
   }
+
+  availableViews.forEach((viewId) => {
+    if (!capabilityViews.has(viewId))
+      errors.push(`$.views.${viewId} has no corresponding capability`);
+  });
 
   if (!Array.isArray(value.changes)) errors.push('$.changes must be an array');
   else {
@@ -365,6 +444,9 @@ export function validateAppMapComparison(value: unknown): string[] {
       validateChange(change, `$.changes[${index}]`, availableViews, ids, errors)
     );
   }
+
+  if (value.extensions !== undefined && !isRecord(value.extensions))
+    errors.push('$.extensions must be an object');
 
   return errors;
 }
