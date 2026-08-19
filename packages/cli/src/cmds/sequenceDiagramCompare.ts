@@ -175,9 +175,20 @@ function actionIdentity(action: Action | undefined): unknown {
   };
 }
 
-function referenceFor(action: Action | undefined): ComparisonReference | undefined {
-  if (!action || action.eventIds.length === 0) return undefined;
-  return { eventIds: [...action.eventIds] };
+function referenceFor(
+  action: Action | undefined,
+  elementId: string
+): ComparisonReference | undefined {
+  if (!action) return undefined;
+
+  // Loops and other structural actions may not own an AppMap event. Preserve
+  // them with a comparison-local element id so every semantic change remains
+  // navigable even when event-based highlighting is unavailable.
+  const reference: ComparisonReference = {
+    elementIds: [elementId],
+  };
+  if (action.eventIds.length > 0) reference.eventIds = [...action.eventIds];
+  return reference;
 }
 
 function valueChange(
@@ -233,12 +244,17 @@ function comparisonChange(
   const baseId = makeComparisonChangeId(identity);
   const occurrence = occurrences.get(baseId) || 0;
   occurrences.set(baseId, occurrence + 1);
+  const changeId = makeComparisonChangeId(identity, occurrence);
 
-  const base = referenceFor(baseAction);
-  const head = referenceFor(headAction);
-  const diff = status === 'removed' ? base : head;
+  const base = referenceFor(baseAction, `${changeId}:sequence:base`);
+  const head = referenceFor(headAction, `${changeId}:sequence:head`);
+  const diffAction = status === 'removed' ? baseAction : headAction;
+  const diff = referenceFor(diffAction, `${changeId}:sequence:diff`);
   const details = {
-    name: valueChange(baseAction ? nodeName(baseAction) : undefined, headAction ? nodeName(headAction) : undefined),
+    name: valueChange(
+      baseAction ? nodeName(baseAction) : undefined,
+      headAction ? nodeName(headAction) : undefined
+    ),
     result: valueChange(nodeResult(baseAction), nodeResult(headAction)),
   };
   const filteredDetails = Object.fromEntries(
@@ -247,7 +263,7 @@ function comparisonChange(
   const labels = Array.from(new Set(headAction?.labels || baseAction?.labels || [])).sort();
 
   return {
-    id: makeComparisonChangeId(identity, occurrence),
+    id: changeId,
     kind,
     summary: `${status[0].toUpperCase()}${status.slice(1)} ${nodeName(primaryAction)}`,
     base,
