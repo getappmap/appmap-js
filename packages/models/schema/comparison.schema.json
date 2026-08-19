@@ -110,11 +110,13 @@
       "properties": {
         "eventIds": {
           "type": "array",
+          "minItems": 1,
           "items": { "type": "integer", "minimum": 1 },
           "uniqueItems": true
         },
         "elementIds": {
           "type": "array",
+          "minItems": 1,
           "items": { "type": "string", "minLength": 1 },
           "uniqueItems": true
         }
@@ -132,7 +134,11 @@
         "head": { "$ref": "#/$defs/reference" },
         "diff": { "$ref": "#/$defs/reference" }
       },
-      "minProperties": 1,
+      "anyOf": [
+        { "required": ["base"] },
+        { "required": ["head"] },
+        { "required": ["diff"] }
+      ],
       "additionalProperties": true
     },
     "valueChange": {
@@ -141,7 +147,10 @@
         "before": true,
         "after": true
       },
-      "minProperties": 1,
+      "anyOf": [
+        { "required": ["before"] },
+        { "required": ["after"] }
+      ],
       "additionalProperties": true
     },
     "change": {
@@ -150,7 +159,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "pattern": "^chg_[0-9a-f]{20}(?:_[2-9][0-9]*|_[1-9][0-9]+)?$"
+          "pattern": "^chg_[0-9a-f]{20}(?:_(?:[2-9]|[1-9][0-9]+))?$"
         },
         "kind": {
           "enum": [
@@ -197,10 +206,34 @@
         },
         "labels": {
           "type": "array",
+          "minItems": 1,
           "items": { "type": "string", "minLength": 1 },
           "uniqueItems": true
         }
       },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "pattern": "-added$" } },
+            "required": ["kind"]
+          },
+          "then": { "required": ["head"] }
+        },
+        {
+          "if": {
+            "properties": { "kind": { "pattern": "-removed$" } },
+            "required": ["kind"]
+          },
+          "then": { "required": ["base"] }
+        },
+        {
+          "if": {
+            "properties": { "kind": { "pattern": "-(?:changed|reordered)$" } },
+            "required": ["kind"]
+          },
+          "then": { "required": ["base", "head"] }
+        }
+      ],
       "additionalProperties": true
     },
     "diagram": {
