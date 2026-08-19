@@ -26,7 +26,7 @@
     "types",
     "schema"
   ],
-  "types": "types/index.d.ts",
+  "types": "types/public.d.ts",
   "author": "",
   "license": "Commons Clause + MIT",
   "devDependencies": {
