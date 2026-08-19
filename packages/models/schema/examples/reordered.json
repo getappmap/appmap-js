@@ -1,0 +1,34 @@
+{
+  "kind": "appmap.comparison",
+  "schemaVersion": 1,
+  "producer": { "name": "contract-fixture", "version": "1" },
+  "scenario": { "id": "reordered-call" },
+  "recordings": { "base": "base.appmap.json", "head": "head.appmap.json" },
+  "capabilities": { "views": { "sequence": 1 } },
+  "changes": [
+    {
+      "id": "chg_44444444444444444444",
+      "kind": "call-reordered",
+      "summary": "Moved authorize before loadUser",
+      "base": { "eventIds": [8] },
+      "head": { "eventIds": [7] },
+      "views": {
+        "sequence": {
+          "base": { "eventIds": [8] },
+          "head": { "eventIds": [7] },
+          "diff": { "eventIds": [7] }
+        }
+      },
+      "details": { "position": { "before": 3, "after": 2 } }
+    }
+  ],
+  "views": {
+    "sequence": {
+      "schemaVersion": 1,
+      "base": { "actors": [], "rootActions": [] },
+      "head": { "actors": [], "rootActions": [] },
+      "diff": { "actors": [], "rootActions": [] },
+      "alignment": { "actorOrder": [] }
+    }
+  }
+}

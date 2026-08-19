@@ -1,0 +1,32 @@
+{
+  "kind": "appmap.comparison",
+  "schemaVersion": 1,
+  "producer": { "name": "contract-fixture", "version": "1" },
+  "scenario": { "id": "removed-query" },
+  "recordings": { "base": "base.appmap.json", "head": "head.appmap.json" },
+  "capabilities": { "views": { "sequence": 1 } },
+  "changes": [
+    {
+      "id": "chg_22222222222222222222",
+      "kind": "query-removed",
+      "summary": "Removed SELECT users query",
+      "base": { "eventIds": [4] },
+      "views": {
+        "sequence": {
+          "base": { "eventIds": [4] },
+          "diff": { "eventIds": [4] }
+        }
+      },
+      "details": { "query": { "before": "SELECT users" } }
+    }
+  ],
+  "views": {
+    "sequence": {
+      "schemaVersion": 1,
+      "base": { "actors": [], "rootActions": [] },
+      "head": { "actors": [], "rootActions": [] },
+      "diff": { "actors": [], "rootActions": [] },
+      "alignment": { "actorOrder": [] }
+    }
+  }
+}

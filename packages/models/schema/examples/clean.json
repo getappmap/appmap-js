@@ -1,0 +1,22 @@
+{
+  "kind": "appmap.comparison",
+  "schemaVersion": 1,
+  "producer": { "name": "contract-fixture", "version": "1" },
+  "scenario": { "id": "clean" },
+  "revisions": { "base": "base", "head": "head" },
+  "recordings": { "base": "base.appmap.json", "head": "head.appmap.json" },
+  "capabilities": {
+    "views": { "sequence": 1 },
+    "navigation": { "changes": 1, "eventAlignment": 1 }
+  },
+  "changes": [],
+  "views": {
+    "sequence": {
+      "schemaVersion": 1,
+      "base": { "actors": [], "rootActions": [] },
+      "head": { "actors": [], "rootActions": [] },
+      "diff": { "actors": [], "rootActions": [] },
+      "alignment": { "actorOrder": [] }
+    }
+  }
+}

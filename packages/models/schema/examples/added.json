@@ -1,0 +1,32 @@
+{
+  "kind": "appmap.comparison",
+  "schemaVersion": 1,
+  "producer": { "name": "contract-fixture", "version": "1" },
+  "scenario": { "id": "added-call" },
+  "recordings": { "base": "base.appmap.json", "head": "head.appmap.json" },
+  "capabilities": { "views": { "sequence": 1 } },
+  "changes": [
+    {
+      "id": "chg_11111111111111111111",
+      "kind": "call-added",
+      "summary": "Added authorize",
+      "head": { "eventIds": [3] },
+      "views": {
+        "sequence": {
+          "head": { "eventIds": [3] },
+          "diff": { "eventIds": [3] }
+        }
+      },
+      "details": { "name": { "after": "authorize" } }
+    }
+  ],
+  "views": {
+    "sequence": {
+      "schemaVersion": 1,
+      "base": { "actors": [], "rootActions": [] },
+      "head": { "actors": [], "rootActions": [] },
+      "diff": { "actors": [], "rootActions": [] },
+      "alignment": { "actorOrder": [] }
+    }
+  }
+}

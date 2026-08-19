@@ -23,7 +23,8 @@
   },
   "files": [
     "dist",
-    "types"
+    "types",
+    "schema"
   ],
   "types": "types/index.d.ts",
   "author": "",

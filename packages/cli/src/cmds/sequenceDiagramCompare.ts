@@ -2,19 +2,33 @@ import { mkdir, readFile, writeFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 import yargs from 'yargs';
 
-import { AppMap, buildAppMap } from '@appland/models';
+import {
+  AppMap,
+  AppMapComparison,
+  BehavioralChange,
+  BehavioralChangeKind,
+  ComparisonReference,
+  ComparisonValueChange,
+  ComparisonView,
+  APPMAP_COMPARISON_KIND,
+  APPMAP_COMPARISON_SCHEMA_VERSION,
+  assertAppMapComparison,
+  buildAppMap,
+  makeComparisonChangeId,
+} from '@appland/models';
 import {
   Action,
   Actor,
+  actionActors,
   buildDiagram,
   buildDiffDiagram,
   Diagram,
   diff,
-  DiffMode,
   FormatType,
   format as formatDiagram,
   Move,
   MoveType,
+  NodeType,
   nodeName,
   nodeResult,
   SequenceDiagramOptions,
@@ -24,37 +38,20 @@ import {
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
 
+const packageVersion = require('../../package.json').version as string;
+
 export const command = 'sequence-diagram-compare <base-appmap> <head-appmap>';
 export const describe =
-  'Create a self-contained, interactive before/after sequence comparison bundle';
+  'Create a self-contained, interactive before/after AppMap comparison bundle';
 
-export type SequenceComparisonChange = {
-  id: string;
-  kind: 'added' | 'removed' | 'changed';
-  diffMode: DiffMode;
-  baseEventIds: number[];
-  headEventIds: number[];
-  diffEventIds: number[];
-  name: string;
-  formerName?: string;
-  result?: string;
-  formerResult?: string;
-  labels?: string[];
+type SequenceAlignment = {
+  actorOrder: string[];
 };
 
-export type SequenceComparisonBundle = {
-  kind: 'appmap.sequence-comparison';
-  schemaVersion: 1;
-  scenario?: string;
-  baseRevision?: string;
-  headRevision?: string;
-  baseAppMap: string;
-  headAppMap: string;
-  base: Diagram;
-  head: Diagram;
-  diff: Diagram;
-  changes: SequenceComparisonChange[];
-};
+export type SequenceComparisonView = ComparisonView<Diagram, SequenceAlignment>;
+export type SequenceComparisonBundle = AppMapComparison<{
+  sequence: SequenceComparisonView;
+}>;
 
 export const builder = (args: yargs.Argv) => {
   args.positional('base-appmap', {
@@ -81,7 +78,7 @@ export const builder = (args: yargs.Argv) => {
     type: 'string',
   });
   args.option('scenario', {
-    describe: 'stable scenario name shown by comparison viewers',
+    describe: 'stable scenario id shown by comparison viewers',
     type: 'string',
   });
   args.option('base-revision', {
@@ -110,12 +107,12 @@ function serializeDiagram(diagram: Diagram, description: string): Diagram {
   return JSON.parse(formatted.diagram) as Diagram;
 }
 
-function alignActors(diagrams: Diagram[]): void {
+function alignActors(diagrams: Diagram[]): string[] {
   const actorIds: string[] = [];
   const seen = new Set<string>();
 
-  // The merged diagram already contains the most useful union ordering. Add any
-  // actor which is only present as otherwise-unused context afterwards.
+  // The merged diagram provides the useful union ordering. Add otherwise-unused
+  // actors from the individual diagrams afterwards.
   for (const diagram of [...diagrams].reverse()) {
     for (const actor of [...diagram.actors].sort((a, b) => a.order - b.order)) {
       if (seen.has(actor.id)) continue;
@@ -131,6 +128,8 @@ function alignActors(diagrams: Diagram[]): void {
     });
     diagram.actors.sort((a, b) => a.order - b.order);
   }
+
+  return actorIds;
 }
 
 function actionAt(actions: Action[], index: number): Action | undefined {
@@ -138,12 +137,67 @@ function actionAt(actions: Action[], index: number): Action | undefined {
   return actions[index];
 }
 
+function actionFamily(action: Action): 'call' | 'query' | 'rpc' | 'control-flow' {
+  switch (action.nodeType) {
+    case NodeType.Function:
+      return 'call';
+    case NodeType.Query:
+      return 'query';
+    case NodeType.ServerRPC:
+    case NodeType.ClientRPC:
+      return 'rpc';
+    case NodeType.Loop:
+      return 'control-flow';
+  }
+}
+
+function actionIdentity(action: Action | undefined): unknown {
+  if (!action) return null;
+
+  const ancestors: unknown[] = [];
+  let parent = action.parent;
+  while (parent) {
+    ancestors.unshift({
+      nodeType: parent.nodeType,
+      digest: parent.digest,
+      actors: actionActors(parent).map((actor) => actor?.id || null),
+      name: nodeName(parent),
+    });
+    parent = parent.parent;
+  }
+
+  return {
+    nodeType: action.nodeType,
+    digest: action.digest,
+    actors: actionActors(action).map((actor) => actor?.id || null),
+    name: nodeName(action),
+    ancestors,
+  };
+}
+
+function referenceFor(action: Action | undefined): ComparisonReference | undefined {
+  if (!action || action.eventIds.length === 0) return undefined;
+  return { eventIds: [...action.eventIds] };
+}
+
+function valueChange(
+  before: string | number | undefined,
+  after: string | number | undefined
+): ComparisonValueChange | undefined {
+  if (before === undefined && after === undefined) return undefined;
+
+  const change: ComparisonValueChange = {};
+  if (before !== undefined) change.before = before;
+  if (after !== undefined) change.after = after;
+  return change;
+}
+
 function comparisonChange(
   move: Move,
-  index: number,
   baseActions: Action[],
-  headActions: Action[]
-): SequenceComparisonChange | undefined {
+  headActions: Action[],
+  occurrences: Map<string, number>
+): BehavioralChange | undefined {
   // Insert and delete moves retain the other cursor's previous position. It is
   // context, not the corresponding action, so never expose it as an alignment.
   const baseAction =
@@ -151,20 +205,16 @@ function comparisonChange(
   const headAction =
     move.moveType === MoveType.DeleteLeft ? undefined : actionAt(headActions, move.rNode);
 
-  let kind: SequenceComparisonChange['kind'];
-  let diffMode: DiffMode;
+  let status: 'added' | 'removed' | 'changed';
   switch (move.moveType) {
     case MoveType.InsertRight:
-      kind = 'added';
-      diffMode = DiffMode.Insert;
+      status = 'added';
       break;
     case MoveType.DeleteLeft:
-      kind = 'removed';
-      diffMode = DiffMode.Delete;
+      status = 'removed';
       break;
     case MoveType.Change:
-      kind = 'changed';
-      diffMode = DiffMode.Change;
+      status = 'changed';
       break;
     case MoveType.AdvanceBoth:
       return undefined;
@@ -173,22 +223,44 @@ function comparisonChange(
   const primaryAction = headAction || baseAction;
   if (!primaryAction) return undefined;
 
-  const baseEventIds = baseAction?.eventIds || [];
-  const headEventIds = headAction?.eventIds || [];
-  const diffEventIds = kind === 'removed' ? baseEventIds : headEventIds;
+  const kind = `${actionFamily(primaryAction)}-${status}` as BehavioralChangeKind;
+  const identity = {
+    version: 1,
+    kind,
+    base: actionIdentity(baseAction),
+    head: actionIdentity(headAction),
+  };
+  const baseId = makeComparisonChangeId(identity);
+  const occurrence = occurrences.get(baseId) || 0;
+  occurrences.set(baseId, occurrence + 1);
+
+  const base = referenceFor(baseAction);
+  const head = referenceFor(headAction);
+  const diff = status === 'removed' ? base : head;
+  const details = {
+    name: valueChange(baseAction ? nodeName(baseAction) : undefined, headAction ? nodeName(headAction) : undefined),
+    result: valueChange(nodeResult(baseAction), nodeResult(headAction)),
+  };
+  const filteredDetails = Object.fromEntries(
+    Object.entries(details).filter(([, value]) => value !== undefined)
+  ) as Record<string, ComparisonValueChange>;
+  const labels = Array.from(new Set(headAction?.labels || baseAction?.labels || [])).sort();
 
   return {
-    id: `change-${String(index + 1).padStart(4, '0')}`,
+    id: makeComparisonChangeId(identity, occurrence),
     kind,
-    diffMode,
-    baseEventIds,
-    headEventIds,
-    diffEventIds,
-    name: nodeName(primaryAction),
-    formerName: baseAction ? nodeName(baseAction) : undefined,
-    result: headAction ? nodeResult(headAction) : undefined,
-    formerResult: baseAction ? nodeResult(baseAction) : undefined,
-    labels: headAction?.labels || baseAction?.labels,
+    summary: `${status[0].toUpperCase()}${status.slice(1)} ${nodeName(primaryAction)}`,
+    base,
+    head,
+    views: {
+      sequence: {
+        base,
+        head,
+        diff,
+      },
+    },
+    details: Object.keys(filteredDetails).length > 0 ? filteredDetails : undefined,
+    labels: labels.length > 0 ? labels : undefined,
   };
 }
 
@@ -223,28 +295,60 @@ export async function buildComparisonBundle(
   const headDiagram = buildDiagramFor(headAppMapFile, headAppMap, diagramOptions);
   const computedDiff = diff(baseDiagram, headDiagram);
   const mergedDiagram = buildDiffDiagram(computedDiff);
+  const actorOrder = alignActors([baseDiagram, headDiagram, mergedDiagram]);
 
-  alignActors([baseDiagram, headDiagram, mergedDiagram]);
-
+  const occurrences = new Map<string, number>();
   const changes = computedDiff.moves
-    .map((move, index) =>
-      comparisonChange(move, index, computedDiff.baseActions, computedDiff.headActions)
+    .map((move) =>
+      comparisonChange(move, computedDiff.baseActions, computedDiff.headActions, occurrences)
     )
-    .filter(Boolean) as SequenceComparisonChange[];
+    .filter(Boolean) as BehavioralChange[];
 
-  return {
-    kind: 'appmap.sequence-comparison',
-    schemaVersion: 1,
-    scenario: options.scenario,
-    baseRevision: options.baseRevision,
-    headRevision: options.headRevision,
-    baseAppMap: basename(baseAppMapFile),
-    headAppMap: basename(headAppMapFile),
-    base: serializeDiagram(baseDiagram, 'base'),
-    head: serializeDiagram(headDiagram, 'head'),
-    diff: serializeDiagram(mergedDiagram, 'diff'),
+  const revisions: SequenceComparisonBundle['revisions'] = {};
+  if (options.baseRevision) revisions.base = options.baseRevision;
+  if (options.headRevision) revisions.head = options.headRevision;
+
+  const scenarioId = options.scenario || basename(headAppMapFile, '.appmap.json');
+  const bundle: SequenceComparisonBundle = {
+    kind: APPMAP_COMPARISON_KIND,
+    schemaVersion: APPMAP_COMPARISON_SCHEMA_VERSION,
+    producer: {
+      name: '@appland/appmap',
+      version: packageVersion,
+    },
+    scenario: {
+      id: scenarioId,
+    },
+    revisions: Object.keys(revisions).length > 0 ? revisions : undefined,
+    recordings: {
+      base: basename(baseAppMapFile),
+      head: basename(headAppMapFile),
+    },
+    capabilities: {
+      views: {
+        sequence: 1,
+      },
+      navigation: {
+        changes: 1,
+        eventAlignment: 1,
+      },
+    },
     changes,
+    views: {
+      sequence: {
+        schemaVersion: 1,
+        base: serializeDiagram(baseDiagram, 'base'),
+        head: serializeDiagram(headDiagram, 'head'),
+        diff: serializeDiagram(mergedDiagram, 'diff'),
+        alignment: {
+          actorOrder,
+        },
+      },
+    },
   };
+
+  assertAppMapComparison(bundle);
+  return bundle;
 }
 
 export const handler = async (argv: any) => {
