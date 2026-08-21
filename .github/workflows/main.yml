@@ -68,7 +68,7 @@ jobs:
 
       - name: Build
         run: |
-          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/scanner run build
+          yarn workspaces foreach -A -v -t --exclude root --exclude @appland/appmap --exclude @appland/scanner run build
 
       - name: Test
         run: |
@@ -97,7 +97,7 @@ jobs:
 
       - name: Build
         run: |
-          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/scanner run build
+          yarn workspaces foreach -A -v -t --exclude root --exclude @appland/appmap --exclude @appland/scanner run build
 
       - name: Publish to Chromatic
         uses: chromaui/action@latest
@@ -139,7 +139,7 @@ jobs:
 
       - name: Build
         run: |
-          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components run build
+          yarn workspaces foreach -A -v -t --exclude root --exclude @appland/appmap --exclude @appland/components run build
 
       - name: Test
         run: |
@@ -190,12 +190,12 @@ jobs:
 
       - name: Build
         run: |
-          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run build
+          yarn workspaces foreach -A -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run build
 
       - name: Test
         run: |
-          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run lint
-          yarn workspaces foreach -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run test
+          yarn workspaces foreach -A -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run lint
+          yarn workspaces foreach -A -v -t --exclude root --exclude @appland/appmap --exclude @appland/components --exclude @appland/scanner run test
 
       - name: Test repository scripts
         run: yarn test:scripts

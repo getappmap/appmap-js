@@ -5,20 +5,20 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "yarn workspaces foreach --exclude root -v run lint",
+    "lint": "yarn workspaces foreach -A --exclude root -v run lint",
     "verify": "node scripts/verify.mjs",
     "verify:staged": "node scripts/verify.mjs --staged",
-    "test": "yarn workspaces foreach --exclude '{root}' -v run test",
+    "test": "yarn workspaces foreach -A --exclude '{root}' -v run test",
     "test:scripts": "node --test scripts/*.test.mjs",
     "sync-docs": "node scripts/sync-docs.mjs",
-    "build": "yarn workspaces foreach -t --exclude root -v run build",
-    "build-native": "yarn workspaces foreach -t --exclude root -v run build-native",
-    "codesign": "yarn workspaces foreach -t --exclude root -v run codesign",
+    "build": "yarn workspaces foreach -A -t --exclude root -v run build",
+    "build-native": "yarn workspaces foreach -A -t --exclude root -v run build-native",
+    "codesign": "yarn workspaces foreach -A -t --exclude root -v run codesign",
     "ci": "yarn run test && yarn run smoketest",
     "smoketest": "./smoketest.sh",
-    "chromatic": "yarn workspaces foreach --exclude root -v run chromatic",
-    "watch": "yarn workspaces foreach -t --exclude root -v -p -i run watch",
-    "semantic-release": "yarn workspaces foreach -t --exclude root -v exec semantic-release"
+    "chromatic": "yarn workspaces foreach -A --exclude root -v run chromatic",
+    "watch": "yarn workspaces foreach -A -t --exclude root -v -p -i run watch",
+    "semantic-release": "yarn workspaces foreach -A -t --exclude root -v exec semantic-release"
   },
   "devDependencies": {
     "@google/semantic-release-replace-plugin": "^1.0.2",
@@ -42,7 +42,7 @@
     "semantic-release-monorepo": "^7.0.5",
     "yarn-changed-workspaces": "^2.0.9"
   },
-  "packageManager": "yarn@3.2.1",
+  "packageManager": "yarn@4.18.0",
   "dependencies": {
     "puppeteer": "^19.7.2"
   },
