@@ -342,7 +342,7 @@ __metadata:
     marked: "npm:^10.0.0"
     marked-highlight: "npm:^2.0.7"
     mathjs: "npm:^9.0.0"
-    mermaid: "npm:^10.9.1"
+    mermaid: "npm:^10.9.8"
     minimist: "npm:^1.2.8"
     pako: "npm:^2.1.0"
     postcss: "npm:^8.4.21"
@@ -13839,9 +13839,9 @@ __metadata:
   linkType: hard
 
 "cytoscape@npm:^3.23.0, cytoscape@npm:^3.28.1":
-  version: 3.30.0
-  resolution: "cytoscape@npm:3.30.0"
-  checksum: 10c0/ffd463f27975b7d979c6f1a8c3472d95cbe2d75dc820aac27ad3e253eaa877da4c7ed4632a341394d911ba1804c5786a292a56387bbb34fcf0c9db69286e123e
+  version: 3.34.1
+  resolution: "cytoscape@npm:3.34.1"
+  checksum: 10c0/1fefc274d8fbbb59273606d71e7875bfe6d7b7f3cafbd5af0083b1b19a431af93440c7273c0896ce5002ccdd54e28cfa4b0d54638017c69ebba0c1860a1c282b
   languageName: node
   linkType: hard
 
@@ -14176,7 +14176,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3@npm:^7.4.0, d3@npm:^7.8.2, d3@npm:^7.8.4":
+"d3@npm:^7.4.0, d3@npm:^7.8.2, d3@npm:^7.8.4, d3@npm:^7.9.0":
   version: 7.9.0
   resolution: "d3@npm:7.9.0"
   dependencies:
@@ -14214,13 +14214,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dagre-d3-es@npm:7.0.10":
-  version: 7.0.10
-  resolution: "dagre-d3-es@npm:7.0.10"
+"dagre-d3-es@npm:7.0.13":
+  version: 7.0.13
+  resolution: "dagre-d3-es@npm:7.0.13"
   dependencies:
-    d3: "npm:^7.8.2"
+    d3: "npm:^7.9.0"
     lodash-es: "npm:^4.17.21"
-  checksum: 10c0/3e1bb6efe9a78cea3fe6ff265eb330692f057bf84c99d6a1d67db379231c37a1a1ca2e1ccc25a732ddf924cd5566062c033d88defd230debec324dc9256c6775
+  checksum: 10c0/4eca80dbbad4075311e3853930f99486024785b54210541796d4216140d91744738ee51125e2692c3532af148fbc2e690171750583916ed2ad553150abb198c7
   languageName: node
   linkType: hard
 
@@ -15110,7 +15110,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.0.5, dompurify@npm:^3.4.14":
+"dompurify@npm:^3.2.4, dompurify@npm:^3.4.14":
   version: 3.4.14
   resolution: "dompurify@npm:3.4.14"
   dependencies:
@@ -24270,9 +24270,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^10.9.1":
-  version: 10.9.1
-  resolution: "mermaid@npm:10.9.1"
+"mermaid@npm:^10.9.8":
+  version: 10.9.8
+  resolution: "mermaid@npm:10.9.8"
   dependencies:
     "@braintree/sanitize-url": "npm:^6.0.1"
     "@types/d3-scale": "npm:^4.0.3"
@@ -24281,9 +24281,9 @@ __metadata:
     cytoscape-cose-bilkent: "npm:^4.1.0"
     d3: "npm:^7.4.0"
     d3-sankey: "npm:^0.12.3"
-    dagre-d3-es: "npm:7.0.10"
+    dagre-d3-es: "npm:7.0.13"
     dayjs: "npm:^1.11.7"
-    dompurify: "npm:^3.0.5"
+    dompurify: "npm:^3.2.4"
     elkjs: "npm:^0.9.0"
     katex: "npm:^0.16.9"
     khroma: "npm:^2.0.0"
@@ -24292,9 +24292,9 @@ __metadata:
     non-layered-tidy-tree-layout: "npm:^2.0.2"
     stylis: "npm:^4.1.3"
     ts-dedent: "npm:^2.2.0"
-    uuid: "npm:^9.0.0"
+    uuid: "npm:^9.0.0 || ^10 || ^11.1.0 || ^12 || ^13 || ^14.0.0"
     web-worker: "npm:^1.2.0"
-  checksum: 10c0/034f326682e3e478e4bd85e418cfef00773db4432301b858247c8d4bf813e67fa1901e8548fc490eafe4c9c215c9fb96dead73007ff317ee99973cf4f63c8791
+  checksum: 10c0/a84e91e05be53001bb2d4c1f5897a3001d9f6fcad2e6a9ee0ade807d9b8e65bce05f7a09f6ae2dd560a4ee60e46a7413e9cac427c4a552e2bcd295d5490cee99
   languageName: node
   linkType: hard
 
@@ -31474,9 +31474,9 @@ __metadata:
   linkType: hard
 
 "stylis@npm:^4.1.2, stylis@npm:^4.1.3":
-  version: 4.3.2
-  resolution: "stylis@npm:4.3.2"
-  checksum: 10c0/0410e1404cbeee3388a9e17587875211ce2f014c8379af0d1e24ca55878867c9f1ccc7b0ce9a156ca53f5d6e301391a82b0645522a604674a378b3189a4a1994
+  version: 4.4.0
+  resolution: "stylis@npm:4.4.0"
+  checksum: 10c0/259be096d90dfbfe903c8656dcb7591e52a421e577e950ef42ebd9ca02f387623a1165dd08761492fb6e92a7a562d62a53a694a10b0a2f6dcd7a0db107b4bf55
   languageName: node
   linkType: hard
 
@@ -33515,6 +33515,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0 || ^10 || ^11.1.0 || ^12 || ^13 || ^14.0.0":
+  version: 14.0.2
+  resolution: "uuid@npm:14.0.2"
+  bin:
+    uuid: dist-node/bin/uuid
+  checksum: 10c0/88906237004db370b013129c8372a2149f6fa1aad7a5f78fa65ddf2ba0a8663097022300d81fa01f551efee9d6bbe8c7ab140dc6d49f1b03d289f855096990c9
   languageName: node
   linkType: hard
 

@@ -46,7 +46,7 @@
     "lucide-vue": "^0.511.0",
     "marked": "^10.0.0",
     "marked-highlight": "^2.0.7",
-    "mermaid": "^10.9.1",
+    "mermaid": "^10.9.8",
     "pako": "^2.1.0",
     "sax": "^1.4.1",
     "sql-formatter": "^4.0.2",
