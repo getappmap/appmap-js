@@ -51,7 +51,7 @@
     "node-gyp": "^10.1.0",
     "web-auth-library": "getappmap/web-auth-library#v1.0.3-cjs",
     "whatwg-url": "14.0.0",
-    "tar": "7.5.11",
+    "tar": "7.5.22",
     "tough-cookie": "^4.1.4",
     "json5@^0.5.0": "npm:json5@^1.0.2",
     "json5@^0.5.1": "npm:json5@^1.0.2",
