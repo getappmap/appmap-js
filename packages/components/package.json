@@ -103,7 +103,7 @@
     "lint-staged": "^10.5.3",
     "mathjs": "^9.0.0",
     "minimist": "^1.2.8",
-    "postcss": "^8.4.21",
+    "postcss": "^8.5.26",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
