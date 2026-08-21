@@ -213,7 +213,7 @@ __metadata:
     type-fest: "npm:^3.1.0"
     typescript: "npm:^4.9.5"
     typescript-eslint: "npm:^7.7.0"
-    validator: "npm:^13.7.0"
+    validator: "npm:^13.15.35"
     w3c-xmlserializer: "npm:^2.0.0"
     ws: "npm:^8.21.3"
     yargs: "npm:^17.1.1"
@@ -33658,10 +33658,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"validator@npm:^13.7.0":
-  version: 13.7.0
-  resolution: "validator@npm:13.7.0"
-  checksum: 10c0/234c9db98001d6f75c04174dd7f67a297728c8cb369db99f21c41ba4a254558bf91427ecdcc9017ddcd44271c9db38e96079cf432a41c92f13d96d6ca0d5c28d
+"validator@npm:^13.15.35, validator@npm:^13.7.0":
+  version: 13.15.35
+  resolution: "validator@npm:13.15.35"
+  checksum: 10c0/1958ebcad578128d154853a2b9bf5b95e7738dcc7d1d065e50a969812272312ec379dcaf375b9d7545e04a71de6755f60f5a4b49c1405737a9c80e11da297eef
   languageName: node
   linkType: hard
 
