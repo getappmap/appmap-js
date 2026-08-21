@@ -64,7 +64,7 @@
     "@types/ws": "^8.18.1",
     "@types/yargs": "^17.0.2",
     "@yao-pkg/pkg": "^6.20.0",
-    "esbuild": "0.19.8",
+    "esbuild": "0.25.12",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
