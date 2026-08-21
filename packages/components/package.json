@@ -54,7 +54,7 @@
     "vuex": "^3.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.5",
+    "@babel/core": "^7.29.7",
     "@babel/node": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@rollup/plugin-alias": "^4.0.3",
