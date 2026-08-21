@@ -181,7 +181,7 @@ __metadata:
     jayson: "npm:^4.1.0"
     jest: "npm:^29.7.0"
     jest-sinon: "npm:^1.1.0"
-    js-yaml: "npm:^4.0.3"
+    js-yaml: "npm:^4.3.1"
     jsdom: "npm:^16.6.0"
     langchain: "npm:^0.2.12"
     lint-staged: "npm:^10.5.4"
@@ -259,7 +259,7 @@ __metadata:
     eslint-plugin-unicorn: "npm:^39.0.0"
     form-data: "npm:^4.0.0"
     jest: "npm:^29.5.0"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.3.1"
     nock: "npm:^13.2.1"
     rxjs: "npm:^7.8.1"
     sinon: "npm:^15.0.1"
@@ -452,7 +452,7 @@ __metadata:
     fast-xml-parser: "npm:^4.4.1"
     jest: "npm:^29.7.0"
     js-tiktoken: "npm:^1.0.18"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.3.1"
     jsdom: "npm:^16.6.0"
     langchain: "npm:^0.2.16"
     mermaid: "npm:^9"
@@ -479,7 +479,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^5.7.0"
     eslint: "npm:^8.4.1"
     jest: "npm:^29.5.0"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.3.1"
     openapi-types: "npm:^12.1.0"
     ts-jest: "npm:^29.0.5"
     typescript: "npm:^4.9.5"
@@ -539,7 +539,7 @@ __metadata:
     glob: "npm:7.2.3"
     inquirer: "npm:^8.1.2"
     jest: "npm:^29.5.0"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.3.1"
     lru-cache: "npm:^10"
     minimatch: "npm:^5.1.9"
     nock: "npm:^13.2.2"
@@ -22262,14 +22262,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.0.0, js-yaml@npm:^4.0.3, js-yaml@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "js-yaml@npm:4.1.0"
+"js-yaml@npm:^4.0.0, js-yaml@npm:^4.1.0, js-yaml@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "js-yaml@npm:4.3.1"
   dependencies:
     argparse: "npm:^2.0.1"
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 10c0/184a24b4eaacfce40ad9074c64fd42ac83cf74d8c8cd137718d456ced75051229e5061b8633c3366b8aada17945a7a356b337828c19da92b51ae62126575018f
+  checksum: 10c0/13c500ca322e0c3f8c81686e6ecda96d2ea37b45247a420c17c7db36932d6965cc27391abc2d1a104501600e7f0d947a5f8b7be6db619c4fefa87901b3512807
   languageName: node
   linkType: hard
 
