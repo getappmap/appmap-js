@@ -11332,9 +11332,9 @@ __metadata:
   linkType: hard
 
 "bn.js@npm:^4.0.0, bn.js@npm:^4.1.0, bn.js@npm:^4.11.9":
-  version: 4.12.0
-  resolution: "bn.js@npm:4.12.0"
-  checksum: 10c0/9736aaa317421b6b3ed038ff3d4491935a01419ac2d83ddcfebc5717385295fcfcf0c57311d90fe49926d0abbd7a9dbefdd8861e6129939177f7e67ebc645b21
+  version: 4.12.5
+  resolution: "bn.js@npm:4.12.5"
+  checksum: 10c0/e15e35d0e082fa43c5dd03b552041faf23bc870fbe5de0e41ab5d2d987875f43ffb1f8f57021494e9d71784223c59ddbba1819948b2c2648477a61ab7455aa42
   languageName: node
   linkType: hard
 
@@ -22857,13 +22857,13 @@ __metadata:
   linkType: hard
 
 "katex@npm:^0.16.9":
-  version: 0.16.11
-  resolution: "katex@npm:0.16.11"
+  version: 0.16.47
+  resolution: "katex@npm:0.16.47"
   dependencies:
     commander: "npm:^8.3.0"
   bin:
     katex: cli.js
-  checksum: 10c0/be405d45d7228bbfeecd491e0f74d9da0066b5e7b457e3f1dc833de5b63f9e98e40d2ef6b46e1cbe577490a43338c043851da032c45aeec0cc03ad431ef6fd83
+  checksum: 10c0/b10f4d0651c60771a48444879e4227255e26e2b2ec061b1ee4b08934863ad2324ba8dbb772455f7768aeb14dfcc13bcd309174a0ddd5ef954a607f644a197710
   languageName: node
   linkType: hard
 
@@ -24018,11 +24018,14 @@ __metadata:
   linkType: hard
 
 "markdown-to-jsx@npm:^7.1.8":
-  version: 7.3.2
-  resolution: "markdown-to-jsx@npm:7.3.2"
+  version: 7.7.17
+  resolution: "markdown-to-jsx@npm:7.7.17"
   peerDependencies:
     react: ">= 0.14.0"
-  checksum: 10c0/191b9a9defeed02e12dd340cebf279f577266dac7b34574fa44ce4d64ee8536f9967d455b8303c853f84413feb473118290a6160d8221eeaf3b9e4961b8980e3
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 10c0/581c5ee1b3c79445f9f8369dc2882d0289507e702b2fcf2bc276b163a984cdcca2d8463a609c9bf310a31dcbf10c3210721c42c9173d4f12da675d3b56243736
   languageName: node
   linkType: hard
 
@@ -28442,9 +28445,9 @@ __metadata:
   linkType: hard
 
 "qs@npm:~6.5.2":
-  version: 6.5.3
-  resolution: "qs@npm:6.5.3"
-  checksum: 10c0/6631d4f2fa9d315e480662646745a4aa3a708817fbffe2cbdacec8ab9be130f92740c66191770fe9b704bc5fa9c1cc1f6596f55ad132fef7bd3ad1582f199eb0
+  version: 6.5.5
+  resolution: "qs@npm:6.5.5"
+  checksum: 10c0/6a5728b92378776d194c19d2bcf8e8847fa96ecfa6eb64f64e7ac73a394043cacaf257be014fa1a86201077a1e0c5ef5760ee0e0d6b6a4fe9f5ae8afcf5b9254
   languageName: node
   linkType: hard
 
@@ -31144,9 +31147,9 @@ __metadata:
   linkType: hard
 
 "store2@npm:^2.14.2":
-  version: 2.14.2
-  resolution: "store2@npm:2.14.2"
-  checksum: 10c0/2f27c3eaa7207b81410e170e7c41379816d22c1566308a9d97fbf853c4facff531fcb2a85f085c7503c578736570972f747c26018ebeaba7d1341fb82a7b6d52
+  version: 2.14.4
+  resolution: "store2@npm:2.14.4"
+  checksum: 10c0/3453c9c8c153c760e6290395a7bc23669df5dc8a6e8a49f9b3187dbb9f86d14b58705aa4f17fad6b536d4b04fe3e66ea5bde12c1352abd52c6b303bbf5757ab6
   languageName: node
   linkType: hard
 
@@ -34552,9 +34555,9 @@ __metadata:
   linkType: hard
 
 "word-wrap@npm:~1.2.3":
-  version: 1.2.3
-  resolution: "word-wrap@npm:1.2.3"
-  checksum: 10c0/1cb6558996deb22c909330db1f01d672feee41d7f0664492912de3de282da3f28ba2d49e87b723024e99d56ba2dac2f3ab28f8db07ac199f5e5d5e2e437833de
+  version: 1.2.5
+  resolution: "word-wrap@npm:1.2.5"
+  checksum: 10c0/e0e4a1ca27599c92a6ca4c32260e8a92e8a44f4ef6ef93f803f8ed823f486e0889fc0b93be4db59c8d51b3064951d25e43d434e95dc8c960cc3a63d65d00ba20
   languageName: node
   linkType: hard
 
