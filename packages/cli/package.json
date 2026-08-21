@@ -162,7 +162,7 @@
     "tsyringe": "^4.8.0",
     "validator": "^13.7.0",
     "w3c-xmlserializer": "^2.0.0",
-    "ws": "^8.18.1",
+    "ws": "^8.21.3",
     "yargs": "^17.1.1"
   },
   "pkg": {
