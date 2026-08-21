@@ -129,7 +129,7 @@
     "crypto-js": "^4.0.0",
     "debug": "^4.3.6",
     "detect-indent": "^6.1.0",
-    "diff": "^5.1.0",
+    "diff": "^5.2.2",
     "express": "^5.1.0",
     "fs-extra": "^10.1.0",
     "gitconfiglocal": "^2.1.0",
