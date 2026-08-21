@@ -203,7 +203,7 @@ __metadata:
     stream-http: "npm:^3.2.0"
     strip-ansi: "npm:^6.0.0"
     tailwindcss: "npm:^3.4.0"
-    tmp: "npm:^0.2.1"
+    tmp: "npm:^0.2.7"
     tmp-promise: "npm:^3.0.3"
     ts-jest: "npm:^29.0.5"
     ts-node: "npm:^10.9.1"
@@ -32186,12 +32186,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tmp@npm:^0.2.0, tmp@npm:^0.2.1, tmp@npm:~0.2.1":
-  version: 0.2.1
-  resolution: "tmp@npm:0.2.1"
-  dependencies:
-    rimraf: "npm:^3.0.0"
-  checksum: 10c0/67607aa012059c9ce697bee820ee51bc0f39b29a8766def4f92d3f764d67c7cf9205d537d24e0cb1ce9685c40d4c628ead010910118ea18348666b5c46ed9123
+"tmp@npm:^0.2.0, tmp@npm:^0.2.7, tmp@npm:~0.2.1":
+  version: 0.2.7
+  resolution: "tmp@npm:0.2.7"
+  checksum: 10c0/59eb55584f2f07210d3231b6a1f6b5c2b9794d8a7b509c8ee867ed2acad6d2245ee2448b7937b676ffbff3155a70077edde8a69f9d7cf0f90c86a62e8910c357
   languageName: node
   linkType: hard
 
