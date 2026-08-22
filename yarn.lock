@@ -122,7 +122,6 @@ __metadata:
     "@types/inquirer": "npm:^9.0.3"
     "@types/jest": "npm:^29.5.4"
     "@types/jest-sinon": "npm:^1.0.2"
-    "@types/jsdom": "npm:^16.2.13"
     "@types/lunr": "npm:^2.3.7"
     "@types/moo": "npm:^0.5.5"
     "@types/node": "npm:^16"
@@ -133,9 +132,9 @@ __metadata:
     "@types/sinon": "npm:^10.0.2"
     "@types/tmp": "npm:^0.2.3"
     "@types/validator": "npm:^13.7.10"
-    "@types/w3c-xmlserializer": "npm:^2.0.2"
     "@types/ws": "npm:^8.18.1"
     "@types/yargs": "npm:^17.0.2"
+    "@xmldom/xmldom": "npm:^0.9.11"
     "@yao-pkg/pkg": "npm:^6.20.0"
     JSONStream: "npm:^1.3.5"
     ajv: "npm:^8.18.0"
@@ -172,7 +171,6 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-sinon: "npm:^1.1.0"
     js-yaml: "npm:^4.3.1"
-    jsdom: "npm:^16.6.0"
     langchain: "npm:^0.2.12"
     lint-staged: "npm:^10.5.4"
     lru-cache: "npm:^10.2.2"
@@ -214,7 +212,6 @@ __metadata:
     typescript: "npm:^4.9.5"
     typescript-eslint: "npm:^7.7.0"
     validator: "npm:^13.15.35"
-    w3c-xmlserializer: "npm:^2.0.0"
     ws: "npm:^8.21.3"
     yargs: "npm:^17.1.1"
   dependenciesMeta:
@@ -428,6 +425,7 @@ __metadata:
     "@langchain/openai": "npm:^0.2.7"
     "@tsconfig/node-lts": "npm:^20.1.3"
     "@types/jest": "npm:^29.5.14"
+    "@types/jsdom": "npm:^16.2.13"
     "@types/node": "npm:20.1.0"
     "@typescript-eslint/eslint-plugin": "npm:^8.6.0"
     "@typescript-eslint/parser": "npm:^8.6.0"
@@ -7880,13 +7878,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/w3c-xmlserializer@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@types/w3c-xmlserializer@npm:2.0.2"
-  checksum: 10c0/8c691ab8479f2d40e4c92ebe3f88d131c31a65ce496857891287f32a943978d8cd2f2995a01c6a7cbf2cb4f9829a9e89acfbd575fe9c69431f8a676508f1e8e2
-  languageName: node
-  linkType: hard
-
 "@types/webpack-dev-server@npm:^3.11.0":
   version: 3.11.6
   resolution: "@types/webpack-dev-server@npm:3.11.6"
@@ -9531,6 +9522,13 @@ __metadata:
     "@webassemblyjs/wast-parser": "npm:1.9.0"
     "@xtuc/long": "npm:4.2.2"
   checksum: 10c0/f3d106aa884cbb7687307db7adeb3b98abff9de81b9ba8c1065267340b5e9de64ffc533044ab916b1f4ce8a67fb03efa54b29b61c8e908abe4c07edf82f614cd
+  languageName: node
+  linkType: hard
+
+"@xmldom/xmldom@npm:^0.9.11":
+  version: 0.9.12
+  resolution: "@xmldom/xmldom@npm:0.9.12"
+  checksum: 10c0/0a9ef38e203213717dde8d16c62743c26c37eb4195aeb4f286550a0aec2145c063a6c3633f253c29f75202f922d7c961d1acaad4dd93e5db1ef05c813354d178
   languageName: node
   linkType: hard
 
