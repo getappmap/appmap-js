@@ -53,7 +53,6 @@
     "whatwg-url": "14.0.0",
     "tar": "7.5.22",
     "tough-cookie": "^4.1.4",
-    "json5@^0.5.0": "npm:json5@^1.0.2",
     "json5@^0.5.1": "npm:json5@^1.0.2",
     "loader-utils@^0.2.16": "npm:loader-utils@^1.4.2",
     "serialize-javascript": "^7.0.3",
