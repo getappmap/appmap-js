@@ -33,17 +33,18 @@ describe('MavenInstaller', () => {
       const tests = files.map((file) => path.basename(file, expectedExt));
       const efWrite = sinon.stub(EncodedFile.prototype, 'write');
 
+      // The installer writes os.EOL, so ignore line endings — but nothing else: the fixtures
+      // record the indentation of the XML we insert.
+      const normalizeEol = (xml: string) => xml.replace(/\r\n/g, '\n');
+
       for (const test of tests) {
         sinon.stub(maven, 'buildFilePath').value(path.join(dataDir, `${test}.actual.xml`));
 
-        const expected = (await fs.readFile(path.join(dataDir, `${test}${expectedExt}`)))
-          .toString()
-          .replace(/\s+/g, ' ');
+        const expected = (await fs.readFile(path.join(dataDir, `${test}${expectedExt}`))).toString();
 
         await maven.installAgent(interactiveUI);
 
-        const actual = efWrite.getCall(-1).args[0].replace(/\s+/g, ' ');
-        expect(actual).toBe(expected);
+        expect(normalizeEol(efWrite.getCall(-1).args[0])).toBe(normalizeEol(expected));
       }
     });
 

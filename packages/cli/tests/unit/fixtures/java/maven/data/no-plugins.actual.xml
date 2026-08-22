@@ -1,6 +1,6 @@
 <!-- This is a comment as the first child node. -->
-<!-- There doesn't appear to be a way to control w3c-xmlserializer's
-indentation, so the spacing in expected-pom.xml is a bit wonky -->
+<!-- A comment spanning more than one line, to check that it
+survives the rewrite intact -->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
