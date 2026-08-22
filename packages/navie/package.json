@@ -45,7 +45,7 @@
     "@langchain/core": "^0.2.27",
     "@langchain/google-vertexai-web": "^0.1.0",
     "@langchain/openai": "^0.2.7",
-    "fast-xml-parser": "^4.5.7",
+    "fast-xml-parser": "^5.0.0",
     "js-tiktoken": "^1.0.18",
     "js-yaml": "^4.3.1",
     "jsdom": "^16.6.0",
