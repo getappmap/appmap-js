@@ -1,0 +1,3 @@
+# Generated deliverables rendered from the HTML sources (e.g. via headless Chromium).
+# Regenerate these locally; they are not versioned.
+*.pdf

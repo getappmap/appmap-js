@@ -1,0 +1,802 @@
+<meta charset="utf-8" />
+<title>AppMap.io Link Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+
+<style>
+  :root {
+    /* purple-biased neutrals — AppMap's world */
+    --bg: #f5f3f9;
+    --surface: #ffffff;
+    --surface-2: #faf9fd;
+    --ink: #1b1526;
+    --muted: #6c6579;
+    --faint: #948da3;
+    --border: #e7e2ef;
+    --border-strong: #d8d1e6;
+    --accent: #9c2fba;
+    --accent-ink: #7a1f95;
+
+    /* semantic status colors (not the chrome accent) */
+    --new: #12855c;
+    --new-bg: #e2f5ec;
+    --stays: #2560d8;
+    --stays-bg: #e4ecfd;
+    --kept: #a5710a;
+    --kept-bg: #fbf0d8;
+    --gone: #c62c50;
+    --gone-bg: #fbe4ea;
+    --moved: #7a44cf;
+    --moved-bg: #efe6fb;
+
+    --shadow: 0 1px 2px rgba(27, 21, 38, 0.04), 0 8px 28px -18px rgba(27, 21, 38, 0.22);
+    --radius: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --bg: #0d0a15;
+      --surface: #161020;
+      --surface-2: #1b1428;
+      --ink: #ece8f3;
+      --muted: #a49cb4;
+      --faint: #746c85;
+      --border: #2a2238;
+      --border-strong: #362c48;
+      --accent: #d46ee8;
+      --accent-ink: #e79bf3;
+
+      --new: #4fd39c;
+      --new-bg: #133027;
+      --stays: #7ba6f7;
+      --stays-bg: #16233f;
+      --kept: #e8b552;
+      --kept-bg: #322709;
+      --gone: #f2789a;
+      --gone-bg: #35141f;
+      --moved: #b98cf0;
+      --moved-bg: #241633;
+
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px -18px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  :root[data-theme='dark'] {
+    --bg: #0d0a15;
+    --surface: #161020;
+    --surface-2: #1b1428;
+    --ink: #ece8f3;
+    --muted: #a49cb4;
+    --faint: #746c85;
+    --border: #2a2238;
+    --border-strong: #362c48;
+    --accent: #d46ee8;
+    --accent-ink: #e79bf3;
+
+    --new: #4fd39c;
+    --new-bg: #133027;
+    --stays: #7ba6f7;
+    --stays-bg: #16233f;
+    --kept: #e8b552;
+    --kept-bg: #322709;
+    --gone: #f2789a;
+    --gone-bg: #35141f;
+    --moved: #b98cf0;
+    --moved-bg: #241633;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px -18px rgba(0, 0, 0, 0.6);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: clamp(28px, 5vw, 64px) clamp(18px, 4vw, 40px) 96px;
+  }
+
+  /* ---- header ---- */
+  header.masthead {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 32px;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 26px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #ff07aa, #9c2fba 55%, #4362b1);
+  }
+  h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: clamp(30px, 6vw, 50px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+  .dek {
+    font-size: clamp(16px, 2.4vw, 19px);
+    color: var(--muted);
+    max-width: 60ch;
+    margin: 0;
+  }
+  .meta {
+    margin-top: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+  .meta b {
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* ---- big picture callout ---- */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin: 0 0 40px;
+    box-shadow: var(--shadow);
+  }
+  .callout h2 {
+    margin: 0 0 12px;
+  }
+  .callout p {
+    margin: 0 0 12px;
+  }
+  .callout p:last-child {
+    margin-bottom: 0;
+  }
+  .callout strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ---- section headings ---- */
+  section {
+    margin-bottom: 44px;
+  }
+  h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3.4vw, 27px);
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  .section-note {
+    color: var(--muted);
+    margin: 0 0 18px;
+    font-size: 15px;
+  }
+  h2 .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6em;
+    font-weight: 500;
+    color: var(--faint);
+    letter-spacing: 0;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+
+  /* ---- legend ---- */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .legend .li {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 13px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .legend .li b {
+    display: block;
+    color: var(--ink);
+  }
+
+  /* ---- status chips ---- */
+  .chip {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    line-height: 1.35;
+  }
+  .chip.new { color: var(--new); background: var(--new-bg); }
+  .chip.stays { color: var(--stays); background: var(--stays-bg); }
+  .chip.kept { color: var(--kept); background: var(--kept-bg); }
+  .chip.gone { color: var(--gone); background: var(--gone-bg); }
+  .chip.moved { color: var(--moved); background: var(--moved-bg); }
+
+  /* ---- tables ---- */
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 640px;
+    font-size: 14.5px;
+  }
+  thead th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding: 13px 16px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  tbody tr:hover td {
+    background: var(--surface-2);
+  }
+  .lbl {
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  code,
+  .url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--accent-ink);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    padding: 1.5px 6px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .url.off {
+    color: var(--muted);
+    background: color-mix(in srgb, var(--muted) 12%, transparent);
+  }
+  .url.dash {
+    background: none;
+    color: var(--faint);
+    padding-left: 0;
+  }
+  td .note {
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.5;
+    display: block;
+    margin-top: 5px;
+    white-space: normal;
+  }
+
+  /* ---- summary cards (docs / blog) ---- */
+  .summary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 620px) {
+    .summary {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+  }
+  .card .big {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .card .big span {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--faint);
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: 6px;
+  }
+  .card h3 {
+    margin: 4px 0 10px;
+    font-size: 17px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+  }
+  .card p {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .card p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ---- decisions list ---- */
+  .decisions {
+    list-style: none;
+    counter-reset: d;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .decisions li {
+    counter-increment: d;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px 16px 56px;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  .decisions li::before {
+    content: counter(d);
+    position: absolute;
+    left: 16px;
+    top: 15px;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #ff07aa, #9c2fba 60%, #4362b1);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    display: grid;
+    place-items: center;
+  }
+  .decisions li b {
+    color: var(--ink);
+  }
+  .decisions .q {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  footer.foot {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    color: var(--faint);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.7;
+  }
+
+  a {
+    color: var(--accent-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">appmap.io &middot; website redesign</p>
+    <h1>Old site vs. new site: the link map</h1>
+    <p class="dek">
+      A plain-English guide to what's new, what's staying, what's being kept as-is, and what's
+      going away — so you can see the whole picture at a glance.
+    </p>
+    <div class="meta">
+      <span><b>Old site:</b> live appmap.io (180 pages)</span>
+      <span><b>New site:</b> Lovable rebuild (18 pages)</span>
+      <span><b>Prepared for:</b> Kevin</span>
+    </div>
+  </header>
+
+  <div class="callout">
+    <h2>The big picture in four sentences</h2>
+    <p>
+      The <strong>marketing pages</strong> (home, pricing, how it works, and so on) have been
+      <strong>rebuilt fresh</strong> on the new site.
+    </p>
+    <p>
+      The <strong>Docs and the Blog were not rebuilt</strong> — all ~165 of those pages still run
+      on the old website, and the new site simply points to them. Visitors won't notice a seam;
+      behind the scenes it's still the old system serving those pages.
+    </p>
+    <p>
+      A handful of <strong>brand-new pages</strong> exist that the old site never had (Benchmarks,
+      Enterprise, Architecture, and more).
+    </p>
+    <p>
+      And a small set of <strong>old pages are going away</strong> — mostly ones that got folded
+      into a new page — which means we should set up redirects so their old links don't break.
+    </p>
+  </div>
+
+  <div class="legend" aria-label="What the labels mean">
+    <div class="li"><b><span class="chip new">New</span></b>Brand-new page. Didn't exist on the old site.</div>
+    <div class="li"><b><span class="chip stays">Stays</span></b>Rebuilt fresh on the new site, same web address.</div>
+    <div class="li"><b><span class="chip kept">Kept (old)</span></b>Not rebuilt — still served by the old website, linked from the new one.</div>
+    <div class="li"><b><span class="chip moved">Moved</span></b>Still around, but relocated or its link changed.</div>
+    <div class="li"><b><span class="chip gone">Going away</span></b>On the old site, not on the new one. Needs a redirect or a decision.</div>
+  </div>
+
+  <!-- ============ TOP MENU ============ -->
+  <section>
+    <h2>The top menu</h2>
+    <p class="section-note">
+      The main navigation bar at the top of every page. This is what most visitors click first.
+    </p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Menu item</th>
+            <th>Old site</th>
+            <th>New site</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lbl">Pricing</td>
+            <td><span class="url">/pricing</span></td>
+            <td><span class="url">/pricing</span></td>
+            <td><span class="chip stays">Stays</span><span class="note">Rebuilt fresh, same address.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Get AppMap</td>
+            <td><span class="url">/get-appmap</span></td>
+            <td><span class="url">/get-appmap</span></td>
+            <td><span class="chip stays">Stays</span><span class="note">Rebuilt fresh, same address. Still the main call-to-action button.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Docs</td>
+            <td><span class="url">/docs</span></td>
+            <td><span class="url off">/docs</span></td>
+            <td><span class="chip kept">Kept (old)</span><span class="note">Menu item stays, but it opens the old documentation — those pages weren't rebuilt.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Blog</td>
+            <td><span class="url">/blog</span> <span class="note" style="display:inline">(in top menu)</span></td>
+            <td><span class="url off">/blog</span> <span class="note" style="display:inline">(moved to footer)</span></td>
+            <td><span class="chip moved">Moved</span><span class="note">Dropped from the top menu; now only linked in the footer. Still the old blog.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Book a Demo</td>
+            <td><span class="url">HubSpot link</span></td>
+            <td><span class="url">/book-a-demo</span></td>
+            <td><span class="chip moved">Moved</span><span class="note">Was a top-menu link to HubSpot; now its own page using a Google Calendar booking link.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">How it works</td>
+            <td><span class="url dash">— none —</span></td>
+            <td><span class="url">/how-it-works</span></td>
+            <td><span class="chip new">New</span><span class="note">New menu item and page.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Benchmarks</td>
+            <td><span class="url dash">— none —</span></td>
+            <td><span class="url">/benchmarks</span></td>
+            <td><span class="chip new">New</span><span class="note">New menu item and page (plus a sub-page, /benchmarks/swe-bench).</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Enterprise</td>
+            <td><span class="url dash">— none —</span></td>
+            <td><span class="url">/enterprise</span></td>
+            <td><span class="chip new">New</span><span class="note">New menu item and page.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ MAIN PAGES ============ -->
+  <section>
+    <h2>Main pages (rebuilt or replaced)</h2>
+    <p class="section-note">
+      Core pages that exist on both sites, or where an old page was replaced by a new one.
+    </p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Page</th>
+            <th>Old site</th>
+            <th>New site</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lbl">Home</td>
+            <td><span class="url">/</span></td>
+            <td><span class="url">/</span></td>
+            <td><span class="chip stays">Stays</span><span class="note">Rebuilt fresh.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Pricing</td>
+            <td><span class="url">/pricing</span></td>
+            <td><span class="url">/pricing</span></td>
+            <td><span class="chip stays">Stays</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Get AppMap</td>
+            <td><span class="url">/get-appmap</span></td>
+            <td><span class="url">/get-appmap</span></td>
+            <td><span class="chip stays">Stays</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Security</td>
+            <td><span class="url">/security</span></td>
+            <td><span class="url">/security</span></td>
+            <td><span class="chip stays">Stays</span><span class="note">Rebuilt. The new site also adds a separate /security-faq page.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">About / Company</td>
+            <td><span class="url">/company/about-appmap</span></td>
+            <td><span class="url">/company</span> + <span class="url">/team</span></td>
+            <td><span class="chip moved">Moved</span><span class="note">The old "About" page is replaced by a new Company page and a new Team page. Old link should redirect.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Contact</td>
+            <td><span class="url">/contact</span>, <span class="url">/contact/sales</span></td>
+            <td><span class="url off">email + /book-a-demo</span></td>
+            <td><span class="chip gone">Going away</span><span class="note">No contact page on the new site. Replaced by an email link (info@appmap.io) and the Book a Demo page. Old links should redirect.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Download</td>
+            <td><span class="url">/download</span></td>
+            <td><span class="url off">use /get-appmap</span></td>
+            <td><span class="chip gone">Going away</span><span class="note">Folded into Get AppMap. Old link should redirect there.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Privacy Policy</td>
+            <td><span class="url">/community/privacy-policy</span></td>
+            <td><span class="url off">/community/privacy-policy</span></td>
+            <td><span class="chip kept">Kept (old)</span><span class="note">Not rebuilt; new footer links to the old page.</span></td>
+          </tr>
+          <tr>
+            <td class="lbl">Terms &amp; Conditions</td>
+            <td><span class="url">/community/terms-and-conditions</span></td>
+            <td><span class="url off">/community/terms-and-conditions</span></td>
+            <td><span class="chip kept">Kept (old)</span><span class="note">Not rebuilt; new footer links to the old page.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ DOCS + BLOG ============ -->
+  <section>
+    <h2>Docs &amp; Blog — the big content sets</h2>
+    <p class="section-note">
+      Together these are about 165 pages. Neither was rebuilt — both still live on the old website,
+      and the new site just links out to them.
+    </p>
+    <div class="summary">
+      <div class="card">
+        <div class="big">55 <span>pages</span></div>
+        <h3>Documentation <span class="chip kept">Kept (old)</span></h3>
+        <p>
+          Getting started, the Navie AI guides, troubleshooting, and the full Reference section
+          (Python, Ruby, Java, Node, VS Code, JetBrains, integrations, and more).
+        </p>
+        <p>
+          <strong>Not rebuilt.</strong> All 55 pages stay on the old site; the new "Docs" menu and
+          footer links point straight to them.
+        </p>
+        <p>
+          <strong>One change:</strong> the old Navie doc links (<span class="url off">/docs/navie/…</span>)
+          now redirect to the new <span class="url">/how-it-works</span> page.
+        </p>
+      </div>
+      <div class="card">
+        <div class="big">110 <span>pages</span></div>
+        <h3>Blog <span class="chip kept">Kept (old)</span></h3>
+        <p>
+          The blog index plus <strong>108 posts</strong>, dating from July 2020 through June 2024.
+        </p>
+        <p>
+          <strong>Not rebuilt.</strong> The whole archive stays on the old site. The new site links
+          to it from the footer only (it's no longer in the top menu).
+        </p>
+        <p>
+          <strong>To check:</strong> the old <span class="url off">/blog/gallery</span> page isn't
+          linked from the new site — keep it or retire it?
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BRAND NEW ============ -->
+  <section>
+    <h2>Brand-new pages <span class="count">11 pages</span></h2>
+    <p class="section-note">Pages the new site introduces that the old site never had.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>New page</th>
+            <th>Address</th>
+            <th>What it is</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="lbl">How it works</td><td><span class="url">/how-it-works</span></td><td>Explains the product. In the top menu.</td></tr>
+          <tr><td class="lbl">Benchmarks</td><td><span class="url">/benchmarks</span></td><td>Performance results. In the top menu.</td></tr>
+          <tr><td class="lbl">SWE-bench</td><td><span class="url">/benchmarks/swe-bench</span></td><td>A specific benchmark sub-page.</td></tr>
+          <tr><td class="lbl">Enterprise</td><td><span class="url">/enterprise</span></td><td>For larger customers. In the top menu.</td></tr>
+          <tr><td class="lbl">Architecture</td><td><span class="url">/architecture</span></td><td>How the product is built. Linked in the footer.</td></tr>
+          <tr><td class="lbl">Platform</td><td><span class="url">/platform</span></td><td>Product overview page.</td></tr>
+          <tr><td class="lbl">Compatibility</td><td><span class="url">/compatibility</span></td><td>Supported languages and tools.</td></tr>
+          <tr><td class="lbl">CLI Quickstart</td><td><span class="url">/cli-quickstart</span></td><td>Command-line getting-started.</td></tr>
+          <tr><td class="lbl">Release Notes</td><td><span class="url">/release-notes</span></td><td>What's changed. Linked in the footer.</td></tr>
+          <tr><td class="lbl">Team</td><td><span class="url">/team</span></td><td>The people. Linked in the footer.</td></tr>
+          <tr><td class="lbl">Security FAQ</td><td><span class="url">/security-faq</span></td><td>Security questions and answers.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ GOING AWAY ============ -->
+  <section>
+    <h2>Old pages going away <span class="count">needs redirects</span></h2>
+    <p class="section-note">
+      These exist on the old site but have no home on the new one. Anyone with an old link or a
+      bookmark will hit a dead end unless we redirect them.
+    </p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Old page</th>
+            <th>Old address</th>
+            <th>Suggested redirect</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="lbl">Download</td><td><span class="url off">/download</span></td><td><span class="url">/get-appmap</span></td></tr>
+          <tr><td class="lbl">Contact</td><td><span class="url off">/contact</span></td><td><span class="url">/book-a-demo</span> or email</td></tr>
+          <tr><td class="lbl">Contact Sales</td><td><span class="url off">/contact/sales</span></td><td><span class="url">/book-a-demo</span></td></tr>
+          <tr><td class="lbl">About AppMap</td><td><span class="url off">/company/about-appmap</span></td><td><span class="url">/company</span> or <span class="url">/team</span></td></tr>
+          <tr><td class="lbl">OpenAPI product page</td><td><span class="url off">/product/automate-openapi-generation</span></td><td><span class="url">/platform</span> / <span class="url">/how-it-works</span></td></tr>
+          <tr><td class="lbl">Debugging product page</td><td><span class="url off">/product/code-investigation-debugging</span></td><td><span class="url">/platform</span> / <span class="url">/how-it-works</span></td></tr>
+          <tr><td class="lbl">Feedback form</td><td><span class="url off">/product/feedback/general</span></td><td><em>decision needed</em></td></tr>
+          <tr><td class="lbl">Brand Assets</td><td><span class="url off">/company/brand-assets</span></td><td><em>decision needed</em></td></tr>
+          <tr><td class="lbl">Code of Conduct</td><td><span class="url off">/community/code-of-conduct</span></td><td><em>decision needed</em></td></tr>
+          <tr><td class="lbl">Blog Gallery</td><td><span class="url off">/blog/gallery</span></td><td><em>decision needed</em></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER + SOCIAL ============ -->
+  <section>
+    <h2>Footer &amp; social links — what changed</h2>
+    <p class="section-note">The footer was reorganized. Here's what's different from the old one.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Link</th>
+            <th>Change</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="lbl">Careers</td><td>Old footer linked to a jobs page (AngelList). Not on the new footer.</td><td><span class="chip gone">Going away</span></td></tr>
+          <tr><td class="lbl">Brand Assets</td><td>Was in the old footer. Not on the new one.</td><td><span class="chip gone">Going away</span></td></tr>
+          <tr><td class="lbl">Code of Conduct</td><td>Was in the old footer. Not on the new one.</td><td><span class="chip gone">Going away</span></td></tr>
+          <tr><td class="lbl">X / Twitter</td><td>Old footer had it. Removed from the new footer.</td><td><span class="chip gone">Going away</span></td></tr>
+          <tr><td class="lbl">Slack</td><td>Old footer had it. Removed from the new footer.</td><td><span class="chip gone">Going away</span></td></tr>
+          <tr><td class="lbl">YouTube</td><td>Old footer had it. Removed from the new footer.</td><td><span class="chip gone">Going away</span></td></tr>
+          <tr><td class="lbl">GitHub</td><td>Kept — the only social link carried over to the new footer.</td><td><span class="chip stays">Stays</span></td></tr>
+          <tr><td class="lbl">Contact</td><td>Was a link to the Contact page; now an email link (info@appmap.io).</td><td><span class="chip moved">Moved</span></td></tr>
+          <tr><td class="lbl">Architecture, Benchmarks, Release Notes, Security FAQ, Report a security issue</td><td>New links the old footer didn't have.</td><td><span class="chip new">New</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ DECISIONS ============ -->
+  <section>
+    <h2>Decisions for Kevin</h2>
+    <p class="section-note">The open questions worth a quick call before launch.</p>
+    <ul class="decisions">
+      <li>
+        <b>Set up the redirects.</b>
+        <span class="q">At least: /download, /contact, /contact/sales, /company/about-appmap, and the two /product/… pages. Without these, old links and Google results will 404.</span>
+      </li>
+      <li>
+        <b>Decide the fate of four orphan pages.</b>
+        <span class="q">Brand Assets, Code of Conduct, the Feedback form, and Blog Gallery have no new home. Keep on the old site, rebuild, or retire?</span>
+      </li>
+      <li>
+        <b>Confirm Docs &amp; Blog stay on the old system.</b>
+        <span class="q">That's ~165 pages still served by the old website behind the new one. Is that the intended long-term plan, or a temporary bridge?</span>
+      </li>
+      <li>
+        <b>Confirm the Navie docs redirect.</b>
+        <span class="q">Old /docs/navie/… links now send people to the new "How it works" page instead of the detailed Navie documentation. Intended?</span>
+      </li>
+      <li>
+        <b>Confirm the dropped social &amp; careers links.</b>
+        <span class="q">X, Slack, YouTube, and Careers are gone from the footer. On purpose, or should any come back?</span>
+      </li>
+      <li>
+        <b>Confirm the booking link.</b>
+        <span class="q">Demo booking moved from HubSpot to a Google Calendar link. Is Google Calendar the one we want?</span>
+      </li>
+    </ul>
+  </section>
+
+  <footer class="foot">
+    Sources: the new site's own routes + navigation code, and a full crawl of the live appmap.io,
+    both stored in the "AppMap.io" Lovable project.<br />
+    Counts: old site 180 pages (15 marketing + 55 docs + 110 blog) &middot; new site 18 rebuilt pages.
+  </footer>
+</div>
