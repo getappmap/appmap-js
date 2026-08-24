@@ -144,6 +144,47 @@ describe('TelemetryClient', () => {
       }
     });
 
+    it('does not send common.customerid when no customer ID is set', () => {
+      client.sendEvent({ name: 'test' });
+
+      const [[{ properties }]] = sendEvent.mock.calls;
+      assert(properties);
+
+      expect(properties).not.toHaveProperty('common.customerid');
+    });
+
+    it('sends the customer ID from the environment', () => {
+      process.env.APPMAP_CUSTOMER_ID = ' acme-corp ';
+      try {
+        const client = new TelemetryClient({ backend });
+        client.enabled = true;
+        client.sendEvent({ name: 'test' });
+
+        const [[{ properties }]] = sendEvent.mock.calls;
+        assert(properties);
+
+        expect(properties['common.customerid']).toBe('acme-corp');
+      } finally {
+        delete process.env.APPMAP_CUSTOMER_ID;
+      }
+    });
+
+    it('treats a blank customer ID as unset', () => {
+      process.env.APPMAP_CUSTOMER_ID = '  ';
+      try {
+        const client = new TelemetryClient({ backend });
+        client.enabled = true;
+        client.sendEvent({ name: 'test' });
+
+        const [[{ properties }]] = sendEvent.mock.calls;
+        assert(properties);
+
+        expect(properties).not.toHaveProperty('common.customerid');
+      } finally {
+        delete process.env.APPMAP_CUSTOMER_ID;
+      }
+    });
+
     it('cannot be configured twice', () => {
       // It's already been configured once in the constructor
       expect(() => {
