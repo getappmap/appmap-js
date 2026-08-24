@@ -36,6 +36,7 @@ The telemetry client can be configured using environment variables.
 *   `APPMAP_TELEMETRY_DISABLED`: Set to `1`, `true`, or `yes` to disable telemetry.
 *   `APPMAP_TELEMETRY_DEBUG`: Set to `1`, `true`, or `yes` to enable debug logging, which will print telemetry events to the console.
 *   `APPMAP_TELEMETRY_BACKEND`: Specifies the telemetry backend to use. Supported values are `application-insights` (default) and `splunk`.
+*   `APPMAP_CUSTOMER_ID`: Identifies the customer in a managed deployment. When set to a non-blank value it is reported on every event as `common.customerid`. It is not a credential and grants nothing on its own.
 
 ### Splunk Backend
 
