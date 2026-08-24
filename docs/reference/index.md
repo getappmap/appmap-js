@@ -18,6 +18,7 @@ redirect_from: [/docs/reference/browser-extension]
   - [AppMap for Java – Maven Plugin](/docs/reference/appmap-maven-plugin)
   - [AppMap for Java – Gradle Plugin](/docs/reference/appmap-gradle-plugin)
 - [AppMap Command line interface (CLI)](/docs/reference/appmap-client-cli.html)
+- [AppMap Gold Traces](/docs/reference/gold-traces)
 - [Remote recording API](/docs/reference/remote-recording-api)
 - [AppMap MCP Server](/docs/reference/appmap-mcp)
 - [Analysis Rules](/docs/reference/analysis-rules)
