@@ -1,0 +1,34 @@
+{
+  "kind": "appmap.comparison",
+  "schemaVersion": 1,
+  "producer": { "name": "contract-fixture", "version": "1" },
+  "scenario": { "id": "changed-result" },
+  "recordings": { "base": "base.appmap.json", "head": "head.appmap.json" },
+  "capabilities": { "views": { "sequence": 1 } },
+  "changes": [
+    {
+      "id": "chg_33333333333333333333",
+      "kind": "call-changed",
+      "summary": "Changed loadUser result",
+      "base": { "eventIds": [5] },
+      "head": { "eventIds": [6] },
+      "views": {
+        "sequence": {
+          "base": { "eventIds": [5] },
+          "head": { "eventIds": [6] },
+          "diff": { "eventIds": [6] }
+        }
+      },
+      "details": { "result": { "before": "User", "after": "AuthorizationError" } }
+    }
+  ],
+  "views": {
+    "sequence": {
+      "schemaVersion": 1,
+      "base": { "actors": [], "rootActions": [] },
+      "head": { "actors": [], "rootActions": [] },
+      "diff": { "actors": [], "rootActions": [] },
+      "alignment": { "actorOrder": [] }
+    }
+  }
+}
