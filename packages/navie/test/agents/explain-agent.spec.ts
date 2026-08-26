@@ -1,8 +1,4 @@
 import ExplainAgent from '../../src/agents/explain-agent';
-import InteractionHistory, {
-  ContextItemRequestor,
-  isPromptEvent,
-} from '../../src/interaction-history';
 import ApplyContextService from '../../src/services/apply-context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
 import LookupContextService from '../../src/services/lookup-context-service';
@@ -12,8 +8,8 @@ import { CHARACTERS_PER_TOKEN } from '../../src/message';
 import { UserOptions } from '../../src/lib/parse-options';
 import ContextService from '../../src/services/context-service';
 import MermaidFixerService from '../../src/services/mermaid-fixer-service';
-import mermaid from 'mermaid';
 import { ContextV2 } from '../../src/context';
+import InteractionHistory, { ContextItemRequestor } from '../../src/interaction-history';
 
 describe('@explain agent', () => {
   let interactionHistory: InteractionHistory;
@@ -117,6 +113,11 @@ describe('@explain agent', () => {
         {
           type: 'prompt',
           role: 'system',
+          name: 'agent',
+        },
+        {
+          type: 'prompt',
+          role: 'system',
           name: 'question',
         },
       ]);
@@ -192,6 +193,11 @@ describe('@explain agent', () => {
         await buildAgent().perform(options, () => tokensAvailable);
 
         expect(interactionHistory.events.map((event) => event.metadata)).toEqual([
+          {
+            type: 'prompt',
+            role: 'system',
+            name: 'agent',
+          },
           {
             type: 'prompt',
             role: 'system',
