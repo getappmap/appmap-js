@@ -34,6 +34,7 @@ describe('ApplicationInsightsBackend', () => {
   afterEach(() => {
     nock.cleanAll();
     nock.enableNetConnect();
+    jest.restoreAllMocks();
   });
 
   const waitForRequest = async (scope: nock.Scope) => {
@@ -118,7 +119,7 @@ describe('ApplicationInsightsBackend', () => {
 
   it('handles https errors', async () => {
     nock.cleanAll(); // Don't use the default scope
-    const errorScope = nock(AI_ENDPOINT).post(AI_PATH).replyWithError('test error');
+    nock(AI_ENDPOINT).post(AI_PATH).replyWithError('test error');
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
     const backend = new ApplicationInsightsBackend('user-id', 'session-id', 'product-name', {
       type: 'application-insights',
@@ -130,7 +131,9 @@ describe('ApplicationInsightsBackend', () => {
 
     backend.sendEvent(event);
 
-    await waitForRequest(errorScope);
+    // Wait for the request's error handler (and its warning) to run, not just
+    // for the request to be sent.
+    await new Promise<void>((resolve) => backend.flush(resolve));
 
     expect(warnSpy).toHaveBeenCalledWith(
       'Error sending telemetry data to Application Insights',
@@ -140,7 +143,7 @@ describe('ApplicationInsightsBackend', () => {
 
   it('logs a warning for non-2xx HTTP responses', async () => {
     nock.cleanAll();
-    const errorScope = nock(AI_ENDPOINT).post(AI_PATH).reply(500, { message: 'Internal Server Error' });
+    nock(AI_ENDPOINT).post(AI_PATH).reply(500, { message: 'Internal Server Error' });
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
     const backend = new ApplicationInsightsBackend('user-id', 'session-id', 'product-name', {
       type: 'application-insights',
@@ -152,7 +155,9 @@ describe('ApplicationInsightsBackend', () => {
 
     backend.sendEvent(event);
 
-    await waitForRequest(errorScope);
+    // Wait for the response handler (and its warning) to run, not just for the
+    // request to be sent.
+    await new Promise<void>((resolve) => backend.flush(resolve));
 
     expect(warnSpy).toHaveBeenCalledWith(
       'ApplicationInsightsBackend: Failed to send telemetry event. Status: 500'
