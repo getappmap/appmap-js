@@ -21,6 +21,7 @@
   "devDependencies": {
     "@tsconfig/node-lts": "^20.1.3",
     "@types/jest": "^29.5.14",
+    "@types/jsdom": "npm:^16.2.13",
     "@types/node": "20.1.0",
     "@typescript-eslint/eslint-plugin": "^8.6.0",
     "@typescript-eslint/parser": "^8.6.0",
