@@ -89,12 +89,16 @@ function buildDefaultConfiguration(
   // By default, the prop prefix will be the product name with non-word characters replaced by dots.
   const propPrefix = base.propPrefix || product.name.replace(/\W/g, '.').replace(/^\./, '') + '.';
   const backend = base.backend || defaultBackend();
+  // Set by managed deployments to attribute usage to a customer. Not a credential.
+  const customerId = process.env.APPMAP_CUSTOMER_ID?.trim();
+
   const properties: Record<string, string> = {
     'common.source': product.name,
     'common.os': os.platform(),
     'common.platformversion': os.release(),
     'common.arch': os.arch(),
     'common.hostname': os.hostname(),
+    ...(customerId ? { 'common.customerid': customerId } : {}),
     ...base.properties,
   };
 
