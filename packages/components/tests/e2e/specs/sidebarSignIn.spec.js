@@ -1,10 +1,15 @@
 describe('Sidebar activation page', () => {
   const INVALID_EMAIL_MSG = 'Invalid email address, please try again.';
   const GENERIC_ERROR_MSG = 'Something went wrong, please try again later.';
+  const DENIAL_MSG =
+    'Sign-in is disabled for this email domain. Your organization licenses AppMap through a ' +
+    'managed installation; please contact your IT department for access.';
   const TEST_EMAIL = 'fake@test.net';
 
   beforeEach(() => {
-    cy.visit('http://localhost:6006/iframe.html?args=&id=pages-vs-code--sign-in&viewMode=story');
+    cy.visit(
+      'http://localhost:6006/iframe.html?args=&id=pages-vs-code-sign-in--sign-in&viewMode=story'
+    );
   });
 
   it('displays a title', () => {
@@ -73,6 +78,33 @@ describe('Sidebar activation page', () => {
     cy.get('[data-cy="org-config-applied"]').should('not.exist');
   });
 
+  it('shows the message the server supplies when sign-in is denied', () => {
+    cy.intercept('POST', 'https://getappmap.com/api/activations*', {
+      statusCode: 403,
+      body: { error: { code: 'sign_in_denied', message: DENIAL_MSG } },
+    });
+    cy.get('#email-input').type(TEST_EMAIL);
+    cy.get('[data-cy="email-activation-button"]').click();
+    cy.get('.error').should('have.text', DENIAL_MSG);
+    cy.get('.finish-activation').should('not.exist');
+    // The address the message is about stays put, and stays correctable.
+    cy.get('#email-input').should('have.value', TEST_EMAIL);
+  });
+
+  it('shows the message the server supplies when verification is denied', () => {
+    cy.intercept('POST', 'https://getappmap.com/api/activations*', {
+      statusCode: 201,
+    });
+    cy.get('#email-input').type(TEST_EMAIL);
+    cy.get('[data-cy="email-activation-button"]').click();
+    cy.intercept('POST', 'https://getappmap.com/api/activations/verify*', {
+      statusCode: 403,
+      body: { error: { code: 'sign_in_denied', message: DENIAL_MSG } },
+    });
+    cy.get('#verification-code-input').type('123456').type('{enter}');
+    cy.get('.error').should('have.text', DENIAL_MSG);
+  });
+
   it('shows an error message with incorrect verification code', () => {
     cy.intercept('POST', 'https://getappmap.com/api/activations*', {
       statusCode: 201,
@@ -90,7 +122,7 @@ describe('Sidebar activation page', () => {
 describe('Sidebar activation page with organization configuration enabled', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?args=&id=pages-vs-code--sign-in-with-org-config&viewMode=story'
+      'http://localhost:6006/iframe.html?args=&id=pages-vs-code-sign-in--sign-in-with-org-config&viewMode=story'
     );
   });
 
@@ -120,7 +152,7 @@ describe('Sidebar activation page with organization configuration enabled', () =
 describe('Sidebar activation page with organization configuration already applied', () => {
   beforeEach(() => {
     cy.visit(
-      'http://localhost:6006/iframe.html?args=&id=pages-vs-code--sign-in-with-org-config-already-applied&viewMode=story'
+      'http://localhost:6006/iframe.html?args=&id=pages-vs-code-sign-in--sign-in-with-org-config-already-applied&viewMode=story'
     );
   });
 

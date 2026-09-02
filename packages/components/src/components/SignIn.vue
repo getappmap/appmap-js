@@ -239,15 +239,13 @@ export default {
           this.error = '';
           this.submitted = true;
         } else if (response.status < 500 && response.status >= 400) {
-          this.email = '';
-          this.error = this.generateInvalidFieldMsg('email address');
+          const message = await this.serverMessage(response);
+          this.error = message || this.generateInvalidFieldMsg('email address');
         } else {
-          this.email = '';
           this.error = GENERIC_ERROR_MSG;
         }
       } catch (error) {
         this.error = GENERIC_ERROR_MSG;
-        this.email = '';
       } finally {
         this.pendingRequest = undefined;
       }
@@ -266,12 +264,13 @@ export default {
         if (response.status === 200) {
           const data = await response.json();
           this.$root.$emit('activate', data.api_key);
+        } else if (response.status < 500 && response.status >= 400) {
+          const message = await this.serverMessage(response);
+          this.verificationCode = '';
+          this.error = message || this.generateInvalidFieldMsg('verification code');
         } else {
           this.verificationCode = '';
-          this.error =
-            response.status < 500 && response.status >= 400
-              ? this.generateInvalidFieldMsg('verification code')
-              : (this.error = GENERIC_ERROR_MSG);
+          this.error = GENERIC_ERROR_MSG;
         }
       } catch (error) {
         this.error = GENERIC_ERROR_MSG;
@@ -279,6 +278,22 @@ export default {
       } finally {
         this.pendingRequest = undefined;
       }
+    },
+    // A 4xx may carry an explanation the user can act on — a denied email
+    // domain, say — which is always better than our guess at which field was
+    // wrong. The error code is deliberately ignored: the message is the part
+    // written for the user, and matching on codes would leave every code the
+    // server adds later falling back to a misleading "invalid field" message.
+    // Any other body shape yields undefined, so the caller keeps its wording.
+    async serverMessage(response) {
+      try {
+        const body = await response.json();
+        const message = body?.error?.message;
+        if (typeof message === 'string' && message.trim()) return message.trim();
+      } catch {
+        // Not JSON — nothing to show beyond what the caller already has.
+      }
+      return undefined;
     },
     addParamsToUrl(url, params) {
       Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
