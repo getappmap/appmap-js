@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import { ChatOpenAI } from '@langchain/openai';
 
 import { PromptInteractionEvent, ContextItemEvent } from '../../src/interaction-history';
@@ -23,15 +25,16 @@ describe('LangchainMemoryService', () => {
     });
 
     it('should add the conversation summary to the context', async () => {
-      const mockPredictNewSummary = jest.fn().mockResolvedValue('This is a summary.');
-      (ConversationSummaryMemory.prototype as any).predictNewSummary = mockPredictNewSummary;
+      jest
+        .spyOn(ConversationSummaryMemory.prototype, 'predictNewSummary')
+        .mockResolvedValue('This is a summary.');
 
       const events = await memoryService.predictSummary(messages);
       expect(events.length).toBe(2);
 
-      const [instruction, context]: [PromptInteractionEvent, ContextItemEvent] = events as any;
-      expect(instruction).toBeInstanceOf(PromptInteractionEvent);
-      expect(context).toBeInstanceOf(ContextItemEvent);
+      const [instruction, context] = events;
+      assert(instruction instanceof PromptInteractionEvent);
+      assert(context instanceof ContextItemEvent);
 
       expect(instruction.type).toEqual('prompt');
       expect(instruction.content).toEqual(expect.stringContaining('**Conversation summary**'));

@@ -8,7 +8,6 @@ import { ExplainOptions } from './explain-command';
 import CompletionService from '../services/completion-service';
 import LookupContextService from '../services/lookup-context-service';
 import VectorTermsService from '../services/vector-terms-service';
-import { ChatHistory } from '../navie';
 import { UserContext } from '../user-context';
 import { getGitDiff, getPinnedItemsExceptGitDiff, GitDiffError } from '../lib/git-diff';
 import { ContextV2 } from '../context';
@@ -371,7 +370,7 @@ export default class Review2Command implements Command {
     private readonly invokeTestsService: InvokeTestsService
   ) {}
 
-  async *execute(request: CommandRequest, chatHistory?: ChatHistory): AsyncIterable<string> {
+  async *execute(request: CommandRequest): AsyncIterable<string> {
     const diffTermsThreshold =
       request.userOptions.numberValue('diff-terms-threshold') ?? DEFAULT_DIFF_TERMS_THRESHOLD;
     const analyzeFeatures = request.userOptions.booleanValue('features', true);

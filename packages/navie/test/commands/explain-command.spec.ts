@@ -17,7 +17,6 @@ import {
   APPMAP_STATS,
   TOKEN_STREAM,
   doesNotPredictSummary,
-  predictsSummary,
   providesProjectInfo,
 } from '../fixture';
 import { CommandRequest } from '../../src/command';
@@ -208,8 +207,8 @@ describe('ExplainCommand', () => {
       assistantMessage1 = 'User management works by...';
       userMessage2 = 'What about user roles?';
       memoryService = {
-        predictSummary: predictsSummary(),
-      } as unknown as MemoryService;
+        predictSummary: jest.fn().mockResolvedValue([]),
+      };
       agent = mockAgent();
       mockAgentSelectionService(agent);
     });
