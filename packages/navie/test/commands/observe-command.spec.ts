@@ -102,9 +102,9 @@ describe('ObserveCommand', () => {
     );
 
     expect(result).toEqual(exampleGeneration);
-    expect(vectorTermsService.suggestTerms).toBeCalledTimes(1);
-    expect(completionService.json).toBeCalledTimes(1);
-    expect(lookupContextService.lookupHelp).toBeCalledTimes(1);
+    expect(vectorTermsService.suggestTerms).toHaveBeenCalledTimes(1);
+    expect(completionService.json).toHaveBeenCalledTimes(1);
+    expect(lookupContextService.lookupHelp).toHaveBeenCalledTimes(1);
   });
 
   it('exits early if no test is identified', async () => {
@@ -118,8 +118,8 @@ describe('ObserveCommand', () => {
       })
     );
     expect(result).toEqual('Sorry, I could not find any relevant tests to record.');
-    expect(lookupContextService.lookupHelp).not.toBeCalled();
-    expect(completionService.complete).not.toBeCalled();
+    expect(lookupContextService.lookupHelp).not.toHaveBeenCalled();
+    expect(completionService.complete).not.toHaveBeenCalled();
   });
 
   it('exits early if the language is not supported', async () => {
@@ -140,8 +140,8 @@ describe('ObserveCommand', () => {
     expect(result).toEqual(
       "I found a relevant test at `tests/assert_true.c`, but I'm unable to help you record it at this time. This language does not appear to be supported."
     );
-    expect(lookupContextService.lookupHelp).not.toBeCalled();
-    expect(completionService.complete).not.toBeCalled();
+    expect(lookupContextService.lookupHelp).not.toHaveBeenCalled();
+    expect(completionService.complete).not.toHaveBeenCalled();
   });
 
   it('yields the expected interaction history', async () => {

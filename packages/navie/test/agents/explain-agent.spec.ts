@@ -1,7 +1,6 @@
 import ExplainAgent from '../../src/agents/explain-agent';
 import InteractionHistory, {
   ContextItemRequestor,
-  isPromptEvent,
 } from '../../src/interaction-history';
 import ApplyContextService from '../../src/services/apply-context-service';
 import VectorTermsService from '../../src/services/vector-terms-service';
@@ -12,8 +11,8 @@ import { CHARACTERS_PER_TOKEN } from '../../src/message';
 import { UserOptions } from '../../src/lib/parse-options';
 import ContextService from '../../src/services/context-service';
 import MermaidFixerService from '../../src/services/mermaid-fixer-service';
-import mermaid from 'mermaid';
 import { ContextV2 } from '../../src/context';
+import type { AppMapConfig, AppMapStats } from '../../src/project-info';
 
 describe('@explain agent', () => {
   let interactionHistory: InteractionHistory;
@@ -24,7 +23,7 @@ describe('@explain agent', () => {
   let tokensAvailable: number;
   let mermaidFixerService: MermaidFixerService;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     tokensAvailable = 1000;
     interactionHistory = new InteractionHistory();
     lookupContextService = {
@@ -63,8 +62,8 @@ describe('@explain agent', () => {
       [
         {
           directory: 'twitter',
-          appmapConfig: { language: 'ruby' } as unknown as any,
-          appmapStats: { numAppMaps: 1 } as unknown as any,
+          appmapConfig: { language: 'ruby' } as unknown as AppMapConfig,
+          appmapStats: { numAppMaps: 1 } as unknown as AppMapStats,
         },
       ]
     );

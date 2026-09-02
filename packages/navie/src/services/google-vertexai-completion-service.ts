@@ -8,6 +8,7 @@ import { zodResponseFormat } from 'openai/helpers/zod';
 import pRetry from 'p-retry';
 import { z } from 'zod';
 
+import extractLangchainText from '../lib/extract-langchain-text';
 import Message from '../message';
 import CompletionService, {
   CompleteOptions,
@@ -83,7 +84,8 @@ export default class GoogleVertexAICompletionService extends CompletionService {
         content: JSON.stringify(response),
       });
 
-      const sanitizedContent = response.content.toString().replace(/^`{3,}[^\s]*?$/gm, '');
+      const responseContent = extractLangchainText(response.content);
+      const sanitizedContent = responseContent.replace(/^`{3,}[^\s]*?$/gm, '');
       debug(`Sanitized content length: ${sanitizedContent.length}`);
       try {
         const parsed = JSON.parse(sanitizedContent) as unknown;
@@ -92,7 +94,7 @@ export default class GoogleVertexAICompletionService extends CompletionService {
         debug(`Schema validation passed`);
         return parsed;
       } catch (e) {
-        debug(`Error parsing or validating JSON: ${e}`);
+        debug(`Error parsing or validating JSON: ${String(e)}`);
         assert(isNativeError(e));
         (e as Error & { response: unknown })['response'] = response;
         throw e;
@@ -104,9 +106,10 @@ export default class GoogleVertexAICompletionService extends CompletionService {
       minTimeout: CompletionRetryDelay,
       randomize: true,
       onFailedAttempt: (err) => {
-        warn(`Failed to complete after ${err.attemptNumber} attempt(s): ${String(err)}`);
-        debug(`Retry attempt ${err.attemptNumber} failed: ${String(err)}`);
-        if ('response' in err) warn(`Response: ${JSON.stringify(err.response)}`);
+        const failedAttemptErr = err as Error & { attemptNumber: number; response?: unknown };
+        warn(`Failed to complete after ${failedAttemptErr.attemptNumber} attempt(s): ${failedAttemptErr.message}`);
+        debug(`Retry attempt ${failedAttemptErr.attemptNumber} failed: ${failedAttemptErr.message}`);
+        if ('response' in failedAttemptErr) warn(`Response: ${JSON.stringify(failedAttemptErr.response)}`);
         temperature += 0.1;
         debug(`Increased temperature to ${temperature}`);
       },
@@ -141,8 +144,9 @@ export default class GoogleVertexAICompletionService extends CompletionService {
           if (chunkCount % 10 === 0) {
             debug(`Received ${chunkCount} chunks so far`);
           }
-          yield content.toString();
-          tokens.push(content.toString());
+          const contentStr = extractLangchainText(content);
+          yield contentStr;
+          tokens.push(contentStr);
           if (usage_metadata) {
             usage.promptTokens += usage_metadata.input_tokens;
             usage.completionTokens += usage_metadata.output_tokens;

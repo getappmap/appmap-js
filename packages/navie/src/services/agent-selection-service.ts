@@ -8,11 +8,9 @@ import ExplainAgent from '../agents/explain-agent';
 import VectorTermsService from './vector-terms-service';
 import LookupContextService from './lookup-context-service';
 import ApplyContextService from './apply-context-service';
-import { ContextV2 } from '../context';
 import TestAgent from '../agents/test-agent';
 import { PlanAgent } from '../agents/plan-agent';
 import ContextService from './context-service';
-import { UserOptions } from '../lib/parse-options';
 import MermaidFixerService from './mermaid-fixer-service';
 import DiagramAgent from '../agents/diagram-agent';
 import FileChangeExtractorService from './file-change-extractor-service';
@@ -57,11 +55,7 @@ export default class AgentSelectionService {
   }
   contextService: ContextService;
 
-  selectAgent(
-    question: string,
-    _classification: ContextV2.ContextLabel[],
-    _userOptions: UserOptions
-  ): AgentModeResult {
+  selectAgent(question: string): AgentModeResult {
     let modifiedQuestion = question;
 
     const helpAgent = () =>

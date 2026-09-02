@@ -15,7 +15,7 @@ describe('UpdateCommand', () => {
   beforeEach(() => {
     history = new InteractionHistory();
     userOptions = new UserOptions(new Map());
-    computeUpdateService = new ComputeUpdateService(history, {} as any);
+    computeUpdateService = new ComputeUpdateService(history, {} as never);
     command = new UpdateCommand(history, computeUpdateService);
   });
 
