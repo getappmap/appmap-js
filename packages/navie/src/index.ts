@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export { default as applyContext } from './lib/apply-context';
 export { default as extractFileChanges } from './lib/extract-file-changes';
 export { default as Message } from './message';

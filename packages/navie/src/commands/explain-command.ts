@@ -89,11 +89,7 @@ export default class ExplainCommand implements Command {
       contextLabels = [];
     }
 
-    const agentSelectionResult = this.agentSelectionService.selectAgent(
-      baseQuestion,
-      contextLabels,
-      request.userOptions
-    );
+    const agentSelectionResult = this.agentSelectionService.selectAgent(baseQuestion);
     const { agentMode, question, agent: mode } = agentSelectionResult;
 
     if (agentSelectionResult.selectionMessage) {

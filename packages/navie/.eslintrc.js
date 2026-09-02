@@ -33,6 +33,12 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['test/**/*.ts', 'test/**/*.js'],
+      rules: {
+        '@typescript-eslint/unbound-method': 'off',
+      },
+    },
+    {
       files: ['*.js'],
       extends: ['eslint:recommended', 'prettier'],
       parserOptions: {

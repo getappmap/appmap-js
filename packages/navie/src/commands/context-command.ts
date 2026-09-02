@@ -7,6 +7,7 @@ import { ChatHistory } from '../navie';
 import { ExplainOptions } from './explain-command';
 import transformSearchTerms from '../lib/transform-search-terms';
 import { ContextV2 } from '../context';
+import { UserContext } from '../user-context';
 
 export default class ContextCommand implements Command {
   constructor(
@@ -23,12 +24,16 @@ export default class ContextCommand implements Command {
     const tokenLimit = request.userOptions.numberValue('tokenlimit') || this.options.tokenLimit;
     const transformTerms = request.userOptions.isEnabled('terms', true);
 
+    const codeSelectionStr =
+      codeSelection &&
+      (typeof codeSelection !== 'string' ? UserContext.renderItems(codeSelection) : codeSelection);
+
     const aggregateQuestion = [
       ...(chatHistory || [])
         .filter((message) => message.role === 'user')
         .map((message) => message.content),
       question,
-      codeSelection,
+      codeSelectionStr,
     ]
       .filter(Boolean)
       .join('\n\n');

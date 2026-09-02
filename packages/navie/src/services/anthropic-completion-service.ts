@@ -14,6 +14,7 @@ import CompletionService, {
   mergeSystemMessages,
   Usage,
 } from './completion-service';
+import extractLangchainText from '../lib/extract-langchain-text';
 import Trajectory from '../lib/trajectory';
 
 /*
@@ -179,8 +180,9 @@ export default class AnthropicCompletionService extends CompletionService {
 
         // eslint-disable-next-line @typescript-eslint/naming-convention, no-await-in-loop
         for await (const { content, usage_metadata } of response) {
-          yield content.toString();
-          tokens.push(content.toString());
+          const contentStr = extractLangchainText(content);
+          yield contentStr;
+          tokens.push(contentStr);
           if (usage_metadata) {
             usage.promptTokens += usage_metadata.input_tokens;
             usage.completionTokens += usage_metadata.output_tokens;
