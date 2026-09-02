@@ -1,5 +1,4 @@
 import { ContextV2 } from '../src/context';
-import Message from '../src/message';
 import { ProjectInfoProvider } from '../src/project-info';
 import VectorTermsService from '../src/services/vector-terms-service';
 
@@ -43,6 +42,7 @@ export const HELP_CONTEXT = [
 
 export const TOKEN_STREAM: AsyncIterable<string> = {
   [Symbol.asyncIterator]: async function* () {
+    await Promise.resolve();
     yield 'The user management system is a system ';
     yield 'that allows users to create and manage their own accounts.';
   },
@@ -91,10 +91,4 @@ export function doesNotPredictSummary() {
 
 export function doesNotRequestContext() {
   return jest.fn().mockRejectedValue('requestContext should not be called for follow-up questions');
-}
-
-export function predictsSummary(): (messages: Message[]) => void {
-  return jest.fn().mockImplementation((_messages: Message[]) => {
-    return Promise.resolve([]);
-  });
 }

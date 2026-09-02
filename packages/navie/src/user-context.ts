@@ -8,16 +8,18 @@ export namespace UserContext {
     content: string;
   };
 
-  export type LocationItem<T = any> = {
-    type: T;
+  export type CodeSnippetItem = {
+    type: 'code-snippet';
     location?: string;
-  };
-
-  export type CodeSnippetItem = LocationItem<'code-snippet'> & {
     content: string;
   };
 
-  export type FileItem = LocationItem<'file'>;
+  export type FileItem = {
+    type: 'file';
+    location?: string;
+  };
+
+  export type LocationItem = CodeSnippetItem | FileItem;
 
   // A specific item provided by the user
   export type ContextItem = CodeSelectionItem | CodeSnippetItem | FileItem;
