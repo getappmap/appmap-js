@@ -1,3 +1,10 @@
+# [@appland/components-v4.49.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.49.0...@appland/components-v4.49.1) (2026-09-04)
+
+
+### Bug Fixes
+
+* **components:** show server-supplied error messages on the sign-in form ([a9a7363](https://github.com/getappmap/appmap-js/commit/a9a73630dddb8258ec65d3250e0e8db623b56e31))
+
 # [@appland/components-v4.49.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.48.0...@appland/components-v4.49.0) (2026-06-14)
 
 
