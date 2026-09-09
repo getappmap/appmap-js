@@ -13,7 +13,6 @@ import {
   FormatType,
 } from '@appland/sequence-diagram';
 import { Telemetry } from '@appland/telemetry';
-import { serveAndOpenSequenceDiagram } from '../lib/serveAndOpen';
 import assert from 'assert';
 import BrowserRenderer from './sequenceDiagram/browserRenderer';
 import filterAppMap from '../lib/filterAppMap';
@@ -141,8 +140,12 @@ export const handler = async (argv: any) => {
       // PNG rendering is performed by loading the sequence
       // diagram in a browser and taking a screenshot.
       const diagramPath = await printDiagram(FormatType.JSON);
+      // Loaded here rather than at the top: serving the diagram brings in the
+      // interactive prompt library, which most invocations never need.
+      // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
+      const serveAndOpen = require('../lib/serveAndOpen') as typeof import('../lib/serveAndOpen');
       outputPath = await new Promise((resolve) =>
-        serveAndOpenSequenceDiagram(diagramPath, false, async (url) => {
+        serveAndOpen.serveAndOpenSequenceDiagram(diagramPath, false, async (url) => {
           if (verbose()) console.warn(`Rendering PNG`);
           assert(browserRender, 'Browser not initialized');
 
