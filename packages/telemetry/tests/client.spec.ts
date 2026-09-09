@@ -144,6 +144,29 @@ describe('TelemetryClient', () => {
       }
     });
 
+    it('runs the flush callback when no event was sent', () => {
+      const callback = jest.fn();
+      client.flush(callback);
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(flush).not.toHaveBeenCalled();
+    });
+
+    it('flushes the backend once an event was sent', () => {
+      const callback = jest.fn();
+      client.sendEvent({ name: 'test' });
+      client.flush(callback);
+      expect(flush).toHaveBeenCalledWith(callback);
+    });
+
+    it('runs the flush callback when telemetry is disabled', () => {
+      const callback = jest.fn();
+      client.enabled = false;
+      client.sendEvent({ name: 'test' });
+      client.flush(callback);
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(flush).not.toHaveBeenCalled();
+    });
+
     it('cannot be configured twice', () => {
       // It's already been configured once in the constructor
       expect(() => {
