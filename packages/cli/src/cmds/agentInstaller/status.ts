@@ -1,24 +1,14 @@
 import Yargs from 'yargs';
-import { verbose } from '../../utils';
 import chalk from 'chalk';
-import UI from '../userInteraction';
-import AgentInstaller from './agentInstaller';
-import { INSTALLERS } from './installers';
-import AgentStatusProcedure from './agentStatusProcedure';
-import { getProjects } from './projectConfiguration';
-import InstallerUI from './installerUI';
-
-interface InstallCommandOptions {
-  verbose?: any;
-  projectType?: string;
-  directory: string;
-}
+import lazyHandler from '../../lib/lazyHandler';
 
 export default {
   command: 'status [directory]',
   aliases: ['s'],
   describe: 'Check the status of the current project for the AppMap language agent',
-  builder(args: Yargs.Argv) {
+  async builder(args: Yargs.Argv) {
+    const { INSTALLERS } = await import('./installers');
+
     // FIXME: This method takes advantage of the fact that each implementation returns a static string
     // as the installer name. In the future, this may not be the case. After all, `name` is a non-static
     // getter.
@@ -42,26 +32,5 @@ export default {
     return args.strict();
   },
 
-  async handler(args: InstallCommandOptions) {
-    const { projectType, directory, verbose: isVerbose } = args;
-    const installers = INSTALLERS.map((constructor) => new constructor(directory));
-
-    verbose(isVerbose);
-
-    const ui = new InstallerUI(false, { overwriteAppMapConfig: false });
-    try {
-      const [project] = await getProjects(ui, installers, directory, false, projectType);
-
-      const statusProcedure = new AgentStatusProcedure(
-        project.selectedInstaller!,
-        directory
-      );
-
-      await statusProcedure.run(ui);
-    } catch (e) {
-      const err = e as Error;
-      UI.error(err.message);
-      Yargs.exit(1, err);
-    }
-  },
+  handler: lazyHandler(() => import('./statusHandler')),
 };
