@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.201.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.3...@appland/appmap-v3.201.4) (2026-09-11)
+
+
+### Performance Improvements
+
+* **cli:** Load subcommands and their heavy dependencies on dispatch ([c53c0fe](https://github.com/getappmap/appmap-js/commit/c53c0fe2c14e713c2c0a019c4a34796f9f37c4e8))
+
 # [@appland/appmap-v3.201.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.2...@appland/appmap-v3.201.3) (2026-07-27)
 
 
