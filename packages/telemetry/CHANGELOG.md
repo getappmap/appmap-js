@@ -1,3 +1,10 @@
+# [@appland/telemetry-v1.2.2](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.2.1...@appland/telemetry-v1.2.2) (2026-09-11)
+
+
+### Performance Improvements
+
+* **telemetry:** Create the config store, session and backend on first use ([15dc378](https://github.com/getappmap/appmap-js/commit/15dc378df85e5361e54707107c84fdf918d0cfb1))
+
 # [@appland/telemetry-v1.2.1](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.2.0...@appland/telemetry-v1.2.1) (2026-07-20)
 
 
