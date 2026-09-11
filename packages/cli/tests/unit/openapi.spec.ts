@@ -1,5 +1,5 @@
 import { verbose } from '../../src/utils';
-import { default as openapi } from '../../src/cmds/openapi/openapi';
+import { OpenAPICommand } from '../../src/cmds/openapi/openapiHandler';
 import assert from 'assert';
 import path from 'path';
 import { fileSizeFilter } from '../../src/lib/fileSizeFilter';
@@ -12,7 +12,7 @@ describe('OpenAPI', () => {
   beforeAll(async () => verbose(process.env.DEBUG === 'true'));
 
   it('handles valid and malformed HTTP server requests', async () => {
-    const cmd = new openapi.OpenAPICommand(missingPathInfoDir);
+    const cmd = new OpenAPICommand(missingPathInfoDir);
     const [result, numAppMaps] = await cmd.execute();
     assert.deepStrictEqual(result, {
       paths: {
@@ -34,7 +34,7 @@ describe('OpenAPI', () => {
   });
 
   it('handles warnings encountered in processing', async () => {
-    const cmd = new openapi.OpenAPICommand(invalidStatusCode);
+    const cmd = new OpenAPICommand(invalidStatusCode);
     const [result, numAppMaps] = await cmd.execute();
     assert.deepStrictEqual(result, {
       paths: {
@@ -101,26 +101,26 @@ describe('OpenAPI', () => {
   });
 
   it('accepts a relative --appmap-dir path', async () => {
-    const cmd = new openapi.OpenAPICommand(rubyDir);
+    const cmd = new OpenAPICommand(rubyDir);
     const [result] = await cmd.execute();
     expect(Object.keys(result.paths)).toHaveLength(2);
   });
 
   it('accepts an absolute --appmap-dir path', async () => {
-    const cmd = new openapi.OpenAPICommand(path.resolve(rubyDir));
+    const cmd = new OpenAPICommand(path.resolve(rubyDir));
     const [result] = await cmd.execute();
     expect(Object.keys(result.paths)).toHaveLength(2);
   });
 
   it('produces 0-length output when all AppMaps are filtered out', async () => {
-    const cmd = new openapi.OpenAPICommand(path.resolve(rubyDir));
+    const cmd = new OpenAPICommand(path.resolve(rubyDir));
     cmd.filter = async (_file: string) => ({ enable: false });
     const [result] = await cmd.execute();
     expect(Object.keys(result.paths)).toHaveLength(0);
   });
 
   it('respects max file size', async () => {
-    const cmd = new openapi.OpenAPICommand(path.resolve(rubyDir));
+    const cmd = new OpenAPICommand(path.resolve(rubyDir));
     // -rw-r--r--   1 xxx  staff  24248 Jan 10 15:50 revoke_api_key.appmap.json
     // -rw-r--r--   1 xxx  staff  47718 Jan 10 15:50 user_page_scenario.appmap.json
     cmd.filter = fileSizeFilter(30000);

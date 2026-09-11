@@ -1,9 +1,10 @@
 import { Telemetry } from '@appland/telemetry';
-import type { CommandModule } from 'yargs';
+import type yargs from 'yargs';
 
-const TelemetryTestCommand: CommandModule = {
+const TelemetryTestCommand = {
   command: 'test-telemetry',
-  describe: false, // hidden command
+  describe: false as const, // hidden command
+  builder: (args: yargs.Argv) => args,
   // eslint-disable-next-line @typescript-eslint/require-await
   handler: async () => {
     Telemetry.enabled = true;

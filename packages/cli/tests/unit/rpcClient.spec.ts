@@ -1,5 +1,5 @@
 import { ConfigurationRpc } from '@appland/rpc';
-import { handler as rpcClientHandler } from '../../src/cmds/rpcClient';
+import rpcClientHandler from '../../src/cmds/rpcClientHandler';
 import { join } from 'path';
 
 const workingDirectory = process.cwd();

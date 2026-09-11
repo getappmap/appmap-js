@@ -5,11 +5,11 @@ import path from 'path';
 import sinon from 'sinon';
 import tmp from 'tmp';
 import yargs from 'yargs';
-import { fromFile } from '../../src/cmds/prune/prune';
+import PruneCommand from '../../src/cmds/prune/prune';
+import pruneHandler, { fromFile } from '../../src/cmds/prune/pruneHandler';
 import * as PruneAppMap from '../../src/cmds/prune/pruneAppMap';
 import { readFile } from 'fs/promises';
 const fixtureDir = path.join(__dirname, 'fixtures', 'ruby');
-const cmd = require('../../src/cmds/prune/prune').default;
 tmp.setGracefulCleanup();
 
 const statsMapFile = path.join(
@@ -33,7 +33,7 @@ describe('prune subcommand', () => {
   });
 
   it('works', async () => {
-    const parser = yargs.command(cmd);
+    const parser = yargs.command(PruneCommand);
 
     sinon
       .stub(PruneAppMap, 'pruneAppMap')
@@ -77,12 +77,13 @@ describe('prune subcommand', () => {
       filter: serializedFilterState,
       outputDir: projectDir,
     };
-    const pruneResult = await cmd.handler(argv);
+    const pruneResult = await pruneHandler(argv);
 
     const outPath = path.join(projectDir, 'Microposts_interface_micropost_interface.appmap.json');
     const appmap = JSON.parse(await readFile(outPath, 'utf8'));
     expect(appmap.events.length).toEqual(2184);
-    expect(serializeFilter(pruneResult.filter)).toEqual(filterState);
+    expect(pruneResult.filter).toBeDefined();
+    expect(serializeFilter(pruneResult.filter!)).toEqual(filterState);
   });
 
   it('correctly combines pruneFilter data', async () => {
@@ -143,7 +144,7 @@ describe('prune subcommand', () => {
       outputDir: projectDir,
       auto: true,
     };
-    await cmd.handler(argv);
+    await pruneHandler(argv);
 
     const outPath = path.join(projectDir, 'Microposts_interface_micropost_interface.appmap.json');
     const prunedMapData = await fromFile(outPath);
@@ -165,7 +166,7 @@ describe('prune subcommand', () => {
       outputDir,
     };
 
-    await cmd.handler(argv);
+    await pruneHandler(argv);
 
     expect(fs.existsSync(path.join(outputDir, mapName))).toBe(false);
   });

@@ -1,0 +1,125 @@
+import readline from 'readline';
+import chalk from 'chalk';
+import { ContextV2, Help, ProjectInfo, TestInvocation } from '@appland/navie';
+
+import FingerprintDirectoryCommand from '../../fingerprint/fingerprintDirectoryCommand';
+import FingerprintWatchCommand from '../../fingerprint/fingerprintWatchCommand';
+import checkLicense from '../../lib/checkLicense';
+import { configureRpcDirectories, handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
+import { locateAppMapDir } from '../../lib/locateAppMapDir';
+import { verbose } from '../../utils';
+import { log, warn } from 'console';
+import { openQueryDb } from '../query/db';
+import { QueryDbIndexer } from '../query/db/import/QueryDbIndexer';
+import { numProcessed } from '../../rpc/index/numProcessed';
+import { search } from '../../rpc/search/search';
+import appmapFilter from '../../rpc/appmap/filter';
+import { RpcHandler } from '../../rpc/rpc';
+import metadata from '../../rpc/appmap/metadata';
+import sequenceDiagram from '../../rpc/appmap/sequenceDiagram';
+import { explainHandler, explainStatusHandler } from '../../rpc/explain/explain';
+import RPCServer from './rpcServer';
+import appmapData from '../../rpc/appmap/data';
+import { appmapStatsV1, appmapStatsV2 } from '../../rpc/appmap/stats';
+import LocalNavie from '../../rpc/explain/navie/navie-local';
+import { InteractionEvent } from '@appland/navie/dist/interaction-history';
+import { update } from '../../rpc/file/update';
+import NavieService from '../../rpc/navie/services/navieService';
+import { ThreadIndexService } from '../../rpc/navie/services/threadIndexService';
+
+export default async function handler(argv) {
+  if (argv.navieProvider) warn(`--navie-provider option is no longer supported`);
+
+  verbose(argv.verbose);
+  handleWorkingDirectory(argv.directory);
+  const appmapDir = await locateAppMapDir(argv.appmapDir);
+
+  const { watch, port, logNavie } = argv;
+
+  const runServer = watch || port !== undefined;
+  if (port && !watch) warn(`Note: --port option implies --watch`);
+
+  const queryDb = openQueryDb(appmapDir, argv.queryDb as string | undefined);
+  const indexer = new QueryDbIndexer(queryDb.db);
+  log(
+    `Query DB at ${queryDb.path} (schema v${queryDb.version}${
+      queryDb.rebuilt ? ', rebuilt' : ''
+    })`
+  );
+
+  if (runServer) {
+    void checkLicense(false);
+
+    log(`Running indexer in watch mode`);
+    const cmd = new FingerprintWatchCommand(appmapDir, indexer);
+    await cmd.execute();
+
+    if (port !== undefined) {
+      const buildLocalNavie = (
+        contextProvider: ContextV2.ContextProvider,
+        projectInfoProvider: ProjectInfo.ProjectInfoProvider,
+        helpProvider: Help.HelpProvider,
+        testInvocationProvider: TestInvocation.TestInvocationProvider
+      ) => {
+        const navie = new LocalNavie(
+          contextProvider,
+          projectInfoProvider,
+          helpProvider,
+          testInvocationProvider
+        );
+
+        let START: number | undefined;
+
+        const logEvent = (event: InteractionEvent) => {
+          if (!logNavie) return;
+
+          if (!START) START = Date.now();
+
+          const elapsed = Date.now() - START;
+          process.stderr.write(chalk.gray(`${elapsed}ms `));
+          process.stderr.write(chalk.gray(event.message));
+          process.stderr.write(chalk.gray('\n'));
+        };
+
+        navie.on('event', logEvent);
+        return navie;
+      };
+
+      const navieProvider = buildLocalNavie;
+      await ThreadIndexService.useDefault();
+      NavieService.bindNavieProvider(navieProvider);
+
+      await configureRpcDirectories([process.cwd()]);
+
+      const rpcMethods: RpcHandler<any, any>[] = [
+        numProcessed(cmd),
+        search(),
+        appmapStatsV1(),
+        appmapStatsV2(), // Forwards compatibility for @appland/components v4.11.0 and onwards
+        appmapFilter(),
+        appmapData(),
+        metadata(),
+        sequenceDiagram(),
+        explainHandler(navieProvider, argv.codeEditor),
+        explainStatusHandler(),
+        update(navieProvider),
+      ];
+      const rpcServer = new RPCServer(port, rpcMethods);
+      rpcServer.start();
+    } else {
+      if (!argv.verbose && process.stdout.isTTY) {
+        process.stdout.write('\x1B[?25l');
+        const consoleLabel = 'AppMaps processed: 0';
+        process.stdout.write(consoleLabel);
+        setInterval(() => {
+          readline.cursorTo(process.stdout, consoleLabel.length - 1);
+          process.stdout.write(`${cmd.numProcessed}`);
+        }, 1000);
+      }
+    }
+  } else {
+    const cmd = new FingerprintDirectoryCommand(appmapDir, indexer);
+    await cmd.execute();
+    indexer.close();
+  }
+}

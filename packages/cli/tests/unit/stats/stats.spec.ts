@@ -1,5 +1,5 @@
 import path from 'path';
-import StatsCommand from '../../../src/cmds/stats/stats';
+import statsHandler from '../../../src/cmds/stats/statsHandler';
 import { withStubbedTelemetry } from '../../helper';
 import { EventInfo } from '../../../src/cmds/stats/accumulateEvents';
 
@@ -24,7 +24,7 @@ describe('stats subcommand', () => {
   it('analyzes a directory', async () => {
     const argv = { ...commonArgs };
 
-    const ret = await StatsCommand.handler(argv);
+    const ret = await statsHandler(argv);
     if (!ret) throw Error();
     const [biggestAppMapSizes, slowestExecutionTimes] = ret;
     expect(biggestAppMapSizes[0].size).toEqual(1747637);
@@ -40,7 +40,7 @@ describe('stats subcommand', () => {
       limit: 10,
     };
 
-    const ret = await StatsCommand.handler(argv);
+    const ret = await statsHandler(argv);
     if (!ret) throw Error();
     expect(ret.length).toEqual(argv.limit);
     const { function: fn, count, size } = ret[0] as EventInfo;
@@ -56,7 +56,7 @@ describe('stats subcommand', () => {
       appmapFile: mapPath,
     };
 
-    const ret = await StatsCommand.handler(argv);
+    const ret = await statsHandler(argv);
     if (!ret) throw Error();
     expect(ret.length).toEqual(75);
     const { function: fn, count, size } = ret[0] as EventInfo;
@@ -71,7 +71,7 @@ describe('stats subcommand', () => {
       appmapFile: relativeMapPath,
     };
 
-    const ret = await StatsCommand.handler(argv);
+    const ret = await statsHandler(argv);
     if (!ret) throw Error();
     expect(ret.length).toEqual(75);
     const { function: fn, count, size } = ret[0] as EventInfo;
@@ -87,7 +87,7 @@ describe('stats subcommand', () => {
       appmapFile: mapPath,
     };
 
-    const ret = await StatsCommand.handler(argv);
+    const ret = await statsHandler(argv);
     expect(ret).toBeUndefined();
   });
 });

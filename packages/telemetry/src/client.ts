@@ -1,8 +1,7 @@
-import Conf from 'conf';
+import type Conf from 'conf';
 import * as os from 'os';
 import { getMachineId } from './identity';
 import { Session } from './session';
-import { sync as readPackageUpSync } from 'read-pkg-up';
 
 import type {
   BackendConfiguration,
@@ -49,7 +48,11 @@ function resolvePackageJson(): { name: string; version: string } | undefined {
     if (nodeModuleIndex !== -1) {
       myPath = myPath.substring(0, nodeModuleIndex);
     }
-    const result = readPackageUpSync({ cwd: myPath })?.packageJson;
+    // Loaded here rather than at the top: it is needed only when the caller
+    // does not name the product, and its load time shows in a short command.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const readPackageUp = require('read-pkg-up') as typeof import('read-pkg-up');
+    const result = readPackageUp.sync({ cwd: myPath })?.packageJson;
     if (result) {
       return {
         name: result.name,
@@ -67,7 +70,7 @@ function defaultBackend(): BackendConfiguration {
     case 'application-insights':
     case 'splunk':
       return {
-        type: process.env.APPMAP_TELEMETRY_BACKEND
+        type: process.env.APPMAP_TELEMETRY_BACKEND,
       };
   }
   // Default to application insights if no backend is specified
@@ -151,15 +154,15 @@ function stringToBool(value: string | undefined, defaultValue = false): boolean 
 
 export class TelemetryClient implements ITelemetryClient {
   private telemetryConfig?: TelemetryConfiguration;
-  private backend?: TelemetryBackend;
-  private userConfig?: Conf;
+  private _backend?: TelemetryBackend;
+  private _userConfig?: Conf;
   public debug = stringToBool(process.env.APPMAP_TELEMETRY_DEBUG);
-  private session?: Session;
+  private _session?: Session;
 
   public enabled = !stringToBool(process.env.APPMAP_TELEMETRY_DISABLED);
   public readonly machineId = getMachineId();
   public get sessionId(): string {
-    if (!this.session) {
+    if (!this.telemetryConfig) {
       throw new Error('Session is not initialized');
     }
     return this.session.id;
@@ -175,39 +178,65 @@ export class TelemetryClient implements ITelemetryClient {
     }
 
     this.telemetryConfig = buildDefaultConfiguration(config);
-    this.userConfig = new Conf({
-      projectName: this.telemetryConfig.product.name,
-      projectVersion: '0.0.1', // note this is actually config version
-    });
-    this.session = new Session(this.userConfig);
-
-    // Construct additional backends here as needed.
-    switch (this.telemetryConfig.backend.type) {
-      case 'application-insights':
-        this.backend = new ApplicationInsightsBackend(
-          this.machineId,
-          this.session.id,
-          this.telemetryConfig.product.name,
-          this.telemetryConfig.backend
-        );
-        break;
-      case 'custom':
-        this.backend = this.telemetryConfig.backend;
-        break;
-      case 'splunk':
-        this.backend = new SplunkBackend(this.telemetryConfig.backend);
-        break;
-    }
 
     if (this.debug) {
       console.warn('Telemetry configuration:', this.telemetryConfig);
     }
   }
 
+  // The user config file, the session and the backend are created on first
+  // use rather than in configure(). Every CLI command configures telemetry at
+  // startup and most never send an event; creating these eagerly loaded the
+  // conf package and read the config file from disk on every invocation.
+  private get userConfig(): Conf {
+    if (!this._userConfig) {
+      if (!this.telemetryConfig) throw new Error('Telemetry client is not configured');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const ConfClass = (require('conf') as { default: typeof Conf }).default;
+      this._userConfig = new ConfClass({
+        projectName: this.telemetryConfig.product.name,
+        projectVersion: '0.0.1', // note this is actually config version
+      });
+    }
+    return this._userConfig;
+  }
+
+  private get session(): Session {
+    if (!this._session) this._session = new Session(this.userConfig);
+    return this._session;
+  }
+
+  private get backend(): TelemetryBackend | undefined {
+    if (!this._backend && this.telemetryConfig) {
+      // Construct additional backends here as needed.
+      switch (this.telemetryConfig.backend.type) {
+        case 'application-insights':
+          this._backend = new ApplicationInsightsBackend(
+            this.machineId,
+            this.session.id,
+            this.telemetryConfig.product.name,
+            this.telemetryConfig.backend
+          );
+          break;
+        case 'custom':
+          this._backend = this.telemetryConfig.backend;
+          break;
+        case 'splunk':
+          this._backend = new SplunkBackend(this.telemetryConfig.backend);
+          break;
+      }
+    }
+    return this._backend;
+  }
+
   sendEvent(data: TelemetryData, options: TelemetryOptions = { includeEnvironment: false }): void {
-    if (!this.backend) this.configure();
-    if (!this.backend || !this.telemetryConfig || !this.session)
-      throw new Error('Telemetry client is not configured');
+    // With telemetry disabled the event goes nowhere unless it is to be
+    // printed, so do not build it, which would create the session and read
+    // the user config file.
+    if (!this.enabled && !this.debug) return;
+    if (!this.telemetryConfig) this.configure();
+    const { backend } = this;
+    if (!backend || !this.telemetryConfig) throw new Error('Telemetry client is not configured');
 
     try {
       const { propPrefix } = this.telemetryConfig;
@@ -243,7 +272,7 @@ export class TelemetryClient implements ITelemetryClient {
       }
 
       if (this.enabled) {
-        this.backend.sendEvent(event);
+        backend.sendEvent(event);
         this.session.touch();
       }
     } catch (e) {
@@ -260,11 +289,12 @@ export class TelemetryClient implements ITelemetryClient {
   }
 
   flush(callback?: FlushCallback): void {
-    if (this.enabled) {
-      this.backend?.flush(callback);
-    } else {
-      if (callback) callback();
-    }
+    // A backend exists only once an event has been sent. When there is none,
+    // or telemetry is disabled, there is nothing to flush, but the callback
+    // must still run: callers use it to continue, for example to exit.
+    const backend = this.enabled ? this._backend : undefined;
+    if (backend) backend.flush(callback);
+    else if (callback) callback();
   }
 }
 
