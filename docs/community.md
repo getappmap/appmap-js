@@ -3,9 +3,16 @@ layout: docs
 toc: true
 title: Docs - Community
 description: "Join AppMap's vibrant community on Slack for discussions, issue reporting, and become a contributor."
-redirect_from: [/docs/troubleshooting, /community]
+redirect_from:
+  [/docs/troubleshooting, /community, /appmap/support, /appmap/support.html]
 ---
 # Community
+
+## Getting support
+We are here to get you unstuck. Contact us on your platform of choice and we
+will walk you through it:
+- [Chat with the development team on Slack](https://appmap.io/slack)
+- [Email our support team directly](mailto:support@appmap.io)
 
 ## Forum
 [AppMap Slack](https://appmap.io/slack) is the best place for discussing AppMap with team members and community users.  Ask questions about installation and setup of AppMap agents, get expert advice about the recording strategies for your applications, and share your AppMap Diagrams with people who code in your language.  
