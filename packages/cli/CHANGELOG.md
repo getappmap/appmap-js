@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.202.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.4...@appland/appmap-v3.202.0) (2026-09-16)
+
+
+### Features
+
+* **cli:** honor APPMAP_CUSTOMER_ID as entitlement in checkLicense ([8601365](https://github.com/getappmap/appmap-js/commit/8601365cf71745a5bd37f9a0d9dd91cbc75ef5b2))
+
 # [@appland/appmap-v3.201.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.3...@appland/appmap-v3.201.4) (2026-09-11)
 
 
