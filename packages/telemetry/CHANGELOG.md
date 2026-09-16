@@ -1,3 +1,10 @@
+# [@appland/telemetry-v1.3.0](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.2.2...@appland/telemetry-v1.3.0) (2026-09-16)
+
+
+### Features
+
+* **telemetry:** report APPMAP_CUSTOMER_ID as common.customerid ([5aab58d](https://github.com/getappmap/appmap-js/commit/5aab58d4b394a970b3b52f375cfce97fad469088))
+
 # [@appland/telemetry-v1.2.2](https://github.com/getappmap/appmap-js/compare/@appland/telemetry-v1.2.1...@appland/telemetry-v1.2.2) (2026-09-11)
 
 
