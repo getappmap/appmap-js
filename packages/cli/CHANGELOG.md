@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.203.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.202.0...@appland/appmap-v3.203.0) (2026-09-16)
+
+
+### Features
+
+* **query:** add sql_normalized to query tree SQL nodes ([92ec566](https://github.com/getappmap/appmap-js/commit/92ec5665eec2438bff059beae6db9c9ba9937587))
+
 # [@appland/appmap-v3.202.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.4...@appland/appmap-v3.202.0) (2026-09-16)
 
 
