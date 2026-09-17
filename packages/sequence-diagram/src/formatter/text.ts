@@ -20,6 +20,8 @@ function diffModeName(diffMode: DiffMode): string {
       return 'added';
     case DiffMode.Delete:
       return 'removed';
+    case DiffMode.Move:
+      return 'moved';
   }
 }
 
@@ -81,6 +83,20 @@ export function format(diagram: Diagram, maxDepth = 4): string {
           tokens.push(currentResult || 'undefined');
           tokens.push('instead of');
           tokens.push(formerResult || 'undefined');
+        }
+      } else if (action.diffMode === DiffMode.Move) {
+        // The same block, now under a different parent, or in a different place
+        // among its siblings when the parent is the same.
+        const newParent = action.parent ? normalizeName(nodeName(action.parent)) : undefined;
+        const oldParent = action.movedFrom ? normalizeName(action.movedFrom) : undefined;
+        tokens.push(oldParent === newParent ? 'reordered' : 'moved');
+        tokens.push(qualifyAction(normalizeName(nodeName(action))));
+        if (oldParent === newParent) {
+          tokens.push('within');
+          tokens.push(newParent ? ['', newParent, ''].join('`') : 'the top level');
+        } else {
+          tokens.push('from');
+          tokens.push(oldParent ? ['', oldParent, ''].join('`') : 'the top level');
         }
       } else {
         tokens.push(diffModeName(action.diffMode));

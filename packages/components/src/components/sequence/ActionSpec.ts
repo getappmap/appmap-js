@@ -82,6 +82,8 @@ export class ActionSpec {
       result.push('diff-delete');
     } else if (this.action.diffMode === DiffMode.Change) {
       result.push('diff-change');
+    } else if (this.action.diffMode === DiffMode.Move) {
+      result.push('diff-move');
     }
     return result;
   }

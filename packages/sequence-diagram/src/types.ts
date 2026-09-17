@@ -27,6 +27,9 @@ export enum DiffMode {
   Insert = 1,
   Delete = 2,
   Change = 3,
+  // The subtree is unchanged but sits under a different parent (or in a different
+  // place among its siblings) than in the base. `movedFrom` names the former parent.
+  Move = 4,
 }
 
 export type Action = Loop | FunctionCall | ServerRPC | ClientRPC | Query;
@@ -43,6 +46,9 @@ export type Node = {
   elapsed?: number;
   formerName?: string;
   formerResult?: string;
+  // DiffMode.Move only: the name of the node this subtree used to be under, or
+  // undefined when it used to be a root action.
+  movedFrom?: string;
   eventIds: number[];
   // AppMap labels applied to the callee code object (sorted, omitted when empty).
   // Carried so downstream analysis (e.g. behavioral diffing) can read labels straight

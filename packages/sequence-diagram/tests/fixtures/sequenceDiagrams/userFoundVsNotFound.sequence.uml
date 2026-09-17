@@ -9,9 +9,9 @@ participant posts as "posts"
   activate controllers
     controllers-[#CA9C3F]>models: <u>find</u> <color:gray> 0.094 ms</color>
     activate models
-      models-[#green]>database: <u><color:lightgray><back:#172238>query</back></color></u> <color:gray> 0.002 ms</color>
+      models->database: <u>query</u> <color:gray> 0.002 ms</color>
       activate database
-      models<[#green]--database: <color:lightgray><back:#172238>void</back></color>
+      models<--database: void
       deactivate database
     controllers<[#CA9C3F]--models: <color:lightgray><back:#29201A>--exception!--</back></color> <color:lightgray><back:#172238>User</back></color>
     deactivate models
@@ -21,9 +21,9 @@ participant posts as "posts"
       activate models
         models-[#green]>models: <u><color:lightgray><back:#172238>find_for_user</back></color></u> <color:gray> 0.034 ms</color>
         activate models
-          models->database: <u>query</u> <color:gray> 0.001 ms</color>
+          models-[#green]>database: <u><color:lightgray><back:#172238>query</back></color></u> <color:gray> 0.001 ms</color>
           activate database
-          models<--database: void
+          models<[#green]--database: <color:lightgray><back:#172238>void</back></color>
           deactivate database
         models<[#green]--models: <color:lightgray><back:#172238>array</back></color>
         deactivate models

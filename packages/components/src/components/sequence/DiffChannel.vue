@@ -44,6 +44,7 @@ export default {
       if (this.actionSpec.action.diffMode === DiffMode.Insert) return '+';
       if (this.actionSpec.action.diffMode === DiffMode.Delete) return '-';
       if (this.actionSpec.action.diffMode === DiffMode.Change) return '+/-';
+      if (this.actionSpec.action.diffMode === DiffMode.Move) return '↷';
 
       return '';
     },
