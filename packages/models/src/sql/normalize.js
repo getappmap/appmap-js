@@ -92,6 +92,13 @@ function detectUnmatchedPairs(obfuscated, adapter) {
  * @returns {string}
  */
 export default function normalize(sql, adapter) {
+  // The MongoDB agents record each operation as a statement whose argument
+  // values are already replaced with placeholders, for example
+  // db.users.updateOne({"_id": ?}, {"$set": {"name": ?}}). The generic
+  // obfuscation below would treat the quoted keys as string literals and a
+  // pair of $operators as a dollar-quoted string, so leave it as it is.
+  if (adapter === 'mongodb') return sql;
+
   /** @type {RegExp[]} */ let regexp;
   switch (adapter) {
     case 'mysql':
