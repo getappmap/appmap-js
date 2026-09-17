@@ -183,14 +183,12 @@ export default function diff(
   // matched in place, so this one is a plain delete or insert.
   const baseDigests = new Set(lActions.map((action) => action.subtreeDigest));
   const headDigests = new Set(rActions.map((action) => action.subtreeDigest));
-  const among = (siblings: Action[], digest: string): boolean =>
-    siblings.some((sibling) => sibling.subtreeDigest === digest);
-  const deleteCost = (l: Action, rs: Action[]): number =>
-    headDigests.has(l.subtreeDigest) && !among(rs, l.subtreeDigest)
+  const deleteCost = (l: Action, siblingDigests: Set<string>): number =>
+    headDigests.has(l.subtreeDigest) && !siblingDigests.has(l.subtreeDigest)
       ? Costs.get(MoveType.Move)!
       : Costs.get(MoveType.DeleteLeft)! * sizeOf(l);
-  const insertCost = (r: Action, ls: Action[]): number =>
-    baseDigests.has(r.subtreeDigest) && !among(ls, r.subtreeDigest)
+  const insertCost = (r: Action, siblingDigests: Set<string>): number =>
+    baseDigests.has(r.subtreeDigest) && !siblingDigests.has(r.subtreeDigest)
       ? Costs.get(MoveType.Move)!
       : Costs.get(MoveType.InsertRight)! * sizeOf(r);
 
@@ -199,6 +197,8 @@ export default function diff(
   const alignLists = (ls: Action[], rs: Action[]): Alignment => {
     type Step = { i: number; j: number; moveType: MoveType; cost: number };
     const key = (i: number, j: number): string => `${i},${j}`;
+    const lsDigests = new Set(ls.map((action) => action.subtreeDigest));
+    const rsDigests = new Set(rs.map((action) => action.subtreeDigest));
     const stepsFrom = (i: number, j: number): Step[] => {
       const steps: Step[] = [];
       const l = ls[i];
@@ -219,8 +219,10 @@ export default function diff(
           cost: Costs.get(MoveType.Change)! + alignPair(l, r).cost,
         });
       }
-      if (l) steps.push({ i: i + 1, j, moveType: MoveType.DeleteLeft, cost: deleteCost(l, rs) });
-      if (r) steps.push({ i, j: j + 1, moveType: MoveType.InsertRight, cost: insertCost(r, ls) });
+      if (l)
+        steps.push({ i: i + 1, j, moveType: MoveType.DeleteLeft, cost: deleteCost(l, rsDigests) });
+      if (r)
+        steps.push({ i, j: j + 1, moveType: MoveType.InsertRight, cost: insertCost(r, lsDigests) });
       return steps;
     };
 
