@@ -1,3 +1,10 @@
+# [@appland/search-v1.2.4](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.3...@appland/search-v1.2.4) (2026-09-18)
+
+
+### Bug Fixes
+
+* **search:** declare the Node versions this package actually supports ([e5102a2](https://github.com/getappmap/appmap-js/commit/e5102a23755b94acfced425ba33540e3e9457cf1))
+
 # [@appland/search-v1.2.3](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.2...@appland/search-v1.2.3) (2025-07-07)
 
 
