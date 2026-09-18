@@ -27,7 +27,20 @@ export enum DiffMode {
   Insert = 1,
   Delete = 2,
   Change = 3,
+  // The subtree is unchanged but sits under a different parent (or in a different
+  // place among its siblings) than in the base. `movedFrom` identifies the former
+  // parent.
+  Move = 4,
 }
+
+// Enough of a node to tell it apart from another one that happens to share its name:
+// the actor-qualified name for display, and the id of the actor it ran on for
+// comparison. `before` on two different classes is two different nodes, so a block
+// moving between them moved; it was not reordered within one of them.
+export type NodeIdentity = {
+  name: string;
+  actorId?: string;
+};
 
 export type Action = Loop | FunctionCall | ServerRPC | ClientRPC | Query;
 
@@ -43,6 +56,9 @@ export type Node = {
   elapsed?: number;
   formerName?: string;
   formerResult?: string;
+  // DiffMode.Move only: the node this subtree used to be under, or undefined when it
+  // used to be a root action.
+  movedFrom?: NodeIdentity;
   eventIds: number[];
   // AppMap labels applied to the callee code object (sorted, omitted when empty).
   // Carried so downstream analysis (e.g. behavioral diffing) can read labels straight
@@ -143,6 +159,25 @@ export const nodeName = (action: Action | undefined): string => {
       return 'loop';
   }
 };
+
+// `Users#show`, `Users.find`: the node name qualified by the actor it ran on. A query
+// or a request names itself, so only a function call needs the actor.
+export const qualifiedNodeName = (action: Action | undefined): string => {
+  if (!action || !isFunction(action)) return nodeName(action);
+
+  const callee = actionActors(action)[1];
+  return callee ? [callee.name, action.name].join(action.static ? '.' : '#') : action.name;
+};
+
+export const nodeIdentity = (action: Action): NodeIdentity => ({
+  name: qualifiedNodeName(action),
+  actorId: actionActors(action)[1]?.id,
+});
+
+// Both undefined means both are the top level, which is one place, so it counts as
+// the same node.
+export const sameNode = (a: NodeIdentity | undefined, b: NodeIdentity | undefined): boolean =>
+  a?.name === b?.name && a?.actorId === b?.actorId;
 
 export const nodeResult = (action: Action | undefined): string | undefined => {
   if (!action) return undefined;

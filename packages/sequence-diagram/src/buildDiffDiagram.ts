@@ -1,7 +1,7 @@
 import type { Diff, Move } from './diff';
 import { MoveType } from './diff';
 import type { Action, Actor, Diagram } from './types';
-import { actionActors, DiffMode, nodeName, nodeResult } from './types';
+import { actionActors, DiffMode, nodeIdentity, nodeName, nodeResult } from './types';
 
 function cloneAction(action: Action): Action {
   const parent = action.parent;
@@ -98,6 +98,21 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
           action.parent = parent;
         }
         diffActionsByAction.set(rAction, action);
+        return action;
+      }
+      case MoveType.Move: {
+        // The subtree is shown where the head has it. Its descendants follow as
+        // AdvanceBoth moves and attach beneath this action.
+        const action = cloneAction(rAction);
+        action.diffMode = DiffMode.Move;
+        if (lAction.parent) action.movedFrom = nodeIdentity(lAction.parent);
+        if (rAction.parent) {
+          const parent = diffActionsByAction.get(rAction.parent);
+          parent?.children.push(action);
+          action.parent = parent;
+        }
+        diffActionsByAction.set(rAction, action);
+        diffActionsByAction.set(lAction, action);
         return action;
       }
     }

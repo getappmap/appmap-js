@@ -29,7 +29,6 @@
   "rootActions": [
     {
       "nodeType": 3,
-      "callee": "package:lib/controllers",
       "name": "show",
       "static": false,
       "digest": "da72c8b0d413322aab734288b2c541eb5d982914136bde437ed1015091d8d9cd",
@@ -45,11 +44,14 @@
         },
         "raisesException": false
       },
+      "elapsed": 0.000617999816313386,
+      "diffMode": 3,
+      "formerName": "list",
+      "formerResult": "array",
+      "callee": "package:lib/controllers",
       "children": [
         {
           "nodeType": 3,
-          "caller": "package:lib/controllers",
-          "callee": "package:lib/models",
           "name": "find",
           "static": true,
           "digest": "281363967794e447bd1771b8485b284f1810c81322172d6cec41a2dac10bb045",
@@ -61,15 +63,19 @@
           },
           "returnValue": {
             "returnValueType": {
-              "name": "User"
+              "name": "object"
             },
             "raisesException": false
           },
+          "elapsed": 0.00008699996396899223,
+          "diffMode": 3,
+          "formerName": "list",
+          "formerResult": "array",
+          "caller": "package:lib/controllers",
+          "callee": "package:lib/models",
           "children": [
             {
               "nodeType": 3,
-              "caller": "package:lib/models",
-              "callee": "package:lib/database",
               "name": "query",
               "static": true,
               "digest": "f38424ccefa090e8f50bc23d085a4cc9fbda158b94efe53128a57f828c52b763",
@@ -79,37 +85,15 @@
                 "id": "lib/database/Database.query",
                 "raises_exception": false
               },
-              "returnValue": {
-                "returnValueType": {
-                  "name": "void"
-                },
-                "raisesException": false
-              },
-              "children": [],
               "elapsed": 0.00000200001522898674,
-              "eventIds": [
-                3
-              ],
-              "labels": [
-                "db"
-              ]
+              "caller": "package:lib/models",
+              "callee": "package:lib/database",
+              "children": []
             }
-          ],
-          "elapsed": 0.00009400025010108948,
-          "eventIds": [
-            2
-          ],
-          "labels": [
-            "mvc.model"
-          ],
-          "diffMode": 3,
-          "formerName": "find",
-          "formerResult": "exception!"
+          ]
         },
         {
           "nodeType": 3,
-          "caller": "package:lib/controllers",
-          "callee": "package:lib/views/users",
           "name": "show",
           "static": false,
           "digest": "58b7bf44c0c966502449312e635787e929e1837133be66485931d1120dfa3ced",
@@ -125,11 +109,15 @@
             },
             "raisesException": false
           },
+          "elapsed": 0.0002999999560415745,
+          "diffMode": 3,
+          "formerName": "list",
+          "formerResult": "array",
+          "caller": "package:lib/controllers",
+          "callee": "package:lib/views/users",
           "children": [
             {
               "nodeType": 3,
-              "caller": "package:lib/views/users",
-              "callee": "package:lib/models",
               "name": "posts",
               "static": false,
               "digest": "d5a2d2e7985d1e0fe85b9563c174d700d1a68567a29749ea471ac2582ff6326a",
@@ -145,11 +133,16 @@
                 },
                 "raisesException": false
               },
+              "elapsed": 0.00012199999764561653,
+              "diffMode": 4,
+              "movedFrom": {
+                "name": "loop"
+              },
+              "caller": "package:lib/views/users",
+              "callee": "package:lib/models",
               "children": [
                 {
                   "nodeType": 3,
-                  "caller": "package:lib/models",
-                  "callee": "package:lib/models",
                   "name": "find_for_user",
                   "static": true,
                   "digest": "b49e3fc05bf13d51c05e4e88f56b275729b46e8739892d3610df5eb4f0229b5a",
@@ -165,11 +158,12 @@
                     },
                     "raisesException": false
                   },
+                  "elapsed": 0.00003600004129111767,
+                  "caller": "package:lib/models",
+                  "callee": "package:lib/models",
                   "children": [
                     {
                       "nodeType": 3,
-                      "caller": "package:lib/models",
-                      "callee": "package:lib/database",
                       "name": "query",
                       "static": true,
                       "digest": "f38424ccefa090e8f50bc23d085a4cc9fbda158b94efe53128a57f828c52b763",
@@ -179,49 +173,57 @@
                         "id": "lib/database/Database.query",
                         "raises_exception": false
                       },
-                      "returnValue": {
-                        "returnValueType": {
-                          "name": "void"
-                        },
-                        "raisesException": false
-                      },
-                      "children": [],
-                      "elapsed": 9.997747838497162e-7,
-                      "eventIds": [
-                        9
-                      ],
-                      "labels": [
-                        "db"
-                      ],
-                      "diffMode": 1
+                      "elapsed": 0.00000100000761449337,
+                      "caller": "package:lib/models",
+                      "callee": "package:lib/database",
+                      "children": []
                     }
-                  ],
-                  "elapsed": 0.000033999793231487274,
-                  "eventIds": [
-                    8
-                  ],
-                  "labels": [
-                    "mvc.model"
-                  ],
-                  "diffMode": 1
+                  ]
                 }
-              ],
-              "elapsed": 0.00011999998241662979,
-              "eventIds": [
-                7
-              ],
-              "diffMode": 1
+              ]
             },
             {
               "nodeType": 1,
               "count": 2,
               "digest": "loop",
               "subtreeDigest": "unknown",
+              "elapsed": 0.00000300002284348011,
               "children": [
                 {
+                  "nodeType": 1,
+                  "count": 2,
+                  "digest": "delete:loop",
+                  "subtreeDigest": "unknown",
+                  "elapsed": 0.00000300002284348011,
+                  "diffMode": 2,
+                  "children": [
+                    {
+                      "nodeType": 3,
+                      "name": "show",
+                      "static": false,
+                      "digest": "delete:527c645f25eb9879f789e61d2b8b1b94c2a62a1c7a9747445c1e01e2abc00f23",
+                      "subtreeDigest": "unknown",
+                      "stableProperties": {
+                        "event_type": "function",
+                        "id": "lib/views/posts/Views::Posts::Show#show",
+                        "raises_exception": false
+                      },
+                      "returnValue": {
+                        "returnValueType": {
+                          "name": "string"
+                        },
+                        "raisesException": false
+                      },
+                      "elapsed": 0.00000200001522898674,
+                      "diffMode": 2,
+                      "caller": "package:lib/views/users",
+                      "callee": "package:lib/views/posts",
+                      "children": []
+                    }
+                  ]
+                },
+                {
                   "nodeType": 3,
-                  "caller": "package:lib/views/users",
-                  "callee": "package:lib/views/posts",
                   "name": "show",
                   "static": false,
                   "digest": "527c645f25eb9879f789e61d2b8b1b94c2a62a1c7a9747445c1e01e2abc00f23",
@@ -237,33 +239,16 @@
                     },
                     "raisesException": false
                   },
-                  "children": [],
-                  "elapsed": 0.0000039995647966861725,
-                  "eventIds": [
-                    13,
-                    15
-                  ],
-                  "diffMode": 1
+                  "elapsed": 0.00000200001522898674,
+                  "diffMode": 1,
+                  "caller": "package:lib/views/users",
+                  "callee": "package:lib/views/posts",
+                  "children": []
                 }
-              ],
-              "elapsed": 0.0000039995647966861725,
-              "eventIds": [],
-              "diffMode": 1
+              ]
             }
-          ],
-          "elapsed": 0.00029900018125772476,
-          "eventIds": [
-            6
-          ],
-          "diffMode": 1
+          ]
         }
-      ],
-      "elapsed": 0.0006280001252889633,
-      "eventIds": [
-        1
-      ],
-      "labels": [
-        "mvc.controller"
       ]
     }
   ]

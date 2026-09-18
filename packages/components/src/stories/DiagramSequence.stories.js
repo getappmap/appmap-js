@@ -2,6 +2,7 @@ import VSequenceDiagram from '@/pages/SequenceDiagram.vue';
 import micropost_diff from '@/stories/data/sequence/Users_profile_profile_display.diff.sequence.json';
 import create_api_key from '@/stories/data/sequence/create_api_key.sequence.json';
 import list_users from '@/stories/data/sequence/list_users.sequence.json';
+import list_users_show_user_diff from '@/stories/data/sequence/list_users_show_user.diff.sequence.json';
 import list_users_prefetch from '@/stories/data/sequence/list_users_prefetch.sequence.json';
 import show_user from '@/stories/data/sequence/show_user.sequence.json';
 import user_not_found from '@/stories/data/sequence/user_not_found.sequence.json';
@@ -32,6 +33,13 @@ MicropostUserProfileDiff.args = {
   serializedDiagram: micropost_diff,
   mockEvent,
 };
+// Exercises every diff mode at once, including a moved block: the existing
+// MicropostUserProfileDiff has only inserts and deletes.
+export const AllDiffModes = Template.bind({});
+AllDiffModes.args = {
+  serializedDiagram: list_users_show_user_diff,
+};
+
 export const Empty = Template.bind({});
 
 export const CreateApiKey = Template.bind({});
