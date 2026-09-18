@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.91.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.2...@appland/scanner-v1.91.3) (2026-09-18)
+
+
+### Bug Fixes
+
+* skip building fsevents on non-macOS npm/npx installs ([e1e675b](https://github.com/getappmap/appmap-js/commit/e1e675bc6e609936db2eabd0543f84e4637896ee))
+
 # [@appland/scanner-v1.91.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.1...@appland/scanner-v1.91.2) (2026-08-10)
 
 
