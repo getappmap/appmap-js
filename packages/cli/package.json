@@ -4,7 +4,7 @@
   "description": "",
   "bin": "built/cli.js",
   "engines": {
-    "node": ">15"
+    "node": ">=18"
   },
   "publishConfig": {
     "access": "public"
@@ -196,6 +196,7 @@
     "outputPath": "dist"
   },
   "optionalDependencies": {
+    "fsevents": "~2.3.2",
     "puppeteer": "^19.7.5"
   }
 }
