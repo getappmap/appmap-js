@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.203.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.203.0...@appland/appmap-v3.203.1) (2026-09-18)
+
+
+### Bug Fixes
+
+* skip building fsevents on non-macOS npm/npx installs ([e1e675b](https://github.com/getappmap/appmap-js/commit/e1e675bc6e609936db2eabd0543f84e4637896ee))
+
 # [@appland/appmap-v3.203.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.202.0...@appland/appmap-v3.203.0) (2026-09-16)
 
 
