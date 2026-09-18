@@ -117,7 +117,10 @@ $sequence-group-border-color: $white;
 //
 //   line             the call and return arrows and their lines
 //   channel          tints the row across the width of the diagram
-//   marker-opacity   the line color, dimmed, behind the +/- glyph in the gutter
+//   marker-opacity   the line color, dimmed, behind the +/-/↷ glyph in the gutter
+//
+// Move is violet because it is the one mode with no added-or-removed valence: the
+// block is unchanged, it only sits somewhere else.
 $sequence-diff-modes: (
   insert: (
     line: rgb(10, 110, 52),
@@ -133,6 +136,11 @@ $sequence-diff-modes: (
     line: rgb(45, 71, 103),
     channel: rgba(71, 122, 184, 0.25),
     marker-opacity: 0.67,
+  ),
+  move: (
+    line: rgb(126, 58, 191),
+    channel: rgba(167, 94, 229, 0.25),
+    marker-opacity: 0.6,
   ),
 );
 
