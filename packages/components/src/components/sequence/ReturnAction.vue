@@ -279,27 +279,15 @@ export default {
 }
 
 .return.diff {
-  &.diff-delete {
-    .return-line-segment {
-      border-bottom: $sequence-call-line-width dotted rgba(185, 25, 33, 1);
-      .arrow {
-        fill: rgba(185, 25, 33, 1);
-      }
-    }
-  }
-  &.diff-insert {
-    .return-line-segment {
-      border-bottom: $sequence-call-line-width dotted rgba(10, 110, 52, 1);
-      .arrow {
-        fill: rgba(10, 110, 52, 1);
-      }
-    }
-  }
-  &.diff-change {
-    .return-line-segment {
-      border-bottom: $sequence-call-line-width dotted rgba(45, 71, 103, 1);
-      .arrow {
-        fill: rgba(45, 71, 103, 1);
+  @each $mode, $colors in $sequence-diff-modes {
+    $line: map-get($colors, line);
+
+    &.diff-#{$mode} {
+      .return-line-segment {
+        border-bottom: $sequence-call-line-width dotted $line;
+        .arrow {
+          fill: $line;
+        }
       }
     }
   }

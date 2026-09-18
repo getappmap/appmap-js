@@ -111,10 +111,30 @@ $sequence-call-line-color: $gray4;
 $sequence-group-border-width: 2px;
 $sequence-group-border-color: $white;
 
-// Diff background
-$sequence-diff-insert-bg-color: rgba(32, 200, 63, 0.23);
-$sequence-diff-delete-bg-color: rgba(246, 47, 47, 0.25);
-$sequence-diff-change-bg-color: rgba(71, 122, 184, 0.25);
+// Diff highlighting, one entry per DiffMode. The key matches the `diff-<mode>` class
+// that ActionSpec puts on a call or return row, so a new mode is one entry here plus
+// its class.
+//
+//   line             the call and return arrows and their lines
+//   channel          tints the row across the width of the diagram
+//   marker-opacity   the line color, dimmed, behind the +/- glyph in the gutter
+$sequence-diff-modes: (
+  insert: (
+    line: rgb(10, 110, 52),
+    channel: rgba(32, 200, 63, 0.23),
+    marker-opacity: 0.5,
+  ),
+  delete: (
+    line: rgb(185, 25, 33),
+    channel: rgba(246, 47, 47, 0.25),
+    marker-opacity: 0.5,
+  ),
+  change: (
+    line: rgb(45, 71, 103),
+    channel: rgba(71, 122, 184, 0.25),
+    marker-opacity: 0.67,
+  ),
+);
 
 $actor-highlight: #262b3a;
 

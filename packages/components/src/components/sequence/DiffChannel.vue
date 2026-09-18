@@ -76,24 +76,12 @@ export default {
   }
 }
 
-.diff-insert .diff-channel {
-  background-color: $sequence-diff-insert-bg-color;
-  .diff-channel-marker {
-    background-color: rgba(10, 110, 52, 0.5);
-  }
-}
-
-.diff-change .diff-channel {
-  background-color: $sequence-diff-change-bg-color;
-  .diff-channel-marker {
-    background-color: rgba(45, 71, 103, 0.67);
-  }
-}
-
-.diff-delete .diff-channel {
-  background-color: $sequence-diff-delete-bg-color;
-  .diff-channel-marker {
-    background-color: rgba(185, 25, 33, 0.5);
+@each $mode, $colors in $sequence-diff-modes {
+  .diff-#{$mode} .diff-channel {
+    background-color: map-get($colors, channel);
+    .diff-channel-marker {
+      background-color: rgba(map-get($colors, line), map-get($colors, marker-opacity));
+    }
   }
 }
 </style>
