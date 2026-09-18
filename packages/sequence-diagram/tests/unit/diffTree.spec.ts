@@ -604,7 +604,7 @@ describe('Rendering a move', () => {
 
   it('in PlantUML colors the arrow and leaves the label plain', () => {
     const uml = format(FormatType.PlantUML, diagram, 'x').diagram;
-    const line = uml.split('\n').find((candidate) => candidate.includes('[#3F7ECA]'))!;
+    const line = uml.split('\n').find((candidate) => candidate.includes('[#7E3ABF]'))!;
     assert.ok(line, 'a move-colored arrow');
     assert.ok(line.includes('check'), line);
     assert.ok(!line.includes('<back:'), 'no added/removed background on a moved label');

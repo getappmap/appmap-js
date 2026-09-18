@@ -206,7 +206,9 @@ function color(action: Action, markupEnabled: boolean): string | undefined {
     case DiffMode.Change:
       return 'CA9C3F';
     case DiffMode.Move:
-      return '3F7ECA';
+      // Violet, matching $sequence-diff-modes in @appland/components: a blue here
+      // would collide with the blue that view uses for a change.
+      return '7E3ABF';
   }
 }
 
