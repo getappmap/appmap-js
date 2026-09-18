@@ -1,7 +1,7 @@
 import type { Diff, Move } from './diff';
 import { MoveType } from './diff';
 import type { Action, Actor, Diagram } from './types';
-import { actionActors, DiffMode, nodeName, nodeResult } from './types';
+import { actionActors, DiffMode, nodeIdentity, nodeName, nodeResult } from './types';
 
 function cloneAction(action: Action): Action {
   const parent = action.parent;
@@ -105,7 +105,7 @@ export default function buildDiffDiagram(diff: Diff): Diagram {
         // AdvanceBoth moves and attach beneath this action.
         const action = cloneAction(rAction);
         action.diffMode = DiffMode.Move;
-        if (lAction.parent) action.movedFrom = nodeName(lAction.parent);
+        if (lAction.parent) action.movedFrom = nodeIdentity(lAction.parent);
         if (rAction.parent) {
           const parent = diffActionsByAction.get(rAction.parent);
           parent?.children.push(action);

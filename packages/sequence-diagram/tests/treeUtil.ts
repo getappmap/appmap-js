@@ -13,7 +13,8 @@
 
 import { createHash } from 'crypto';
 import buildDiffDiagram from '../src/buildDiffDiagram';
-import diff, { Move, MoveType } from '../src/diff';
+import type { Move } from '../src/diff';
+import diff, { MoveType } from '../src/diff';
 import type { Action, Actor, Diagram, FunctionCall, Loop, Query, ServerRPC } from '../src/types';
 import { DiffMode, NodeType, nodeName, setParent } from '../src/types';
 
@@ -123,7 +124,7 @@ export function renderTree(diagram: Diagram): string {
         marker = ` [~ was ${action.formerName}]`;
         break;
       case DiffMode.Move:
-        marker = ` [> from ${action.movedFrom ?? 'top'}]`;
+        marker = ` [> from ${action.movedFrom?.name ?? 'top'}]`;
         break;
     }
     lines.push(`${'  '.repeat(depth)}${label(action)}${marker}`);

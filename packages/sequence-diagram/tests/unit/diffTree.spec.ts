@@ -2,7 +2,8 @@ import assert from 'assert';
 import diff, { MoveType } from '../../src/diff';
 import buildDiffDiagram from '../../src/buildDiffDiagram';
 import format from '../../src/formatter';
-import { Action, DiffMode, FormatType } from '../../src/types';
+import type { Action } from '../../src/types';
+import { DiffMode, FormatType } from '../../src/types';
 import {
   buildTree,
   cloneSpec,
@@ -281,7 +282,7 @@ describe('Moved blocks', () => {
       App#run
         A#before
         B#after
-          A#check [> from before]
+          A#check [> from A#before]
             SQL SELECT allowed`)
     );
     const moved = moves.find((move) => move.moveType === MoveType.Move)!;
@@ -315,7 +316,7 @@ describe('Moved blocks', () => {
       App#run
         A#one
         B#two
-          SQL UPDATE t [> from one]`)
+          SQL UPDATE t [> from A#one]`)
     );
   });
 
@@ -378,11 +379,43 @@ describe('Moved blocks', () => {
       App#run
         B#second
         C#third
-        A#first [> from run]
+        A#first [> from App#run]
           SQL SELECT 1`)
     );
     const { diagram: text } = format(FormatType.Text, diagram, 'x');
-    assert.strictEqual(text, 'reordered function call `A#first` within `run`');
+    assert.strictEqual(text, 'reordered function call `A#first` within `App#run`');
+  });
+
+  it('distinguishes the parents when a block moves between same-named methods', () => {
+    const { diagram } = diffTrees(
+      `
+      App#run
+        Alpha#before
+          A#work
+            SQL SELECT 1
+        Beta#before`,
+      `
+      App#run
+        Alpha#before
+        Beta#before
+          A#work
+            SQL SELECT 1`
+    );
+    assert.strictEqual(
+      renderTree(diagram),
+      tree(`
+      App#run
+        Alpha#before
+        Beta#before
+          A#work [> from Alpha#before]
+            SQL SELECT 1`)
+    );
+    // Both parents are named `before`, so comparing bare node names would call this
+    // a reorder within a parent the block was never under.
+    assert.strictEqual(
+      format(FormatType.Text, diagram, 'x').diagram,
+      'moved function call `A#work` from `Alpha#before`'
+    );
   });
 
   it('reports a move to and from the top level', () => {
@@ -400,12 +433,12 @@ describe('Moved blocks', () => {
       renderTree(up.diagram),
       tree(`
       App#run
-      A#work [> from run]
+      A#work [> from App#run]
         SQL SELECT 1`)
     );
     assert.strictEqual(
       format(FormatType.Text, up.diagram, 'x').diagram,
-      'moved function call `A#work` from `run`'
+      'moved function call `A#work` from `App#run`'
     );
 
     const down = diffTrees(
@@ -458,9 +491,9 @@ describe('Moved blocks', () => {
       tree(`
       App#run
         A#one
-          SQL SELECT y [> from two]
+          SQL SELECT y [> from B#two]
         B#two
-          SQL SELECT x [> from one]`)
+          SQL SELECT x [> from A#one]`)
     );
   });
 
@@ -524,7 +557,7 @@ describe('Moved blocks', () => {
       App#run
         A#one
         B#two
-          loop [> from one]
+          loop [> from A#one]
             SQL SELECT x`)
     );
   });
@@ -565,7 +598,7 @@ describe('Rendering a move', () => {
   it('in text names the block and where it came from', () => {
     assert.strictEqual(
       format(FormatType.Text, diagram, 'x').diagram,
-      'moved function call `A#check` from `before`'
+      'moved function call `A#check` from `A#before`'
     );
   });
 
@@ -582,7 +615,7 @@ describe('Rendering a move', () => {
     const check = json.rootActions[0].children[1].children[0];
     assert.strictEqual(check.name, 'check');
     assert.strictEqual(check.diffMode, DiffMode.Move);
-    assert.strictEqual(check.movedFrom, 'before');
+    assert.deepStrictEqual(check.movedFrom, { name: 'A#before', actorId: 'class:A' });
     assert.strictEqual(check.children[0].diffMode, undefined);
   });
 });
