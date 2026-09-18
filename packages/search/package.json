@@ -3,6 +3,9 @@
   "version": "1.2.3",
   "description": "",
   "bin": "built/cli.js",
+  "engines": {
+    "node": ">=18"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -16,6 +19,7 @@
     "lint:fix": "eslint --fix",
     "test": "jest",
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "watch": "tsc --watch"
   },
   "author": "AppLand, Inc",
