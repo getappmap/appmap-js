@@ -1,3 +1,11 @@
+# [@appland/components-v4.50.0](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.49.1...@appland/components-v4.50.0) (2026-09-18)
+
+
+### Features
+
+* **components:** style a moved block in violet ([e4f9d6a](https://github.com/getappmap/appmap-js/commit/e4f9d6a12a4a38d025704cb8399f8f4f8cebe8c8))
+* **sequence-diagram:** structure-aware diff with moved blocks ([f0f16ef](https://github.com/getappmap/appmap-js/commit/f0f16eff91f5eeda87bfb375ebbdfb0fe5a865a5))
+
 # [@appland/components-v4.49.1](https://github.com/getappmap/appmap-js/compare/@appland/components-v4.49.0...@appland/components-v4.49.1) (2026-09-04)
 
 
