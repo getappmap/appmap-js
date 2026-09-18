@@ -91,7 +91,10 @@
     "yargs": "^17.1.1"
   },
   "engines": {
-    "node": ">15"
+    "node": ">=18"
+  },
+  "optionalDependencies": {
+    "fsevents": "~2.3.2"
   },
   "publishConfig": {
     "access": "public"

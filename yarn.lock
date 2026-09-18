@@ -163,6 +163,7 @@ __metadata:
     eslint-plugin-import: "npm:^2.22.1"
     express: "npm:^5.1.0"
     fs-extra: "npm:^10.1.0"
+    fsevents: "npm:~2.3.2"
     gitconfiglocal: "npm:^2.1.0"
     glob: "npm:^7.2.3"
     graceful-fs: "npm:^4.2.10"
@@ -220,6 +221,8 @@ __metadata:
     ws: "npm:^8.21.3"
     yargs: "npm:^17.1.1"
   dependenciesMeta:
+    fsevents:
+      optional: true
     puppeteer:
       optional: true
   bin:
@@ -528,6 +531,7 @@ __metadata:
     eslint-plugin-node: "npm:^11.1.0"
     eslint-plugin-prettier: "npm:^4.2.1"
     fs-extra: "npm:^10.1.0"
+    fsevents: "npm:~2.3.2"
     glob: "npm:7.2.3"
     inquirer: "npm:^8.1.2"
     jest: "npm:^29.5.0"
@@ -552,6 +556,9 @@ __metadata:
     ts-node: "npm:^10.2.1"
     typescript: "npm:^4.4.2"
     yargs: "npm:^17.1.1"
+  dependenciesMeta:
+    fsevents:
+      optional: true
   bin:
     scanner: built/cli.js
   languageName: unknown
