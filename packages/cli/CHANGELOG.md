@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.204.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.203.1...@appland/appmap-v3.204.0) (2026-09-19)
+
+
+### Features
+
+* **cli:** require the sequence diagram diff that reports moved blocks ([f46c121](https://github.com/getappmap/appmap-js/commit/f46c121e734b2238ff6bf6085e2154a3febf2228)), closes [#2402](https://github.com/getappmap/appmap-js/issues/2402)
+
 # [@appland/appmap-v3.203.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.203.0...@appland/appmap-v3.203.1) (2026-09-18)
 
 
