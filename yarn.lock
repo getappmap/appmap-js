@@ -98,7 +98,7 @@ __metadata:
   resolution: "@appland/appmap@workspace:packages/cli"
   dependencies:
     "@appland/client": "workspace:^1.17.0"
-    "@appland/components": "workspace:^4.12.0"
+    "@appland/components": "workspace:^4.50.0"
     "@appland/diagrams": "workspace:^1.8.0"
     "@appland/models": "workspace:^2.10.4"
     "@appland/navie": "npm:^1.48.0"
@@ -106,7 +106,7 @@ __metadata:
     "@appland/rpc": "workspace:^1.22.0"
     "@appland/scanner": "workspace:^1.86.0"
     "@appland/search": "workspace:^1.1.0"
-    "@appland/sequence-diagram": "workspace:^1.12.0"
+    "@appland/sequence-diagram": "workspace:^1.15.0"
     "@appland/telemetry": "workspace:^1.2.0"
     "@craftamap/esbuild-plugin-html": "npm:^0.9.0"
     "@eslint/js": "npm:~8.57.0"
@@ -266,7 +266,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/components@workspace:^4.12.0, @appland/components@workspace:packages/components":
+"@appland/components@workspace:^4.50.0, @appland/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@appland/components@workspace:packages/components"
   dependencies:
@@ -593,7 +593,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@appland/sequence-diagram@npm:^1.11.0, @appland/sequence-diagram@workspace:^1.12.0, @appland/sequence-diagram@workspace:packages/sequence-diagram":
+"@appland/sequence-diagram@npm:^1.11.0, @appland/sequence-diagram@workspace:^1.15.0, @appland/sequence-diagram@workspace:packages/sequence-diagram":
   version: 0.0.0-use.local
   resolution: "@appland/sequence-diagram@workspace:packages/sequence-diagram"
   dependencies:
