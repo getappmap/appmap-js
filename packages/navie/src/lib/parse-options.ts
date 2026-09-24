@@ -1,7 +1,21 @@
 import { ContextV2 } from '../context';
 
 export class UserOptions {
-  constructor(private options: Map<string, string | boolean>) {}
+  private options: Map<string, string | boolean>;
+  constructor(options: Map<string, string | boolean> | Record<string, string | boolean>) {
+    this.options = new Map<string, string | boolean>();
+    if (options instanceof Map) {
+      this.options = options;
+    } else {
+      Object.entries(options).forEach(([key, value]) => {
+        this.options.set(key.toLowerCase(), value);
+      });
+    }
+  }
+
+  [Symbol.iterator](): IterableIterator<[string, string | boolean]> {
+    return this.options.entries();
+  }
 
   /**
    * @returns A new instance of UserOptions with the same options.

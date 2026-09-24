@@ -107,19 +107,35 @@ describe('ObserveCommand', () => {
     expect(lookupContextService.lookupHelp).toBeCalledTimes(1);
   });
 
-  it('exits early if no test is identified', async () => {
+  it('suggests a test if no test is identified', async () => {
     lookupContextService.lookupContext = jest.fn().mockResolvedValue([]);
-    completionService.json = jest.fn().mockReturnValueOnce(undefined);
-    lookupContextService.lookupHelp = jest.fn();
+    completionService.json = jest.fn().mockReturnValueOnce({
+      suggestedTest: 'Write a test for the observe command that handles missing tests',
+      relevantTest: { language: 'javascript' },
+    });
+    completionService.complete = jest
+      .fn()
+      .mockImplementationOnce(function* () {
+        yield '1. Create the following test:\n<generated-test-case />\n2. Run the test';
+      })
+      .mockImplementation(function* () {
+        yield 'Generated test case code';
+      });
+
     const result = await read(
       command.execute({
         question: 'what?',
         userOptions: new UserOptions(new Map()),
       })
     );
-    expect(result).toEqual('Sorry, I could not find any relevant tests to record.');
-    expect(lookupContextService.lookupHelp).not.toBeCalled();
-    expect(completionService.complete).not.toBeCalled();
+    expect(result).toMatchInlineSnapshot(`
+      "1. Create the following test:
+
+      Generated test case code
+
+      2. Run the test"
+    `);
+    expect(completionService.complete).toHaveBeenCalledTimes(4);
   });
 
   it('exits early if the language is not supported', async () => {
