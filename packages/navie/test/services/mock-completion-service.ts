@@ -43,7 +43,7 @@ export default class MockCompletionService extends CompletionService {
   mock(response: unknown): typeof this.completion;
   mock(...response: unknown[]): typeof this.completion {
     if (response.length > 1 && response.every((x) => typeof x === 'string'))
-      return this.completion.mockReturnValue(response as string[]);
+      return this.completion.mockReturnValue(response);
     assert(response.length === 1, 'Only one response is supported');
     const cpl = typeof response[0] === 'string' ? response[0] : JSON.stringify(response[0]);
     return this.completion.mockReturnValue(cpl.split(/(?= )/));

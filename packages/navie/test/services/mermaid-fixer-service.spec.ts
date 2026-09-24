@@ -23,6 +23,7 @@ describe('MermaidFixerService', () => {
     const repairedDiagram = 'graph TD\n  A --> B';
 
     const completer = async function* () {
+      await Promise.resolve();
       yield `graph TD\n  A --> B`;
     };
 

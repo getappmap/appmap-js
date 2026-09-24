@@ -21,11 +21,7 @@ export function findObject(text: string): string | undefined {
   return object ? object[0] : undefined;
 }
 
-export default function parseJSON<T>(
-  text: string,
-  warnOnError: boolean,
-  warning?: string | undefined
-): T | undefined {
+export default function parseJSON<T>(text: string, warnOnError: boolean, warning?: string): T | undefined {
   const sanitizedTerms = trimFences(text);
 
   const parse = (chunk: string): T | undefined => {
