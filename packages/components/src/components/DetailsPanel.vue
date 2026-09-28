@@ -1,8 +1,7 @@
 <template>
   <div class="details-panel">
     <h3 class="details-panel__title">
-      <v-ask-navie-button v-if="showAskNavie" @click.native="$emit('askNavieAboutMap')" />
-      <AppMapLogo v-else width="70" />
+      <AppMapLogo width="70" />
       <ChevronDownIcon
         class="details-panel__hide-panel-icon"
         @click="() => this.$emit('hideDetailsPanel')"
@@ -131,14 +130,12 @@ import VDetailsPanelLabels from '@/components/DetailsPanelLabels.vue';
 import VDetailsSearch from '@/components/DetailsSearch.vue';
 import VPopper from '@/components/Popper.vue';
 import VSourceCodeLink from '@/components/SourceCodeLink.vue';
-import VAskNavieButton from '@/components/chat-search/AskNavieButton.vue';
 import FeedbackIcon from '@/assets/feedback-icon.svg';
 import ExclamationIcon from '@/assets/exclamation-circle.svg';
 import ScissorsIcon from '@/assets/scissors-icon.svg';
 import NavArrow from '@/assets/nav-arrow.svg';
 import ClearIcon from '@/assets/x-icon.svg';
 import ChevronDownIcon from '@/assets/fa-solid_chevron-down.svg';
-import CompassIcon from '@/assets/compass-simpler.svg';
 import { SELECT_CODE_OBJECT } from '@/store/vsCode';
 
 const MAX_DISPLAY_NAME_LENGTH = 150;
@@ -163,14 +160,12 @@ export default {
     VDetailsSearch,
     VPopper,
     VSourceCodeLink,
-    VAskNavieButton,
     FeedbackIcon,
     ExclamationIcon,
     ScissorsIcon,
     NavArrow,
     ClearIcon,
     ChevronDownIcon,
-    CompassIcon,
   },
   props: {
     subtitle: String,
@@ -196,10 +191,6 @@ export default {
     isGiantAppMap: {
       type: Boolean,
       default: false,
-    },
-    showAskNavie: {
-      type: Boolean,
-      default: true,
     },
   },
 
