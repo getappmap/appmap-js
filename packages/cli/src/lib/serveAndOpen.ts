@@ -8,12 +8,13 @@ import { exists, verbose } from '../utils';
 import UI from '../cmds/userInteraction';
 
 function mimeTypeOfName(filename: string): string {
+  // extname() includes the leading dot.
   return (
     {
-      js: 'application/javascript',
-      css: 'text/css',
-      json: 'application/json',
-      map: 'application/json',
+      '.js': 'application/javascript',
+      '.css': 'text/css',
+      '.json': 'application/json',
+      '.map': 'application/json',
     }[extname(filename)] || 'application/octet-stream'
   );
 }
