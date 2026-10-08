@@ -11,6 +11,7 @@ esbuild
     bundle: true,
     logLevel: 'info',
     define: {
+      'process.env': '{}',
       'process.env.NODE_ENV': '"production"',
       global: 'window',
     },
