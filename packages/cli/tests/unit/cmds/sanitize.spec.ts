@@ -52,6 +52,61 @@ describe('sanitizeAppMap', () => {
     expect(event.http_server_request.request_method).toEqual('POST');
   });
 
+  it('tokenizes multi-valued headers, which recorders represent as string arrays', () => {
+    const appmap = {
+      events: [
+        {
+          http_server_response: {
+            status: 200,
+            headers: {
+              'Set-Cookie': ['session=sekrit-abc; HttpOnly', 'tracking=deadbeef'],
+              'Content-Type': ['application/json'],
+            },
+          },
+        },
+      ],
+    } as any;
+    sanitizeAppMap(appmap);
+    const { headers } = appmap.events[0].http_server_response;
+    expect(headers['Set-Cookie']).toEqual([
+      expect.stringMatching(/^<v\d+>$/),
+      expect.stringMatching(/^<v\d+>$/),
+    ]);
+    expect(headers['Content-Type']).toEqual([expect.stringMatching(/^<v\d+>$/)]);
+  });
+
+  it('keeps non-string primitives inside a multi-valued header', () => {
+    const appmap = {
+      events: [{ http_server_response: { headers: { 'X-Retry': ['sekrit-abc', 3, true, null] } } }],
+    } as any;
+    sanitizeAppMap(appmap);
+    expect(appmap.events[0].http_server_response.headers['X-Retry']).toEqual([
+      expect.stringMatching(/^<v\d+>$/),
+      3, // other primitives have no room for a secret and stay readable
+      true,
+      null,
+    ]);
+  });
+
+  it('collapses a captured object to one token, so a data-bearing KEY cannot survive', () => {
+    // An object is not a shape the format defines in a value position, and a
+    // key there is application data, not schema — masking the values alone
+    // would leave the email in the clear.
+    const appmap = {
+      events: [
+        {
+          return_value: {
+            class: 'Hash',
+            value: { 'alice@example.com': true, 'bob@example.com': false },
+          },
+        },
+      ],
+    } as any;
+    sanitizeAppMap(appmap);
+    expect(appmap.events[0].return_value.value).toMatch(/^<v\d+>$/);
+    expect(JSON.stringify(appmap)).not.toContain('example.com');
+  });
+
   it('normalizes a template-less server path to a route template, not a token', () => {
     const appmap = {
       events: [
@@ -113,7 +168,8 @@ describe('sanitizeAppMap', () => {
     // The property that keeps `appmap compare` stable: the same route with a
     // different id yields the same template in every file (unlike per-file
     // tokens), so id churn is not a spurious diff.
-    const mk = (path: string) => ({ events: [{ http_server_request: { path_info: path } }] } as any);
+    const mk = (path: string) =>
+      ({ events: [{ http_server_request: { path_info: path } }] }) as any;
     const a = mk('/users/1/edit');
     const b = mk('/users/999/edit');
     sanitizeAppMap(a, new ValueMasker());
@@ -168,7 +224,10 @@ describe('sanitizeAppMap', () => {
         {
           parameters: [param('token', 'sekrit'), param('id', '12345')],
           exceptions: [{ class: 'RuntimeError', message: 'boom: sekrit' }],
-          sql_query: { sql: "SELECT * FROM users WHERE email = 'a@b.c'", database_type: 'postgres' },
+          sql_query: {
+            sql: "SELECT * FROM users WHERE email = 'a@b.c'",
+            database_type: 'postgres',
+          },
         },
       ],
     };
@@ -472,7 +531,12 @@ describe('sanitize command handler', () => {
           { id: 2, event: 'return', parent_id: 1 },
         ],
         eventUpdates: {
-          '2': { id: 2, event: 'return', parent_id: 1, return_value: { class: 'String', value: 'sekrit' } },
+          '2': {
+            id: 2,
+            event: 'return',
+            parent_id: 1,
+            return_value: { class: 'String', value: 'sekrit' },
+          },
         },
       })
     );
