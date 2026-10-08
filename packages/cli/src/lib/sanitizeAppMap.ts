@@ -93,12 +93,58 @@ export class ValueMasker {
     this.counter = Math.max(this.counter, n);
   }
 
-  // The masking primitive: every captured value string passes through here
-  // and is replaced with a content-free token (allow-list and
-  // already-assigned tokens excepted). Labeled so appmap-review interprets
-  // changes to what escapes masking.
+  // The entry point for a captured value of UNVERIFIED shape — use this
+  // wherever the format does not guarantee a string, and let it decide.
+  // Deciding here rather than at each call site is what makes masking fail
+  // closed under a shape nobody anticipated: a caller that type-tested for
+  // `string` first silently passed everything else through intact, which is
+  // how a multi-valued `set-cookie` — recorded as an ARRAY of strings —
+  // survived verbatim into a sanitized file.
+  //
+  // A string is tokenized. An array is walked, each element masked: that is a
+  // real shape the format produces, and its length is behavioral signal (two
+  // `set-cookie` headers, not one). Other primitives — numbers, booleans,
+  // null — are deliberately returned verbatim; they have no room for a secret
+  // and stay readable for the review.
+  //
+  // Anything else (an object, a class instance) is a shape the format does
+  // NOT define in a captured-value position, so it is collapsed to a single
+  // token of its JSON form rather than walked. Walking it would mask the
+  // values but not the KEYS, and a key here is application data, not schema —
+  // `{"alice@example.com": true}` would keep the email. Since we cannot tell a
+  // data key from a schema one, we do not guess: the whole value becomes one
+  // token. (Header NAMES are schema and are kept, but that is decided by
+  // sanitizeHeaders, which iterates them itself and only passes values here.)
+  //
+  // !! MUTATES arrays IN PLACE and returns the same reference !! This is
+  // deliberate and matches sanitizeAppMap, which rewrites the document in
+  // place; it is safe because the input is parsed JSON — acyclic, with no
+  // node reachable twice. (Aliasing would matter: re-masking an assigned
+  // `<v1>` in an unmarked file hands it a second token.) Assign the result
+  // anyway: `x = masker.mask(x)` is correct for every shape, mutating or not.
+  //
+  // The return type is `unknown` because that is the truth — any input can
+  // come back as a token string. Callers holding a string statically want
+  // maskString instead.
+  //
+  // Labeled so appmap-review interprets changes to what escapes masking.
   // @label security.sanitization
-  mask(value: string): string {
+  mask(value: unknown): unknown {
+    if (typeof value === 'string') return this.maskString(value);
+    if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i += 1) value[i] = this.mask(value[i]);
+      return value;
+    }
+    if (value && typeof value === 'object') return this.maskString(JSON.stringify(value));
+    return value;
+  }
+
+  // The masking primitive: every captured value string ends up here and is
+  // replaced with a content-free token (allow-list and already-assigned tokens
+  // excepted). Public for callers that already hold a string, where the shape
+  // analysis in mask() would be a no-op.
+  // @label security.sanitization
+  maskString(value: string): string {
     if (this.allow.has(value) || (this.recognizeTokens && TOKEN_PATTERN.test(value))) return value;
     let token = this.tokens.get(value);
     if (!token) {
@@ -135,7 +181,7 @@ function sanitizeSql(sql: string, adapter: string | undefined, masker: ValueMask
   if (masker.recognizeTokens && TOKEN_PATTERN.test(sql)) return sql;
   const normalized = normalizeSQL(sql, adapter ?? '');
   const residue = (adapter && SQL_RESIDUE[adapter]) || SQL_RESIDUE_DEFAULT;
-  if (residue.test(normalized)) return masker.mask(sql);
+  if (residue.test(normalized)) return masker.maskString(sql);
   return normalized;
 }
 
@@ -221,16 +267,16 @@ interface AppMap {
 }
 
 function sanitizeSlot(slot: ValueSlot | undefined, masker: ValueMasker): void {
-  if (slot && typeof slot.value === 'string') slot.value = masker.mask(slot.value);
+  if (slot) slot.value = masker.mask(slot.value);
 }
 
 // Header NAMES are schema (kept); header VALUES are captured data (tokenized).
+// A value is usually a string but may be an array of them — that is how a
+// recorder represents a header sent more than once, `set-cookie` above all —
+// so masking walks whatever shape it finds rather than testing for one.
 function sanitizeHeaders(headers: Record<string, unknown> | undefined, masker: ValueMasker): void {
   if (!headers) return;
-  for (const name of Object.keys(headers)) {
-    const value = headers[name];
-    if (typeof value === 'string') headers[name] = masker.mask(value);
-  }
+  for (const name of Object.keys(headers)) headers[name] = masker.mask(headers[name]);
 }
 
 // HTTP paths and client URLs are the one kind of captured value that feeds the
@@ -286,10 +332,7 @@ const TOKEN_SCAN = /<(?:[a-z0-9]+:)?v(\d+)>/g;
 // SQL) so the committed AppMap is structurally incapable of carrying a secret.
 // Labeled so appmap-review interprets any change to this boundary.
 // @label security.sanitization
-export function sanitizeAppMap(
-  appmap: AppMap,
-  masker: ValueMasker = new ValueMasker()
-): AppMap {
+export function sanitizeAppMap(appmap: AppMap, masker: ValueMasker = new ValueMasker()): AppMap {
   const prior = appmap.metadata?.sanitized;
   masker.recognizeTokens = Boolean(prior);
   if (prior) {
@@ -321,9 +364,7 @@ export function sanitizeAppMap(
   // Provenance. Masking is one-way, so on a re-run the values still verbatim
   // are those allowed by BOTH runs — the marker records that intersection.
   const current = masker.userAllowValues;
-  const allowValues = prior
-    ? current.filter((v) => prior.allow_values.includes(v))
-    : current;
+  const allowValues = prior ? current.filter((v) => prior.allow_values.includes(v)) : current;
   appmap.metadata = {
     ...(appmap.metadata ?? {}),
     sanitized: { version: CLI_VERSION, allow_values: allowValues },
@@ -370,15 +411,14 @@ function sanitizeMetadata(metadata: AppMapMetadata | undefined, masker: ValueMas
         git.repository = url.toString();
       } catch {
         // Unparseable URL: mask the whole value rather than risk a credential.
-        git.repository = masker.mask(repository);
+        git.repository = masker.maskString(repository);
       }
     }
-    if (typeof git.user_name === 'string') git.user_name = masker.mask(git.user_name);
-    if (typeof git.user_email === 'string') git.user_email = masker.mask(git.user_email);
+    git.user_name = masker.mask(git.user_name);
+    git.user_email = masker.mask(git.user_email);
   }
-  if (metadata.exception && typeof metadata.exception.message === 'string')
-    metadata.exception.message = masker.mask(metadata.exception.message);
-  if (metadata.test_failure && typeof metadata.test_failure.message === 'string')
+  if (metadata.exception) metadata.exception.message = masker.mask(metadata.exception.message);
+  if (metadata.test_failure)
     metadata.test_failure.message = masker.mask(metadata.test_failure.message);
 }
 
@@ -389,8 +429,8 @@ function sanitizeEvent(event: AppMapEvent, masker: ValueMasker): void {
   sanitizeSlot(event.return_value, masker);
 
   for (const x of event.exceptions ?? []) {
-    if (typeof x.message === 'string') x.message = masker.mask(x.message);
-    if (typeof x.value === 'string') x.value = masker.mask(x.value);
+    x.message = masker.mask(x.message);
+    x.value = masker.mask(x.value);
   }
 
   const serverRequest = event.http_server_request;
@@ -403,7 +443,7 @@ function sanitizeEvent(event: AppMapEvent, masker: ValueMasker): void {
     // between recordings and destabilize `appmap compare`.
     if (typeof serverRequest.path_info === 'string')
       serverRequest.path_info = serverRequest.normalized_path_info
-        ? masker.mask(serverRequest.path_info)
+        ? masker.maskString(serverRequest.path_info)
         : normalizePath(serverRequest.path_info);
     sanitizeHeaders(serverRequest.headers, masker);
   }
@@ -411,8 +451,7 @@ function sanitizeEvent(event: AppMapEvent, masker: ValueMasker): void {
   if (clientRequest) {
     // The client URL always feeds the ClientRPC route/digest, so normalize it
     // to a route template rather than tokenize it (see normalizeUrl).
-    if (typeof clientRequest.url === 'string')
-      clientRequest.url = normalizeUrl(clientRequest.url);
+    if (typeof clientRequest.url === 'string') clientRequest.url = normalizeUrl(clientRequest.url);
     sanitizeHeaders(clientRequest.headers, masker);
   }
   sanitizeHeaders(event.http_server_response?.headers, masker);
