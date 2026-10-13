@@ -1,3 +1,12 @@
+# [@appland/appmap-v3.204.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.204.0...@appland/appmap-v3.204.1) (2026-10-13)
+
+
+### Bug Fixes
+
+* **cli:** Make appmap open show the AppMap viewer again ([bfa9fb4](https://github.com/getappmap/appmap-js/commit/bfa9fb482b9fccb33bc2d152323047c0b1453083))
+* **cli:** mask header values recorded as arrays ([1e0ae62](https://github.com/getappmap/appmap-js/commit/1e0ae626f1042c469860fcc51149255012f494ae)), closes [#2404](https://github.com/getappmap/appmap-js/issues/2404)
+* **cli:** serve JS, CSS, JSON and source maps with their media types ([3d88bab](https://github.com/getappmap/appmap-js/commit/3d88babddd840db565d84349a53faef710ad312b)), closes [#2406](https://github.com/getappmap/appmap-js/issues/2406)
+
 # [@appland/appmap-v3.204.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.203.1...@appland/appmap-v3.204.0) (2026-09-19)
 
 
