@@ -124,7 +124,7 @@ __metadata:
     "@types/jest-sinon": "npm:^1.0.2"
     "@types/lunr": "npm:^2.3.7"
     "@types/moo": "npm:^0.5.5"
-    "@types/node": "npm:^16"
+    "@types/node": "npm:^18"
     "@types/proper-lockfile": "npm:^4.1.4"
     "@types/react": "npm:^18.3.0"
     "@types/react-dom": "npm:^18.3.0"
@@ -509,7 +509,7 @@ __metadata:
     "@types/glob": "npm:^7.2.0"
     "@types/jest": "npm:^29.4.1"
     "@types/js-yaml": "npm:^4.0.3"
-    "@types/node": "npm:^16.7.10"
+    "@types/node": "npm:^18"
     "@types/sinon": "npm:^10.0.11"
     "@types/tar-stream": "npm:^2.2.2"
     "@types/yargs": "npm:^17.0.2"
@@ -568,7 +568,7 @@ __metadata:
   dependencies:
     "@types/better-sqlite3": "npm:^7.6.13"
     "@types/jest": "npm:^29.5.4"
-    "@types/node": "npm:^16"
+    "@types/node": "npm:^18"
     better-sqlite3: "npm:^12.0.0"
     cachedir: "npm:^2.4.0"
     eslint: "npm:^9"
@@ -7496,20 +7496,6 @@ __metadata:
   version: 14.18.11
   resolution: "@types/node@npm:14.18.11"
   checksum: 10c0/94f79306474dc6b1314ccec661ebd2602534f5b9f4bf7ef213a564796c4f9b09ed78ce3fd25b0959501916813505f52bf803e6705cc08afb89a913f84d894f5e
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^16, @types/node@npm:^16.7.10":
-  version: 16.18.12
-  resolution: "@types/node@npm:16.18.12"
-  checksum: 10c0/d57b30a9e408bca51b57a1f5118335b2266ff30d66ae87c828630a9391fd1005229ce6b648492374dc393db2e4eae56212d16ef57c8a40e7b25f6306353dd1b1
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^17.0.2":
-  version: 17.0.17
-  resolution: "@types/node@npm:17.0.17"
-  checksum: 10c0/e7a4096a1ead38b0943f4cee02d8710d6419588c5f5e1bc186ccc06fc30911f7f3e7e3f784d1ffc747bdf464f688df1764aea00f0059cd64da0367974b86df76
   languageName: node
   linkType: hard
 
@@ -29557,7 +29543,7 @@ __metadata:
     "@semantic-release/release-notes-generator": "npm:^10"
     "@tsconfig/recommended": "npm:^1.0.3"
     "@types/jest": "npm:^29.5.2"
-    "@types/node": "npm:^17.0.2"
+    "@types/node": "npm:^18"
     appmap-node: "npm:^2.23.0"
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^8.10.0"
