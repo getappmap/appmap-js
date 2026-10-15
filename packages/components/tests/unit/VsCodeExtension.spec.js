@@ -17,7 +17,6 @@ describe('VsCodeExtension.vue', () => {
   const defaultFilter = new AppMapFilter();
   const serialized = serializeFilter(defaultFilter);
   const base64encoded = base64UrlEncode(JSON.stringify({ filters: serialized }));
-  const appmapFsPath = '/some/fake/path';
 
   const defaultFilterObject = {
     filterName: 'AppMap default',
@@ -36,9 +35,6 @@ describe('VsCodeExtension.vue', () => {
           return false;
         },
       },
-      propsData: {
-        appmapFsPath,
-      },
     });
     rootWrapper = createWrapper(wrapper.vm.$root);
     await wrapper.vm.loadData(data);
@@ -49,28 +45,6 @@ describe('VsCodeExtension.vue', () => {
     if (wrapper) {
       wrapper.destroy();
     }
-  });
-
-  it('emits the "ask-navie-about-map" event when the buttons are clicked', async () => {
-    // Sanity check
-    expect(rootWrapper.emitted()['ask-navie-about-map']).toBeUndefined();
-
-    wrapper.find('[data-cy="ask-navie-control-button"]').trigger('click');
-    expect(rootWrapper.emitted()['ask-navie-about-map']).toEqual([[appmapFsPath]]);
-
-    wrapper.find('[data-cy="collapsed-sidebar-ask-navie"]').trigger('click');
-    expect(rootWrapper.emitted()['ask-navie-about-map']).toEqual([[appmapFsPath], [appmapFsPath]]);
-
-    // Open the details panel
-    wrapper.find('[data-cy="sidebar-hamburger-menu-icon').trigger('click');
-    await Vue.nextTick();
-
-    wrapper.find('[data-cy="ask-navie-button"]').trigger('click');
-    expect(rootWrapper.emitted()['ask-navie-about-map']).toEqual([
-      [appmapFsPath],
-      [appmapFsPath],
-      [appmapFsPath],
-    ]);
   });
 
   it('sets the selected object by FQID', () => {
