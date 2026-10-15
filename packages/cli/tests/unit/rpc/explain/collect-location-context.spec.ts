@@ -21,7 +21,7 @@ describe('collectLocationContext', () => {
   });
 
   describe('listDirectory', () => {
-    const mockReaddir = jest.spyOn(fs, 'readdir');
+    const mockReaddir = spyOnReaddir();
 
     afterEach(() => {
       jest.resetAllMocks();
@@ -186,9 +186,7 @@ describe('collectLocationContext', () => {
 
     it('handles directory listings', async () => {
       stat.mockResolvedValue({ isDirectory: () => true, isFile: () => false } as Stats);
-      jest
-        .spyOn(fs, 'readdir')
-        .mockResolvedValue(['file1.js', 'file2.js'].map((p) => mockDirent(p)));
+      spyOnReaddir().mockResolvedValue(['file1.js', 'file2.js'].map((p) => mockDirent(p)));
 
       const result = await collectLocationContext(sourceDirectories, [Location.parse('/src:0')]);
       expect(result).toEqual([
@@ -245,9 +243,20 @@ describe('collectLocationContext', () => {
   });
 });
 
+// jest types an overloaded function by its last signature, which for readdir
+// is the encoding: 'buffer' one yielding Dirent<Buffer>[]. The code under test
+// calls the withFileTypes overload, so pin the spy to that shape.
+function spyOnReaddir() {
+  return jest.spyOn(fs, 'readdir') as unknown as jest.MockedFunction<
+    (path: string) => Promise<Dirent[]>
+  >;
+}
+
 function mockDirent(name: string, isDirectory = false): Dirent {
   return {
     name,
+    parentPath: '/test',
+    path: '/test',
     isFile: () => true,
     isDirectory: () => isDirectory,
     isBlockDevice: () => false,

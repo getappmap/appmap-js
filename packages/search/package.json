@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "@types/jest": "^29.5.4",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "eslint": "^9",
     "eslint-config-prettier": "^9",
     "eslint-plugin-eslint-comments": "^3.2.0",
