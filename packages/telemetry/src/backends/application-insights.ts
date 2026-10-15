@@ -1,3 +1,4 @@
+import type { ClientRequest } from 'node:http';
 import * as https from 'node:https';
 import os from 'node:os';
 
@@ -7,6 +8,8 @@ import type {
   TelemetryBackend,
   TelemetryData,
 } from '../types';
+
+const MaxFlushTime = 5000; // 5 seconds
 
 // This key is meant to be publically shared. However, I'm adding a simple
 // obfuscation to mitigate key scraping bots on GitHub. The key is split on
@@ -26,6 +29,7 @@ export class ApplicationInsightsBackend implements TelemetryBackend {
   private readonly productName: string;
   private readonly hostname: string;
   private readonly uname: string;
+  private pendingRequests = new Set<ClientRequest>();
 
   constructor(
     userId: string,
@@ -61,9 +65,30 @@ export class ApplicationInsightsBackend implements TelemetryBackend {
     this._post([envelope]);
   }
 
+  // Resolve once all in-flight requests have settled (their response/error
+  // handlers, including any warning, have run), so callers — and tests — can
+  // await the full request lifecycle rather than just the request being sent.
   flush(callback?: FlushCallback): void {
-    // No batching, so nothing to flush. Just call callback.
-    callback?.();
+    const startTime = process.hrtime.bigint();
+
+    const checkPending = () => {
+      if (this.pendingRequests.size === 0) {
+        callback?.();
+        return;
+      }
+
+      const elapsedMs = Number((process.hrtime.bigint() - startTime) / BigInt(1_000_000));
+      if (elapsedMs > MaxFlushTime) {
+        console.warn(`ApplicationInsightsBackend: Flush timed out after ${MaxFlushTime}ms`);
+        this.pendingRequests.forEach((req) => req.destroy());
+        callback?.();
+        return;
+      }
+
+      setTimeout(checkPending, 10);
+    };
+
+    checkPending();
   }
 
   private _post(envelopes: unknown[]): void {
@@ -85,10 +110,13 @@ export class ApplicationInsightsBackend implements TelemetryBackend {
           if (res.statusCode && (res.statusCode < 200 || res.statusCode >= 300)) {
             console.warn(`ApplicationInsightsBackend: Failed to send telemetry event. Status: ${res.statusCode}`);
           }
+          this.pendingRequests.delete(req);
         });
     });
+    this.pendingRequests.add(req);
     req.on('error', (e) => {
       console.warn('Error sending telemetry data to Application Insights', e);
+      this.pendingRequests.delete(req);
     });
     req.write(body);
     req.end();
