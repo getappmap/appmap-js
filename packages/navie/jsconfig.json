@@ -3,5 +3,5 @@
     "module": "commonjs",
     "moduleResolution": "node"
   },
-  "include": ["*.js"]
+  "include": ["*.js", ".eslintrc.js"]
 }

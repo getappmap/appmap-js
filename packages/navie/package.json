@@ -12,7 +12,7 @@
     "build": "tsc --project tsconfig.build.json",
     "watch": "tsc --project tsconfig.build.json --watch",
     "test": "npx appmap-node jest",
-    "lint": "eslint src test",
+    "lint": "eslint src test scripts",
     "typecheck": "tsc --noEmit",
     "vendor:mermaid": "node scripts/bundle-mermaid-parser.mjs"
   },
