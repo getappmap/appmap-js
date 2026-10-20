@@ -2,7 +2,7 @@
 import assert from 'assert';
 import { isNativeError } from 'node:util/types';
 
-import mermaid from './mermaid';
+import { parse } from './mermaid';
 
 import InteractionHistory from '../interaction-history';
 import MermaidFixerService from '../services/mermaid-fixer-service';
@@ -73,7 +73,7 @@ export default class MermaidFilter {
 
     // Ensure that the diagram content parses correctly.
     try {
-      mermaid.parse(diagramContent);
+      await parse(diagramContent);
       this.history.log(`[mermaid-filter] Yielding diagram:\n${diagramContent}`);
       const content = ['', '```mermaid', diagramContent.trim(), '```', ''].join('\n');
       yield content;
@@ -91,7 +91,7 @@ export default class MermaidFilter {
 
     // Check if the repaired diagram is valid.
     try {
-      mermaid.parse(repairedDiagram);
+      await parse(repairedDiagram);
       this.history.log(`[mermaid-filter] Diagram successfully repaired.`);
 
       const content = ['', '```mermaid', repairedDiagram, '```', ''].join('\n');

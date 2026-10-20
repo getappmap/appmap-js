@@ -1,5 +1,5 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const path = require('path');
 
 module.exports = {
@@ -46,6 +46,17 @@ module.exports = {
       },
       rules: {
         'unicorn/prefer-module': 'off',
+      },
+    },
+    {
+      // Build scripts are plain ESM and live outside the TypeScript project,
+      // so lint them without the type-aware rules.
+      files: ['scripts/**/*.mjs'],
+      extends: ['eslint:recommended', 'plugin:@typescript-eslint/disable-type-checked', 'prettier'],
+      parserOptions: {
+        project: null,
+        sourceType: 'module',
+        ecmaVersion: 'latest',
       },
     },
   ],
