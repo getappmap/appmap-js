@@ -96,6 +96,10 @@ export default {
     appMap: {
       type: Object,
     },
+    serializedSelection: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -108,7 +112,7 @@ export default {
     classes(): { [key: string]: boolean } {
       return {
         label: true,
-        interactive: this.interactive,
+        interactive: this.interactive || this.serializedSelection,
       };
     },
     collapseEnabled(): boolean {
@@ -205,6 +209,8 @@ export default {
         const event = this.appMap.events.find((e) => e.id === eventId);
         if (event) this.$store.commit(SELECT_CODE_OBJECT, event);
         else console.warn(`Event ${eventId} not found`);
+      } else if (this.serializedSelection) {
+        this.$emit('select-serialized-call', this.actionSpec.eventIds[0]);
       }
     },
     startHoverExpandCollapse() {
