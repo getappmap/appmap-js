@@ -3,7 +3,7 @@ import { rm } from 'node:fs/promises';
 
 import { retry } from 'async';
 
-import { buildRubyProject, runInBackground, waitForStdout } from './helpers';
+import { buildFixtureProject, runInBackground, waitForStdout } from './helpers';
 import { Client } from 'jayson/promise';
 import { AppMapRpc } from '@appland/rpc';
 
@@ -12,7 +12,7 @@ describe('appmap', () => {
 
   describe('index', () => {
     beforeEach(async () => {
-      projectPath = await buildRubyProject();
+      projectPath = await buildFixtureProject();
     });
 
     // Ensure backwards compatibility
