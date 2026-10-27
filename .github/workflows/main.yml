@@ -99,7 +99,10 @@ jobs:
         run: |
           yarn workspaces foreach -A -v -t --exclude root --exclude @appland/appmap --exclude @appland/scanner run build
 
+      # Secrets aren't passed to pull requests from forks (or Dependabot); still
+      # build there, but skip publishing rather than failing.
       - name: Publish to Chromatic
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
         uses: chromaui/action@latest
         with:
           workingDir: packages/components
