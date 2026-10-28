@@ -116,7 +116,7 @@
     "JSONStream": "^1.3.5",
     "ajv": "^8.18.0",
     "async": "^3.2.4",
-    "axios": "^0.33.0",
+    "axios": "^0.34.0",
     "better-sqlite3": "^12.0.0",
     "body-parser": "^1.20.9",
     "boxen": "^5.0.1",
