@@ -133,6 +133,16 @@ export default class Graph {
   }
 
   render() {
+    // Dagre 0.8 computes -Infinity dimensions for a graph without nodes.
+    // An empty graph has no layout to solve, including after its last node is removed.
+    if (this.graph.nodeCount() === 0) {
+      this.graph.graph().width = 0;
+      this.graph.graph().height = 0;
+      this.element.setAttribute('width', 0);
+      this.element.setAttribute('height', 0);
+      return;
+    }
+
     dagre.layout(this.graph);
 
     this.graph.nodes().forEach((id) => {
