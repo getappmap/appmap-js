@@ -4,7 +4,7 @@
 // current platform, with pkg. Shared by packages/cli and packages/scanner
 // (whose bin/build-native is a symlink to this file).
 //
-//   build-native [OS [ARCH]]
+//   build-native [--check-only] [OS [ARCH]]
 //
 // OS and ARCH are pkg's names (linux, macos, win; x64, arm64). They are
 // optional and only asserted against the current platform: cross-platform
@@ -15,16 +15,23 @@
 // would request the wrong ABI anyway (its node-abi maps Node 22 to 124). Both
 // failures are silent at build time and only show when the binary runs.
 //
+// Before building, checks that the native addons will load in the binary (see
+// checkNativeAbi below). With --check-only it stops there, which lets
+// `yarn build-native` fail fast before spending time on `yarn build`.
+//
 // The pkg target comes from the package's pkg.targets, which is therefore the
 // single place the supported platforms and the Node version are declared.
 
 const { spawnSync } = require('child_process');
+const { existsSync } = require('fs');
 const { resolve } = require('path');
 
 const hostOs = { linux: 'linux', darwin: 'macos', win32: 'win' }[process.platform];
 const hostArch = process.arch;
 
-const [os = hostOs, arch = hostArch] = process.argv.slice(2);
+const argv = process.argv.slice(2);
+const checkOnly = argv.includes('--check-only');
+const [os = hostOs, arch = hostArch] = argv.filter((arg) => arg !== '--check-only');
 if (os !== hostOs || arch !== hostArch) {
   console.error(
     `build-native: cannot build for ${os}-${arch} on ${hostOs}-${hostArch}; ` +
@@ -49,6 +56,51 @@ if (!target) {
 // Note that Node 24+ officially dropped support for macOS < 13.5 due to newer
 // libc++ requirements. Keeping the target at Node 22 ensures backward
 // compatibility with older macOS versions.
+
+// Native addons are packaged as yarn install compiled them, so they only load
+// in the binary if that was on the target's Node major. Otherwise the build
+// succeeds and the binary dies at runtime with ERR_DLOPEN_FAILED
+// (NODE_MODULE_VERSION mismatch).
+function checkNativeAbi() {
+  const addons = packageJson.pkg.assets
+    .filter((asset) => asset.endsWith('.node'))
+    .map((asset) => resolve(asset))
+    .filter((path) => existsSync(path));
+  if (addons.length === 0) return;
+
+  const targetMajor = target.match(/^node(\d+)-/)[1];
+  const packages = [
+    ...new Set(
+      addons.flatMap(
+        (path) => path.match(/node_modules[\\/]((?:@[^\\/]+[\\/])?[^\\/]+)/)?.[1] ?? []
+      )
+    ),
+  ];
+  const fail = (reason) => {
+    console.error(`build-native: ${reason}
+
+The binary targets Node ${targetMajor}, and native addons are packaged as
+yarn install compiled them, so they must be built for that Node major.
+
+Switch to Node ${targetMajor} (e.g. \`nvm use ${targetMajor}\`), run
+\`yarn rebuild ${packages.join(' ')}\`, then retry.`);
+    process.exit(1);
+  };
+
+  if (process.versions.node.split('.')[0] !== targetMajor)
+    fail(`running on Node ${process.versions.node}.`);
+  for (const addon of addons) {
+    try {
+      process.dlopen({ exports: {} }, addon);
+    } catch (err) {
+      fail(`${addon} does not load on Node ${process.versions.node}:
+  ${String(err.message).replace(/\n/g, '\n  ')}`);
+    }
+  }
+}
+
+checkNativeAbi();
+if (checkOnly) process.exit(0);
 
 console.log(`Building native binary for ${target}...`);
 
