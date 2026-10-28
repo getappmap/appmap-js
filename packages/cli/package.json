@@ -27,7 +27,7 @@
     "build:ui:css": "tailwindcss -i src/html/query-ui/index.css -o built/html/query-ui/tailwind.css --config src/html/query-ui/tailwind.config.js --minify",
     "build:doc": "node ../../scripts/sync-docs.mjs --source ../../docs --target built/docs",
     "start": "ts-node src/cli.ts",
-    "build-native": "yarn build && ./bin/build-native"
+    "build-native": "yarn build && node bin/build-native"
   },
   "lint-staged": {
     "*.{js,md,json,ts}": [
