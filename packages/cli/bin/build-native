@@ -1,57 +1,76 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env node
 
-# Optionally pass a desired OS as the first argument, followed by an optional architecture.
-# e.g. ./build-native macos arm64
-#
-# Otherwise every target will be built.
-OS="${1}"
-ARCH="${2:-x64}"
-ARGS="--config package.json --compress Brotli"
-PKG_NAME=$(node -p "require('./package.json').name.split('/').pop()")
+// Builds a native binary of the package in the current directory for the
+// current platform, with pkg. Shared by packages/cli and packages/scanner
+// (whose bin/build-native is a symlink to this file).
+//
+//   build-native [OS [ARCH]]
+//
+// OS and ARCH are pkg's names (linux, macos, win; x64, arm64). They are
+// optional and only asserted against the current platform: cross-platform
+// builds are not supported. Two things break them. pkg compiles bytecode on
+// the host, and V8 on the target rejects it. And native addons
+// (better-sqlite3) are packaged as yarn install compiled them, because pkg's
+// own prebuild-install step cannot find prebuild-install in this workspace and
+// would request the wrong ABI anyway (its node-abi maps Node 22 to 124). Both
+// failures are silent at build time and only show when the binary runs.
+//
+// The pkg target comes from the package's pkg.targets, which is therefore the
+// single place the supported platforms and the Node version are declared.
 
-# check if OS is set and OS/ARCH is the same as the current system.
-is_native() {
-  [ -z "${OS}" ] && return 1
-  # Check if the current system matches the specified OS and ARCH.
-  case "$(uname -s)" in
-    Linux*)   current_os="linux" ;;
-    Darwin*)  current_os="macos" ;;
-    CYGWIN*)  current_os="windows" ;;
-    MINGW*)   current_os="windows" ;;
-    *)        current_os="unknown" ;;
-  esac
-  current_arch="$(uname -m)"
-  case "${current_arch}" in
-    x86_64)  current_arch="x64" ;;
-    arm64)   current_arch="arm64" ;;
-    aarch64) current_arch="arm64" ;;
-    *)       current_arch="unknown" ;;
-  esac
-  [ "${OS}" = "${current_os}" ] && [ "${ARCH}" = "${current_arch}" ]
+const { spawnSync } = require('child_process');
+const { resolve } = require('path');
+
+const hostOs = { linux: 'linux', darwin: 'macos', win32: 'win' }[process.platform];
+const hostArch = process.arch;
+
+const [os = hostOs, arch = hostArch] = process.argv.slice(2);
+if (os !== hostOs || arch !== hostArch) {
+  console.error(
+    `build-native: cannot build for ${os}-${arch} on ${hostOs}-${hostArch}; ` +
+      'only builds for the current platform are supported.'
+  );
+  process.exit(1);
 }
 
-# Do not rebuild native binary addons if the architecture and system match. 
-# These should be built by yarn install beforehand.
-# Having pkg try to rebuild them risks downloading pre-built versions that do not work
-# correctly on the target machine.
-if is_native; then
-  echo "Building native binary for current system ${OS} ${ARCH} - skipping native build step."
-  ARGS="${ARGS} --no-native-build"
-fi
+const packageJson = require(resolve('package.json'));
+const pkgName = packageJson.name.split('/').pop();
+const target = packageJson.pkg.targets.find((t) => t.endsWith(`-${os}-${arch}`));
+if (!target) {
+  console.error(`build-native: no pkg target for ${os}-${arch} in package.json`);
+  process.exit(1);
+}
 
-# NOTE: The Node version target (e.g. node22) MUST match the Node version configured
-# in GHA workflows and actions (e.g. setup-node/action.yml). If they mismatch, native Node addons
-# (like better-sqlite3) compiled during GHA host execution will have ABI version mismatches
-# (NODE_MODULE_VERSION mismatches) at runtime in the packaged executable.
-# 
-# Note that Node 24+ officially dropped support for macOS < 13.5 due to newer libc++ requirements.
-# Keeping the target at Node 22 ensures backward compatibility with older macOS versions.
-if [ -n "${OS}" ]; then
-  echo "Building native binaries for ${OS} ${ARCH}..."
-  ARGS="${ARGS} -o release/${PKG_NAME}-${OS}-${ARCH} -t node22-${OS}-${ARCH}"
-else
-  echo "Building native binaries for each target..."
-fi
+// NOTE: The Node version of the targets (e.g. node22) MUST match the Node
+// version configured in GHA workflows and actions (e.g. setup-node/action.yml),
+// because native addons compiled by yarn install on the runner are packaged
+// as-is (see --no-native-build below).
+//
+// Note that Node 24+ officially dropped support for macOS < 13.5 due to newer
+// libc++ requirements. Keeping the target at Node 22 ensures backward
+// compatibility with older macOS versions.
 
-yarn pkg ${ARGS} built/cli.js
+console.log(`Building native binary for ${target}...`);
+
+// --no-native-build: package the addons yarn install built rather than let pkg
+// try to fetch prebuilt ones. CI deliberately compiles them against old glibc
+// (in the RHEL 8 container) and with MACOSX_DEPLOYMENT_TARGET.
+const args = [
+  'pkg',
+  '--config',
+  'package.json',
+  '--compress',
+  'Brotli',
+  '--no-native-build',
+  '-t',
+  target,
+  '-o',
+  `release/${pkgName}-${os}-${arch}`,
+  'built/cli.js',
+];
+const { status, error } = spawnSync('yarn', args, {
+  stdio: 'inherit',
+  shell: process.platform === 'win32',
+});
+if (error) throw error;
+process.exit(status ?? 1);
