@@ -10,6 +10,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "test": "jest"
   },
   "publishConfig": {
