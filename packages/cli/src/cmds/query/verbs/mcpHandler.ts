@@ -12,6 +12,9 @@ import {
 } from '../queries/mcp';
 import type { Argv } from './mcp';
 
+// How long the server may outlive its client's stdin; see exitIfStuck().
+const EXIT_GRACE_MS = 5000;
+
 export default async function handler(argvIn: yargs.ArgumentsCamelCase<unknown>): Promise<void> {
   const argv = argvIn as yargs.ArgumentsCamelCase<Argv>;
   verbose(argv.verbose as boolean | undefined);
@@ -39,6 +42,13 @@ export default async function handler(argvIn: yargs.ArgumentsCamelCase<unknown>)
   }
 
   const rl = createInterface({ input: process.stdin });
+  // A client that goes away with responses still queued makes the next
+  // write fail with EPIPE. Stop answering and exit quietly instead of
+  // crashing with an unhandled 'error' event.
+  process.stdout.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code !== 'EPIPE') throw err;
+    rl.close();
+  });
   // refresh() is async, so chain messages to keep responses in order.
   let pending = Promise.resolve();
   rl.on('line', (line) => {
@@ -77,14 +87,39 @@ export default async function handler(argvIn: yargs.ArgumentsCamelCase<unknown>)
     if (response) writeResponse(response);
   }
 
+  // Once the client closes stdin, finish pending messages and let the
+  // process exit on its own, which also waits for stdout to flush. Nothing
+  // else may keep the event loop alive; tests/unit/cmds/query/verbs/
+  // mcpProcess.spec.ts checks that.
   rl.on('close', () => {
     void pending.then(() => {
       queryDb.close();
-      process.exit(0);
+      // Responses a slow client hasn't read yet also hold the process open,
+      // so only start counting once they're flushed: the callback of this
+      // empty write runs after all earlier writes.
+      if (process.stdout.writable) process.stdout.write('', exitIfStuck);
+      else exitIfStuck();
     });
   });
 }
 
+// A safety net for a leaked handle, which would otherwise leave a server
+// running behind every client that only closes stdin. It says what held
+// the process open and exits with a failure, so the leak still shows up
+// (and fails the test above) rather than being papered over. The timer is
+// unref'd, so it never fires if the process can exit on its own.
+function exitIfStuck(): void {
+  setTimeout(() => {
+    const resources = process.getActiveResourcesInfo().join(', ');
+    process.stderr.write(
+      `appmap mcp: still running ${EXIT_GRACE_MS / 1000}s after stdin closed; ` +
+        `held open by: ${resources}\n`
+    );
+    process.exit(1);
+  }, EXIT_GRACE_MS).unref();
+}
+
 function writeResponse(response: JsonRpcResponse): void {
+  if (!process.stdout.writable) return; // the client is gone
   process.stdout.write(`${JSON.stringify(response)}\n`);
 }
