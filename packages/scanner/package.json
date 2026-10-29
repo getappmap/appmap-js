@@ -90,7 +90,7 @@
     "yargs": "^17.1.1"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "optionalDependencies": {
     "fsevents": "~2.3.2"
