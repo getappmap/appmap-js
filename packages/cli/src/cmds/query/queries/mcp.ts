@@ -975,8 +975,11 @@ const RESOURCE_TEMPLATES: ResourceTemplateImpl[] = [
 
 export type McpHandler = (msg: JsonRpcRequest) => JsonRpcResponse | null;
 
-export function buildMcpHandler(db: sqlite3.Database): McpHandler {
-  const ctx: McpContext = { db };
+// `db` may be a function so the server can start before the DB exists;
+// it is called per tool call or resource read, and whatever it throws is
+// reported to the client as that call's failure.
+export function buildMcpHandler(db: sqlite3.Database | (() => sqlite3.Database)): McpHandler {
+  const context = (): McpContext => ({ db: typeof db === 'function' ? db() : db });
   return (msg: JsonRpcRequest): JsonRpcResponse | null => {
     const id = msg.id ?? null;
     const method = msg.method;
@@ -1010,7 +1013,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
       const tool = TOOLS.find((t) => t.spec.name === name);
       if (!tool) return errorResponse(id, -32602, `unknown tool: ${name}`);
       try {
-        const result = tool.handler(args, ctx);
+        const result = tool.handler(args, context());
         return {
           jsonrpc: '2.0',
           id,
@@ -1056,7 +1059,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
       const resource = RESOURCES.find((r) => r.spec.uri === uri);
       if (resource) {
         try {
-          const result = resource.read(ctx);
+          const result = resource.read(context());
           return readResponse(id, uri, resource.spec.mimeType, result);
         } catch (e) {
           return errorResponse(id, -32000, e instanceof Error ? e.message : String(e));
@@ -1066,7 +1069,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
         const matched = tmpl.match(uri);
         if (matched) {
           try {
-            const result = tmpl.read(matched, ctx);
+            const result = tmpl.read(matched, context());
             return readResponse(id, uri, tmpl.spec.mimeType, result);
           } catch (e) {
             return errorResponse(id, -32000, e instanceof Error ? e.message : String(e));

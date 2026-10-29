@@ -180,6 +180,30 @@ describe('MCP handler', () => {
     }
   });
 
+  it('serves tools/list while the DB is unavailable, and reports it per call', () => {
+    const handler = buildMcpHandler(() => {
+      throw new Error('No AppMap index found');
+    });
+    const list = call(handler, { jsonrpc: '2.0', id: 7, method: 'tools/list' });
+    expect((list!.result as any).tools.length).toBeGreaterThan(0);
+
+    const tool = call(handler, {
+      jsonrpc: '2.0',
+      id: 8,
+      method: 'tools/call',
+      params: { name: 'find_recordings', arguments: {} },
+    });
+    expect(toolError(tool)).toMatch(/No AppMap index found/);
+
+    const resource = call(handler, {
+      jsonrpc: '2.0',
+      id: 9,
+      method: 'resources/read',
+      params: { uri: 'appmap://endpoints' },
+    });
+    expect(resource!.error!.message).toMatch(/No AppMap index found/);
+  });
+
   it('tools/call wraps the result as a content block of type=text', () => {
     const db = freshDb();
     try {
