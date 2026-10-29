@@ -3,9 +3,8 @@ import { createInterface } from 'readline';
 import yargs from 'yargs';
 
 import { handleWorkingDirectory } from '../../../lib/handleWorkingDirectory';
-import { locateAppMapDir } from '../../../lib/locateAppMapDir';
 import { verbose } from '../../../utils';
-import { openReadOnly } from '../lib/openReadOnly';
+import { LazyQueryDb } from '../lib/lazyQueryDb';
 import {
   buildMcpHandler,
   JsonRpcRequest,
@@ -17,17 +16,40 @@ export default async function handler(argvIn: yargs.ArgumentsCamelCase<unknown>)
   const argv = argvIn as yargs.ArgumentsCamelCase<Argv>;
   verbose(argv.verbose as boolean | undefined);
   handleWorkingDirectory(argv.directory);
-  const appmapDir = argv.queryDb ? '' : await locateAppMapDir(argv.appmapDir);
 
-  const db = openReadOnly(appmapDir, argv.queryDb);
-  const handle = buildMcpHandler(db);
+  // Serve even when the index doesn't exist yet (e.g. the MCP is
+  // configured before `appmap index` has run): tool calls report what's
+  // missing and how to build it, and the DB is picked up once it appears.
+  const queryDb = new LazyQueryDb({
+    appmapDir: argv.appmapDir,
+    queryDb: argv.queryDb,
+    // Set by @yao-pkg/pkg in the native binary.
+    executable: 'pkg' in process ? process.execPath : undefined,
+  });
+  await queryDb.refresh();
+  const handle = buildMcpHandler(() => queryDb.get());
 
   // MCP transport: newline-delimited JSON-RPC 2.0 over stdio. Logging
   // goes to stderr only — anything on stdout corrupts the protocol stream.
   process.stderr.write(`appmap mcp listening on stdio\n`);
+  try {
+    queryDb.get();
+  } catch (e) {
+    process.stderr.write(`warning: ${(e as Error).message}\n`);
+  }
 
   const rl = createInterface({ input: process.stdin });
+  // refresh() is async, so chain messages to keep responses in order.
+  let pending = Promise.resolve();
   rl.on('line', (line) => {
+    pending = pending
+      .then(() => handleLine(line))
+      .catch((err: Error) => {
+        process.stderr.write(`error: ${err.message}\n`);
+      });
+  });
+
+  async function handleLine(line: string): Promise<void> {
     const trimmed = line.trim();
     if (trimmed.length === 0) return;
     let msg: JsonRpcRequest;
@@ -41,6 +63,7 @@ export default async function handler(argvIn: yargs.ArgumentsCamelCase<unknown>)
       });
       return;
     }
+    await queryDb.refresh();
     let response: JsonRpcResponse | null;
     try {
       response = handle(msg);
@@ -52,11 +75,13 @@ export default async function handler(argvIn: yargs.ArgumentsCamelCase<unknown>)
       };
     }
     if (response) writeResponse(response);
-  });
+  }
 
   rl.on('close', () => {
-    db.close();
-    process.exit(0);
+    void pending.then(() => {
+      queryDb.close();
+      process.exit(0);
+    });
   });
 }
 
