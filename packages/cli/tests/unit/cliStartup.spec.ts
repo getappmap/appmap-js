@@ -1,5 +1,6 @@
-import { spawnSync } from 'child_process';
 import { join } from 'path';
+
+import { runCliFromSource } from './support/runCliFromSource';
 
 // cli.ts imports every command module at startup, so each must stay light:
 // the code that does the work, with its heavy dependencies, is loaded only
@@ -21,21 +22,10 @@ const HEAVY_PACKAGES = [
   'mermaid',
 ];
 
-const packageDir = join(__dirname, '..', '..');
-
 function packagesLoadedBy(...args: string[]): string[] {
-  const result = spawnSync(
-    process.execPath,
-    [
-      '-r',
-      'ts-node/register',
-      '-r',
-      join(__dirname, 'support', 'printLoadedModules.js'),
-      join(packageDir, 'src', 'cli.ts'),
-      ...args,
-    ],
-    { cwd: packageDir, encoding: 'utf8', env: { ...process.env, TS_NODE_TRANSPILE_ONLY: 'true' } }
-  );
+  const result = runCliFromSource(args, {
+    preload: [join(__dirname, 'support', 'printLoadedModules.js')],
+  });
   expect(result.status).toBe(0);
 
   const loaded = result.stderr.split('\n');
