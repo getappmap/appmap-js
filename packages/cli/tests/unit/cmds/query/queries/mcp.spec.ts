@@ -60,6 +60,15 @@ function call(handler: ReturnType<typeof buildMcpHandler>, msg: JsonRpcRequest) 
   return r;
 }
 
+// Text of a tool-call failure. Tool failures come back as a result with
+// isError rather than a JSON-RPC error; fails the test if the call succeeded.
+function toolError(r: ReturnType<typeof call>): string {
+  expect(r!.error).toBeUndefined();
+  const result = r!.result as { isError?: boolean; content: { text: string }[] };
+  expect(result.isError).toBe(true);
+  return result.content[0].text;
+}
+
 describe('MCP handler', () => {
   it('initialize returns server info and capabilities', () => {
     const db = freshDb();
@@ -136,7 +145,7 @@ describe('MCP handler', () => {
     }
   });
 
-  it('tools/call to an unknown tool → -32601', () => {
+  it('tools/call to an unknown tool → -32602, as in the MCP spec', () => {
     const db = freshDb();
     try {
       const r = call(buildMcpHandler(db), {
@@ -145,13 +154,13 @@ describe('MCP handler', () => {
         method: 'tools/call',
         params: { name: 'no_such_tool', arguments: {} },
       });
-      expect(r!.error?.code).toBe(-32601);
+      expect(r!.error?.code).toBe(-32602);
     } finally {
       db.close();
     }
   });
 
-  it('tools/call with missing arguments object → -32602 invalid params', () => {
+  it('tools/call with an invalid argument value → isError result', () => {
     const db = freshDb();
     try {
       const r = call(buildMcpHandler(db), {
@@ -165,7 +174,7 @@ describe('MCP handler', () => {
           },
         },
       });
-      expect(r!.error?.code).toBe(-32602);
+      expect(toolError(r)).toMatch(/invalid compare sort/);
     } finally {
       db.close();
     }
@@ -630,8 +639,8 @@ describe('MCP handler', () => {
           method: 'tools/call',
           params: { name: 'get_call_tree', arguments: { appmap: junit.appmap_name } },
         });
-        expect(byName!.error).toBeDefined();
-        expect(byName!.error!.message).toMatch(/not found at path/);
+        const byNameMessage = toolError(byName);
+        expect(byNameMessage).toMatch(/not found at path/);
 
         // Numeric id: rejected.
         const byId = call(handler, {
@@ -640,8 +649,8 @@ describe('MCP handler', () => {
           method: 'tools/call',
           params: { name: 'get_call_tree', arguments: { appmap: String(junit.appmap_id) } },
         });
-        expect(byId!.error).toBeDefined();
-        expect(byId!.error!.message).toMatch(/not found at path/);
+        const byIdMessage = toolError(byId);
+        expect(byIdMessage).toMatch(/not found at path/);
       } finally {
         db.close();
       }
@@ -743,6 +752,7 @@ describe('MCP handler', () => {
           },
         });
         expect(ok!.error).toBeUndefined();
+        expect((ok!.result as any).isError).toBeUndefined();
 
         // Bare name: rejected with a hint to use the path field.
         const reject = call(handler, {
@@ -751,9 +761,9 @@ describe('MCP handler', () => {
           method: 'tools/call',
           params: { name: 'get_call_tree', arguments: { appmap: 'foo' } },
         });
-        expect(reject!.error).toBeDefined();
-        expect(reject!.error!.message).toMatch(/not found at path/);
-        expect(reject!.error!.message).toMatch(/find_recordings/);
+        const rejectMessage = toolError(reject);
+        expect(rejectMessage).toMatch(/not found at path/);
+        expect(rejectMessage).toMatch(/find_recordings/);
       } finally {
         db.close();
       }
@@ -818,10 +828,10 @@ describe('MCP handler', () => {
             arguments: { appmap: 'tmp/appmap/junit/foo.appmap.json' },
           },
         });
-        expect(r!.error).toBeDefined();
-        expect(r!.error!.message).toMatch(/ambiguous/);
-        expect(r!.error!.message).toContain('/tmp/proj-a/tmp/appmap/junit/foo.appmap.json');
-        expect(r!.error!.message).toContain('/tmp/proj-b/tmp/appmap/junit/foo.appmap.json');
+        const message = toolError(r);
+        expect(message).toMatch(/ambiguous/);
+        expect(message).toContain('/tmp/proj-a/tmp/appmap/junit/foo.appmap.json');
+        expect(message).toContain('/tmp/proj-b/tmp/appmap/junit/foo.appmap.json');
       } finally {
         db.close();
       }
@@ -840,9 +850,9 @@ describe('MCP handler', () => {
             arguments: { appmap: 'POST /orders (200) - 19:47:22.660' },
           },
         });
-        expect(r!.error).toBeDefined();
-        expect(r!.error!.message).toMatch(/display label/);
-        expect(r!.error!.message).toMatch(/find_recordings/);
+        const message = toolError(r);
+        expect(message).toMatch(/display label/);
+        expect(message).toMatch(/find_recordings/);
       } finally {
         db.close();
       }

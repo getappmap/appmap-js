@@ -118,12 +118,10 @@ function maybeString(s: unknown): string | undefined {
   return typeof s === 'string' && s.length > 0 ? s : undefined;
 }
 
-class ParameterValidationError extends TypeError {}
-
 function maybeCompareSort(s: unknown): CompareSort | undefined {
   if (s === 'delta' || s === 'p95-a' || s === 'p95-b') return s;
   if (s === undefined) return undefined;
-  throw new ParameterValidationError(`invalid compare sort: ${String(s)}`);
+  throw new TypeError(`invalid compare sort: ${String(s)}`);
 }
 
 // ---- get_call_tree default selection -----------------------------------
@@ -1010,7 +1008,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
       const name = params.name;
       const args = params.arguments ?? {};
       const tool = TOOLS.find((t) => t.spec.name === name);
-      if (!tool) return errorResponse(id, -32601, `unknown tool: ${name}`);
+      if (!tool) return errorResponse(id, -32602, `unknown tool: ${name}`);
       try {
         const result = tool.handler(args, ctx);
         return {
@@ -1021,8 +1019,18 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
           },
         };
       } catch (e) {
-        const code = e instanceof ParameterValidationError ? -32602 : -32000;
-        return errorResponse(id, code, (e as Error).message);
+        // Tool failures go back as a result with isError rather than a
+        // JSON-RPC error, so the client passes the message to the model
+        // and it can correct the call. Protocol errors (unknown tool,
+        // unknown method) stay JSON-RPC errors.
+        return {
+          jsonrpc: '2.0',
+          id,
+          result: {
+            content: [{ type: 'text', text: e instanceof Error ? e.message : String(e) }],
+            isError: true,
+          },
+        };
       }
     }
 
@@ -1051,7 +1059,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
           const result = resource.read(ctx);
           return readResponse(id, uri, resource.spec.mimeType, result);
         } catch (e) {
-          return errorResponse(id, -32000, (e as Error).message);
+          return errorResponse(id, -32000, e instanceof Error ? e.message : String(e));
         }
       }
       for (const tmpl of RESOURCE_TEMPLATES) {
@@ -1061,7 +1069,7 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
             const result = tmpl.read(matched, ctx);
             return readResponse(id, uri, tmpl.spec.mimeType, result);
           } catch (e) {
-            return errorResponse(id, -32000, (e as Error).message);
+            return errorResponse(id, -32000, e instanceof Error ? e.message : String(e));
           }
         }
       }
