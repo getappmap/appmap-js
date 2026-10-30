@@ -1,30 +1,30 @@
 {
-  "tag_name": "@appland/scanner-v1.91.3",
+  "tag_name": "@appland/scanner-v1.92.0",
   "assets": [
     {
       "name": "scanner-linux-arm64",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.91.3/scanner-linux-arm64",
-      "digest": "sha256:097be706c09e8645ce9d5480ebc75f1e5878f529e28c0133eed419777ccd99bf"
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.92.0/scanner-linux-arm64",
+      "digest": "sha256:a37cd22067b00e84e2f881904c70add270a595b8aaa80c231f2948263986ada7"
     },
     {
       "name": "scanner-linux-x64",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.91.3/scanner-linux-x64",
-      "digest": "sha256:9e5d6a072343c9495d28f8c6a66027e35ea68b6c6d2fa9e7bb7751757965a7bb"
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.92.0/scanner-linux-x64",
+      "digest": "sha256:63ed2322874ade18e9955870f313347ecc14388ae048072c91881b6253b22c9e"
     },
     {
       "name": "scanner-macos-arm64",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.91.3/scanner-macos-arm64",
-      "digest": "sha256:43cff1f612429d8d97ed2c6d6acc91af3f8388f5cc8c1175c9d1bbcd1fec57fa"
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.92.0/scanner-macos-arm64",
+      "digest": "sha256:416cce649558ba674a852dc55a3992e791008e38a99bc8ff6529def940297b2d"
     },
     {
       "name": "scanner-macos-x64",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.91.3/scanner-macos-x64",
-      "digest": "sha256:6dddc8a81758ca475eff1c4730fae9c57bdf5966f17e0def314802b5a996fdb8"
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.92.0/scanner-macos-x64",
+      "digest": "sha256:0b7200201d356d53414b722e95d845c4d6902fb108a60e81a0d385f5cf39570f"
     },
     {
       "name": "scanner-win-x64.exe",
-      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.91.3/scanner-win-x64.exe",
-      "digest": "sha256:b63be35e8c8075d869d5642a47223ca89c95b06d9e886bbf19ab58d30e9eada8"
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/scanner-v1.92.0/scanner-win-x64.exe",
+      "digest": "sha256:6893d146d2d287b1359a73834523f7b6b24ffb12f18a2c0cfe5844abbd80bd1d"
     }
   ]
 }
