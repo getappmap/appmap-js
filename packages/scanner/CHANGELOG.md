@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.92.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.3...@appland/scanner-v1.92.0) (2026-10-30)
+
+
+### Features
+
+* Require Node 22 ([d4d97f8](https://github.com/getappmap/appmap-js/commit/d4d97f85e184ea5c799851718fa973da1d0baa7e))
+
 # [@appland/scanner-v1.91.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.2...@appland/scanner-v1.91.3) (2026-09-18)
 
 
