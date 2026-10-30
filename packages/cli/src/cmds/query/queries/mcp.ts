@@ -118,12 +118,10 @@ function maybeString(s: unknown): string | undefined {
   return typeof s === 'string' && s.length > 0 ? s : undefined;
 }
 
-class ParameterValidationError extends TypeError {}
-
 function maybeCompareSort(s: unknown): CompareSort | undefined {
   if (s === 'delta' || s === 'p95-a' || s === 'p95-b') return s;
   if (s === undefined) return undefined;
-  throw new ParameterValidationError(`invalid compare sort: ${String(s)}`);
+  throw new TypeError(`invalid compare sort: ${String(s)}`);
 }
 
 // ---- get_call_tree default selection -----------------------------------
@@ -977,8 +975,11 @@ const RESOURCE_TEMPLATES: ResourceTemplateImpl[] = [
 
 export type McpHandler = (msg: JsonRpcRequest) => JsonRpcResponse | null;
 
-export function buildMcpHandler(db: sqlite3.Database): McpHandler {
-  const ctx: McpContext = { db };
+// `db` may be a function so the server can start before the DB exists;
+// it is called per tool call or resource read, and whatever it throws is
+// reported to the client as that call's failure.
+export function buildMcpHandler(db: sqlite3.Database | (() => sqlite3.Database)): McpHandler {
+  const context = (): McpContext => ({ db: typeof db === 'function' ? db() : db });
   return (msg: JsonRpcRequest): JsonRpcResponse | null => {
     const id = msg.id ?? null;
     const method = msg.method;
@@ -1010,9 +1011,9 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
       const name = params.name;
       const args = params.arguments ?? {};
       const tool = TOOLS.find((t) => t.spec.name === name);
-      if (!tool) return errorResponse(id, -32601, `unknown tool: ${name}`);
+      if (!tool) return errorResponse(id, -32602, `unknown tool: ${name}`);
       try {
-        const result = tool.handler(args, ctx);
+        const result = tool.handler(args, context());
         return {
           jsonrpc: '2.0',
           id,
@@ -1021,8 +1022,18 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
           },
         };
       } catch (e) {
-        const code = e instanceof ParameterValidationError ? -32602 : -32000;
-        return errorResponse(id, code, (e as Error).message);
+        // Tool failures go back as a result with isError rather than a
+        // JSON-RPC error, so the client passes the message to the model
+        // and it can correct the call. Protocol errors (unknown tool,
+        // unknown method) stay JSON-RPC errors.
+        return {
+          jsonrpc: '2.0',
+          id,
+          result: {
+            content: [{ type: 'text', text: e instanceof Error ? e.message : String(e) }],
+            isError: true,
+          },
+        };
       }
     }
 
@@ -1048,20 +1059,20 @@ export function buildMcpHandler(db: sqlite3.Database): McpHandler {
       const resource = RESOURCES.find((r) => r.spec.uri === uri);
       if (resource) {
         try {
-          const result = resource.read(ctx);
+          const result = resource.read(context());
           return readResponse(id, uri, resource.spec.mimeType, result);
         } catch (e) {
-          return errorResponse(id, -32000, (e as Error).message);
+          return errorResponse(id, -32000, e instanceof Error ? e.message : String(e));
         }
       }
       for (const tmpl of RESOURCE_TEMPLATES) {
         const matched = tmpl.match(uri);
         if (matched) {
           try {
-            const result = tmpl.read(matched, ctx);
+            const result = tmpl.read(matched, context());
             return readResponse(id, uri, tmpl.spec.mimeType, result);
           } catch (e) {
-            return errorResponse(id, -32000, (e as Error).message);
+            return errorResponse(id, -32000, e instanceof Error ? e.message : String(e));
           }
         }
       }
