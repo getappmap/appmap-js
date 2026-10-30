@@ -1,3 +1,10 @@
+# [@appland/appmap-v3.205.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.204.1...@appland/appmap-v3.205.0) (2026-10-30)
+
+
+### Features
+
+* Require Node 22 ([d4d97f8](https://github.com/getappmap/appmap-js/commit/d4d97f85e184ea5c799851718fa973da1d0baa7e))
+
 # [@appland/appmap-v3.204.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.204.0...@appland/appmap-v3.204.1) (2026-10-13)
 
 
