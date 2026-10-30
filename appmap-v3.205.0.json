@@ -1,0 +1,30 @@
+{
+  "tag_name": "@appland/appmap-v3.205.0",
+  "assets": [
+    {
+      "name": "appmap-linux-arm64",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/appmap-v3.205.0/appmap-linux-arm64",
+      "digest": "sha256:2e6684fb0b6b9cc7ea89f68b8d0b2cba6ea07634baf2de3b254afd0f4e7f5a21"
+    },
+    {
+      "name": "appmap-linux-x64",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/appmap-v3.205.0/appmap-linux-x64",
+      "digest": "sha256:405e8604cb354c9a3744f18fdc84d0d125fe4762aadbc5a06a05cb8928a466ab"
+    },
+    {
+      "name": "appmap-macos-arm64",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/appmap-v3.205.0/appmap-macos-arm64",
+      "digest": "sha256:53ded84484b7fab158413419788d94f0ad9c9332829c01218a9df8db3d1727ee"
+    },
+    {
+      "name": "appmap-macos-x64",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/appmap-v3.205.0/appmap-macos-x64",
+      "digest": "sha256:1e4a10826848423643d349d54196a020d2c6474c15b4b22e5c14a17101bc1954"
+    },
+    {
+      "name": "appmap-win-x64.exe",
+      "url": "https://github.com/getappmap/appmap-js/releases/download/%40appland/appmap-v3.205.0/appmap-win-x64.exe",
+      "digest": "sha256:8421df836832b1626943e613ab71b303ebc95c29420c0789841a61ea51b99831"
+    }
+  ]
+}
