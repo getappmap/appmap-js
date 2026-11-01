@@ -1,3 +1,21 @@
+# [@appland/sequence-diagram-v1.15.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.14.0...@appland/sequence-diagram-v1.15.0) (2026-09-18)
+
+
+### Bug Fixes
+
+* **sequence-diagram:** color a moved arrow violet in PlantUML too ([78df9c1](https://github.com/getappmap/appmap-js/commit/78df9c13c3ce835cbefc5e80e71862e79c51e979))
+* **sequence-diagram:** identify a moved block's former parent by actor ([dd5d350](https://github.com/getappmap/appmap-js/commit/dd5d350618b49115ef3bf8420ca69d4ba5898a99))
+
+
+### Features
+
+* **sequence-diagram:** structure-aware diff with moved blocks ([f0f16ef](https://github.com/getappmap/appmap-js/commit/f0f16eff91f5eeda87bfb375ebbdfb0fe5a865a5))
+
+
+### Performance Improvements
+
+* **sequence-diagram:** look up sibling digests in a set, not a scan ([e0a8705](https://github.com/getappmap/appmap-js/commit/e0a87057d236401d1e644c1455c504fcc1ad758a))
+
 # [@appland/sequence-diagram-v1.14.0](https://github.com/getappmap/appmap-js/compare/@appland/sequence-diagram-v1.13.0...@appland/sequence-diagram-v1.14.0) (2026-07-11)
 
 

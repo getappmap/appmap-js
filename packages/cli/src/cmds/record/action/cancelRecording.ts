@@ -4,8 +4,8 @@ import RecordContext from '../recordContext';
 import RemoteRecording from '../remoteRecording';
 
 export default async function cancelRecording({
-  configuration: { requestOptions },
+  configuration,
 }: RecordContext): Promise<void> {
-  await new RemoteRecording(requestOptions()).stop();
+  await new RemoteRecording(configuration.requestOptions()).stop();
   UI.success('The recording has been cancelled.');
 }

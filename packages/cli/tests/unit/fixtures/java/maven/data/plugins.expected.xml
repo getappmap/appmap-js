@@ -1,5 +1,7 @@
-<!-- This is a comment as the first child node. --><!-- There doesn't appear to be a way to control w3c-xmlserializer's
-indentation, so the spacing in expected-pom.xml is a bit wonky --><project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- This is a comment as the first child node. -->
+<!-- A comment spanning more than one line, to check that it
+survives the rewrite intact -->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.springframework.samples</groupId>
   <artifactId>spring-petclinic</artifactId>
@@ -19,20 +21,20 @@ indentation, so the spacing in expected-pom.xml is a bit wonky --><project xmlns
           </execution>
         </executions>
       </plugin>
-    <plugin>
-          <groupId>com.appland</groupId>
-          <artifactId>appmap-maven-plugin</artifactId>
-          <version>1.3.0</version>
-          <executions>
-              <execution>
-                  <phase>process-test-classes</phase>
-                  <goals>
-                      <goal>prepare-agent</goal>
-                  </goals>
-              </execution>
-          </executions>
+      <plugin>
+        <groupId>com.appland</groupId>
+        <artifactId>appmap-maven-plugin</artifactId>
+        <version>1.3.0</version>
+        <executions>
+          <execution>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
-</plugins>
+    </plugins>
   </build>
 
 </project>

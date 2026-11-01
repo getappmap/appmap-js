@@ -380,29 +380,15 @@ export default {
 }
 
 .call.diff {
-  &.diff-delete {
-    .call-line-segment {
-      border-bottom: $sequence-call-line-width solid rgba(185, 25, 33, 1);
-      .arrow {
-        fill: rgba(185, 25, 33, 1);
-      }
-    }
-  }
+  @each $mode, $colors in $sequence-diff-modes {
+    $line: map-get($colors, line);
 
-  &.diff-insert {
-    .call-line-segment {
-      border-bottom: $sequence-call-line-width solid rgba(10, 110, 52, 1);
-      .arrow {
-        fill: green;
-      }
-    }
-  }
-
-  &.diff-change {
-    .call-line-segment {
-      border-bottom: $sequence-call-line-width solid rgba(45, 71, 103, 1);
-      .arrow {
-        fill: rgba(45, 71, 103, 1);
+    &.diff-#{$mode} {
+      .call-line-segment {
+        border-bottom: $sequence-call-line-width solid $line;
+        .arrow {
+          fill: $line;
+        }
       }
     }
   }

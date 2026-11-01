@@ -13,12 +13,11 @@ describe('getMostRecentMessages', () => {
       { role: 'user', content: 'What can you do?' },
     ];
 
-    for (let i = 0; i < messages.length; i++) {
+    const zeroEvents = getMostRecentMessages(messages, 0);
+    expect(zeroEvents.length).toBe(0);
+
+    for (let i = 1; i < messages.length; i++) {
       const events = getMostRecentMessages(messages, i);
-      if (i === 0) {
-        expect(events.length).toBe(0);
-        continue;
-      }
       expect(events.map(({ role, content }) => ({ role, content }))).toStrictEqual(
         messages.slice(-i - (1 - (i % 2)))
       );

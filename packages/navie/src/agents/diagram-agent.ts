@@ -1,7 +1,7 @@
 import { Agent, AgentOptions } from '../agent';
 import InteractionHistory, { PromptInteractionEvent } from '../interaction-history';
 import MermaidFilter from '../lib/mermaid-filter';
-import { buildPromptValue, PROMPTS, PromptType } from '../prompt';
+import { PROMPTS, PromptType } from '../prompt';
 import ContextService from '../services/context-service';
 import MermaidFixerService from '../services/mermaid-fixer-service';
 import { DIAGRAM_FORMAT_PROMPT } from './explain-agent';

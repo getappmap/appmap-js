@@ -6,6 +6,7 @@
   "description": "AppMap RPC client and server",
   "scripts": {
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "semantic-release": "semantic-release",
     "test": "jest",
     "watch": "tsc --watch"

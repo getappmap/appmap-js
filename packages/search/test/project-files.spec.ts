@@ -11,6 +11,13 @@ jest.mock('fs/promises', () => ({
 }));
 jest.mock('node:child_process');
 
+// jest types an overloaded function by its last signature, which for readdir
+// is the encoding: 'buffer' one yielding Dirent<Buffer>[]. The code under test
+// calls the withFileTypes overload, so pin the mock to that shape.
+const mockReaddir = jest.mocked(fsp.readdir) as unknown as jest.MockedFunction<
+  (dir: fs.PathLike) => Promise<fs.Dirent[]>
+>;
+
 describe('listProjectFiles', () => {
   beforeEach(() => {
     jest.resetAllMocks();
@@ -26,7 +33,7 @@ describe('listProjectFiles', () => {
     ];
 
     const baseDir = join('fake', 'directory');
-    jest.mocked(fsp.readdir).mockImplementation((dir: fs.PathLike) => {
+    mockReaddir.mockImplementation((dir: fs.PathLike) => {
       if (dir.toString() === join(baseDir, 'utils')) return Promise.resolve([mockFiles[3]]);
       else if (dir.toString() === baseDir) return Promise.resolve(mockFiles.slice(0, 3));
       else return Promise.resolve([]);
@@ -50,7 +57,7 @@ describe('listProjectFiles', () => {
 
     const directoriesRead = new Array<string>();
     const baseDir = join('fake', 'directory');
-    jest.mocked(fsp.readdir).mockImplementation((dir: fs.PathLike) => {
+    mockReaddir.mockImplementation((dir: fs.PathLike) => {
       directoriesRead.push(dir.toString());
 
       if (dir.toString() === baseDir) return Promise.resolve(mockDirectories);

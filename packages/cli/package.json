@@ -1,10 +1,10 @@
 {
   "name": "@appland/appmap",
-  "version": "3.201.3",
+  "version": "3.205.0",
   "description": "",
   "bin": "built/cli.js",
   "engines": {
-    "node": ">15"
+    "node": ">=22"
   },
   "publishConfig": {
     "access": "public"
@@ -25,9 +25,9 @@
     "watch": "tsc --watch",
     "build:html": "ts-node esbuild.html.ts",
     "build:ui:css": "tailwindcss -i src/html/query-ui/index.css -o built/html/query-ui/tailwind.css --config src/html/query-ui/tailwind.config.js --minify",
-    "build:doc": "rsync -av --delete ../../docs built/ && rm -f built/docs/reference/appmap-agent-js.md",
+    "build:doc": "node ../../scripts/sync-docs.mjs --source ../../docs --target built/docs",
     "start": "ts-node src/cli.ts",
-    "build-native": "yarn build && ./bin/build-native"
+    "build-native": "node bin/build-native --check-only \"$@\" && yarn build && node bin/build-native \"$@\""
   },
   "lint-staged": {
     "*.{js,md,json,ts}": [
@@ -49,10 +49,9 @@
     "@types/inquirer": "^9.0.3",
     "@types/jest": "^29.5.4",
     "@types/jest-sinon": "^1.0.2",
-    "@types/jsdom": "^16.2.13",
     "@types/lunr": "^2.3.7",
     "@types/moo": "^0.5.5",
-    "@types/node": "^16",
+    "@types/node": "^22",
     "@types/proper-lockfile": "^4.1.4",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
@@ -60,11 +59,12 @@
     "@types/sinon": "^10.0.2",
     "@types/tmp": "^0.2.3",
     "@types/validator": "^13.7.10",
-    "@types/w3c-xmlserializer": "^2.0.2",
     "@types/ws": "^8.18.1",
     "@types/yargs": "^17.0.2",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
     "@yao-pkg/pkg": "^6.20.0",
-    "esbuild": "0.19.8",
+    "esbuild": "0.25.12",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
@@ -78,11 +78,11 @@
     "prettier": "^2.7.1",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "react-router-dom": "^6.26.0",
+    "react-router-dom": "^6.30.6",
     "sinon": "^11.1.2",
     "stream-http": "^3.2.0",
     "tailwindcss": "^3.4.0",
-    "tmp": "^0.2.1",
+    "tmp": "^0.2.7",
     "tmp-promise": "^3.0.3",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
@@ -100,7 +100,7 @@
   ],
   "dependencies": {
     "@appland/client": "workspace:^1.17.0",
-    "@appland/components": "workspace:^4.12.0",
+    "@appland/components": "workspace:^4.50.0",
     "@appland/diagrams": "workspace:^1.8.0",
     "@appland/models": "workspace:^2.10.4",
     "@appland/navie": "^1.48.0",
@@ -108,16 +108,17 @@
     "@appland/rpc": "workspace:^1.22.0",
     "@appland/scanner": "workspace:^1.86.0",
     "@appland/search": "workspace:^1.1.0",
-    "@appland/sequence-diagram": "workspace:^1.12.0",
+    "@appland/sequence-diagram": "workspace:^1.15.0",
     "@appland/telemetry": "workspace:^1.2.0",
     "@octokit/rest": "^20.0.1",
     "@sidvind/better-ajv-errors": "^0.9.1",
+    "@xmldom/xmldom": "^0.9.11",
     "JSONStream": "^1.3.5",
-    "ajv": "^8.6.3",
+    "ajv": "^8.18.0",
     "async": "^3.2.4",
-    "axios": "^0.27.2",
+    "axios": "^0.34.0",
     "better-sqlite3": "^12.0.0",
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.9",
     "boxen": "^5.0.1",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.1",
@@ -129,17 +130,16 @@
     "crypto-js": "^4.0.0",
     "debug": "^4.3.6",
     "detect-indent": "^6.1.0",
-    "diff": "^5.1.0",
-    "express": "^5.1.0",
+    "diff": "^5.2.2",
+    "express": "^5.3.0",
     "fs-extra": "^10.1.0",
     "gitconfiglocal": "^2.1.0",
     "glob": "^7.2.3",
     "graceful-fs": "^4.2.10",
-    "handlebars": "^4.7.8",
+    "handlebars": "^4.7.10",
     "inquirer": "^8.1.2",
     "jayson": "^4.1.0",
-    "js-yaml": "^4.0.3",
-    "jsdom": "^16.6.0",
+    "js-yaml": "^4.3.2",
     "langchain": "^0.2.12",
     "lru-cache": "^10.2.2",
     "lunr": "^2.3.9",
@@ -160,9 +160,8 @@
     "sql-formatter": "^4.0.2",
     "strip-ansi": "^6.0.0",
     "tsyringe": "^4.8.0",
-    "validator": "^13.7.0",
-    "w3c-xmlserializer": "^2.0.0",
-    "ws": "^8.18.1",
+    "validator": "^13.15.35",
+    "ws": "^8.21.3",
     "yargs": "^17.1.1"
   },
   "pkg": {
@@ -194,6 +193,7 @@
     "outputPath": "dist"
   },
   "optionalDependencies": {
+    "fsevents": "~2.3.2",
     "puppeteer": "^19.7.5"
   }
 }

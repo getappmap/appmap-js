@@ -1,3 +1,54 @@
+# [@appland/appmap-v3.205.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.204.1...@appland/appmap-v3.205.0) (2026-10-30)
+
+
+### Features
+
+* Require Node 22 ([d4d97f8](https://github.com/getappmap/appmap-js/commit/d4d97f85e184ea5c799851718fa973da1d0baa7e))
+
+# [@appland/appmap-v3.204.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.204.0...@appland/appmap-v3.204.1) (2026-10-13)
+
+
+### Bug Fixes
+
+* **cli:** Make appmap open show the AppMap viewer again ([bfa9fb4](https://github.com/getappmap/appmap-js/commit/bfa9fb482b9fccb33bc2d152323047c0b1453083))
+* **cli:** mask header values recorded as arrays ([1e0ae62](https://github.com/getappmap/appmap-js/commit/1e0ae626f1042c469860fcc51149255012f494ae)), closes [#2404](https://github.com/getappmap/appmap-js/issues/2404)
+* **cli:** serve JS, CSS, JSON and source maps with their media types ([3d88bab](https://github.com/getappmap/appmap-js/commit/3d88babddd840db565d84349a53faef710ad312b)), closes [#2406](https://github.com/getappmap/appmap-js/issues/2406)
+
+# [@appland/appmap-v3.204.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.203.1...@appland/appmap-v3.204.0) (2026-09-19)
+
+
+### Features
+
+* **cli:** require the sequence diagram diff that reports moved blocks ([f46c121](https://github.com/getappmap/appmap-js/commit/f46c121e734b2238ff6bf6085e2154a3febf2228)), closes [#2402](https://github.com/getappmap/appmap-js/issues/2402)
+
+# [@appland/appmap-v3.203.1](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.203.0...@appland/appmap-v3.203.1) (2026-09-18)
+
+
+### Bug Fixes
+
+* skip building fsevents on non-macOS npm/npx installs ([e1e675b](https://github.com/getappmap/appmap-js/commit/e1e675bc6e609936db2eabd0543f84e4637896ee))
+
+# [@appland/appmap-v3.203.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.202.0...@appland/appmap-v3.203.0) (2026-09-16)
+
+
+### Features
+
+* **query:** add sql_normalized to query tree SQL nodes ([92ec566](https://github.com/getappmap/appmap-js/commit/92ec5665eec2438bff059beae6db9c9ba9937587))
+
+# [@appland/appmap-v3.202.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.4...@appland/appmap-v3.202.0) (2026-09-16)
+
+
+### Features
+
+* **cli:** honor APPMAP_CUSTOMER_ID as entitlement in checkLicense ([8601365](https://github.com/getappmap/appmap-js/commit/8601365cf71745a5bd37f9a0d9dd91cbc75ef5b2))
+
+# [@appland/appmap-v3.201.4](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.3...@appland/appmap-v3.201.4) (2026-09-11)
+
+
+### Performance Improvements
+
+* **cli:** Load subcommands and their heavy dependencies on dispatch ([c53c0fe](https://github.com/getappmap/appmap-js/commit/c53c0fe2c14e713c2c0a019c4a34796f9f37c4e8))
+
 # [@appland/appmap-v3.201.3](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.201.2...@appland/appmap-v3.201.3) (2026-07-27)
 
 

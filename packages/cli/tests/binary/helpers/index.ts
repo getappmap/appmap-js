@@ -66,25 +66,17 @@ export function waitForStdout(
   });
 }
 
-export async function buildRubyProject(): Promise<string> {
+// A project with an appmap.yml and a single pre-recorded AppMap, so the binary
+// can be exercised without installing or running any language agent.
+export async function buildFixtureProject(): Promise<string> {
   const projectPath = join(tmpdir(), `test-appmap-project-${Date.now()}`);
-  const srcPath = join(projectPath, 'src');
   const appMapDir = join(projectPath, 'tmp', 'appmap');
 
-  await mkdir(srcPath, { recursive: true });
   await mkdir(appMapDir, { recursive: true });
 
-  await writeFile(join(projectPath, 'Gemfile'), 'source "https://rubygems.org"\n');
-  await writeFile(join(srcPath, 'main.rb'), 'puts "Hello, world!"');
   await writeFile(
     join(projectPath, 'appmap.yml'),
-    [
-      'name: test-appmap-project',
-      'language: ruby',
-      'appmap_dir: tmp/appmap',
-      'packages:',
-      '  - src',
-    ].join('\n')
+    ['name: test-appmap-project', 'language: ruby', 'appmap_dir: tmp/appmap'].join('\n')
   );
 
   await copyFile(

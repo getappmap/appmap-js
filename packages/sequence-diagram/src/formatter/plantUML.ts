@@ -162,8 +162,13 @@ class Label {
     } else if (this.action.diffMode && label && formerLabel && label === formerLabel) {
       tokens.push(label);
     } else if (label) {
-      if (this.action.diffMode) {
-        this.action.diffMode === DiffMode.Delete ? removedSegment(label) : addedSegment(label);
+      if (this.action.diffMode === DiffMode.Delete) {
+        removedSegment(label);
+      } else if (this.action.diffMode === DiffMode.Move) {
+        // Unchanged text; the arrow color says it moved.
+        tokens.push(label);
+      } else if (this.action.diffMode) {
+        addedSegment(label);
       } else {
         tokens.push(label);
       }
@@ -200,6 +205,10 @@ function color(action: Action, markupEnabled: boolean): string | undefined {
       return 'green';
     case DiffMode.Change:
       return 'CA9C3F';
+    case DiffMode.Move:
+      // Violet, matching $sequence-diff-modes in @appland/components: a blue here
+      // would collide with the blue that view uses for a change.
+      return '7E3ABF';
   }
 }
 

@@ -1,3 +1,17 @@
+# [@appland/scanner-v1.92.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.3...@appland/scanner-v1.92.0) (2026-10-30)
+
+
+### Features
+
+* Require Node 22 ([d4d97f8](https://github.com/getappmap/appmap-js/commit/d4d97f85e184ea5c799851718fa973da1d0baa7e))
+
+# [@appland/scanner-v1.91.3](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.2...@appland/scanner-v1.91.3) (2026-09-18)
+
+
+### Bug Fixes
+
+* skip building fsevents on non-macOS npm/npx installs ([e1e675b](https://github.com/getappmap/appmap-js/commit/e1e675bc6e609936db2eabd0543f84e4637896ee))
+
 # [@appland/scanner-v1.91.2](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.1...@appland/scanner-v1.91.2) (2026-08-10)
 
 

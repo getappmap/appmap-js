@@ -469,6 +469,35 @@ describe('tree --filter', () => {
       db.close();
     }
   });
+
+  it('sql nodes carry sql_normalized with literals replaced, alongside the full sql_text', () => {
+    const db = freshDb();
+    try {
+      const id = seed(db);
+      db.prepare(
+        `INSERT INTO sql_queries (appmap_id, event_id, parent_event_id, thread_id,
+           sql_text, database_type, elapsed_ms)
+         VALUES (?, 7, 2, 1, ?, 'postgres', 1.0)`
+      ).run(id, "SELECT * FROM orders WHERE id = 42 AND status = 'paid' AND ids IN (1, 2, 3)");
+      const sqls = tree(db, 'orders_create_42').filter((n) => n.kind === 'sql');
+      expect(sqls).toHaveLength(2);
+      const literal = sqls.find((n) => n.event_id === 7)!;
+      expect(literal.kind).toBe('sql');
+      if (literal.kind !== 'sql') return;
+      expect(literal.sql_text).toBe(
+        "SELECT * FROM orders WHERE id = 42 AND status = 'paid' AND ids IN (1, 2, 3)"
+      );
+      expect(literal.sql_normalized).toBe(
+        'SELECT * FROM orders WHERE id = ? AND status = ? AND ids IN (?, ?, ?)'
+      );
+      // A query with no literals normalizes to itself.
+      const plain = sqls.find((n) => n.event_id === 3)!;
+      if (plain.kind !== 'sql') return;
+      expect(plain.sql_normalized).toBe(plain.sql_text);
+    } finally {
+      db.close();
+    }
+  });
 });
 
 describe('log nodes in tree', () => {

@@ -1,3 +1,17 @@
+# [@appland/search-v1.3.0](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.4...@appland/search-v1.3.0) (2026-10-30)
+
+
+### Features
+
+* Require Node 22 ([d4d97f8](https://github.com/getappmap/appmap-js/commit/d4d97f85e184ea5c799851718fa973da1d0baa7e))
+
+# [@appland/search-v1.2.4](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.3...@appland/search-v1.2.4) (2026-09-18)
+
+
+### Bug Fixes
+
+* **search:** declare the Node versions this package actually supports ([e5102a2](https://github.com/getappmap/appmap-js/commit/e5102a23755b94acfced425ba33540e3e9457cf1))
+
 # [@appland/search-v1.2.3](https://github.com/getappmap/appmap-js/compare/@appland/search-v1.2.2...@appland/search-v1.2.3) (2025-07-07)
 
 

@@ -72,10 +72,15 @@ export default class ObserveCommand implements Command {
     }
 
     const containsUnknownLanguage = projectInfos.some((info) => !info.appmapConfig?.language);
-    const languageTable = projectInfos.reduce((acc, info) => {
-      acc += `| ${info.directory} | ${info.appmapConfig?.language ?? 'unknown'} |\n`;
-      return acc;
-    }, '| Directory | Language |\n| --- | --- |\n');
+    const languageLines = projectInfos.map(
+      (info) => `| ${info.directory} | ${info.appmapConfig?.language ?? 'unknown'} |`
+    );
+    const languageTable = [
+      '| Directory | Language |',
+      '| --- | --- |',
+      ...languageLines,
+      '',
+    ].join('\n');
 
     return [
       'The language of the test must be one of the following, associated by project directory:',

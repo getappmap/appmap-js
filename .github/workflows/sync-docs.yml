@@ -1,0 +1,110 @@
+name: Sync docs
+
+# docs/ is the help corpus for `appmap navie help` (see scripts/sync-docs.mjs).
+# getappmap/applandinc.github.io owns the content; this workflow pulls it in and
+# opens a pull request so a human reviews what ships in the CLI.
+#
+# Pull, rather than a push from the website repo: a schedule is self-healing (a
+# missed run is fixed by the next one), failures surface in the repo that owns the
+# consumer, and the credential only needs *read* access to the website.
+
+on:
+  schedule:
+    # Mondays, 06:00 UTC. Deliberately off the hour the CI workflow uses.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+  # Let the website repo request an immediate sync for urgent changes. If the
+  # dispatch never arrives, the schedule still catches the change.
+  repository_dispatch:
+    types: [sync-docs]
+
+# GITHUB_TOKEN only ever reads this repository; the pull request is pushed with
+# an app token instead (see below).
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-docs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Must come before the website checkout: this one cleans the workspace.
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # A read-only deploy key rather than an app installation token. A GitHub App
+      # declares its permissions app-wide, not per repository, so installing
+      # appmap-releasebot on the website would let every holder of its private key
+      # — appmap-ruby, appmap-node, appmap-intellij-plugin — mint write access to
+      # it. Requesting a downscoped token here would not help: the key material in
+      # this job can always ask for more. A deploy key is scoped to one repository
+      # and read-only by construction, so nothing in this job can write to the
+      # website.
+      - name: Checkout website docs
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository_owner }}/applandinc.github.io
+          ssh-key: ${{ secrets.DOCS_REPO_SSH_KEY }}
+          path: website
+          # Only the docs are needed; the rest of the website never touches disk.
+          sparse-checkout: _docs
+          persist-credentials: false
+
+      - name: Record source revision
+        id: source
+        run: echo "sha=$(git -C website rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Sync docs
+        run: node scripts/sync-docs.mjs --source website/_docs
+
+      # Not GITHUB_TOKEN: GitHub suppresses workflow runs for events it authors, so
+      # a pull request created with it would arrive with no checks — and test_cli
+      # building the help index over docs/ is the point of opening one. Scoped to
+      # this repository, and minted here rather than up front so it is only live
+      # for the step that needs it.
+      - name: Generate GitHub App token
+        id: app-token
+        # Pinned: this step reads the app's private key, so a compromised release
+        # behind a mutable tag would be the worst place to find one.
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          # client-id, not app-id: the latter is deprecated as of v3.1.0. Note this
+          # is the app's Client ID (Iv23li...), a different value from its App ID.
+          client-id: ${{ secrets.RELEASE_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Create or update pull request
+        # Pinned: runs in the same job as the app token.
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          base: main
+          branch: chore/sync-docs
+          delete-branch: true
+          # Only docs/ is committed, so the website checkout in website/ cannot
+          # leak into the pull request.
+          add-paths: docs
+          title: 'chore: sync docs from applandinc.github.io'
+          commit-message: |
+            chore: sync docs from applandinc.github.io
+
+            Mirrors _docs from getappmap/applandinc.github.io@${{ steps.source.outputs.sha }}.
+          body: |
+            Mirrors `_docs` from
+            [getappmap/applandinc.github.io@${{ steps.source.outputs.sha }}](https://github.com/${{ github.repository_owner }}/applandinc.github.io/commit/${{ steps.source.outputs.sha }})
+            into `docs/`, the help corpus that `appmap navie help` indexes and that
+            `packages/cli` bundles into its published artifacts.
+
+            Opened by [`.github/workflows/sync-docs.yml`](https://github.com/${{ github.repository }}/blob/main/.github/workflows/sync-docs.yml).
+            To reproduce or amend locally:
+
+            ```sh
+            yarn sync-docs --source ../applandinc.github.io/_docs
+            ```
+
+            Check that `test_cli` passes — it builds the help index over `docs/`,
+            so a reorganization upstream can legitimately break search.

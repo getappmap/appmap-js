@@ -39,8 +39,8 @@ export default async function performSetup() {
   try {
     await run(
       new CommandStruct(
-        './bin/build-native',
-        [os, arch],
+        'node',
+        ['bin/build-native', os, arch],
         packageRoot,
         {}
       )

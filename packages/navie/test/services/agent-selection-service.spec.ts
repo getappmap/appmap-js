@@ -1,8 +1,6 @@
 import ExplainAgent from '../../src/agents/explain-agent';
 import HelpAgent from '../../src/agents/help-agent';
-import { ContextV2 } from '../../src/context';
 import InteractionHistory, { AgentSelectionEvent } from '../../src/interaction-history';
-import { UserOptions } from '../../src/lib/parse-options';
 import AgentSelectionService from '../../src/services/agent-selection-service';
 import ApplyContextService from '../../src/services/apply-context-service';
 import FileChangeExtractorService from '../../src/services/file-change-extractor-service';
@@ -19,7 +17,6 @@ describe('AgentSelectionService', () => {
   let mermaidFixerService: MermaidFixerService;
   const genericQuestion = 'How does user management work?';
   const helpAgentQueston = '@help How to make a diagram?';
-  const emptyUserOptions = new UserOptions(new Map());
 
   function buildAgentSelectionService() {
     return new AgentSelectionService(
@@ -42,11 +39,10 @@ describe('AgentSelectionService', () => {
   });
 
   const agentSelectionEvent = (): AgentSelectionEvent | undefined =>
-    interactionHistory.events.find((event) => event instanceof AgentSelectionEvent) as any;
+    interactionHistory.events.find((event) => event instanceof AgentSelectionEvent);
 
   describe('when the question specifies an agent', () => {
-    const invokeAgent = () =>
-      buildAgentSelectionService().selectAgent(helpAgentQueston, [], emptyUserOptions);
+    const invokeAgent = () => buildAgentSelectionService().selectAgent(helpAgentQueston);
 
     it('creates the specified agent', () => {
       const { agent } = invokeAgent();
@@ -67,29 +63,9 @@ describe('AgentSelectionService', () => {
 
   describe('by default', () => {
     it('creates an Explain agent', () => {
-      const { agent, question } = buildAgentSelectionService().selectAgent(
-        genericQuestion,
-        [],
-        emptyUserOptions
-      );
+      const { agent, question } = buildAgentSelectionService().selectAgent(genericQuestion);
       expect(agent).toBeInstanceOf(ExplainAgent);
       expect(question).toEqual(question);
-    });
-  });
-
-  describe('when the question is classified as help-with-appmap', () => {
-    it('creates an explain agent', () => {
-      const { agent } = buildAgentSelectionService().selectAgent(
-        genericQuestion,
-        [
-          {
-            name: ContextV2.ContextLabelName.HelpWithAppMap,
-            weight: ContextV2.ContextLabelWeight.High,
-          },
-        ],
-        emptyUserOptions
-      );
-      expect(agent).toBeInstanceOf(ExplainAgent);
     });
   });
 });

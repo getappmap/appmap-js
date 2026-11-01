@@ -1,3 +1,0 @@
-[submodule ".claude/appland-skills"]
-	path = .claude/appland-skills
-	url = https://github.com/getappmap/skills.git

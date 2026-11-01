@@ -1,7 +1,9 @@
-import XML from 'fast-xml-parser';
+import { XMLParser } from 'fast-xml-parser';
 
 import { FileUpdate } from '../file-update';
 import { Update } from '../services/compute-update-service';
+
+const parser = new XMLParser({ trimValues: false });
 
 export default function extractFileChanges(content: string): (Update & { file?: string })[] {
   // Search for <change> tags
@@ -16,7 +18,6 @@ export default function extractFileChanges(content: string): (Update & { file?: 
   while ((match = changeRegex.exec(content)) !== null) {
     const change = match[1];
 
-    const parser = new XML.XMLParser();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const jObj = parser.parse(change);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -24,6 +25,7 @@ export default function extractFileChanges(content: string): (Update & { file?: 
       const update = jObj as FileUpdate;
       update.original = trimChange(update.original);
       update.modified = trimChange(update.modified);
+      if (update.file) update.file = update.file.trim();
       changes.push(jObj as FileUpdate);
     }
   }

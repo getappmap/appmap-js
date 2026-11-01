@@ -18,14 +18,16 @@ describe('Sequence diagram diff', () => {
       assert.deepStrictEqual(
         computedDiff.moves.map((state) => state.moveType),
         [
+          // show, then find changes (raises instead of returning a user) and its
+          // query is unchanged beneath it; everything after that is new.
           MoveType.AdvanceBoth,
           MoveType.Change,
+          MoveType.AdvanceBoth,
 
           MoveType.InsertRight,
           MoveType.InsertRight,
           MoveType.InsertRight,
           MoveType.InsertRight,
-          MoveType.AdvanceBoth,
           MoveType.InsertRight,
           MoveType.InsertRight,
         ]

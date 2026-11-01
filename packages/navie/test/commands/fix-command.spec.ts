@@ -84,11 +84,8 @@ describe('FixCommand', () => {
     };
     fixCommand = new FixCommand(explainCommand);
     // Just run to ensure no errors
-    await (async () => {
-      for await (const _ of fixCommand.execute(request)) {
-        break;
-      }
-    })();
+    const iterator = fixCommand.execute(request)[Symbol.asyncIterator]();
+    await iterator.next();
     expect(userOptions.clone).toHaveBeenCalled();
   });
 });

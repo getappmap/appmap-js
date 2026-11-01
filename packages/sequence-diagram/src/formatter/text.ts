@@ -1,4 +1,4 @@
-import type { Action, Actor, Diagram } from '../types';
+import type { Action, Actor, Diagram, NodeIdentity } from '../types';
 import {
   actionActors,
   DiffMode,
@@ -6,8 +6,10 @@ import {
   isFunction,
   isQuery,
   isServerRPC,
+  nodeIdentity,
   nodeName,
   nodeResult,
+  sameNode,
 } from '../types';
 
 export const extension = '.txt';
@@ -20,6 +22,8 @@ function diffModeName(diffMode: DiffMode): string {
       return 'added';
     case DiffMode.Delete:
       return 'removed';
+    case DiffMode.Move:
+      return 'moved';
   }
 }
 
@@ -82,6 +86,21 @@ export function format(diagram: Diagram, maxDepth = 4): string {
           tokens.push('instead of');
           tokens.push(formerResult || 'undefined');
         }
+      } else if (action.diffMode === DiffMode.Move) {
+        // The same block, now under a different parent, or in a different place
+        // among its siblings when the parent is the same. The parents are compared
+        // by identity rather than by name, so a block that moved between two
+        // same-named methods on different actors is not called a reorder.
+        const newParent = action.parent ? nodeIdentity(action.parent) : undefined;
+        const oldParent = action.movedFrom;
+        const reordered = sameNode(oldParent, newParent);
+        const parentName = (parent: NodeIdentity | undefined): string =>
+          parent ? ['', normalizeName(parent.name), ''].join('`') : 'the top level';
+
+        tokens.push(reordered ? 'reordered' : 'moved');
+        tokens.push(qualifyAction(normalizeName(nodeName(action))));
+        tokens.push(reordered ? 'within' : 'from');
+        tokens.push(parentName(reordered ? newParent : oldParent));
       } else {
         tokens.push(diffModeName(action.diffMode));
         tokens.push(qualifyAction(normalizeName(nodeName(action))));

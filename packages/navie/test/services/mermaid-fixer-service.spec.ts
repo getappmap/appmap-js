@@ -22,6 +22,7 @@ describe('MermaidFixerService', () => {
     const error = 'Error: Something went wrong';
     const repairedDiagram = 'graph TD\n  A --> B';
 
+    // eslint-disable-next-line @typescript-eslint/require-await
     const completer = async function* () {
       yield `graph TD\n  A --> B`;
     };

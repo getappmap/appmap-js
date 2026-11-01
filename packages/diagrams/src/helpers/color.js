@@ -137,36 +137,36 @@ export default class Color {
     }
   }
 
-  set r(val) {
-    this.$data.r = Math.floor(clamp(val, 0, 255));
-  }
-
-  set g(val) {
-    this.$data.g = Math.floor(clamp(val, 0, 255));
-  }
-
-  set b(val) {
-    this.$data.b = Math.floor(clamp(val, 0, 255));
-  }
-
-  set a(val) {
-    this.$data.a = clamp(val, 0, 1);
-  }
-
   get r() {
     return this.$data.r;
+  }
+
+  set r(val) {
+    this.$data.r = Math.floor(clamp(val, 0, 255));
   }
 
   get g() {
     return this.$data.g;
   }
 
+  set g(val) {
+    this.$data.g = Math.floor(clamp(val, 0, 255));
+  }
+
   get b() {
     return this.$data.b;
   }
 
+  set b(val) {
+    this.$data.b = Math.floor(clamp(val, 0, 255));
+  }
+
   get a() {
     return this.$data.a;
+  }
+
+  set a(val) {
+    this.$data.a = clamp(val, 0, 1);
   }
 
   get rgb() {

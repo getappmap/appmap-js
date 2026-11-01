@@ -1,5 +1,3 @@
-import { SELECTED_BACKEND } from '@appland/navie';
-
 const azureVariables = [
   'AZURE_OPENAI_API_KEY',
   'AZURE_OPENAI_API_DEPLOYMENT_NAME',
@@ -69,6 +67,11 @@ function defaultBaseUrlForProvider(provider: string): string | undefined {
  * This does not include any dynamic changes made by the user.
  */
 export function getLLMConfiguration(): LLMConfiguration {
+  // Loaded here rather than at the top: this constant is the only thing needed
+  // from Navie, and importing the package loads mermaid, jsdom and langchain.
+  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+  const { SELECTED_BACKEND } = require('@appland/navie') as typeof import('@appland/navie');
+
   const provider = process.env.APPMAP_NAVIE_COMPLETION_BACKEND ?? SELECTED_BACKEND ?? 'openai';
   const baseUrl = defaultBaseUrlForProvider(provider);
 

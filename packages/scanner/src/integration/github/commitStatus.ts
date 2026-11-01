@@ -1,5 +1,3 @@
-import { Octokit } from 'octokit';
-
 import {
   owner,
   repo,
@@ -13,7 +11,9 @@ import {
 
 type CommitStatusState = 'pending' | 'success' | 'error' | 'failure';
 
-export default function postCommitStatus(
+const GITHUB_API_URL = 'https://api.github.com';
+
+export default async function postCommitStatus(
   state: CommitStatusState,
   description: string
 ): Promise<unknown> {
@@ -22,15 +22,32 @@ export default function postCommitStatus(
   validateOwner();
   validateSha();
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const octo = new Octokit({ auth: token() });
+  const url = `${GITHUB_API_URL}/repos/${encodeURIComponent(owner()!)}/${encodeURIComponent(
+    repo()!
+  )}/statuses/${encodeURIComponent(sha()!)}`;
 
-  return octo.rest.repos.createCommitStatus({
-    owner: owner()!,
-    repo: repo()!,
-    sha: sha()!,
-    state: state,
-    context: 'appland/scanner',
-    description: description,
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      accept: 'application/vnd.github+json',
+      authorization: `token ${token()!}`,
+      'content-type': 'application/json',
+      'user-agent': 'appland-scanner',
+      'x-github-api-version': '2022-11-28',
+    },
+    body: JSON.stringify({
+      state,
+      context: 'appland/scanner',
+      description,
+    }),
   });
+
+  if (!response.ok)
+    throw new Error(
+      `Failed to update commit status: ${response.status} ${
+        response.statusText
+      } ${await response.text()}`
+    );
+
+  return (await response.json()) as unknown;
 }

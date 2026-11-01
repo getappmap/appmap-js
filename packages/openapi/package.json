@@ -12,7 +12,8 @@
     "test": "jest",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/jest": "^29.4.1",
@@ -27,7 +28,7 @@
   },
   "dependencies": {
     "@appland/models": "workspace:^2.10.0",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.3.2"
   },
   "publishConfig": {
     "access": "public"

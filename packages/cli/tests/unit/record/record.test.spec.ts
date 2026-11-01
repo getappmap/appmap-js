@@ -17,7 +17,7 @@ import TestCaseRecording from '../../../src/cmds/record/testCaseRecording';
 import RecordContext, { RecordProcessResult } from '../../../src/cmds/record/recordContext';
 import Configuration from '../../../src/cmds/record/configuration';
 import { withStubbedTelemetry } from '../../helper';
-import RecordCommand from '../../../src/cmds/record/record';
+import recordHandler from '../../../src/cmds/record/recordHandler';
 
 describe('record test', () => {
   withStubbedTelemetry();
@@ -90,7 +90,7 @@ describe('record test', () => {
         d: dirPrefix,
       };
 
-      const ret = await RecordCommand.handler(argv);
+      const ret = await recordHandler(argv);
       expect(ret).toEqual(null);
 
       await unlink(directoryParam);
@@ -120,7 +120,7 @@ describe('record test', () => {
         directory: symlinkSrc,
         d: dirPrefix,
       };
-      const ret = await RecordCommand.handler(argv);
+      const ret = await recordHandler(argv);
       expect(ret).toEqual(null);
     });
   });

@@ -25,7 +25,7 @@ const httpOut: HttpClientNode = {
 };
 const sql: SqlNode = {
   kind: 'sql', event_id: 3, ...baseFields,
-  sql_text: 'SELECT 1', database_type: null, elapsed_ms: 1,
+  sql_text: 'SELECT 1', sql_normalized: 'SELECT ?', database_type: null, elapsed_ms: 1,
 };
 const fn: FunctionNode = {
   kind: 'function', event_id: 4, ...baseFields,

@@ -1,4 +1,5 @@
 import sqlite3 from 'better-sqlite3';
+import { normalizeSQL } from '@appland/models';
 
 import { looksLikeDisplayLabel } from '../lib/appmapPath';
 import { projectLogMessage } from '../lib/logMessage';
@@ -34,6 +35,11 @@ export interface HttpClientNode extends BaseNode {
 export interface SqlNode extends BaseNode {
   kind: 'sql';
   sql_text: string;
+  // sql_text with every literal replaced by `?`, the same normalization the
+  // sequence-diagram digest applies before deciding whether two recordings
+  // ran the same query. Lets a consumer diff two trees by query shape while
+  // keeping sql_text, values included, for the finding itself.
+  sql_normalized: string;
   database_type: string | null;
   elapsed_ms: number | null;
 }
@@ -269,6 +275,7 @@ export function treeWithMeta(
       thread_id: r.thread_id,
       depth: 0,
       sql_text: r.sql_text,
+      sql_normalized: normalizeSQL(r.sql_text, r.database_type ?? ''),
       database_type: r.database_type,
       elapsed_ms: r.elapsed_ms,
     });

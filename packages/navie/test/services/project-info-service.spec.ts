@@ -1,8 +1,10 @@
 import ProjectInfoService from '../../src/services/project-info-service';
 import InteractionHistory from '../../src/interaction-history';
-import { ProjectInfo, ProjectInfoProvider } from '../../src/project-info';
+import { ProjectInfoProvider } from '../../src/project-info';
 import { PromptType } from '../../src/prompt';
-import { jest } from '@jest/globals';
+// note: the expect from @jest/globals is typed more strictly than the global one,
+// avoiding unsafe any assignments when using asymmetric matchers
+import { expect, jest } from '@jest/globals';
 
 describe('ProjectInfoService', () => {
   let interactionHistory: InteractionHistory;
@@ -167,6 +169,7 @@ describe('ProjectInfoService', () => {
       };
 
       describe('and the question is about architecture', () => {
+        // eslint-disable-next-line jest/expect-expect
         test('the prompt includes the stats', async () => {
           const projectInfo = [
             {
@@ -181,6 +184,7 @@ describe('ProjectInfoService', () => {
       });
 
       describe('and the question is not about architecture', () => {
+        // eslint-disable-next-line jest/expect-expect
         test('the prompt includes small stats', async () => {
           const projectInfo = [
             {

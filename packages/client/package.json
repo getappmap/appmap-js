@@ -10,6 +10,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "test": "jest"
   },
   "publishConfig": {
@@ -20,8 +21,8 @@
   "dependencies": {
     "@appland/models": "workspace:^2.10.0",
     "@types/form-data": "^2.5.0",
-    "form-data": "^4.0.0",
-    "js-yaml": "^4.1.0",
+    "form-data": "^4.0.6",
+    "js-yaml": "^4.3.2",
     "rxjs": "^7.8.1",
     "socket.io-client": "^4.7.2"
   },
@@ -29,7 +30,7 @@
     "@types/jest": "^29.4.1",
     "@types/js-yaml": "^4.0.5",
     "@types/nock": "^11.1.0",
-    "@types/node": "^18",
+    "@types/node": "^22",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.7.0",
     "eslint": "^8.4.1",

@@ -1,6 +1,11 @@
 {
   "testFailures": [],
-  "newAppMaps": ["minitest/Users_profile_profile_display_while_logged_in_as_the_user"],
+  "newAppMaps": [
+    "minitest/Users_profile_profile_display_while_logged_in_as_the_user"
+  ],
+  "removedAppMaps": [
+    "minitest/Relationship_should_be_valid"
+  ],
   "changedAppMaps": [
     {
       "appmap": "minitest/Microposts_interface_micropost_interface",
@@ -19,60 +24,25 @@
       "sequenceDiagramDiff": "minitest/Users_signup_valid_signup_information_with_account_activation.diff.sequence.json"
     }
   ],
-  "removedAppMaps": ["minitest/Relationship_should_be_valid"],
   "sequenceDiagramDiff": {
     "": [
       "minitest/Microposts_interface_micropost_interface",
       "minitest/Users_login_login_with_valid_information_followed_by_logout",
       "minitest/Users_signup_valid_signup_information_with_account_activation"
     ],
-    "changed HTTP server request `GET /users/{id}` to return 302 instead of 200\n  changed function call `app/helpers#show` to function call `app/helpers#logged_in_user` and changed to return string instead of ActiveRecord::AssociationRelation\n    removed SQL `SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?`\n    removed function call `controllers#page_number`\n    changed function call `app/helpers#render` to function call `app/helpers#store_location` and changed to return string instead of void\n  removed function call `views.render`\n    removed function call `helpers#gravatar_for`\n4 times:     removed function call `views.render`\n      removed SQL `SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?`\n      removed SQL `SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?`\n    removed SQL `SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?`\n2 times:     removed SQL `SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?`\n      removed SQL `SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?`\n      removed loop\n    removed function call `helpers#full_title`\n      removed function call `helpers#logged_in?`": [
+    "changed HTTP server request `GET /users/{id}` to return 302 instead of 200\n  removed function call `controllers#show`\n    removed SQL `SELECT \"users\".* FROM \"users\" WHERE \"users\".\"id\" = ? LIMIT ?`\n    removed function call `controllers#page_number`\n  added function call `app/helpers#logged_in_user`\n    added function call `app/helpers#logged_in?`\n      added function call `app/helpers#current_user`\n    added function call `app/helpers#store_location`\n  removed function call `views.render`\n    removed function call `helpers#gravatar_for`\n5 times:     removed function call `views.render`\n      removed SQL `SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"followed_id\" WHERE \"relationships\".\"follower_id\" = ?`\n      removed SQL `SELECT COUNT(*) FROM \"users\" INNER JOIN \"relationships\" ON \"users\".\"id\" = \"relationships\".\"follower_id\" WHERE \"relationships\".\"followed_id\" = ?`\n    removed function call `helpers#logged_in?`\n      removed function call `helpers#current_user`\n    removed SQL `SELECT 1 AS one FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? LIMIT ?`\n2 times:     removed SQL `SELECT COUNT(*) FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ?`\n      removed SQL `SELECT \"microposts\".* FROM \"microposts\" WHERE \"microposts\".\"user_id\" = ? ORDER BY \"microposts\".\"created_at\" DESC LIMIT ? OFFSET ?`\n      removed loop\n    removed function call `helpers#full_title`\n      removed function call `helpers#logged_in?`": [
       "minitest/Users_profile_profile_display_while_anonyomus"
     ]
   },
   "appMapMetadata": {
     "base": {
-      "minitest/Microposts_interface_micropost_interface": {
-        "app": "sample_app_6th_ed",
-        "client": {
-          "name": "appmap",
-          "url": "https://github.com/applandinc/appmap-ruby",
-          "version": "0.102.1"
-        },
-        "frameworks": [
-          {
-            "name": "rails",
-            "version": "6.0.4.1"
-          },
-          {
-            "name": "minitest",
-            "version": "5.11.3"
-          }
-        ],
-        "git": {
-          "branch": "appmap-e2e",
-          "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
-          "git_last_annotated_tag": null,
-          "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
-        },
-        "name": "Microposts_interface micropost interface",
-        "recorder": {
-          "name": "minitest",
-          "type": "tests"
-        },
-        "source_location": "test/integration/microposts_interface_test.rb:9",
-        "test_status": "succeeded"
-      },
       "minitest/Relationship_should_be_valid": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -89,29 +59,68 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "appmap-e2e",
           "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Relationship should be valid",
+        "source_location": "test/models/relationship_test.rb:10",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/models/relationship_test.rb:10",
+        "test_status": "succeeded"
+      },
+      "minitest/Microposts_interface_micropost_interface": {
+        "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
+        "client": {
+          "name": "appmap",
+          "url": "https://github.com/applandinc/appmap-ruby",
+          "version": "0.102.1"
+        },
+        "frameworks": [
+          {
+            "name": "rails",
+            "version": "6.0.4.1"
+          },
+          {
+            "name": "minitest",
+            "version": "5.11.3"
+          }
+        ],
+        "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
+          "branch": "appmap-e2e",
+          "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
+          "git_last_annotated_tag": null,
+          "git_last_tag": null,
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
+        },
+        "name": "Microposts_interface micropost interface",
+        "source_location": "test/integration/microposts_interface_test.rb:9",
+        "recorder": {
+          "name": "minitest",
+          "type": "tests"
+        },
         "test_status": "succeeded"
       },
       "minitest/Users_edit_unsuccessful_edit": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -128,29 +137,29 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "appmap-e2e",
           "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_edit unsuccessful edit",
+        "source_location": "test/integration/users_edit_test.rb:9",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_edit_test.rb:9",
         "test_status": "succeeded"
       },
       "minitest/Users_login_login_with_valid_information_followed_by_logout": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -167,29 +176,29 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "appmap-e2e",
           "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_login login with valid information followed by logout",
+        "source_location": "test/integration/users_login_test.rb:21",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_login_test.rb:21",
         "test_status": "succeeded"
       },
       "minitest/Users_profile_profile_display_while_anonyomus": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -206,29 +215,29 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "appmap-e2e",
           "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_profile profile display while anonyomus",
+        "source_location": "test/integration/users_profile_test.rb:18",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_profile_test.rb:18",
         "test_status": "succeeded"
       },
       "minitest/Users_signup_valid_signup_information_with_account_activation": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -245,31 +254,31 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "appmap-e2e",
           "commit": "9745c3074776f1c102f193eec2a80ed7153a1412",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_signup valid signup information with account activation",
+        "source_location": "test/integration/users_signup_test.rb:22",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_signup_test.rb:22",
         "test_status": "succeeded"
       }
     },
     "head": {
       "minitest/Microposts_interface_micropost_interface": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -286,29 +295,29 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "HEAD",
           "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Microposts_interface micropost interface",
+        "source_location": "test/integration/microposts_interface_test.rb:9",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/microposts_interface_test.rb:9",
         "test_status": "succeeded"
       },
       "minitest/Users_edit_unsuccessful_edit": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -325,29 +334,29 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "HEAD",
           "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_edit unsuccessful edit",
+        "source_location": "test/integration/users_edit_test.rb:9",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_edit_test.rb:9",
         "test_status": "succeeded"
       },
       "minitest/Users_login_login_with_valid_information_followed_by_logout": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -364,29 +373,29 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "HEAD",
           "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_login login with valid information followed by logout",
+        "source_location": "test/integration/users_login_test.rb:21",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_login_test.rb:21",
         "test_status": "succeeded"
       },
       "minitest/Users_profile_profile_display_while_anonyomus": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -403,29 +412,29 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "HEAD",
           "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_profile profile display while anonyomus",
+        "source_location": "test/integration/users_profile_test.rb:18",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_profile_test.rb:18",
         "test_status": "succeeded"
       },
       "minitest/Users_profile_profile_display_while_logged_in_as_the_user": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -442,29 +451,29 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "HEAD",
           "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_profile profile display while logged in as the user",
+        "source_location": "test/integration/users_profile_test.rb:24",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_profile_test.rb:24",
         "test_status": "succeeded"
       },
       "minitest/Users_signup_valid_signup_information_with_account_activation": {
         "app": "sample_app_6th_ed",
+        "language": {
+          "name": "ruby",
+          "engine": "ruby",
+          "version": "3.0.2"
+        },
         "client": {
           "name": "appmap",
           "url": "https://github.com/applandinc/appmap-ruby",
@@ -481,25 +490,20 @@
           }
         ],
         "git": {
+          "repository": "https://github.com/land-of-apps/sample_app_6th_ed",
           "branch": "HEAD",
           "commit": "7b255b2478f1a8a8c70b3d8adb52cd858397c38a",
-          "git_commits_since_last_annotated_tag": null,
-          "git_commits_since_last_tag": null,
           "git_last_annotated_tag": null,
           "git_last_tag": null,
-          "repository": "https://github.com/land-of-apps/sample_app_6th_ed"
-        },
-        "language": {
-          "engine": "ruby",
-          "name": "ruby",
-          "version": "3.0.2"
+          "git_commits_since_last_annotated_tag": null,
+          "git_commits_since_last_tag": null
         },
         "name": "Users_signup valid signup information with account activation",
+        "source_location": "test/integration/users_signup_test.rb:22",
         "recorder": {
           "name": "minitest",
           "type": "tests"
         },
-        "source_location": "test/integration/users_signup_test.rb:22",
         "test_status": "succeeded"
       }
     }
@@ -743,6 +747,15 @@
       }
     ]
   },
+  "sqlDiff": {
+    "newQueries": [],
+    "removedQueries": [
+      "begin transaction",
+      "rollback transaction"
+    ],
+    "newTables": [],
+    "removedTables": []
+  },
   "apiDiff": {
     "breakingDifferencesFound": false,
     "nonBreakingDifferences": [
@@ -767,11 +780,5 @@
       }
     ],
     "unclassifiedDifferences": []
-  },
-  "sqlDiff": {
-    "newQueries": [],
-    "newTables": [],
-    "removedQueries": ["begin transaction", "rollback transaction"],
-    "removedTables": []
   }
 }
