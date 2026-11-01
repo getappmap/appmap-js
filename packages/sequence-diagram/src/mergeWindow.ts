@@ -52,9 +52,10 @@ function compressionProperties(action: Action): unknown[] {
     actionActors(action).map((actor) => actor?.id),
     isLoop(action) ? action.count : undefined,
     functionProperties,
-    // Query digests can be normalized, or even the constant "truncatedQuery".
-    // The representative must not erase the actual statement or classification.
-    isQuery(action) ? action.query : undefined,
+    // A complete statement's digest is normalized on purpose, so iterations that differ
+    // only in literal values still form a loop. Every truncated statement shares the
+    // constant "truncatedQuery" digest, so compare its text instead.
+    isQuery(action) && action.digest === 'truncatedQuery' ? action.query : undefined,
     action.labels,
     isServerRPC(action) || isClientRPC(action) ? [action.route, action.status] : undefined,
     // Inspect current children, not just a digest built before inner compression.

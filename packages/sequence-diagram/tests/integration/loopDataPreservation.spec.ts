@@ -351,3 +351,31 @@ describe('GIVEN truncated native queries sharing the legacy truncatedQuery diges
     }
   );
 });
+
+describe('GIVEN complete native queries whose statements differ only in literal values', () => {
+  const iteration = (sql: string): Call => ({ name: 'posts', children: [{ name: 'query', sql }] });
+
+  it('WHEN repeated iterations are compressed THEN the normalized statement still forms one loop', () => {
+    const calls = [1, 2, 3].map((id) => iteration(`SELECT * FROM posts WHERE user_id = ${id}`));
+    const queries = flatten(build(calls, false)).filter(isQuery);
+    expect(new Set(queries.map((action) => action.digest)).size).toBe(1);
+
+    const compressed = build(calls);
+    expect(compressed.rootActions[0].children).toHaveLength(1);
+    expect(compressed.rootActions[0].children[0]).toMatchObject({
+      nodeType: NodeType.Loop,
+      count: 3,
+    });
+    const compressedQueries = flatten(compressed).filter(isQuery);
+    expect(compressedQueries).toHaveLength(1);
+    expect(compressedQueries[0].eventIds).toEqual([3, 7, 11]);
+  });
+
+  it('WHEN iterations run different complete statements THEN they are not merged', () => {
+    const calls = [
+      iteration('SELECT * FROM posts WHERE user_id = 1'),
+      iteration('DELETE FROM posts WHERE user_id = 1'),
+    ];
+    expect(build(calls).rootActions[0].children).toHaveLength(2);
+  });
+});
