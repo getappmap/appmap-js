@@ -28,6 +28,13 @@ function buildDigest(actions: Action[]): string {
   return digest(actions.map((action) => action.subtreeDigest).join('\n'));
 }
 
+// Mask complete single-quoted strings and standalone numbers in a truncated statement, so that
+// iterations differing only in those values still form a loop. Identifiers, keywords and a
+// literal cut off by the truncation are compared exactly; the SQL dialect is not known here.
+function truncatedQueryText(query: string): string {
+  return query.replace(/'(?:[^']|'')*'/g, '?').replace(/\b\d+(?:\.\d+)?\b/g, '?');
+}
+
 // Compression identities by action, valid for one diagram build: loop detection compresses an
 // action's children before its siblings are compared, and merging only changes event IDs and
 // elapsed time, which the identity excludes.
@@ -68,8 +75,10 @@ function compressionProperties(action: Action, identities: CompressionIdentities
     functionProperties,
     // A complete statement's digest is normalized on purpose, so iterations that differ
     // only in literal values still form a loop. Every truncated statement shares the
-    // constant "truncatedQuery" digest, so compare its text instead.
-    isQuery(action) && action.digest === 'truncatedQuery' ? action.query : undefined,
+    // constant "truncatedQuery" digest, so compare its text, with literals masked.
+    isQuery(action) && action.digest === 'truncatedQuery'
+      ? truncatedQueryText(action.query)
+      : undefined,
     action.labels,
     isServerRPC(action) || isClientRPC(action) ? [action.route, action.status] : undefined,
     // Inspect current children, not just a digest built before inner compression.
