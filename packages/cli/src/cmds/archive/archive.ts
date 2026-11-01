@@ -5,7 +5,8 @@ import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 // ## 1.3.1
 //
 // * Sequence diagram subtree digests are rebuilt after loop compression and include each loop's
-//   count, so the digests of loops and their ancestors change.
+//   count, so the digests of loops and their ancestors change. A change that alters loop
+//   grouping, such as a different return type inside repeated calls, now changes them too.
 //
 // ## 1.3.0
 //
