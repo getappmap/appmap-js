@@ -18,11 +18,21 @@ describe('compiled-assets-only CLI packaging', () => {
   });
 
   it('Given a workspace build, when packed by Yarn, then the actual archive preserves assets and normalized dependencies', () => {
-    execFileSync(process.execPath, ['--test', resolve(__dirname, '../compiled-assets-pack.test.cjs')], {
-      cwd: packageRoot,
-      encoding: 'utf8',
-      maxBuffer: 4 * 1024 * 1024,
-      timeout: 100000,
-    });
+    try {
+      execFileSync(
+        process.execPath,
+        ['--test', resolve(__dirname, '../compiled-assets-pack.test.cjs')],
+        {
+          cwd: packageRoot,
+          encoding: 'utf8',
+          maxBuffer: 4 * 1024 * 1024,
+          timeout: 100000,
+        }
+      );
+    } catch (error) {
+      // node:test reports its assertions on stdout; keep them in the Jest failure.
+      const { stdout, stderr } = error as { stdout?: string; stderr?: string };
+      throw new Error(`The archive test failed:\n${stdout ?? ''}${stderr ?? ''}`);
+    }
   }, 110000);
 });
