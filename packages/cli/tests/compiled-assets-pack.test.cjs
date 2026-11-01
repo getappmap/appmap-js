@@ -10,7 +10,7 @@ const cli = path.resolve(__dirname, '..');
 const root = path.resolve(cli, '../..');
 const manifest = JSON.parse(fs.readFileSync(path.join(cli, 'package.json')));
 // Use the Yarn release the repository pins, whatever its version.
-const yarnPath = /^yarnPath:\s*['"]?([^'"\n]+?)['"]?\s*$/m.exec(
+const yarnPath = /^yarnPath:\s*['"]?([^'"#\n]+?)['"]?\s*(?:#.*)?$/m.exec(
   fs.readFileSync(path.join(root, '.yarnrc.yml'), 'utf8')
 )?.[1];
 const sha = (bytes) => createHash('sha256').update(bytes).digest('hex');
@@ -52,7 +52,7 @@ test('Given a current workspace build, when Yarn packs the actual CLI, then norm
     assert.ok(yarnPath, 'The repository pins Yarn with yarnPath in .yarnrc.yml');
     execFileSync(
       process.execPath,
-      [path.join(root, yarnPath), 'workspace', manifest.name, 'pack', '--out', archive],
+      [path.resolve(root, yarnPath), 'workspace', manifest.name, 'pack', '--out', archive],
       {
         cwd: root,
         encoding: 'utf8',

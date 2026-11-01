@@ -31,8 +31,10 @@ describe('compiled-assets-only CLI packaging', () => {
       );
     } catch (error) {
       // node:test reports its assertions on stdout; keep them in the Jest failure.
-      const { stdout, stderr } = error as { stdout?: string; stderr?: string };
-      throw new Error(`The archive test failed:\n${stdout ?? ''}${stderr ?? ''}`);
+      const { message, stdout, stderr } = error as Error & { stdout?: string; stderr?: string };
+      throw new Error(`The archive test failed: ${message}\n${stdout ?? ''}${stderr ?? ''}`, {
+        cause: error,
+      });
     }
   }, 110000);
 });
