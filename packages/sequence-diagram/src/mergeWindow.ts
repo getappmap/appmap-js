@@ -22,13 +22,27 @@ function digest(sha256Input: string): string {
   return result;
 }
 
-// Keep the loop-discovery digest independent of compression eligibility. Compression eligibility is stricter than
-// the legacy subtree digest, which omits return metadata and nested loop counts.
+// The legacy subtree digest omits return metadata and nested loop counts, so it only seeds a new
+// loop's digest; compression eligibility uses the stricter window digest below.
 function buildDigest(actions: Action[]): string {
   return digest(actions.map((action) => action.subtreeDigest).join('\n'));
 }
 
-function compressionProperties(action: Action): unknown[] {
+// Compression identities by action, valid for one diagram build: loop detection compresses an
+// action's children before its siblings are compared, and merging only changes event IDs and
+// elapsed time, which the identity excludes.
+export type CompressionIdentities = WeakMap<Action, string>;
+
+function compressionIdentity(action: Action, identities: CompressionIdentities): string {
+  let identity = identities.get(action);
+  if (identity === undefined) {
+    identity = sha256(JSON.stringify(compressionProperties(action, identities))).toString();
+    identities.set(action, identity);
+  }
+  return identity;
+}
+
+function compressionProperties(action: Action, identities: CompressionIdentities): unknown[] {
   const functionProperties = isFunction(action)
     ? [
         action.name,
@@ -59,19 +73,23 @@ function compressionProperties(action: Action): unknown[] {
     action.labels,
     isServerRPC(action) || isClientRPC(action) ? [action.route, action.status] : undefined,
     // Inspect current children, not just a digest built before inner compression.
-    action.children.map(compressionProperties),
+    action.children.map((child) => compressionIdentity(child, identities)),
   ];
 }
 
-function buildWindowDigest(actions: Action[]): string {
-  return digest(JSON.stringify(actions.map(compressionProperties)));
+function buildWindowDigest(actions: Action[], identities: CompressionIdentities): string {
+  return digest(actions.map((action) => compressionIdentity(action, identities)).join('\n'));
 }
 
-function countDigests(actions: Action[], windowSize: number): Map<string, number> {
+function countDigests(
+  actions: Action[],
+  windowSize: number,
+  identities: CompressionIdentities
+): Map<string, number> {
   const digestCount = new Map<string, number>();
   for (let index = 0; index + windowSize <= actions.length; index++) {
     const range = actions.slice(index, index + windowSize);
-    const digest = buildWindowDigest(range);
+    const digest = buildWindowDigest(range, identities);
     const count = digestCount.get(digest);
     if (count !== undefined) digestCount.set(digest, count + 1);
     else digestCount.set(digest, 1);
@@ -131,8 +149,12 @@ const unroll = (items: (Merge | Action)[]): Action[] => {
   return result;
 };
 
-export function merge(actions: Action[], windowSize: number): Action[] | undefined {
-  const digestCount = countDigests(actions, windowSize);
+export function merge(
+  actions: Action[],
+  windowSize: number,
+  identities: CompressionIdentities = new WeakMap()
+): Action[] | undefined {
+  const digestCount = countDigests(actions, windowSize, identities);
   const digestsSorted = [...digestCount.keys()]
     .filter((key) => digestCount.get(key)! > 1)
     .sort((a, b) => digestCount.get(b)! - digestCount.get(a)!);
@@ -145,7 +167,8 @@ export function merge(actions: Action[], windowSize: number): Action[] | undefin
     let merge: Merge | undefined = undefined;
     for (let actionIndex = 0; actionIndex < actions.length; ) {
       const window = actions.slice(actionIndex, actionIndex + windowSize);
-      const windowDigest = window.length === windowSize ? buildWindowDigest(window) : undefined;
+      const windowDigest =
+        window.length === windowSize ? buildWindowDigest(window, identities) : undefined;
       if (windowDigest === referenceDigest) {
         if (merge) {
           merge.push(window);

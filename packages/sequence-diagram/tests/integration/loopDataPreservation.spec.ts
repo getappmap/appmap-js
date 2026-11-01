@@ -371,6 +371,20 @@ describe('GIVEN complete native queries whose statements differ only in literal 
     expect(compressedQueries[0].eventIds).toEqual([3, 7, 11]);
   });
 
+  it('WHEN truncated statements differ only in literal values THEN they are kept apart', () => {
+    // Truncated text cannot be normalized reliably: the dialect is not known here and the cut can
+    // fall inside a literal. Comparing it exactly never merges different statements.
+    const calls = [1, 2].map((id) =>
+      iteration(`SELECT * FROM posts WHERE user_id = ${id} AND ...`)
+    );
+    expect(
+      flatten(build(calls))
+        .filter(isQuery)
+        .every((a) => a.digest === 'truncatedQuery')
+    ).toBe(true);
+    expect(build(calls).rootActions[0].children).toHaveLength(2);
+  });
+
   it('WHEN iterations run different complete statements THEN they are not merged', () => {
     const calls = [
       iteration('SELECT * FROM posts WHERE user_id = 1'),

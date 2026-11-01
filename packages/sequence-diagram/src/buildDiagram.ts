@@ -3,6 +3,7 @@ import { classNameToOpenAPIType } from '@appland/openapi';
 import sha256 from 'crypto-js/sha256.js';
 import { LRUCache } from 'lru-cache';
 import { merge } from './mergeWindow';
+import type { CompressionIdentities } from './mergeWindow';
 import { selectEvents } from './selectEvents';
 import type Specification from './specification';
 import type {
@@ -228,6 +229,7 @@ export default function buildDiagram(
     node.subtreeDigest = sha256Digest;
   };
 
+  const identities: CompressionIdentities = new WeakMap();
   const detectLoops = (node: Action): void => {
     node.children.forEach((child) => detectLoops(child));
 
@@ -235,7 +237,7 @@ export default function buildDiagram(
 
     let windowSize = 1;
     while (windowSize <= MAX_WINDOW_SIZE) {
-      const mergedChildren = merge(node.children, windowSize);
+      const mergedChildren = merge(node.children, windowSize, identities);
       if (mergedChildren) {
         node.children = mergedChildren;
       } else {
