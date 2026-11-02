@@ -1,32 +1,128 @@
 {
   "kind": "appmap.comparison",
   "schemaVersion": 1,
-  "producer": { "name": "contract-fixture", "version": "1" },
-  "scenario": { "id": "added-call" },
-  "recordings": { "base": "base.appmap.json", "head": "head.appmap.json" },
-  "capabilities": { "views": { "sequence": 1 } },
+  "producer": {
+    "name": "contract-fixture",
+    "version": "1"
+  },
+  "scenario": {
+    "id": "added-call"
+  },
+  "recordings": {
+    "base": "base.appmap.json",
+    "head": "head.appmap.json"
+  },
+  "capabilities": {
+    "views": {
+      "sequence": 1
+    }
+  },
   "changes": [
     {
       "id": "chg_11111111111111111111",
       "kind": "call-added",
       "summary": "Added authorize",
-      "head": { "eventIds": [3] },
+      "head": {
+        "eventIds": [
+          3
+        ],
+        "elementIds": [
+          "fixture-head-1"
+        ]
+      },
       "views": {
         "sequence": {
-          "head": { "eventIds": [3] },
-          "diff": { "eventIds": [3] }
+          "head": {
+            "eventIds": [
+              3
+            ],
+            "elementIds": [
+              "fixture-head-1"
+            ]
+          },
+          "diff": {
+            "eventIds": [
+              3
+            ],
+            "elementIds": [
+              "fixture-diff-1"
+            ]
+          }
         }
       },
-      "details": { "name": { "after": "authorize" } }
+      "details": {
+        "name": {
+          "after": "authorize"
+        }
+      }
     }
   ],
   "views": {
     "sequence": {
       "schemaVersion": 1,
-      "base": { "actors": [], "rootActions": [] },
-      "head": { "actors": [], "rootActions": [] },
-      "diff": { "actors": [], "rootActions": [] },
-      "alignment": { "actorOrder": [] }
+      "base": {
+        "actors": [],
+        "rootActions": []
+      },
+      "head": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "name": "authorize",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              3
+            ],
+            "elementId": "fixture-head-1"
+          }
+        ]
+      },
+      "diff": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "name": "authorize",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              3
+            ],
+            "elementId": "fixture-diff-1"
+          }
+        ]
+      },
+      "alignment": {
+        "actorOrder": [
+          "service"
+        ]
+      }
     }
   }
 }

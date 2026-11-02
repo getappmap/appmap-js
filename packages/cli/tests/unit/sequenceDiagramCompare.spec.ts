@@ -2,11 +2,13 @@ import {
   APPMAP_COMPARISON_CHANGE_ID_PATTERN,
   APPMAP_COMPARISON_KIND,
   AppMapComparison,
+  ComparisonSequenceDiagram,
   assertAppMapComparison,
 } from '@appland/models';
 import { Diagram, unparseDiagram } from '@appland/sequence-diagram';
-import { existsSync, mkdirSync } from 'fs';
-import { readFile } from 'fs/promises';
+import { existsSync } from 'fs';
+import { mkdtemp, readFile, rm } from 'fs/promises';
+import { tmpdir } from 'os';
 import path from 'path';
 
 import {
@@ -15,17 +17,9 @@ import {
   SequenceComparisonView,
 } from '../../src/cmds/sequenceDiagramCompare';
 
-const fixtureDir = path.join(
-  '..',
-  'sequence-diagram',
-  'tests',
-  'fixtures',
-  'app',
-  'tmp',
-  'appmap'
-);
-const outputDir = path.join('tests', 'output', 'sequence-comparison');
-const outputFile = path.join(outputDir, 'users.compare.diff.sequence.json');
+const fixtureDir = path.join('..', 'sequence-diagram', 'tests', 'fixtures', 'app', 'tmp', 'appmap');
+let outputDir: string;
+let outputFile: string;
 const baseAppMap = path.join(fixtureDir, 'user_not_found.appmap.json');
 const headAppMap = path.join(fixtureDir, 'show_user.appmap.json');
 const changeIdPattern = new RegExp(APPMAP_COMPARISON_CHANGE_ID_PATTERN);
@@ -60,7 +54,8 @@ describe('sequence diagram compare command', () => {
     expect(bundle.changes.length).toBeGreaterThan(0);
 
     const sequence = bundle.views.sequence;
-    const actorOrder = (diagram: Diagram) => diagram.actors.map((actor) => actor.id);
+    const actorOrder = (diagram: ComparisonSequenceDiagram) =>
+      diagram.actors.map((actor) => actor.id);
     const diffActors = actorOrder(sequence.diff);
     const baseActors = actorOrder(sequence.base);
     const headActors = actorOrder(sequence.head);
@@ -68,18 +63,26 @@ describe('sequence diagram compare command', () => {
     expect(baseActors).toEqual(diffActors.filter((actorId) => baseActors.includes(actorId)));
     expect(headActors).toEqual(diffActors.filter((actorId) => headActors.includes(actorId)));
 
-    expect(() => unparseDiagram(sequence.base)).not.toThrow();
-    expect(() => unparseDiagram(sequence.head)).not.toThrow();
-    expect(() => unparseDiagram(sequence.diff)).not.toThrow();
+    expect(() =>
+      unparseDiagram(JSON.parse(JSON.stringify(sequence.base)) as Diagram)
+    ).not.toThrow();
+    expect(() =>
+      unparseDiagram(JSON.parse(JSON.stringify(sequence.head)) as Diagram)
+    ).not.toThrow();
+    expect(() =>
+      unparseDiagram(JSON.parse(JSON.stringify(sequence.diff)) as Diagram)
+    ).not.toThrow();
 
     bundle.changes.forEach((change) => {
       expect(change.id).toMatch(changeIdPattern);
-      expect(change.kind).toMatch(/-(added|removed|changed)$/);
+      expect(change.kind).toMatch(/-(added|removed|changed|reordered)$/);
       expect(change.views.sequence).toBeDefined();
       Object.values(change.views.sequence || {})
         .filter(Boolean)
         .forEach((reference) => {
-          expect((reference?.eventIds?.length || 0) + (reference?.elementIds?.length || 0)).toBeGreaterThan(0);
+          expect(
+            (reference?.eventIds?.length || 0) + (reference?.elementIds?.length || 0)
+          ).toBeGreaterThan(0);
         });
     });
   });
@@ -100,4 +103,10 @@ describe('sequence diagram compare command', () => {
   });
 });
 
-beforeEach(() => mkdirSync(outputDir, { recursive: true }));
+beforeEach(async () => {
+  outputDir = await mkdtemp(path.join(tmpdir(), 'ak7594-existing-'));
+  outputFile = path.join(outputDir, 'users.compare.diff.sequence.json');
+});
+afterEach(async () => {
+  await rm(outputDir, { recursive: true, force: true });
+});

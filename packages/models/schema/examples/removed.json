@@ -1,32 +1,120 @@
 {
   "kind": "appmap.comparison",
   "schemaVersion": 1,
-  "producer": { "name": "contract-fixture", "version": "1" },
-  "scenario": { "id": "removed-query" },
-  "recordings": { "base": "base.appmap.json", "head": "head.appmap.json" },
-  "capabilities": { "views": { "sequence": 1 } },
+  "producer": {
+    "name": "contract-fixture",
+    "version": "1"
+  },
+  "scenario": {
+    "id": "removed-query"
+  },
+  "recordings": {
+    "base": "base.appmap.json",
+    "head": "head.appmap.json"
+  },
+  "capabilities": {
+    "views": {
+      "sequence": 1
+    }
+  },
   "changes": [
     {
       "id": "chg_22222222222222222222",
       "kind": "query-removed",
       "summary": "Removed SELECT users query",
-      "base": { "eventIds": [4] },
+      "base": {
+        "eventIds": [
+          4
+        ],
+        "elementIds": [
+          "fixture-base-1"
+        ]
+      },
       "views": {
         "sequence": {
-          "base": { "eventIds": [4] },
-          "diff": { "eventIds": [4] }
+          "base": {
+            "eventIds": [
+              4
+            ],
+            "elementIds": [
+              "fixture-base-1"
+            ]
+          },
+          "diff": {
+            "eventIds": [
+              4
+            ],
+            "elementIds": [
+              "fixture-diff-1"
+            ]
+          }
         }
       },
-      "details": { "query": { "before": "SELECT users" } }
+      "details": {
+        "query": {
+          "before": "SELECT users"
+        }
+      }
     }
   ],
   "views": {
     "sequence": {
       "schemaVersion": 1,
-      "base": { "actors": [], "rootActions": [] },
-      "head": { "actors": [], "rootActions": [] },
-      "diff": { "actors": [], "rootActions": [] },
-      "alignment": { "actorOrder": [] }
+      "base": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 6,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "callee": "service",
+            "children": [],
+            "eventIds": [
+              4
+            ],
+            "elementId": "fixture-base-1",
+            "query": "SELECT users"
+          }
+        ]
+      },
+      "head": {
+        "actors": [],
+        "rootActions": []
+      },
+      "diff": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 6,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "callee": "service",
+            "children": [],
+            "eventIds": [
+              4
+            ],
+            "elementId": "fixture-diff-1",
+            "query": "SELECT users"
+          }
+        ]
+      },
+      "alignment": {
+        "actorOrder": [
+          "service"
+        ]
+      }
     }
   }
 }

@@ -1,34 +1,265 @@
 {
   "kind": "appmap.comparison",
   "schemaVersion": 1,
-  "producer": { "name": "contract-fixture", "version": "1" },
-  "scenario": { "id": "reordered-call" },
-  "recordings": { "base": "base.appmap.json", "head": "head.appmap.json" },
-  "capabilities": { "views": { "sequence": 1 } },
+  "producer": {
+    "name": "contract-fixture",
+    "version": "1"
+  },
+  "scenario": {
+    "id": "reordered-call"
+  },
+  "recordings": {
+    "base": "base.appmap.json",
+    "head": "head.appmap.json"
+  },
+  "capabilities": {
+    "views": {
+      "sequence": 1
+    }
+  },
   "changes": [
     {
       "id": "chg_44444444444444444444",
       "kind": "call-reordered",
       "summary": "Moved authorize before loadUser",
-      "base": { "eventIds": [8] },
-      "head": { "eventIds": [7] },
+      "base": {
+        "eventIds": [
+          8
+        ],
+        "elementIds": [
+          "fixture-base-1"
+        ]
+      },
+      "head": {
+        "eventIds": [
+          7
+        ],
+        "elementIds": [
+          "fixture-head-1"
+        ]
+      },
       "views": {
         "sequence": {
-          "base": { "eventIds": [8] },
-          "head": { "eventIds": [7] },
-          "diff": { "eventIds": [7] }
+          "base": {
+            "eventIds": [
+              8
+            ],
+            "elementIds": [
+              "fixture-base-1"
+            ]
+          },
+          "head": {
+            "eventIds": [
+              7
+            ],
+            "elementIds": [
+              "fixture-head-1"
+            ]
+          },
+          "diff": {
+            "eventIds": [
+              7
+            ],
+            "elementIds": [
+              "fixture-diff-1"
+            ]
+          }
         }
       },
-      "details": { "position": { "before": 3, "after": 2 } }
+      "details": {
+        "position": {
+          "before": 3,
+          "after": 2
+        }
+      }
     }
   ],
   "views": {
     "sequence": {
       "schemaVersion": 1,
-      "base": { "actors": [], "rootActions": [] },
-      "head": { "actors": [], "rootActions": [] },
-      "diff": { "actors": [], "rootActions": [] },
-      "alignment": { "actorOrder": [] }
+      "base": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture-prepare",
+            "subtreeDigest": "fixture-prepare",
+            "name": "prepare",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              20
+            ],
+            "elementId": "fixture-base-prepare"
+          },
+          {
+            "nodeType": 3,
+            "digest": "fixture-loadUser",
+            "subtreeDigest": "fixture-loadUser",
+            "name": "loadUser",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              21
+            ],
+            "elementId": "fixture-base-loadUser"
+          },
+          {
+            "nodeType": 3,
+            "digest": "fixture-authorize",
+            "subtreeDigest": "fixture-authorize",
+            "name": "authorize",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              8
+            ],
+            "elementId": "fixture-base-1"
+          }
+        ]
+      },
+      "head": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture-prepare",
+            "subtreeDigest": "fixture-prepare",
+            "name": "prepare",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              20
+            ],
+            "elementId": "fixture-head-prepare"
+          },
+          {
+            "nodeType": 3,
+            "digest": "fixture-authorize",
+            "subtreeDigest": "fixture-authorize",
+            "name": "authorize",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              7
+            ],
+            "elementId": "fixture-head-1"
+          },
+          {
+            "nodeType": 3,
+            "digest": "fixture-loadUser",
+            "subtreeDigest": "fixture-loadUser",
+            "name": "loadUser",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              21
+            ],
+            "elementId": "fixture-head-loadUser"
+          }
+        ]
+      },
+      "diff": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture-prepare",
+            "subtreeDigest": "fixture-prepare",
+            "name": "prepare",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              20
+            ],
+            "elementId": "fixture-diff-prepare"
+          },
+          {
+            "nodeType": 3,
+            "digest": "fixture-authorize",
+            "subtreeDigest": "fixture-authorize",
+            "name": "authorize",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              7
+            ],
+            "elementId": "fixture-diff-1",
+            "diffMode": 4
+          },
+          {
+            "nodeType": 3,
+            "digest": "fixture-loadUser",
+            "subtreeDigest": "fixture-loadUser",
+            "name": "loadUser",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              21
+            ],
+            "elementId": "fixture-diff-loadUser"
+          }
+        ]
+      },
+      "alignment": {
+        "actorOrder": [
+          "service"
+        ]
+      }
     }
   }
 }

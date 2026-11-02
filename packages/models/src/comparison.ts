@@ -1,6 +1,19 @@
 import sha256 from 'crypto-js/sha256.js';
 
 import comparisonSchema from '../schema/comparison.schema.json';
+import { canonicalComparisonIdentity } from './comparisonIdentity';
+import { validateSequenceView, validateSequenceReferences } from './comparisonSequence';
+export {
+  canonicalComparisonIdentity,
+  COMPARISON_IDENTITY_MAX_DEPTH,
+  COMPARISON_IDENTITY_MAX_NODES,
+} from './comparisonIdentity';
+export type {
+  ComparisonSequenceActor,
+  ComparisonSequenceAction,
+  ComparisonSequenceDiagram,
+  ComparisonSequenceView,
+} from './comparisonSequenceTypes';
 
 export const APPMAP_COMPARISON_KIND = 'appmap.comparison' as const;
 export const APPMAP_COMPARISON_SCHEMA_VERSION = 1 as const;
@@ -123,41 +136,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function isComparisonValue(value: unknown): value is ComparisonValue {
-  if (value === null || typeof value === 'string' || typeof value === 'boolean') return true;
-  if (typeof value === 'number') return Number.isFinite(value);
-  if (Array.isArray(value)) return value.every(isComparisonValue);
-  if (isRecord(value)) return Object.values(value).every(isComparisonValue);
-  return false;
-}
-
-function canonicalize(value: unknown): string {
-  if (value === null) return 'null';
-  if (Array.isArray(value)) return `[${value.map(canonicalize).join(',')}]`;
-
-  switch (typeof value) {
-    case 'boolean':
-    case 'number':
-    case 'string':
-      return JSON.stringify(value);
-    case 'object': {
-      const record = value as Record<string, unknown>;
-      return `{${Object.keys(record)
-        .filter((key) => record[key] !== undefined)
-        .sort()
-        .map((key) => `${JSON.stringify(key)}:${canonicalize(record[key])}`)
-        .join(',')}}`;
-    }
-    default:
-      throw new TypeError(`Comparison identities cannot contain ${typeof value}`);
+  try {
+    canonicalComparisonIdentity(value);
+    return true;
+  } catch {
+    return false;
   }
-}
-
-/**
- * Canonical JSON representation used by every comparison producer before hashing a
- * behavioral change identity. Object key order never affects the result.
- */
-export function canonicalComparisonIdentity(identity: unknown): string {
-  return canonicalize(identity);
 }
 
 /**
@@ -165,8 +149,8 @@ export function canonicalComparisonIdentity(identity: unknown): string {
  * otherwise-identical changes while keeping unrelated earlier changes from renumbering it.
  */
 export function makeComparisonChangeId(identity: unknown, occurrence = 0): string {
-  if (!Number.isInteger(occurrence) || occurrence < 0)
-    throw new RangeError('occurrence must be a non-negative integer');
+  if (!Number.isSafeInteger(occurrence) || occurrence < 0 || occurrence >= Number.MAX_SAFE_INTEGER)
+    throw new RangeError('occurrence and its one-based suffix must be safe non-negative integers');
 
   const digest = sha256(canonicalComparisonIdentity(identity)).toString().slice(0, 20);
   return `chg_${digest}${occurrence === 0 ? '' : `_${occurrence + 1}`}`;
@@ -185,7 +169,7 @@ function validatePositiveIntegerArray(value: unknown, path: string, errors: stri
   }
 
   if (value.length === 0) errors.push(`${path} must not be empty`);
-  const valid = value.every((item) => Number.isInteger(item) && item > 0);
+  const valid = value.every((item) => Number.isSafeInteger(item) && item > 0);
   if (!valid) errors.push(`${path} must contain positive integers`);
   if (new Set(value).size !== value.length) errors.push(`${path} must contain unique values`);
   return value.length > 0 && valid;
@@ -217,12 +201,12 @@ function validateReference(value: unknown, path: string, errors: string[]): bool
 
   let hasReference = false;
   if (value.eventIds !== undefined) {
-    hasReference = validatePositiveIntegerArray(value.eventIds, `${path}.eventIds`, errors) ||
-      hasReference;
+    hasReference =
+      validatePositiveIntegerArray(value.eventIds, `${path}.eventIds`, errors) || hasReference;
   }
   if (value.elementIds !== undefined) {
-    hasReference = validateStringArray(value.elementIds, `${path}.elementIds`, errors) ||
-      hasReference;
+    hasReference =
+      validateStringArray(value.elementIds, `${path}.elementIds`, errors) || hasReference;
   }
   if (!hasReference) errors.push(`${path} must contain at least one eventId or elementId`);
   return hasReference;
@@ -309,15 +293,6 @@ function validateChange(
   }
 }
 
-function validateDiagram(value: unknown, path: string, errors: string[]): void {
-  if (!isRecord(value)) {
-    errors.push(`${path} must be an object`);
-    return;
-  }
-  if (!Array.isArray(value.actors)) errors.push(`${path}.actors must be an array`);
-  if (!Array.isArray(value.rootActions)) errors.push(`${path}.rootActions must be an array`);
-}
-
 function validateView(value: unknown, viewId: string, path: string, errors: string[]): void {
   if (!isRecord(value)) {
     errors.push(`${path} must be an object`);
@@ -331,13 +306,7 @@ function validateView(value: unknown, viewId: string, path: string, errors: stri
     if (!isRecord(value[field])) errors.push(`${path}.${field} must be an object`);
   }
 
-  if (viewId === 'sequence') {
-    validateDiagram(value.base, `${path}.base`, errors);
-    validateDiagram(value.head, `${path}.head`, errors);
-    validateDiagram(value.diff, `${path}.diff`, errors);
-    if (isRecord(value.alignment))
-      validateStringArray(value.alignment.actorOrder, `${path}.alignment.actorOrder`, errors, true);
-  }
+  if (viewId === 'sequence') validateSequenceView(value, path, errors);
 }
 
 function validatePositiveInteger(value: unknown, path: string, errors: string[]): void {
@@ -345,7 +314,9 @@ function validatePositiveInteger(value: unknown, path: string, errors: string[])
     errors.push(`${path} must be a positive integer`);
 }
 
-/** Return all contract violations. An empty result means the bundle is valid. */
+/** Structural and mandatory semantic checks for the envelope and sequence v1.
+ * Reserved non-sequence views receive envelope checks only, not interoperability proof.
+ */
 export function validateAppMapComparison(value: unknown): string[] {
   const errors: string[] = [];
   if (!isRecord(value)) return ['$ must be an object'];
@@ -405,8 +376,11 @@ export function validateAppMapComparison(value: unknown): string[] {
         if (!viewIds.has(viewId)) errors.push(`$.capabilities.views.${viewId} is unsupported`);
         else capabilityViews.add(viewId);
         validatePositiveInteger(version, `$.capabilities.views.${viewId}`, errors);
+        if (viewId === 'sequence' && version !== 1)
+          errors.push('$.capabilities.views.sequence must be supported version 1');
         const view = isRecord(value.views) ? value.views[viewId] : undefined;
-        if (!isRecord(view)) errors.push(`$.capabilities.views.${viewId} has no corresponding view`);
+        if (!isRecord(view))
+          errors.push(`$.capabilities.views.${viewId} has no corresponding view`);
         else if (view.schemaVersion !== version)
           errors.push(`$.capabilities.views.${viewId} must match the view schemaVersion`);
       });
@@ -444,6 +418,8 @@ export function validateAppMapComparison(value: unknown): string[] {
       validateChange(change, `$.changes[${index}]`, availableViews, ids, errors)
     );
   }
+
+  validateSequenceReferences(value, errors);
 
   if (value.extensions !== undefined && !isRecord(value.extensions))
     errors.push('$.extensions must be an object');

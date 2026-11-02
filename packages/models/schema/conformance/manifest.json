@@ -1,0 +1,262 @@
+[
+  {
+    "file": "targeted-function.json",
+    "structural": true,
+    "semantic": true
+  },
+  {
+    "file": "all-action-types.json",
+    "structural": true,
+    "semantic": true
+  },
+  {
+    "file": "conditional-not-action.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "unknown-action-type.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "malformed-actor.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "malformed-action.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "actor-object-instead-of-id.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "missing-children.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "malformed-return.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "invalid-event-id.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "invalid-element-id.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "unsupported-sequence-version.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "undeclared-actor.json",
+    "structural": true,
+    "semantic": false
+  },
+  {
+    "file": "dangling-element-reference.json",
+    "structural": true,
+    "semantic": false
+  },
+  {
+    "file": "duplicate-element-target.json",
+    "structural": true,
+    "semantic": false
+  },
+  {
+    "file": "duplicate-change-id.json",
+    "structural": true,
+    "semantic": false
+  },
+  {
+    "file": "ambiguous-event-only-reference.json",
+    "structural": true,
+    "semantic": false
+  },
+  {
+    "file": "known-nodeType-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-digest-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-subtreeDigest-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-children-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-eventIds-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-elementId-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-diffMode-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-elapsed-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-formerName-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-formerResult-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-movedFrom-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-labels-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-caller-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-callee-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-name-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-static-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-stableProperties-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-returnValue-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-route-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-status-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-query-on-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-count-on-3.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-returnValue-nested-0.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-returnValue-nested-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-returnValue-nested-2.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-returnValue-nested-3.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-returnValue-nested-4.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-movedFrom-nested-0.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-movedFrom-nested-1.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-movedFrom-nested-2.json",
+    "structural": false,
+    "semantic": false
+  },
+  {
+    "file": "known-valid-and-unknown-extension-on-1.json",
+    "structural": true,
+    "semantic": true
+  },
+  {
+    "file": "known-valid-and-unknown-extension-on-3.json",
+    "structural": true,
+    "semantic": true
+  },
+  {
+    "file": "known-valid-and-unknown-extension-on-4.json",
+    "structural": true,
+    "semantic": true
+  },
+  {
+    "file": "known-valid-and-unknown-extension-on-5.json",
+    "structural": true,
+    "semantic": true
+  },
+  {
+    "file": "known-valid-and-unknown-extension-on-6.json",
+    "structural": true,
+    "semantic": true
+  }
+]

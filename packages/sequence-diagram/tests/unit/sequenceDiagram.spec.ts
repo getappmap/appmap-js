@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type { Action } from '../../src/types';
 import { isFunction, isLoop } from '../../src/types';
 import {
   findActionById,
@@ -155,13 +156,25 @@ describe('Sequence diagram', () => {
       const enclosingLoop = loop.parent;
       assert(enclosingLoop);
       assert(isLoop(enclosingLoop));
-      assert.strictEqual(enclosingLoop.count, 5);
+      // The middle iteration has three inner calls; it must not be folded into
+      // the surrounding runs of two identical iterations.
+      assert.strictEqual(enclosingLoop.count, 2);
     });
     describe('members', () => {
       it('acculumates event ids', () => {
-        const action = findActionById(LIST_USERS_APPMAP, 'lib/models/User#posts');
-
-        assert.deepEqual(action.eventIds, [7, 17, 27, 39, 49]);
+        const ids: number[] = [];
+        const collect = (action: Action): void => {
+          if (isFunction(action) && action.stableProperties.id === 'lib/models/User#posts')
+            ids.push(...action.eventIds);
+          action.children.forEach(collect);
+        };
+        loadDiagram(LIST_USERS_APPMAP).rootActions.forEach(collect);
+        // The same five calls are now in separate groups around the differing
+        // nested count, rather than being incorrectly represented by one loop.
+        assert.deepStrictEqual(
+          ids.sort((a, b) => a - b),
+          [7, 17, 27, 39, 49]
+        );
       });
     });
   });

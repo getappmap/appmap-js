@@ -1,3 +1,5 @@
+/* Conformance fixtures are cloned and deliberately mutated into invalid documents. */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
 import { readFile } from 'fs/promises';
 import path from 'path';
 
@@ -18,7 +20,10 @@ const examples = ['clean', 'added', 'removed', 'changed', 'reordered'];
 const examplesDir = path.resolve(__dirname, '../../schema/examples');
 
 async function loadExample(name: string): Promise<Record<string, unknown>> {
-  return JSON.parse(await readFile(path.join(examplesDir, `${name}.json`), 'utf8'));
+  return JSON.parse(await readFile(path.join(examplesDir, `${name}.json`), 'utf8')) as Record<
+    string,
+    unknown
+  >;
 }
 
 describe('AppMap comparison contract', () => {
@@ -37,9 +42,7 @@ describe('AppMap comparison contract', () => {
     expect(appMapComparisonSchema.$defs.change.properties.id.pattern).toBe(
       APPMAP_COMPARISON_CHANGE_ID_PATTERN
     );
-    expect(appMapComparisonSchema.$defs.change.properties.kind.enum).toEqual(
-      behavioralChangeKinds
-    );
+    expect(appMapComparisonSchema.$defs.change.properties.kind.enum).toEqual(behavioralChangeKinds);
     expect(Object.keys(appMapComparisonSchema.properties.views.properties)).toEqual(
       comparisonViewIds
     );
@@ -59,7 +62,9 @@ describe('AppMap comparison contract', () => {
 
   it('uses an occurrence suffix only for indistinguishable repeated changes', () => {
     const identity = { kind: 'call-added', action: 'authorize' };
-    expect(makeComparisonChangeId(identity)).toMatch(new RegExp(APPMAP_COMPARISON_CHANGE_ID_PATTERN));
+    expect(makeComparisonChangeId(identity)).toMatch(
+      new RegExp(APPMAP_COMPARISON_CHANGE_ID_PATTERN)
+    );
     expect(makeComparisonChangeId(identity, 1)).toBe(`${makeComparisonChangeId(identity)}_2`);
   });
 

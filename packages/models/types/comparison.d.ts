@@ -1,9 +1,50 @@
 declare module '@appland/models' {
+  export const COMPARISON_IDENTITY_MAX_DEPTH: 64;
+  export const COMPARISON_IDENTITY_MAX_NODES: 10000;
+
+  export type ComparisonSequenceActor = { id: string; name: string; order: number };
+  type SequenceNode = {
+    digest: string;
+    subtreeDigest: string;
+    children: ComparisonSequenceAction[];
+    eventIds: number[];
+    /** Unique only within this serialized base, head or diff diagram. */
+    elementId?: string;
+    diffMode?: 1 | 2 | 3 | 4;
+    elapsed?: number;
+    formerName?: string;
+    formerResult?: string;
+    movedFrom?: { name: string; actorId?: string };
+    labels?: string[];
+  };
+  type SequenceMessage = SequenceNode & { caller?: string; callee: string };
+  export type ComparisonSequenceAction =
+    | (SequenceNode & { nodeType: 1; count: number })
+    | (SequenceMessage & {
+        nodeType: 3;
+        name: string;
+        static?: boolean;
+        stableProperties: Record<string, string | number | boolean | null>;
+        returnValue?: {
+          raisesException: boolean;
+          returnValueType?: { name: string; properties?: string[] };
+        };
+      })
+    | (SequenceMessage & { nodeType: 4 | 5; route: string; status?: number })
+    | (SequenceMessage & { nodeType: 6; query: string });
+  export type ComparisonSequenceDiagram = {
+    actors: ComparisonSequenceActor[];
+    rootActions: ComparisonSequenceAction[];
+  };
+  export type ComparisonSequenceView = ComparisonView<
+    ComparisonSequenceDiagram,
+    { actorOrder: string[] }
+  > & { schemaVersion: 1 };
+
   export const APPMAP_COMPARISON_KIND: 'appmap.comparison';
   export const APPMAP_COMPARISON_SCHEMA_VERSION: 1;
   export const APPMAP_COMPARISON_CHANGE_ID_VERSION: 1;
-  export const APPMAP_COMPARISON_CHANGE_ID_PATTERN:
-    '^chg_[0-9a-f]{20}(?:_(?:[2-9]|[1-9][0-9]+))?$';
+  export const APPMAP_COMPARISON_CHANGE_ID_PATTERN: '^chg_[0-9a-f]{20}(?:_(?:[2-9]|[1-9][0-9]+))?$';
 
   export const comparisonViewIds: readonly ['dependency', 'sequence', 'trace', 'flame'];
   export type ComparisonViewId = (typeof comparisonViewIds)[number];
