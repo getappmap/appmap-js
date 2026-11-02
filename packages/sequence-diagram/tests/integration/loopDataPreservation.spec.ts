@@ -389,6 +389,23 @@ describe('GIVEN complete native queries whose statements differ only in literal 
       groups: 2,
     },
     {
+      // The cut falls at a fixed length, so a longer literal shifts the text that survives.
+      name: 'end at different text because an earlier literal is longer',
+      sql: [
+        `SELECT * FROM posts WHERE id = 9 ORDER BY created_at ...`,
+        `SELECT * FROM posts WHERE id = 10 ORDER BY created_a ...`,
+      ],
+      groups: 2,
+    },
+    {
+      name: 'are cut inside literals that differ only in digits',
+      sql: [
+        `SELECT * FROM posts WHERE title = 'Chapter 1 ...`,
+        `SELECT * FROM posts WHERE title = 'Chapter 2 ...`,
+      ],
+      groups: 2,
+    },
+    {
       name: 'are cut inside different literals',
       sql: [
         `SELECT * FROM posts WHERE title = 'first ...`,

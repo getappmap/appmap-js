@@ -29,10 +29,16 @@ function buildDigest(actions: Action[]): string {
 }
 
 // Mask complete single-quoted strings and standalone numbers in a truncated statement, so that
-// iterations differing only in those values still form a loop. Identifiers, keywords and a
-// literal cut off by the truncation are compared exactly; the SQL dialect is not known here.
+// iterations differing only in those values still form a loop when the cut leaves the same text.
+// Other text, including a literal cut off by the truncation, is compared exactly. The SQL dialect
+// is not known here, so this assumes standard single-quote escaping.
 function truncatedQueryText(query: string): string {
-  return query.replace(/'(?:[^']|'')*'/g, '?').replace(/\b\d+(?:\.\d+)?\b/g, '?');
+  const masked = query.replace(/'(?:[^']|'')*'/g, '?');
+  // A quote left after masking opens the literal that the truncation cut off.
+  const cut = masked.indexOf("'");
+  const complete = cut === -1 ? masked : masked.slice(0, cut);
+  const rest = cut === -1 ? '' : masked.slice(cut);
+  return complete.replace(/\b\d+(?:\.\d+)?\b/g, '?') + rest;
 }
 
 // Compression identities by action, valid for one diagram build: loop detection compresses an
