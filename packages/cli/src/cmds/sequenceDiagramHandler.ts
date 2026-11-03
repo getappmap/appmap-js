@@ -96,7 +96,7 @@ export default async function handler(argv: any) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
       const serveAndOpen = require('../lib/serveAndOpen') as typeof import('../lib/serveAndOpen');
       outputPath = await new Promise((resolve) =>
-        serveAndOpen.serveAndOpenSequenceDiagram(diagramPath, false, async (url) => {
+        serveAndOpen.serveAndOpenSequenceDiagram(diagramPath, async (url) => {
           if (verbose()) console.warn(`Rendering PNG`);
           assert(browserRender, 'Browser not initialized');
 
