@@ -1,3 +1,16 @@
+# [@appland/appmap-v3.206.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.205.0...@appland/appmap-v3.206.0) (2026-11-06)
+
+
+### Bug Fixes
+
+* **query:** Let the MCP server exit on its own when stdin closes ([1976918](https://github.com/getappmap/appmap-js/commit/1976918dd07da0856543431d8a5512bebd53d88e))
+* **query:** Report MCP tool failures as isError results ([fb6bee6](https://github.com/getappmap/appmap-js/commit/fb6bee6923bfdcd2b24bba43f7a282d4cb24aa81))
+
+
+### Features
+
+* **query:** Start the MCP server before the index exists ([7dbf231](https://github.com/getappmap/appmap-js/commit/7dbf231ec984165773a1a29a910eaa84be80e41e))
+
 # [@appland/appmap-v3.205.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.204.1...@appland/appmap-v3.205.0) (2026-10-30)
 
 
