@@ -1,0 +1,343 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://appmap.io/schemas/comparison/v1",
+  "title": "AppMap comparison bundle",
+  "description": "View-neutral envelope with implemented sequence v1 structural checks. Reserved views are opaque; mandatory semantic checks are documented in schema/README.md.",
+  "type": "object",
+  "required": [
+    "kind",
+    "schemaVersion",
+    "producer",
+    "scenario",
+    "recordings",
+    "capabilities",
+    "changes",
+    "views"
+  ],
+  "properties": {
+    "kind": { "const": "appmap.comparison" },
+    "schemaVersion": { "const": 1 },
+    "producer": { "$ref": "#/$defs/producer" },
+    "scenario": { "$ref": "#/$defs/scenario" },
+    "revisions": { "$ref": "#/$defs/revisions" },
+    "recordings": { "$ref": "#/$defs/recordings" },
+    "capabilities": { "$ref": "#/$defs/capabilities" },
+    "changes": { "type": "array", "items": { "$ref": "#/$defs/change" } },
+    "views": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "dependency": { "$ref": "#/$defs/genericView" },
+        "sequence": { "$ref": "#/$defs/sequenceView" },
+        "trace": { "$ref": "#/$defs/genericView" },
+        "flame": { "$ref": "#/$defs/genericView" }
+      },
+      "additionalProperties": false
+    },
+    "extensions": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "producer": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "revisions": {
+      "type": "object",
+      "properties": {
+        "base": { "type": "string", "minLength": 1 },
+        "head": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "recordings": {
+      "type": "object",
+      "required": ["base", "head"],
+      "properties": {
+        "base": { "type": "string", "minLength": 1 },
+        "head": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "object",
+      "required": ["views"],
+      "properties": {
+        "views": {
+          "type": "object",
+          "minProperties": 1,
+          "properties": {
+            "dependency": { "type": "integer", "minimum": 1 },
+            "sequence": { "const": 1 },
+            "trace": { "type": "integer", "minimum": 1 },
+            "flame": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "navigation": {
+          "type": "object",
+          "properties": {
+            "changes": { "type": "integer", "minimum": 1 },
+            "eventAlignment": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "reference": {
+      "type": "object",
+      "properties": {
+        "eventIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+          "uniqueItems": true
+        },
+        "elementIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      },
+      "anyOf": [{ "required": ["eventIds"] }, { "required": ["elementIds"] }],
+      "additionalProperties": true
+    },
+    "viewReference": {
+      "type": "object",
+      "properties": {
+        "base": { "$ref": "#/$defs/reference" },
+        "head": { "$ref": "#/$defs/reference" },
+        "diff": { "$ref": "#/$defs/reference" }
+      },
+      "anyOf": [{ "required": ["base"] }, { "required": ["head"] }, { "required": ["diff"] }],
+      "additionalProperties": true
+    },
+    "valueChange": {
+      "type": "object",
+      "properties": { "before": true, "after": true },
+      "anyOf": [{ "required": ["before"] }, { "required": ["after"] }],
+      "additionalProperties": true
+    },
+    "change": {
+      "type": "object",
+      "required": ["id", "kind", "summary", "views"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^chg_[0-9a-f]{20}(?:_(?:[2-9]|[1-9][0-9]+))?$" },
+        "kind": {
+          "enum": [
+            "call-added",
+            "call-removed",
+            "call-changed",
+            "call-reordered",
+            "query-added",
+            "query-removed",
+            "query-changed",
+            "rpc-added",
+            "rpc-removed",
+            "rpc-changed",
+            "dependency-added",
+            "dependency-removed",
+            "dependency-changed",
+            "exception-added",
+            "exception-removed",
+            "exception-changed",
+            "control-flow-added",
+            "control-flow-removed",
+            "control-flow-changed",
+            "timing-changed",
+            "unknown"
+          ]
+        },
+        "summary": { "type": "string", "minLength": 1 },
+        "base": { "$ref": "#/$defs/reference" },
+        "head": { "$ref": "#/$defs/reference" },
+        "views": {
+          "type": "object",
+          "minProperties": 1,
+          "properties": {
+            "dependency": { "$ref": "#/$defs/viewReference" },
+            "sequence": { "$ref": "#/$defs/viewReference" },
+            "trace": { "$ref": "#/$defs/viewReference" },
+            "flame": { "$ref": "#/$defs/viewReference" }
+          },
+          "additionalProperties": false
+        },
+        "details": { "type": "object", "additionalProperties": { "$ref": "#/$defs/valueChange" } },
+        "labels": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "pattern": "-added$" } }, "required": ["kind"] },
+          "then": { "required": ["head"] }
+        },
+        {
+          "if": { "properties": { "kind": { "pattern": "-removed$" } }, "required": ["kind"] },
+          "then": { "required": ["base"] }
+        },
+        {
+          "if": {
+            "properties": { "kind": { "pattern": "-(?:changed|reordered)$" } },
+            "required": ["kind"]
+          },
+          "then": { "required": ["base", "head"] }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "diagram": {
+      "type": "object",
+      "required": ["actors", "rootActions"],
+      "properties": {
+        "actors": { "type": "array", "items": { "$ref": "#/$defs/actor" } },
+        "rootActions": { "type": "array", "items": { "$ref": "#/$defs/action" } }
+      },
+      "additionalProperties": true
+    },
+    "genericView": {
+      "type": "object",
+      "required": ["schemaVersion", "base", "head", "diff", "alignment"],
+      "properties": {
+        "schemaVersion": { "type": "integer", "minimum": 1 },
+        "base": { "type": "object" },
+        "head": { "type": "object" },
+        "diff": { "type": "object" },
+        "alignment": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "sequenceView": {
+      "type": "object",
+      "required": ["schemaVersion", "base", "head", "diff", "alignment"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "base": { "$ref": "#/$defs/diagram" },
+        "head": { "$ref": "#/$defs/diagram" },
+        "diff": { "$ref": "#/$defs/diagram" },
+        "alignment": {
+          "type": "object",
+          "required": ["actorOrder"],
+          "properties": {
+            "actorOrder": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "actor": {
+      "type": "object",
+      "required": ["id", "name", "order"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "order": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "nodeIdentity": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "actorId": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "returnValueType": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "properties": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": true
+    },
+    "returnValue": {
+      "type": "object",
+      "required": ["raisesException"],
+      "properties": {
+        "raisesException": { "type": "boolean" },
+        "returnValueType": { "$ref": "#/$defs/returnValueType" }
+      },
+      "additionalProperties": true
+    },
+    "action": {
+      "type": "object",
+      "required": ["nodeType", "digest", "subtreeDigest", "children", "eventIds"],
+      "properties": {
+        "nodeType": { "enum": [1, 3, 4, 5, 6] },
+        "digest": { "type": "string", "minLength": 1 },
+        "subtreeDigest": { "type": "string", "minLength": 1 },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/action" } },
+        "eventIds": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 }
+        },
+        "elementId": { "type": "string", "minLength": 1 },
+        "diffMode": { "enum": [1, 2, 3, 4] },
+        "elapsed": { "type": "number" },
+        "formerName": { "type": "string" },
+        "formerResult": { "type": "string" },
+        "movedFrom": { "$ref": "#/$defs/nodeIdentity" },
+        "labels": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "caller": { "type": "string", "minLength": 1 },
+        "callee": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "static": { "type": "boolean" },
+        "stableProperties": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number", "boolean", "null"] }
+        },
+        "returnValue": { "$ref": "#/$defs/returnValue" },
+        "route": { "type": "string", "minLength": 1 },
+        "status": { "type": "number" },
+        "query": { "type": "string", "minLength": 1 },
+        "count": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "nodeType": { "enum": [1] } }, "required": ["nodeType"] },
+          "then": { "required": ["count"] }
+        },
+        {
+          "if": { "properties": { "nodeType": { "enum": [3] } }, "required": ["nodeType"] },
+          "then": { "required": ["callee", "name", "stableProperties"] }
+        },
+        {
+          "if": { "properties": { "nodeType": { "enum": [4, 5] } }, "required": ["nodeType"] },
+          "then": { "required": ["callee", "route"] }
+        },
+        {
+          "if": { "properties": { "nodeType": { "enum": [6] } }, "required": ["nodeType"] },
+          "then": { "required": ["callee", "query"] }
+        }
+      ],
+      "additionalProperties": true
+    }
+  }
+}

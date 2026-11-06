@@ -20,4 +20,5 @@ export {
   filterStringToFilterState,
   mergeFilterState,
 } from './serialize';
+export * from './comparison';
 export * from './util';

@@ -85,13 +85,13 @@ context('AppMap sequence diagram', () => {
     });
 
     it('should display the truncated tooltip on hover on tab call label', () => {
-      cy.get('.call:nth-child(293) .name').trigger('mouseover');
-      cy.get('.call:nth-child(293) span.tooltip')
-        .should('exist')
-        .invoke('text')
-        .should('include', '...,');
-      cy.get('.call:nth-child(293) .name').trigger('mouseout');
-      cy.get('.call:nth-child(293) span.tooltip').should('not.be.visible');
+      // Select the call by its event, not its position: loop compression keeps trailing
+      // actions, so the position of later calls depends on the recording.
+      const tab = '.call[data-event-ids~="434"]';
+      cy.get(`${tab} .name`).trigger('mouseover');
+      cy.get(`${tab} span.tooltip`).should('exist').invoke('text').should('include', '...,');
+      cy.get(`${tab} .name`).trigger('mouseout');
+      cy.get(`${tab} span.tooltip`).should('not.be.visible');
     });
 
     it('should not display the tooltip on hover on index call label without parameters', () => {
