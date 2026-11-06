@@ -3,6 +3,7 @@ import { classNameToOpenAPIType } from '@appland/openapi';
 import sha256 from 'crypto-js/sha256.js';
 import { LRUCache } from 'lru-cache';
 import { merge } from './mergeWindow';
+import type { CompressionIdentities } from './mergeWindow';
 import { selectEvents } from './selectEvents';
 import type Specification from './specification';
 import type {
@@ -16,7 +17,7 @@ import type {
   ClientRPC,
   Query,
 } from './types';
-import { NodeType, setParent } from './types';
+import { isLoop, NodeType, setParent } from './types';
 
 const MAX_WINDOW_SIZE = 5;
 
@@ -212,6 +213,8 @@ export default function buildDiagram(
   // Do this recursively.
   const buildSubtreeDigests = (node: Action): void => {
     const hashEntries = [node.digest];
+    // A compressed loop's repetition count is part of its current subtree.
+    if (isLoop(node)) hashEntries.push(`count:${node.count}`);
     node.children.forEach((child) => {
       buildSubtreeDigests(child);
 
@@ -226,6 +229,7 @@ export default function buildDiagram(
     node.subtreeDigest = sha256Digest;
   };
 
+  const identities: CompressionIdentities = new WeakMap();
   const detectLoops = (node: Action): void => {
     node.children.forEach((child) => detectLoops(child));
 
@@ -233,7 +237,7 @@ export default function buildDiagram(
 
     let windowSize = 1;
     while (windowSize <= MAX_WINDOW_SIZE) {
-      const mergedChildren = merge(node.children, windowSize);
+      const mergedChildren = merge(node.children, windowSize, identities);
       if (mergedChildren) {
         node.children = mergedChildren;
       } else {
@@ -243,7 +247,12 @@ export default function buildDiagram(
   };
 
   rootActions.forEach((root) => buildSubtreeDigests(root));
-  if (specification.loops) rootActions.forEach((root) => detectLoops(root));
+  if (specification.loops) {
+    rootActions.forEach((root) => detectLoops(root));
+    // Loop discovery needs the original tree digests above. Diffing instead needs
+    // digests of the current tree, or equal hashes can hide different node shapes.
+    rootActions.forEach((root) => buildSubtreeDigests(root));
+  }
   rootActions.forEach((root) => setParent(root));
 
   return {
