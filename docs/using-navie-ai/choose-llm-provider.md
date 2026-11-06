@@ -70,7 +70,7 @@ Select "GitHub Copilot":
 
 Only `OPENAI_API_KEY` needs to be set, other settings can stay default:
 
-| `OPENAI_API_KEY`| `sk-9spQsnE3X7myFHnjgNKKgIcGAdaIG78I3HZB4DFDWQGM` |
+| `OPENAI_API_KEY`| `sk-...your-openai-key...` |
 
 When using your own OpenAI API key, you can also modify the OpenAI model for Navie to use. For example if you wanted to use `gpt-3.5` or use an preview model like `gpt-4-vision-preview`.
 
@@ -131,7 +131,7 @@ In the next box, give your key an easy to recognize name.
 In your VS Code or JetBrains editor, configure the following environment variables.
 
 ```
-ANTHROPIC_API_KEY=sk-ant-api03-12...
+ANTHROPIC_API_KEY=sk-ant-...your-anthropic-key...
 APPMAP_NAVIE_MODEL=claude-3-5-sonnet-20240620
 ```
 
@@ -157,7 +157,7 @@ In the next box, give your key an easy to recognize name.
 
 In your VS Code or JetBrains editor, configure the following environment variables:
 
-| `ANTHROPIC_API_KEY`| `sk-ant-api03-8SgtgQrGB0vTSsB_DeeIZHvDrfmrg` |
+| `ANTHROPIC_API_KEY`| `sk-ant-...your-anthropic-key...` |
 | `APPMAP_NAVIE_MODEL`| `claude-3-5-sonnet-20240620` |
 
 When setting the `APPMAP_NAVIE_MODEL` refer to the [Anthropic documentation](https://docs.anthropic.com/en/docs/intro-to-claude#model-options) for the latest available models to chose from.
@@ -183,7 +183,7 @@ You can confirm your model and API endpoint after making this change in the Navi
 
 Assuming you [created](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource) a `navie` GPT-4 deployment on `contoso.openai.azure.com` OpenAI instance:
 
-| `AZURE_OPENAI_API_KEY` | `e50edc22e83f01802893d654c4268c4f` |
+| `AZURE_OPENAI_API_KEY` | `<your-azure-openai-key>` |
 | `AZURE_OPENAI_API_VERSION` | `2024-02-01` |
 | `AZURE_OPENAI_API_INSTANCE_NAME` | `contoso` |
 | `AZURE_OPENAI_API_DEPLOYMENT_NAME` | `navie` |
@@ -194,7 +194,7 @@ Assuming you [created](https://learn.microsoft.com/en-us/azure/ai-services/opena
 selection of open-source LLMs. After you create an account you can use it by
 setting:
 
-| `OPENAI_API_KEY` | `esecret_myxfwgl1iinbz9q5hkexemk8f4xhcou8` |
+| `OPENAI_API_KEY` | `<your-anyscale-key>` |
 | `OPENAI_BASE_URL` | `https://api.endpoints.anyscale.com/v1` |
 | `APPMAP_NAVIE_MODEL` | `mistralai/Mixtral-8x7B-Instruct-v0.1` |
 
@@ -217,7 +217,7 @@ models as a compatible backend for AppMap Navie AI.
 After creating an account on Fireworks AI you can configure your Navie environment
 settings:
 
-| `OPENAI_API_KEY` | `WBYq2mKlK8I16ha21k233k2EwzGAJy3e0CLmtNZadJ6byfpu7c` |
+| `OPENAI_API_KEY` | `<your-fireworks-key>` |
 | `OPENAI_BASE_URL` | `https://api.fireworks.ai/inference/v1` |
 | `APPMAP_NAVIE_MODEL` | `accounts/fireworks/models/mixtral-8x22b-instruct` |
 
