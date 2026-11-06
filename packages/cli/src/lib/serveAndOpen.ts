@@ -1,10 +1,10 @@
-import { createReadStream, existsSync } from 'fs';
+import { createReadStream, existsSync, realpathSync, statSync } from 'fs';
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import open from 'open';
-import { extname, isAbsolute, join } from 'path';
+import { extname, isAbsolute, join, relative, resolve, sep } from 'path';
 import { parse } from 'url';
-import { exists, verbose } from '../utils';
+import { verbose } from '../utils';
 import UI from '../cmds/userInteraction';
 
 function mimeTypeOfName(filename: string): string {
@@ -19,10 +19,44 @@ function mimeTypeOfName(filename: string): string {
   );
 }
 
+// The regular file at `requested` below `root`, after resolving symlinks, or undefined when it is
+// missing, not a regular file, or outside `root`. This checks a stable tree; it does not guard
+// against the tree being replaced between this check and the read.
+export function containedFile(root: string, requested: string): string | undefined {
+  if (isAbsolute(requested)) return;
+  try {
+    const realRoot = realpathSync(root);
+    const path = realpathSync(join(realRoot, requested));
+    const fromRoot = relative(realRoot, path);
+    if (!fromRoot || fromRoot === '..' || fromRoot.startsWith(`..${sep}`) || isAbsolute(fromRoot))
+      return;
+    return statSync(path).isFile() ? path : undefined;
+  } catch {
+    return;
+  }
+}
+
+function isRegularFile(path: string): boolean {
+  try {
+    return statSync(path).isFile();
+  } catch {
+    return false;
+  }
+}
+
+const RESOURCE_ROUTE = 'resource';
+
+export type ServedPage = {
+  // Local files the page fetches, by page parameter. The page receives only a route for each
+  // file, never its path, and the server serves no other file under that route.
+  resources?: Record<string, string>;
+  // Other page parameters.
+  params?: Record<string, string>;
+};
+
 export default function serveAndOpen(
   file: string,
-  resources: Record<string, string>,
-  verifyInSubdir: boolean,
+  { resources = {}, params = {} }: ServedPage,
   onListen: (url: string) => void,
   unrefOnServe = true
 ) {
@@ -31,22 +65,25 @@ export default function serveAndOpen(
   const baseDir = join(__dirname, '..', '..', 'built', 'html');
   if (!existsSync(join(baseDir, file))) throw new Error(`File ${file} does not exist`);
 
+  const boundResources = new Map(
+    Object.entries(resources).map(([name, path]) => [name, resolve(process.cwd(), path)])
+  );
+
   const server = createServer((req, res) => {
     const send404 = () => {
       res.writeHead(404);
       res.end();
     };
 
-    const serveStaticFile = (dir: string, fileName: string, contentType?: string) => {
-      const path = isAbsolute(fileName) ? fileName : join(dir, fileName);
-      if (verifyInSubdir && !path.startsWith(dir)) return send404();
-
-      // eslint-disable-next-line no-param-reassign
-      if (!contentType) contentType = mimeTypeOfName(fileName);
-
+    const serveFile = (path: string, contentType: string) => {
       const fileStream = createReadStream(path);
+      const closeFile = () => fileStream.destroy();
+      // Release the file when the client goes away, including while it is still opening.
+      res.once('close', closeFile);
+      fileStream.once('close', () => res.off('close', closeFile));
       fileStream.pipe(res);
       fileStream.on('open', function () {
+        if (res.destroyed) return closeFile();
         if (verbose()) {
           console.log(`${path}: 200`);
         }
@@ -54,28 +91,47 @@ export default function serveAndOpen(
       });
       fileStream.on('error', function (e) {
         if (verbose()) {
-          console.log(`${path}: 404 (${e})`);
+          console.log(`${path}: ${res.headersSent ? 'read error' : '404'} (${e})`);
         }
-        send404();
+        if (res.destroyed) return;
+        // After the 200 has been sent, cut the response off instead of sending a second status.
+        if (res.headersSent) res.destroy(e);
+        else send404();
       });
     };
+
+    // Answer only requests addressed to this server, so that a page on another origin cannot
+    // reach it through DNS rebinding.
+    const { port } = server.address() as AddressInfo;
+    if (![`localhost:${port}`, `127.0.0.1:${port}`].includes(req.headers.host ?? '')) {
+      res.writeHead(403);
+      res.end();
+      return;
+    }
 
     try {
       if (verbose()) {
         console.log(req.url);
       }
 
-      const requestUrl = parse(req.url!);
-      const pathname = requestUrl.pathname;
+      const pathname = parse(req.url!).pathname || '/';
       if (pathname === '/') {
-        return serveStaticFile(baseDir, file, 'text/html');
-      } else if (pathname?.startsWith('/resource')) {
-        const pathname = requestUrl.query;
-        if (pathname) serveStaticFile(process.cwd(), decodeURIComponent(pathname));
-        else send404();
-      } else {
-        serveStaticFile(baseDir, (pathname || '/').slice(1));
+        return serveFile(join(baseDir, file), 'text/html');
       }
+      if (pathname === `/${RESOURCE_ROUTE}` || pathname.startsWith(`/${RESOURCE_ROUTE}/`)) {
+        let name: string;
+        try {
+          name = decodeURIComponent(pathname.slice(RESOURCE_ROUTE.length + 2));
+        } catch {
+          return send404();
+        }
+        const path = boundResources.get(name);
+        if (!path || !isRegularFile(path)) return send404();
+        return serveFile(path, mimeTypeOfName(path));
+      }
+      const asset = containedFile(baseDir, pathname.slice(1));
+      if (!asset) return send404();
+      serveFile(asset, mimeTypeOfName(asset));
     } catch (e) {
       if (e instanceof Error) {
         console.log(e.message);
@@ -90,11 +146,14 @@ export default function serveAndOpen(
     .listen(0, '127.0.0.1', () => {
       const port = (server.address() as AddressInfo).port;
 
-      const params = new URLSearchParams();
-      for (const [key, value] of Object.entries(resources)) {
-        params.append(key, value);
+      const query = new URLSearchParams();
+      for (const name of boundResources.keys()) {
+        query.append(name, `${RESOURCE_ROUTE}/${encodeURIComponent(name)}`);
       }
-      const url = new URL(`http://localhost:${port}/?${params.toString()}`);
+      for (const [key, value] of Object.entries(params)) {
+        query.append(key, value);
+      }
+      const url = new URL(`http://localhost:${port}/?${query.toString()}`);
       onListen(url.toString());
     })
     .on('connection', function (socket) {
@@ -106,40 +165,22 @@ export default function serveAndOpen(
 
 export async function serveAndOpenSequenceDiagram(
   diagramFile: string,
-  verifyInSubdir: boolean,
   onListen: (url: string) => void
 ): Promise<string> {
   return new Promise((resolve) => {
-    serveAndOpen(
-      'sequenceDiagram.html',
-      {
-        diagram: ['resource', encodeURIComponent(diagramFile)].join('?'),
-      },
-      verifyInSubdir,
-      async (url) => {
-        onListen(url);
-        resolve(url);
-      }
-    );
+    serveAndOpen('sequenceDiagram.html', { resources: { diagram: diagramFile } }, async (url) => {
+      onListen(url);
+      resolve(url);
+    });
   });
 }
 
-export async function serveAndOpenAppMap(
-  appMapFile: string,
-  verifyInSubdir: boolean
-): Promise<string> {
+export async function serveAndOpenAppMap(appMapFile: string): Promise<string> {
   return new Promise((resolve) => {
-    serveAndOpen(
-      'appmap.html',
-      {
-        appmap: ['resource', encodeURIComponent(appMapFile)].join('?'),
-      },
-      verifyInSubdir,
-      async (url) => {
-        await tryOpen(url);
-        resolve(url);
-      }
-    );
+    serveAndOpen('appmap.html', { resources: { appmap: appMapFile } }, async (url) => {
+      await tryOpen(url);
+      resolve(url);
+    });
   });
 }
 
@@ -152,8 +193,7 @@ export async function serveAndOpenNavie(rpcPort: number, question?: string): Pro
   return new Promise((resolve) => {
     serveAndOpen(
       'navie.html',
-      params,
-      false,
+      { params },
       async (url) => {
         await tryOpen(url);
         resolve(url);
