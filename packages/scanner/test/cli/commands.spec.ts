@@ -48,7 +48,10 @@ describe('commands', () => {
       }
     });
 
-    it('work correctly even if the appmap directory does not initially exist', () =>
+    it.each([
+      ['in appmap.yml', {}],
+      ['with --appmap-dir', { appmapDir: 'tmp/appmap' }],
+    ])('work correctly even if the appmap directory given %s does not initially exist', (_, args) =>
       tmp.withDir(
         async ({ path: tmpDir }) => {
           jest.spyOn(watchScan, 'default').mockImplementation((opts) => {
@@ -59,6 +62,7 @@ describe('commands', () => {
           await writeFile(path.join(tmpDir, 'appmap.yml'), 'appmap_dir: tmp/appmap\n');
           await ScanCommand.handler({
             ...defaultArguments,
+            ...args,
             watch: true,
             directory: tmpDir,
           });
@@ -84,6 +88,7 @@ describe('commands', () => {
           await scanned;
         },
         { unsafeCleanup: true }
-      ));
+      )
+    );
   });
 });
