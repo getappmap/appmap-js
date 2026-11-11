@@ -67,7 +67,8 @@ export default {
       throw new ValidationError('Use --appmap-file or --watch, but not both');
     }
 
-    if (appmapDir) await validateFile('directory', appmapDir);
+    // --watch waits for the directory to appear, so it doesn't need to exist yet.
+    if (appmapDir && !watch) await validateFile('directory', appmapDir);
     if (!appmapFile && !appmapDir) {
       appmapDir = (await appmapDirFromConfig()) || '.';
     }
