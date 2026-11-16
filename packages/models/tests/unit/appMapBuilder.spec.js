@@ -112,6 +112,96 @@ describe('normalize', () => {
       expect(appMap.events.length).toEqual(40);
     });
   });
+
+  describe('with returns out of order', () => {
+    // Async functions can return after calls made later have started, e.g.
+    // appmap-node records the return of an async function when its promise
+    // settles.
+    const call = (id, methodId) => ({
+      id,
+      event: 'call',
+      thread_id: 0,
+      defined_class: 'main',
+      method_id: methodId,
+      path: 'app/main.mjs',
+      static: true,
+    });
+    const ret = (id, parentId) => ({ id, event: 'return', thread_id: 0, parent_id: parentId });
+    const build = (events) => buildAppMap({ events }).normalize().build();
+    const describeEvents = (appMap) =>
+      appMap.events.map((e) => (e.isCall() ? e.method_id : `return ${e.callEvent.method_id}`));
+
+    it('nests calls made while their caller was still open', () => {
+      // https://github.com/getappmap/appmap-js/issues/2430
+      const appMap = build([call(1, 'startStudio'), call(2, 'handle'), ret(3, 1), ret(4, 2)]);
+
+      expect(describeEvents(appMap)).toEqual([
+        'startStudio',
+        'handle',
+        'return handle',
+        'return startStudio',
+      ]);
+      const [startStudio, handle] = appMap.events;
+      expect(startStudio.children).toEqual([handle]);
+      expect(handle.parent).toBe(startStudio);
+      expect(appMap.callTree.rootEvent.children.length).toEqual(1);
+    });
+
+    it('builds the tree when the returning call is deeper in the stack', () => {
+      const appMap = build([
+        call(1, 'a'),
+        call(2, 'b'),
+        call(3, 'c'),
+        ret(4, 1),
+        ret(5, 3),
+        ret(6, 2),
+      ]);
+
+      expect(describeEvents(appMap)).toEqual(['a', 'b', 'c', 'return c', 'return b', 'return a']);
+      const [a, b, c] = appMap.events;
+      expect(a.parent).toBeUndefined();
+      expect(b.parent).toBe(a);
+      expect(c.parent).toBe(b);
+    });
+
+    it('orders children by when they were called', () => {
+      const appMap = build([
+        call(1, 'a'),
+        call(2, 'b'),
+        ret(3, 1),
+        call(4, 'c'),
+        ret(5, 4),
+        ret(6, 2),
+      ]);
+
+      // c is called after a returns, so it's a child of b, the only open call.
+      expect(describeEvents(appMap)).toEqual(['a', 'b', 'c', 'return c', 'return b', 'return a']);
+    });
+
+    it('closes calls that never return inside calls that did', () => {
+      const appMap = build([call(1, 'a'), call(2, 'b'), ret(3, 1), call(4, 'c'), ret(5, 4)]);
+
+      // c is called after a returns, but b is still open, so c is b's child.
+      expect(describeEvents(appMap)).toEqual(['a', 'b', 'c', 'return c', 'return b', 'return a']);
+      const [a, b] = appMap.events;
+      expect(a.children).toEqual([b]);
+    });
+
+    it('gives the returns it adds unused ids', () => {
+      const appMap = buildAppMap({
+        events: [call(1, 'a'), call(2, 'b'), ret(3, 1), call(4, 'c'), ret(5, 4)],
+      }).build();
+
+      expect(appMap.events.map((e) => e.id)).toEqual([1, 2, 4, 5, 6, 3]);
+      expect(appMap.events[4].callEvent).toBe(appMap.events[1]);
+    });
+
+    it('discards a second return of the same call', () => {
+      const appMap = build([call(1, 'a'), call(2, 'b'), ret(3, 2), ret(4, 2), ret(5, 1)]);
+
+      expect(describeEvents(appMap)).toEqual(['a', 'b', 'return b', 'return a']);
+    });
+  });
 });
 
 test('prune', () => {

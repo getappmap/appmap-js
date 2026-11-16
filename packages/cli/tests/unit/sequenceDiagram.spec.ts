@@ -1,7 +1,7 @@
 import { buildAppMap } from '@appland/models';
-import { unparseDiagram } from '@appland/sequence-diagram';
+import { Action, NodeType, unparseDiagram } from '@appland/sequence-diagram';
 import assert from 'assert';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, rmSync } from 'fs';
 import { readFile } from 'fs/promises';
 import path from 'path';
 
@@ -47,6 +47,24 @@ describe('sequence diagram command', () => {
       },
       30 * 1000 // Allow time to install and run the headless browser
     );
+    it('is drawn when an async call returns after a later call starts', async () => {
+      // https://github.com/getappmap/appmap-js/issues/2430
+      const warn = jest.spyOn(console, 'warn');
+      await buildDiagram({
+        format: 'json',
+        outputDir: OutputDir,
+        appmap: [path.join(AppMapDir, 'javascript', 'out_of_order_return.appmap.json')],
+      });
+
+      expect(warn).not.toHaveBeenCalled();
+      const diagramFile = path.join(OutputDir, 'out_of_order_return.sequence.json');
+      const diagram = unparseDiagram(JSON.parse(await readFile(diagramFile, 'utf8')));
+      const describeAction = (action: Action): unknown =>
+        action.nodeType === NodeType.Function
+          ? { [action.name]: action.children.map(describeAction) }
+          : action.nodeType;
+      expect(diagram.rootActions.map(describeAction)).toEqual([{ startStudio: [{ handle: [] }] }]);
+    });
   });
   describe('PNG format', () => {
     // TODO: Chromium is failing to run in CI
@@ -118,6 +136,9 @@ let cwd: string | undefined;
 
 beforeEach(() => {
   cwd = process.cwd();
+  // Start each test without diagrams from earlier ones, so a test can't pass
+  // by reading a file it failed to write.
+  rmSync(OutputDir, { recursive: true, force: true });
   mkdirSync(OutputDir, { recursive: true });
 });
 afterEach(() => {
