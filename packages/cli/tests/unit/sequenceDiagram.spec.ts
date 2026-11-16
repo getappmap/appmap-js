@@ -66,6 +66,25 @@ describe('sequence diagram command', () => {
       expect(diagram.rootActions.map(describeAction)).toEqual([{ startStudio: [{ handle: [] }] }]);
     });
   });
+  describe('with a file that cannot be drawn', () => {
+    afterEach(() => {
+      process.exitCode = undefined;
+    });
+
+    it('draws the rest of the batch and fails the command', async () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const missingFile = path.join(AppMapDir, 'missing.appmap.json');
+      await buildDiagram({
+        format: 'json',
+        outputDir: OutputDir,
+        appmap: [missingFile, appmapFile],
+      });
+
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining(`Failed to draw ${missingFile}`));
+      expect(existsSync(sequenceDiagramFile)).toBe(true);
+      expect(process.exitCode).toBe(1);
+    });
+  });
   describe('PNG format', () => {
     // TODO: Chromium is failing to run in CI
     it.skip(

@@ -119,8 +119,14 @@ export default async function handler(argv: any) {
     }
   };
 
+  // A file that can't be drawn shouldn't stop the rest of the batch.
   for (const appmapFile of argv.appmap) {
-    await generateDiagram(appmapFile);
+    try {
+      await generateDiagram(appmapFile);
+    } catch (e) {
+      console.warn(`Failed to draw ${appmapFile}: ${e instanceof Error ? e.message : String(e)}`);
+      process.exitCode = 1;
+    }
   }
 
   if (browserRender) await browserRender.close();
