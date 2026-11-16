@@ -18,6 +18,12 @@ export const builder = (args: yargs.Argv) => {
   args.option('output-dir', {
     describe: 'directory in which to save the sequence diagrams',
   });
+  args.option('output', {
+    describe: 'file in which to save the sequence diagram (for a single AppMap)',
+    type: 'string',
+    alias: 'o',
+    conflicts: 'output-dir',
+  });
   args.option('show-browser', {
     describe: 'when using a browser to render the diagram, show the browser window',
     type: 'boolean',

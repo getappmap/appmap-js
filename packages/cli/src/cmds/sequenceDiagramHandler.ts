@@ -1,4 +1,5 @@
-import { mkdir, readFile, writeFile } from 'fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'fs/promises';
+import { tmpdir } from 'os';
 import { basename, dirname, join } from 'path';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
@@ -28,6 +29,12 @@ export default async function handler(argv: any) {
 
   if (argv.format !== 'png' && !Formatters.includes(argv.format)) {
     console.log(`Invalid format: ${argv.format}`);
+    process.exitCode = 1;
+    return;
+  }
+
+  if (argv.output && argv.appmap.length > 1) {
+    console.log(`--output can only be used with a single AppMap; use --output-dir instead`);
     process.exitCode = 1;
     return;
   }
@@ -65,12 +72,13 @@ export default async function handler(argv: any) {
       specOptions.exclude = Array.isArray(argv.exclude) ? argv.exclude : [argv.exclude];
 
     if (argv.outputDir) await mkdir(argv.outputDir, { recursive: true });
+    if (argv.output) await mkdir(dirname(argv.output), { recursive: true });
 
     const specification = Specification.build(appmap, specOptions);
 
     const diagram = buildDiagram(appmapFileName, appmap, specification);
 
-    const printDiagram = async (format: FormatType): Promise<string> => {
+    const printDiagram = async (format: FormatType, outputPath?: string): Promise<string> => {
       const template = formatDiagram(format, diagram, appmapFileName);
       const outputFileName = [
         basename(appmapFileName, '.appmap.json'),
@@ -79,7 +87,8 @@ export default async function handler(argv: any) {
       ].join('');
 
       let resultPath: string;
-      if (argv.outputDir) resultPath = join(argv.outputDir, outputFileName);
+      if (outputPath) resultPath = outputPath;
+      else if (argv.outputDir) resultPath = join(argv.outputDir, outputFileName);
       else resultPath = join(dirname(appmapFileName), outputFileName);
 
       await writeFile(resultPath, template.diagram);
@@ -90,7 +99,16 @@ export default async function handler(argv: any) {
     if (argv.format === 'png') {
       // PNG rendering is performed by loading the sequence
       // diagram in a browser and taking a screenshot.
-      const diagramPath = await printDiagram(FormatType.JSON);
+      // With --output naming the PNG, the JSON is only an intermediate, so it
+      // goes to a temporary directory: written beside the PNG, it could
+      // overwrite some other file, such as the input AppMap.
+      const tempDir = argv.output
+        ? await mkdtemp(join(tmpdir(), 'appmap-sequence-diagram-'))
+        : undefined;
+      const diagramPath = await printDiagram(
+        FormatType.JSON,
+        tempDir && join(tempDir, 'diagram.sequence.json')
+      );
       // Loaded here rather than at the top: serving the diagram brings in the
       // interactive prompt library, which most invocations never need.
       // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
@@ -100,21 +118,21 @@ export default async function handler(argv: any) {
           if (verbose()) console.warn(`Rendering PNG`);
           assert(browserRender, 'Browser not initialized');
 
-          const outputPath = join(
-            dirname(diagramPath),
-            [basename(diagramPath, '.json'), '.png'].join('')
-          );
+          const outputPath =
+            argv.output ??
+            join(dirname(diagramPath), [basename(diagramPath, '.json'), '.png'].join(''));
 
           await browserRender.screenshot(url, outputPath);
 
           resolve(outputPath);
         })
       );
+      if (tempDir) await rm(tempDir, { recursive: true, force: true });
       console.warn(`Printed diagram ${outputPath}`);
     } else {
       // Other forms of output are produced directly by the
       // sequence diagram library.
-      outputPath = await printDiagram(argv.format);
+      outputPath = await printDiagram(argv.format, argv.output);
       console.log(`Printed diagram ${outputPath}`);
     }
   };
