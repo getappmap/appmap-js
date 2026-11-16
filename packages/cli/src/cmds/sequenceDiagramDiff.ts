@@ -18,8 +18,14 @@ export const builder = (args: yargs.Argv) => {
     alias: 'd',
   });
   args.option('output-dir', {
-    describe: 'directory in which to save the sequence diagrams',
-    default: '.',
+    describe: 'directory in which to save the sequence diagrams (default: the current directory)',
+    type: 'string',
+  });
+  args.option('output', {
+    describe: 'file in which to save the diff (when comparing two files)',
+    type: 'string',
+    alias: 'o',
+    conflicts: 'output-dir',
   });
   args.option('format', {
     describe: 'output format',

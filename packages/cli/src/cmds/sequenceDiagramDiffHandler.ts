@@ -13,7 +13,7 @@ import {
   validateDiagram,
 } from '@appland/sequence-diagram';
 import { verbose } from '../utils';
-import { basename, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
 import { readDiagramFile } from './sequenceDiagram/readDiagramFile';
 import { readFile } from 'fs/promises';
@@ -22,11 +22,12 @@ async function printDiff(
   diagram: Diagram,
   format: FormatType,
   outputFileName: string,
-  description: string
+  description: string,
+  outputFile?: string
 ): Promise<Diagram | undefined> {
   const template = formatDiagram(format, diagram, description);
 
-  const outputPath = [outputFileName, template.extension].join('');
+  const outputPath = outputFile ?? [outputFileName, template.extension].join('');
   await writeFile(outputPath, template.diagram);
 
   console.log(`Printed diagram ${outputPath}`);
@@ -44,7 +45,8 @@ export default async function handler(argv: any) {
   }
 
   handleWorkingDirectory(argv.directory);
-  await mkdir(argv.outputDir, { recursive: true });
+  const outputDir: string = argv.outputDir ?? '.';
+  await mkdir(argv.output ? dirname(argv.output) : outputDir, { recursive: true });
 
   const { baseDiagram: baseDiagramFile, headDiagram: headDiagramFile } = argv;
 
@@ -114,11 +116,12 @@ export default async function handler(argv: any) {
       return;
     }
 
-    printDiff(
+    await printDiff(
       diffDiagram,
       argv.format,
-      join(argv.outputDir, 'diff'),
-      `Diff ${baseDiagramFile} with ${headDiagramFile}`
+      join(outputDir, 'diff'),
+      `Diff ${baseDiagramFile} with ${headDiagramFile}`,
+      argv.output
     );
   };
 
@@ -179,6 +182,8 @@ export default async function handler(argv: any) {
   if (isFile.every(Boolean)) {
     await compareFiles();
   } else if (isFile.every((b) => !b)) {
+    if (argv.output)
+      throw new Error(`--output names a single diff file; use --output-dir to compare directories`);
     await compareDirectories();
   } else {
     throw new Error(`Both arguments must be files, or be directories`);
