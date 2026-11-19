@@ -58,6 +58,13 @@ commit of the current git revision may not be the one that triggered the build.`
     type: 'string',
   });
 
+  args.option('in-place', {
+    describe: `build the archive in the AppMap directory, leaving index files, appmap_archive.json, appmaps.tar.gz and openapi.yml there.
+With --no-in-place, the AppMaps are hard-linked (or copied) into a temporary directory and the archive is built there, so the AppMap directory is left unchanged.`,
+    type: 'boolean',
+    default: true,
+  });
+
   args.option('output-dir', {
     describe: `directory in which to save the output file. By default, it's .appmap/archive/<type>.`,
     type: 'string',
