@@ -95,6 +95,13 @@ If the value is an absolute path, or contains a directory, it is used as given (
     multiple: true,
   });
 
+  args.option('expand', {
+    describe:
+      'code objects to expand into one lane per child in the stored sequence diagrams, for example package:app/models. See the sequence-diagram command.',
+    type: 'string',
+    array: true,
+  });
+
   args.option('thread-count', {
     describe: 'Number of worker threads to use when analyzing AppMaps',
     type: 'number',

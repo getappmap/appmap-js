@@ -6,7 +6,9 @@ import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import detectRevisions from './detectRevisions';
 import { defaultOutputDir, prepareOutputDir } from './prepareOutputDir';
 import { checkArchives, restoreArchives } from './restoreArchives';
+import { expandSequenceDiagrams } from './expandSequenceDiagrams';
 import { ValidationError } from './ValidationError';
+import { Paths } from '../../diffArchive/Paths';
 import { verbose } from '../../utils';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { analyzeChanges } from '../../diffArchive/ChangeAnalysis';
@@ -32,7 +34,10 @@ export default async function handler(argv: any) {
     reportRemoved,
     baseArchive,
     headArchive,
+    expand: expandArg,
   } = argv;
+  const expand: string[] | undefined =
+    expandArg === undefined ? undefined : Array.isArray(expandArg) ? expandArg : [expandArg];
 
   try {
     handleWorkingDirectory(directory);
@@ -75,6 +80,8 @@ export default async function handler(argv: any) {
 
     const options = new ChangeReportOptions();
     options.reportRemoved = reportRemoved;
+
+    if (expand && expand.length > 0) await expandSequenceDiagrams(new Paths(outputDir), expand);
 
     const changeAnalysis = await analyzeChanges(outputDir, srcDir, baseRevision, headRevision);
     const report = await reportChanges(changeAnalysis, options);

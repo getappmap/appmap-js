@@ -40,8 +40,11 @@ export default async function handler(argv: any) {
     threadCount: threadCountArg,
     appmapDir: appmapDirArg,
     inPlace: inPlaceArg,
+    expand: expandArg,
   } = argv;
   const inPlace = inPlaceArg !== false;
+  const expand: string[] | undefined =
+    expandArg === undefined ? undefined : Array.isArray(expandArg) ? expandArg : [expandArg];
 
   handleWorkingDirectory(argv.directory);
   const workingDirectory = process.cwd();
@@ -136,7 +139,8 @@ export default async function handler(argv: any) {
           compareFilter,
           appMapDir,
           oversizedAppMaps,
-          doScan
+          doScan,
+          expand
         );
       } finally {
         finalizers.push(workerPool.close());

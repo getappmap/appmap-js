@@ -3,6 +3,8 @@ import { execFileSync } from 'child_process';
 import { existsSync } from 'fs';
 import { tmpdir } from 'os';
 import { dirname, join } from 'path';
+import { glob } from 'glob';
+import { promisify } from 'util';
 
 import { handler as archive } from '../../../src/cmds/archive/archive';
 import { handler as compare } from '../../../src/cmds/compare/compare';
@@ -110,6 +112,15 @@ describe('archive and compare without an appmap.yml', () => {
         ...extra,
       });
 
+    const diffActorNames = async (): Promise<string[]> => {
+      const diffFiles = await promisify(glob)(
+        join(workDir, outputDir, 'diff', '**', '*.diff.sequence.json')
+      );
+      expect(diffFiles).toHaveLength(1);
+      const diagram = JSON.parse(await readFile(diffFiles[0], 'utf-8'));
+      return diagram.actors.map((actor: { name: string }) => actor.name);
+    };
+
     afterEach(() => process.chdir(originalWorkingDir));
 
     it(
@@ -127,6 +138,19 @@ describe('archive and compare without an appmap.yml', () => {
           expect(
             existsSync(join(workDir, outputDir, revisionName, 'user_page_scenario.appmap.json'))
           ).toBe(true);
+
+        // Without --expand, the classes in app/models share one lane.
+        expect(await diffActorNames()).not.toContain('Configuration');
+      },
+      60 * 1000
+    );
+
+    it(
+      'with --expand, gives each class in the package its own lane',
+      async () => {
+        await runCompare({ expand: ['package:app/models'] });
+
+        expect(await diffActorNames()).toContain('Configuration');
       },
       60 * 1000
     );

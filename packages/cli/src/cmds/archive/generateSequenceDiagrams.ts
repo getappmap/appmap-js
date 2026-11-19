@@ -11,11 +11,13 @@ export async function generateSequenceDiagrams(
   maxAppMapSizeInBytes: number,
   compareFilter: CompareFilter,
   oversizedAppMaps: Set<string>,
-  appMapDir: string
+  appMapDir: string,
+  expand?: string[]
 ) {
   const specOptions = {
     loops: true,
   } as SequenceDiagramOptions;
+  if (expand && expand.length > 0) specOptions.expand = expand;
 
   const task = (file: string): SequenceDiagramTask => ({
     name: 'sequence-diagram',

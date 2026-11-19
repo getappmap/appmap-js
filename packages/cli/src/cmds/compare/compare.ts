@@ -34,6 +34,13 @@ Must be given together with --head-archive. In this mode appmap.yml is not requi
     type: 'string',
   });
 
+  args.option('expand', {
+    describe: `code objects to expand into one lane per child (for example package:app/models) in the sequence diagrams of both revisions before they are compared.
+See the sequence-diagram command. The diagrams are rebuilt from the AppMaps in <output-dir>/base and <output-dir>/head.`,
+    type: 'string',
+    array: true,
+  });
+
   args.option('output-dir', {
     describe:
       'directory in which to save the report files. Default is ./.appmap/change-report/<base-revision>-<head-revision>.',
