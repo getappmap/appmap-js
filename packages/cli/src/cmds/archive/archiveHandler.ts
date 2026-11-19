@@ -2,8 +2,8 @@ import { exec, execFile } from 'child_process';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'path';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
-import { exists, verbose } from '../../utils';
-import { mkdir, readFile, unlink, writeFile } from 'fs/promises';
+import { exists, findFiles, verbose } from '../../utils';
+import { copyFile, mkdir, mkdtemp, readFile, rm, unlink, writeFile } from 'fs/promises';
 import loadAppMapConfig, { AppMapConfig } from '../../lib/loadAppMapConfig';
 import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
@@ -11,7 +11,7 @@ import gitRevision from './gitRevision';
 import { ArchiveMetadata } from '../../lib/ArchiveMetadata';
 import analyze from './analyze';
 import parseFilterArgs from './parseFilterArgs';
-import { cpus } from 'os';
+import { cpus, tmpdir } from 'os';
 import { log, warn } from 'console';
 import buildWorkerPool from './buildWorkerPool';
 import { index } from '.';
@@ -39,7 +39,9 @@ export default async function handler(argv: any) {
     filter: filterArg,
     threadCount: threadCountArg,
     appmapDir: appmapDirArg,
+    inPlace: inPlaceArg,
   } = argv;
+  const inPlace = inPlaceArg !== false;
 
   handleWorkingDirectory(argv.directory);
   const workingDirectory = process.cwd();
@@ -55,10 +57,26 @@ export default async function handler(argv: any) {
     packages: [],
   };
 
-  const appMapDir: string = appmapDirArg || (await locateAppMapDir());
-  if (!(await exists(appMapDir))) throw new Error(`AppMap directory ${appMapDir} does not exist`);
+  const sourceAppMapDir: string = appmapDirArg || (await locateAppMapDir());
+  if (!(await exists(sourceAppMapDir)))
+    throw new Error(`AppMap directory ${sourceAppMapDir} does not exist`);
 
-  await buildArchive();
+  // Without --in-place, the AppMaps are indexed in a temporary copy, so that
+  // the AppMap directory is left as it was.
+  let tempDir: string | undefined;
+  let appMapDir = sourceAppMapDir;
+  if (!inPlace) {
+    tempDir = await mkdtemp(join(tmpdir(), 'appmap-archive-'));
+    await copyAppMaps(sourceAppMapDir, tempDir);
+    appMapDir = tempDir;
+  }
+
+  try {
+    await buildArchive();
+  } finally {
+    process.chdir(workingDirectory);
+    if (tempDir) await rm(tempDir, { recursive: true, force: true });
+  }
 
   async function buildArchive() {
     const threadCount = threadCountArg || cpus().length;
@@ -71,7 +89,7 @@ export default async function handler(argv: any) {
 
     const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
 
-    console.log(`Building '${typeArg}' archive from ${appMapDir}`);
+    console.log(`Building '${typeArg}' archive from ${sourceAppMapDir}`);
 
     const revision = revisionArg !== undefined ? revisionArg : await gitRevision();
 
@@ -92,7 +110,16 @@ export default async function handler(argv: any) {
       // Scanner findings are not meaningful for failed tests, so we skip doing that
       // work and avoid misleading or confusing the user.
       try {
-        await index(workerPool, maxAppMapSizeInBytes, appMapDir, oversizedAppMaps, failedTests);
+        // Without --in-place, run statistics go in the temporary copy too, so that
+        // nothing is written beside the recordings.
+        await index(
+          workerPool,
+          maxAppMapSizeInBytes,
+          appMapDir,
+          oversizedAppMaps,
+          failedTests,
+          tempDir ? join(tempDir, '.appmap', 'run-stats') : undefined
+        );
 
         let doScan = true;
         if (failedTests.size > 0) {
@@ -127,8 +154,8 @@ export default async function handler(argv: any) {
       commandArguments: argv,
       revision,
       timestamp: Date.now().toString(),
-      failedTests: [...failedTests].sort(),
-      oversizedAppMaps: [...oversizedAppMaps].sort(),
+      failedTests: relativeToAppMapDir(failedTests),
+      oversizedAppMaps: relativeToAppMapDir(oversizedAppMaps),
       config: appmapConfig,
     };
 
@@ -181,7 +208,8 @@ The base revision cannot be determined, so either use --type=auto or --type=full
       );
     });
 
-    process.on('exit', () => unlink('appmaps.tar.gz'));
+    const appmapsTarball = resolve('appmaps.tar.gz');
+    if (inPlace) process.on('exit', () => unlink(appmapsTarball).catch(() => undefined));
 
     await writeFile('appmap_archive.json', JSON.stringify(metadata, null, 2));
 
@@ -208,6 +236,13 @@ The base revision cannot be determined, so either use --type=auto or --type=full
     }
     console.log(`Created AppMap archive ${relative(workingDirectory, outputPath) || outputPath}`);
     await Promise.all(finalizers);
+  }
+
+  // Paths of failed and oversized AppMaps are stored relative to the AppMap directory,
+  // whether or not the AppMaps were indexed in a temporary copy.
+  function relativeToAppMapDir(files: Set<string>): string[] {
+    const root = resolve(workingDirectory, appMapDir);
+    return [...files].map((file) => relative(root, resolve(workingDirectory, file))).sort();
   }
 }
 
@@ -236,4 +271,23 @@ export function resolveOutputPath(
     outputDir || join('.appmap', 'archive', type),
     outputFile || `${revision}.tar`
   );
+}
+
+// Copies the AppMap files (and appmap_archive.json, if present) into a scratch directory.
+// Index files from an earlier run are not copied. Like the 'tar *' that packs the archive,
+// top-level entries whose names start with '.' are skipped; hidden entries further down are kept.
+async function copyAppMaps(fromDir: string, toDir: string) {
+  const isHidden = (path: string) => path.split(sep)[0].startsWith('.');
+  const files = await findFiles(fromDir, '.appmap.json');
+  for (const file of files) {
+    const relativePath = relative(fromDir, file);
+    if (isHidden(relativePath)) continue;
+
+    const target = join(toDir, relativePath);
+    await mkdir(dirname(target), { recursive: true });
+    await copyFile(file, target);
+  }
+  const archiveMetadata = join(fromDir, 'appmap_archive.json');
+  if (await exists(archiveMetadata))
+    await copyFile(archiveMetadata, join(toDir, 'appmap_archive.json'));
 }

@@ -1,4 +1,153 @@
+import { copyFile, mkdtemp, mkdir, readFile, readdir, rm, writeFile } from 'fs/promises';
+import { execFileSync } from 'child_process';
+import { existsSync } from 'fs';
+import { tmpdir } from 'os';
+import { dirname, join } from 'path';
+import { handler as archive } from '../../../src/cmds/archive/archive';
 import { resolveOutputPath } from '../../../src/cmds/archive/archiveHandler';
+import { fixtureDir } from '../util';
+
+const rubyFixturePath = join(fixtureDir, 'ruby');
+const appmapNames = ['revoke_api_key', 'user_page_scenario'];
+const originalWorkingDir = process.cwd();
+
+type AppMapData = {
+  metadata: Record<string, any>;
+  events: { id: number; event: string; parent_id?: number; method_id?: string }[];
+};
+
+async function loadFixture(name: string): Promise<AppMapData> {
+  return JSON.parse(await readFile(join(rubyFixturePath, `${name}.appmap.json`), 'utf-8'));
+}
+
+// Writes the Ruby fixture AppMaps into a directory, marked as test recordings.
+// The edit function can change an AppMap before it is written.
+async function writeRecordings(dir: string, edit?: (name: string, appmap: AppMapData) => void) {
+  await mkdir(dir, { recursive: true });
+  for (const name of appmapNames) {
+    const appmap = await loadFixture(name);
+    appmap.metadata.recorder = { name: 'rspec', type: 'tests' };
+    if (edit) edit(name, appmap);
+    await writeFile(join(dir, `${name}.appmap.json`), JSON.stringify(appmap));
+  }
+}
+
+// Removes the call to Configuration#attributes that has the given id, and its return.
+function removeCall(appmap: AppMapData, callId: number) {
+  appmap.events = appmap.events.filter((e) => e.id !== callId && e.parent_id !== callId);
+}
+
+describe('archive and compare without an appmap.yml', () => {
+  let workDir: string;
+  let baseRecordings: string;
+  let headRecordings: string;
+  let baseArchive: string;
+  let headArchive: string;
+
+  beforeAll(async () => {
+    workDir = await mkdtemp(join(tmpdir(), 'appmap-compare-archives-'));
+    baseRecordings = join(workDir, 'recordings', 'base');
+    headRecordings = join(workDir, 'recordings', 'head');
+    baseArchive = join(workDir, 'archives', 'base.tar');
+    headArchive = join(workDir, 'archives', 'head.tar');
+
+    await writeRecordings(baseRecordings);
+    await writeRecordings(headRecordings, (name, appmap) => {
+      if (name === 'user_page_scenario') removeCall(appmap, 64);
+    });
+
+    for (const [recordings, outputFile, revision] of [
+      [baseRecordings, baseArchive, 'rev-base'],
+      [headRecordings, 'archives/head.tar', 'rev-head'],
+    ]) {
+      await archive({
+        directory: workDir,
+        appmapDir: recordings,
+        inPlace: false,
+        revision,
+        outputFile,
+        analyze: true,
+        threadCount: 1,
+        maxSize: 50,
+        type: 'auto',
+      });
+    }
+  }, 120 * 1000);
+
+  afterAll(async () => {
+    process.chdir(originalWorkingDir);
+    await rm(workDir, { recursive: true, force: true });
+  });
+
+  it('writes the archives to the paths given by --output-file', () => {
+    expect(existsSync(baseArchive)).toBe(true);
+    expect(existsSync(headArchive)).toBe(true);
+  });
+
+  it('leaves the recordings directories unchanged with --no-in-place', async () => {
+    for (const dir of [baseRecordings, headRecordings]) {
+      expect((await readdir(dir)).sort()).toEqual(
+        appmapNames.map((name) => `${name}.appmap.json`).sort()
+      );
+    }
+  });
+});
+
+describe('archive --appmap-dir . --no-in-place, run from the recordings directory', () => {
+  let recordings: string;
+  let outputFile: string;
+
+  beforeAll(async () => {
+    const root = await mkdtemp(join(tmpdir(), 'appmap-archive-in-place-'));
+    recordings = join(root, 'recordings');
+    outputFile = join(root, 'out.tar');
+
+    await writeRecordings(recordings);
+    // A hidden directory below a visible one is archived, as 'tar *' would do.
+    // A hidden top-level directory is not.
+    for (const dir of [join('suite', '.captures'), '.hidden']) {
+      await mkdir(join(recordings, dir), { recursive: true });
+      await copyFile(
+        join(recordings, 'revoke_api_key.appmap.json'),
+        join(recordings, dir, 'revoke_api_key.appmap.json')
+      );
+    }
+
+    await archive({
+      directory: recordings,
+      appmapDir: '.',
+      inPlace: false,
+      revision: 'r1',
+      outputFile,
+      analyze: true,
+      threadCount: 1,
+      maxSize: 50,
+      type: 'auto',
+    });
+  }, 120 * 1000);
+
+  afterAll(async () => {
+    process.chdir(originalWorkingDir);
+    await rm(dirname(recordings), { recursive: true, force: true });
+  });
+
+  it('writes nothing into the recordings directory', async () => {
+    expect((await readdir(recordings)).sort()).toEqual(
+      ['.hidden', 'revoke_api_key.appmap.json', 'suite', 'user_page_scenario.appmap.json'].sort()
+    );
+    expect(await readdir(join(recordings, 'suite', '.captures'))).toEqual([
+      'revoke_api_key.appmap.json',
+    ]);
+  });
+
+  it('archives hidden directories below the top level, but not hidden top-level ones', () => {
+    const appmaps = execFileSync('tar', ['-xOf', outputFile, 'appmaps.tar.gz']);
+    const entries = execFileSync('tar', ['tzf', '-'], { input: appmaps }).toString().split('\n');
+
+    expect(entries).toContain('suite/.captures/revoke_api_key.appmap.json');
+    expect(entries.filter((entry) => entry.startsWith('.hidden'))).toEqual([]);
+  });
+});
 
 describe('resolveOutputPath', () => {
   const wd = '/work';

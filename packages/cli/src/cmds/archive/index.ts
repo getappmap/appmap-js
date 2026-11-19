@@ -13,7 +13,8 @@ export async function index(
   maxAppMapSizeInBytes: number,
   appMapDir: string,
   oversizedAppMaps: Set<string>,
-  failedTests: Set<string>
+  failedTests: Set<string>,
+  runStatsDir = join('.appmap', 'run-stats')
 ) {
   const task = (file: string): IndexTask => ({
     name: 'index',
@@ -39,7 +40,7 @@ export async function index(
   );
 
   if (sampleMetadata) {
-    const outputDir = join('.appmap', 'run-stats');
+    const outputDir = runStatsDir;
     const usageData = await collectUsageData(
       appMapDir,
       totalEvents,
