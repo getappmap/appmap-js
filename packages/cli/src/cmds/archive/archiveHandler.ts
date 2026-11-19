@@ -1,9 +1,9 @@
 import { exec, execFile } from 'child_process';
-import { basename, dirname, isAbsolute, join, resolve } from 'path';
+import { basename, dirname, isAbsolute, join, normalize, resolve, sep } from 'path';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
-import { exists, verbose } from '../../utils';
-import { mkdir, readFile, unlink, writeFile } from 'fs/promises';
+import { exists, findFiles, verbose } from '../../utils';
+import { copyFile, link, mkdir, mkdtemp, readFile, rm, unlink, writeFile } from 'fs/promises';
 import loadAppMapConfig, { AppMapConfig } from '../../lib/loadAppMapConfig';
 import { VERSION as IndexVersion } from '../../fingerprint/fingerprinter';
 import chalk from 'chalk';
@@ -11,7 +11,7 @@ import gitRevision from './gitRevision';
 import { ArchiveMetadata } from '../../lib/ArchiveMetadata';
 import analyze from './analyze';
 import parseFilterArgs from './parseFilterArgs';
-import { cpus } from 'os';
+import { cpus, tmpdir } from 'os';
 import { log, warn } from 'console';
 import buildWorkerPool from './buildWorkerPool';
 import { index } from '.';
@@ -40,6 +40,9 @@ export default async function handler(argv: any) {
     threadCount: threadCountArg,
     appmapDir: appmapDirArg,
   } = argv;
+  // The handler is also called directly, without yargs defaults, so only an
+  // explicit false selects --no-in-place.
+  const inPlace = argv.inPlace !== false;
 
   handleWorkingDirectory(argv.directory);
   const workingDirectory = process.cwd();
@@ -54,9 +57,21 @@ export default async function handler(argv: any) {
 
   if (appmapDirArg && !(await exists(appmapDirArg)))
     throw new Error(`AppMap directory ${appmapDirArg} does not exist`);
-  const appMapDir: string = appmapDirArg || (await locateAppMapDir());
+  const sourceAppMapDir: string = appmapDirArg || (await locateAppMapDir());
 
-  await buildArchive();
+  // With --no-in-place, the archive is built in a scratch copy, so nothing is
+  // written beside the recordings. See makeScratchCopy.
+  const scratch = inPlace ? undefined : await makeScratchCopy(workingDirectory, sourceAppMapDir);
+  const appMapDir = scratch ? scratch.appMapDir : sourceAppMapDir;
+
+  try {
+    await buildArchive();
+  } finally {
+    if (scratch) {
+      process.chdir(workingDirectory);
+      await rm(scratch.root, { recursive: true, force: true });
+    }
+  }
 
   async function buildArchive() {
     const threadCount = threadCountArg || cpus().length;
@@ -69,9 +84,12 @@ export default async function handler(argv: any) {
 
     const maxAppMapSizeInBytes = Math.round(parseFloat(maxSize) * 1024 * 1024);
 
-    console.log(`Building '${typeArg}' archive from ${appMapDir}`);
+    console.log(`Building '${typeArg}' archive from ${sourceAppMapDir}`);
 
     const revision = revisionArg !== undefined ? revisionArg : await gitRevision();
+    // The revision is read from git in the real working directory. From here on,
+    // a scratch copy is worked on from its own root.
+    if (scratch) process.chdir(scratch.root);
 
     console.log(`Building archive of revision ${revision}`);
     const versions = { archive: ArchiveVersion, index: IndexVersion };
@@ -179,7 +197,9 @@ The base revision cannot be determined, so either use --type=auto or --type=full
       );
     });
 
-    process.on('exit', () => unlink('appmaps.tar.gz'));
+    // A scratch copy is removed with everything in it. Registering this for one would
+    // delete appmaps.tar.gz from whatever the working directory is at exit.
+    if (inPlace) process.on('exit', () => unlink('appmaps.tar.gz'));
 
     await writeFile('appmap_archive.json', JSON.stringify(metadata, null, 2));
 
@@ -224,4 +244,74 @@ export function archiveOutputPath(
   if (isAbsolute(outputFileName)) return outputFileName;
 
   return join(resolve(workingDirectory, outputDir), outputFileName);
+}
+
+type ScratchCopy = {
+  // Temporary directory that stands in for the working directory.
+  root: string;
+  // The AppMap directory, relative to root.
+  appMapDir: string;
+};
+
+// Lays out a scratch copy of the AppMap directory, for --no-in-place.
+//
+// The copy keeps the AppMap directory's relative name: tmp/appmap is copied to
+// <root>/tmp/appmap, and the archive is then built with <root> as the working
+// directory. So every path that indexing and scanning record (failedTests,
+// oversizedAppMaps, the findings, appMapDir in appmap_archive.json) is the same
+// string that an in-place archive records. Nothing has to be rewritten.
+//
+// An AppMap directory given as an absolute path, or outside the working
+// directory, has no relative name to keep, so it is placed under its own base
+// name, and the archive records paths relative to that name.
+async function makeScratchCopy(workingDirectory: string, appMapDir: string): Promise<ScratchCopy> {
+  const root = await mkdtemp(join(tmpdir(), 'appmap-archive-'));
+  const relativeName = normalize(appMapDir);
+  const keepsName =
+    !isAbsolute(appMapDir) && relativeName !== '..' && !relativeName.startsWith(`..${sep}`);
+  const scratchAppMapDir = keepsName
+    ? appMapDir
+    : basename(resolve(workingDirectory, appMapDir)) || 'appmaps';
+
+  await linkAppMaps(resolve(workingDirectory, appMapDir), join(root, scratchAppMapDir));
+
+  // The scanner reads appmap-scanner.yml from the working directory.
+  const scannerConfig = join(workingDirectory, 'appmap-scanner.yml');
+  if (await exists(scannerConfig)) await copyFile(scannerConfig, join(root, 'appmap-scanner.yml'));
+
+  return { root, appMapDir: scratchAppMapDir };
+}
+
+// Puts each AppMap file into the scratch directory as a hard link. Archiving only
+// reads AppMap files (the index, sequence diagrams and findings are written to new
+// files beside them), so a link costs no time or space and the original is never
+// written. Where a link can't be made, for example across file systems, the file is
+// copied instead.
+//
+// appmap_archive.json, which marks the directory as holding incremental AppMaps, is
+// copied, never linked, because archive overwrites it.
+//
+// Like the 'tar *' that packs an in-place archive, top-level entries whose names
+// start with '.' are skipped; hidden entries further down are kept. Index files from
+// an earlier in-place run are not copied.
+async function linkAppMaps(fromDir: string, toDir: string) {
+  const isHidden = (path: string) => path.split(sep)[0].startsWith('.');
+  await mkdir(toDir, { recursive: true });
+
+  for (const file of await findFiles(fromDir, '.appmap.json')) {
+    const relativePath = file.slice(fromDir.length + 1);
+    if (isHidden(relativePath)) continue;
+
+    const target = join(toDir, relativePath);
+    await mkdir(dirname(target), { recursive: true });
+    try {
+      await link(file, target);
+    } catch {
+      await copyFile(file, target);
+    }
+  }
+
+  const archiveMetadata = join(fromDir, 'appmap_archive.json');
+  if (await exists(archiveMetadata))
+    await copyFile(archiveMetadata, join(toDir, 'appmap_archive.json'));
 }
