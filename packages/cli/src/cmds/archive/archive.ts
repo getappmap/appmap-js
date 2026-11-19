@@ -52,6 +52,12 @@ commit of the current git revision may not be the one that triggered the build.`
     alias: 'r',
   });
 
+  args.option('appmap-dir', {
+    describe:
+      'directory of AppMaps to archive. By default, it is appmap_dir from appmap.yml. When this option is given, appmap.yml is not required.',
+    type: 'string',
+  });
+
   args.option('output-dir', {
     describe: `directory in which to save the output file. By default, it's .appmap/archive/<type>.`,
     type: 'string',
