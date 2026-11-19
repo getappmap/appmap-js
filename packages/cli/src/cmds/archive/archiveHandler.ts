@@ -1,5 +1,5 @@
 import { exec, execFile } from 'child_process';
-import { dirname, isAbsolute, join, relative, resolve, sep } from 'path';
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'path';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { exists, verbose } from '../../utils';
@@ -38,16 +38,25 @@ export default async function handler(argv: any) {
     outputDir: outputDirArg,
     filter: filterArg,
     threadCount: threadCountArg,
+    appmapDir: appmapDirArg,
   } = argv;
 
   handleWorkingDirectory(argv.directory);
   const workingDirectory = process.cwd();
 
   const loadedConfig = await loadAppMapConfig();
-  if (!loadedConfig) throw new Error(`Unable to load appmap.yml config file`);
-  const appmapConfig: AppMapConfig = loadedConfig;
+  if (!loadedConfig && !appmapDirArg)
+    throw new Error(
+      `Unable to load appmap.yml config file. Use --appmap-dir to archive without one.`
+    );
+  const appmapConfig: AppMapConfig = loadedConfig || {
+    name: basename(workingDirectory),
+    appmap_dir: appmapDirArg,
+    packages: [],
+  };
 
-  const appMapDir = await locateAppMapDir();
+  const appMapDir: string = appmapDirArg || (await locateAppMapDir());
+  if (!(await exists(appMapDir))) throw new Error(`AppMap directory ${appMapDir} does not exist`);
 
   await buildArchive();
 
