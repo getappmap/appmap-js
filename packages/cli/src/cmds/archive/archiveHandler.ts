@@ -1,5 +1,5 @@
-import { exec } from 'child_process';
-import { join, resolve } from 'path';
+import { exec, execFile } from 'child_process';
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'path';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { exists, verbose } from '../../utils';
@@ -176,28 +176,55 @@ The base revision cannot be determined, so either use --type=auto or --type=full
 
     await writeFile('appmap_archive.json', JSON.stringify(metadata, null, 2));
 
-    const outputFileName = outputFileNameArg || `${revision}.tar`;
-
-    const defaultOutputDir = () => join('.appmap', 'archive', type);
-    const outputDir = outputDirArg || defaultOutputDir();
-    await mkdir(resolve(workingDirectory, outputDir), { recursive: true });
+    const outputPath = resolveOutputPath(
+      workingDirectory,
+      type,
+      revision,
+      outputFileNameArg,
+      outputDirArg
+    );
+    await mkdir(dirname(outputPath), { recursive: true });
 
     {
-      let tarCommand = `tar cf ${join(
-        resolve(workingDirectory, outputDir),
-        outputFileName
-      )} appmap_archive.json appmaps.tar.gz`;
-      if (existsSync('openapi.yml')) tarCommand += ' openapi.yml';
+      const tarArgs = ['cf', outputPath, 'appmap_archive.json', 'appmaps.tar.gz'];
+      if (existsSync('openapi.yml')) tarArgs.push('openapi.yml');
 
       await new Promise<void>((resolveCB, rejectCB) => {
-        exec(tarCommand, (error) => {
+        execFile('tar', tarArgs, (error) => {
           if (error) return rejectCB(error);
 
           resolveCB();
         });
       });
     }
-    console.log(`Created AppMap archive ${join(outputDir, outputFileName)}`);
+    console.log(`Created AppMap archive ${relative(workingDirectory, outputPath) || outputPath}`);
     await Promise.all(finalizers);
   }
+}
+
+// A bare file name goes in the output directory. A path (absolute, or containing a
+// directory) is used as given, relative to the working directory.
+export function resolveOutputPath(
+  workingDirectory: string,
+  type: string,
+  revision: string,
+  outputFile: string | undefined,
+  outputDir: string | undefined
+): string {
+  if (
+    outputFile &&
+    (isAbsolute(outputFile) || outputFile.includes('/') || outputFile.includes(sep))
+  ) {
+    if (outputDir)
+      throw new Error(
+        `--output-file ${outputFile} includes a directory, so --output-dir cannot also be given`
+      );
+    return resolve(workingDirectory, outputFile);
+  }
+
+  return resolve(
+    workingDirectory,
+    outputDir || join('.appmap', 'archive', type),
+    outputFile || `${revision}.tar`
+  );
 }
