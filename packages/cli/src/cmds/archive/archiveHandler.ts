@@ -18,6 +18,7 @@ import { index } from '.';
 import { existsSync } from 'fs';
 import generateOpenAPI from './generateOpenAPI';
 import { ArchiveVersion, PackageVersion } from './archive';
+import optionList from '../../lib/optionList';
 
 export default async function handler(argv: any) {
   let finalizers: Promise<unknown>[] = [];
@@ -43,6 +44,7 @@ export default async function handler(argv: any) {
   // The handler is also called directly, without yargs defaults, so only an
   // explicit false selects --no-in-place.
   const inPlace = argv.inPlace !== false;
+  const expand = optionList(argv.expand);
 
   handleWorkingDirectory(argv.directory);
   const workingDirectory = process.cwd();
@@ -125,7 +127,8 @@ export default async function handler(argv: any) {
           compareFilter,
           appMapDir,
           oversizedAppMaps,
-          doScan
+          doScan,
+          expand
         );
       } finally {
         finalizers.push(workerPool.close());

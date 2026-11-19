@@ -6,7 +6,10 @@ import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import detectRevisions from './detectRevisions';
 import { defaultOutputDir, prepareOutputDir } from './prepareOutputDir';
 import { checkArchives, restoreArchives } from './restoreArchives';
+import { expandSequenceDiagrams } from './expandSequenceDiagrams';
 import { ValidationError } from './ValidationError';
+import { Paths } from '../../diffArchive/Paths';
+import optionList from '../../lib/optionList';
 import { verbose } from '../../utils';
 import loadAppMapConfig from '../../lib/loadAppMapConfig';
 import { analyzeChanges } from '../../diffArchive/ChangeAnalysis';
@@ -33,12 +36,19 @@ export default async function handler(argv: any) {
     baseArchive,
     headArchive,
   } = argv;
+  const expand = optionList(argv.expand);
 
   try {
     handleWorkingDirectory(directory);
 
     let baseRevision: string;
     let headRevision: string;
+    // --expand rebuilds the sequence diagrams in base/ and head/. With archives, compare
+    // restores those directories itself. Without them, they belong to the caller, and
+    // rewriting them would change what a later compare of the same directories sees.
+    if (expand && !baseArchive)
+      throw new ValidationError(`--expand can only be used with --base-archive and --head-archive`);
+
     if (baseArchive || headArchive) {
       if (!baseArchive || !headArchive)
         throw new ValidationError(`--base-archive and --head-archive must be given together`);
@@ -75,6 +85,8 @@ export default async function handler(argv: any) {
 
     const options = new ChangeReportOptions();
     options.reportRemoved = reportRemoved;
+
+    if (expand && expand.length > 0) await expandSequenceDiagrams(new Paths(outputDir), expand);
 
     const changeAnalysis = await analyzeChanges(outputDir, srcDir, baseRevision, headRevision);
     const report = await reportChanges(changeAnalysis, options);
