@@ -133,6 +133,15 @@ export default class Graph {
   }
 
   render() {
+    // Skip Dagre to avoid -Infinity dimensions for an empty graph.
+    if (this.graph.nodeCount() === 0) {
+      this.graph.graph().width = 0;
+      this.graph.graph().height = 0;
+      this.element.setAttribute('width', 0);
+      this.element.setAttribute('height', 0);
+      return;
+    }
+
     dagre.layout(this.graph);
 
     this.graph.nodes().forEach((id) => {
