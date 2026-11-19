@@ -58,7 +58,8 @@ commit of the current git revision may not be the one that triggered the build.`
   });
 
   args.option('output-file', {
-    describe: 'output file name. Default output name is <revision>.tar',
+    describe:
+      'output file name. Default output name is <revision>.tar. It is placed in the output directory, unless it is an absolute path, which is used as given.',
     type: 'string',
     alias: 'f',
   });

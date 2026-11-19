@@ -1,5 +1,5 @@
-import { exec } from 'child_process';
-import { join, resolve } from 'path';
+import { exec, execFile } from 'child_process';
+import { dirname, isAbsolute, join, resolve } from 'path';
 import { handleWorkingDirectory } from '../../lib/handleWorkingDirectory';
 import { locateAppMapDir } from '../../lib/locateAppMapDir';
 import { exists, verbose } from '../../utils';
@@ -180,24 +180,41 @@ The base revision cannot be determined, so either use --type=auto or --type=full
 
     const defaultOutputDir = () => join('.appmap', 'archive', type);
     const outputDir = outputDirArg || defaultOutputDir();
-    await mkdir(resolve(workingDirectory, outputDir), { recursive: true });
+    const outputPath = archiveOutputPath(workingDirectory, outputDir, outputFileName);
+    await mkdir(
+      isAbsolute(outputFileName) ? dirname(outputPath) : resolve(workingDirectory, outputDir),
+      { recursive: true }
+    );
 
     {
-      let tarCommand = `tar cf ${join(
-        resolve(workingDirectory, outputDir),
-        outputFileName
-      )} appmap_archive.json appmaps.tar.gz`;
-      if (existsSync('openapi.yml')) tarCommand += ' openapi.yml';
+      const tarArgs = ['cf', outputPath, 'appmap_archive.json', 'appmaps.tar.gz'];
+      if (existsSync('openapi.yml')) tarArgs.push('openapi.yml');
 
       await new Promise<void>((resolveCB, rejectCB) => {
-        exec(tarCommand, (error) => {
+        execFile('tar', tarArgs, (error) => {
           if (error) return rejectCB(error);
 
           resolveCB();
         });
       });
     }
-    console.log(`Created AppMap archive ${join(outputDir, outputFileName)}`);
+    console.log(
+      `Created AppMap archive ${
+        isAbsolute(outputFileName) ? outputFileName : join(outputDir, outputFileName)
+      }`
+    );
     await Promise.all(finalizers);
   }
+}
+
+// An absolute --output-file is used as given. Any other value is placed in the
+// output directory, as it always has been.
+export function archiveOutputPath(
+  workingDirectory: string,
+  outputDir: string,
+  outputFileName: string
+): string {
+  if (isAbsolute(outputFileName)) return outputFileName;
+
+  return join(resolve(workingDirectory, outputDir), outputFileName);
 }
