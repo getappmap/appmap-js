@@ -4,7 +4,9 @@ import { execFileSync } from 'child_process';
 import { existsSync, realpathSync } from 'fs';
 import { tmpdir } from 'os';
 import { dirname, join } from 'path';
+
 import { handler as archive } from '../../../src/cmds/archive/archive';
+import { handler as compare } from '../../../src/cmds/compare/compare';
 import { archiveOutputPath } from '../../../src/cmds/archive/archiveHandler';
 import { fixtureDir } from '../util';
 
@@ -131,6 +133,124 @@ describe('archive and compare without an appmap.yml', () => {
   it('records an AppMap directory given as an absolute path by its base name', () => {
     expect(readManifest(baseArchive).appMapDir).toEqual('base');
     expect(archivedFiles(baseArchive)).toContain('revoke_api_key.appmap.json');
+  });
+
+  describe('compare --base-archive --head-archive', () => {
+    const outputDir = 'report';
+
+    const runCompare = async (extra: Record<string, unknown> = {}) =>
+      compare({
+        directory: workDir,
+        baseArchive,
+        headArchive,
+        outputDir,
+        sourceDir: '.',
+        clobberOutputDir: true,
+        deleteUnreferenced: false,
+        reportRemoved: true,
+        ...extra,
+      });
+
+    afterEach(() => process.chdir(originalWorkingDir));
+
+    it(
+      'restores both archives and reports the changed AppMap',
+      async () => {
+        await runCompare();
+
+        const report = JSON.parse(
+          await readFile(join(workDir, outputDir, 'change-report.json'), 'utf-8')
+        );
+        expect(report.changedAppMaps.map((c: { appmap: string }) => c.appmap)).toEqual([
+          'user_page_scenario',
+        ]);
+        for (const revisionName of ['base', 'head'])
+          expect(
+            existsSync(join(workDir, outputDir, revisionName, 'user_page_scenario.appmap.json'))
+          ).toBe(true);
+      },
+      60 * 1000
+    );
+
+    it(
+      'names the default output directory after the revisions stored in the archives',
+      async () => {
+        await runCompare({ outputDir: undefined });
+
+        expect(
+          existsSync(
+            join(workDir, '.appmap', 'change-report', 'rev_base-rev_head', 'change-report.json')
+          )
+        ).toBe(true);
+      },
+      60 * 1000
+    );
+
+    it(
+      'refuses to replace restored data without --clobber-output-dir',
+      async () => {
+        await expect(runCompare({ clobberOutputDir: false })).rejects.toThrow(/already exists/);
+      },
+      60 * 1000
+    );
+
+    it(
+      'treats archive file names as literal paths',
+      async () => {
+        const oddName = join(workDir, 'archives', 'head $(touch pwned) ; x.tar');
+        await copyFile(headArchive, oddName);
+
+        await runCompare({ headArchive: oddName });
+
+        expect(existsSync(join(workDir, outputDir, 'change-report.json'))).toBe(true);
+        expect(existsSync(join(workDir, 'pwned'))).toBe(false);
+        expect(existsSync(join(workDir, outputDir, 'pwned'))).toBe(false);
+      },
+      60 * 1000
+    );
+
+    it('refuses an incremental archive before writing anything', async () => {
+      const incrementalDir = join(workDir, 'incremental');
+      await mkdir(incrementalDir, { recursive: true });
+      await writeFile(
+        join(incrementalDir, 'appmap_archive.json'),
+        JSON.stringify({ revision: 'rev-inc', baseRevision: 'rev-base' })
+      );
+      execFileSync('tar', ['czf', 'appmaps.tar.gz', 'appmap_archive.json'], {
+        cwd: incrementalDir,
+      });
+      const incrementalArchive = join(workDir, 'archives', 'incremental.tar');
+      execFileSync('tar', ['cf', incrementalArchive, 'appmap_archive.json', 'appmaps.tar.gz'], {
+        cwd: incrementalDir,
+      });
+
+      await expect(
+        runCompare({ headArchive: incrementalArchive, outputDir: 'incremental-report' })
+      ).rejects.toThrow(/incremental archive/);
+      expect(existsSync(join(workDir, 'incremental-report'))).toBe(false);
+    });
+
+    it('refuses an archive with no revision before writing anything', async () => {
+      const noRevisionDir = join(workDir, 'no-revision');
+      await mkdir(noRevisionDir, { recursive: true });
+      await writeFile(join(noRevisionDir, 'appmap_archive.json'), JSON.stringify({}));
+      execFileSync('tar', ['czf', 'appmaps.tar.gz', 'appmap_archive.json'], { cwd: noRevisionDir });
+      const noRevisionArchive = join(workDir, 'archives', 'no-revision.tar');
+      execFileSync('tar', ['cf', noRevisionArchive, 'appmap_archive.json', 'appmaps.tar.gz'], {
+        cwd: noRevisionDir,
+      });
+
+      await expect(
+        runCompare({ headArchive: noRevisionArchive, outputDir: 'no-revision-report' })
+      ).rejects.toThrow(/has no revision/);
+      expect(existsSync(join(workDir, 'no-revision-report'))).toBe(false);
+    });
+
+    it('requires both archives', async () => {
+      await expect(runCompare({ headArchive: undefined })).rejects.toThrow(
+        /must be given together/
+      );
+    });
   });
 });
 
