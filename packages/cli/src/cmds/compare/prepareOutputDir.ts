@@ -6,6 +6,10 @@ import { RevisionName } from '../../diffArchive/RevisionName';
 import { confirm, sanitizeRevision } from './ui';
 import { ValidationError } from './ValidationError';
 
+export function defaultOutputDir(baseRevision: string, headRevision: string): string {
+  return `.appmap/change-report/${sanitizeRevision(baseRevision)}-${sanitizeRevision(headRevision)}`;
+}
+
 export async function prepareOutputDir(
   outputDirArg: any,
   baseRevision: string,
@@ -13,12 +17,7 @@ export async function prepareOutputDir(
   clobberOutputDir: boolean,
   rl: readline.Interface
 ): Promise<string> {
-  let outputDir = outputDirArg;
-  if (!outputDir) {
-    outputDir = `.appmap/change-report/${sanitizeRevision(baseRevision)}-${sanitizeRevision(
-      headRevision
-    )}`;
-  }
+  const outputDir = outputDirArg || defaultOutputDir(baseRevision, headRevision);
 
   for (const revision of [RevisionName.Base, RevisionName.Head]) {
     if (!(await exists(join(outputDir, revision))))
