@@ -35,14 +35,15 @@ class ReferencedAppMaps {
 
 export type AppMapMetadata = { [K in BaseOrHead]: Map<AppMapName, Metadata> };
 
-// Gets a function that returns true if the given appmap is a test.
-function isTest(
+// Gets a function that returns true if the given appmap is a test. A recording whose
+// metadata has no recorder, or a recorder with no type, is not a test.
+export function isTest(
   revisionName: RevisionName,
   appMapMetadata: AppMapMetadata
 ): (appmap: AppMapName) => boolean {
   return (appmap: AppMapName): boolean => {
     const metadata = appMapMetadata[revisionName].get(appmap);
-    return !!(metadata && metadata.recorder.type === 'tests');
+    return metadata?.recorder?.type === 'tests';
   };
 }
 
@@ -71,6 +72,32 @@ export function isChanged(
       baseDigest !== headDigest
     );
   };
+}
+
+// Only test recordings are compared. Say which recordings are left out because their
+// metadata does not say what recorded them, so that an empty report is not a mystery.
+const MAX_NAMES_IN_WARNING = 10;
+
+// Lists up to MAX_NAMES_IN_WARNING names, then says how many more there are.
+export function nameList(names: string[]): string {
+  const shown = names.slice(0, MAX_NAMES_IN_WARNING).join(', ');
+  const more = names.length - MAX_NAMES_IN_WARNING;
+  return more > 0 ? `${shown}, and ${more} more` : shown;
+}
+
+function warnAboutRecordingsWithoutRecorderType(appMapMetadata: AppMapMetadata) {
+  for (const revisionName of [RevisionName.Base, RevisionName.Head] as BaseOrHead[]) {
+    const skipped = [...appMapMetadata[revisionName].entries()]
+      .filter(([, metadata]) => !metadata.recorder?.type)
+      .map(([appmap]) => appmap)
+      .sort();
+    if (skipped.length === 0) continue;
+
+    warn(
+      `${skipped.length} ${revisionName} recording(s) have no metadata.recorder.type, so they are ` +
+        `not treated as test recordings and are left out of the comparison: ${nameList(skipped)}`
+    );
+  }
 }
 
 export default interface ChangeAnalysis {
@@ -191,6 +218,8 @@ export class ChangeAnalysisImpl {
       isTest(RevisionName.Head, appMapMetadata),
       this.digests
     );
+
+    warnAboutRecordingsWithoutRecorderType(appMapMetadata);
 
     this.newAppMaps = [...headAppMaps].filter(isNewFn);
     this.removedAppMaps = [...baseAppMaps].filter(isRemovedFn);

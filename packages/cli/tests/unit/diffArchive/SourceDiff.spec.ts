@@ -30,7 +30,7 @@ describeExceptWindows('SourceDiff', () => {
 
     it('organizes the diff by file', async () => {
       jest.spyOn(SourceDiff, 'isEligibleFile').mockReturnValue(true);
-      jest.spyOn(executeCommand, 'executeCommand').mockResolvedValue(exampleDiff);
+      jest.spyOn(executeCommand, 'execute').mockResolvedValue(exampleDiff);
 
       await diffLoader.update(new Set(['app']));
 
@@ -46,16 +46,26 @@ describeExceptWindows('SourceDiff', () => {
 
     it('updates the diff information incrementally', async () => {
       jest.spyOn(SourceDiff, 'isEligibleFile').mockReturnValue(true);
-      const executeCommandSpy = jest.spyOn(executeCommand, 'executeCommand');
+      const executeCommandSpy = jest.spyOn(executeCommand, 'execute');
       executeCommandSpy.mockResolvedValueOnce('');
       executeCommandSpy.mockResolvedValueOnce(exampleDiff);
 
       await diffLoader.update(new Set(['lib']));
-      expect(executeCommandSpy).toHaveBeenCalledWith('git diff the-base..the-head -- lib', true);
+      expect(executeCommandSpy).toHaveBeenCalledWith('git', [
+        'diff',
+        'the-base..the-head',
+        '--',
+        'lib',
+      ]);
       expect(diffLoader.lookupDiff('app/controllers/users_controller.rb')).toBeUndefined();
 
       await diffLoader.update(new Set(['app']));
-      expect(executeCommandSpy).toHaveBeenCalledWith('git diff the-base..the-head -- app', true);
+      expect(executeCommandSpy).toHaveBeenCalledWith('git', [
+        'diff',
+        'the-base..the-head',
+        '--',
+        'app',
+      ]);
       expect(diffLoader.lookupDiff('app/controllers/users_controller.rb')).toEqual(expectedDiff);
 
       // This one should be a nop
@@ -67,7 +77,7 @@ describeExceptWindows('SourceDiff', () => {
 
     it('reports on a variety of diff information', async () => {
       jest.spyOn(SourceDiff, 'isEligibleFile').mockReturnValue(true);
-      const executeCommandSpy = jest.spyOn(executeCommand, 'executeCommand');
+      const executeCommandSpy = jest.spyOn(executeCommand, 'execute');
       executeCommandSpy.mockResolvedValueOnce(addDeleteChangeRemoveDiff);
 
       await diffLoader.update(new Set(['just-cant-be-empty']));
@@ -111,7 +121,7 @@ describeExceptWindows('SourceDiff', () => {
     beforeEach(() => (q = new SourceDiffQueue(baseRevision, headRevision)));
 
     it('processes a single diff request', async () => {
-      const executeCommandSpy = jest.spyOn(executeCommand, 'executeCommand').mockResolvedValue('');
+      const executeCommandSpy = jest.spyOn(executeCommand, 'execute').mockResolvedValue('');
 
       const sourcePathRoots = new Set(['root-a']);
       const diff = await q.diff(sourcePathRoots);
@@ -120,7 +130,12 @@ describeExceptWindows('SourceDiff', () => {
         JSON.stringify({ command: 'git diff the-base..the-head -- root-a', files: [] })
       );
       expect(executeCommandSpy).toHaveBeenCalledTimes(1);
-      expect(executeCommandSpy).toHaveBeenCalledWith('git diff the-base..the-head -- root-a', true);
+      expect(executeCommandSpy).toHaveBeenCalledWith('git', [
+        'diff',
+        'the-base..the-head',
+        '--',
+        'root-a',
+      ]);
     });
 
     it('returns an empty diff for empty roots', async () => {
@@ -129,7 +144,7 @@ describeExceptWindows('SourceDiff', () => {
     });
 
     it('parses unified diff', async () => {
-      jest.spyOn(executeCommand, 'executeCommand').mockResolvedValue(exampleDiff);
+      jest.spyOn(executeCommand, 'execute').mockResolvedValue(exampleDiff);
 
       const sourcePathRoots = new Set(['root-a']);
       const diff = await q.diff(sourcePathRoots);
@@ -139,7 +154,7 @@ describeExceptWindows('SourceDiff', () => {
     });
 
     it('serializes diff requests', async () => {
-      jest.spyOn(executeCommand, 'executeCommand').mockImplementation(async () => {
+      jest.spyOn(executeCommand, 'execute').mockImplementation(async () => {
         await new Promise((resolve) => setTimeout(resolve, 1));
         return '';
       });

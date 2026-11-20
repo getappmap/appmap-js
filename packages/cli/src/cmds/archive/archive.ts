@@ -52,13 +52,27 @@ commit of the current git revision may not be the one that triggered the build.`
     alias: 'r',
   });
 
+  args.option('appmap-dir', {
+    describe:
+      'directory of AppMaps to archive. By default, it is appmap_dir from appmap.yml. When this option is given, appmap.yml is not required.',
+    type: 'string',
+  });
+
+  args.option('in-place', {
+    describe: `build the archive in the AppMap directory, leaving index files, appmap_archive.json, appmaps.tar.gz and openapi.yml there.
+With --no-in-place, the AppMaps are hard-linked (or copied) into a temporary directory and the archive is built there, so the AppMap directory is left unchanged.`,
+    type: 'boolean',
+    default: true,
+  });
+
   args.option('output-dir', {
     describe: `directory in which to save the output file. By default, it's .appmap/archive/<type>.`,
     type: 'string',
   });
 
   args.option('output-file', {
-    describe: 'output file name. Default output name is <revision>.tar',
+    describe:
+      'output file name. Default output name is <revision>.tar. It is placed in the output directory, unless it is an absolute path, which is used as given.',
     type: 'string',
     alias: 'f',
   });
@@ -79,6 +93,13 @@ commit of the current git revision may not be the one that triggered the build.`
     describe: 'filter to apply to AppMaps when normalizing them into sequence diagrams',
     type: 'string',
     multiple: true,
+  });
+
+  args.option('expand', {
+    describe:
+      'code objects to expand into one lane per child in the stored sequence diagrams, for example package:app/models. See the sequence-diagram command.',
+    type: 'string',
+    array: true,
   });
 
   args.option('thread-count', {
