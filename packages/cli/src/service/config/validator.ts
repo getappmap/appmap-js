@@ -1,12 +1,20 @@
 import Ajv, { AnySchema } from 'ajv';
-import betterAjvErrors from '@sidvind/better-ajv-errors';
+import betterAjvErrors, { IColors, IOutputError } from '@sidvind/better-ajv-errors';
+import chalk from 'chalk';
 
 type ValidationResult = {
   valid: boolean;
   errors?: {
-    js: betterAjvErrors.IOutputError[];
+    js: IOutputError[];
     cli: string;
   };
+};
+
+// The colors better-ajv-errors used before it stopped coloring by default.
+const colors: IColors = {
+  error: chalk.red,
+  property: chalk.magentaBright,
+  bold: chalk.bold,
 };
 
 export class ConfigValidationError extends Error {
@@ -27,13 +35,12 @@ export function validateConfig(schema: AnySchema | AnySchema[], config: object):
   const valid = validate(config) as boolean;
   let result: ValidationResult = { valid };
   if (!valid) {
+    const errors = validate.errors ?? [];
     result = {
       ...result,
       errors: {
-        js: betterAjvErrors(schema, config, validate.errors, { format: 'js' }),
-        cli: betterAjvErrors(schema, config, validate.errors, {
-          format: 'cli',
-        }),
+        js: betterAjvErrors(schema, config, errors, { format: 'js' }),
+        cli: betterAjvErrors(schema, config, errors, { format: 'cli', colors }),
       },
     };
   }
