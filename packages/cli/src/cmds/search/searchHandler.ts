@@ -87,7 +87,7 @@ export default async function handler(argvIn: yargs.ArgumentsCamelCase) {
       if (show) {
         const appmapFile = `${sanitize(query)}_${count}.appmap.json`;
         await writeFile(appmapFile, JSON.stringify(filteredAppMap, null, 2));
-        await openInBrowser(appmapFile, false);
+        await openInBrowser(appmapFile);
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
         appmaps.push(filteredAppMap);

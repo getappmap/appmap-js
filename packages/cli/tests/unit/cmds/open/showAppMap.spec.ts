@@ -10,7 +10,7 @@ describe(showAppMap, () => {
   it('opens the appmap in the browser', async () => {
     const openInBrowser = jest.spyOn(openers, 'openInBrowser').mockResolvedValue();
     await showAppMap(testPath);
-    expect(openInBrowser.mock.calls).toStrictEqual([[testPath, false]]);
+    expect(openInBrowser.mock.calls).toStrictEqual([[testPath]]);
   });
 
   describe('on darwin in VSCode', () => {
@@ -31,7 +31,7 @@ describe(showAppMap, () => {
       });
       const openInBrowser = jest.spyOn(openers, 'openInBrowser').mockResolvedValue();
       await showAppMap(testPath);
-      expect(openInBrowser.mock.calls).toStrictEqual([[testPath, false]]);
+      expect(openInBrowser.mock.calls).toStrictEqual([[testPath]]);
     });
   });
 });

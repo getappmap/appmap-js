@@ -12,7 +12,7 @@ export default async function showAppMap(appMapFile: string) {
       } catch {
         // fallthrough
       }
-    return openInBrowser(appMapFile, false);
+    return openInBrowser(appMapFile);
   }
 
   await open();
