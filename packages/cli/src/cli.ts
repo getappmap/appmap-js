@@ -84,27 +84,39 @@ registerCommand(parser, Query);
 registerCommand(parser, RunTest);
 registerCommand(parser, TestTelemetry);
 
-// eslint-disable-next-line no-unused-expressions
-parser
-  .option('verbose', {
-    alias: 'v',
-    type: 'boolean',
-    description: 'Run with verbose logging',
-  })
-  .fail((msg, err, yargs) => {
-    if (msg) {
-      console.log(yargs.help());
-      console.log(msg);
-    } else if (err) {
-      if (err.cause) {
-        console.error(err.message);
-        console.error(err.cause);
-      } else {
-        console.error(err);
+// Thrown from the failure handler to stop yargs; see below.
+class UsageError extends Error {}
+
+try {
+  // eslint-disable-next-line no-unused-expressions
+  parser
+    .option('verbose', {
+      alias: 'v',
+      type: 'boolean',
+      description: 'Run with verbose logging',
+    })
+    .fail((msg, err, yargs) => {
+      if (msg) {
+        console.log(yargs.help());
+        console.log(msg);
+        process.exitCode = 1;
+        // This is a validation failure (e.g. an unknown option under strict
+        // mode), reported before the command runs. Returning would let yargs go
+        // on to run the command anyway, so stop it.
+        throw new UsageError(msg);
+      } else if (err) {
+        if (err.cause) {
+          console.error(err.message);
+          console.error(err.cause);
+        } else {
+          console.error(err);
+        }
       }
-    }
-    process.exitCode = 1;
-  })
-  .strict()
-  .demandCommand()
-  .help().argv;
+      process.exitCode = 1;
+    })
+    .strict()
+    .demandCommand()
+    .help().argv;
+} catch (e) {
+  if (!(e instanceof UsageError)) throw e;
+}
