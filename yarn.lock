@@ -14072,18 +14072,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:~4.3.1, debug@npm:~4.3.2":
-  version: 4.3.6
-  resolution: "debug@npm:4.3.6"
-  dependencies:
-    ms: "npm:2.1.2"
-  peerDependenciesMeta:
-    supports-color:
-      optional: true
-  checksum: 10c0/3293416bff072389c101697d4611c402a6bacd1900ac20c0492f61a9cdd6b3b29750fc7f5e299f8058469ef60ff8fb79b86395a30374fbd2490113c1c7112285
-  languageName: node
-  linkType: hard
-
 "debuglog@npm:^1.0.1":
   version: 1.0.1
   resolution: "debuglog@npm:1.0.1"
@@ -15048,16 +15036,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"engine.io-client@npm:~6.5.2":
-  version: 6.5.3
-  resolution: "engine.io-client@npm:6.5.3"
+"engine.io-client@npm:~6.6.1":
+  version: 6.6.8
+  resolution: "engine.io-client@npm:6.6.8"
   dependencies:
     "@socket.io/component-emitter": "npm:~3.1.0"
-    debug: "npm:~4.3.1"
+    debug: "npm:~4.4.1"
     engine.io-parser: "npm:~5.2.1"
-    ws: "npm:~8.11.0"
-    xmlhttprequest-ssl: "npm:~2.0.0"
-  checksum: 10c0/15d2136655972984012fe5c92446ff9939c08d872262bbb23cd54be1b66a00d489da93321cd01a8ad72eaf4022cfd73bdc8bccf32fa51c097a96c0b4c679cd7b
+    ws: "npm:~8.21.0"
+    xmlhttprequest-ssl: "npm:~2.1.1"
+  checksum: 10c0/bd0fd41c5e1f7b5d7c7460a5a6e70b65b0b4b36656c048eab9d0f07b643392278d6654feda389573a72b8717995cae57cabc6db28b6c79e7e69eb8589c390a2c
   languageName: node
   linkType: hard
 
@@ -30125,14 +30113,14 @@ __metadata:
   linkType: hard
 
 "socket.io-client@npm:^4.7.2":
-  version: 4.7.2
-  resolution: "socket.io-client@npm:4.7.2"
+  version: 4.8.4
+  resolution: "socket.io-client@npm:4.8.4"
   dependencies:
     "@socket.io/component-emitter": "npm:~3.1.0"
-    debug: "npm:~4.3.2"
-    engine.io-client: "npm:~6.5.2"
+    debug: "npm:~4.4.1"
+    engine.io-client: "npm:~6.6.1"
     socket.io-parser: "npm:~4.2.4"
-  checksum: 10c0/164931221deaa30278185c795772b6065273b751b4951ce16581eff0aed955196ae3e911489d66542409ef3629e4a5dc85908902c6aa9f8f79fee314732e624b
+  checksum: 10c0/53f6266d85e375902f1ca417fb2c9ad523463fcd9c4b7aa66fb31792809c4b0d7b81cb760e9fac1b7cbb7bc4283feb39b37867e8ef2a5dcad99302f71ca2346f
   languageName: node
   linkType: hard
 
@@ -34155,18 +34143,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:~8.11.0":
-  version: 8.11.0
-  resolution: "ws@npm:8.11.0"
+"ws@npm:~8.21.0":
+  version: 8.21.3
+  resolution: "ws@npm:8.21.3"
   peerDependencies:
     bufferutil: ^4.0.1
-    utf-8-validate: ^5.0.2
+    utf-8-validate: ">=5.0.2"
   peerDependenciesMeta:
     bufferutil:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 10c0/b672b312f357afba8568b9dbb9e08b9e8a20845659b35fa6b340dc848efe371379f5e22bb1dc89c4b2940d5e2dc52dd1de85dde41776875fce115a448f94754f
+  checksum: 10c0/7b28dc2863ea0e2cece68d142a3eee90361021b73f750431e6d8076bb7dede5fdfdb75b3d29534b62f411261147b76b1bc80fb5cc63ab0aabd467280e85b22e0
   languageName: node
   linkType: hard
 
@@ -34205,10 +34193,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xmlhttprequest-ssl@npm:~2.0.0":
-  version: 2.0.0
-  resolution: "xmlhttprequest-ssl@npm:2.0.0"
-  checksum: 10c0/b64ab371459bd5e3a4827e3c7535759047d285fd310aea6fd028973d547133f3be0d473c1fdae9f14d89bf509267759198ae1fbe89802079a7e217ddd990d734
+"xmlhttprequest-ssl@npm:~2.1.1":
+  version: 2.1.2
+  resolution: "xmlhttprequest-ssl@npm:2.1.2"
+  checksum: 10c0/70d60869323e823f473a238f78fd108437edbc3690ecd5859c39c83217080090a18899b272e515769c0d1f518cc64cbed6b6995b23fdd7ba13b297d530b6e631
   languageName: node
   linkType: hard
 
