@@ -462,6 +462,9 @@ export function buildUIApp(opts: UIServerOptions): express.Express {
 
   if (bundleExists) {
     app.use(express.static(staticDir));
+    // viewer.js imports the code it shares with the other Vue viewers from
+    // ../chunks/, which the browser resolves to /chunks/ (see esbuild.html.ts).
+    app.use('/chunks', express.static(path.join(staticDir, '..', 'chunks')));
   }
 
   // Catch-all for non-API GETs. Express 5's path-to-regexp doesn't
