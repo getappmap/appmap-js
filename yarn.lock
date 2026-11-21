@@ -112,7 +112,7 @@ __metadata:
     "@eslint/js": "npm:~8.57.0"
     "@octokit/rest": "npm:^20.0.1"
     "@octokit/types": "npm:^11.1.0"
-    "@sidvind/better-ajv-errors": "npm:^0.9.1"
+    "@sidvind/better-ajv-errors": "npm:^7.0.0"
     "@swc/core": "npm:^1.11.24"
     "@types/better-sqlite3": "npm:^7.6.11"
     "@types/cors": "npm:^2.8.17"
@@ -5830,18 +5830,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sidvind/better-ajv-errors@npm:^0.9.1":
-  version: 0.9.2
-  resolution: "@sidvind/better-ajv-errors@npm:0.9.2"
-  dependencies:
-    "@babel/code-frame": "npm:^7.0.0"
-    chalk: "npm:^4.0.0"
-    json-to-ast: "npm:^2.0.3"
-    jsonpointer: "npm:^4.1.0"
-    leven: "npm:^3.1.0"
+"@sidvind/better-ajv-errors@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "@sidvind/better-ajv-errors@npm:7.0.0"
   peerDependencies:
-    ajv: 4.11.8 - 8
-  checksum: 10c0/e7ce54e88e4bad04b2755814295ccf02055b80a1b9f27ca93c132f6e5989c1cb05ac46f620282b963f9e8726fb42fd31c79cb49a82b8e2ff18ccc1bac4cc7e2f
+    ajv: ^8.0.0
+  checksum: 10c0/8ac190b8f956c4e19384d80b73eb9f2e0e9f10c9bda95a4e3b1fa2899cbd7967826248f6e01f4fcbcd5fc5e2615dcdf63fe688745027a89d3d66d2c6d9b5fa47
   languageName: node
   linkType: hard
 
@@ -12477,13 +12471,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"code-error-fragment@npm:0.0.230":
-  version: 0.0.230
-  resolution: "code-error-fragment@npm:0.0.230"
-  checksum: 10c0/40164ec7ad40434fc05ed02d2cd085db3a974a2be9dc48b54b1d7f99f38c621a027dc3af29bda0208c7a6af46571208ae8b84e1ea5eb20fcecbbbf40403c9fd1
-  languageName: node
-  linkType: hard
-
 "collect-v8-coverage@npm:^1.0.0":
   version: 1.0.1
   resolution: "collect-v8-coverage@npm:1.0.1"
@@ -18449,13 +18436,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"grapheme-splitter@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "grapheme-splitter@npm:1.0.4"
-  checksum: 10c0/108415fb07ac913f17040dc336607772fcea68c7f495ef91887edddb0b0f5ff7bc1d1ab181b125ecb2f0505669ef12c9a178a3bbd2dd8e042d8c5f1d7c90331a
-  languageName: node
-  linkType: hard
-
 "graphemer@npm:^1.4.0":
   version: 1.4.0
   resolution: "graphemer@npm:1.4.0"
@@ -22496,16 +22476,6 @@ __metadata:
   version: 5.0.1
   resolution: "json-stringify-safe@npm:5.0.1"
   checksum: 10c0/7dbf35cd0411d1d648dceb6d59ce5857ec939e52e4afc37601aa3da611f0987d5cee5b38d58329ceddf3ed48bd7215229c8d52059ab01f2444a338bf24ed0f37
-  languageName: node
-  linkType: hard
-
-"json-to-ast@npm:^2.0.3":
-  version: 2.1.0
-  resolution: "json-to-ast@npm:2.1.0"
-  dependencies:
-    code-error-fragment: "npm:0.0.230"
-    grapheme-splitter: "npm:^1.0.4"
-  checksum: 10c0/28f37650df38cf61002e8c4454b6fcf471a13c19c9b300491b2240cb0e1ef71f5e29480b9f0d10a7462c5e17c9bca4eda4446776b425805d7a4bb8cd2aeef74a
   languageName: node
   linkType: hard
 
