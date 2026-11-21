@@ -20,6 +20,7 @@ async function initializeApp() {
         ref: 'ui',
         props: {
           interactive: false,
+          serializedSelection: true,
           serializedDiagram: json || {},
         },
       }),

@@ -25,6 +25,9 @@
               :interactive="interactive"
               :appMap="appMap"
               :highlighted-event-index="highlightedEventIndex"
+              :serialized-selection="serializedSelectionEnabled"
+              :serialized-selected="isSerializedSelected(action)"
+              @select-serialized-call="selectSerializedCall(action, $event)"
             />
           </template>
           <template v-if="action.nodeType === 'return'">
@@ -75,12 +78,22 @@ export default {
 
   components: { VLoopAction, VCallAction, VReturnAction, VActor },
 
+  data() {
+    return { selectedSerializedEventId: undefined };
+  },
+
   props: {
     appMap: {
       type: Object,
     },
     serializedDiagram: {
       type: Object,
+    },
+    // Opt-in call identity selection for serialized-only viewers, independent of
+    // interactive controls and without fabricating AppMap Event/data objects.
+    serializedSelection: {
+      type: Boolean,
+      default: false,
     },
     interactive: {
       type: Boolean,
@@ -97,6 +110,9 @@ export default {
   },
 
   computed: {
+    serializedSelectionEnabled() {
+      return this.serializedSelection && !!this.serializedDiagram && !this.appMap;
+    },
     collapsedActionState: {
       get() {
         return this.$store?.state?.collapsedActionState || [];
@@ -183,6 +199,26 @@ export default {
     },
   },
   methods: {
+    selectSerializedCall(action: ActionSpec, eventId: number) {
+      if (!this.serializedSelectionEnabled || !Number.isSafeInteger(eventId) || eventId <= 0)
+        return;
+      if (!this.actions.includes(action) || action.nodeType !== 'call') return;
+      if (action.eventIds[0] !== eventId) return;
+      // Event IDs identify calls within this loaded diagram, not their grid rows.
+      // Refuse ambiguous input rather than selecting multiple unrelated calls.
+      const matches = this.actions.filter(
+        (candidate) => candidate.nodeType === 'call' && candidate.eventIds.includes(eventId)
+      );
+      if (matches.length !== 1) return;
+      this.selectedSerializedEventId = eventId;
+    },
+    isSerializedSelected(action: ActionSpec): boolean {
+      return (
+        this.serializedSelectionEnabled &&
+        this.selectedSerializedEventId !== undefined &&
+        action.eventIds.includes(this.selectedSerializedEventId)
+      );
+    },
     actionKey(action: ActionSpec): string {
       return `action:${action.index}:${action.action.digest}`;
     },
@@ -314,6 +350,12 @@ export default {
     },
   },
   watch: {
+    serializedDiagram() {
+      this.selectedSerializedEventId = undefined;
+    },
+    serializedSelectionEnabled() {
+      this.selectedSerializedEventId = undefined;
+    },
     collapseDepth() {
       const diffMode = this.actions.some((a) => a.action.diffMode);
       if (!diffMode) this.collapseActionsForCompactLook(this.actions, this.collapseDepth);

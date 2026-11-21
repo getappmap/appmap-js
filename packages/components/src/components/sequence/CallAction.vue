@@ -26,6 +26,8 @@
           :appMap="appMap"
           :is-collapsed="isLabelCollapsed"
           :interactive="interactive"
+          :serialized-selection="serializedSelection"
+          @select-serialized-call="$emit('select-serialized-call', $event)"
         />
         <VSelfCallArrow :action-spec="actionSpec" />
       </div>
@@ -48,6 +50,8 @@
             :appMap="appMap"
             :is-collapsed="isLabelCollapsed"
             :interactive="interactive"
+            :serialized-selection="serializedSelection"
+            @select-serialized-call="$emit('select-serialized-call', $event)"
           />
           <Arrow class="arrow" />
         </div>
@@ -69,6 +73,8 @@
             :appMap="appMap"
             :is-collapsed="isLabelCollapsed"
             :interactive="interactive"
+            :serialized-selection="serializedSelection"
+            @select-serialized-call="$emit('select-serialized-call', $event)"
           />
         </div>
         <template v-if="actionSpec.calleeActionIndex - actionSpec.callerActionIndex > 2">
@@ -120,6 +126,8 @@
             :appMap="appMap"
             :is-collapsed="isLabelCollapsed"
             :interactive="interactive"
+            :serialized-selection="serializedSelection"
+            @select-serialized-call="$emit('select-serialized-call', $event)"
           />
           <Arrow class="arrow" />
         </div>
@@ -141,6 +149,8 @@
             :appMap="appMap"
             :is-collapsed="isLabelCollapsed"
             :interactive="interactive"
+            :serialized-selection="serializedSelection"
+            @select-serialized-call="$emit('select-serialized-call', $event)"
           />
           <Arrow class="arrow" />
         </div>
@@ -239,6 +249,14 @@ export default {
     appMap: {
       type: Object,
     },
+    serializedSelection: {
+      type: Boolean,
+      default: false,
+    },
+    serializedSelected: {
+      type: Boolean,
+      default: false,
+    },
     highlightedEventIndex: {
       type: Number,
       default: undefined,
@@ -248,6 +266,7 @@ export default {
   computed: {
     selected() {
       return (
+        this.appMap &&
         this.$store.getters.selectedObject &&
         this.$store.getters.selectedObject instanceof Event &&
         this.actionSpec.eventIds.includes(this.$store.getters.selectedObject.id)
@@ -285,7 +304,8 @@ export default {
       if (this.focusedEvent && this.actionSpec.eventIds.includes(this.focusedEvent.id))
         result.push('focused');
 
-      if (this.selected) result.push('selected');
+      if (this.selected || (this.serializedSelection && !this.appMap && this.serializedSelected))
+        result.push('selected');
       if (this.highlighted) result.push('highlighted');
 
       return result;
