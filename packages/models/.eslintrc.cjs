@@ -4,6 +4,7 @@ module.exports = {
     'shared-node-browser': true,
   },
   extends: ['../../eslintrc.js', 'plugin:import/recommended'],
+  settings: { 'import/resolver': { node: { extensions: ['.js', '.ts', '.json'] } } },
   ignorePatterns: ['**/*.cjs'],
   rules: {
     'no-undef': ['warn'],

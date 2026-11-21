@@ -1,12 +1,19 @@
 import sha256 from 'crypto-js/sha256.js';
 import { LRUCache } from 'lru-cache';
 import type { Action, Loop } from './types';
-import { NodeType } from './types';
+import {
+  actionActors,
+  isClientRPC,
+  isFunction,
+  isLoop,
+  isQuery,
+  isServerRPC,
+  NodeType,
+} from './types';
 
 const sha256Cache = new LRUCache<string, string>({ max: 3000 });
 
-function buildDigest(actions: Action[]): string {
-  const sha256Input = actions.map((action) => action.subtreeDigest).join('\n');
+function digest(sha256Input: string): string {
   let result = sha256Cache.get(sha256Input);
   if (!result) {
     result = sha256(sha256Input).toString();
@@ -15,11 +22,89 @@ function buildDigest(actions: Action[]): string {
   return result;
 }
 
-function countDigests(actions: Action[], windowSize: number): Map<string, number> {
+// The legacy subtree digest omits return metadata and nested loop counts, so it only seeds a new
+// loop's digest; compression eligibility uses the stricter window digest below.
+function buildDigest(actions: Action[]): string {
+  return digest(actions.map((action) => action.subtreeDigest).join('\n'));
+}
+
+// Mask complete single-quoted strings and standalone numbers in a truncated statement, so that
+// iterations differing only in those values still form a loop when the cut leaves the same text.
+// Other text, including a literal cut off by the truncation, is compared exactly. The SQL dialect
+// is not known here, so this assumes standard single-quote escaping.
+function truncatedQueryText(query: string): string {
+  const masked = query.replace(/'(?:[^']|'')*'/g, '?');
+  // A quote left after masking opens the literal that the truncation cut off.
+  const cut = masked.indexOf("'");
+  const complete = cut === -1 ? masked : masked.slice(0, cut);
+  const rest = cut === -1 ? '' : masked.slice(cut);
+  return complete.replace(/\b\d+(?:\.\d+)?\b/g, '?') + rest;
+}
+
+// Compression identities by action, valid for one diagram build: loop detection compresses an
+// action's children before its siblings are compared, and merging only changes event IDs and
+// elapsed time, which the identity excludes.
+export type CompressionIdentities = WeakMap<Action, string>;
+
+function compressionIdentity(action: Action, identities: CompressionIdentities): string {
+  let identity = identities.get(action);
+  if (identity === undefined) {
+    identity = sha256(JSON.stringify(compressionProperties(action, identities))).toString();
+    identities.set(action, identity);
+  }
+  return identity;
+}
+
+function compressionProperties(action: Action, identities: CompressionIdentities): unknown[] {
+  const functionProperties = isFunction(action)
+    ? [
+        action.name,
+        action.static,
+        Object.keys(action.stableProperties)
+          .sort()
+          .map((key) => [key, action.stableProperties[key]]),
+        action.returnValue && [
+          action.returnValue.raisesException,
+          action.returnValue.returnValueType && [
+            action.returnValue.returnValueType.name,
+            action.returnValue.returnValueType.properties,
+          ],
+        ],
+      ]
+    : undefined;
+  return [
+    action.nodeType,
+    action.digest,
+    action.subtreeDigest,
+    actionActors(action).map((actor) => actor?.id),
+    isLoop(action) ? action.count : undefined,
+    functionProperties,
+    // A complete statement's digest is normalized on purpose, so iterations that differ
+    // only in literal values still form a loop. Every truncated statement shares the
+    // constant "truncatedQuery" digest, so compare its text, with literals masked.
+    isQuery(action) && action.digest === 'truncatedQuery'
+      ? truncatedQueryText(action.query)
+      : undefined,
+    action.labels,
+    isServerRPC(action) || isClientRPC(action) ? [action.route, action.status] : undefined,
+    // Inspect current children, not just a digest built before inner compression.
+    action.children.map((child) => compressionIdentity(child, identities)),
+  ];
+}
+
+function buildWindowDigest(actions: Action[], identities: CompressionIdentities): string {
+  return digest(actions.map((action) => compressionIdentity(action, identities)).join('\n'));
+}
+
+function countDigests(
+  actions: Action[],
+  windowSize: number,
+  identities: CompressionIdentities
+): Map<string, number> {
   const digestCount = new Map<string, number>();
   for (let index = 0; index + windowSize <= actions.length; index++) {
     const range = actions.slice(index, index + windowSize);
-    const digest = buildDigest(range);
+    const digest = buildWindowDigest(range, identities);
     const count = digestCount.get(digest);
     if (count !== undefined) digestCount.set(digest, count + 1);
     else digestCount.set(digest, 1);
@@ -79,8 +164,12 @@ const unroll = (items: (Merge | Action)[]): Action[] => {
   return result;
 };
 
-export function merge(actions: Action[], windowSize: number): Action[] | undefined {
-  const digestCount = countDigests(actions, windowSize);
+export function merge(
+  actions: Action[],
+  windowSize: number,
+  identities: CompressionIdentities = new WeakMap()
+): Action[] | undefined {
+  const digestCount = countDigests(actions, windowSize, identities);
   const digestsSorted = [...digestCount.keys()]
     .filter((key) => digestCount.get(key)! > 1)
     .sort((a, b) => digestCount.get(b)! - digestCount.get(a)!);
@@ -91,9 +180,10 @@ export function merge(actions: Action[], windowSize: number): Action[] | undefin
     const referenceDigest = digestsSorted[digestIndex];
     const result: (Merge | Action)[] = [];
     let merge: Merge | undefined = undefined;
-    for (let actionIndex = 0; actionIndex + windowSize <= actions.length; ) {
+    for (let actionIndex = 0; actionIndex < actions.length; ) {
       const window = actions.slice(actionIndex, actionIndex + windowSize);
-      const windowDigest = buildDigest(window);
+      const windowDigest =
+        window.length === windowSize ? buildWindowDigest(window, identities) : undefined;
       if (windowDigest === referenceDigest) {
         if (merge) {
           merge.push(window);

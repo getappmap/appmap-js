@@ -25,8 +25,8 @@ participant posts as "posts"
     deactivate models
     controllers->users: list <color:gray> 0.529 ms</color>
     activate users
-      Loop 5 times <color:gray> 0.013 ms</color>
-        users->models: posts <color:gray> 0.004 ms</color>
+      Loop 2 times <color:gray> 0.006 ms</color>
+        users->models: posts <color:gray> 0.002 ms</color>
         activate models
           models-[#red]>models: <color:lightgray><back:#29201A>--find_for_user--</back></color>
           activate models
@@ -38,8 +38,46 @@ participant posts as "posts"
           deactivate models
         users<--models: array
         deactivate models
-        Loop ~2 times <color:gray> 0.009 ms</color>
-          users->posts: show <color:gray> 0.009 ms</color>
+        Loop ~2 times <color:gray> 0.004 ms</color>
+          users->posts: show <color:gray> 0.004 ms</color>
+          activate posts
+          users<--posts: string
+          deactivate posts
+        End
+      End
+      users->models: posts
+      activate models
+        models-[#red]>models: <color:lightgray><back:#29201A>--find_for_user--</back></color>
+        activate models
+          models-[#red]>database: <color:lightgray><back:#29201A>--query--</back></color>
+          activate database
+          models<[#red]--database: <color:lightgray><back:#29201A>--void--</back></color>
+          deactivate database
+        models<[#red]--models: <color:lightgray><back:#29201A>--array--</back></color>
+        deactivate models
+      users<--models: array
+      deactivate models
+      Loop 3 times <color:gray> 0.003 ms</color>
+        users->posts: show <color:gray> 0.003 ms</color>
+        activate posts
+        users<--posts: string
+        deactivate posts
+      End
+      Loop 2 times <color:gray> 0.004 ms</color>
+        users->models: posts <color:gray> 0.002 ms</color>
+        activate models
+          models-[#red]>models: <color:lightgray><back:#29201A>--find_for_user--</back></color>
+          activate models
+            models-[#red]>database: <color:lightgray><back:#29201A>--query--</back></color>
+            activate database
+            models<[#red]--database: <color:lightgray><back:#29201A>--void--</back></color>
+            deactivate database
+          models<[#red]--models: <color:lightgray><back:#29201A>--array--</back></color>
+          deactivate models
+        users<--models: array
+        deactivate models
+        Loop ~2 times <color:gray> 0.002 ms</color>
+          users->posts: show <color:gray> 0.002 ms</color>
           activate posts
           users<--posts: string
           deactivate posts
