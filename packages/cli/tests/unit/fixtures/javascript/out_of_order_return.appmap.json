@@ -1,0 +1,49 @@
+{
+  "version": "1.12",
+  "metadata": { "name": "out-of-order return", "language": { "name": "javascript" } },
+  "classMap": [
+    {
+      "type": "package",
+      "name": "app",
+      "children": [
+        {
+          "type": "class",
+          "name": "main",
+          "children": [
+            {
+              "type": "function",
+              "name": "startStudio",
+              "location": "app/main.mjs:1",
+              "static": true
+            },
+            { "type": "function", "name": "handle", "location": "app/main.mjs:10", "static": true }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "event": "call",
+      "thread_id": 0,
+      "defined_class": "main",
+      "method_id": "startStudio",
+      "path": "app/main.mjs",
+      "lineno": 1,
+      "static": true
+    },
+    {
+      "id": 2,
+      "event": "call",
+      "thread_id": 0,
+      "defined_class": "main",
+      "method_id": "handle",
+      "path": "app/main.mjs",
+      "lineno": 10,
+      "static": true
+    },
+    { "id": 3, "event": "return", "thread_id": 0, "parent_id": 1 },
+    { "id": 4, "event": "return", "thread_id": 0, "parent_id": 2 }
+  ]
+}

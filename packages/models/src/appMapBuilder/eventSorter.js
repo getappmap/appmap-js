@@ -11,6 +11,7 @@ export default class EventSorter {
   constructor() {
     this.activeStacks = {};
     this.finalizedStacks = [];
+    this.maxId = 0;
   }
 
   // Add an event to be sorted. An event must be added through this method to
@@ -23,13 +24,20 @@ export default class EventSorter {
       this.activeStacks[event.thread_id] = stack;
     }
 
+    if (event.id > this.maxId) this.maxId = event.id;
     stack.add(event);
 
     if (stack.unwound()) {
-      this.finalizedStacks.splice(stack.id, 0, stack.events);
+      this.finalizedStacks.splice(stack.id, 0, stack.orderedEvents(this.nextId));
       delete this.activeStacks[event.thread_id];
     }
   }
+
+  // Returns an id not used by any event added so far.
+  nextId = () => {
+    this.maxId += 1;
+    return this.maxId;
+  };
 
   // Calculate the serialized size of all events. This is more of an
   // approximation than an exact number.
@@ -45,7 +53,9 @@ export default class EventSorter {
     // Join active and finalized stacks. We want to make sure we iterate over
     // every event.
     const stacks = [...this.finalizedStacks];
-    Object.values(this.activeStacks).forEach((s) => stacks.splice(s.id, 0, s.events));
+    Object.values(this.activeStacks).forEach((s) =>
+      stacks.splice(s.id, 0, s.orderedEvents(this.nextId))
+    );
 
     return stacks.reduce((chunks, stack) => {
       if (stack.length === 0) {
