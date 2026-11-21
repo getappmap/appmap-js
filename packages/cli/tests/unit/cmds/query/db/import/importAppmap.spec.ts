@@ -115,6 +115,48 @@ describe('importAppmap', () => {
     }
   });
 
+  it('applies eventUpdates before importing', () => {
+    const db = freshDb();
+    try {
+      // The return was written before the request finished; its status,
+      // elapsed time and exception arrive through eventUpdates.
+      const path = writeAppmap(tmp, 'rec.appmap.json', {
+        metadata: { timestamp: 1700000000 },
+        events: [
+          {
+            id: 1,
+            event: 'call',
+            thread_id: 1,
+            http_server_request: { request_method: 'GET', path_info: '/slow' },
+          },
+          { id: 2, event: 'return', thread_id: 1, parent_id: 1 },
+        ],
+        eventUpdates: {
+          '2': {
+            id: 2,
+            event: 'return',
+            thread_id: 1,
+            parent_id: 1,
+            elapsed: 4.2,
+            http_server_response: { status_code: 500 },
+            exceptions: [{ class: 'Error', message: 'boom' }],
+          },
+        },
+      });
+      importAppmap(db, path);
+
+      const am = db.prepare('SELECT * FROM appmaps').get() as any;
+      expect(am.elapsed_ms).toBeCloseTo(4200);
+      const req = db.prepare('SELECT * FROM http_requests').get() as any;
+      expect(req.status_code).toBe(500);
+      expect(req.elapsed_ms).toBeCloseTo(4200);
+      const exc = db.prepare('SELECT * FROM exceptions').get() as any;
+      expect(exc).toMatchObject({ event_id: 1, exception_class: 'Error', message: 'boom' });
+    } finally {
+      db.close();
+    }
+  });
+
   it('is idempotent on re-import — rows are replaced, not duplicated', () => {
     const db = freshDb();
     try {

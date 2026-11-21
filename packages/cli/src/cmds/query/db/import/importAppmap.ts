@@ -26,8 +26,16 @@ export interface ImportResult {
 export function importAppmap(db: sqlite3.Database, filePath: string): ImportResult {
   const absolutePath = resolve(filePath);
   const raw = readFileSync(absolutePath, 'utf8');
-  const parsed = JSON.parse(raw) as ParsedAppmap & { classMap?: ClassMapNode[] };
-  const events = parsed.events ?? [];
+  const parsed = JSON.parse(raw) as ParsedAppmap & {
+    classMap?: ClassMapNode[];
+    eventUpdates?: Record<string, Record<string, unknown>>;
+  };
+  // eventUpdates replace events by id (e.g. a return whose status, elapsed time
+  // or exception was only known after it was written). Apply them first, the
+  // same way @appland/models does when building an AppMap.
+  const updates = parsed.eventUpdates ?? {};
+  const events = (parsed.events ?? []).map((ev) => updates[String(ev.id)] ?? ev);
+  parsed.events = events;
   const classMap = parsed.classMap ?? [];
 
   const tx = db.transaction((): ImportResult => {
