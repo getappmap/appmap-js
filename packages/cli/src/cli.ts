@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+import './lib/enableSourceMaps';
 import 'reflect-metadata';
 
 import yargs from 'yargs';
