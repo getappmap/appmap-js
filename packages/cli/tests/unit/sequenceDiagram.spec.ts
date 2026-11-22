@@ -48,6 +48,33 @@ describe('sequence diagram command', () => {
       30 * 1000 // Allow time to install and run the headless browser
     );
   });
+  describe('--output', () => {
+    it('names the output file', async () => {
+      const outputFile = path.join(OutputDir, 'named', 'base.sequence.json');
+      await buildDiagram({
+        format: 'json',
+        output: outputFile,
+        appmap: [appmapFile],
+      });
+
+      const diagram = unparseDiagram(JSON.parse(await readFile(outputFile, 'utf8')));
+      expect(diagram.rootActions).toHaveLength(3);
+    });
+
+    it('is rejected with more than one AppMap', async () => {
+      const outputFile = path.join(OutputDir, 'rejected.sequence.json');
+      await buildDiagram({
+        format: 'json',
+        output: outputFile,
+        appmap: [appmapFile, appmapFile],
+      });
+
+      const { exitCode } = process;
+      process.exitCode = undefined;
+      expect(exitCode).toBe(1);
+      expect(existsSync(outputFile)).toBe(false);
+    });
+  });
   describe('PNG format', () => {
     // TODO: Chromium is failing to run in CI
     it.skip(
