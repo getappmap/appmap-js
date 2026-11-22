@@ -22,7 +22,6 @@
           :findings="findings"
           :wasAutoPruned="wasAutoPruned"
           :isGiantAppMap="isGiantAppMap"
-          :showAskNavie="showAskNavie"
           @onChangeFilter="
             (value) => {
               this.eventFilterText = value;
@@ -35,7 +34,6 @@
           "
           @clearSelections="clearSelection"
           @hideDetailsPanel="hideDetailsPanel"
-          @askNavieAboutMap="askNavie"
           data-cy="sidebar"
         />
       </transition>
@@ -43,9 +41,6 @@
       <div v-if="!showDetailsPanel" class="sidebar-menu" data-cy="sidebar-menu">
         <div data-cy="sidebar-hamburger-menu-icon" @click="revealDetailsPanel">
           <HamburgerMenu class="sidebar-menu__icon sidebar-menu__hamburger-menu" width="30" />
-        </div>
-        <div data-cy="collapsed-sidebar-ask-navie" @click="askNavie" v-if="showAskNavie">
-          <VCompassIcon class="sidebar-menu__icon sidebar-menu__compass" width="37" />
         </div>
       </div>
     </div>
@@ -144,18 +139,6 @@
           />
         </template>
         <template v-slot:controls>
-          <v-popper
-            class="hover-text-popper"
-            text="Ask Navie about this AppMap"
-            placement="left"
-            text-align="left"
-            v-if="!sequenceDiagramDiffMode && showAskNavie"
-          >
-            <button class="ask-navie" @click="askNavie" data-cy="ask-navie-control-button">
-              <v-compass-icon />
-              <v-compass-icon class="ask-navie-glow" />
-            </button>
-          </v-popper>
           <v-popper
             class="hover-text-popper"
             text="Collapse actions below this depth"
@@ -438,7 +421,6 @@ import {
 import isPrecomputedSequenceDiagram from '@/lib/isPrecomputedSequenceDiagram';
 import { SAVED_FILTERS_STORAGE_ID } from '../components/FilterMenu.vue';
 import { DEFAULT_SEQ_DIAGRAM_COLLAPSE_DEPTH } from '../components/DiagramSequence.vue';
-import VCompassIcon from '@/assets/compass-simpler.svg';
 
 const browserPrefixes = ['', 'webkit', 'moz'];
 
@@ -478,7 +460,6 @@ export default {
     VNoDataNotice,
     VUnlicensedNotice,
     VConfigurationRequired,
-    VCompassIcon,
   },
   store,
   data() {
@@ -542,14 +523,6 @@ export default {
       default: true,
     },
     autoExpandDetailsPanel: {
-      type: Boolean,
-      default: true,
-    },
-    appmapFsPath: {
-      type: String,
-      default: '',
-    },
-    showAskNavie: {
       type: Boolean,
       default: true,
     },
@@ -1431,9 +1404,6 @@ export default {
         document.mozFullScreenElement;
       this.isFullscreen = fullscreenElement === this.$el;
     },
-    askNavie() {
-      this.$root.$emit('ask-navie-about-map', this.appmapFsPath);
-    },
   },
   mounted() {
     this.$root.$on('makeRoot', (codeObject) => {
@@ -1732,32 +1702,6 @@ code {
             }
           }
         }
-
-        &__compass {
-          circle {
-            stroke: darken($gray5, 10%);
-            transition: $transition;
-          }
-
-          path {
-            fill: darken($gray5, 10%);
-            transition: $transition;
-          }
-
-          &:hover {
-            cursor: pointer;
-
-            circle {
-              stroke: $hotpink;
-              transition: $transition;
-            }
-
-            path {
-              fill: $hotpink;
-              transition: $transition;
-            }
-          }
-        }
       }
     }
 
@@ -1845,67 +1789,6 @@ code {
         font-family: $appland-text-font-family;
         font-size: 0.9rem;
         cursor: pointer;
-      }
-
-      $glow-size: 4px;
-      @keyframes glow {
-        0%,
-        100% {
-          opacity: 0;
-        }
-
-        50% {
-          opacity: 0.75;
-        }
-      }
-      .ask-navie {
-        position: relative;
-        background-color: inherit;
-        border: none;
-        padding: 0;
-
-        &:hover {
-          cursor: pointer;
-          filter: drop-shadow(0 0 $glow-size $white) !important;
-
-          svg path {
-            fill: $white;
-          }
-
-          svg circle {
-            stroke: $white;
-          }
-        }
-
-        svg {
-          width: 22px;
-
-          path {
-            fill: $gray4;
-          }
-
-          circle {
-            stroke: $gray4;
-          }
-        }
-      }
-
-      .ask-navie-glow {
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        animation: glow 5s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        pointer-events: none;
-        transform: translateZ(0);
-        will-change: opacity;
-
-        path {
-          fill: rgb(255, 7, 170) !important;
-        }
-        circle {
-          stroke: rgb(255, 7, 170) !important;
-        }
       }
 
       .depth-button {
