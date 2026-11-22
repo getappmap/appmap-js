@@ -1,3 +1,10 @@
+# [@appland/diagrams-v1.8.1](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.8.0...@appland/diagrams-v1.8.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* **diagrams:** render empty component graphs with zero dimensions ([277581c](https://github.com/getappmap/appmap-js/commit/277581c93a7b3bad072f358d7b0cc230fc6f3c42))
+
 # [@appland/diagrams-v1.8.0](https://github.com/getappmap/appmap-js/compare/@appland/diagrams-v1.7.0...@appland/diagrams-v1.8.0) (2023-12-28)
 
 
