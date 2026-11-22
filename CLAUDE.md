@@ -37,3 +37,24 @@ The `appmap query mcp` server lives in `built/cli.js`. If you change anything un
 # Recording with appmap-node from a monorepo
 
 `npx appmap-node@latest npx jest …` invoked from the repo root can fail to parse `.ts` test files with a babel SyntaxError, because the inner jest doesn't pick up `packages/<name>/jest.config.js`'s `ts-jest` preset. Run from the package directory whose preset matters — e.g. `cd packages/cli && npx appmap-node@latest npx jest …`.
+
+# Shaping commits
+
+PRs here are reviewed commit by commit. Shape the history so that each commit can be read and reviewed on its own.
+
+- **One logical change per commit.** A PR that closes several issues or adds several options should normally be several commits, about one per issue or option. Don't make one commit whose body is a bulleted list of unrelated changes. If the body needs a list of separate topics, split the commit.
+- **Refactor first, then change behaviour.** If a feature needs code moved, extracted or wrapped, commit that first as a no-op (`refactor: …`, and say "no behaviour change"), then put the feature on top. Avoid re-indenting large blocks, for example by wrapping a whole function body in a new closure or `try`. Whitespace churn hides the real change. Prefer a structure that leaves the existing lines where they are.
+- **Pre-existing bugs get their own `fix:` commit**, before the feature that exposed them. That includes hardening, such as replacing shell-string `exec` with `execFile`.
+- **Format changes to lines you didn't otherwise touch** (for example after a prettier upgrade) belong in their own commit, or nowhere.
+- **Tests go in the commit whose behaviour they test.**
+- **Each commit should build and pass `yarn verify`**, so put prerequisites first.
+- **Review fixes go to the commit they belong to,** not into one "address review comments" commit covering several topics. `git commit --fixup=<sha>` is handy for this, and `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base>` squashes the fixups without an interactive editor. If a fix changes what the original commit does or why, update that commit's message too, for example with `--fixup=amend:<sha>`. Then the message still describes the code.
+- If a change really can't be split, say why in the PR description.
+
+## Commit messages
+
+- **Subject:** use Conventional Commits, and capitalize the first word after the tag: `fix(cli): Restore archives whose paths contain spaces`, not `fix(cli): restore …`. Older history doesn't always do this; follow it anyway.
+- **`feat:`, `fix:` and `perf:` subjects are published.** semantic-release copies them into each package's `CHANGELOG.md` and the GitHub release notes. Write them for users of the package. Describe the change in behaviour they will see (`fix(cli): Compare no longer crashes on recordings without a recorder type`), not the code change (`fix(cli): Use optional chaining in isTest`).
+- **Use `refactor:`, `test:`, `chore:`, `docs:` or `ci:` for changes users can't see.** That includes a fix to a feature that hasn't been released yet. Don't release it as a `fix:` of its own; fold it into the feature commit.
+- **Always write a body,** wrapped at about 72 columns. Explain *why*: the problem or motivation, what was wrong before, and why you chose this approach over the obvious alternatives. Mention anything a future reader of `git blame` would need, such as compatibility concerns, changed formats, or behaviour that changed on purpose. Don't restate the diff file by file; the diff already shows that. End with `Fixes #NNN` where it applies.
+- **Attribute AI assistance with an `Assisted-by:` trailer**, as described in the [Linux kernel guidance](https://docs.kernel.org/process/coding-assistants.html). Name the agent and the exact model, with no space in the agent name: `Assisted-by: Claude:claude-opus-4-8`. This applies when a human directed the work and the agent helped significantly, for example with design, implementation or debugging. Use it instead of the `Co-Authored-By:` trailer that some agents add by default. When an agent works autonomously, with no human steering it, it can use `Co-Authored-By:` or commit as the author itself, whichever its setup normally does. Leave the trailer off commits the agent only staged or committed for you.
