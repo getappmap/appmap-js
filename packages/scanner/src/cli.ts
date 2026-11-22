@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import './enableSourceMaps';
+import './enableCompileCache';
 import yargs from 'yargs';
 import ScanCommand from './cli/scan/command';
 import { verbose } from './rules/lib/util';

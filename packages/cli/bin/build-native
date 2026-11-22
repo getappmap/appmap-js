@@ -8,12 +8,11 @@
 //
 // OS and ARCH are pkg's names (linux, macos, win; x64, arm64). They are
 // optional and only asserted against the current platform: cross-platform
-// builds are not supported. Two things break them. pkg compiles bytecode on
-// the host, and V8 on the target rejects it. And native addons
-// (better-sqlite3) are packaged as yarn install compiled them, because pkg's
-// own prebuild-install step cannot find prebuild-install in this workspace and
-// would request the wrong ABI anyway (its node-abi maps Node 22 to 124). Both
-// failures are silent at build time and only show when the binary runs.
+// builds are not supported. Native addons (better-sqlite3) break them: they
+// are packaged as yarn install compiled them, because pkg's own
+// prebuild-install step cannot find prebuild-install in this workspace and
+// would request the wrong ABI anyway (its node-abi maps Node 22 to 124). The
+// failure is silent at build time and only shows when the binary runs.
 //
 // Before building, checks that the native addons will load in the binary (see
 // checkNativeAbi below). With --check-only it stops there, which lets
@@ -107,6 +106,13 @@ console.log(`Building native binary for ${target}...`);
 // --no-native-build: package the addons yarn install built rather than let pkg
 // try to fetch prebuilt ones. CI deliberately compiles them against old glibc
 // (in the RHEL 8 container) and with MACOSX_DEPLOYMENT_TARGET.
+//
+// --no-bytecode (which needs the sources to be --public): package the
+// JavaScript as source rather than V8 bytecode. The binary is ~15% smaller
+// and its stack traces have line numbers. Startup pays for parsing, but
+// enabling Node's compile cache (lib/enableCompileCache.ts in cli,
+// src/enableCompileCache.ts in scanner) wins most of that back from the
+// second run on.
 const args = [
   'pkg',
   '--config',
@@ -114,6 +120,10 @@ const args = [
   '--compress',
   'Brotli',
   '--no-native-build',
+  '--no-bytecode',
+  '--public-packages',
+  '*',
+  '--public',
   '-t',
   target,
   '-o',
