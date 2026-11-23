@@ -52,6 +52,20 @@ function browserBuild(
   };
 }
 
+// App shell of the query UI. Exported so tests can check its asset URLs.
+export const QUERY_UI_HTML = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AppMap Query UI</title>
+    <link rel="stylesheet" href="/tailwind.css" />
+  </head>
+  <body class="bg-gray-950 text-gray-100">
+    <div id="root"></div>
+  </body>
+</html>`;
+
 export const BROWSER_BUILDS: esbuild.BuildOptions[] = [
   browserBuild(
     {
@@ -99,26 +113,21 @@ export const BROWSER_BUILDS: esbuild.BuildOptions[] = [
   // there). Tailwind CSS is built separately by `build:ui:css` and lands
   // at `built/html/query-ui/tailwind.css`, referenced from the inline
   // HTML template below.
+  //
+  // Asset URLs are root-absolute (`publicPath` and the stylesheet href) so
+  // that a client-side route loaded directly, such as
+  // `/recordings/detail?appmap=…`, doesn't resolve them against its own
+  // path and get index.html back instead of the script and stylesheet.
   browserBuild(
     {
       outdir: 'built/html/query-ui',
+      publicPath: '/',
       loader: { '.ts': 'tsx', '.tsx': 'tsx' },
       entryPoints: ['src/html/query-ui/src/main.tsx'],
     },
     {
       filename: 'index.html',
-      htmlTemplate: `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AppMap Query UI</title>
-    <link rel="stylesheet" href="./tailwind.css" />
-  </head>
-  <body class="bg-gray-950 text-gray-100">
-    <div id="root"></div>
-  </body>
-</html>`,
+      htmlTemplate: QUERY_UI_HTML,
     }
   ),
 
