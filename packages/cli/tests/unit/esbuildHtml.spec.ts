@@ -1,4 +1,4 @@
-import { BROWSER_BUILDS, BROWSER_DEFINE } from '../../esbuild.html';
+import { BROWSER_BUILDS, BROWSER_DEFINE, QUERY_UI_HTML } from '../../esbuild.html';
 
 // Regression guard for "Uncaught ReferenceError: process is not defined" in
 // `appmap open`. The viewer bundles run in a browser, where `process` does not
@@ -31,4 +31,24 @@ describe('browser bundle build options', () => {
       });
     }
   );
+});
+
+// Regression guard for deep links into `appmap query ui`. React Router serves
+// routes like `/recordings/detail?appmap=…`; loaded directly, a relative asset
+// URL resolves to `/recordings/main.js`, the server answers with index.html,
+// and the page stays blank.
+describe('query UI app shell', () => {
+  const options = BROWSER_BUILDS.find(
+    (o) => (o.entryPoints as string[])[0] === 'src/html/query-ui/src/main.tsx'
+  );
+
+  it('loads its bundle from the server root', () => {
+    expect(options?.publicPath).toBe('/');
+  });
+
+  it('loads its other assets from the server root', () => {
+    const urls = [...QUERY_UI_HTML.matchAll(/(?:src|href)="([^"]*)"/g)].map((m) => m[1]);
+    expect(urls).toContain('/tailwind.css');
+    for (const url of urls) expect(url).toMatch(/^\//);
+  });
 });
