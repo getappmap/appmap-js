@@ -2,6 +2,7 @@ import buildAppMap from '../../src/appMapBuilder';
 import scenario from './fixtures/large_scenario.json';
 import missingEventsScenario from './fixtures/missing_calls.appmap.json';
 import updatesScenario from './fixtures/event_updates.json';
+import asyncReturnsScenario from './fixtures/async_returns.appmap.json';
 
 describe('build', () => {
   it('creates an AppMap', () => {
@@ -102,6 +103,25 @@ describe('normalize', () => {
       }).forEach(([actual, expected]) => {
         expect(normalizeRepository(actual)).toEqual(expected);
       });
+    });
+  });
+
+  describe('with a return that arrives after a later call was made', () => {
+    it('nests the later call inside the call it was made from', () => {
+      // Previously this threw "failed trying to compute event stack". appmap-node writes an
+      // async call's return when its promise settles, so `startStudio` returns here while
+      // `handle`, called from it, is still open.
+      const appMap = buildAppMap(asyncReturnsScenario).normalize().build();
+
+      expect(appMap.events.map((e) => [e.event, e.callEvent.method_id].join(' '))).toEqual([
+        'call startStudio',
+        'call handle',
+        'return handle',
+        'return startStudio',
+      ]);
+
+      const [startStudio] = appMap.events;
+      expect(startStudio.children.map((e) => e.method_id)).toEqual(['handle']);
     });
   });
 
