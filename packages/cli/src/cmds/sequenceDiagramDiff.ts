@@ -21,6 +21,11 @@ export const builder = (args: yargs.Argv) => {
     describe: 'directory in which to save the sequence diagrams',
     default: '.',
   });
+  args.option('output-file', {
+    describe:
+      'file to write the diff to, instead of a name derived from the diagrams (two files only)',
+    type: 'string',
+  });
   args.option('format', {
     describe: 'output format',
     alias: 'f',

@@ -26,7 +26,7 @@ export default class EventSorter {
     stack.add(event);
 
     if (stack.unwound()) {
-      this.finalizedStacks.splice(stack.id, 0, stack.events);
+      this.finalizedStacks.splice(stack.id, 0, stack.ordered());
       delete this.activeStacks[event.thread_id];
     }
   }
@@ -45,7 +45,7 @@ export default class EventSorter {
     // Join active and finalized stacks. We want to make sure we iterate over
     // every event.
     const stacks = [...this.finalizedStacks];
-    Object.values(this.activeStacks).forEach((s) => stacks.splice(s.id, 0, s.events));
+    Object.values(this.activeStacks).forEach((s) => stacks.splice(s.id, 0, s.ordered()));
 
     return stacks.reduce((chunks, stack) => {
       if (stack.length === 0) {
