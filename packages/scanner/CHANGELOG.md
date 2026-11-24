@@ -1,3 +1,10 @@
+# [@appland/scanner-v1.92.1](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.92.0...@appland/scanner-v1.92.1) (2026-11-24)
+
+
+### Bug Fixes
+
+* **scanner:** scan --watch accepts an --appmap-dir that doesn't exist yet ([9a94110](https://github.com/getappmap/appmap-js/commit/9a94110779863f9dd9b3c43bb9eba1e3f1b4e464))
+
 # [@appland/scanner-v1.92.0](https://github.com/getappmap/appmap-js/compare/@appland/scanner-v1.91.3...@appland/scanner-v1.92.0) (2026-10-30)
 
 
