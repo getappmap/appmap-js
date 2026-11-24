@@ -23,6 +23,10 @@ export interface SequenceDiagramOptions {
 
 export default class Specification {
   public loops = true;
+
+  // The --expand values that name no package in the recording. Expanding a package that isn't
+  // there has no effect, and a misspelled name is easy to miss, so the caller reports these.
+  public unmatchedExpand: CodeObjectId[] = [];
   private static readonly DefaultActorTypes: ReadonlyArray<CodeObjectType> = [
     'package',
     'database',
@@ -55,6 +59,7 @@ export default class Specification {
   static build(appmap: AppMap, options: SequenceDiagramOptions): Specification {
     const excludeSet = new Set<string>(options.exclude || []);
     const expandSet = new Set<string>(options.expand || []);
+    const matchedExpand = new Set<string>();
     const includedCodeObjectIds = new Set<string>();
 
     const hasNonPackageChildren = (co: AppMapCodeObject): boolean => {
@@ -65,12 +70,14 @@ export default class Specification {
 
     const includeCodeObjects = (co: AppMapCodeObject): void => {
       if (co.type === 'class' && co.packageObject && expandSet.has(co.packageObject.fqid)) {
+        matchedExpand.add(co.packageObject.fqid);
         includedCodeObjectIds.add(co.fqid);
         co.children.forEach((child) => includeCodeObjects(child));
       }
 
       if (!this.DefaultActorTypes.includes(co.type)) return;
       if (excludeSet.has(co.fqid)) return;
+      if (expandSet.has(co.fqid)) matchedExpand.add(co.fqid);
       if (!expandSet.has(co.fqid) && hasNonPackageChildren(co)) includedCodeObjectIds.add(co.fqid);
 
       co.children.forEach((child) => includeCodeObjects(child));
@@ -106,6 +113,7 @@ export default class Specification {
 
     const spec = new Specification(priority, includedCodeObjectIds, requiredCodeObjectIds);
     spec.loops = !!options.loops;
+    spec.unmatchedExpand = [...expandSet].filter((coid) => !matchedExpand.has(coid));
     return spec;
   }
 
