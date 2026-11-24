@@ -13,20 +13,31 @@ import {
   validateDiagram,
 } from '@appland/sequence-diagram';
 import { verbose } from '../utils';
-import { basename, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { DiffDiagrams } from '../sequenceDiagramDiff/DiffDiagrams';
 import { readDiagramFile } from './sequenceDiagram/readDiagramFile';
 import { readFile } from 'fs/promises';
+
+// Name the diff after the diagrams it came from. The output was always called "diff", so a
+// second diff written to the same directory overwrote the first.
+export function diffFileName(baseDiagramFile: string, headDiagramFile: string): string {
+  const stem = (fileName: string) => basename(fileName).replace(/(\.sequence)?\.json$/, '');
+  const base = stem(baseDiagramFile);
+  const head = stem(headDiagramFile);
+  return base === head ? `${base}.diff` : `${base}-${head}.diff`;
+}
 
 async function printDiff(
   diagram: Diagram,
   format: FormatType,
   outputFileName: string,
-  description: string
+  description: string,
+  writeTo?: string
 ): Promise<Diagram | undefined> {
   const template = formatDiagram(format, diagram, description);
 
-  const outputPath = [outputFileName, template.extension].join('');
+  const outputPath = writeTo ?? [outputFileName, template.extension].join('');
+  await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, template.diagram);
 
   console.log(`Printed diagram ${outputPath}`);
@@ -114,11 +125,12 @@ export default async function handler(argv: any) {
       return;
     }
 
-    printDiff(
+    await printDiff(
       diffDiagram,
       argv.format,
-      join(argv.outputDir, 'diff'),
-      `Diff ${baseDiagramFile} with ${headDiagramFile}`
+      join(argv.outputDir, diffFileName(baseDiagramFile, headDiagramFile)),
+      `Diff ${baseDiagramFile} with ${headDiagramFile}`,
+      argv.outputFile
     );
   };
 
@@ -171,11 +183,21 @@ export default async function handler(argv: any) {
         continue;
       }
 
-      printDiff(diffDiagram, argv.format, [fileName, 'diff'].join('.'), `Diff ${fileName}`);
+      await printDiff(
+        diffDiagram,
+        argv.format,
+        join(argv.outputDir, [fileName, 'diff'].join('.')),
+        `Diff ${fileName}`
+      );
     }
   };
 
   const isFile = [baseDiagramFile, headDiagramFile].map((fileName) => statSync(fileName).isFile());
+  if (argv.outputFile && !isFile.every(Boolean)) {
+    console.log(`--output-file names one file, so it can't be used with directories`);
+    process.exitCode = 1;
+    return;
+  }
   if (isFile.every(Boolean)) {
     await compareFiles();
   } else if (isFile.every((b) => !b)) {

@@ -1,0 +1,58 @@
+{
+  "version": "1.12",
+  "metadata": {
+    "name": "an async call that returns after a later call was made",
+    "client": { "name": "appmap-node", "url": "https://github.com/getappmap/appmap-node" },
+    "recorder": { "name": "tests" }
+  },
+  "classMap": [
+    {
+      "name": "server",
+      "type": "package",
+      "children": [
+        {
+          "name": "Studio",
+          "type": "class",
+          "children": [
+            {
+              "type": "function",
+              "name": "startStudio",
+              "static": true,
+              "location": "server/studio-server.mjs:10"
+            },
+            {
+              "type": "function",
+              "name": "handle",
+              "static": true,
+              "location": "server/studio-server.mjs:20"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "event": "call",
+      "id": 1,
+      "thread_id": 0,
+      "defined_class": "Studio",
+      "method_id": "startStudio",
+      "static": true,
+      "path": "server/studio-server.mjs",
+      "lineno": 10
+    },
+    {
+      "event": "call",
+      "id": 2,
+      "thread_id": 0,
+      "defined_class": "Studio",
+      "method_id": "handle",
+      "static": true,
+      "path": "server/studio-server.mjs",
+      "lineno": 20
+    },
+    { "event": "return", "id": 3, "thread_id": 0, "parent_id": 1, "elapsed": 0.01 },
+    { "event": "return", "id": 4, "thread_id": 0, "parent_id": 2, "elapsed": 0.005 }
+  ]
+}

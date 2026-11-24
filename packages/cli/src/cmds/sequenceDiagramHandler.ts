@@ -1,5 +1,5 @@
 import { mkdir, readFile, writeFile } from 'fs/promises';
-import { basename, dirname, join } from 'path';
+import { basename, dirname, extname, join } from 'path';
 import { handleWorkingDirectory } from '../lib/handleWorkingDirectory';
 import { verbose } from '../utils';
 import { AppMap, buildAppMap } from '@appland/models';
@@ -32,7 +32,13 @@ export default async function handler(argv: any) {
     return;
   }
 
-  const { filter, expand } = argv;
+  if (argv.outputFile && argv.appmap.length > 1) {
+    console.log(`--output-file names one file, so it can't be used with more than one AppMap`);
+    process.exitCode = 1;
+    return;
+  }
+
+  const { filter, expand, outputFile } = argv;
 
   let browserRender: BrowserRenderer | undefined;
 
@@ -68,20 +74,30 @@ export default async function handler(argv: any) {
 
     const specification = Specification.build(appmap, specOptions);
 
+    // Expanding a package that isn't in the recording does nothing at all, and the name has to
+    // match the one the recording uses ('package:content', not 'package:src/content'), so say so
+    // rather than drawing one lane per package and leaving the reader to wonder.
+    for (const codeObjectId of specification.unmatchedExpand)
+      console.warn(`${appmapFileName}: --expand ${codeObjectId} matches no package in it`);
+
     const diagram = buildDiagram(appmapFileName, appmap, specification);
 
-    const printDiagram = async (format: FormatType): Promise<string> => {
+    const printDiagram = async (format: FormatType, writeTo?: string): Promise<string> => {
       const template = formatDiagram(format, diagram, appmapFileName);
-      const outputFileName = [
-        basename(appmapFileName, '.appmap.json'),
-        '.sequence',
-        template.extension,
-      ].join('');
 
       let resultPath: string;
-      if (argv.outputDir) resultPath = join(argv.outputDir, outputFileName);
-      else resultPath = join(dirname(appmapFileName), outputFileName);
+      if (writeTo) resultPath = writeTo;
+      else {
+        const outputFileName = [
+          basename(appmapFileName, '.appmap.json'),
+          '.sequence',
+          template.extension,
+        ].join('');
+        if (argv.outputDir) resultPath = join(argv.outputDir, outputFileName);
+        else resultPath = join(dirname(appmapFileName), outputFileName);
+      }
 
+      await mkdir(dirname(resultPath), { recursive: true });
       await writeFile(resultPath, template.diagram);
       return resultPath;
     };
@@ -90,7 +106,14 @@ export default async function handler(argv: any) {
     if (argv.format === 'png') {
       // PNG rendering is performed by loading the sequence
       // diagram in a browser and taking a screenshot.
-      const diagramPath = await printDiagram(FormatType.JSON);
+      // --output-file names the picture; the JSON it is rendered from is written beside it.
+      const pngPath: string | undefined = outputFile;
+      const diagramPath = await printDiagram(
+        FormatType.JSON,
+        pngPath
+          ? join(dirname(pngPath), `${basename(pngPath, extname(pngPath))}.sequence.json`)
+          : undefined
+      );
       // Loaded here rather than at the top: serving the diagram brings in the
       // interactive prompt library, which most invocations never need.
       // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
@@ -100,10 +123,9 @@ export default async function handler(argv: any) {
           if (verbose()) console.warn(`Rendering PNG`);
           assert(browserRender, 'Browser not initialized');
 
-          const outputPath = join(
-            dirname(diagramPath),
-            [basename(diagramPath, '.json'), '.png'].join('')
-          );
+          const outputPath =
+            pngPath ??
+            join(dirname(diagramPath), [basename(diagramPath, '.json'), '.png'].join(''));
 
           await browserRender.screenshot(url, outputPath);
 
@@ -114,14 +136,30 @@ export default async function handler(argv: any) {
     } else {
       // Other forms of output are produced directly by the
       // sequence diagram library.
-      outputPath = await printDiagram(argv.format);
+      outputPath = await printDiagram(argv.format, outputFile);
       console.log(`Printed diagram ${outputPath}`);
     }
   };
 
-  for (const appmapFile of argv.appmap) {
-    await generateDiagram(appmapFile);
+  let failureCount = 0;
+  try {
+    for (const appmapFile of argv.appmap) {
+      try {
+        await generateDiagram(appmapFile);
+      } catch (error) {
+        // Name the file that failed and draw the rest. One recording that can't be read or whose
+        // events can't be ordered should not cost a batch of twenty, and skipping it in silence
+        // is worse than either.
+        failureCount += 1;
+        console.error(
+          `Failed to draw ${appmapFile}: ${error instanceof Error ? error.message : String(error)}`
+        );
+        if (verbose()) console.error(error);
+      }
+    }
+  } finally {
+    if (browserRender) await browserRender.close();
   }
 
-  if (browserRender) await browserRender.close();
+  if (failureCount > 0) process.exitCode = 1;
 }
