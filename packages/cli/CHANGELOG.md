@@ -1,3 +1,21 @@
+# [@appland/appmap-v3.207.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.206.0...@appland/appmap-v3.207.0) (2026-11-24)
+
+
+### Bug Fixes
+
+* **cli:** Archive accepts an absolute --output-file ([34c95f6](https://github.com/getappmap/appmap-js/commit/34c95f6cf3093892c67c95702df515713875b0bc)), closes [#2437](https://github.com/getappmap/appmap-js/issues/2437)
+* **cli:** Compare no longer crashes on recordings without a recorder type ([10d82ef](https://github.com/getappmap/appmap-js/commit/10d82ef0b8e1ecc9f9971acd9d494e8eb9bed3e9)), closes [#2438](https://github.com/getappmap/appmap-js/issues/2438)
+* **cli:** Pass revisions and source roots to git diff without a shell ([6b6db33](https://github.com/getappmap/appmap-js/commit/6b6db3319678868b815817a5bcf9dbbb6fe09b42))
+* **cli:** Restore archives whose paths contain spaces ([c8e1db1](https://github.com/getappmap/appmap-js/commit/c8e1db1fe57ac21e0d44b345ce971d7cd71d660a))
+
+
+### Features
+
+* **cli:** Archive any directory of AppMaps with --appmap-dir ([4f9d1ca](https://github.com/getappmap/appmap-js/commit/4f9d1cace451bf55bb3a1d4e65a9d73875dea229)), closes [#2437](https://github.com/getappmap/appmap-js/issues/2437)
+* **cli:** Archive without changing the AppMap directory, with --no-in-place ([2f252c2](https://github.com/getappmap/appmap-js/commit/2f252c2172fa37633cf7a2dd60927a0e6f6bf884)), closes [#2437](https://github.com/getappmap/appmap-js/issues/2437)
+* **cli:** Compare and archive accept --expand, to split package lanes ([a680420](https://github.com/getappmap/appmap-js/commit/a680420d6ca8891fe4aa80001cc4ee8a6127064f)), closes [#2439](https://github.com/getappmap/appmap-js/issues/2439)
+* **cli:** Compare two archive files directly ([b82de1b](https://github.com/getappmap/appmap-js/commit/b82de1b3cb68ffae5bf763c0278269a058381d1b)), closes [#2436](https://github.com/getappmap/appmap-js/issues/2436)
+
 # [@appland/appmap-v3.206.0](https://github.com/getappmap/appmap-js/compare/@appland/appmap-v3.205.0...@appland/appmap-v3.206.0) (2026-11-06)
 
 
