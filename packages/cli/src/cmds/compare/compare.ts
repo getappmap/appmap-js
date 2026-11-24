@@ -12,13 +12,33 @@ export const builder = (args: yargs.Argv) => {
   });
 
   args.option('base-revision', {
-    describe: 'base revision name or commit SHA.',
+    describe:
+      'base revision name or commit SHA. Required unless --base-archive is given, in which case the default is the revision stored in the archive.',
+    type: 'string',
     alias: ['b', 'base'],
-    demandOption: true,
   });
   args.option('head-revision', {
-    describe: 'head revision name or commit SHA. By default, use the current commit.',
+    describe:
+      'head revision name or commit SHA. By default, use the current commit, or the revision stored in --head-archive.',
+    type: 'string',
     alias: ['h', 'head'],
+  });
+
+  args.option('base-archive', {
+    describe: `AppMap archive (.tar, made by 'appmap archive') of the base revision. It is restored into <output-dir>/base.
+Must be given together with --head-archive. In this mode appmap.yml is not required.`,
+    type: 'string',
+  });
+  args.option('head-archive', {
+    describe: `AppMap archive (.tar, made by 'appmap archive') of the head revision. It is restored into <output-dir>/head.`,
+    type: 'string',
+  });
+
+  args.option('expand', {
+    describe: `code objects to expand into one lane per child (for example package:app/models) in the sequence diagrams of both revisions before they are compared.
+See the sequence-diagram command. Requires --base-archive and --head-archive: the diagrams are rebuilt in the <output-dir>/base and <output-dir>/head that compare restores from them.`,
+    type: 'string',
+    array: true,
   });
 
   args.option('output-dir', {
@@ -27,7 +47,8 @@ export const builder = (args: yargs.Argv) => {
   });
 
   args.option('clobber-output-dir', {
-    describe: 'remove the output directory if it exists',
+    describe:
+      'remove the existing diff directory without asking. With --base-archive and --head-archive, also remove existing base and head directories.',
     type: 'boolean',
     default: false,
   });

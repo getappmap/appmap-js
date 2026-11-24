@@ -14,7 +14,8 @@ export default async function analyze(
   compareFilter: CompareFilter,
   appMapDir: string,
   oversizedAppMaps: Set<string>,
-  doScan: boolean
+  doScan: boolean,
+  expand?: string[]
 ): Promise<void> {
   const scan = async () => {
     let findingsCount = 0;
@@ -50,7 +51,8 @@ export default async function analyze(
     maxAppMapSizeInBytes,
     compareFilter,
     oversizedAppMaps,
-    appMapDir
+    appMapDir,
+    expand
   );
   if (doScan) await scan();
   await generateOpenAPI(appMapDir, maxAppMapSizeInBytes);
