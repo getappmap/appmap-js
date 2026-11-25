@@ -50,6 +50,27 @@ describe('trim command', () => {
       }
     });
 
+    it('trims eventUpdates as well as events', () => {
+      const long = 'x'.repeat(500);
+      const trimmed: any = trimAppMap({
+        events: [{ id: 2, event: 'return' }],
+        eventUpdates: {
+          '2': {
+            id: 2,
+            event: 'return',
+            return_value: { value: long },
+            exceptions: [{ class: 'E', value: long }],
+          },
+        },
+      } as any);
+
+      const update = trimmed.eventUpdates['2'];
+      for (const value of [update.return_value.value, update.exceptions[0].value]) {
+        expect(value.length).toBeLessThanOrEqual(120);
+        expect(value.endsWith('…')).toBe(true);
+      }
+    });
+
     it('parses a multi-line util.inspect object value and budgets it per field', () => {
       // The shape appmap-node captures for a JS object (ClassName {\n ... }).
       const value = `User {\n  id: 42,\n  secret: '${'x'.repeat(300)}',\n  name: 'alice'\n}`;

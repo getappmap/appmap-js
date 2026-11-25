@@ -25,6 +25,7 @@ interface TrimmedMarker {
 export interface AppMap {
   metadata?: { trimmed?: TrimmedMarker; [key: string]: unknown };
   events?: AppMapEvent[];
+  eventUpdates?: Record<string, AppMapEvent>;
 }
 
 function trimSlot(slot: ValueSlot | undefined, budget: StructBudget): void {
@@ -37,8 +38,10 @@ function trimSlot(slot: ValueSlot | undefined, budget: StructBudget): void {
 // touches `value` strings — the call structure, code objects, SQL, and every
 // other stable property are untouched — so a trimmed AppMap is behaviorally
 // identical (its sequence-diagram digest is unchanged) but much smaller.
+// eventUpdates are trimmed too: they replace their events when the AppMap is
+// loaded, so untrimmed updates would bring the full values back.
 export function trimAppMap(appmap: AppMap, budget: StructBudget = MCP_RETURN_VALUE_BUDGET): AppMap {
-  for (const event of appmap.events ?? []) {
+  for (const event of [...(appmap.events ?? []), ...Object.values(appmap.eventUpdates ?? {})]) {
     for (const p of event.parameters ?? []) trimSlot(p, budget);
     for (const m of event.message ?? []) trimSlot(m, budget);
     trimSlot(event.receiver, budget);
