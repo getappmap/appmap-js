@@ -388,7 +388,6 @@ definitions:
         type: string
       value:
         type: string
-        maxLength: 100
       size:            #! >= 1.7.0
         nullable: true #! >= 1.7.0
         type: integer  #! >= 1.7.0
