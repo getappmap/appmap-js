@@ -1,3 +1,4 @@
+import { execFileSync, spawn } from 'node:child_process';
 import fs, { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { request as httpRequest } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -132,7 +133,19 @@ describe('serveAndOpen', () => {
       ['localhost', 200, (port: string) => `localhost:${port}`],
       ['the loopback address', 200, (port: string) => `127.0.0.1:${port}`],
       ['another host name', 403, (port: string) => `attacker.example:${port}`],
-      ['no port', 403, () => 'localhost'],
+      ['localhost without a port', 200, () => 'localhost'],
+      ['the loopback address without a port', 200, () => '127.0.0.1'],
+      [
+        'a forwarded localhost port',
+        200,
+        (port: string) => `localhost:${port === '8080' ? 8081 : 8080}`,
+      ],
+      [
+        'a forwarded loopback port',
+        200,
+        (port: string) => `127.0.0.1:${port === '8080' ? 8081 : 8080}`,
+      ],
+      ['a malformed port', 403, () => 'localhost:not-a-port'],
     ])('When the Host header names %s, Then the server answers %i', async (_case, status, host) => {
       const served = await request(
         viewer.base,
@@ -174,9 +187,64 @@ describe('serveAndOpen', () => {
     });
   });
 
-  it('Given a bound directory, When it is requested, Then it is refused', async () => {
-    const bound = await serve({ appmap: fixtureDir });
-    expect((await request(bound.base, resourcePath(bound, 'appmap'))).status).toBe(404);
+  describe('Given explicit resource paths', () => {
+    it('When one is missing at startup, Then the caller gets its path and the filesystem error', () => {
+      const missing = join(fixtureDir, 'missing.json');
+      expect(() =>
+        serveAndOpen(
+          'appmap.html',
+          { resources: { appmap: appmapFile, other: missing } },
+          jest.fn()
+        )
+      ).toThrow(expect.objectContaining({ code: 'ENOENT', path: missing }));
+    });
+
+    it('When a path names a directory, Then startup reports which path is a directory', () => {
+      expect(() =>
+        serveAndOpen('appmap.html', { resources: { appmap: fixtureDir } }, jest.fn())
+      ).toThrow(`${fixtureDir} is a directory`);
+    });
+
+    it('When the page fetches a resource twice, Then its path was checked once at startup', async () => {
+      const stat = jest.spyOn(fs, 'statSync');
+      const checks = () => stat.mock.calls.filter(([path]) => path === appmapFile).length;
+      const bound = await serve({ appmap: appmapFile });
+      expect(checks()).toBe(1);
+      for (let i = 0; i < 2; i++) {
+        expect((await request(bound.base, resourcePath(bound, 'appmap'))).status).toBe(200);
+      }
+      expect(checks()).toBe(1);
+    });
+
+    // A POSIX FIFO has a path but is not a regular file, just like a process-substitution pipe.
+    const itWithFifo = process.platform === 'win32' ? it.skip : it;
+    itWithFifo(
+      'When a named pipe is bound, Then the page receives bytes from its writer',
+      async () => {
+        const fifo = join(fixtureDir, 'stream.appmap.json');
+        execFileSync('mkfifo', [fifo]);
+        const bound = await serve({ appmap: fifo });
+        const writer = spawn('sh', ['-c', `printf '%s' '{"stream":true}' > "$1"`, 'writer', fifo]);
+        try {
+          expect(await request(bound.base, resourcePath(bound, 'appmap'))).toEqual({
+            status: 200,
+            contentType: 'application/json',
+            body: '{"stream":true}',
+          });
+        } finally {
+          writer.kill(); // A rejected request may leave the writer waiting for a reader.
+        }
+      }
+    );
+
+    it('When a bound file disappears before it opens, Then only that request returns 404', async () => {
+      const removed = join(fixtureDir, 'removed.json');
+      writeFileSync(removed, '{}');
+      const bound = await serve({ appmap: appmapFile, other: removed });
+      rmSync(removed);
+      expect((await request(bound.base, resourcePath(bound, 'other'))).status).toBe(404);
+      expect((await request(bound.base, resourcePath(bound, 'appmap'))).status).toBe(200);
+    });
   });
 
   it('Given a read that fails after the response started, When the error arrives, Then the response is cut off and the server keeps serving', async () => {

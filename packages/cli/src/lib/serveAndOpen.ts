@@ -36,14 +36,6 @@ export function containedFile(root: string, requested: string): string | undefin
   }
 }
 
-function isRegularFile(path: string): boolean {
-  try {
-    return statSync(path).isFile();
-  } catch {
-    return false;
-  }
-}
-
 const RESOURCE_ROUTE = 'resource';
 
 export type ServedPage = {
@@ -65,9 +57,13 @@ export default function serveAndOpen(
   const baseDir = join(__dirname, '..', '..', 'built', 'html');
   if (!existsSync(join(baseDir, file))) throw new Error(`File ${file} does not exist`);
 
-  const boundResources = new Map(
-    Object.entries(resources).map(([name, path]) => [name, resolve(process.cwd(), path)])
-  );
+  const boundResources = new Map<string, string>();
+  for (const [name, path] of Object.entries(resources)) {
+    const absolutePath = resolve(path);
+    // The command can supply a pipe. Check the path without opening or consuming it.
+    if (statSync(absolutePath).isDirectory()) throw new Error(`${absolutePath} is a directory`);
+    boundResources.set(name, absolutePath);
+  }
 
   const server = createServer((req, res) => {
     const send404 = () => {
@@ -100,10 +96,8 @@ export default function serveAndOpen(
       });
     };
 
-    // Answer only requests addressed to this server, so that a page on another origin cannot
-    // reach it through DNS rebinding.
-    const { port } = server.address() as AddressInfo;
-    if (![`localhost:${port}`, `127.0.0.1:${port}`].includes(req.headers.host ?? '')) {
+    // Check the loopback hostname for DNS rebinding. A tunnel may use a different local port.
+    if (!/^(?:localhost|127\.0\.0\.1)(?::[0-9]+)?$/i.test(req.headers.host ?? '')) {
       res.writeHead(403);
       res.end();
       return;
@@ -126,7 +120,7 @@ export default function serveAndOpen(
           return send404();
         }
         const path = boundResources.get(name);
-        if (!path || !isRegularFile(path)) return send404();
+        if (!path) return send404();
         return serveFile(path, mimeTypeOfName(path));
       }
       const asset = containedFile(baseDir, pathname.slice(1));
