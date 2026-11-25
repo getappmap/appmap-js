@@ -415,7 +415,7 @@ definitions:
         type: array                    #! >= 1.11.0
         nullable: true                 #! >= 1.11.0
         items:                         #! >= 1.11.0
-          $ref: "#/definitions/parameter-property"  #! >= 1.11.0
+          $ref: "#/definitions/item-schema"  #! >= 1.11.0
 
   parameter-property:                               #! >= 1.10.0
     type: object                                    #! >= 1.10.0
@@ -436,7 +436,26 @@ definitions:
         type: array                                 #! >= 1.11.0
         nullable: true                              #! >= 1.11.0
         items:                                      #! >= 1.11.0
+          $ref: "#/definitions/item-schema"         #! >= 1.11.0
+
+  # Unlike a property, an array item has no name.
+  item-schema:                                      #! >= 1.11.0
+    type: object                                    #! >= 1.11.0
+    required:                                       #! >= 1.11.0
+      - class                                       #! >= 1.11.0
+    properties:                                     #! >= 1.11.0
+      class:                                        #! >= 1.11.0
+        type: string                                #! >= 1.11.0
+      properties:                                   #! >= 1.11.0
+        type: array                                 #! >= 1.11.0
+        nullable: true                              #! >= 1.11.0
+        items:                                      #! >= 1.11.0
           $ref: "#/definitions/parameter-property"  #! >= 1.11.0
+      items:                                        #! >= 1.11.0
+        type: array                                 #! >= 1.11.0
+        nullable: true                              #! >= 1.11.0
+        items:                                      #! >= 1.11.0
+          $ref: "#/definitions/item-schema"         #! >= 1.11.0
 
   exception:
     type: object

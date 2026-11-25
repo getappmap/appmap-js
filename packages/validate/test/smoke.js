@@ -83,6 +83,20 @@ for (const version of ['1.2.0', '1.3.0', '1.4.0', '1.5.0', '1.5.1', '1.6.0', '1.
             class: 'string',
             value: 'foo',
           },
+          ...(Semver.satisfies(version, '>= 1.11.0')
+            ? [
+                {
+                  name: 'xs',
+                  object_id: 790,
+                  class: 'Array',
+                  value: "[ [ 1 ], { y: 'bar' } ]",
+                  items: [
+                    { class: 'Array', items: [{ class: 'Number' }] },
+                    { class: 'Object', properties: [{ name: 'y', class: 'String' }] },
+                  ],
+                },
+              ]
+            : []),
         ],
       },
       {
@@ -176,6 +190,13 @@ for (const version of ['1.2.0', '1.3.0', '1.4.0', '1.5.0', '1.5.1', '1.6.0', '1.
       : {}),
   };
   Assert.equal(validate(data), version);
+  if (Semver.satisfies(version, '>= 1.11.0')) {
+    const xs = data.events[0].parameters[1];
+    const { items } = xs;
+    xs.items = items[0];
+    Assert.throws(() => validate(data), AppmapError);
+    xs.items = items;
+  }
   data.events.push(123);
   Assert.throws(() => validate(data), AppmapError);
   data.events.pop();
