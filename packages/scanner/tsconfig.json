@@ -4,6 +4,7 @@
     "outDir": "built",
     "types": ["node", "jest"],
     "declaration": true,
+    "sourceMap": true,
     "resolveJsonModule": true
   },
   "include": ["src", "test", "types/sinon.d.ts"]

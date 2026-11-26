@@ -11,7 +11,8 @@
   },
   "files": [
     "built",
-    "resources"
+    "resources",
+    "!built/html/**/*.map"
   ],
   "scripts": {
     "lint": "eslint src tests",
@@ -37,6 +38,8 @@
   "author": "AppLand, Inc",
   "license": "Commons Clause + MIT",
   "devDependencies": {
+    "@appland/components": "workspace:^4.50.0",
+    "@appland/diagrams": "workspace:^1.8.0",
     "@craftamap/esbuild-plugin-html": "^0.9.0",
     "@eslint/js": "~8.57.0",
     "@octokit/types": "^11.1.0",
@@ -92,16 +95,8 @@
     "typescript": "^4.9.5",
     "typescript-eslint": "^7.7.0"
   },
-  "bundledDependencies": [
-    "@appland/components",
-    "@appland/diagrams",
-    "vue",
-    "vuex"
-  ],
   "dependencies": {
     "@appland/client": "workspace:^1.17.0",
-    "@appland/components": "workspace:^4.50.0",
-    "@appland/diagrams": "workspace:^1.8.0",
     "@appland/models": "workspace:^2.10.4",
     "@appland/navie": "^1.48.0",
     "@appland/openapi": "workspace:^1.8.0",

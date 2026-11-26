@@ -52,45 +52,98 @@ function browserBuild(
   };
 }
 
+const VIEWER_ENTRY_POINTS = {
+  appmap: 'src/html/appmap.js',
+  sequenceDiagram: 'src/html/sequenceDiagram.js',
+  navie: 'src/html/navie.js',
+  queryUiViewer: 'src/html/query-ui/src/viewer.ts',
+};
+
 export const BROWSER_BUILDS: esbuild.BuildOptions[] = [
-  browserBuild(
-    {
-      outdir: 'built/html',
-      alias: BROWSER_ALIAS,
-      entryPoints: ['src/html/appmap.js'],
+  // The Vue viewers. Nearly all of each one is @appland/components, so
+  // they're built together with code splitting: the shared code lands once
+  // in built/html/chunks/ rather than in every bundle. Splitting requires
+  // ESM output, hence `format` and `scriptLoading: 'module'`.
+  //
+  // query-ui/viewer is the AppMap viewer that the Query UI's React detail
+  // page loads via <iframe src="/viewer.html?appmap=…">. That server only
+  // serves built/html/query-ui/, so uiServer.ts mounts the chunks too.
+  //
+  // The banner installs a `process` shim before the bundle runs because
+  // transitive deps (e.g. @appland/telemetry's deprecation logger) make
+  // unguarded `process.stderr.write(...)` calls; the query-ui viewer's
+  // loadData() path hits them in normal use. esbuild prepends the banner to
+  // every output file, chunks included, so the shim is in place before any
+  // shared code runs.
+  {
+    ...BASE_OPTIONS,
+    outdir: 'built/html',
+    alias: BROWSER_ALIAS,
+    format: 'esm',
+    splitting: true,
+    chunkNames: 'chunks/[name]-[hash]',
+    banner: {
+      js: 'window.process=window.process||{env:{},stderr:{write:function(){}},stdout:{write:function(){}},platform:"browser",version:""};',
     },
-    {
-      filename: 'appmap.html',
-      title: 'AppMap Viewer',
-      htmlTemplate: '<div id="app"></div>',
-    }
-  ),
-
-  browserBuild(
-    {
-      outdir: 'built/html',
-      alias: BROWSER_ALIAS,
-      entryPoints: ['src/html/sequenceDiagram.js'],
-    },
-    {
-      filename: 'sequenceDiagram.html',
-      title: 'AppMap Sequence Diagram Viewer',
-      htmlTemplate: '<div id="app"></div>',
-    }
-  ),
-
-  browserBuild(
-    {
-      outdir: 'built/html',
-      alias: BROWSER_ALIAS,
-      entryPoints: ['src/html/navie.js'],
-    },
-    {
-      filename: 'navie.html',
-      title: 'AppMap Navie',
-      htmlTemplate: '<div id="app"></div>',
-    }
-  ),
+    entryPoints: [
+      { in: VIEWER_ENTRY_POINTS.appmap, out: 'appmap' },
+      { in: VIEWER_ENTRY_POINTS.sequenceDiagram, out: 'sequenceDiagram' },
+      { in: VIEWER_ENTRY_POINTS.navie, out: 'navie' },
+      { in: VIEWER_ENTRY_POINTS.queryUiViewer, out: 'query-ui/viewer' },
+    ],
+    plugins: [
+      htmlPlugin({
+        files: [
+          {
+            entryPoints: [VIEWER_ENTRY_POINTS.appmap],
+            filename: 'appmap.html',
+            title: 'AppMap Viewer',
+            htmlTemplate: '<div id="app"></div>',
+            scriptLoading: 'module',
+          },
+          {
+            entryPoints: [VIEWER_ENTRY_POINTS.sequenceDiagram],
+            filename: 'sequenceDiagram.html',
+            title: 'AppMap Sequence Diagram Viewer',
+            htmlTemplate: '<div id="app"></div>',
+            scriptLoading: 'module',
+          },
+          {
+            entryPoints: [VIEWER_ENTRY_POINTS.navie],
+            filename: 'navie.html',
+            title: 'AppMap Navie',
+            htmlTemplate: '<div id="app"></div>',
+            scriptLoading: 'module',
+          },
+          {
+            entryPoints: [VIEWER_ENTRY_POINTS.queryUiViewer],
+            filename: 'query-ui/viewer.html',
+            scriptLoading: 'module',
+            htmlTemplate: `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AppMap Viewer</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body, #viewer { width: 100%; height: 100%; overflow: hidden; }
+      body { background: #0a0a0f; color: #e5e7eb; font-family: system-ui, sans-serif; }
+      #loading { display: flex; align-items: center; justify-content: center; height: 100%; color: #6b7280; }
+      #error { display: none; padding: 2rem; color: #ef4444; }
+    </style>
+  </head>
+  <body>
+    <div id="loading">Loading AppMap...</div>
+    <div id="error"></div>
+    <div id="viewer"></div>
+  </body>
+</html>`,
+          },
+        ],
+      }),
+    ],
+  },
 
   // Query UI React SPA — main app shell.
   //
@@ -117,50 +170,6 @@ export const BROWSER_BUILDS: esbuild.BuildOptions[] = [
   </head>
   <body class="bg-gray-950 text-gray-100">
     <div id="root"></div>
-  </body>
-</html>`,
-    }
-  ),
-
-  // Query UI — embedded AppMap viewer.
-  //
-  // Vue 2 + @appland/components mount that the React detail page loads
-  // via <iframe src="/viewer.html?appmap=…">.
-  //
-  // The banner installs a `process` shim before the bundle runs because
-  // transitive deps (e.g. @appland/telemetry's deprecation logger) make
-  // unguarded `process.stderr.write(...)` calls. The other Vue bundles
-  // carry the same code but just don't hit that codepath in normal use;
-  // loadData() in the dashboard's iframe path does.
-  browserBuild(
-    {
-      outdir: 'built/html/query-ui',
-      alias: BROWSER_ALIAS,
-      banner: {
-        js: 'window.process=window.process||{env:{},stderr:{write:function(){}},stdout:{write:function(){}},platform:"browser",version:""};',
-      },
-      entryPoints: ['src/html/query-ui/src/viewer.ts'],
-    },
-    {
-      filename: 'viewer.html',
-      htmlTemplate: `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AppMap Viewer</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body, #viewer { width: 100%; height: 100%; overflow: hidden; }
-      body { background: #0a0a0f; color: #e5e7eb; font-family: system-ui, sans-serif; }
-      #loading { display: flex; align-items: center; justify-content: center; height: 100%; color: #6b7280; }
-      #error { display: none; padding: 2rem; color: #ef4444; }
-    </style>
-  </head>
-  <body>
-    <div id="loading">Loading AppMap...</div>
-    <div id="error"></div>
-    <div id="viewer"></div>
   </body>
 </html>`,
     }
