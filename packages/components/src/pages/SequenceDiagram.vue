@@ -1,5 +1,9 @@
 <template>
-  <VDiagramSequence :serialized-diagram="serializedDiagram" :interactive="interactive" />
+  <VDiagramSequence
+    :serialized-diagram="serializedDiagram"
+    :interactive="interactive"
+    :serialized-selection="serializedSelection"
+  />
 </template>
 
 <script>
@@ -16,6 +20,10 @@ export default {
   props: {
     serializedDiagram: {
       type: Object,
+    },
+    serializedSelection: {
+      type: Boolean,
+      default: false,
     },
     interactive: {
       type: Boolean,
