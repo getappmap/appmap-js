@@ -58,6 +58,21 @@ describe('Sequence diagram diff', () => {
 
           MoveType.AdvanceBoth,
           MoveType.AdvanceBoth,
+
+          // The middle iteration (three shows) and the final pair (two shows)
+          // retain their own groups, including the removed query in each group.
+          MoveType.AdvanceBoth,
+          MoveType.InsertRight,
+          MoveType.InsertRight,
+          MoveType.AdvanceBoth,
+          MoveType.AdvanceBoth,
+
+          MoveType.AdvanceBoth,
+          MoveType.AdvanceBoth,
+          MoveType.InsertRight,
+          MoveType.InsertRight,
+          MoveType.AdvanceBoth,
+          MoveType.AdvanceBoth,
         ]
       );
     });

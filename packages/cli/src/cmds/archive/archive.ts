@@ -2,6 +2,12 @@ import yargs from 'yargs';
 import lazyHandler from '../../lib/lazyHandler';
 import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 
+// ## 1.3.1
+//
+// * Sequence diagram subtree digests are rebuilt after loop compression and include each loop's
+//   count, so the digests of loops and their ancestors change. A change that alters loop
+//   grouping, such as a different return type inside repeated calls, now changes them too.
+//
 // ## 1.3.0
 //
 // * AppMap scanner is run on all AppMaps, with an appmap-findings.json file stored in each index directory.
@@ -17,7 +23,7 @@ import { DefaultMaxAppMapSizeInMB } from '../../lib/fileSizeFilter';
 // ## 1.1.0
 //
 // * Added appMapFilter to the archive metadata.
-export const ArchiveVersion = '1.3.0';
+export const ArchiveVersion = '1.3.1';
 
 export const PackageVersion = {
   name: '@appland/appmap',
