@@ -1,0 +1,202 @@
+{
+  "kind": "appmap.comparison",
+  "schemaVersion": 1,
+  "producer": {
+    "name": "contract-fixture",
+    "version": "1"
+  },
+  "scenario": {
+    "id": "changed-result"
+  },
+  "recordings": {
+    "base": "base.appmap.json",
+    "head": "head.appmap.json"
+  },
+  "capabilities": {
+    "views": {
+      "sequence": 1
+    }
+  },
+  "changes": [
+    {
+      "id": "chg_33333333333333333333",
+      "kind": "call-changed",
+      "summary": "Changed loadUser result",
+      "base": {
+        "eventIds": [
+          5
+        ],
+        "elementIds": [
+          "fixture-base-1"
+        ]
+      },
+      "head": {
+        "eventIds": [
+          6
+        ],
+        "elementIds": [
+          "fixture-head-1"
+        ]
+      },
+      "views": {
+        "sequence": {
+          "base": {
+            "eventIds": [
+              5
+            ],
+            "elementIds": [
+              "fixture-base-1"
+            ]
+          },
+          "head": {
+            "eventIds": [
+              6
+            ],
+            "elementIds": [
+              "fixture-head-1"
+            ]
+          },
+          "diff": {
+            "eventIds": [
+              6
+            ],
+            "elementIds": [
+              "fixture-diff-1"
+            ]
+          }
+        }
+      },
+      "details": {
+        "result": {
+          "before": "User",
+          "after": "AuthorizationError"
+        }
+      }
+    }
+  ],
+  "views": {
+    "sequence": {
+      "schemaVersion": 1,
+      "base": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "name": "loadUser",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              5
+            ],
+            "elementId": "fixture-base-1"
+          }
+        ]
+      },
+      "head": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "name": "loadUser",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              6
+            ],
+            "elementId": "fixture-head-1"
+          }
+        ]
+      },
+      "diff": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 1,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "name": "run",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "flag": false,
+              "missing": null,
+              "number": 1,
+              "text": "value"
+            },
+            "children": null,
+            "eventIds": [
+              6
+            ],
+            "elementId": "fixture-diff-1",
+            "count": 2,
+            "route": "GET /",
+            "status": 200,
+            "returnValue": {
+              "raisesException": false,
+              "returnValueType": {
+                "name": "User",
+                "properties": [
+                  "id"
+                ]
+              }
+            },
+            "caller": "service",
+            "query": "SELECT 1",
+            "movedFrom": {
+              "name": "old",
+              "actorId": "service"
+            },
+            "diffMode": 4,
+            "elapsed": 0,
+            "formerName": "",
+            "formerResult": "",
+            "labels": [],
+            "futureExtension": {
+              "nested": [
+                "arbitrary",
+                {
+                  "count": 0
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "alignment": {
+        "actorOrder": [
+          "service"
+        ]
+      }
+    }
+  }
+}

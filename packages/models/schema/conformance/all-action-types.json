@@ -1,0 +1,220 @@
+{
+  "kind": "appmap.comparison",
+  "schemaVersion": 1,
+  "producer": {
+    "name": "contract-fixture",
+    "version": "1"
+  },
+  "scenario": {
+    "id": "changed-result"
+  },
+  "recordings": {
+    "base": "base.appmap.json",
+    "head": "head.appmap.json"
+  },
+  "capabilities": {
+    "views": {
+      "sequence": 1
+    }
+  },
+  "changes": [
+    {
+      "id": "chg_33333333333333333333",
+      "kind": "call-changed",
+      "summary": "Changed loadUser result",
+      "base": {
+        "eventIds": [
+          5
+        ],
+        "elementIds": [
+          "fixture-base-1"
+        ]
+      },
+      "head": {
+        "eventIds": [
+          6
+        ],
+        "elementIds": [
+          "fixture-head-1"
+        ]
+      },
+      "views": {
+        "sequence": {
+          "base": {
+            "eventIds": [
+              5
+            ],
+            "elementIds": [
+              "fixture-base-1"
+            ]
+          },
+          "head": {
+            "eventIds": [
+              6
+            ],
+            "elementIds": [
+              "fixture-head-1"
+            ]
+          },
+          "diff": {
+            "eventIds": [
+              6
+            ],
+            "elementIds": [
+              "fixture-diff-1"
+            ]
+          }
+        }
+      },
+      "details": {
+        "result": {
+          "before": "User",
+          "after": "AuthorizationError"
+        }
+      }
+    }
+  ],
+  "views": {
+    "sequence": {
+      "schemaVersion": 1,
+      "base": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "name": "loadUser",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              5
+            ],
+            "elementId": "fixture-base-1"
+          }
+        ]
+      },
+      "head": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 3,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "name": "loadUser",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [],
+            "eventIds": [
+              6
+            ],
+            "elementId": "fixture-head-1"
+          }
+        ]
+      },
+      "diff": {
+        "actors": [
+          {
+            "id": "service",
+            "name": "Service",
+            "order": 0
+          }
+        ],
+        "rootActions": [
+          {
+            "nodeType": 1,
+            "digest": "fixture",
+            "subtreeDigest": "fixture",
+            "name": "loadUser",
+            "callee": "service",
+            "static": false,
+            "stableProperties": {
+              "raises_exception": false
+            },
+            "children": [
+              {
+                "nodeType": 3,
+                "digest": "d",
+                "subtreeDigest": "s",
+                "children": [],
+                "eventIds": [
+                  1
+                ],
+                "elementId": "3",
+                "callee": "service",
+                "name": "run",
+                "stableProperties": {
+                  "raises_exception": false
+                }
+              },
+              {
+                "nodeType": 4,
+                "digest": "d",
+                "subtreeDigest": "s",
+                "children": [],
+                "eventIds": [
+                  1
+                ],
+                "elementId": "4",
+                "callee": "service",
+                "route": "GET /"
+              },
+              {
+                "nodeType": 5,
+                "digest": "d",
+                "subtreeDigest": "s",
+                "children": [],
+                "eventIds": [
+                  1
+                ],
+                "elementId": "5",
+                "callee": "service",
+                "route": "POST /",
+                "status": 201
+              },
+              {
+                "nodeType": 6,
+                "digest": "d",
+                "subtreeDigest": "s",
+                "children": [],
+                "eventIds": [
+                  1
+                ],
+                "elementId": "6",
+                "callee": "service",
+                "query": "SELECT 1"
+              }
+            ],
+            "eventIds": [],
+            "elementId": "fixture-diff-1",
+            "count": 2
+          }
+        ]
+      },
+      "alignment": {
+        "actorOrder": [
+          "service"
+        ]
+      }
+    }
+  }
+}

@@ -1,5 +1,4 @@
-import type { SqliteParser } from './sqlite-parser';
-import type { LRUCache } from 'lru-cache';
+import type { SqliteParser } from './sqlite-parser.js';
 
 declare module '@appland/models' {
   export type CodeObjectType =
@@ -48,6 +47,8 @@ declare module '@appland/models' {
     readonly lineno?: number;
   }
 
+  // Public extension point; intentionally preserves interface augmentation.
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   export interface ReturnValueObject extends ValueBase {}
 
   export interface HttpServerRequest {
@@ -215,7 +216,11 @@ declare module '@appland/models' {
     dataObjects(): Array<ParameterObject | ReturnValueObject>;
     toString(): string;
     toJSON(): any;
-    buildStableHash(parsedSqlCache?: LRUCache<string, any>): any;
+    // Only the cache protocol used at runtime; do not leak a dev-only dependency.
+    buildStableHash(parsedSqlCache?: {
+      get(key: string): unknown;
+      set(key: string, value: unknown): unknown;
+    }): any;
   }
 
   export class EventNavigator {

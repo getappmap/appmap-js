@@ -99,7 +99,7 @@
       "route": "DELETE /api/api_keys",
       "status": 200,
       "digest": "cd2b4b0dc223b099b33a5c64b2b3f4c42616f3ea17c919ae676d7a7cddaaa3b0",
-      "subtreeDigest": "9e6ca608c8b1f7a01b62fd67d973d9da274fdf5d188096254e23513cbc8d8c4a",
+      "subtreeDigest": "d354ea9069c3399e16a946895f11366f0d0cf338f500d2eedaa366b276afb81c",
       "children": [
         {
           "nodeType": 3,
@@ -108,7 +108,7 @@
           "name": "authenticate",
           "static": true,
           "digest": "54259769fc7b554024c267444b7d33beb4d6c5c9acffaa5f02ad25e5c8b6e8bd",
-          "subtreeDigest": "11241f386528f197453d905a8eb4dd53a284e81e0ffef26b26975be68e36f6bf",
+          "subtreeDigest": "9649020c8300cfeda0a85d8a2956efee1324d9e8d4ec37844eeca3acba889bd7",
           "stableProperties": {
             "event_type": "function",
             "id": "app/models/ApiKey.authenticate",
@@ -215,7 +215,7 @@
               "nodeType": 1,
               "count": 2,
               "digest": "loop",
-              "subtreeDigest": "loop:fe0466d8bc4900773ff8911859b1e476e8485e682d008f0d31e4036139b75eed",
+              "subtreeDigest": "ef04658b2b65ecb20c2c851dc0b4fd3a1b7bcb7ac10af9527918a1fd8766cc64",
               "children": [
                 {
                   "nodeType": 6,
