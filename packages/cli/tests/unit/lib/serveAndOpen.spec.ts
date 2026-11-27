@@ -199,6 +199,16 @@ describe('serveAndOpen', () => {
       ).toThrow(expect.objectContaining({ code: 'ENOENT', path: missing }));
     });
 
+    // POSIX mode bits do not deny a privileged process read access and do not apply on Windows.
+    const itWithReadPermissions = process.getuid?.() && process.platform !== 'win32' ? it : it.skip;
+    itWithReadPermissions('When a file denies read access, Then startup reports its path', () => {
+      const denied = join(fixtureDir, 'unreadable.json');
+      writeFileSync(denied, '{}', { mode: 0o000 });
+      expect(() =>
+        serveAndOpen('appmap.html', { resources: { appmap: denied } }, jest.fn())
+      ).toThrow(expect.objectContaining({ code: 'EACCES', path: denied }));
+    });
+
     it('When a path names a directory, Then startup reports which path is a directory', () => {
       expect(() =>
         serveAndOpen('appmap.html', { resources: { appmap: fixtureDir } }, jest.fn())

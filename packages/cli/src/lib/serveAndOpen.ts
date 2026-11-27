@@ -1,4 +1,4 @@
-import { createReadStream, existsSync, realpathSync, statSync } from 'fs';
+import { accessSync, constants, createReadStream, existsSync, realpathSync, statSync } from 'fs';
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import open from 'open';
@@ -62,6 +62,7 @@ export default function serveAndOpen(
     const absolutePath = resolve(path);
     // The command can supply a pipe. Check the path without opening or consuming it.
     if (statSync(absolutePath).isDirectory()) throw new Error(`${absolutePath} is a directory`);
+    accessSync(absolutePath, constants.R_OK);
     boundResources.set(name, absolutePath);
   }
 
