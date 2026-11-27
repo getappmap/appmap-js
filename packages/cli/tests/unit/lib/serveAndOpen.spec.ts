@@ -1,6 +1,6 @@
 import { execFileSync, spawn } from 'node:child_process';
 import fs, { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
-import { request as httpRequest } from 'node:http';
+import http, { request as httpRequest } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import { Readable } from 'node:stream';
@@ -66,16 +66,42 @@ describe('serveAndOpen', () => {
   let otherFile: string;
   let viewer: Viewer;
 
-  beforeAll(async () => {
+  const createServer = http.createServer;
+  const servers: http.Server[] = [];
+
+  beforeAll(() => {
     fixtureDir = mkdtempSync(join(tmpdir(), 'serve-and-open-'));
     appmapFile = join(fixtureDir, 'opened.appmap.json');
     otherFile = join(fixtureDir, 'other.json');
     writeFileSync(appmapFile, '{"opened":true}\n');
     writeFileSync(otherFile, '{"other":true}\n');
-    viewer = await serve({ appmap: appmapFile });
   });
 
-  afterAll(() => rmSync(fixtureDir, { recursive: true, force: true }));
+  beforeEach(async () => {
+    // Keep the real servers, including the one started by the sequence-diagram wrapper.
+    jest.spyOn(http, 'createServer').mockImplementation((...args) => {
+      const server = createServer(...args);
+      servers.push(server);
+      return server;
+    });
+    viewer ??= await serve({ appmap: appmapFile });
+  });
+
+  afterAll(async () => {
+    try {
+      await Promise.all(
+        servers.map(
+          (server) =>
+            new Promise<void>((resolve, reject) =>
+              server.close((error) => (error ? reject(error) : resolve()))
+            )
+        )
+      );
+      expect(servers.some((server) => server.listening)).toBe(false);
+    } finally {
+      rmSync(fixtureDir, { recursive: true, force: true });
+    }
+  });
 
   it('serves the viewer page as text/html', async () => {
     expect(await request(viewer.base, '/')).toMatchObject({
