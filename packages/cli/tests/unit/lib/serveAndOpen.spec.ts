@@ -1,55 +1,113 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { get } from 'node:http';
+import { execFileSync, spawn } from 'node:child_process';
+import fs, { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import http, { request as httpRequest } from 'node:http';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
+import { Readable } from 'node:stream';
 
-import serveAndOpen from '../../../src/lib/serveAndOpen';
+import serveAndOpen, {
+  containedFile,
+  serveAndOpenSequenceDiagram,
+} from '../../../src/lib/serveAndOpen';
 
-type Served = { status?: number; contentType?: string };
+// Every file outside the viewer assets is a disposable fixture created here, never host data.
 
-function request(url: URL): Promise<Served> {
+type Served = { status?: number; contentType?: string; body: string };
+
+// Send the path exactly as written: URL parsing would normalize `..` and `//` away.
+function request(base: URL, path: string, host?: string): Promise<Served> {
   return new Promise((resolve, reject) => {
-    get(url, (res) => {
-      res.resume();
+    const headers = host ? { host } : undefined;
+    const req = httpRequest({ host: base.hostname, port: base.port, path, headers }, (res) => {
+      let body = '';
+      res.setEncoding('utf8');
+      res.on('data', (chunk: string) => (body += chunk));
       res.on('end', () =>
-        resolve({ status: res.statusCode, contentType: res.headers['content-type'] })
+        resolve({ status: res.statusCode, contentType: res.headers['content-type'], body })
       );
-    }).on('error', reject);
+      res.on('error', reject);
+    });
+    req.on('error', reject);
+    req.end();
   });
 }
 
-function serve(): Promise<URL> {
+type Viewer = { base: URL; page: URL };
+
+// Start a viewer page with local files bound to its resource parameters.
+function serve(resources: Record<string, string>): Promise<Viewer> {
   return new Promise((resolve) =>
-    serveAndOpen('appmap.html', {}, false, (url) => {
-      const base = new URL(url);
+    serveAndOpen('appmap.html', { resources }, (url) => {
+      const page = new URL(url);
       // The server listens on 127.0.0.1 only; localhost may resolve to ::1 first.
-      base.hostname = '127.0.0.1';
-      resolve(base);
+      page.hostname = '127.0.0.1';
+      resolve({ base: new URL('/', page), page });
     })
   );
 }
 
-describe('serveAndOpen', () => {
-  let base: URL;
-  let fixtureDir: string;
+const resourcePath = (viewer: Viewer, name: string) => `/${viewer.page.searchParams.get(name)}`;
 
-  beforeAll(async () => {
+// Hand the next createReadStream call a controllable stream that has "opened".
+function nextReadStream(stream: Readable, afterOpen: () => void) {
+  jest.spyOn(fs, 'createReadStream').mockImplementationOnce((() => {
+    setImmediate(() => {
+      stream.emit('open');
+      afterOpen();
+    });
+    return stream;
+  }) as unknown as typeof fs.createReadStream);
+}
+
+describe('serveAndOpen', () => {
+  const assets = join(__dirname, '..', '..', '..', 'built', 'html');
+  let fixtureDir: string;
+  let appmapFile: string;
+  let otherFile: string;
+  let viewer: Viewer;
+
+  const createServer = http.createServer;
+  const servers: http.Server[] = [];
+
+  beforeAll(() => {
     fixtureDir = mkdtempSync(join(tmpdir(), 'serve-and-open-'));
-    for (const name of [
-      'fixture.js',
-      'fixture.css',
-      'fixture.json',
-      'fixture.js.map',
-      'fixture.bin',
-    ])
-      writeFileSync(join(fixtureDir, name), '{}\n');
-    base = await serve();
+    appmapFile = join(fixtureDir, 'opened.appmap.json');
+    otherFile = join(fixtureDir, 'other.json');
+    writeFileSync(appmapFile, '{"opened":true}\n');
+    writeFileSync(otherFile, '{"other":true}\n');
   });
 
-  afterAll(() => rmSync(fixtureDir, { recursive: true, force: true }));
+  beforeEach(async () => {
+    // Keep the real servers, including the one started by the sequence-diagram wrapper.
+    jest.spyOn(http, 'createServer').mockImplementation((...args) => {
+      const server = createServer(...args);
+      servers.push(server);
+      return server;
+    });
+    viewer ??= await serve({ appmap: appmapFile });
+  });
+
+  afterAll(async () => {
+    try {
+      await Promise.all(
+        servers.map(
+          (server) =>
+            new Promise<void>((resolve, reject) =>
+              server.close((error) => (error ? reject(error) : resolve()))
+            )
+        )
+      );
+      expect(servers.some((server) => server.listening)).toBe(false);
+    } finally {
+      rmSync(fixtureDir, { recursive: true, force: true });
+    }
+  });
 
   it('serves the viewer page as text/html', async () => {
-    expect(await request(new URL('/', base))).toEqual({ status: 200, contentType: 'text/html' });
+    expect(await request(viewer.base, '/')).toMatchObject({
+      status: 200,
+      contentType: 'text/html',
+    });
   });
 
   it.each([
@@ -57,7 +115,76 @@ describe('serveAndOpen', () => {
     ['/appmap.css', 'text/css'],
     ['/appmap.js.map', 'application/json'],
   ])('serves the built asset %s as %s', async (path, contentType) => {
-    expect(await request(new URL(path, base))).toEqual({ status: 200, contentType });
+    expect(await request(viewer.base, path)).toMatchObject({ status: 200, contentType });
+  });
+
+  describe('Given a viewer opened for one AppMap', () => {
+    it('When the page URL is built, Then it names a resource route instead of the local path', () => {
+      expect(viewer.page.searchParams.get('appmap')).toBe('resource/appmap');
+      expect(decodeURIComponent(viewer.page.toString())).not.toContain(fixtureDir);
+    });
+
+    it('When the page fetches its resource, Then the opened file is served as JSON', async () => {
+      expect(await request(viewer.base, resourcePath(viewer, 'appmap'))).toEqual({
+        status: 200,
+        contentType: 'application/json',
+        body: '{"opened":true}\n',
+      });
+    });
+
+    it.each([
+      ['another local file by path', () => `/resource?${encodeURIComponent(otherFile)}`],
+      ['the opened file by path', () => `/resource?${encodeURIComponent(appmapFile)}`],
+      ['a resource name that was not bound', () => '/resource/other'],
+      ['the resource route without a name', () => '/resource'],
+    ])('When a client requests %s, Then it is refused', async (_case, path) => {
+      expect((await request(viewer.base, path())).status).toBe(404);
+    });
+
+    it.each([
+      ['an absolute path', () => `/${otherFile}`],
+      ['dot segments', () => `/${relative(assets, otherFile)}`],
+    ])(
+      'When a static request names a file outside the viewer assets with %s, Then it is refused',
+      async (_case, path) => {
+        expect((await request(viewer.base, path())).status).toBe(404);
+      }
+    );
+
+    it('When a resource name is not valid percent-encoding, Then it is refused', async () => {
+      expect((await request(viewer.base, '/resource/%E0%A4%A')).status).toBe(404);
+    });
+
+    it.each([
+      ['localhost', 200, (port: string) => `localhost:${port}`],
+      ['the loopback address', 200, (port: string) => `127.0.0.1:${port}`],
+      ['another host name', 403, (port: string) => `attacker.example:${port}`],
+      ['localhost without a port', 200, () => 'localhost'],
+      ['the loopback address without a port', 200, () => '127.0.0.1'],
+      [
+        'a forwarded localhost port',
+        200,
+        (port: string) => `localhost:${port === '8080' ? 8081 : 8080}`,
+      ],
+      [
+        'a forwarded loopback port',
+        200,
+        (port: string) => `127.0.0.1:${port === '8080' ? 8081 : 8080}`,
+      ],
+      ['a malformed port', 403, () => 'localhost:not-a-port'],
+    ])('When the Host header names %s, Then the server answers %i', async (_case, status, host) => {
+      const served = await request(
+        viewer.base,
+        resourcePath(viewer, 'appmap'),
+        host(viewer.base.port)
+      );
+      expect(served.status).toBe(status);
+    });
+
+    it('When a directory is requested, Then it is refused and the server keeps serving', async () => {
+      expect((await request(viewer.base, '/query-ui')).status).toBe(404);
+      expect((await request(viewer.base, '/appmap.js')).status).toBe(200);
+    });
   });
 
   it.each([
@@ -66,8 +193,169 @@ describe('serveAndOpen', () => {
     ['fixture.json', 'application/json'],
     ['fixture.js.map', 'application/json'],
     ['fixture.bin', 'application/octet-stream'],
-  ])('serves the resource %s as %s', async (name, contentType) => {
-    const url = new URL(`/resource?${encodeURIComponent(join(fixtureDir, name))}`, base);
-    expect(await request(url)).toEqual({ status: 200, contentType });
+  ])('serves the bound resource %s as %s', async (name, contentType) => {
+    const file = join(fixtureDir, name);
+    writeFileSync(file, '{}\n');
+    const typed = await serve({ appmap: file });
+    expect(await request(typed.base, resourcePath(typed, 'appmap'))).toMatchObject({
+      status: 200,
+      contentType,
+    });
+  });
+
+  it('Given a sequence diagram, When its viewer starts, Then the page fetches it from its route', async () => {
+    const page = new URL(await serveAndOpenSequenceDiagram(appmapFile, () => undefined));
+    page.hostname = '127.0.0.1';
+    expect(page.searchParams.get('diagram')).toBe('resource/diagram');
+    expect(await request(new URL('/', page), '/resource/diagram')).toMatchObject({
+      status: 200,
+      body: '{"opened":true}\n',
+    });
+  });
+
+  describe('Given explicit resource paths', () => {
+    it('When one is missing at startup, Then the caller gets its path and the filesystem error', () => {
+      const missing = join(fixtureDir, 'missing.json');
+      expect(() =>
+        serveAndOpen(
+          'appmap.html',
+          { resources: { appmap: appmapFile, other: missing } },
+          jest.fn()
+        )
+      ).toThrow(expect.objectContaining({ code: 'ENOENT', path: missing }));
+    });
+
+    // POSIX mode bits do not deny a privileged process read access and do not apply on Windows.
+    const itWithReadPermissions = process.getuid?.() && process.platform !== 'win32' ? it : it.skip;
+    itWithReadPermissions('When a file denies read access, Then startup reports its path', () => {
+      const denied = join(fixtureDir, 'unreadable.json');
+      writeFileSync(denied, '{}', { mode: 0o000 });
+      expect(() =>
+        serveAndOpen('appmap.html', { resources: { appmap: denied } }, jest.fn())
+      ).toThrow(expect.objectContaining({ code: 'EACCES', path: denied }));
+    });
+
+    it('When a path names a directory, Then startup reports which path is a directory', () => {
+      expect(() =>
+        serveAndOpen('appmap.html', { resources: { appmap: fixtureDir } }, jest.fn())
+      ).toThrow(`${fixtureDir} is a directory`);
+    });
+
+    it('When the page fetches a resource twice, Then its path was checked once at startup', async () => {
+      const stat = jest.spyOn(fs, 'statSync');
+      const checks = () => stat.mock.calls.filter(([path]) => path === appmapFile).length;
+      const bound = await serve({ appmap: appmapFile });
+      expect(checks()).toBe(1);
+      for (let i = 0; i < 2; i++) {
+        expect((await request(bound.base, resourcePath(bound, 'appmap'))).status).toBe(200);
+      }
+      expect(checks()).toBe(1);
+    });
+
+    // A POSIX FIFO has a path but is not a regular file, just like a process-substitution pipe.
+    const itWithFifo = process.platform === 'win32' ? it.skip : it;
+    itWithFifo(
+      'When a named pipe is bound, Then the page receives bytes from its writer',
+      async () => {
+        const fifo = join(fixtureDir, 'stream.appmap.json');
+        execFileSync('mkfifo', [fifo]);
+        const bound = await serve({ appmap: fifo });
+        const writer = spawn('sh', ['-c', `printf '%s' '{"stream":true}' > "$1"`, 'writer', fifo]);
+        try {
+          expect(await request(bound.base, resourcePath(bound, 'appmap'))).toEqual({
+            status: 200,
+            contentType: 'application/json',
+            body: '{"stream":true}',
+          });
+        } finally {
+          writer.kill(); // A rejected request may leave the writer waiting for a reader.
+        }
+      }
+    );
+
+    it('When a bound file disappears before it opens, Then only that request returns 404', async () => {
+      const removed = join(fixtureDir, 'removed.json');
+      writeFileSync(removed, '{}');
+      const bound = await serve({ appmap: appmapFile, other: removed });
+      rmSync(removed);
+      expect((await request(bound.base, resourcePath(bound, 'other'))).status).toBe(404);
+      expect((await request(bound.base, resourcePath(bound, 'appmap'))).status).toBe(200);
+    });
+  });
+
+  it('Given a read that fails after the response started, When the error arrives, Then the response is cut off and the server keeps serving', async () => {
+    const failing = new Readable({ read() {} });
+    nextReadStream(failing, () => {
+      failing.push('{"partial":');
+      setImmediate(() => failing.destroy(new Error('injected read failure')));
+    });
+    await expect(request(viewer.base, resourcePath(viewer, 'appmap'))).rejects.toThrow();
+    expect((await request(viewer.base, resourcePath(viewer, 'appmap'))).status).toBe(200);
+  });
+
+  it('Given a client that disconnects while a resource streams, When the connection closes, Then the file stream is closed', async () => {
+    const slow = new Readable({ read() {} });
+    nextReadStream(slow, () => slow.push('{"first":'));
+    await new Promise<void>((resolve) => {
+      const req = httpRequest(
+        {
+          host: viewer.base.hostname,
+          port: viewer.base.port,
+          path: resourcePath(viewer, 'appmap'),
+        },
+        (res) => res.once('data', () => req.destroy())
+      );
+      req.on('error', () => undefined);
+      req.on('close', resolve);
+      req.end();
+    });
+    for (let i = 0; i < 100 && !slow.destroyed; i++) await new Promise((r) => setTimeout(r, 10));
+    expect(slow.destroyed).toBe(true);
+  });
+});
+
+describe('containedFile', () => {
+  let scratch: string;
+  let root: string;
+
+  beforeAll(() => {
+    scratch = mkdtempSync(join(tmpdir(), 'contained-file-'));
+    root = join(scratch, 'root');
+    for (const dir of [
+      root,
+      join(root, 'nested'),
+      join(scratch, 'root-neighbor'),
+      join(scratch, 'outside'),
+    ])
+      mkdirSync(dir);
+    writeFileSync(join(root, 'inside.js'), '');
+    writeFileSync(join(scratch, 'root-neighbor', 'neighbor.js'), '');
+    writeFileSync(join(scratch, 'outside', 'outside.js'), '');
+    symlinkSync(join(root, 'inside.js'), join(root, 'inside-link.js'));
+    symlinkSync(join(scratch, 'outside', 'outside.js'), join(root, 'escape.js'));
+    symlinkSync(join(scratch, 'outside'), join(root, 'escape-dir'), 'dir');
+  });
+
+  afterAll(() => rmSync(scratch, { recursive: true, force: true }));
+
+  it.each(['inside.js', 'nested/../inside.js', 'inside-link.js'])(
+    'Given %s below the root, When resolved, Then it is served',
+    (requested) => {
+      expect(containedFile(root, requested)).toBe(fs.realpathSync(join(root, 'inside.js')));
+    }
+  );
+
+  it.each([
+    ['a sibling whose name extends the root', '../root-neighbor/neighbor.js'],
+    ['a parent traversal', '../outside/outside.js'],
+    ['an absolute path', () => join(scratch, 'outside', 'outside.js')],
+    ['a symlink to an outside file', 'escape.js'],
+    ['a symlink to an outside directory', 'escape-dir/outside.js'],
+    ['a directory', 'nested'],
+    ['the root itself', ''],
+    ['a missing file', 'missing.js'],
+  ])('Given %s, When resolved, Then it is refused', (_case, requested) => {
+    const path = typeof requested === 'function' ? requested() : requested;
+    expect(containedFile(root, path)).toBeUndefined();
   });
 });
